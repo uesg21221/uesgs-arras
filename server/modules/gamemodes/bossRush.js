@@ -71,7 +71,7 @@ class BossRush {
 
     spawnEnemyWrapper(loc, type) {
         let thisWave = this, n = new Entity(loc);
-        n.define(ran.choose(type));
+        n.define(type);
         n.team = -100;
         n.FOV = 10;
         n.refreshBodyAttributes();
