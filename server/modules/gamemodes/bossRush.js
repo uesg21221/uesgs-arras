@@ -14,7 +14,7 @@ class BossRush {
     generateWaves() {
         let bosses = this.bossChoices.sort(() => 0.5 - Math.random())
         let waves = []
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 2000; i++) {
             let wave = []
             for (let j = 0; j < 2 + Math.random() * 4 + (i * .4); j++) {
                 wave.push(bosses[j])
