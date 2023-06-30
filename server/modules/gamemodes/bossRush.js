@@ -49,7 +49,7 @@ class BossRush {
     }
 
     spawnDominator(loc, team, type = false) {
-        type = type ? type : Class.destroyerDominator
+        type = type ? type : Class.trapperDominator
         let bossRush = this,
             o = new Entity(loc)
         o.define(type)
