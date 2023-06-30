@@ -39,7 +39,7 @@ class BossRush {
     spawnDominator(loc, team, type = false) {
         type = type ? type : Class.destroyerDominator
         let bossRush = this,
-            o = new Entity(loc)
+        o = new Entity(loc)
         o.define(type)
         o.team = team
         o.color = [10, 11, 12, 15, 25, 26, 27, 28][-team - 1] || 3
