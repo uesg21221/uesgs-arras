@@ -2,6 +2,7 @@ class BossRush {
     constructor() {
         this.bossChoices = [Class.eliteDestroyer, Class.eliteGunner, Class.eliteSprayer, Class.eliteBattleship, Class.eliteSpawner, Class.roguePalisade, Class.eliteSkimmer, Class.summoner, Class.nestKeeper]
         this.friendlyBossChoices = [Class.roguePalisade, Class.rogueArmada];
+        this.bigBossChoices = [Class.paladin, Class.freyja, Class.zaphkiel, Class.nyx, Class.theia, Class.alviss, Class.tyr];
         this.bigFodderChoices = [Class.sentryGun, Class.sentrySwarm, Class.sentryTrap, Class.shinySentryGun];
         this.smallFodderChoices = [Class.crasher];
         this.waves = this.generateWaves()
@@ -14,7 +15,7 @@ class BossRush {
     generateWaves() {
         let bosses = this.bossChoices.sort(() => 0.5 - Math.random())
         let waves = []
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 100; i++) {
             let wave = []
             for (let j = 0; j < 2 + Math.random() * 4 + (i * .4); j++) {
                 wave.push(bosses[j])
@@ -34,6 +35,17 @@ class BossRush {
         o.team = -1
         o.controllers.push(new ioTypes.nearestDifferentMaster(o))
         o.controllers.push(new ioTypes.botMovement(o))
+    }
+
+    spawnCelestial() {
+        sockets.broadcast('A Celestial has spawned!')
+        let spot = null, m = 0;
+        do { spot = room.randomType('boss'); } while (dirtyCheck(spot, 500) && ++m < 30);
+        let o = new Entity(spot)
+        o.define(ran.choose(this.bigBossChoices))
+        o.define({ DANGER: 25 + o.SIZE / 5 });
+        o.team = -100
+        o.controllers.push(new ioTypes.bossRushAI(o));
     }
 
     spawnDominator(loc, team, type = false) {
@@ -87,8 +99,9 @@ class BossRush {
         return n;
     }
 
-        //yell at everyone
+    //spawn waves
     spawnWave(waveId) {
+        //yell at everyone
         sockets.broadcast(`Wave ${waveId + 1} has arrived!`);
 
         //spawn bosses
@@ -105,7 +118,9 @@ class BossRush {
         for (let i = 0; i < this.waveId / 2; i++) this.spawnEnemyWrapper(room.randomType('boss'), ran.choose(this.smallFodderChoices));
 
         //spawn a friendly boss every 20 waves
-        if (waveId % 20 == 19) setTimeout(this.spawnFriendlyBoss, 5000);
+        if (waveId % 20 == 19) setTimeout(() => this.spawnFriendlyBoss(), 5000);
+        //spawn a celestial every 30 waves
+        if (waveId % 30 == 29) () => this.spawnCelestial();
     }
 
     //runs once when the server starts
