@@ -612,11 +612,12 @@ class io_zoom extends IO {
     constructor(body, opts = {}) {
         super(body);
         this.distance = opts.distance || 225;
+        this.moveWithBody = opts.moveWithBody;
     }
 
     think(input) {
         if (input.alt && input.target) {
-            if (this.body.cameraOverrideX === null) {
+            if (this.moveWithBody || this.body.cameraOverrideX === null) {
                 let direction = Math.atan2(input.target.y, input.target.x);
                 this.body.cameraOverrideX = this.body.x + this.distance * Math.cos(direction);
                 this.body.cameraOverrideY = this.body.y + this.distance * Math.sin(direction);
