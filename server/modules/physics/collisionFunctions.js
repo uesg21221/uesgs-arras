@@ -308,7 +308,7 @@ function reflectCollide(wall, bounce) {
     let topExposed = bounce.y - bounce.size < wall.y - wall.size
     let bottomExposed = bounce.y + bounce.size > wall.y + wall.size
 
-    let intersected = true
+    let intersected = false
 
     if (left && right) {
         left = right = false

@@ -45,6 +45,10 @@ function collide(collision) {
     if (!instance.activation.check() && !other.activation.check()) {
         return 0;
     }
+    if (instance.label === "Spectator" || other.label === "Spectator")
+    {
+        return 0;
+    }
     switch (true) {
         case instance.type === "wall" || other.type === "wall":
             if (instance.type === "wall" && other.type === "wall") return;
