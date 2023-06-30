@@ -797,6 +797,9 @@ class Entity extends EventEmitter {
         player.body = fakeBody;
         player.body.kill();
     }
+    reset_func() {
+        this.controllers = this.controllers.filter(controller => controller instanceof ioTypes.listenToPlayer);
+    }
     define(set) {
         if (set.PARENT != null) {
             for (let i = 0; i < set.PARENT.length; i++) {
