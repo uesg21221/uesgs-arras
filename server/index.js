@@ -49,6 +49,17 @@ function collide(collision) {
     {
         return 0;
     }
+    if (instance.label === "Substance" || other.label === "Substance") {
+        if (other.type === "food") {
+            other.color = instance.color;
+            other.team = instance.team;
+            return 0;
+        } else if (instance.type === "food") {
+            instance.color = other.color;
+            instance.team = other.team;
+            return 0;
+        }
+    }
     switch (true) {
         case instance.type === "wall" || other.type === "wall":
             if (instance.type === "wall" && other.type === "wall") return;

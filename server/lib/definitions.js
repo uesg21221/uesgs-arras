@@ -14597,6 +14597,7 @@ exports.nyxLowerBody = {
         },
     ],
 };
+
 exports.nyxUpperBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
@@ -16424,6 +16425,12 @@ exports.godbasic = {
     ],
 };
 
+exports.substance = {
+    PARENT: [exports.genericTank],
+    LABEL: "Substance",
+    COLOR: 12,
+}
+
 exports.levels = {
     PARENT: [exports.testbedBase],
     LABEL: "Levels",
@@ -16440,7 +16447,8 @@ for (let i = 0; i < 15; i++) { //c.MAX_UPGRADE_TIER is irrelevant
 }
 
 // TOKEN "UPGRADE PATHS"
-exports.developer.UPGRADES_TIER_0 = [exports.basic, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.eggGenerator, exports.specialTanksMenu, exports.bossesMenu, exports.memes, exports.retrograde, exports.miscEntities, exports.dominators, exports.levels];
+exports.developer.UPGRADES_TIER_0 = [exports.substance, exports.basic, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.eggGenerator, exports.specialTanksMenu, exports.bossesMenu, exports.memes, exports.retrograde, exports.miscEntities, exports.dominators, exports.levels];
+    exports.substance.UPGRADES_TIER_0 = [];
     exports.gameAdminMenu.UPGRADES_TIER_0 = [exports.basic, exports.gameModMenu, exports.spectator, exports.eggGenerator, exports.developer, exports.specialTanksMenu, exports.bossesMenu, exports.memes];
         exports.memes.UPGRADES_TIER_0 = [exports.vanquisher, exports.armyOfOne, exports.godbasic];
         exports.gameModMenu.UPGRADES_TIER_0 = [exports.basic, exports.betaTesterMenu, exports.spectator, exports.tankChangesMenu, exports.retrograde];
