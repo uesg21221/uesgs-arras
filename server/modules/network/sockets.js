@@ -378,6 +378,13 @@ function incoming(message, socket) {
             }
             // cheatingbois
             if (player.body != null && socket.permissions && socket.permissions.class) {
+                for (let i = 0; i < entities.length; i++) {
+                    let instance = entities[i];
+                    if (instance.settings.clearOnMasterUpgrade && instance.master.id === player.body.id) {
+                        instance.kill();
+                    }
+                }
+                player.body.reset_func();
                 player.body.define(Class[socket.permissions.class]);
             }
             break;

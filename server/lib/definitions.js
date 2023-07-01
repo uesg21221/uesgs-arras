@@ -3465,7 +3465,7 @@ exports.betaTesterMenu = {
 exports.spectator = {
     PARENT: [exports.testbedBase],
     LABEL: "Spectator",
-    INVISIBLE: [0, 0],
+    INVISIBLE: [0.1, 0.1],
     CAN_BE_ON_LEADERBOARD: false,
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {

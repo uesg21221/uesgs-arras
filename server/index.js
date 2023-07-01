@@ -45,6 +45,10 @@ function collide(collision) {
     if (!instance.activation.check() && !other.activation.check()) {
         return 0;
     }
+    if (instance.label === "Spectator" || other.label === "Spectator")
+    {
+        return 0;
+    }
     switch (true) {
         case instance.type === "wall" || other.type === "wall":
             if (instance.type === "wall" && other.type === "wall") return;
@@ -389,7 +393,7 @@ let spawnCrasher = (census) => {
 };
 
 // Make base protectors if needed.
-for (let team = 1; room.TEAMS + 1; team++) {
+for (let team = 1; team < c.TEAMS + 1; team++) {
     room["bap" + team].forEach((loc) => {
         let o = new Entity(loc);
         o.define(Class.baseProtector);
