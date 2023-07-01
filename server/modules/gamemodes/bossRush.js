@@ -59,7 +59,7 @@ class BossRush {
         o.name = 'Dominator'
         o.SIZE = c.WIDTH / c.X_GRID / 10
         o.isDominator = true
-        o.controllers = [new ioTypes.alwaysFire(o), new ioTypes.spin(o, { onlyWhenIdle: true })]
+        o.controllers = [new ioTypes.alwaysFire(o)]
         o.on('dead', () => {
             if (o.team === -100) {
                 bossRush.spawnDominator(loc, -1, type)
