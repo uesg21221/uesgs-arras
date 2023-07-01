@@ -291,6 +291,7 @@ class Gun {
     }
     bulletInit(o) {
         // Define it by its natural properties
+        o.color = undefined;
         this.bulletTypes.forEach(type => o.define(type));
         // Pass the gun attributes
         o.define({
