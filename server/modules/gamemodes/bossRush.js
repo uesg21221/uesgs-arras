@@ -1,6 +1,6 @@
 class BossRush {
     constructor() {
-        this.bossChoices = [Class.eliteDestroyer, Class.eliteGunner, Class.eliteSprayer, Class.eliteBattleship, Class.eliteSpawner, Class.roguePalisade, Class.eliteSkimmer, Class.summoner, Class.nestKeeper, Class.paladin, Class.freyja, Class.zaphkiel, Class.nyx, Class.theia, Class.alviss, Class.tyr]
+        this.bossChoices = [Class.eliteDestroyer, Class.eliteGunner, Class.eliteSprayer, Class.eliteBattleship, Class.eliteSpawner, Class.roguePalisade, Class.eliteSkimmer, Class.summoner, Class.nestKeeper]
         this.friendlyBossChoices = [Class.roguePalisade, Class.rogueArmada];
         this.bigBossChoices = [Class.paladin, Class.freyja, Class.zaphkiel, Class.nyx, Class.theia, Class.alviss, Class.tyr];
         this.bigFodderChoices = [Class.sentryGun, Class.sentrySwarm, Class.sentryTrap, Class.shinySentryGun];
@@ -59,7 +59,7 @@ class BossRush {
         o.name = 'Dominator'
         o.SIZE = c.WIDTH / c.X_GRID / 10
         o.isDominator = true
-        o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: true })]
+        o.controllers = [new ioTypes.alwaysFire(o), new ioTypes.spin(o, { onlyWhenIdle: true })]
         o.on('dead', () => {
             if (o.team === -100) {
                 bossRush.spawnDominator(loc, -1, type)
