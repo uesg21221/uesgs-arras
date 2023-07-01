@@ -1,6 +1,6 @@
 class BossRush {
     constructor() {
-        this.bossChoices = [Class.eliteDestroyer, Class.eliteGunner, Class.eliteSprayer, Class.eliteBattleship, Class.eliteSpawner, Class.roguePalisade, Class.eliteSkimmer, Class.summoner, Class.nestKeeper]
+        this.bossChoices = [Class.eliteDestroyer, Class.eliteGunner, Class.eliteSprayer, Class.eliteBattleship, Class.eliteSpawner, Class.roguePalisade, Class.eliteSkimmer, Class.summoner, Class.nestKeeper, Class.paladin, Class.freyja, Class.zaphkiel, Class.nyx, Class.theia, Class.alviss, Class.tyr]
         this.friendlyBossChoices = [Class.roguePalisade, Class.rogueArmada];
         this.bigBossChoices = [Class.paladin, Class.freyja, Class.zaphkiel, Class.nyx, Class.theia, Class.alviss, Class.tyr];
         this.bigFodderChoices = [Class.sentryGun, Class.sentrySwarm, Class.sentryTrap, Class.shinySentryGun];
@@ -27,7 +27,6 @@ class BossRush {
     }
 
     spawnFriendlyBoss() {
-        sockets.broadcast('A Rogue Boss has spawned to help!')
         let o = new Entity(room.randomType('bas1'))
         o.define(ran.choose(this.friendlyBossChoices))
         o.define({ DANGER: 10 });
@@ -35,6 +34,7 @@ class BossRush {
         o.team = -1
         o.controllers.push(new ioTypes.nearestDifferentMaster(o))
         o.controllers.push(new ioTypes.botMovement(o))
+        sockets.broadcast(o.name + ' has arrived and joined your team!')
     }
 
     spawnCelestial() {
@@ -51,7 +51,7 @@ class BossRush {
     spawnDominator(loc, team, type = false) {
         type = type ? type : Class.trapperDominator
         let bossRush = this,
-            o = new Entity(loc)
+        o = new Entity(loc)
         o.define(type)
         o.team = team
         o.color = [10, 11, 12, 15, 25, 26, 27, 28][-team - 1] || 3
