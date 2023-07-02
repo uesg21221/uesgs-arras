@@ -15281,7 +15281,6 @@ exports.dominator = {
         HETERO: 0,
         SHIELD: base.SHIELD * 1.4,
     },
-    CONTROLLERS: ["nearestDifferentMaster"],
     DISPLAY_NAME: true,
     TURRETS: [
         {
@@ -15296,6 +15295,7 @@ exports.dominator = {
 };
 exports.destroyerDominator = {
     PARENT: [exports.dominator],
+    CONTROLLERS: ["nearestDifferentMaster"],
     GUNS: [
         {
             POSITION: [15.25, 6.75, 1, 0, 0, 0, 0],
@@ -15311,6 +15311,7 @@ exports.destroyerDominator = {
 };
 exports.gunnerDominator = {
     PARENT: [exports.dominator],
+    CONTROLLERS: ["nearestDifferentMaster"],
     GUNS: [
         {
             POSITION: [14.25, 3, 1, 0, -2, 0, 0.5],
