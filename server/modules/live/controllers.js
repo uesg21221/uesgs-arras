@@ -352,14 +352,14 @@ class io_nearestDifferentMaster extends IO {
         }
         // Otherwise, consider how fast we can either move to ram it or shoot at a potiential target.
         let tracking = this.body.topSpeed,
-            range = this.body.fov;
+            range = body.fov;
         // Use whether we have functional guns to decide
         for (let i = 0; i < this.body.guns.length; i++) {
             if (this.body.guns[i].canShoot && !this.body.aiSettings.SKYNET) {
                 let v = this.body.guns[i].getTracking();
                 if (v.speed == 0 || v.range == 0) continue;
                 tracking = v.speed;
-                range = Math.min(range, (v.speed || 1.5) * (v.range < (this.body.size * 2) ? this.body.fov : v.range));
+                range = Math.min(range, (v.speed || 1.5) * (v.range < (this.body.size * 2) ? body.fov : v.range));
                 break;
             }
         }
@@ -367,7 +367,7 @@ class io_nearestDifferentMaster extends IO {
             tracking = this.body.topSpeed + .01;
         }
         if (!Number.isFinite(range)) {
-            range = 640 * this.body.FOV;
+            range = 640 * body.fov;
         }
         // Check if my target's alive
         if (this.targetLock && !this.validate(this.targetLock, this.body, this.body.master.master, range * range, range * range * 4 / 3)) {
