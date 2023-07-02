@@ -1453,10 +1453,10 @@ class Entity extends EventEmitter {
         if (this.type === "food" && room.isIn("boss", this)) {
             this.kill();
         }
-        if (room.gameMode === "tdm" && this.type !== "food" && this.master.label !== "Arena Closer") {
+        if (c.MODE === "tdm" && this.type !== "food" && this.master.label !== "Arena Closer") {
             let loc = this;
             let inEnemyBase = false;
-            for (let i = 1; i < room.TEAMS + 1; i++) {
+            for (let i = 1; i < c.TEAMS + 1; i++) {
                 if (room["bas" + i].length) {
                     if (this.team !== -i && room.isIn("bas" + i, loc)) inEnemyBase = true;
                 }
