@@ -894,7 +894,7 @@ class Entity extends EventEmitter {
             }
             this.skill.reset();
             while (
-                this.skill.level < c.SKILL_CHEAT_CAP &&
+                this.skill.level < c.SKILL_CAP &&
                 this.skill.level < set.LEVEL
             ) {
                 this.skill.score += this.skill.levelScore;

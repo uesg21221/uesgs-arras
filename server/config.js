@@ -44,13 +44,14 @@ module.exports = {
         if (level < 2) return 0;
         if (level <= 40) return 1;
         if (level <= 45 && level & 1 == 1) return 1;
+        if (level <= 60) return 2;
         return 0;
     },
     MAX_SKILL: 9,
     SOFT_MAX_SKILL: 0.59,
     MAX_UPGRADE_TIER: 9,
     TIER_MULTIPLIER: 15,
-    SKILL_CAP: 45,
+    SKILL_CAP: 60,
     SKILL_SOFT_CAP: 0,
     SKILL_CHEAT_CAP: 45,
     SKILL_LEAK: 0,

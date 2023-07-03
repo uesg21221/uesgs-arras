@@ -3387,6 +3387,19 @@ exports.testbedBase = {
 exports.developer = {
     PARENT: [exports.testbedBase],
     LABEL: "Developer",
+    LEVEL: 0,
+    SKILL: skillSet({
+        rld: 0,
+        dam: 0,
+        pen: 0,
+        str: 0,
+        spd: 0,
+        atk: 0,
+        hlt: 0,
+        shi: 0,
+        rgn: 0,
+        mob: 0,
+    }),
     BODY: {
         SHIELD: 1000,
         REGEN: 10,
@@ -16435,8 +16448,8 @@ exports.levels = {
     LABEL: "Levels",
     UPGRADES_TIER_0: [exports.developer]
 };
-for (let i = 0; i < 15; i++) { //c.MAX_UPGRADE_TIER is irrelevant
-    let LEVEL = i * c.TIER_MULTIPLIER;
+for (let i = 0; i <= c.SKILL_CAP; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_TIER is irrelevant
+    let LEVEL = i;
     exports["level" + LEVEL] = {
         PARENT: [exports.levels],
         LEVEL,
@@ -16448,15 +16461,15 @@ for (let i = 0; i < 15; i++) { //c.MAX_UPGRADE_TIER is irrelevant
 exports.genericDreadnought = {
     PARENT: [exports.genericTank],
     BODY: {
-        HEALTH: base.HEALTH * 5,
-        DAMAGE: base.DAMAGE * 3,
-        PENETRATION: base.PENETRATION * 1.5,
-        SHIELD: base.SHIELD * 2,
-        REGEN: base.REGEN * 2,
+        HEALTH: base.HEALTH * 24,
+        DAMAGE: base.DAMAGE * 6,
+        PENETRATION: base.PENETRATION * 2,
+        SHIELD: base.SHIELD * 4,
+        REGEN: base.REGEN * 4,
     },
     SIZE: 16,
     COLOR: 6,
-    LEVEL: 45,
+    LEVEL: 60,
     SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl],
 };
 exports.dreadnought = {
@@ -16470,14 +16483,14 @@ exports.pacifier = {
         {
             POSITION: [15, 7, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.power, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [15, 7, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.power, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16490,14 +16503,14 @@ exports.peacekeeper = {
         {
             POSITION: [17, 7, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                SHOOT_SETTINGS: combineStats([g.power, g.sniper]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [17, 7, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                SHOOT_SETTINGS: combineStats([g.power, g.sniper]),
                 TYPE: exports.bullet,
             },
         },
@@ -16515,7 +16528,7 @@ exports.centaur = {
         {
             POSITION: [4, 8, 1.5, 12, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap]),
+                SHOOT_SETTINGS: combineStats([g.power, g.trap, g.slow]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16527,7 +16540,7 @@ exports.centaur = {
         {
             POSITION: [4, 8, 1.5, 12, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap]),
+                SHOOT_SETTINGS: combineStats([g.power, g.trap, g.slow]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
