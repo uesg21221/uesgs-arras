@@ -3371,7 +3371,6 @@ exports.testbedBase = {
         dfltskl,
         dfltskl,
     ],
-    IGNORED_BY_AI: true,
     TURRETS: [],
     GUNS: [
         {
@@ -3433,6 +3432,19 @@ exports.developer = {
 exports.developerB = {
     PARENT: [exports.testbedBase],
     LABEL: "Developer B",
+    LEVEL: 0,
+    SKILL: skillSet({
+        rld: 0,
+        dam: 0,
+        pen: 0,
+        str: 0,
+        spd: 0,
+        atk: 0,
+        hlt: 0,
+        shi: 0,
+        rgn: 0,
+        mob: 0,
+    }),
     BODY: {
         SHIELD: 1000,
         REGEN: 10,
