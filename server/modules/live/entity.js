@@ -678,6 +678,7 @@ class Entity extends EventEmitter {
         this.define(Class.genericEntity);
         // Initalize physics and collision
         this.maxSpeed = 0;
+        this.facingLocked = false;
         this.facing = 0;
         this.vfacing = 0;
         this.range = 0;
@@ -1224,7 +1225,8 @@ class Entity extends EventEmitter {
     face() {
         let t = this.control.target,
             tactive = t.x !== 0 || t.y !== 0,
-            oldFacing = this.facing;
+            oldFacing = this.facing,
+            oldVFacing = this.vfacing;
         switch (this.facingType) {
             case "autospin":
                 this.facing += 0.02 / roomSpeed;
@@ -1282,8 +1284,13 @@ class Entity extends EventEmitter {
         this.facing += this.turnAngle;
         // Loop
         const TAU = 2 * Math.PI;
-        this.facing = ((this.facing % TAU) + TAU) % TAU;
-        this.vfacing = util.angleDifference(oldFacing, this.facing) * roomSpeed;
+        if (this.facingLocked) {
+            this.facing = oldFacing;
+            this.vfacing = oldVFacing;
+        } else {
+            this.facing = ((this.facing % TAU) + TAU) % TAU;
+            this.vfacing = util.angleDifference(oldFacing, this.facing) * roomSpeed;
+        }
     }
     takeSelfie() {
         this.flattenedPhoto = null;

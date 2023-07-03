@@ -287,7 +287,8 @@ function incoming(message, socket) {
                 "override",
                 "reverse mouse", //reverse mouse does nothing server-side, it's easier to make the client send swapped inputs
                 "reverse tank", //reverse tank does nothing server-side, it's easier to make the client turn around 180 degrees
-                "autoalt"
+                "autoalt",
+                "spinlock"
             ][tog];
 
             // Kick if it sent us shit.
@@ -901,7 +902,8 @@ const spawn = (socket, name) => {
         autofire: false,
         autospin: false,
         override: false,
-        autoalt: false
+        autoalt: false,
+        spinlock: false
     };
     // Set up the recording commands
     let begin = util.time();
