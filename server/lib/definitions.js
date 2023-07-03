@@ -16468,7 +16468,6 @@ exports.genericDreadnought = {
         REGEN: base.REGEN * 4,
     },
     SIZE: 16,
-    COLOR: 6,
     LEVEL: 60,
     SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl],
 };
