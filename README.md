@@ -16,4 +16,3 @@ Your private server will be at <https://servername.glitch.me> (replace `serverna
 
 - APS+ - https://discord.gg/kvCAZfUCjy
 - Arras.io - https://discord.gg/arras
-- 
