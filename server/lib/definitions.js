@@ -16445,8 +16445,102 @@ for (let i = 0; i < 15; i++) { //c.MAX_UPGRADE_TIER is irrelevant
     exports.levels.UPGRADES_TIER_0.push(exports["level" + LEVEL]);
 }
 
+exports.genericDreadnought = {
+    PARENT: [exports.genericTank],
+    BODY: {
+        HEALTH: base.HEALTH * 5,
+        DAMAGE: base.DAMAGE * 3,
+        PENETRATION: base.PENETRATION * 1.5,
+        SHIELD: base.SHIELD * 2,
+        REGEN: base.REGEN * 2,
+    },
+    SIZE: 16,
+    COLOR: 6,
+    LEVEL: 45,
+    SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl],
+};
+exports.dreadnought = {
+    PARENT: [exports.genericDreadnought],
+    LABEL: "Dreadnought",
+};
+exports.pacifier = {
+    PARENT: [exports.genericDreadnought],
+    LABEL: "Pacifier",
+    GUNS: [
+        {
+            POSITION: [15, 7, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [15, 7, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.peacekeeper = {
+    PARENT: [exports.genericDreadnought],
+    LABEL: "Peacekeeper",
+    GUNS: [
+        {
+            POSITION: [17, 7, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [17, 7, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.centaur = {
+    PARENT: [exports.genericDreadnought],
+    LABEL: "Centaur",
+    STAT_NAMES: statnames.trap,
+    GUNS: [
+        {
+            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [12, 8, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [4, 8, 1.5, 12, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [12, 8, 1, 0, 0, 180, 0],
+        },
+        {
+            POSITION: [4, 8, 1.5, 12, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
+
 // TOKEN "UPGRADE PATHS"
-exports.developer.UPGRADES_TIER_0 = [exports.substance, exports.basic, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.eggGenerator, exports.specialTanksMenu, exports.bossesMenu, exports.memes, exports.retrograde, exports.miscEntities, exports.dominators, exports.levels];
+exports.developer.UPGRADES_TIER_0 = [exports.dreadnought, exports.substance, exports.basic, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.eggGenerator, exports.specialTanksMenu, exports.bossesMenu, exports.memes, exports.retrograde, exports.miscEntities, exports.dominators, exports.levels];
+    exports.dreadnought.UPGRADES_TIER_0 = [exports.pacifier, exports.peacekeeper, exports.centaur];
+        exports.pacifier.UPGRADES_TIER_0 = [];
+        exports.peacekeeper.UPGRADES_TIER_0 = [];
+        exports.centaur.UPGRADES_TIER_0 = [];
     exports.substance.UPGRADES_TIER_0 = [];
     exports.gameAdminMenu.UPGRADES_TIER_0 = [exports.basic, exports.gameModMenu, exports.spectator, exports.eggGenerator, exports.developer, exports.specialTanksMenu, exports.bossesMenu, exports.memes];
         exports.memes.UPGRADES_TIER_0 = [exports.vanquisher, exports.armyOfOne, exports.godbasic];
