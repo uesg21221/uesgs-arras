@@ -44,7 +44,7 @@ module.exports = {
         if (level < 2) return 0;
         if (level <= 40) return 1;
         if (level <= 45 && level & 1 == 1) return 1;
-        if (level <= 60) return 2;
+        if (level <= 60) return 1.3;
         return 0;
     },
     MAX_SKILL: 9,
