@@ -42,16 +42,15 @@ module.exports = {
     FOOD_NEST: [0, 0.0, 0.0, 0.75, 0.23, 0.02, 0],
     LEVEL_SKILL_POINT_FUNCTION: level => {
         if (level < 2) return 0;
-        if (level <= 40) return 1;
-        if (level <= 45 && level & 1 == 1) return 1;
-        if (level <= 60) return 1.3;
+        if (level <= 60) return 1;
+        if (level <= 105 && level & 1 == 1) return 0.5;
         return 0;
     },
     MAX_SKILL: 9,
     SOFT_MAX_SKILL: 0.59,
-    MAX_UPGRADE_TIER: 9,
+    MAX_UPGRADE_TIER: 7,
     TIER_MULTIPLIER: 15,
-    SKILL_CAP: 60,
+    SKILL_CAP: 105,
     SKILL_SOFT_CAP: 0,
     SKILL_CHEAT_CAP: 45,
     SKILL_LEAK: 0,
