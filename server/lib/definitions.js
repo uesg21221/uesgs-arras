@@ -16468,6 +16468,7 @@ exports.genericDreadnought = {
         PENETRATION: base.PENETRATION * 1.5,
         SHIELD: base.SHIELD * 2,
         REGEN: base.REGEN * 2,
+        SPEED: base.SPEED * 0.7,
     },
     SIZE: 16,
     LEVEL: 60,
