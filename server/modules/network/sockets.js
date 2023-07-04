@@ -4,7 +4,7 @@ let permissionsDict = {}
     players = [],
     disconnections = [];
 
-for (let entry of require("../../permissions.json")) {
+for (let entry of require("../../permissions.js")) {
     permissionsDict[entry.key] = entry;
 }
 
@@ -857,7 +857,7 @@ const spawn = (socket, name) => {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
         }
-        body.addController(new ioTypes.listenToPlayer(body, player)); // Make it listen
+        body.addController(new ioTypes.listenToPlayer(body, { player })); // Make it listen
         body.sendMessage = (content) => messenger(socket, content); // Make it speak
         socket.spectateEntity = null;
         body.invuln = true; // Make it safe

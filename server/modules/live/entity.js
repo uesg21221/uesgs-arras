@@ -692,6 +692,8 @@ class Entity extends EventEmitter {
         this.accel = new Vector(0, 0);
         this.damp = 0.05;
         this.collisionArray = [];
+        this.perceptionAngleIndependence = 1;
+        this.firingArc = [0, 360];
         this.invuln = false;
         this.alpha = 1;
         this.invisible = [0, 0];
@@ -768,8 +770,8 @@ class Entity extends EventEmitter {
     become(player, dom = false) {
         this.addController(
             dom
-                ? new ioTypes.listenToPlayerStatic(this, player)
-                : new ioTypes.listenToPlayer(this, player)
+                ? new ioTypes.listenToPlayerStatic(this, { player })
+                : new ioTypes.listenToPlayer(this, { player })
         );
         this.sendMessage = (content, color) => player.socket.talk("m", content);
         this.kick = (reason) => player.socket.kick(reason);
