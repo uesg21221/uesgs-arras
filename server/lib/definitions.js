@@ -207,7 +207,7 @@ const g = {
     lowpower: [1, 1, 2, 1, 0.5, 0.5, 0.7, 1, 1, 1, 1, 0.5, 0.7],
     notdense: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.1, 1, 1],
     halfrange: [1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1],
-    dreadnought: [1, 1, 0.8, 1.1, 1, 1, 1.15, 1.4, 1.2, 1, 1.5, 0.75, 1.25],
+    dreadnought: [1, 1, 0.8, 1.1, 1, 1, 1.15, 0.7, 0.7, 1, 1.5, 0.75, 1.25],
 };
 
 // SKILL DEFINITIONS
@@ -3359,7 +3359,6 @@ exports.doctorDrone = {
 exports.testbedBase = {
     PARENT: [exports.genericTank],
     LABEL: "",
-    RESET_UPGRADES: true,
     LEVEL: 0,
     SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
     SKILL: skillSet({
@@ -3389,6 +3388,8 @@ exports.testbedBase = {
 exports.developer = {
     PARENT: [exports.testbedBase],
     LABEL: "Developer",
+    RESET_UPGRADES: true,
+    INVISIBLE: [0, 0],
     BODY: {
         SHIELD: 1000,
         REGEN: 10,
@@ -3467,7 +3468,7 @@ exports.betaTesterMenu = {
 exports.spectator = {
     PARENT: [exports.testbedBase],
     LABEL: "Spectator",
-    INVISIBLE: [0.1, 0.1],
+    INVISIBLE: [0.08, 0.03],
     CAN_BE_ON_LEADERBOARD: false,
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
@@ -16450,18 +16451,6 @@ for (let i = 0; i <= c.SKILL_CAP; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_TIER
 exports.genericDreadnought = {
     PARENT: [exports.genericTank],
     DANGER: 9,
-    SKILL: skillSet({
-        rld: 0,
-        dam: 0,
-        pen: 0,
-        str: 0,
-        spd: 0,
-        atk: 0,
-        hlt: 0,
-        shi: 0,
-        rgn: 0,
-        mob: 0,
-    }),
     SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl],
 };
 exports.eggDreadnought = {
@@ -16473,7 +16462,7 @@ exports.eggDreadnought = {
         DAMAGE: base.DAMAGE * 2,
         SHIELD: base.SHIELD * 1.5,
         REGEN: base.REGEN * 2,
-        SPEED: base.SPEED * 0.7,
+        SPEED: base.SPEED * 0.6,
     },
     SIZE: 16,
 };
