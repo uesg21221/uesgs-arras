@@ -207,6 +207,7 @@ const g = {
     lowpower: [1, 1, 2, 1, 0.5, 0.5, 0.7, 1, 1, 1, 1, 0.5, 0.7],
     notdense: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.1, 1, 1],
     halfrange: [1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1],
+    dreadnought: [1, 1, 0.6, 1.2, 1, 1, 1.25, 1.4, 1.19, 1, 2, 0.5, 1.5],
 };
 
 // SKILL DEFINITIONS
@@ -16463,10 +16464,9 @@ exports.genericDreadnought = {
         mob: 0,
     }),
     BODY: {
-        HEALTH: base.HEALTH * 5,
-        DAMAGE: base.DAMAGE * 3.5,
-        PENETRATION: base.PENETRATION * 1.5,
-        SHIELD: base.SHIELD * 2,
+        HEALTH: base.HEALTH * 4,
+        DAMAGE: base.DAMAGE * 2,
+        SHIELD: base.SHIELD * 1.5,
         REGEN: base.REGEN * 2,
         SPEED: base.SPEED * 0.7,
     },
@@ -16485,14 +16485,14 @@ exports.pacifier = {
         {
             POSITION: [15, 7, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.power, g.basic]),
+                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [15, 7, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.power, g.basic]),
+                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16505,14 +16505,14 @@ exports.peacekeeper = {
         {
             POSITION: [17, 7, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.power, g.sniper]),
+                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [17, 7, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.power, g.sniper]),
+                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper]),
                 TYPE: exports.bullet,
             },
         },
@@ -16530,7 +16530,7 @@ exports.centaur = {
         {
             POSITION: [4, 8, 1.5, 12, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.power, g.trap, g.slow]),
+                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16542,7 +16542,7 @@ exports.centaur = {
         {
             POSITION: [4, 8, 1.5, 12, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.power, g.trap, g.slow]),
+                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
