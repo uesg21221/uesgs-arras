@@ -16479,6 +16479,7 @@ exports.eggDreadnought = {
 };
 exports.dreadnought = {
     PARENT: [exports.eggDreadnought],
+    IS_SMASHER: true,
     LABEL: "Dreadnought",
 };
 exports.pacifier = {
@@ -16633,9 +16634,9 @@ exports.miscEntities.UPGRADES_TIER_0 = [exports.dominators, exports.baseProtecto
 exports.dominators.UPGRADES_TIER_0 = [exports.dominator, exports.destroyerDominator, exports.gunnerDominator, exports.trapperDominator];
 
 // TANK UPGRADE PATHS
-exports.basic.UPGRADES_TIER_1 = [exports.dreadnought, exports.twin, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper];
+exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper];
         exports.basic.UPGRADES_TIER_2 = [exports.smasher];
-                exports.basic.UPGRADES_TIER_3 = [exports.single];
+                exports.basic.UPGRADES_TIER_3 = [exports.single, exports.dreadnought];
                 exports.smasher.UPGRADES_TIER_3 = [exports.megaSmasher, exports.spike, exports.autoSmasher, exports.landmine];
 
         exports.twin.UPGRADES_TIER_2 = [exports.doubleTwin, exports.tripleShot, exports.gunner, exports.hexaTank];
@@ -16679,8 +16680,7 @@ exports.basic.UPGRADES_TIER_1 = [exports.dreadnought, exports.twin, exports.snip
                 exports.triTrapper.UPGRADES_TIER_3 = [exports.fortress, exports.hexaTrapper, exports.septaTrapper, exports.architect];
                 exports.trapGuard.UPGRADES_TIER_3 = [exports.bushwhacker, exports.gunnerTrapper, exports.bomber, exports.conqueror, exports.bulwark];
 
-        exports.dreadnought.UPGRADES_TIER_2 = [];
-                exports.dreadnought.UPGRADES_TIER_3 = [exports.pacifier, exports.peacekeeper, exports.centaur, exports.sword, exports.invader];
+        exports.dreadnought.UPGRADES_TIER_3 = [exports.pacifier, exports.peacekeeper, exports.centaur, exports.sword, exports.invader];
                 // exports.pacifier.UPGRADES_TIER_4 = [];
                 // exports.peacekeeper.UPGRADES_TIER_4 = [];
                 // exports.centaur.UPGRADES_TIER_4 = [];

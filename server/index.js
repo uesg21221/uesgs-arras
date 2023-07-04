@@ -487,7 +487,7 @@ let makenpcs = () => {
         o.team = team;
         o.color = color;
         o.name += ran.chooseBotName();
-        o.leftoverUpgrades = ran.chooseChance(1, 5, 20, 37, 37); //some guy in discord once suggested that some bots shouldnt upgrade to latest tier
+        o.leftoverUpgrades = ran.chooseChance(1, 5, 20, 37); //some guy in discord once suggested that some bots shouldnt upgrade to latest tier
         bots.push(o);
 
         //TODO: add support for tag mode
