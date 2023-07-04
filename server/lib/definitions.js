@@ -207,7 +207,8 @@ const g = {
     lowpower: [1, 1, 2, 1, 0.5, 0.5, 0.7, 1, 1, 1, 1, 0.5, 0.7],
     notdense: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.1, 1, 1],
     halfrange: [1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1],
-    dreadnought: [1, 1, 0.8, 1.1, 1, 1, 1.15, 0.7, 0.7, 1, 1.5, 0.75, 1.25],
+    //Reload, recoil, shudder (speed variation), size, health, damage, penetration, speed, max speed, range, density, spray (accuracy variation), resist
+    dreadnought: [0.8, 1, 0.6, 1.2, 1, 1, 1.2, 0.7, 0.7, 1, 1.5, 0.5, 1.25],
 };
 
 // SKILL DEFINITIONS
