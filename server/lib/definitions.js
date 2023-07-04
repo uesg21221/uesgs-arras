@@ -16448,6 +16448,8 @@ for (let i = 0; i <= c.SKILL_CAP; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_TIER
 exports.genericDreadnought = {
     PARENT: [exports.genericTank],
     DANGER: 9,
+    COLOR: 6,
+    TEAM: 9,
     SKILL: skillSet({
         rld: 0,
         dam: 0,

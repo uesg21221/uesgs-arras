@@ -819,6 +819,7 @@ class Entity extends EventEmitter {
             this.shapeData = set.SHAPE;
         }
         if (set.COLOR != null) this.color = set.COLOR;
+        if (set.TEAM != null) this.team = set.TEAM;
         if (set.CONTROLLERS != null) {
             let toAdd = [];
             for (let i = 0; i < set.CONTROLLERS.length; i++) {
