@@ -915,7 +915,7 @@ exports.genericTank = {
     TYPE: "tank",
     DAMAGE_CLASS: 2,
     DANGER: 5,
-    REALSKILL_CAP: 45,
+    REALSKILL_CAP: c.SKILL_CHEAT_CAP,
     MOTION_TYPE: "motor",
     FACING_TYPE: "toTarget",
     SIZE: 12,
