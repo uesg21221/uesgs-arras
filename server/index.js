@@ -455,8 +455,17 @@ let makenpcs = () => {
     // upgrade existing ones
     for (let i = 0; i < bots.length; i++) {
         let o = bots[i];
-        if (o.skill.level < c.SKILL_CAP) o.skill.score += 125;
-        o.skill.maintain();
+        if (o.skill.level < c.SKILL_CAP) {
+            o.skill.score += 125;
+            o.skill.maintain();
+        }
+        if (o.label.includes("Dreadnought") && o.skill.level < c.SKILL_CHEAT_CAP) {
+            while (o.skill.level < c.SKILL_CHEAT_CAP) {
+                o.skill.score += o.skill.levelScore;
+                o.skill.maintain();
+            }
+            o.refreshBodyAttributes();
+        }
         o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(1, 1, 3, 4, 4, 4, 4, 2, 1, 1)]);
         if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) o.leftoverUpgrades--;
     }
@@ -482,13 +491,25 @@ let makenpcs = () => {
             team = -team;
         }
         o.define(Class.bot);
-        o.define(Class.basic);
+        ran.chooseChance(5, 1) ? o.define(Class.dreadnought) : o.define(Class.basic);
         o.refreshBodyAttributes();
         o.isBot = true;
-        o.team = team;
+        if (o.label.includes("Dreadnought")) {
+            o.team = ran.chooseChance(2, 1) ? c.DREADNOUGHT_TEAM : team;
+        } else { o.team = team; }
+        if (room["bas" + c.TEAMS].length) {
+            let loc;
+            do {
+                loc = room.randomType("norm");
+            } while (dirtyCheck(loc, 50));
+            o.x = loc.x;
+            o.y = loc.y;
+        }
         o.color = color;
         o.name += ran.chooseBotName();
-        o.leftoverUpgrades = ran.chooseChance(1, 5, 20, 37, 37); //some guy in discord once suggested that some bots shouldnt upgrade to latest tier
+        //some guy in discord once suggested that some bots shouldnt upgrade to latest tier
+        //o.leftoverUpgrades = ran.chooseChance(1, 5, 20, 37, 37);
+        o.leftoverUpgrades = 1;
         bots.push(o);
 
         //TODO: add support for tag mode

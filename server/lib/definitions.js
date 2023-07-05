@@ -252,7 +252,6 @@ const base = {
     DENSITY: 0.5,
 };
 let dreadTeam = c.DREADNOUGHT_TEAM;
-let dreadLoc;
 if (c.TEAMS == 1) dreadTeam = null;
 if (c.DOMINATOR_LOOP || c.MOTHERSHIP_LOOP) dreadTeam = -100;
 
@@ -16456,20 +16455,13 @@ for (let i = 0; i <= defineSkillCap; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_T
     exports.levels.UPGRADES_TIER_0.push(exports["level" + LEVEL]);
 }
 
-try {
-    if (room["bas"].length) {
-        do {
-            dreadLoc = room.randomType("norm");
-        } while (dirtyCheck(dreadLoc, 50));
-    }
-} catch {};
 exports.genericDreadnought = {
     PARENT: [exports.genericTank],
     REALSKILL_CAP: defineSkillCap,
     DANGER: 9,
     SIZE: 16,
     TEAM: dreadTeam,
-    TILE: dreadLoc,
+    BROADCAST_MESSAGE: "A Dreadnought has left!",
     SKILL_CAP: [dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl],
 };
 
@@ -17615,7 +17607,7 @@ exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machineGu
                 exports.builder.UPGRADES_TIER_3 = [exports.constructor, exports.autoBuilder, exports.engineer, exports.boomer, exports.architect, exports.conqueror];
                 exports.triTrapper.UPGRADES_TIER_3 = [exports.fortress, exports.hexaTrapper, exports.septaTrapper, exports.architect];
                 exports.trapGuard.UPGRADES_TIER_3 = [exports.bushwhacker, exports.gunnerTrapper, exports.bomber, exports.conqueror, exports.bulwark];
-
+        
         exports.dreadnought.UPGRADES_TIER_3 = [exports.pacifier, exports.peacekeeper, exports.centaur, exports.sword, exports.invader];
                 exports.pacifier.UPGRADES_TIER_5 = [exports.trianglePacifier];
                 exports.peacekeeper.UPGRADES_TIER_5 = [exports.trianglePeacekeeper];
