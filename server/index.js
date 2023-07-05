@@ -461,7 +461,7 @@ let makenpcs = () => {
         }
         if (o.skill.level < c.SKILL_CHEAT_CAP) {
             if (o.label.includes("Dreadnought")) { o.setLevel(c.SKILL_CHEAT_CAP); }
-            else { ran.chooseChance(12, 1) ? o.setLevel(c.SKILL_CHEAT_CAP) : null; }
+            else { ran.chooseChance(23, 1) ? o.setLevel(c.SKILL_CHEAT_CAP) : null; }
         }
         o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(1, 1, 3, 4, 4, 4, 4, 2, 1, 1)]);
         if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) o.leftoverUpgrades--;

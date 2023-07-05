@@ -1254,7 +1254,7 @@ let minimapAll = new Delta(5, () => {
     }
     return all;
 });
-let teamIDs = [1, 2, 3, 4];
+let teamIDs = [1, 2, 3, 4, 5, 6, 7, 8];
 if (c.GROUPS) for (let i = 0; i < 100; i++) teamIDs.push(i + 5);
 let minimapTeams = teamIDs.map((team) =>
     new Delta(3, () => {
@@ -1277,7 +1277,7 @@ let leaderboard = new Delta(6, () => {
     let list = [];
     if (c.TAG)
         for (let i = 0; i < c.TEAMS; i++) {
-            let teamNames = ["BLUE", "GREEN", "RED", "PURPLE"];
+            let teamNames = ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN"];
             let teamColors = [10, 11, 12, 15, 25, 26, 27, 28];
             list.push({
                 id: i,
@@ -1337,7 +1337,6 @@ let leaderboard = new Delta(6, () => {
     room.topPlayerID = topTen.length ? topTen[0].id : -1;
     return topTen.sort((a, b) => a.id - b.id);
 });
-
 
 // Periodically give out updates
 let subscribers = [];
