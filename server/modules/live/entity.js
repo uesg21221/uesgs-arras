@@ -803,6 +803,20 @@ class Entity extends EventEmitter {
     reset_func() {
         this.controllers = this.controllers.filter(controller => controller instanceof ioTypes.listenToPlayer);
     }
+    setLevel(level) {
+        if (level === -1) {
+            this.skill.reset();
+        }
+        this.skill.reset();
+        while (
+            this.skill.level < this.skill.realSkillCap &&
+            this.skill.level < level
+        ) {
+            this.skill.score += this.skill.levelScore;
+            this.skill.maintain();
+        }
+        this.refreshBodyAttributes();
+    }
     define(set) {
         if (set.PARENT != null) {
             for (let i = 0; i < set.PARENT.length; i++) {

@@ -459,12 +459,9 @@ let makenpcs = () => {
             o.skill.score += 125;
             o.skill.maintain();
         }
-        if (o.label.includes("Dreadnought") && o.skill.level < c.SKILL_CHEAT_CAP) {
-            while (o.skill.level < c.SKILL_CHEAT_CAP) {
-                o.skill.score += o.skill.levelScore;
-                o.skill.maintain();
-            }
-            o.refreshBodyAttributes();
+        if (o.skill.level < c.SKILL_CHEAT_CAP) {
+            if (o.label.includes("Dreadnought")) { o.setLevel(c.SKILL_CHEAT_CAP); }
+            else { ran.chooseChance(12, 1) ? o.setLevel(c.SKILL_CHEAT_CAP) : null; }
         }
         o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(1, 1, 3, 4, 4, 4, 4, 2, 1, 1)]);
         if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) o.leftoverUpgrades--;
@@ -491,12 +488,10 @@ let makenpcs = () => {
             team = -team;
         }
         o.define(Class.bot);
-        ran.chooseChance(5, 1) ? o.define(Class.dreadnought) : o.define(Class.basic);
+        ran.chooseChance(10, 1) ? o.define(Class.dreadnought) : o.define(Class.basic);
         o.refreshBodyAttributes();
         o.isBot = true;
-        if (o.label.includes("Dreadnought")) {
-            o.team = ran.chooseChance(2, 1) ? c.DREADNOUGHT_TEAM : team;
-        } else { o.team = team; }
+        if (!o.label.includes("Dreadnought")) { o.team = team; }
         if (room["bas" + c.TEAMS].length) {
             let loc;
             do {
@@ -622,7 +617,7 @@ function spawnShape(location, type = 0) {
         },
     });
     o.facing = ran.randomAngle();
-    o.team = -100;
+    o.team = -102;
     return o;
 }
 function spawnGroupedFood() {
