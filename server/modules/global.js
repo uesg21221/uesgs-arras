@@ -44,6 +44,14 @@ global.loopThrough = function(array, callback = () => {}) {
     for (let index = 0, length = array.length; index < length; index++) callback(array[index], index);
 };
 
+global.dirtyCheck = function (p, r) {
+    for (let i = 0; i < entitiesToAvoid.length; i++) {
+        let e = entitiesToAvoid[i];
+        if (Math.abs(p.x - e.x) < r + e.size && Math.abs(p.y - e.y) < r + e.size) return true;
+    }
+    return false
+};
+
 global.isEven = function isEven(number) {
     let string = number.toString();
     let last = string[string.length - 1];

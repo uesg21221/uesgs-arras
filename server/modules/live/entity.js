@@ -820,6 +820,10 @@ class Entity extends EventEmitter {
         }
         if (set.COLOR != null) this.color = set.COLOR;
         if (set.TEAM != null) this.team = set.TEAM;
+        if (set.TILE != null) {
+            this.x = set.TILE.x;
+            this.y = set.TILE.y;
+        }
         if (set.REALSKILL_CAP != null) {
             this.skill.realSkillCap = set.REALSKILL_CAP;
         }

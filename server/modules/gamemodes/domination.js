@@ -18,15 +18,15 @@ let spawn = (loc, team, color, type = false) => {
         if (o.team === -100) {
             let killers = [];
             for (let instance of o.collisionArray) {
-                if (instance.team > -5 && instance.team < 0 && o.team !== instance.team) {
+                if (instance.team > -(c.TEAMS + 1) && instance.team < 0 && o.team !== instance.team) {
                     killers.push(instance);
                 }
             }
             let killer = ran.choose(killers),
                 newTeam = killer.team;
             spawn(loc, newTeam, killer.color, type);
-            room.setType("dom" + ((killer.team < 0 && killer.team > 5) ? -killer.team : 0), loc);
             sockets.broadcast("A dominator is now controlled by " + ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN"][-newTeam - 1] + "!");
+            room.setType("dom" + ((newTeam < 0 && newTeam > c.TEAMS + 1) ? -newTeam : 0), loc);
             for (let player of sockets.players) {
                 if (player.body) {
                     if (player.body.team === newTeam) {
@@ -46,7 +46,7 @@ let spawn = (loc, team, color, type = false) => {
 function winner(teamId) {
     gameWon = true;
     setTimeout(function() {
-        let team = ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN"][teamId] || "An unknown team";
+        let team = ["BLUE", "GREEN", "RED", "PURPLE"][teamId] || "An unknown team";
         sockets.broadcast(team + " has won the game!");
         setTimeout(closeArena, 3000);
     }, 1500);
@@ -55,7 +55,7 @@ function winner(teamId) {
 function tally() {
     if (gameWon == true) return;
     let dominators = {};
-    for (let i = 0; i < 4; i++) dominators[-(i + 1)] = 0;
+    for (let i = 0; i < c.TEAMS; i++) dominators[-(i + 1)] = 0;
     loopThrough(entities, function(o) {
         if (o.isDominator && o.team !== -101 && dominators[o.team] != null) dominators[o.team]++;
     });
