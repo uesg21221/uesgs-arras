@@ -366,7 +366,7 @@ function incoming(message, socket) {
             if (player.body.underControl) return;
             if (player.body.skill.level < c.SKILL_CHEAT_CAP ||
                 (player.body.skill.level < c.SKILL_CAP &&
-                (socket.permissions && socket.permissions.class))) {
+                (socket.permissions && socket.permissions.class && player.body.label.includes("Dreadnought")))) {
                 player.body.skill.score += player.body.skill.levelScore;
                 player.body.skill.maintain();
                 player.body.refreshBodyAttributes();

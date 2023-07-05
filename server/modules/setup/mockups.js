@@ -290,6 +290,7 @@ for (let k in Class) {
         // Kill the reference entities.
         temptank.destroy();
     } catch (error) {
+        console.log("in");
         util.error(error);
         util.error(k);
         util.error(Class[k]);

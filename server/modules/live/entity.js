@@ -820,6 +820,9 @@ class Entity extends EventEmitter {
         }
         if (set.COLOR != null) this.color = set.COLOR;
         if (set.TEAM != null) this.team = set.TEAM;
+        if (set.REALSKILL_CAP != null) {
+            this.skill.realSkillCap = set.REALSKILL_CAP;
+        }
         if (set.CONTROLLERS != null) {
             let toAdd = [];
             for (let i = 0; i < set.CONTROLLERS.length; i++) {
@@ -897,7 +900,7 @@ class Entity extends EventEmitter {
             }
             this.skill.reset();
             while (
-                this.skill.level < c.SKILL_CAP &&
+                this.skill.level < this.skill.realSkillCap &&
                 this.skill.level < set.LEVEL
             ) {
                 this.skill.score += this.skill.levelScore;

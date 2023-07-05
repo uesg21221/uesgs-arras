@@ -47,6 +47,7 @@ let skcnv = {
     rgn: 8,
     hlt: 7,
 };
+const defineSkillCap = c.SKILL_CAP;
 const skillSet = (args) => {
     let skills = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let s in args) {
@@ -914,6 +915,7 @@ exports.genericTank = {
     TYPE: "tank",
     DAMAGE_CLASS: 2,
     DANGER: 5,
+    REALSKILL_CAP: 45,
     MOTION_TYPE: "motor",
     FACING_TYPE: "toTarget",
     SIZE: 12,
@@ -3361,6 +3363,8 @@ exports.testbedBase = {
     PARENT: [exports.genericTank],
     LABEL: "",
     LEVEL: 0,
+    RESET_UPGRADES: true,
+    INVISIBLE: [0, 0],
     SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
     SKILL: skillSet({
         rld: 0,
@@ -3389,8 +3393,6 @@ exports.testbedBase = {
 exports.developer = {
     PARENT: [exports.testbedBase],
     LABEL: "Developer",
-    RESET_UPGRADES: true,
-    INVISIBLE: [0, 0],
     BODY: {
         SHIELD: 1000,
         REGEN: 10,
@@ -16436,10 +16438,11 @@ exports.substance = {
 
 exports.levels = {
     PARENT: [exports.testbedBase],
+    REALSKILL_CAP: defineSkillCap,
     LABEL: "Levels",
     UPGRADES_TIER_0: [exports.developer]
 };
-for (let i = 0; i <= c.SKILL_CAP; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_TIER is irrelevant
+for (let i = 0; i <= defineSkillCap; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_TIER is irrelevant
     let LEVEL = i;
     exports["level" + LEVEL] = {
         PARENT: [exports.levels],
@@ -16451,6 +16454,7 @@ for (let i = 0; i <= c.SKILL_CAP; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_TIER
 
 exports.genericDreadnought = {
     PARENT: [exports.genericTank],
+    REALSKILL_CAP: defineSkillCap,
     DANGER: 9,
     SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl],
 };
@@ -16458,13 +16462,6 @@ exports.eggDreadnought = {
     PARENT: [exports.genericDreadnought],
     COLOR: 6,
     TEAM: 10,
-    BODY: {
-        HEALTH: base.HEALTH * 4,
-        DAMAGE: base.DAMAGE * 2,
-        SHIELD: base.SHIELD * 1.5,
-        REGEN: base.REGEN * 2,
-        SPEED: base.SPEED * 0.6,
-    },
     SIZE: 16,
 };
 exports.dreadnought = {
@@ -16474,7 +16471,7 @@ exports.dreadnought = {
 };
 exports.pacifier = {
     PARENT: [exports.eggDreadnought],
-    LABEL: "Pacifier",
+    LABEL: "Dreadnought Pacifier",
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
@@ -16494,7 +16491,7 @@ exports.pacifier = {
 };
 exports.peacekeeper = {
     PARENT: [exports.eggDreadnought],
-    LABEL: "Peacekeeper",
+    LABEL: "Dreadnought Peacekeeper",
     GUNS: [
         {
             POSITION: [20.5, 12, 1, 0, 0, 0, 0],
@@ -16514,7 +16511,7 @@ exports.peacekeeper = {
 };
 exports.centaur = {
     PARENT: [exports.eggDreadnought],
-    LABEL: "Centaur",
+    LABEL: "Dreadnought Centaur",
     STAT_NAMES: statnames.trap,
     GUNS: [
         {
@@ -16543,7 +16540,7 @@ exports.centaur = {
 };
 exports.invader = {
     PARENT: [exports.eggDreadnought],
-    LABEL: "Invader",
+    LABEL: "Dreadnought Invader",
     STAT_NAMES: statnames.drone,
     GUNS: [
         {
@@ -16572,7 +16569,7 @@ exports.invader = {
 };
 exports.sword = {
     PARENT: [exports.eggDreadnought],
-    LABEL: "Sword",
+    LABEL: "Dreadnought Sword",
     GUNS: [
         {
             POSITION: [24, 8.5, 1, 0, 0, 0, 0],

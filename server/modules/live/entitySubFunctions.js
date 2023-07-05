@@ -31,10 +31,11 @@ function apply(f, x) {
 }
 
 class Skill {
-    constructor(inital = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+    constructor(inital = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], defineSkillCap = 0) {
         // Just skill stuff.
         this.raw = inital;
         this.caps = [];
+        this.realSkillCap = defineSkillCap;
         this.setCaps([ c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL ]);
         this.name = [
             "Reload",
@@ -128,7 +129,7 @@ class Skill {
         this.update();
     }
     maintain() {
-        if (this.level < c.SKILL_CAP) {
+        if (this.level < this.realSkillCap) {
             if (this.score - this.deduction >= this.levelScore) {
                 this.deduction += this.levelScore;
                 this.level += 1;

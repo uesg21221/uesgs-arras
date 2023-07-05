@@ -48,9 +48,16 @@ module.exports = {
     },
     MAX_SKILL: 9,
     SOFT_MAX_SKILL: 0.59,
-    MAX_UPGRADE_TIER: 7,
+    MAX_UPGRADE_TIER: 14,
+    // 1, 2, 3 tiers - tanks
+    // from 3 tier - dreadnoughts
+    //     egg dreadnought - tier 3
+    //     triangle dreadnought - tier 6
+    //     square dreadnought - tier 9
+    //     penatgon dreadnought - tier 12
+    //     hexagon dreadnought - tier 14
     TIER_MULTIPLIER: 15,
-    SKILL_CAP: 105,
+    SKILL_CAP: 210,
     SKILL_SOFT_CAP: 0,
     SKILL_CHEAT_CAP: 45,
     SKILL_LEAK: 0,
