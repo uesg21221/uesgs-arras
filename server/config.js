@@ -62,6 +62,7 @@ module.exports = {
     NEST_FOOD_AMOUNT: 1.5,
     CRASHER_RATIO: 2,
     SKILL_BOOST: 5,
+    BOTS_USE_DEFAULT: true,
     BOTS: 24,
     GLASS_HEALTH_FACTOR: 2,
     SPECIAL_BOSS_SPAWNS: false,
