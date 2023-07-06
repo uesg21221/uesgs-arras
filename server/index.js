@@ -459,10 +459,7 @@ let makenpcs = () => {
             o.skill.score += 125;
             o.skill.maintain();
         }
-        if (o.skill.level < c.SKILL_CHEAT_CAP) {
-            if (o.label.includes("Dreadnought")) { o.setLevel(c.SKILL_CHEAT_CAP); }
-            else { ran.chooseChance(30, 1) ? o.setLevel(c.SKILL_CHEAT_CAP) : null; }
-        }
+        if (o.skill.level < c.SKILL_CHEAT_CAP) { if (o.label.includes("Dreadnought")) o.setLevel(c.SKILL_CHEAT_CAP); }
         o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(1, 1, 3, 4, 4, 4, 4, 2, 1, 1)]);
         if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) o.leftoverUpgrades--;
     }
@@ -488,7 +485,8 @@ let makenpcs = () => {
             team = -team;
         }
         o.define(Class.bot);
-        ran.chooseChance(10, 1) ? o.define(Class.dreadnought) : o.define(Class.basic);
+        let dread_bots = bots.filter(e => e.label.includes("Dreadnought"));
+        ran.chooseChance(1, 10) ? (dread_bots.length < (c.BOTS / 4.8) ? o.define(Class.dreadnought) : o.define(Class.basic)) : o.define(Class.basic);
         o.refreshBodyAttributes();
         o.isBot = true;
         if (!o.label.includes("Dreadnought")) { o.team = team; }
