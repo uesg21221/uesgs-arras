@@ -57,6 +57,7 @@ let skcnv = {
     hlt: 7,
 };
 const defineSkillCap = c.SKILL_CAP;
+const genericSkillCap = c.SUB == "growth" ? c.SKILL_CAP : c.SKILL_CHEAT_CAP;
 const skillSet = (args) => {
     let skills = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let s in args) {
@@ -969,7 +970,7 @@ exports.genericTank = {
     TYPE: "tank",
     DAMAGE_CLASS: 2,
     DANGER: 5,
-    REALSKILL_CAP: c.SKILL_CHEAT_CAP,
+    REALSKILL_CAP: genericSkillCap,
     MOTION_TYPE: "motor",
     FACING_TYPE: "toTarget",
     SIZE: 12,

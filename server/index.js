@@ -507,13 +507,15 @@ let makenpcs = () => {
         o.refreshBodyAttributes();
         o.isBot = true;
         if (!o.label.includes("Dreadnought")) { o.team = team; }
-        if (room["bas" + c.TEAMS].length) {
-            let loc;
-            do {
-                loc = room.randomType("norm");
-            } while (dirtyCheck(loc, 50));
-            o.x = loc.x;
-            o.y = loc.y;
+        if (c.MODE == "tdm") {
+            if (room["bas" + c.TEAMS].length) {
+                let loc;
+                do {
+                    loc = room.randomType("norm");
+                } while (dirtyCheck(loc, 50));
+                o.x = loc.x;
+                o.y = loc.y;
+            }
         }
         o.color = color;
         o.name += ran.chooseBotName();
