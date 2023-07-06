@@ -3,7 +3,7 @@ const combineStats = function (arr) {
     try {
         // Build a blank array of the appropiate length
         let data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-        arr.forEach(function (component) {
+        arr.forEach((component) => {
             for (let i = 0; i < data.length; i++) {
                 data[i] = data[i] * component[i];
             }
@@ -27,6 +27,15 @@ const combineStats = function (arr) {
         console.log(err);
         console.log(JSON.stringify(arr));
     }
+};
+const dreadStat = function (arr) {
+    let data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    arr.forEach((component) => {
+        for (let i = 0; i < data.length; i++) {
+            data[i] = data[i] * component[i];
+        }
+    });
+    return data;
 };
 const setBuild = (build) => {
     let skills = build.split(build.includes("/") ? "/" : "").map((r) => +r);
@@ -67,7 +76,14 @@ const g = {
     power: [1, 1, 0.6, 1.2, 1, 1, 1.25, 2, 1.7, 1, 2, 0.5, 1.5],
     fake: [1, 1, 1, 1e-5, 1e-4, 1, 1, 1e-5, 2, 0, 1, 1, 1],
     op: [0.5, 1.3, 1, 1, 4, 4, 4, 3, 2, 1, 5, 2, 1],
-    
+
+    // Dreadnoughts
+    egg: [1, 1, 0.6, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1.5],
+    triangle: [1, 1, 0.6, 1, 1.1, 1.1, 1.1, 1, 1, 1, 2, 1, 1.5],
+    square: [1, 1, 0.6, 1, 1.2, 1.2, 1.2, 1, 1, 1, 2, 1, 1.5],
+    pentagon: [1, 1, 0.6, 1, 1.3, 1.3, 1.3, 1, 1, 1, 2, 1, 1.5],
+    hexagon: [1, 1, 0.6, 1, 1.4, 1.4, 1.4, 1, 1, 1, 2, 1, 1.5],
+
     // Bases
     basic: [18, 1.4, 0.1, 1, 1, 0.75, 1, 4.5, 1, 1, 1, 15, 1],
     drone: [50, 0.25, 0.1, 0.6, 1, 1, 1, 2, 1, 1, 1, 0.1, 1],
@@ -190,6 +206,7 @@ const g = {
     halfrecoil: [1, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     
     // Reload Modifiers
+    badreload: [3.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     halfreload: [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     lessreload: [1.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     one_third_reload: [1.333, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -208,13 +225,47 @@ const g = {
     lowpower: [1, 1, 2, 1, 0.5, 0.5, 0.7, 1, 1, 1, 1, 0.5, 0.7],
     notdense: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.1, 1, 1],
     halfrange: [1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1],
-    dreadnought: [1.5, 1, 0.4, 1, 1, 1, 1.2, 0.8, 0.8, 1, 1.5, 0.5, 1.25],
+    morerange: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1.5, 1, 1, 1],
 };
+const eggDreadnoughtBullet = dreadStat([
+    g.egg,
+    g.morerecoil,
+    g.one_third_reload,
+    g.halfspeed,
+    g.morerange
+]);
+const triangleDreadnoughtBullet = dreadStat([
+    g.triangle,
+    g.morerecoil,
+    g.one_third_reload,
+    g.halfspeed,
+    g.morerange
+]);
+const squareDreadnoughtBullet = dreadStat([
+    g.square,
+    g.morerecoil,
+    g.one_third_reload,
+    g.halfspeed,
+    g.morerange
+]);
+const pentagonDreadnoughtBullet = dreadStat([
+    g.pentagon,
+    g.morerecoil,
+    g.one_third_reload,
+    g.halfspeed,
+    g.morerange
+]);
+const hexagonDreadnoughtBullet = dreadStat([
+    g.hexagon,
+    g.morerecoil,
+    g.one_third_reload,
+    g.halfspeed,
+    g.morerange
+]);
 
 // SKILL DEFINITIONS
 const dfltskl = 9;
 const smshskl = 12;
-const dreadskl = 15;
 
 // NAMES
 const statnames = {
@@ -2140,6 +2191,7 @@ exports.hypermissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    g.badreload
                 ]),
                 TYPE: [
                     exports.bullet,
@@ -2157,6 +2209,7 @@ exports.hypermissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    g.badreload
                 ]),
                 TYPE: [
                     exports.bullet,
@@ -2174,6 +2227,7 @@ exports.hypermissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    g.badreload
                 ]),
                 TYPE: [
                     exports.bullet,
@@ -2190,6 +2244,7 @@ exports.hypermissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    g.badreload
                 ]),
                 TYPE: [
                     exports.bullet,
@@ -2212,10 +2267,10 @@ exports.minimissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     g.skim,
-                    g.doublereload,
                     g.lowpower,
                     g.muchmorerecoil,
                     g.morespeed,
+                    g.badreload
                 ]),
                 TYPE: [exports.bullet, { PERSISTS_AFTER_DEATH: true }],
                 STAT_CALCULATOR: gunCalcNames.thruster,
@@ -2292,9 +2347,7 @@ exports.hyperspinmissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     g.skim,
-                    g.doublereload,
                     g.lowpower,
-                    g.morereload,
                     g.morespeed,
                 ]),
                 TYPE: [
@@ -2313,9 +2366,7 @@ exports.hyperspinmissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     g.skim,
-                    g.doublereload,
                     g.lowpower,
-                    g.morereload,
                     g.morespeed,
                 ]),
                 TYPE: [
@@ -2334,9 +2385,7 @@ exports.hyperspinmissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     g.skim,
-                    g.doublereload,
                     g.lowpower,
-                    g.morereload,
                     g.morespeed,
                 ]),
                 TYPE: [
@@ -2355,9 +2404,7 @@ exports.hyperspinmissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     g.skim,
-                    g.doublereload,
                     g.lowpower,
-                    g.morereload,
                     g.morespeed,
                 ]),
                 TYPE: [
@@ -2388,7 +2435,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 108, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2396,7 +2443,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 180, 0.2],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2404,7 +2451,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 252, 0.4],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2412,7 +2459,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 324, 0.6],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2420,7 +2467,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 36, 0.8],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2494,6 +2541,7 @@ exports.rocketeerMissile = {
                     g.basic,
                     g.missileTrail,
                     g.rocketeerMissileTrail,
+                    g.lowpower
                 ]),
                 TYPE: [
                     exports.bullet,
@@ -2820,6 +2868,7 @@ exports.skimmerTurret = {
                     g.arty,
                     g.arty,
                     g.skim,
+                    g.badreload
                 ]),
                 TYPE: exports.hypermissile,
             },
@@ -2856,7 +2905,7 @@ exports.twisterTurret = {
                     g.arty,
                     g.skim,
                     g.morespeed,
-                    g.one_third_reload,
+                    g.badreload
                 ]),
                 TYPE: exports.hyperspinmissile,
                 STAT_CALCULATOR: gunCalcNames.sustained,
@@ -3097,8 +3146,8 @@ exports.auto4gun = {
                     g.auto,
                     g.gunner,
                     g.twin,
-                    g.power,
                     g.slow,
+                    g.badreload
                 ]),
                 TYPE: exports.bullet,
             },
@@ -3111,8 +3160,8 @@ exports.auto4gun = {
                     g.auto,
                     g.gunner,
                     g.twin,
-                    g.power,
                     g.slow,
+                    g.badreload
                 ]),
                 TYPE: exports.bullet,
             },
@@ -13944,11 +13993,10 @@ exports.celestial = {
     SIZE: 45,
     BODY: {
         FOV: 1,
-        HEALTH: 1000,
-        SHIELD: 2,
+        HEALTH: 500,
+        SHIELD: 1,
         REGEN: base.REGEN * 0.1,
         SPEED: 0.75,
-        DAMAGE: 5,
     },
 };
 exports.rogueCelestial = {
@@ -13975,7 +14023,7 @@ exports.swarmerTurret = {
         {
             POSITION: [14, 14, -1.2, 5, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.hive]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.hive, g.badreload]),
                 TYPE: exports.hive,
             },
         },
@@ -14002,7 +14050,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 26, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14013,7 +14061,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 77, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14024,7 +14072,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 129, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14035,7 +14083,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14046,7 +14094,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 231, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14057,7 +14105,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 282, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14068,7 +14116,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 333, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14183,7 +14231,7 @@ exports.cruiserTurret = {
         {
             POSITION: [7, 7.5, 0.6, 7, 4, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.badreload]),
                 TYPE: exports.swarm,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -14191,7 +14239,7 @@ exports.cruiserTurret = {
         {
             POSITION: [7, 7.5, 0.6, 7, -4, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.badreload]),
                 TYPE: exports.swarm,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -14346,7 +14394,7 @@ exports.zaphkielLowerBody = {
             //*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY
             POSITION: [3.6, 6, 1.4, 8, 0, 26, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14357,7 +14405,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 77, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14366,7 +14414,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 129, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14375,7 +14423,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14384,7 +14432,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 231, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14393,7 +14441,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 282, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14402,7 +14450,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 333, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14520,6 +14568,7 @@ exports.rocketeerTurret = {
                     g.pound,
                     g.launcher,
                     g.rocketeer,
+                    g.badreload
                 ]),
                 TYPE: exports.rocketeerMissile,
                 STAT_CALCULATOR: gunCalcNames.sustained,
@@ -14544,7 +14593,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 26, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14553,7 +14602,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 77, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14562,7 +14611,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 129, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14571,7 +14620,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14580,7 +14629,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 231, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14589,7 +14638,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 282, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14598,7 +14647,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 333, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14757,7 +14806,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 26, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14767,7 +14816,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 77, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14777,7 +14826,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 129, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14787,7 +14836,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 180, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14797,7 +14846,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 231, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14807,7 +14856,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 282, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14817,7 +14866,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 333, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14939,7 +14988,7 @@ exports.launcherTurret = {
         {
             POSITION: [17, 13, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.badreload]),
                 TYPE: exports.minimissile,
                 STAT_CALCULATOR: gunCalcNames.sustained,
             },
@@ -14965,7 +15014,7 @@ exports.alvissLowerTurret = {
             /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [8.5, 11, 0.6, 6, 0, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.sunchip]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.sunchip, g.badreload]),
                 TYPE: exports.alvissDrone,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -15122,7 +15171,7 @@ exports.tyrLowerTurret = {
         {
             POSITION: [3.4, 14, 1, 14.3, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.babyfactory, g.lessreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.babyfactory, g.badreload]),
                 TYPE: exports.tinyMinion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16458,15 +16507,20 @@ for (let i = 0; i <= defineSkillCap; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_T
 exports.genericDreadnought = {
     PARENT: [exports.genericTank],
     REALSKILL_CAP: defineSkillCap,
-    DANGER: 9,
-    SIZE: 16,
+    DANGER: 7,
     TEAM: dreadTeam,
     BROADCAST_MESSAGE: "A Dreadnought has left!",
-    SKILL_CAP: [dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl, dreadskl],
+    BODY: {
+        SPEED: 0.7 * base.SPEED,
+        HEALTH: 4 * base.HEALTH,
+        DAMAGE: 2 * base.DAMAGE,
+    },
+    SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl],
 };
 
 exports.eggDreadnought = {
     PARENT: [exports.genericDreadnought],
+    SIZE: 16,
     COLOR: 6,
 };
 exports.dreadnought = {
@@ -16481,14 +16535,14 @@ exports.pacifier = {
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18, 8, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16501,14 +16555,14 @@ exports.peacekeeper = {
         {
             POSITION: [20.5, 12, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [20.5, 12, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16525,7 +16579,7 @@ exports.centaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16536,7 +16590,7 @@ exports.centaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16551,7 +16605,7 @@ exports.invader = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16562,7 +16616,7 @@ exports.invader = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16579,14 +16633,14 @@ exports.sword = {
         {
             POSITION: [24, 8.5, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [24, 8.5, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16600,6 +16654,10 @@ exports.triangleDreadnought = {
         [0.778,1.347],
         [0.778,-1.347]
     ],
+    BODY: {
+        FOV: base.FOV * 0.95,
+    },
+    SIZE: 15,
     COLOR: 2,
 };
 exports.trianglePacifier = {
@@ -16609,21 +16667,21 @@ exports.trianglePacifier = {
         {
             POSITION: [16, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16636,21 +16694,21 @@ exports.trianglePeacekeeper = {
         {
             POSITION: [18.5, 12, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 12, 1, 0, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 12, 1, 0, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16667,7 +16725,7 @@ exports.triangleCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16678,7 +16736,7 @@ exports.triangleCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16689,7 +16747,7 @@ exports.triangleCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16704,7 +16762,7 @@ exports.triangleInvader = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16715,7 +16773,7 @@ exports.triangleInvader = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16726,7 +16784,7 @@ exports.triangleInvader = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16743,21 +16801,21 @@ exports.triangleSword = {
         {
             POSITION: [22, 8.5, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16767,6 +16825,10 @@ exports.triangleSword = {
 exports.squareDreadnought = {
     PARENT: [exports.genericDreadnought],
     SHAPE: 4,
+    BODY: {
+        FOV: base.FOV * 0.9,
+    },
+    SIZE: 14,
     COLOR: 13,
 };
 exports.squarePacifier = {
@@ -16776,28 +16838,28 @@ exports.squarePacifier = {
         {
             POSITION: [16, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 270, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16810,28 +16872,28 @@ exports.squarePeacekeeper = {
         {
             POSITION: [18.5, 12, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 12, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 12, 1, 0, 0, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 12, 1, 0, 0, 270, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16848,7 +16910,7 @@ exports.squareCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16859,7 +16921,7 @@ exports.squareCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16870,7 +16932,7 @@ exports.squareCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16881,7 +16943,7 @@ exports.squareCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 270, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -16896,7 +16958,7 @@ exports.squareInvader = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16907,7 +16969,7 @@ exports.squareInvader = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16918,7 +16980,7 @@ exports.squareInvader = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16929,7 +16991,7 @@ exports.squareInvader = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 270, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -16946,28 +17008,28 @@ exports.squareSword = {
         {
             POSITION: [22, 8.5, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 270, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -16983,6 +17045,10 @@ exports.pentagonDreadnought = {
         [0.8,-0.58],
         [-0.3,-0.95]
     ],
+    BODY: {
+        FOV: base.FOV * 0.85,
+    },
+    SIZE: 13,
     COLOR: 14,
 };
 exports.pentagonPacifier = {
@@ -16992,35 +17058,35 @@ exports.pentagonPacifier = {
         {
             POSITION: [16, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 72, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 144, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 216, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 288, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -17033,35 +17099,35 @@ exports.pentagonPeacekeeper = {
         {
             POSITION: [18.5, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 10, 1, 0, 0, 72, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 10, 1, 0, 0, 144, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 10, 1, 0, 0, 216, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 10, 1, 0, 0, 288, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -17078,7 +17144,7 @@ exports.pentagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17089,7 +17155,7 @@ exports.pentagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 72, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17100,7 +17166,7 @@ exports.pentagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 144, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17111,7 +17177,7 @@ exports.pentagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 216, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17122,7 +17188,7 @@ exports.pentagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 288, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17137,7 +17203,7 @@ exports.pentagonInvader = {
         {
             POSITION: [4, 8, 1.3, 7, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17148,7 +17214,7 @@ exports.pentagonInvader = {
         {
             POSITION: [4, 8, 1.3, 7, 0, 72, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17159,7 +17225,7 @@ exports.pentagonInvader = {
         {
             POSITION: [4, 8, 1.3, 7, 0, 144, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17170,7 +17236,7 @@ exports.pentagonInvader = {
         {
             POSITION: [4, 8, 1.3, 7, 0, 216, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17181,7 +17247,7 @@ exports.pentagonInvader = {
         {
             POSITION: [4, 8, 1.3, 7, 0, 288, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17198,35 +17264,35 @@ exports.pentagonSword = {
         {
             POSITION: [22, 8.5, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 72, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 144, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 216, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 288, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -17236,6 +17302,10 @@ exports.pentagonSword = {
 exports.hexagonDreadnought = {
     PARENT: [exports.genericDreadnought],
     SHAPE: 6,
+    BODY: {
+        FOV: base.FOV * 0.8,
+    },
+    SIZE: 12,
     COLOR: 0,
 };
 exports.hexagonPacifier = {
@@ -17245,42 +17315,42 @@ exports.hexagonPacifier = {
         {
             POSITION: [16, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 60, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [16, 8, 1, 0, 0, 300, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -17293,42 +17363,42 @@ exports.hexagonPeacekeeper = {
         {
             POSITION: [18.5, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 10, 1, 0, 0, 60, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 10, 1, 0, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 10, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 10, 1, 0, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [18.5, 10, 1, 0, 0, 300, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.pound, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
                 TYPE: exports.bullet,
             },
         },
@@ -17345,7 +17415,7 @@ exports.hexagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17356,7 +17426,7 @@ exports.hexagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 60, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17367,7 +17437,7 @@ exports.hexagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17378,7 +17448,7 @@ exports.hexagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17389,7 +17459,7 @@ exports.hexagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17400,7 +17470,7 @@ exports.hexagonCentaur = {
         {
             POSITION: [3, 7, 1.7, 13, 0, 300, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.trap]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
                 TYPE: exports.trap,
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -17415,7 +17485,7 @@ exports.hexagonInvader = {
         {
             POSITION: [6, 8, 1.3, 7, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17426,7 +17496,7 @@ exports.hexagonInvader = {
         {
             POSITION: [6, 8, 1.3, 7, 0, 60, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17437,7 +17507,7 @@ exports.hexagonInvader = {
         {
             POSITION: [6, 8, 1.3, 7, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17448,7 +17518,7 @@ exports.hexagonInvader = {
         {
             POSITION: [6, 8, 1.3, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17459,7 +17529,7 @@ exports.hexagonInvader = {
         {
             POSITION: [6, 8, 1.3, 7, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17470,7 +17540,7 @@ exports.hexagonInvader = {
         {
             POSITION: [6, 8, 1.3, 7, 0, 300, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.drone]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -17487,42 +17557,42 @@ exports.hexagonSword = {
         {
             POSITION: [22, 8.5, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 60, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 120, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 240, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },
         {
             POSITION: [22, 8.5, 1, 0, 0, 300, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.dreadnought, g.sniper, g.basic]),
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
             },
         },

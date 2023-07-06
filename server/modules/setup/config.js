@@ -1,6 +1,6 @@
 const defaults = require("../../config.js");
 
-const gamemode = "Open TDM"; // keep it as ffa
+const gamemode = "Domination"; // keep it as ffa
 
 const gamemodes = {
     "FFA": {
@@ -497,7 +497,7 @@ let output = {};
 for (let key in defaults) {
     output[key] = defaults[key];
     if (mode[key]) {
-        key == "BOTS" && defaults.BOTS_USE_DEFAULT ? output[key] = defaults[key] : output[key] = mode[key];
+        output[key] = key == "BOTS" && defaults.BOTS_USE_DEFAULT ? defaults[key] : mode[key];
     }
 }
 

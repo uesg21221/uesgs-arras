@@ -11,6 +11,7 @@ module.exports = {
     runSpeed: 1.5,
     maxHeartbeatInterval: 300000,
     verbose: true,
+    bossSpawnInterval: 8,
     WIDTH: 6500,
     HEIGHT: 6500,
     MODE: "ffa",
@@ -42,8 +43,8 @@ module.exports = {
     FOOD_NEST: [0, 0.0, 0.0, 0.75, 0.23, 0.02, 0],
     LEVEL_SKILL_POINT_FUNCTION: level => {
         if (level < 2) return 0;
-        if (level <= 60) return 1;
-        if (level <= 105 && level & 1 == 1) return 0.5;
+        if (level <= 45) return 1;
+        if (level <= 100 && level & 1 == 1) return 1;
         return 0;
     },
     MAX_SKILL: 9,
@@ -62,8 +63,9 @@ module.exports = {
     NEST_FOOD_AMOUNT: 1.5,
     CRASHER_RATIO: 2,
     SKILL_BOOST: 5,
+    // Use defaults?
     BOTS_USE_DEFAULT: true,
-    BOTS: 24,
+    BOTS: 10,
     GLASS_HEALTH_FACTOR: 2,
     SPECIAL_BOSS_SPAWNS: false,
     MOTHERSHIP_LOOP: false,

@@ -285,83 +285,100 @@ function spawnWall(loc) {
     o.life();
 }
 
-let timer = Math.round((c.bossSpawnInterval || 8) * 60); // It's in minutes
-const bossSelections = [{
-    bosses: [Class.eliteDestroyer, Class.eliteGunner, Class.eliteSprayer, Class.eliteBattleship, Class.eliteSpawner],
-    location: "nest",
-    amount: [5, 5, 4, 2, 1],
-    nameType: "a",
-    chance: 2,
-},{
-    bosses: [Class.roguePalisade],
-    location: "norm",
-    amount: [4, 1],
-    nameType: "castle",
-    message: "A strange trembling...",
-    chance: 1,
-},{
-    bosses: [Class.summoner, Class.eliteSkimmer, Class.nestKeeper],
-    location: "norm",
-    amount: [2, 2, 1],
-    nameType: "a",
-    message: "A strange trembling...",
-    chance: 1,
-},{
-    bosses: [Class.paladin],
-    location: "norm",
-    amount: [1],
-    nameType: "paladin",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: [Class.freyja],
-    location: "norm",
-    amount: [1],
-    nameType: "freyja",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: [Class.zaphkiel],
-    location: "norm",
-    amount: [1],
-    nameType: "zaphkiel",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: [Class.nyx],
-    location: "norm",
-    amount: [1],
-    nameType: "nyx",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: [Class.theia],
-    location: "norm",
-    amount: [1],
-    nameType: "theia",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: [Class.alviss],
-    location: "norm",
-    amount: [1],
-    nameType: "alviss",
-    message: "The darkness arrives as the realms are torn apart!",
-    chance: 0.1,
-}];
+let timer = Math.round(c.bossSpawnInterval * 60); // It's in minutes
+const bossSelections = [
+    {
+        bosses: [Class.eliteDestroyer, Class.eliteGunner, Class.eliteSprayer, Class.eliteBattleship, Class.eliteSpawner],
+        location: "nest",
+        amount: [5, 5, 4, 2, 1],
+        nameType: "a",
+        chance: 2,
+    },
+    {
+        bosses: [Class.roguePalisade],
+        location: "norm",
+        amount: [4, 1],
+        nameType: "castle",
+        message: "A strange trembling...",
+        chance: 1,
+    },
+    {
+        bosses: [Class.summoner, Class.eliteSkimmer, Class.nestKeeper],
+        location: "norm",
+        amount: [2, 2, 1],
+        nameType: "a",
+        message: "A strange trembling...",
+        chance: 1,
+    },
+    {
+        bosses: [Class.paladin],
+        location: "norm",
+        amount: [1],
+        nameType: "paladin",
+        message: "The world tremors as the celestials are reborn anew!",
+        chance: 0.1,
+    },
+    {
+        bosses: [Class.freyja],
+        location: "norm",
+        amount: [1],
+        nameType: "freyja",
+        message: "The world tremors as the celestials are reborn anew!",
+        chance: 0.1,
+    },
+    {
+        bosses: [Class.zaphkiel],
+        location: "norm",
+        amount: [1],
+        nameType: "zaphkiel",
+        message: "The world tremors as the celestials are reborn anew!",
+        chance: 0.1,
+    },
+    {
+        bosses: [Class.nyx],
+        location: "norm",
+        amount: [1],
+        nameType: "nyx",
+        message: "The world tremors as the celestials are reborn anew!",
+        chance: 0.1,
+    },
+    {
+        bosses: [Class.theia],
+        location: "norm",
+        amount: [1],
+        nameType: "theia",
+        message: "The world tremors as the celestials are reborn anew!",
+        chance: 0.1,
+    },
+    {
+        bosses: [Class.alviss],
+        location: "norm",
+        amount: [1],
+        nameType: "alviss",
+        message: "The darkness arrives as the realms are torn apart!",
+        chance: 0.1,
+    }
+];
 
 let spawnBosses = (census) => {
     if (!census.miniboss && !timer--) {
         timer--;
         const selection = bossSelections[ran.chooseChance(...bossSelections.map((selection) => selection.chance))];
         const amount = ran.chooseChance(...selection.amount) + 1;
-        sockets.broadcast(amount > 1 ? "Visitors are coming..." : "A visitor is coming...");
+        let bossMessage = amount > 1 ? "Visitors are coming..." : "A visitor is coming...";
+        sockets.broadcast(bossMessage);
+        console.log(bossMessage);
         if (selection.message) {
-            setTimeout(sockets.broadcast, 2500, selection.message);
+            bossMessage = selection.message;
+            console.log(bossMessage);
+            setTimeout(sockets.broadcast, 2500, bossMessage);
         }
         setTimeout(() => {
-            const names = ran.chooseBossName(selection.nameType, amount);
-            sockets.broadcast(amount > 1 ? util.listify(names) + " have arrived!" : names[0] + " has arrived!");
+            let names = ran.chooseBossName(selection.nameType, amount);
+            bossMessage = amount > 1 ? util.listify(names) + " have arrived!" : names + " has arrived!";
+            sockets.broadcast(bossMessage);
+            console.log(bossMessage);
+            if (typeof names === "string") names = [names];
             names.forEach((name, i) => {
                 let spot,
                     m = 0;
@@ -375,7 +392,7 @@ let spawnBosses = (census) => {
                 boss.team = -100;
             });
         }, 5000);
-        timer = Math.round((c.bossSpawnInterval || 8) * 65); // 5 seconds due to spawning process
+        timer = Math.round(c.bossSpawnInterval * 60 + 5); // 5 seconds due to spawning process
     }
 };
 
@@ -486,7 +503,7 @@ let makenpcs = () => {
         }
         o.define(Class.bot);
         let dread_bots = bots.filter(e => e.label.includes("Dreadnought"));
-        ran.chooseChance(1, 10) ? (dread_bots.length < (c.BOTS / 4.8) ? o.define(Class.dreadnought) : o.define(Class.basic)) : o.define(Class.basic);
+        ran.chooseChance(10, 1) ? (dread_bots.length < (c.BOTS / 4.8) ? o.define(Class.dreadnought) : o.define(Class.basic)) : o.define(Class.basic);
         o.refreshBodyAttributes();
         o.isBot = true;
         if (!o.label.includes("Dreadnought")) { o.team = team; }
