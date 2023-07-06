@@ -16523,6 +16523,53 @@ exports.eggDreadnought = {
     SIZE: 16,
     COLOR: 6,
 };
+exports.triangleDreadnought = {
+    PARENT: [exports.genericDreadnought],
+    SHAPE: [
+        [-1.555,0],
+        [0.778,1.347],
+        [0.778,-1.347]
+    ],
+    BODY: {
+        FOV: base.FOV * 0.95,
+    },
+    SIZE: 15,
+    COLOR: 2,
+};
+exports.squareDreadnought = {
+    PARENT: [exports.genericDreadnought],
+    SHAPE: 4,
+    BODY: {
+        FOV: base.FOV * 0.9,
+    },
+    SIZE: 15,
+    COLOR: 13,
+};
+exports.pentagonDreadnought = {
+    PARENT: [exports.genericDreadnought],
+    SHAPE: [
+        [-1,0],
+        [-0.3,0.95],
+        [0.8,0.58],
+        [0.8,-0.58],
+        [-0.3,-0.95]
+    ],
+    BODY: {
+        FOV: base.FOV * 0.85,
+    },
+    SIZE: 14,
+    COLOR: 14,
+};
+exports.hexagonDreadnought = {
+    PARENT: [exports.genericDreadnought],
+    SHAPE: 6,
+    BODY: {
+        FOV: base.FOV * 0.8,
+    },
+    SIZE: 14,
+    COLOR: 0,
+};
+
 exports.dreadnought = {
     PARENT: [exports.eggDreadnought],
     IS_SMASHER: true,
@@ -16647,19 +16694,6 @@ exports.sword = {
     ],
 };
 
-exports.triangleDreadnought = {
-    PARENT: [exports.genericDreadnought],
-    SHAPE: [
-        [-1.555,0],
-        [0.778,1.347],
-        [0.778,-1.347]
-    ],
-    BODY: {
-        FOV: base.FOV * 0.95,
-    },
-    SIZE: 15,
-    COLOR: 2,
-};
 exports.trianglePacifier = {
     PARENT: [exports.triangleDreadnought],
     LABEL: "Dreadnought trianglePacifier",
@@ -16822,15 +16856,6 @@ exports.triangleSword = {
     ],
 };
 
-exports.squareDreadnought = {
-    PARENT: [exports.genericDreadnought],
-    SHAPE: 4,
-    BODY: {
-        FOV: base.FOV * 0.9,
-    },
-    SIZE: 14,
-    COLOR: 13,
-};
 exports.squarePacifier = {
     PARENT: [exports.squareDreadnought],
     LABEL: "Dreadnought squarePacifier",
@@ -17036,21 +17061,6 @@ exports.squareSword = {
     ],
 };
 
-exports.pentagonDreadnought = {
-    PARENT: [exports.genericDreadnought],
-    SHAPE: [
-        [-1,0],
-        [-0.3,0.95],
-        [0.8,0.58],
-        [0.8,-0.58],
-        [-0.3,-0.95]
-    ],
-    BODY: {
-        FOV: base.FOV * 0.85,
-    },
-    SIZE: 13,
-    COLOR: 14,
-};
 exports.pentagonPacifier = {
     PARENT: [exports.pentagonDreadnought],
     LABEL: "Dreadnought pentagonPacifier",
@@ -17299,15 +17309,6 @@ exports.pentagonSword = {
     ],
 };
 
-exports.hexagonDreadnought = {
-    PARENT: [exports.genericDreadnought],
-    SHAPE: 6,
-    BODY: {
-        FOV: base.FOV * 0.8,
-    },
-    SIZE: 12,
-    COLOR: 0,
-};
 exports.hexagonPacifier = {
     PARENT: [exports.hexagonDreadnought],
     LABEL: "Dreadnought hexagonPacifier",
