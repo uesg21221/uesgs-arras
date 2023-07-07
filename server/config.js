@@ -16,7 +16,6 @@ module.exports = {
     HEIGHT: 6500,
     MODE: "ffa",
     TEAMS: 0,
-    SUB: "",
     RANDOM_COLORS: false,
     ARENA_TYPE: "rect",
     BANNED_CHARACTER_REGEX: "/[\uFDFD\u200E\u0000]/gi",
