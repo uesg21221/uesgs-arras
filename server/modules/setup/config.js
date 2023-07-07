@@ -8,7 +8,7 @@ const gamemodes = {
     }, // "defaults" is already FFA.
     "Growth FFA": {
         BOTS: 10,
-        SUB: "growth",
+        secondaryGameMode: "growth",
         LEVEL_SKILL_POINT_FUNCTION: level => {
             if (level < 2) return 0;
             if (level <= 45) return 1;
@@ -18,7 +18,7 @@ const gamemodes = {
     },
     "Growth TDM": {
         MODE: "tdm",
-        SUB: "growth",
+        secondaryGameMode: "growth",
         TEAMS: 2 + (Math.random() * 3 | 0),
         BOTS: 20,
         LEVEL_SKILL_POINT_FUNCTION: level => {

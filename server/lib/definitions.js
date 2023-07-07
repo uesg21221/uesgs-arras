@@ -57,7 +57,7 @@ let skcnv = {
     hlt: 7,
 };
 const defineSkillCap = c.SKILL_CAP;
-const genericSkillCap = c.SUB == "growth" ? c.SKILL_CAP : c.SKILL_CHEAT_CAP;
+const genericSkillCap = c.secondaryGameMode == "growth" ? c.SKILL_CAP : c.SKILL_CHEAT_CAP;
 const skillSet = (args) => {
     let skills = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let s in args) {

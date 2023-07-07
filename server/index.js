@@ -503,7 +503,14 @@ let makenpcs = () => {
         }
         o.define(Class.bot);
         let dread_bots = bots.filter(e => e.label.includes("Dreadnought"));
-        ran.chooseChance(10, 1) ? (dread_bots.length < (c.BOTS / 4.8) ? o.define(Class.dreadnought) : o.define(Class.basic)) : o.define(Class.basic);
+        if (dread_bots < 1 && bots.length == c.BOTS - 1) { o.define(Class.dreadnought); }
+        else {
+            ran.chooseChance(10, 1)
+                    ? (dread_bots.length < (Math.round(c.BOTS / 6) + 1)
+                            ? o.define(Class.dreadnought)
+                            : o.define(Class.basic))
+                    : o.define(Class.basic);
+        }
         o.refreshBodyAttributes();
         o.isBot = true;
         if (!o.label.includes("Dreadnought")) { o.team = team; }
