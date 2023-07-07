@@ -885,7 +885,10 @@ class Entity extends EventEmitter {
         if (set.STAT_NAMES != null) this.settings.skillNames = set.STAT_NAMES;
         if (set.AI != null) this.aiSettings = set.AI;
         if (set.ALPHA != null) this.alpha = set.ALPHA;
-        if (set.INVISIBLE != null) this.invisible = set.INVISIBLE;
+        if (set.INVISIBLE != null) {
+            this.invisible = set.INVISIBLE;
+            this.alpha = 1;
+        }
         if (set.DANGER != null) this.dangerValue = set.DANGER;
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.VARIES_IN_SIZE != null) {

@@ -3418,6 +3418,7 @@ exports.testbedBase = {
     LABEL: "",
     LEVEL: 0,
     RESET_UPGRADES: true,
+    INVISIBLE: [0, 0],
     SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
     SKILL: skillSet({
         rld: 0,
