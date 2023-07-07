@@ -297,6 +297,17 @@ class io_onlyAcceptInArc extends IO {
         }
     }
 }
+class io_teleportToMaster extends IO {
+    constructor(body) {
+        super(body);
+    }
+    think(input) {
+      this.body.x = this.body.source.x;
+      this.body.y = this.body.source.y;
+      this.body.accel.x = 0;
+      this.body.accel.y = 0;
+    }
+}
 class io_nearestDifferentMaster extends IO {
     constructor(body, opts = {}) {
         super(body);
@@ -314,6 +325,7 @@ class io_nearestDifferentMaster extends IO {
         (e.master.master.team !== this.body.master.master.team) &&
         (e.master.master.team !== -101) &&
         (!e.master.master.ignoredByAi) &&
+        (e.master.master.label != "Spectator") &&
         ((this.body.isDominator || this.body.type == "tank") ? (!e.master.master.isDominator) : true) &&
         (this.body.type == "crasher" ? (e.master.master.type != "food") : true) &&
         (this.body.aiSettings.seeInvisible || this.body.isArenaCloser || e.alpha > 0.5) &&
@@ -656,6 +668,26 @@ class io_wanderAroundMap extends IO {
         }
     }
 }
+class io_reversespin extends IO {
+    constructor(b) {
+        super(b)
+        this.a = 0
+    }
+    think(input) {
+        this.a -= 0.01
+        let offset = 0
+        if (this.body.bond != null) {
+            offset = this.body.bound.angle
+        }
+        return {
+            target: {
+                x: Math.cos(this.a + offset),
+                y: Math.sin(this.a + offset),
+            },
+            main: true,
+        };
+    }
+}
 
 let ioTypes = {
     //misc
@@ -670,6 +702,7 @@ let ioTypes = {
     nearestDifferentMaster: io_nearestDifferentMaster,
     targetSelf: io_targetSelf,
     onlyAcceptInArc: io_onlyAcceptInArc,
+    reversespin: io_reversespin,
     spin: io_spin,
 
     //movement related
@@ -678,6 +711,7 @@ let ioTypes = {
     bossRushAI: io_bossRushAI,
     moveInCircles: io_moveInCircles,
     boomerang: io_boomerang,
+    teleportToMaster: io_teleportToMaster,
     goToMasterTarget: io_goToMasterTarget,
     avoid: io_avoid,
     minion: io_minion,

@@ -472,59 +472,50 @@ let makenpcs = () => {
     // upgrade existing ones
     for (let i = 0; i < bots.length; i++) {
         let o = bots[i];
-        if (o.skill.level < c.SKILL_CAP) {
-            o.skill.score += 125;
-            o.skill.maintain();
-        }
-        if (o.skill.level < c.SKILL_CHEAT_CAP) { if (o.label.includes("Dreadnought")) o.setLevel(c.SKILL_CHEAT_CAP); }
+        if (o.skill.level < c.SKILL_CAP) o.skill.score += 125;
+        o.skill.maintain();
         o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(1, 1, 3, 4, 4, 4, 4, 2, 1, 1)]);
         if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) o.leftoverUpgrades--;
     }
 
     // then add new bots
     if (bots.length < c.BOTS) {
+        let dread_bots = bots.filter(e => e.label.includes("Dreadnought"));
         let o = new Entity(room.randomType("norm")),
             color = 17,
-            team = o.id;
-        if (c.RANDOM_COLORS && room.gameMode === "ffa") {
-            color = Math.floor(Math.random() * 20);
-        } else if (room.gameMode === "tdm") {
-            team = getTeam(0);
-            if (room["bas" + team].length) {
-                let loc;
-                do {
-                    loc = room.randomType("bas" + team);
-                } while (dirtyCheck(loc, 50));
-                o.x = loc.x;
-                o.y = loc.y;
-            }
-            color = [10, 11, 12, 15, 25, 26, 27, 28][team - 1];
-            team = -team;
-        }
+            team = o.id,
+            dread_bot = ran.chooseChance(1, 10)
+                    ? ((dread_bots.length < (Math.round(c.BOTS / 6) + 1) ||
+                        (dread_bots < 1 && bots.length == c.BOTS - 1))
+                            ? true
+                            : false)
+                    : false;
         o.define(Class.bot);
-        let dread_bots = bots.filter(e => e.label.includes("Dreadnought"));
-        if (dread_bots < 1 && bots.length == c.BOTS - 1) { o.define(Class.dreadnought); }
-        else {
-            ran.chooseChance(10, 1)
-                    ? (dread_bots.length < (Math.round(c.BOTS / 6) + 1)
-                            ? o.define(Class.dreadnought)
-                            : o.define(Class.basic))
-                    : o.define(Class.basic);
+        if (!dread_bot) {
+            if (c.RANDOM_COLORS && room.gameMode === "ffa") {
+                color = Math.floor(Math.random() * 20);
+            } else if (room.gameMode === "tdm") {
+                team = getTeam(0);
+                if (room["bas" + team].length) {
+                    let loc;
+                    do {
+                        loc = room.randomType("bas" + team);
+                    } while (dirtyCheck(loc, 50));
+                    o.x = loc.x;
+                    o.y = loc.y;
+                }
+                color = [10, 11, 12, 15, 25, 26, 27, 28][team - 1];
+                team = -team;
+            }
+            o.define(Class.basic);
+            o.team = team;
+            o.color = color;
+        } else {
+            o.define(Class.dreadnought);
+            o.setLevel(c.SKILL_CHEAT_CAP);
         }
         o.refreshBodyAttributes();
         o.isBot = true;
-        if (!o.label.includes("Dreadnought")) { o.team = team; }
-        if (c.MODE == "tdm") {
-            if (room["bas" + c.TEAMS].length) {
-                let loc;
-                do {
-                    loc = room.randomType("norm");
-                } while (dirtyCheck(loc, 50));
-                o.x = loc.x;
-                o.y = loc.y;
-            }
-        }
-        o.color = color;
         o.name += ran.chooseBotName();
         //some guy in discord once suggested that some bots shouldnt upgrade to latest tier
         //o.leftoverUpgrades = ran.chooseChance(1, 5, 20, 37, 37);

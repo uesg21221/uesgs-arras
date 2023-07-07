@@ -179,6 +179,11 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
                 };
                 /********** DO DAMAGE *********/
                 let bail = false;
+                if (my.type === "atmosphere" && !(n.type === "tank" || n.type === "miniboss")) {
+                    bail = true;
+                } else if (n.type === "atmosphere" && !(my.type === "tank" || my.type === "miniboss")) {
+                    bail = true;
+                }
                 if (n.type === 'food' && my.settings.necroTypes.includes(n.shape)) {
                     bail = my.necro(n);
                 } else if (my.type === 'food' && n.settings.necroTypes.includes(my.shape)) {

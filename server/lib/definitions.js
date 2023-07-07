@@ -84,6 +84,7 @@ const g = {
     square: [1, 1, 0.6, 1, 1.2, 1.2, 1.2, 1, 1, 1, 2, 1, 1.5],
     pentagon: [1, 1, 0.6, 1, 1.3, 1.3, 1.3, 1, 1, 1, 2, 1, 1.5],
     hexagon: [1, 1, 0.6, 1, 1.4, 1.4, 1.4, 1, 1, 1, 2, 1, 1.5],
+    atmosphere: [0.001, 0.001, 0.001, 6, 1, 1, 1, 0.001, 0.001, 1, 1, 0.001, 1],
 
     // Bases
     basic: [18, 1.4, 0.1, 1, 1, 0.75, 1, 4.5, 1, 1, 1, 15, 1],
@@ -3417,7 +3418,6 @@ exports.testbedBase = {
     LABEL: "",
     LEVEL: 0,
     RESET_UPGRADES: true,
-    INVISIBLE: [0, 0],
     SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
     SKILL: skillSet({
         rld: 0,
@@ -3530,7 +3530,7 @@ exports.spectator = {
     BODY: {
         DAMAGE: 0,
         SPEED: 5,
-        FOV: 2.5,
+        FOV: 4,
         HEALTH: 1e100,
         SHIELD: 1e100,
         REGEN: 1e100,
@@ -16505,6 +16505,72 @@ for (let i = 0; i <= defineSkillCap; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_T
     exports.levels.UPGRADES_TIER_0.push(exports["level" + LEVEL]);
 }
 
+// Atmosphere
+exports.atmosphere = {
+    PARENT: [exports.bullet],
+    LABEL: "",
+    TYPE: "atmosphere",
+    CONTROLLERS: ["teleportToMaster"],
+    DAMAGE_EFFECTS: false,
+    DIE_AT_RANGE: false,
+    ALPHA: 0.25,
+    CLEAR_ON_MASTER_UPGRADE: true,
+    CAN_GO_OUTSIDE_ROOM: true,
+    BODY: {
+        REGEN: 1e5,
+        HEALTH: 1e6,
+        DENSITY: 0,
+        DAMAGE: 0.25,
+        SPEED: 0,
+        PUSHABILITY: 0,
+    },
+    TURRETS: [
+        {
+            /*    SIZE         X             Y         ANGLE        ARC       Z*/
+            POSITION: [20, 0, 0, 0, 360, 1],
+            TYPE: [exports.genericEntity, { COLOR: 0 }]
+        },
+    ]
+}
+exports.atmosphereSymbol = {
+    PARENT: [exports.genericTank],
+    CONTROLLERS: ["reversespin"],
+    INDEPENDENT: true,
+    COLOR: 0,
+    SHAPE: [
+        [-0.598,-0.7796],
+        [-0.3817,-0.9053],
+        [0.9688,-0.1275],
+        [0.97,0.125],
+        [-0.3732,0.9116],
+        [-0.593,0.785]
+    ]
+}
+exports.atmosphereGenerator = {
+    PARENT: [exports.genericTank],
+    LABEL: "Atmosphere",
+    COLOR: 9,
+    GUNS: [
+        {
+            POSITION: [0, 20, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.atmosphere]),
+                TYPE: exports.atmosphere,
+                MAX_CHILDREN: 1,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+            },
+        }, 
+    ],
+    TURRETS: [
+        {
+            /*    SIZE         X             Y         ANGLE        ARC       Z*/
+            POSITION: [20, 0, 0, 0, 360, 1],
+            TYPE: exports.atmosphereSymbol,
+        },
+    ]
+}
+
 exports.genericDreadnought = {
     PARENT: [exports.genericTank],
     REALSKILL_CAP: defineSkillCap,
@@ -16517,6 +16583,12 @@ exports.genericDreadnought = {
         DAMAGE: 2 * base.DAMAGE,
     },
     SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl],
+    TURRETS: [
+        {
+            POSITION: [14, 0, 0, 0, 360, 1],
+            TYPE: exports.atmosphereGenerator,
+        },
+    ],
 };
 
 exports.eggDreadnought = {
@@ -16573,8 +16645,7 @@ exports.hexagonDreadnought = {
 
 exports.dreadnought = {
     PARENT: [exports.eggDreadnought],
-    IS_SMASHER: true,
-    LABEL: "Dreadnought",
+    LABEL: "Dreadnought"
 };
 exports.pacifier = {
     PARENT: [exports.eggDreadnought],

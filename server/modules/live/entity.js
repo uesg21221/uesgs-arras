@@ -1097,18 +1097,16 @@ class Entity extends EventEmitter {
         ) {
             let upgrade = this.upgrades[number].class;
             this.upgrades = [];
+            for (let instance of entities) {
+                if (
+                    instance.settings.clearOnMasterUpgrade &&
+                    instance.master.id == this.id
+                ) instance.master.isBot ? instance.destroy() : instance.kill();
+            }
             this.define(upgrade);
             this.sendMessage("You have upgraded to " + this.label + ".");
             if (upgrade.TOOLTIP != null && upgrade.TOOLTIP.length > 0) {
                 this.sendMessage(upgrade.TOOLTIP);
-            }
-            for (let instance of entities) {
-                if (
-                    instance.settings.clearOnMasterUpgrade &&
-                    instance.master.id === this.id
-                ) {
-                    instance.kill();
-                }
             }
             this.skill.update();
             this.refreshBodyAttributes();
