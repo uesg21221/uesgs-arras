@@ -41,18 +41,14 @@ module.exports = {
     ROOM_BOUND_FORCE: 0.01,
     FOOD: [0, 0.75, 0.22, 0.1, 0.005, 0, 0],
     FOOD_NEST: [0, 0.0, 0.0, 0.75, 0.23, 0.02, 0],
-    LEVEL_SKILL_POINT_FUNCTION: level => {
-        if (level < 2) return 0;
-        if (level <= 45) return 1;
-        if (level <= (72 * 2 - 45) && level & 1 == 1) return 1;
-        return 0;
-    },
+    LEVEL_SKILL_POINT_FUNCTION: null,
     MAX_SKILL: 9,
     SOFT_MAX_SKILL: 0.59,
     MAX_UPGRADE_TIER: 14,
     // Dreadnoughts team
     DREADNOUGHT_TEAM: 10,
     TIER_MULTIPLIER: 15,
+    GROWTH: 71,
     SKILL_CAP: 210,
     SKILL_SOFT_CAP: 0,
     SKILL_CHEAT_CAP: 45,
@@ -72,7 +68,6 @@ module.exports = {
     SPACE_PHYSICS: false,
     SPACE_MODE: false,
     MAZE: false,
-    GROWTH: false,
     DOMINATOR_LOOP: false,
     secondaryGameMode: "z",
     GROUPS: false,

@@ -16604,18 +16604,12 @@ exports.triangleDreadnought = {
         [0.778,1.347],
         [0.778,-1.347]
     ],
-    BODY: {
-        FOV: base.FOV * 0.95,
-    },
     SIZE: 15,
     COLOR: 2,
 };
 exports.squareDreadnought = {
     PARENT: [exports.genericDreadnought],
     SHAPE: 4,
-    BODY: {
-        FOV: base.FOV * 0.9,
-    },
     SIZE: 15,
     COLOR: 13,
 };
@@ -16628,9 +16622,6 @@ exports.pentagonDreadnought = {
         [0.8,-0.58],
         [-0.3,-0.95]
     ],
-    BODY: {
-        FOV: base.FOV * 0.85,
-    },
     SIZE: 14,
     COLOR: 14,
 };

@@ -3,11 +3,14 @@ const bossRush = new BossRush()
 if (c.MOTHERSHIP_LOOP) mothershipLoop.spawn();
 if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
 if (c.MAZE && typeof c.MAZE == "number") generateMaze(c.MAZE);
-if (c.GROWTH && typeof c.GROWTH == "number") c.LEVEL_SKILL_POINT_FUNCTION = level => {
-                                                if (level < 2) return 0;
-                                                if (level <= (c.GROWTH * 2) && level & 1 == 1) return 1;
-                                                return 0;
-                                            };
+if (c.GROWTH && typeof c.GROWTH == "number") {
+    c.LEVEL_SKILL_POINT_FUNCTION = level => {
+        if (level < 2) return 0;
+        if (level <= c.SKILL_CHEAT_CAP) return 1;
+        if (level <= (c.GROWTH + 1) * 2 - c.SKILL_CHEAT_CAP && level & 1 == 1) return 1;
+        return 0;
+    };
+}
 if (c.DOMINATOR_LOOP) for (let loc of room.dom0) dominatorLoop.spawn(loc, -100, 3);
 let logger = new LagLogger();
 const gamemodeLoop = function() {

@@ -77,7 +77,6 @@ const requires = [
     "./live/entitySubFunctions.js", // Skill, HealthType and other functions related to entities are here.
     "./live/controllers.js", // The AI of the game.
     "./live/entity.js", // The actual Entity constructor.
-    "./setup/mockups.js", // This file loads the mockups.
     "./physics/collisionFunctions.js", // The actual collision functions that make the game work.
     "./network/sockets.js", // The networking that helps players interact with the game.
     "./network/webServer.js", // The networking that actually hosts the server.
@@ -91,6 +90,7 @@ const requires = [
     "./gamemodes/groups.js", // Duos/Trios/Squads
     "./gamemodes/tag.js", // Tag
     "./gamemodes/closeArena.js", // Arena Closing mechanics
+    "./setup/mockups.js", // This file loads the mockups.
     "./debug/antibot.js" // Antibot :DDD
 ];
 
