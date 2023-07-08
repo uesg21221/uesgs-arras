@@ -8,12 +8,12 @@ const gamemodes = {
     }, // "defaults" is already FFA.
     "Growth FFA": {
         BOTS: 10,
-        GROWTH: 135,
+        GROWTH: 90,
         secondaryGameMode: "growth"
     },
     "Growth TDM": {
         MODE: "tdm",
-        GROWTH: 135,
+        GROWTH: 90,
         secondaryGameMode: "growth",
         TEAMS: 2 + (Math.random() * 3 | 0),
         BOTS: 20

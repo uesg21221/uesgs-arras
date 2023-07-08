@@ -1104,7 +1104,7 @@ class Entity extends EventEmitter {
                 if (
                     instance.settings.clearOnMasterUpgrade &&
                     instance.master.id == this.id
-                ) instance.master.isBot ? instance.destroy() : instance.kill();
+                ) instance.kill();
             }
             this.define(upgrade);
             this.sendMessage("You have upgraded to " + this.label + ".");

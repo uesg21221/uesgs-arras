@@ -485,11 +485,10 @@ let makenpcs = () => {
             color = 17,
             team = o.id,
             dread_bot = ran.chooseChance(10, 1)
-                    ? ((dread_bots.length < (Math.round(c.BOTS / 6) + 1) ||
-                        (dread_bots < 1 && bots.length == c.BOTS - 1))
+                    ? (dread_bots.length < (Math.round(c.BOTS / 6) + 1)
                             ? true
                             : false)
-                    : false;
+                    : (dread_bots < 1 && bots.length == c.BOTS - 1) ? true : false;
         o.define(Class.bot);
         if (!dread_bot) {
             if (c.RANDOM_COLORS && room.gameMode === "ffa") {
@@ -719,7 +718,7 @@ const maintainloop = () => {
     // Regen health and update the grid
     loopThrough(entities, function (instance) {
         if (instance.shield.max) instance.shield.regenerate();
-        if (instance.health.amount) instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
+        if (instance.health.amount > 0) instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
     });
 };
 

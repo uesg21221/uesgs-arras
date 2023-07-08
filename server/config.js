@@ -44,7 +44,7 @@ module.exports = {
     LEVEL_SKILL_POINT_FUNCTION: level => {
         if (level < 2) return 0;
         if (level <= 45) return 1;
-        if (level <= 100 && level & 1 == 1) return 1;
+        if (level <= (72 * 2 - 45) && level & 1 == 1) return 1;
         return 0;
     },
     MAX_SKILL: 9,
@@ -72,6 +72,7 @@ module.exports = {
     SPACE_PHYSICS: false,
     SPACE_MODE: false,
     MAZE: false,
+    GROWTH: false,
     DOMINATOR_LOOP: false,
     secondaryGameMode: "z",
     GROUPS: false,
