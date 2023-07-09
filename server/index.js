@@ -73,6 +73,7 @@ function collide(collision) {
             let wall = instance.type === "wall" ? instance : other;
             let entity = instance.type === "wall" ? other : instance;
             if (entity.ac || entity.master.ac) return;
+            if (entity.type == "atmosphere") return;
             switch (wall.shape) {
                 case 4:
                     reflectCollide(wall, entity);
@@ -557,8 +558,9 @@ if (c.SPACE_MODE) {
 
 class FoodType {
     constructor(groupName, types, chances, chance, isNestFood = false) {
+        let scale;
         if (chances[0] === "scale") {
-            const scale = chances[1];
+            scale = chances[1];
             chances = [];
             for (let i = types.length; i > 0; i--) {
                 chances.push(i ** scale);
@@ -570,7 +572,7 @@ class FoodType {
         }
         this.types = types;
         this.chances = chances;
-        this.chance = chance;
+        this.chance = chance * (scale > 4 && c.SHINY ? 100 : 1);
         this.isNestFood = isNestFood;
     }
     choose() {
