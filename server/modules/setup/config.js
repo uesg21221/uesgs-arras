@@ -1,6 +1,6 @@
 const defaults = require("../../config.js");
 
-const gamemode = "Domination"; // keep it as ffa
+const gamemode = "Labyrinth"; // keep it as ffa
 
 const gamemodes = {
     "FFA": {
@@ -113,6 +113,7 @@ const gamemodes = {
         HEIGHT: 6300,
         MAZE: 36,
         SHINY: true,
+        TEAMS: Math.random() * 5 | 0,
         ROOM_SETUP: [
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],

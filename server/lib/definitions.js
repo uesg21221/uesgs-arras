@@ -233,36 +233,31 @@ const eggDreadnoughtBullet = dreadStat([
     g.egg,
     g.morerecoil,
     g.one_third_reload,
-    g.halfspeed,
-    g.morerange
+    g.slow
 ]);
 const triangleDreadnoughtBullet = dreadStat([
     g.triangle,
     g.morerecoil,
     g.one_third_reload,
-    g.halfspeed,
-    g.morerange
+    g.slow
 ]);
 const squareDreadnoughtBullet = dreadStat([
     g.square,
     g.morerecoil,
     g.one_third_reload,
-    g.halfspeed,
-    g.morerange
+    g.slow
 ]);
 const pentagonDreadnoughtBullet = dreadStat([
     g.pentagon,
     g.morerecoil,
     g.one_third_reload,
-    g.halfspeed,
-    g.morerange
+    g.slow
 ]);
 const hexagonDreadnoughtBullet = dreadStat([
     g.hexagon,
     g.morerecoil,
     g.one_third_reload,
-    g.halfspeed,
-    g.morerange
+    g.slow
 ]);
 
 // SKILL DEFINITIONS
@@ -16578,8 +16573,9 @@ exports.genericDreadnought = {
     DANGER: 7,
     TEAM: dreadTeam,
     BROADCAST_MESSAGE: "A Dreadnought has left!",
+    SIZE: 14,
     BODY: {
-        SPEED: 0.7 * base.SPEED,
+        SPEED: 0.5 * base.SPEED,
         HEALTH: 4 * base.HEALTH,
         DAMAGE: 2 * base.DAMAGE,
     },
@@ -16594,7 +16590,6 @@ exports.genericDreadnought = {
 
 exports.eggDreadnought = {
     PARENT: [exports.genericDreadnought],
-    SIZE: 16,
     COLOR: 6,
 };
 exports.triangleDreadnought = {
@@ -16604,13 +16599,11 @@ exports.triangleDreadnought = {
         [0.778,1.347],
         [0.778,-1.347]
     ],
-    SIZE: 15,
     COLOR: 2,
 };
 exports.squareDreadnought = {
     PARENT: [exports.genericDreadnought],
     SHAPE: 4,
-    SIZE: 15,
     COLOR: 13,
 };
 exports.pentagonDreadnought = {
@@ -16622,16 +16615,11 @@ exports.pentagonDreadnought = {
         [0.8,-0.58],
         [-0.3,-0.95]
     ],
-    SIZE: 14,
     COLOR: 14,
 };
 exports.hexagonDreadnought = {
     PARENT: [exports.genericDreadnought],
     SHAPE: 6,
-    BODY: {
-        FOV: base.FOV * 0.8,
-    },
-    SIZE: 14,
     COLOR: 0,
 };
 
