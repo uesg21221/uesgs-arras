@@ -302,18 +302,17 @@ function reflectCollide(wall, bounce) {
         bounce.x - bounce.size > wall.x + wall.size ||
         bounce.y + bounce.size < wall.y - wall.size ||
         bounce.y - bounce.size > wall.y + wall.size) return 0;
-    if (wall.intangibility) return 0
-    let bounceBy = bounce.type === 'tank' ? 1.0 : bounce.type === 'miniboss' ? 2.5 : 0.1
-    let left = bounce.x < wall.x - wall.size
-    let right = bounce.x > wall.x + wall.size
-    let top = bounce.y < wall.y - wall.size
-    let bottom = bounce.y > wall.y + wall.size
-    let leftExposed = bounce.x - bounce.size < wall.x - wall.size
-    let rightExposed = bounce.x + bounce.size > wall.x + wall.size
-    let topExposed = bounce.y - bounce.size < wall.y - wall.size
-    let bottomExposed = bounce.y + bounce.size > wall.y + wall.size
-
-    let intersected = false
+    if (wall.intangibility) return 0;
+    let bounceBy = bounce.type === 'tank' ? 1.0 : bounce.type === 'miniboss' ? 2.5 : 0.1,
+        left = bounce.x < wall.x - wall.size,
+        right = bounce.x > wall.x + wall.size,
+        top = bounce.y < wall.y - wall.size,
+        bottom = bounce.y > wall.y + wall.size,
+        leftExposed = bounce.x - bounce.size < wall.x - wall.size,
+        rightExposed = bounce.x + bounce.size > wall.x + wall.size,
+        topExposed = bounce.y - bounce.size < wall.y - wall.size,
+        bottomExposed = bounce.y + bounce.size > wall.y + wall.size,
+        intersected = true;
 
     if (left && right) {
         left = right = false
@@ -372,7 +371,7 @@ function reflectCollide(wall, bounce) {
 
     if (intersected) {
         bounce.collisionArray.push(wall);
-        if (bounce.type !== 'tank' && bounce.type !== 'miniboss')
+        if (bounce.type !== 'tank' && bounce.type !== 'miniboss' && bounce.type !== "crasher" && bounce.type !== "food")
             bounce.kill();
     }
 };

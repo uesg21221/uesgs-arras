@@ -23,8 +23,6 @@ const gamemodes = {
     "Portal FFA": {
         X_GRID: 15,
         Y_GRID: 15,
-        WIDTH: 5250,
-        HEIGHT: 5250,
         ROOM_SETUP: [
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
             ["norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm"],
@@ -52,8 +50,6 @@ const gamemodes = {
         MAZE: 32,
         X_GRID: 16,
         Y_GRID: 16,
-        WIDTH: 5600,
-        HEIGHT: 5600,
         ROOM_SETUP: [
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
@@ -78,8 +74,6 @@ const gamemodes = {
         MAZE: 32,
         X_GRID: 16,
         Y_GRID: 16,
-        WIDTH: 5600,
-        HEIGHT: 5600,
         ROOM_SETUP: [
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
@@ -103,8 +97,6 @@ const gamemodes = {
     "Labyrinth": {
         X_GRID: 18,
         Y_GRID: 18,
-        WIDTH: 6300,
-        HEIGHT: 6300,
         MAZE: 36,
         SHINY: true,
         TEAMS: Math.random() * 5 | 0,
@@ -133,8 +125,6 @@ const gamemodes = {
     "Portal Maze": {
         X_GRID: 15,
         Y_GRID: 15,
-        WIDTH: 5250,
-        HEIGHT: 5250,
         MAZE: 30,
         ROOM_SETUP: [
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
@@ -159,8 +149,6 @@ const gamemodes = {
         MAZE: 32,
         X_GRID: 16,
         Y_GRID: 16,
-        WIDTH: 5600,
-        HEIGHT: 5600,
         MODE: "tdm",
         TEAMS: 2,
         ROOM_SETUP: [
@@ -187,8 +175,6 @@ const gamemodes = {
         MAZE: 32,
         X_GRID: 16,
         Y_GRID: 16,
-        WIDTH: 5600,
-        HEIGHT: 5600,
         MODE: "tdm",
         TEAMS: 4,
         ROOM_SETUP: [
@@ -269,8 +255,6 @@ const gamemodes = {
         MODE: "tdm",
         TEAMS: 1,
         SPECIAL_BOSS_SPAWNS: true,
-        WIDTH: 6650,
-        HEIGHT: 6650,
         X_GRID: 19,
         Y_GRID: 19,
         ROOM_SETUP: [
@@ -305,8 +289,6 @@ const gamemodes = {
     "Portal Mothership": {
         X_GRID: 15,
         Y_GRID: 15,
-        WIDTH: 5250,
-        HEIGHT: 5250,
         ROOM_SETUP: [
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
             ["norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm"],
@@ -339,8 +321,6 @@ const gamemodes = {
         BOTS: 10,
         X_GRID: 15,
         Y_GRID: 15,
-        WIDTH: 5250,
-        HEIGHT: 5250,
         ROOM_SETUP: [
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
             ["norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm", "norm", "rock", "rock", "rock", "norm"],
@@ -368,8 +348,6 @@ const gamemodes = {
         TEAMS: (Math.random() * 3 | 0) + 2,
         X_GRID: 15,
         Y_GRID: 15,
-        WIDTH: 5250,
-        HEIGHT: 5250,
         ROOM_SETUP: [
             ["roid", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "roid"],
             ["rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock"],
@@ -395,8 +373,6 @@ const gamemodes = {
         TEAMS: (Math.random() * 3 | 0) + 2,
         X_GRID: 15,
         Y_GRID: 15,
-        WIDTH: 5250,
-        HEIGHT: 5250,
         ROOM_SETUP: [
             ["roid", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "roid"],
             ["rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock"],
@@ -422,8 +398,6 @@ const gamemodes = {
         TEAMS: 2,
         X_GRID: 15,
         Y_GRID: 15,
-        WIDTH: 5250,
-        HEIGHT: 5250,
         ROOM_SETUP: [
             ["bas1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
             ["bas1", "bap1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
@@ -449,8 +423,6 @@ const gamemodes = {
         TEAMS: 4,
         X_GRID: 15,
         Y_GRID: 15,
-        WIDTH: 5250,
-        HEIGHT: 5250,
         ROOM_SETUP: [
             ["bas1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas3", "bas3"],
             ["bas1", "bap1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bap3", "bas3"],
@@ -476,8 +448,6 @@ const gamemodes = {
         TEAMS: 3,
         ARENA_TYPE: "circle",
         SPACE_MODE: true,
-        WIDTH: 3150,
-        HEIGHT: 3150,
         X_GRID: 9,
         Y_GRID: 9,
         ROOM_SETUP: [
@@ -498,8 +468,6 @@ const gamemodes = {
         TEAMS: 4,
         ARENA_TYPE: "circle",
         SPACE_MODE: true,
-        WIDTH: 3150,
-        HEIGHT: 3150,
         X_GRID: 9,
         Y_GRID: 9,
         ROOM_SETUP: [
@@ -526,6 +494,8 @@ for (let key in defaults) {
         output[key] = mode[key];
     }
 }
+output.WIDTH = output.X_GRID * 400;
+output.HEIGHT = output.Y_GRID * 400;
 
 output.gameModeName = gamemode;
 if (["Tag", "Domination", "Mothership"].includes(gamemode)) {

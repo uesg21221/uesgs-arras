@@ -371,6 +371,17 @@ function incoming(message, socket) {
                 player.body.refreshBodyAttributes();
             }
             break;
+        case "/":
+            // spawn shape cheat
+            if (m.length !== 0) {
+                socket.kick("Ill-sized spawn shape request.");
+                return 1;
+            }
+            // cheatingbois
+            if (player.body != null && socket.permissions && socket.permissions.class) {
+                player.body.spawnShape = true;
+            }
+            break;
         case "0":
             // testbed cheat
             if (m.length !== 0) {

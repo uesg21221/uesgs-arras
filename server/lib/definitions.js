@@ -1010,9 +1010,82 @@ exports.food = {
     HEALTH_WITH_LEVEL: false,
 };
 
+exports.eggs = {
+    PARENT: [exports.food],
+    BODY: {
+        DAMAGE: basePolygonDamage / 3,
+        HEALTH: basePolygonHealth / 3,
+        DENSITY: 2,
+        PENETRATION: 1,
+        RESIST: 1,
+        PUSHABILITY: 0.25,
+    },
+};
+exports.squares = {
+    PARENT: [exports.food],
+    BODY: {
+        DAMAGE: basePolygonDamage,
+        HEALTH: basePolygonHealth,
+        DENSITY: 4,
+        PENETRATION: 2,
+    },
+};
+exports.triangles = {
+    PARENT: [exports.food],
+    BODY: {
+        DAMAGE: 3 * basePolygonDamage,
+        HEALTH: 3 * basePolygonHealth,
+        DENSITY: 6,
+        PENETRATION: 3,
+        RESIST: 3,
+    },
+};
+exports.pentagons = {
+    PARENT: [exports.food],
+    BODY: {
+        DAMAGE: 9 * basePolygonDamage,
+        HEALTH: 9 * basePolygonHealth,
+        DENSITY: 8,
+        PENETRATION: 4,
+        RESIST: 4,
+    },
+};
+exports.beta = {
+    PARENT: [exports.food],
+    BODY: {
+        DAMAGE: 18 * basePolygonDamage,
+        HEALTH: 18 * basePolygonHealth,
+        SHIELD: 18 * basePolygonHealth,
+        DENSITY: 10,
+        RESIST: 5,
+        REGEN: 5,
+    },
+};
+exports.alpha = {
+    PARENT: [exports.food],
+    BODY: {
+        DAMAGE: 36 * basePolygonDamage,
+        HEALTH: 36 * basePolygonHealth,
+        SHIELD: 36 * basePolygonHealth,
+        DENSITY: 12,
+        RESIST: 6,
+        REGEN: 6,
+    },
+};
+exports.cubes = {
+    PARENT: [exports.food],
+    BODY: {
+        DAMAGE: 12 * basePolygonDamage,
+        HEALTH: 12 * basePolygonHealth,
+        DENSITY: 4,
+        PENETRATION: 2,
+        RESIST: 2,
+    },
+};
+
 // EGGS
 exports.egg = {
-    PARENT: [exports.food],
+    PARENT: [exports.eggs],
     LABEL: "Egg",
     FOOD: {
         LEVEL: 0,
@@ -1022,16 +1095,10 @@ exports.egg = {
     SIZE: 5,
     COLOR: 6,
     INTANGIBLE: true,
-    BODY: {
-        DAMAGE: 0,
-        DENSITY: 2,
-        HEALTH: 0.0011,
-        PUSHABILITY: 0,
-    },
     DRAW_HEALTH: false,
 };
 exports.gem = {
-    PARENT: [exports.food],
+    PARENT: [exports.eggs],
     LABEL: "Gem",
     FOOD: {
         LEVEL: 0,
@@ -1040,19 +1107,11 @@ exports.gem = {
     SHAPE: 6,
     SIZE: 5,
     COLOR: 0,
-    BODY: {
-        DAMAGE: basePolygonDamage / 4,
-        DENSITY: 4,
-        HEALTH: 10,
-        PENETRATION: 2,
-        RESIST: 2,
-        PUSHABILITY: 0.25,
-    },
     DRAW_HEALTH: true,
     INTANGIBLE: false,
 };
 exports.jewel = {
-    PARENT: [exports.food],
+    PARENT: [exports.eggs],
     LABEL: "Jewel",
     FOOD: {
         LEVEL: 0,
@@ -1061,14 +1120,6 @@ exports.jewel = {
     SHAPE: 6,
     SIZE: 12,
     COLOR: 3,
-    BODY: {
-        DAMAGE: basePolygonDamage / 4,
-        DENSITY: 4,
-        HEALTH: 50,
-        PENETRATION: 2,
-        RESIST: 2,
-        PUSHABILITY: 0.25,
-    },
     DRAW_HEALTH: true,
     INTANGIBLE: false,
     GIVE_KILL_MESSAGE: true,
@@ -1076,7 +1127,7 @@ exports.jewel = {
 
 // SQUARES
 exports.square = {
-    PARENT: [exports.food],
+    PARENT: [exports.squares],
     LABEL: "Square",
     FOOD: {
         LEVEL: 1,
@@ -1085,17 +1136,11 @@ exports.square = {
     SHAPE: 4,
     SIZE: 10,
     COLOR: 13,
-    BODY: {
-        DAMAGE: basePolygonDamage,
-        DENSITY: 4,
-        HEALTH: basePolygonHealth,
-        PENETRATION: 2,
-    },
     DRAW_HEALTH: true,
     INTANGIBLE: false,
 };
 exports.shinySquare = {
-    PARENT: [exports.food],
+    PARENT: [exports.squares],
     LABEL: "Shiny Square",
     FOOD: {
         LEVEL: 1,
@@ -1104,18 +1149,12 @@ exports.shinySquare = {
     SHAPE: 4,
     SIZE: 10,
     COLOR: 1,
-    BODY: {
-        DAMAGE: 0.5,
-        DENSITY: 4,
-        HEALTH: 20,
-        PENETRATION: 2,
-    },
     DRAW_HEALTH: true,
     INTANGIBLE: false,
     GIVE_KILL_MESSAGE: true,
 };
 exports.legendarySquare = {
-    PARENT: [exports.food],
+    PARENT: [exports.squares],
     LABEL: "Legendary Square",
     FOOD: {
         LEVEL: 1,
@@ -1124,18 +1163,12 @@ exports.legendarySquare = {
     SHAPE: 4,
     SIZE: 10,
     COLOR: 0,
-    BODY: {
-        DAMAGE: 2,
-        DENSITY: 6,
-        HEALTH: 60,
-        PENETRATION: 6,
-    },
     DRAW_HEALTH: true,
     INTANGIBLE: false,
     GIVE_KILL_MESSAGE: true,
 };
 exports.shadowSquare = {
-    PARENT: [exports.food],
+    PARENT: [exports.squares],
     LABEL: "Shadow Square",
     FOOD: {
         LEVEL: 1,
@@ -1145,18 +1178,12 @@ exports.shadowSquare = {
     SIZE: 10,
     COLOR: 19,
     ALPHA: 0.25,
-    BODY: {
-        DAMAGE: 4,
-        DENSITY: 10,
-        HEALTH: 100,
-        PENETRATION: 8,
-    },
     DRAW_HEALTH: true,
     INTANGIBLE: false,
     GIVE_KILL_MESSAGE: true,
 };
 exports.rainbowSquare = {
-    PARENT: [exports.food],
+    PARENT: [exports.squares],
     LABEL: "Rainbow Square",
     FOOD: {
         LEVEL: 1,
@@ -1165,12 +1192,6 @@ exports.rainbowSquare = {
     SHAPE: 4,
     SIZE: 10,
     COLOR: 36,
-    BODY: {
-        DAMAGE: 8,
-        DENSITY: 15,
-        HEALTH: 200,
-        PENETRATION: 12.5,
-    },
     DRAW_HEALTH: true,
     INTANGIBLE: false,
     GIVE_KILL_MESSAGE: true,
@@ -1178,7 +1199,7 @@ exports.rainbowSquare = {
 
 // TRIANGLES
 exports.triangle = {
-    PARENT: [exports.food],
+    PARENT: [exports.triangles],
     LABEL: "Triangle",
     FOOD: {
         LEVEL: 2,
@@ -1187,17 +1208,10 @@ exports.triangle = {
     SHAPE: 3,
     SIZE: 9,
     COLOR: 2,
-    BODY: {
-        DAMAGE: basePolygonDamage,
-        DENSITY: 6,
-        HEALTH: 3 * basePolygonHealth,
-        RESIST: 1.15,
-        PENETRATION: 1.5,
-    },
     DRAW_HEALTH: true,
 };
 exports.shinyTriangle = {
-    PARENT: [exports.food],
+    PARENT: [exports.triangles],
     LABEL: "Shiny Triangle",
     FOOD: {
         LEVEL: 2,
@@ -1206,18 +1220,11 @@ exports.shinyTriangle = {
     SHAPE: 3,
     SIZE: 9,
     COLOR: 1,
-    BODY: {
-        DAMAGE: 1,
-        DENSITY: 6,
-        HEALTH: 60,
-        RESIST: 1.15,
-        PENETRATION: 1.5,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.legendaryTriangle = {
-    PARENT: [exports.food],
+    PARENT: [exports.triangles],
     LABEL: "Legendary Triangle",
     FOOD: {
         LEVEL: 2,
@@ -1226,18 +1233,11 @@ exports.legendaryTriangle = {
     SHAPE: 3,
     SIZE: 9,
     COLOR: 0,
-    BODY: {
-        DAMAGE: 4,
-        DENSITY: 8,
-        HEALTH: 90,
-        RESIST: 1.25,
-        PENETRATION: 10,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.shadowTriangle = {
-    PARENT: [exports.food],
+    PARENT: [exports.triangles],
     LABEL: "Shadow Triangle",
     FOOD: {
         LEVEL: 2,
@@ -1247,18 +1247,11 @@ exports.shadowTriangle = {
     SIZE: 9,
     COLOR: 19,
     ALPHA: 0.25,
-    BODY: {
-        DAMAGE: 8,
-        DENSITY: 15,
-        HEALTH: 200,
-        RESIST: 3.25,
-        PENETRATION: 14,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.rainbowTriangle = {
-    PARENT: [exports.food],
+    PARENT: [exports.triangles],
     LABEL: "Rainbow Triangle",
     FOOD: {
         LEVEL: 2,
@@ -1267,20 +1260,13 @@ exports.rainbowTriangle = {
     SHAPE: 3,
     SIZE: 9,
     COLOR: 36,
-    BODY: {
-        DAMAGE: 12,
-        DENSITY: 20,
-        HEALTH: 300,
-        RESIST: 4.25,
-        PENETRATION: 17.5,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 
 // PENTAGONS
 exports.pentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.pentagons],
     LABEL: "Pentagon",
     FOOD: {
         LEVEL: 3,
@@ -1289,17 +1275,10 @@ exports.pentagon = {
     SHAPE: 5,
     SIZE: 16,
     COLOR: 14,
-    BODY: {
-        DAMAGE: 1.5 * basePolygonDamage,
-        DENSITY: 8,
-        HEALTH: 10 * basePolygonHealth,
-        RESIST: 1.25,
-        PENETRATION: 1.1,
-    },
     DRAW_HEALTH: true,
 };
 exports.shinyPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.pentagons],
     LABEL: "Shiny Pentagon",
     FOOD: {
         LEVEL: 3,
@@ -1308,18 +1287,11 @@ exports.shinyPentagon = {
     SHAPE: 5,
     SIZE: 16,
     COLOR: 1,
-    BODY: {
-        DAMAGE: 3,
-        DENSITY: 8,
-        HEALTH: 200,
-        RESIST: 1.25,
-        PENETRATION: 1.1,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.legendaryPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.pentagons],
     LABEL: "Legendary Pentagon",
     FOOD: {
         LEVEL: 3,
@@ -1328,18 +1300,11 @@ exports.legendaryPentagon = {
     SHAPE: 5,
     SIZE: 16,
     COLOR: 0,
-    BODY: {
-        DAMAGE: 6,
-        DENSITY: 12,
-        HEALTH: 240,
-        RESIST: 1.75,
-        PENETRATION: 15,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.shadowPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.pentagons],
     LABEL: "Shadow Pentagon",
     FOOD: {
         LEVEL: 3,
@@ -1349,18 +1314,11 @@ exports.shadowPentagon = {
     SIZE: 16,
     COLOR: 19,
     ALPHA: 0.25,
-    BODY: {
-        DAMAGE: 14,
-        DENSITY: 20,
-        HEALTH: 300,
-        RESIST: 4.75,
-        PENETRATION: 20,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.rainbowPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.pentagons],
     LABEL: "Rainbow Pentagon",
     FOOD: {
         LEVEL: 3,
@@ -1369,20 +1327,13 @@ exports.rainbowPentagon = {
     SHAPE: 5,
     SIZE: 16,
     COLOR: 36,
-    BODY: {
-        DAMAGE: 17.5,
-        DENSITY: 25,
-        HEALTH: 500,
-        RESIST: 5.5,
-        PENETRATION: 25,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 
 // BETA PENTAGONS
 exports.betaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.beta],
     LABEL: "Beta Pentagon",
     FOOD: {
         LEVEL: 4,
@@ -1391,19 +1342,11 @@ exports.betaPentagon = {
     SHAPE: 5,
     SIZE: 30,
     COLOR: 14,
-    BODY: {
-        DAMAGE: 2 * basePolygonDamage,
-        DENSITY: 30,
-        HEALTH: 50 * basePolygonHealth,
-        RESIST: Math.pow(1.25, 2),
-        SHIELD: 20 * basePolygonHealth,
-        REGEN: 0.2,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.shinyBetaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.beta],
     LABEL: "Shiny Beta Pentagon",
     FOOD: {
         LEVEL: 4,
@@ -1412,19 +1355,11 @@ exports.shinyBetaPentagon = {
     SHAPE: 5,
     SIZE: 30,
     COLOR: 1,
-    BODY: {
-        DAMAGE: 4 * basePolygonDamage,
-        DENSITY: 30,
-        HEALTH: 1000 * basePolygonHealth,
-        RESIST: Math.pow(1.25, 2),
-        SHIELD: 20 * basePolygonHealth,
-        REGEN: 0.2,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.legendaryBetaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.beta],
     LABEL: "Legendary Beta Pentagon",
     FOOD: {
         LEVEL: 4,
@@ -1433,18 +1368,11 @@ exports.legendaryBetaPentagon = {
     SHAPE: 5,
     SIZE: 30,
     COLOR: 0,
-    BODY: {
-        DAMAGE: 11,
-        DENSITY: 17,
-        HEALTH: 480,
-        RESIST: 2.5,
-        PENETRATION: 25,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.shadowBetaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.beta],
     LABEL: "Shadow Beta Pentagon",
     FOOD: {
         LEVEL: 4,
@@ -1454,18 +1382,11 @@ exports.shadowBetaPentagon = {
     SIZE: 30,
     COLOR: 19,
     ALPHA: 0.25,
-    BODY: {
-        DAMAGE: 20,
-        DENSITY: 25,
-        HEALTH: 600,
-        RESIST: 6,
-        PENETRATION: 30,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.rainbowBetaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.beta],
     LABEL: "Rainbow Beta Pentagon",
     FOOD: {
         LEVEL: 4,
@@ -1474,20 +1395,13 @@ exports.rainbowBetaPentagon = {
     SHAPE: 5,
     SIZE: 30,
     COLOR: 36,
-    BODY: {
-        DAMAGE: 27.5,
-        DENSITY: 30,
-        HEALTH: 750,
-        RESIST: 8.75,
-        PENETRATION: 35,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 
 // ALPHA PENTAGONS
 exports.alphaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.alpha],
     LABEL: "Alpha Pentagon",
     FOOD: {
         LEVEL: 5,
@@ -1496,19 +1410,11 @@ exports.alphaPentagon = {
     SHAPE: 5,
     SIZE: 58,
     COLOR: 14,
-    BODY: {
-        DAMAGE: 2 * basePolygonDamage,
-        DENSITY: 80,
-        HEALTH: 300 * basePolygonHealth,
-        RESIST: Math.pow(1.25, 3),
-        SHIELD: 40 * basePolygonHealth,
-        REGEN: 0.6,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.shinyAlphaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.alpha],
     LABEL: "Shiny Alpha Pentagon",
     FOOD: {
         LEVEL: 5,
@@ -1517,19 +1423,11 @@ exports.shinyAlphaPentagon = {
     SHAPE: 5,
     SIZE: 58,
     COLOR: 1,
-    BODY: {
-        DAMAGE: 4 * basePolygonDamage,
-        DENSITY: 80,
-        HEALTH: 6000 * basePolygonHealth,
-        RESIST: Math.pow(1.25, 3),
-        SHIELD: 40 * basePolygonHealth,
-        REGEN: 0.6,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.legendaryAlphaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.alpha],
     LABEL: "Legendary Alpha Pentagon",
     FOOD: {
         LEVEL: 5,
@@ -1538,18 +1436,11 @@ exports.legendaryAlphaPentagon = {
     SHAPE: 5,
     SIZE: 58,
     COLOR: 0,
-    BODY: {
-        DAMAGE: 15,
-        DENSITY: 28,
-        HEALTH: 550,
-        RESIST: 3.75,
-        PENETRATION: 35,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.shadowAlphaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.alpha],
     LABEL: "Shadow Alpha Pentagon",
     FOOD: {
         LEVEL: 5,
@@ -1559,18 +1450,11 @@ exports.shadowAlphaPentagon = {
     SIZE: 58,
     COLOR: 19,
     ALPHA: 0.25,
-    BODY: {
-        DAMAGE: 15,
-        DENSITY: 30,
-        HEALTH: 750,
-        RESIST: 8,
-        PENETRATION: 45,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.rainbowAlphaPentagon = {
-    PARENT: [exports.food],
+    PARENT: [exports.alpha],
     LABEL: "Rainbow Alpha Pentagon",
     FOOD: {
         LEVEL: 5,
@@ -1579,20 +1463,13 @@ exports.rainbowAlphaPentagon = {
     SHAPE: 5,
     SIZE: 58,
     COLOR: 36,
-    BODY: {
-        DAMAGE: 35,
-        DENSITY: 35,
-        HEALTH: 1250,
-        RESIST: 12.5,
-        PENETRATION: 42.5,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 
 // 3D POLYGONS
 exports.cube = {
-    PARENT: [exports.food],
+    PARENT: [exports.cubes],
     LABEL: "The Cube",
     FOOD: {
         LEVEL: 0,
@@ -1603,18 +1480,12 @@ exports.cube = {
     COLOR: 18,
     SHAPE:
         "M -0.355 -0.39 V 2 L 1.735 0.802 V -1.585 L -0.355 -0.39 Z M -0.647 -0.39 V 2 L -2.735 0.8 V -1.585 L -0.647 -0.39 Z M -0.5 -0.64 L 1.589 -1.827 L -0.5 -3.02 L -2.58 -1.828 L -0.5 -0.64",
-    BODY: {
-        DAMAGE: 12,
-        DENSITY: 20,
-        HEALTH: 500,
-        PENETRATION: 17.5,
-    },
     DRAW_HEALTH: true,
     INTANGIBLE: false,
     GIVE_KILL_MESSAGE: true,
 };
 exports.dodecahedron = {
-    PARENT: [exports.food],
+    PARENT: [exports.cubes],
     LABEL: "The Dodecahedron",
     FOOD: {
         LEVEL: 0,
@@ -1624,18 +1495,11 @@ exports.dodecahedron = {
     COLOR: 18,
     SHAPE:
         "M -1.22 -1.45 H 0.17 L 0.615 -0.12 L -0.52 0.7 L -1.65 -0.12 L -1.22 -1.45 Z M -1.835 0.09 L -0.67 0.94 V 1.61 L -1.81 1.255 L -2.51 0.28 L -1.835 0.09 Z M 0.8 0.09 L -0.385 0.95 V 1.62 L 0.77 1.25 L 1.47 0.28 L 0.8 0.09 Z M -1.93 -0.18 L -1.485 -1.56 L -1.89 -2.151 L -2.6 -1.2 V 0.01 L -1.93 -0.18 Z M 0.44 -1.565 L 0.89 -0.18 L 1.555 0.015 V -1.19 L 0.852 -2.17 L 0.44 -1.565 Z M -0.52 -2.7 L -1.67 -2.335 L -1.26 -1.734 H 0.21 L 0.635 -2.329 L -0.52 -2.7",
-    BODY: {
-        DAMAGE: 22.5,
-        DENSITY: 30,
-        HEALTH: 1000,
-        RESIST: 10,
-        PENETRATION: 35,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
 exports.icosahedron = {
-    PARENT: [exports.food],
+    PARENT: [exports.cubes],
     LABEL: "The Icosahedron",
     FOOD: {
         LEVEL: 0,
@@ -1645,13 +1509,6 @@ exports.icosahedron = {
     COLOR: 18,
     SHAPE:
         "M -0.39 -0.245 L 0.392 -0.245 L 0 0.47 L -0.39 -0.245 Z M -0.465 -0.2 L -0.893 0.475 L -0.073 0.51 L -0.465 -0.2 Z M 0.4636 -0.2 L 0.073 0.509 L 0.891 0.4736 L 0.4636 -0.2 Z M 0 -1 L -0.39 -0.33 L 0.389 -0.328 L 0 -1 Z M -0.142 -0.925 L -0.875 -0.506 L -0.48 -0.339 L -0.142 -0.925 Z M -0.925 0.366 L -0.925 -0.431 L -0.525 -0.266 L -0.925 0.366 Z M -0.042 0.595 L -0.808 0.562 L -0.042 1 L -0.042 0.595 Z M 0.042 0.595 L 0.808 0.562 L 0.042 1 L 0.042 0.595 Z M 0.142 -0.925 L 0.858 -0.516 L 0.48 -0.339 L 0.142 -0.925 Z M 0.925 0.366 L 0.925 -0.452 L 0.523 -0.269 L 0.925 0.366 Z",
-    BODY: {
-        DAMAGE: 17.5,
-        DENSITY: 25,
-        HEALTH: 750,
-        RESIST: 7.5,
-        PENETRATION: 22.5,
-    },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
@@ -3530,43 +3387,15 @@ exports.spectator = {
         HEALTH: 1e100,
         SHIELD: 1e100,
         REGEN: 1e100,
-    },
-};
-exports.tankChangesMenu = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Tank Changes Menu",
-};
-exports.btTanksMenu = {
-    PARENT: [exports.testbedBase],
-    LABEL: "BT Tanks Menu",
-};
-exports.specialTanksMenu = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Special Tanks Menu",
+    }
 };
 exports.bossesMenu = {
     PARENT: [exports.testbedBase],
     LABEL: "Bosses Menu",
 };
-exports.memes = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Memes",
-};
 exports.retrograde = {
     PARENT: [exports.testbedBase],
     LABEL: "Retrograde",
-};
-exports.diepTanks = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Diep Tanks",
-};
-exports.diep2Tanks = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Diep2 Tanks",
-};
-exports.digDig = {
-    PARENT: [exports.testbedBase],
-    LABEL: "DigDig",
 };
 exports.bosses = {
     PARENT: [exports.testbedBase],
@@ -3584,37 +3413,13 @@ exports.strangeBosses = {
     PARENT: [exports.testbedBase],
     LABEL: "Strange Bosses",
 };
-exports.diepBosses = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Diep Bosses",
-};
-exports.taleOfDiepBosses = {
-    PARENT: [exports.testbedBase],
-    LABEL: "ToD Bosses",
-};
-exports.otherTanks = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Tanks",
-};
 exports.nostalgiaMenu = {
     PARENT: [exports.testbedBase],
     LABEL: "Nostalgia Menu",
 };
-exports.scrappedMenu = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Scrapped Menu",
-};
-exports.scrappedMenu2 = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Scrapped Menu 2",
-};
 exports.miscRetrograde = {
     PARENT: [exports.testbedBase],
     LABEL: "Misc Retrograde",
-};
-exports.finalBosses = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Final Bosses",
 };
 exports.miscEntities = {
     PARENT: [exports.testbedBase],
@@ -3623,10 +3428,6 @@ exports.miscEntities = {
 exports.dominators = {
     PARENT: [exports.testbedBase],
     LABEL: "Dominators",
-};
-exports.nostalgiaMenu2 = {
-    PARENT: [exports.testbedBase],
-    LABEL: "Nostalgia Menu 2",
 };
 exports.sentries = {
     PARENT: [exports.testbedBase],
@@ -15556,6 +15357,7 @@ exports.baseProtector = {
             POSITION: [4.5, 8.5, -1.5, 7, 0, 315, 0],
         },
     ],
+    HITS_OWN_TYPE: "pushOnlyTeam",
 };
 exports.mothership = {
     PARENT: [exports.genericTank],
@@ -15679,810 +15481,12 @@ exports.tagMode = {
     LABEL: "Players",
 };
 
-// ARRAS DISCORD BOSS CONTEST SUBMISSION
-exports.dreadnoughtDrone = {
-    PARENT: [exports.minion],
-    LABEL: "Dreadnought",
-    BODY: {
-        FOV: base.FOV * 1.2,
-        HEALTH: base.HEALTH * 0.4,
-        SHIELD: base.SHIELD * 0.4,
-        DENSITY: base.DENSITY * 0.3,
-    },
-    TURRETS: [
-        {
-            /*    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [20, -4, 0, 0, 0, 0],
-            TYPE: exports.genericEntity,
-        },
-    ],
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [18, 8, 1, 0, 0, 0, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm]),
-                TYPE: exports.swarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [6, 16, 1, 16, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.fake]),
-                TYPE: exports.swarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [1, 3, 1, 3, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.twin,
-                    g.puregunner,
-                    g.machgun,
-                    g.thruster,
-                    [0.1, 3, 1, 1, 1, 1, 1, 1, 1, 0.075, 1, 2, 1],
-                ]),
-                TYPE: exports.bullet,
-            },
-        },
-    ],
-};
-exports.ironclad = {
-    PARENT: [exports.miniboss],
-    LABEL: "Ironclad",
-    COLOR: 17,
-    SHAPE: 3,
-    SIZE: 27,
-    VARIES_IN_SIZE: true,
-    VALUE: 15e4,
-    BODY: {
-        FOV: 1.25,
-        SPEED: 0.1 * base.SPEED,
-        HEALTH: 150,
-        DAMAGE: 2.5 * base.DAMAGE,
-    },
-    FACING_TYPE: "toTarget",
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [4, 6, 0.6, 7, 9, 60, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, 3, 60, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, -3, 60, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, -9, 60, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, 9, -60, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, 3, -60, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, -3, -60, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, -9, -60, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            /**** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [4.5, 14, 1, 9.5, 0, 180, 0],
-        },
-        {
-            POSITION: [2, 16, 1, 13, 0, 180, 0],
-            PROPERTIES: {
-                MAX_CHILDREN: 3,
-                SHOOT_SETTINGS: combineStats([
-                    g.factory,
-                    g.babyfactory,
-                    [1, 1, 1, 0.75, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                ]),
-                TYPE: exports.dreadnoughtDrone,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [10.5, 16, 1, 0, 0, 180, 0],
-        },
-    ],
-    TURRETS: [
-        {
-            /*    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [7, 5, 0, 0, 360, 1],
-            TYPE: [
-                exports.bigauto4gun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-        {
-            POSITION: [5, 7, 4.5, 90, 360, 1],
-            TYPE: [
-                exports.autoTankGun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-        {
-            POSITION: [5, 7, -4.5, 270, 360, 1],
-            TYPE: [
-                exports.autoTankGun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-    ],
-};
-exports.ironcladOld = {
-    PARENT: [exports.miniboss],
-    LABEL: "Old Ironclad",
-    COLOR: 17,
-    SHAPE: 3,
-    SIZE: 27,
-    VARIES_IN_SIZE: true,
-    VALUE: 15e4,
-    BODY: {
-        FOV: 1.25,
-        SPEED: 0.1 * base.SPEED,
-        HEALTH: 150,
-        DAMAGE: 2.5 * base.DAMAGE,
-    },
-    FACING_TYPE: "toTarget",
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [4, 6, 0.6, 7, 4, 60, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, -4, 60, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, 4, -60, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 7, -4, -60, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            /**** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [4.5, 14, 1, 9.5, 0, 180, 0],
-        },
-        {
-            POSITION: [2, 16, 1, 13, 0, 180, 0],
-            PROPERTIES: {
-                MAX_CHILDREN: 3,
-                SHOOT_SETTINGS: combineStats([
-                    g.factory,
-                    g.babyfactory,
-                    [1, 1, 1, 0.75, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                ]),
-                TYPE: exports.dreadnoughtDrone,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [10.5, 16, 1, 0, 0, 180, 0],
-        },
-    ],
-    TURRETS: [
-        {
-            /*    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [7, 5, 0, 0, 360, 1],
-            TYPE: [
-                exports.bigauto4gun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-        {
-            POSITION: [5, 7, 4.5, 90, 360, 1],
-            TYPE: [
-                exports.autoTankGun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-        {
-            POSITION: [5, 7, -4.5, 270, 360, 1],
-            TYPE: [
-                exports.autoTankGun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-    ],
-};
-exports.classicIronclad = {
-    PARENT: [exports.miniboss],
-    LABEL: "Ironclad",
-    COLOR: 17,
-    SHAPE: [
-        [-1, -1],
-        [1, -1],
-        [2, 0],
-        [1, 1],
-        [-1, 1],
-    ],
-    SIZE: 27,
-    VARIES_IN_SIZE: true,
-    VALUE: 15e4,
-    BODY: {
-        FOV: 1.25,
-        SPEED: 0.1 * base.SPEED,
-        HEALTH: 150,
-        DAMAGE: 2.5 * base.DAMAGE,
-    },
-    FACING_TYPE: "toTarget",
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [4, 6, 0.6, 9, -4.5, 90, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 9, 4.5, 90, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 9, -4.5, 270, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 9, 4.5, 270, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 13, -4, 45, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 13, 4, -45, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 13, -10, 45, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [4, 6, 0.6, 13, 10, -45, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
-                TYPE: exports.autoswarm,
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            /**** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [4.5, 14, 1, 10.5, 0, 180, 0],
-        },
-        {
-            POSITION: [2, 16, 1, 14, 0, 180, 0],
-            PROPERTIES: {
-                MAX_CHILDREN: 3,
-                SHOOT_SETTINGS: combineStats([
-                    g.factory,
-                    g.babyfactory,
-                    [1, 1, 1, 0.75, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                ]),
-                TYPE: exports.dreadnoughtDrone,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [11.5, 16, 1, 0, 0, 180, 0],
-        },
-    ],
-    TURRETS: [
-        {
-            /*    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [7, 11, 0, 0, 360, 1],
-            TYPE: [
-                exports.bigauto4gun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-        {
-            POSITION: [5, 7, 4.5, 90, 360, 1],
-            TYPE: [
-                exports.autoTankGun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-        {
-            POSITION: [5, 7, -4.5, 90, 360, 1],
-            TYPE: [
-                exports.autoTankGun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-        {
-            POSITION: [5, 7, 4.5, 270, 360, 1],
-            TYPE: [
-                exports.autoTankGun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-        {
-            POSITION: [5, 7, -4.5, 270, 360, 1],
-            TYPE: [
-                exports.autoTankGun,
-                {
-                    INDEPENDENT: true,
-                    COLOR: 17,
-                },
-            ],
-        },
-    ],
-};
-
-// GENERATOR-SPECIFIC POLYGONS
-exports.spawnedEgg = {
-    PARENT: [exports.genericEntity],
-    LABEL: "Egg",
-    VALUE: 10,
-    SHAPE: 0,
-    SIZE: 5,
-    COLOR: 6,
-    BODY: {
-        DAMAGE: 0,
-        DENSITY: 2,
-        HEALTH: 0.0011,
-        PUSHABILITY: 0,
-    },
-    DRAW_HEALTH: false,
-    INTANGIBLE: true,
-    MOTION_TYPE: "drift",
-    FACING_TYPE: "turnWithSpeed",
-};
-exports.spawnedSquare = {
-    PARENT: [exports.genericEntity],
-    LABEL: "Square",
-    VALUE: 30,
-    SHAPE: 4,
-    SIZE: 10,
-    COLOR: 13,
-    BODY: {
-        DAMAGE: basePolygonDamage,
-        DENSITY: 4,
-        HEALTH: basePolygonHealth,
-        PENETRATION: 2,
-    },
-    DRAW_HEALTH: true,
-    INTANGIBLE: false,
-    MOTION_TYPE: "drift",
-    FACING_TYPE: "turnWithSpeed",
-};
-exports.spawnedAlphaPentagon = {
-    PARENT: [exports.genericEntity],
-    LABEL: "Alpha Pentagon",
-    VALUE: 15e3,
-    SHAPE: 5,
-    SIZE: 58,
-    COLOR: 14,
-    BODY: {
-        DAMAGE: 2 * basePolygonDamage,
-        DENSITY: 80,
-        HEALTH: 300 * basePolygonHealth,
-        RESIST: Math.pow(1.25, 3),
-        SHIELD: 40 * basePolygonHealth,
-        REGEN: 0.6,
-    },
-    DRAW_HEALTH: true,
-    MOTION_TYPE: "drift",
-    FACING_TYPE: "turnWithSpeed",
-};
-
-// GENERATORS
-exports.generatorBase = {
-    PARENT: [exports.genericTank],
-    SKILL_CAP: [15, 0, 0, 0, 0, 0, 0, 0, 0, 15],
-    INVISIBLE: [0.01, 0.1],
-};
-exports.eggGenerator = {
-    PARENT: [exports.generatorBase],
-    LABEL: "Egg Generator",
-    COLOR: 6,
-    TURRETS: [
-        {
-            /*    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [5, 0, 0, 0, 0, 1],
-            TYPE: [exports.egg, { COLOR: 6 }],
-        },
-    ],
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [14, 12, 1, 4, 0, 0, 0],
-        },
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [12, 12, 1.4, 4, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.micro]),
-                TYPE: exports.spawnedEgg,
-                LABEL: "Spawned",
-            },
-        },
-    ],
-};
-exports.squareGenerator = {
-    PARENT: [exports.generatorBase],
-    LABEL: "Square Generator",
-    COLOR: 13,
-    SHAPE: 4,
-    TURRETS: [
-        {
-            /*    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [8, 0, 0, 0, 0, 1],
-            TYPE: [exports.square, { COLOR: 13 }],
-        },
-    ],
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [14, 12, 1, 4, 0, 0, 0],
-        },
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [12, 12, 1.4, 4, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.small]),
-                TYPE: exports.spawnedSquare,
-                LABEL: "Spawned",
-            },
-        },
-    ],
-};
-exports.alphaPentagonGenerator = {
-    PARENT: [exports.generatorBase],
-    LABEL: "Alpha Pentagon Generator",
-    COLOR: 14,
-    SHAPE: 5,
-    TURRETS: [
-        {
-            /*    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [14, 0, 0, 0, 0, 1],
-            TYPE: [exports.alphaPentagon, { COLOR: 14 }],
-        },
-    ],
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [14, 12, 1, 4, 0, 0, 0],
-        },
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [12, 12, 1.4, 4, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.small]),
-                TYPE: exports.spawnedAlphaPentagon,
-                LABEL: "Spawned",
-            },
-        },
-    ],
-};
-exports.crasherGenerator = {
-    PARENT: [exports.generatorBase],
-    LABEL: "Crasher Generator",
-    COLOR: 5,
-    SHAPE: 3,
-    TURRETS: [
-        {
-            /*    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [5, 0, 0, 0, 0, 1],
-            TYPE: [exports.crasher, { COLOR: 5 }],
-        },
-    ],
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [14, 12, 1, 4, 0, 0, 0],
-        },
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [12, 12, 1.4, 4, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.micro]),
-                TYPE: exports.crasher,
-                LABEL: "Spawned",
-            },
-        },
-    ],
-};
-
-// JOKE TANKS
-exports.wifeBeater = {
-    PARENT: [exports.genericTank],
-    LABEL: "Wife Beater",
-    DANGER: 8,
-    COLOR: 33,
-    STAT_NAMES: statnames.drone,
-    BODY: {
-        SPEED: 0.8 * base.SPEED,
-        FOV: 1.1 * base.FOV,
-    },
-    MAX_CHILDREN: 16,
-    GUNS: [
-        {
-            POSITION: [6, 12, 1.2, 8, 0, 90, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: exports.drone,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [6, 12, 1.2, 8, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: exports.drone,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [6, 12, 1.2, 8, 0, 270, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: exports.drone,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [6, 12, 1.2, 8, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: exports.drone,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-    ],
-};
-exports.CONQ = {
-    PARENT: [exports.genericTank],
-    LABEL: "CONQ!!!",
-    DANGER: 8,
-    COLOR: 25,
-    BODY: {
-        SPEED: 0.8 * base.SPEED,
-    },
-    GUNS: [
-        {
-            POSITION: [20.5, 19.5, 1, 0, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni]),
-                TYPE: exports.bullet,
-            },
-        },
-        {
-            POSITION: [18, 18, 1, 0, 0, 0, 0],
-        },
-        {
-            POSITION: [2, 18, 1.2, 18, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.construct]),
-                TYPE: exports.setTrap,
-            },
-        },
-    ],
-};
-exports.armyOfOneBullet = {
-    PARENT: [exports.bullet],
-    LABEL: "Unstoppable",
-    TURRETS: [
-        {
-            /** SIZE         X             Y         ANGLE        ARC */
-            POSITION: [18.5, 0, 0, 0, 360, 0],
-            TYPE: [exports.spikeBody, { COLOR: null }],
-        },
-        {
-            POSITION: [18.5, 0, 0, 180, 360, 0],
-            TYPE: [exports.spikeBody, { COLOR: null }],
-        },
-    ],
-};
-exports.armyOfOne = {
-    PARENT: [exports.genericTank],
-    LABEL: "Army Of One",
-    DANGER: 9,
-    SKILL_CAP: [31, 31, 31, 31, 31, 31, 31, 31, 31, 31],
-    BODY: {
-        SPEED: 0.5 * base.SPEED,
-        FOV: 1.8 * base.FOV,
-    },
-    GUNS: [
-        {
-            POSITION: [21, 19, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.destroy, g.destroy, g.destroy, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.doublereload, g.doublereload, g.doublereload, g.doublereload]),
-                TYPE: exports.armyOfOneBullet,
-            },
-        },{
-            POSITION: [21, 11, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.destroy, g.destroy, g.destroy, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.doublereload, g.doublereload, g.doublereload, g.doublereload, g.fake]),
-                TYPE: exports.bullet,
-            },
-        }
-    ],
-};
-exports.godbasic = {
-    PARENT: [exports.genericTank],
-    LABEL: "God Basic",
-    SKILL_CAP: [31, 31, 31, 31, 31, 31, 31, 31, 31, 31],
-    SKILL: [ 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 ],
-    BODY: {
-        ACCELERATION: base.ACCEL * 1,
-        SPEED: base.SPEED * 1,
-        HEALTH: base.HEALTH * 1,
-        DAMAGE: base.DAMAGE * 1,
-        PENETRATION: base.PENETRATION * 1,
-        SHIELD: base.SHIELD * 1,
-        REGEN: base.REGEN * 1,
-        FOV: base.FOV * 1,
-        DENSITY: base.DENSITY * 1,
-        PUSHABILITY: 1,
-        HETERO: 3,
-    },
-    GUNS: [
-        {
-            POSITION: [18, 8, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: exports.bullet,
-                COLOR: 16,
-                LABEL: "",
-                STAT_CALCULATOR: 0,
-                WAIT_TO_CYCLE: false,
-                AUTOFIRE: false,
-                SYNCS_SKILLS: false,
-                MAX_CHILDREN: 0,
-                ALT_FIRE: false,
-                NEGATIVE_RECOIL: false,
-            },
-        },
-    ],
-};
-
 exports.substance = {
     PARENT: [exports.genericTank],
     LABEL: "Substance",
     COLOR: 12,
+    TEAM: -101,
+    HITS_OWN_TYPE: "never",
 }
 
 exports.levels = {
@@ -17653,32 +16657,18 @@ exports.hexagonSword = {
 };
 
 // TOKEN "UPGRADE PATHS"
-exports.developer.UPGRADES_TIER_0 = [exports.substance, exports.basic, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.eggGenerator, exports.specialTanksMenu, exports.bossesMenu, exports.memes, exports.retrograde, exports.miscEntities, exports.dominators, exports.levels];
+exports.developer.UPGRADES_TIER_0 = [exports.basic, exports.substance, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.bossesMenu, exports.retrograde, exports.miscEntities, exports.levels];
     exports.substance.UPGRADES_TIER_0 = [];
-    exports.gameAdminMenu.UPGRADES_TIER_0 = [exports.basic, exports.gameModMenu, exports.spectator, exports.eggGenerator, exports.developer, exports.specialTanksMenu, exports.bossesMenu, exports.memes];
-        exports.memes.UPGRADES_TIER_0 = [exports.vanquisher, exports.armyOfOne, exports.godbasic];
-        exports.gameModMenu.UPGRADES_TIER_0 = [exports.basic, exports.betaTesterMenu, exports.spectator, exports.tankChangesMenu, exports.retrograde];
-            exports.betaTesterMenu.UPGRADES_TIER_0 = [exports.basic, exports.tankChangesMenu, exports.retrograde];
-                exports.tankChangesMenu.UPGRADES_TIER_0 = [];
-    exports.eggGenerator.UPGRADES_TIER_0 = [exports.basic, exports.squareGenerator, exports.crasherGenerator];
-        exports.crasherGenerator.UPGRADES_TIER_0 = [exports.basic, exports.gameAdminMenu, exports.alphaPentagonGenerator, exports.eggGenerator];
-    exports.bossesMenu.UPGRADES_TIER_0 = [exports.sentries, exports.celestialBosses, exports.eliteBosses, exports.strangeBosses, exports.ironclad];
+    exports.gameAdminMenu.UPGRADES_TIER_0 = [exports.basic, exports.gameModMenu, exports.spectator, exports.bossesMenu];
+        exports.gameModMenu.UPGRADES_TIER_0 = [exports.basic, exports.betaTesterMenu, exports.spectator, exports.retrograde];
+            exports.betaTesterMenu.UPGRADES_TIER_0 = [exports.basic, exports.retrograde];
+    exports.bossesMenu.UPGRADES_TIER_0 = [exports.sentries, exports.celestialBosses, exports.eliteBosses, exports.strangeBosses];
         exports.sentries.UPGRADES_TIER_0 = [exports.sentrySwarm, exports.sentryGun, exports.sentryTrap, exports.shinySentrySwarm, exports.shinySentryGun, exports.shinySentryTrap];
-    exports.retrograde.UPGRADES_TIER_0 = [exports.diepTanks, exports.digDig, exports.celestialBosses, exports.eliteBosses, exports.strangeBosses, exports.nostalgiaMenu, exports.scrappedMenu, exports.miscRetrograde];
-        exports.diepTanks.UPGRADES_TIER_0 = [exports.diep2Tanks, exports.diepTank];
-            exports.diep2Tanks.UPGRADES_TIER_0 = [exports.blaster, exports.gatlingGun, exports.machineFlank, exports.retroRifle, exports.buttbuttin, exports.blower, exports.quadTwin, exports.tornado, exports.subverter, exports.battery, exports.deathStar, exports.bonker, exports.protector, exports.doubleTrapGuard];
-                exports.blaster.UPGRADES_TIER_3 = [exports.triBlaster, exports.splasher];
-                exports.gatlingGun.UPGRADES_TIER_3 = [exports.retroSprayer, exports.accurator, exports.halfNHalf];
-                exports.machineFlank.UPGRADES_TIER_3 = [exports.machineTriple, exports.halfNHalf];
-                exports.retroRifle.UPGRADES_TIER_3 = [exports.sniperRifle, exports.rifleGuard, exports.spreadRifle];
+    exports.retrograde.UPGRADES_TIER_0 = [exports.celestialBosses, exports.eliteBosses, exports.strangeBosses, exports.nostalgiaMenu];
         exports.celestialBosses.UPGRADES_TIER_0 = [exports.paladin, exports.freyja, exports.zaphkiel, exports.nyx, exports.theia, exports.alviss, exports.tyr];
         exports.eliteBosses.UPGRADES_TIER_0 = [exports.eliteDestroyer, exports.eliteGunner, exports.eliteSprayer, exports.eliteBattleship, exports.eliteSpawner];
         exports.strangeBosses.UPGRADES_TIER_0 = [exports.roguePalisade, exports.rogueArmada, exports.nestKeeper, exports.eliteSkimmer, exports.summoner];
         exports.nostalgiaMenu.UPGRADES_TIER_0 = [exports.oldSpreadshot, exports.bentBoomer, exports.quadBuilder, exports.quintuplet, exports.vulcan, exports.sniper3, exports.weirdSpike, exports.master, exports.oldCommander, exports.blunderbuss, exports.oldRimfire, exports.ransacker];
-        exports.scrappedMenu.UPGRADES_TIER_0 = [exports.scrappedMenu2, exports.rocketeer, exports.crowbar, exports.peashooter, exports.autoTrapper, exports.megaTrapper, exports.railgun, exports.megaSpawner, exports.badDreadnought, exports.mender];
-            exports.scrappedMenu2.UPGRADES_TIER_0 = [exports.scrappedMenu, exports.overcheese, exports.prodigy, exports.spawnerdrive, exports.rimfire, exports.productionist, exports.taser];
-                exports.productionist.UPGRADES_TIER_0 = [exports.bismarck];
-        exports.miscRetrograde.UPGRADES_TIER_0 = [exports.tracker3, exports.tetraGunner, exports.worstTank];
 
 // MISCELLANEOUS
 exports.miscEntities.UPGRADES_TIER_0 = [exports.dominators, exports.baseProtector, exports.mothership, exports.arenaCloser];

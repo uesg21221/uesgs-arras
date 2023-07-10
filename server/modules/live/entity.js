@@ -675,6 +675,7 @@ class Entity extends EventEmitter {
         this.children = [];
         // Define it
         this.SIZE = 1;
+        this.spawnShape = false;
         this.define(Class.genericEntity);
         // Initalize physics and collision
         this.maxSpeed = 0;

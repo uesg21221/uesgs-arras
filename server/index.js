@@ -49,23 +49,16 @@ function collide(collision) {
         }
         return 0;
     }
-    if (!instance.activation.check() && !other.activation.check()) {
+    if ((!instance.activation.check() && !other.activation.check()) ||
+        instance.label === "Spectator") {
         return 0;
     }
-    if (instance.label === "Spectator" || other.label === "Spectator")
-    {
-        return 0;
-    }
-    if (instance.label === "Substance" || other.label === "Substance") {
-        if (other.type === "food") {
-            other.color = instance.color;
-            other.team = instance.team;
-            return 0;
-        } else if (instance.type === "food") {
-            instance.color = other.color;
-            instance.team = other.team;
-            return 0;
-        }
+    if ((instance.label === "Substance" || other.label === "Substance") &&
+        instance.team != other.team) {
+        let food = instance.label === "Substance" ? other : instance;
+        let entity = instance.label === "Substance" ? instance : other;
+        food.color = entity.color;
+        food.team = entity.team;
     }
     switch (true) {
         case instance.type === "wall" || other.type === "wall":
@@ -95,18 +88,13 @@ function collide(collision) {
                 other.settings.hitsOwnType === "pushOnlyTeam"):
             {
                 // Dominator / Mothership collisions
-                if (instance.settings.hitsOwnType === other.settings.hitsOwnType)
-                    return;
-                let pusher =
-                    instance.settings.hitsOwnType === "pushOnlyTeam" ? instance : other;
-                let entity =
-                    instance.settings.hitsOwnType === "pushOnlyTeam" ? other : instance;
-                if (entity.type !== "tank" || entity.settings.hitsOwnType === "never")
-                    return;
+                if (instance.settings.hitsOwnType === other.settings.hitsOwnType) return;
+                let pusher = instance.settings.hitsOwnType === "pushOnlyTeam" ? instance : other;
+                let entity = instance.settings.hitsOwnType === "pushOnlyTeam" ? other : instance;
+                if (entity.type !== "tank" || entity.settings.hitsOwnType === "never") return;
                 let a =
-                    1 +
-                    10 /
-                        (Math.max(entity.velocity.length, pusher.velocity.length) + 10);
+                    1 + 10 /
+                    (Math.max(entity.velocity.length, pusher.velocity.length) + 10);
                 advancedcollide(pusher, entity, false, false, a);
             }
             break;
@@ -586,27 +574,27 @@ const foodTypes = [
     ),
     new FoodType("Shiny Food",
         [Class.gem, Class.shinySquare, Class.shinyTriangle, Class.shinyPentagon, Class.shinyBetaPentagon, Class.shinyAlphaPentagon],
-        ["scale", 5], 1
+        ["scale", 4], 1
     ),
     new FoodType("Legendary Food",
         [Class.jewel, Class.legendarySquare, Class.legendaryTriangle, Class.legendaryPentagon, Class.legendaryBetaPentagon, Class.legendaryAlphaPentagon],
-        ["scale", 6], 0.02
+        ["scale", 5], 0.02
     ),
     new FoodType("Shadow Food",
-        [Class.egg, Class.shadowSquare, Class.shadowTriangle, Class.shadowPentagon, Class.shadowBetaPentagon, Class.shadowAlphaPentagon],
-        ["scale", 7], 0.005
+        [Class.shadowSquare, Class.shadowTriangle, Class.shadowPentagon, Class.shadowBetaPentagon, Class.shadowAlphaPentagon],
+        ["scale", 5], 0.005
     ),
     new FoodType("Rainbow Food",
-        [Class.egg, Class.rainbowSquare, Class.rainbowTriangle, Class.rainbowPentagon, Class.rainbowBetaPentagon, Class.rainbowAlphaPentagon],
-        ["scale", 8], 0.001
+        [Class.rainbowSquare, Class.rainbowTriangle, Class.rainbowPentagon, Class.rainbowBetaPentagon, Class.rainbowAlphaPentagon],
+        ["scale", 7], 0.001
     ),
-    new FoodType("Trans Food",
-        [Class.egg],
-        ["scale", 9], 0.0005
-    ),
+    // new FoodType("Trans Food",
+    //     [Class.egg],
+    //     ["scale", 9], 0.0005
+    // ),
     new FoodType("Extradimensional Food",
-        [Class.egg, Class.cube, Class.dodecahedron, Class.icosahedron],
-        ["scale", 10], 0.0001
+        [Class.cube, Class.dodecahedron, Class.icosahedron],
+        ["scale", 7], 0.0001
     ),
     new FoodType("Nest Food", // Commented out because stats aren't done yet.
         [Class.pentagon, Class.betaPentagon, Class.alphaPentagon, /*Class.alphaHexagon, Class.alphaHeptagon, Class.alphaOctogon, Class.alphaNonagon, Class.alphaDecagon, Class.icosagon*/],
@@ -711,6 +699,17 @@ const makefood = () => {
             }
         }
     }
+    loopThrough(sockets.players, function (instance) {
+        // we love cheats
+        if (instance.body != null && instance.body.spawnShape) {
+            const loc = {
+                x: instance.body.x,
+                y: instance.body.y
+            }
+            spawnShape(loc, 5);
+            instance.body.spawnShape = false;
+        }
+    });
 };
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
 const maintainloop = () => {
