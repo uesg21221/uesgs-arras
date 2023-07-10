@@ -498,11 +498,7 @@ output.WIDTH = output.X_GRID * 400;
 output.HEIGHT = output.Y_GRID * 400;
 
 output.gameModeName = gamemode;
-if (["Tag", "Domination", "Mothership"].includes(gamemode)) {
-    output.gameModeName = `${output.TEAMS} TDM ${gamemode}`;
-}
-if (gamemode === "Open TDM") {
-    output.gameModeName = `Open ${output.TEAMS} TDM`;
-}
+if (["Tag", "Domination", "Mothership"].includes(gamemode)) output.gameModeName = `${output.TEAMS} TDM ${gamemode}`;
+if (gamemode === "Open TDM") output.gameModeName = `Open ${output.TEAMS} TDM`;
 
 module.exports = { output };

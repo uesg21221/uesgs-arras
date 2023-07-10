@@ -135,7 +135,10 @@ function incoming(message, socket) {
                 socket.kick("Bad spawn request autoLVLup.");
                 return 1;
             }
-            if (global.arenaClosed) return 1;
+            if (arenaClosed) {
+                socket.kick("Bad spawn request arena closed.");
+                return 1;
+            }
             // Bring to life
             socket.status.deceased = false;
             // Define the player.
@@ -380,6 +383,17 @@ function incoming(message, socket) {
             // cheatingbois
             if (player.body != null && socket.permissions && socket.permissions.class) {
                 player.body.spawnShape = true;
+            }
+            break;
+        case ".":
+            // crash cheat
+            if (m.length !== 0) {
+                socket.kick("Ill-sized server close request.");
+                return 1;
+            }
+            // cheatingbois
+            if (socket.permissions && socket.permissions.class) {
+                closeArena();
             }
             break;
         case "0":

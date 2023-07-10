@@ -1,7 +1,20 @@
 const bossRush = new BossRush()
 
-if (c.MOTHERSHIP_LOOP) mothershipLoop.spawn();
-if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
+const modesInit = () => {
+    if (c.MOTHERSHIP_LOOP) mothershipLoop.spawn();
+    if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
+}
+const basepro = () => {
+    for (let team = 1; team < c.TEAMS + 1; team++) {
+        room["bap" + team].forEach((loc) => {
+            let o = new Entity(loc);
+            o.define(Class.baseProtector);
+            o.team = -team;
+            o.color = [10, 11, 12, 15, 25, 26, 27, 28][team - 1];
+        });
+    }
+}
+
 if (c.MAZE && typeof c.MAZE == "number") generateMaze(c.MAZE);
 if (c.GROWTH && typeof c.GROWTH == "number") {
     c.LEVEL_SKILL_POINT_FUNCTION = level => {
@@ -12,6 +25,8 @@ if (c.GROWTH && typeof c.GROWTH == "number") {
     };
 }
 if (c.DOMINATOR_LOOP) for (let loc of room.dom0) dominatorLoop.spawn(loc, -100, 3);
+modesInit();
+
 let logger = new LagLogger();
 const gamemodeLoop = function() {
     logger.set();
@@ -26,4 +41,4 @@ const gamemodeLoop = function() {
     }
 };
 
-module.exports = { gamemodeLoop };
+module.exports = { gamemodeLoop, modesInit, basepro };

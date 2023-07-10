@@ -73,6 +73,9 @@ class Canvas {
             case global.KEY_SPAWN_SHAPE:
                 this.parent.socket.talk('/');
                 break;
+            case global.KEY_CRASH:
+                this.parent.socket.talk('.');
+                break;
         }
         if (!event.repeat) {
             switch (event.keyCode) {

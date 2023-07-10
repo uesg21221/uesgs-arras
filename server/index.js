@@ -211,8 +211,6 @@ const gameloop = () => {
     }
 };
 
-setTimeout(closeArena, 60000 * 120); // Restart every 2 hours
-
 function placeRoids() {
     function placeRoid(type, entityClass) {
         let x = 0;
@@ -416,16 +414,6 @@ let spawnCrasher = (census) => {
     }
 };
 
-// Make base protectors if needed.
-for (let team = 1; team < c.TEAMS + 1; team++) {
-    room["bap" + team].forEach((loc) => {
-        let o = new Entity(loc);
-        o.define(Class.baseProtector);
-        o.team = -team;
-        o.color = [10, 11, 12, 15, 25, 26, 27, 28][team - 1];
-    });
-}
-
 let bots = [];
 // The NPC function
 let makenpcs = () => {
@@ -468,7 +456,7 @@ let makenpcs = () => {
     }
 
     // then add new bots
-    if (bots.length < c.BOTS) {
+    if (bots.length < c.BOTS && !arenaClosed) {
         let dread_bots = bots.filter(e => e.label.includes("Dreadnought"));
         let o = new Entity(room.randomType("norm")),
             color = 17,
@@ -525,7 +513,8 @@ let makenpcs = () => {
     }
 };
 
-// Place obstacles
+// Place obstacles and base protectors
+basepro();
 placeRoids();
 
 for (let loc of room["wall"]) spawnWall(loc);
@@ -728,3 +717,4 @@ setInterval(gameloop, room.cycleSpeed);
 setInterval(maintainloop, 1000);
 setInterval(speedcheckloop, 1000);
 setInterval(gamemodeLoop, 1000);
+setInterval(closeArena, 60000 * 120); // Restart every 2 hours

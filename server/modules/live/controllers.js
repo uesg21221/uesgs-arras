@@ -327,7 +327,7 @@ class io_nearestDifferentMaster extends IO {
         (!e.master.master.ignoredByAi) &&
         (e.master.master.label != "Spectator") &&
         ((this.body.isDominator || this.body.type == "tank") ? (!e.master.master.isDominator) : true) &&
-        (this.body.type == "crasher" ? (e.master.master.type != "food") : true) &&
+        ((this.body.type == "crasher" || this.body.isArenaCloser) ? (e.master.master.type != "food") : true) &&
         (this.body.aiSettings.seeInvisible || this.body.isArenaCloser || e.alpha > 0.5) &&
         (e.type === "miniboss" || e.type === "tank" || e.type === "crasher" || (!this.body.aiSettings.IGNORE_SHAPES && e.type === 'food')) &&
         (this.body.aiSettings.BLIND || ((e.x - m.x) * (e.x - m.x) < sqrRange && (e.y - m.y) * (e.y - m.y) < sqrRange)) &&
