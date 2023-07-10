@@ -7,7 +7,6 @@ const gamemodes = {
         BOTS: 9
     }, // "defaults" is already FFA.
     "Growth FFA": {
-        BOTS: 10,
         GROWTH: 90,
         secondaryGameMode: "growth"
     },
@@ -15,16 +14,13 @@ const gamemodes = {
         MODE: "tdm",
         GROWTH: 90,
         secondaryGameMode: "growth",
-        TEAMS: 2 + (Math.random() * 3 | 0),
-        BOTS: 20
+        TEAMS: 2 + (Math.random() * 3 | 0)
     },
     "Open TDM": {
         MODE: "tdm",
-        TEAMS: 2 + (Math.random() * 3 | 0),
-        BOTS: 10
+        TEAMS: 2 + (Math.random() * 3 | 0)
     },
     "Portal FFA": {
-        BOTS: 10,
         X_GRID: 15,
         Y_GRID: 15,
         WIDTH: 5250,
@@ -49,8 +45,7 @@ const gamemodes = {
     },
     "Groups": {
         GROUPS: (Math.random() * 3 | 0) + 2,
-        secondaryGameMode: "Squads",
-        BOTS: 15
+        secondaryGameMode: "Squads"
     },
     "Maze Groups": {
         GROUPS: (Math.random() * 3 | 0) + 2,
@@ -106,7 +101,6 @@ const gamemodes = {
         secondaryGameMode: "Maze"
     },
     "Labyrinth": {
-        BOTS: 15,
         X_GRID: 18,
         Y_GRID: 18,
         WIDTH: 6300,
@@ -137,7 +131,6 @@ const gamemodes = {
         secondaryGameMode: "Maze"
     },
     "Portal Maze": {
-        BOTS: 10,
         X_GRID: 15,
         Y_GRID: 15,
         WIDTH: 5250,
@@ -170,7 +163,6 @@ const gamemodes = {
         HEIGHT: 5600,
         MODE: "tdm",
         TEAMS: 2,
-        BOTS: 24,
         ROOM_SETUP: [
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
             ["norm", "bap1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
@@ -199,7 +191,6 @@ const gamemodes = {
         HEIGHT: 5600,
         MODE: "tdm",
         TEAMS: 4,
-        BOTS: 24,
         ROOM_SETUP: [
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
             ["norm", "bap1", "bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas4", "bap4", "norm"],
@@ -236,8 +227,7 @@ const gamemodes = {
             ["bas1", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "bas2"],
             ["bap1", "rock", "norm", "norm", "norm", "rock", "rock", "norm", "norm", "norm", "rock", "bap2"],
             ["bas1", "rock", "norm", "norm", "norm", "roid", "roid", "norm", "norm", "norm", "rock", "bas2"]
-        ],
-        BOTS: 16
+        ]
     },
     "4TDM": {
         MODE: "tdm",
@@ -255,8 +245,7 @@ const gamemodes = {
             ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
             ["bas4", "bap4", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bap2", "bas2"],
             ["bas4", "bas4", "norm", "norm", "norm", "roid", "roid", "norm", "norm", "norm", "bas2", "bas2"]
-        ],
-        BOTS: 16
+        ]
     },
     "8TDM": {
         MODE: "tdm",
@@ -274,8 +263,7 @@ const gamemodes = {
             ["norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm"],
             ["bap4", "bas4", "norm", "norm", "norm", "bas7", "bas7", "norm", "norm", "norm", "bas2", "bap2"],
             ["bas4", "bap4", "norm", "norm", "norm", "bap7", "bap7", "norm", "norm", "norm", "bap2", "bas2"]
-        ],
-        BOTS: 32
+        ]
     },
     "Siege": {
         MODE: "tdm",
@@ -306,18 +294,15 @@ const gamemodes = {
             ["outb", "outb", "outb", "outb", "outb", "outb", "outb", "wall", "boss", "boss", "boss", "wall", "outb", "outb", "outb", "outb", "outb", "outb", "outb"],
             ["outb", "outb", "outb", "outb", "outb", "outb", "outb", "wall", "wall", "wall", "wall", "wall", "outb", "outb", "outb", "outb", "outb", "outb", "outb"],
         ],
-        secondaryGameMode: "Boss Rush",
-        BOTS: 6
+        secondaryGameMode: "Boss Rush"
     },
     "Mothership": {
         MODE: "tdm",
         TEAMS: (Math.random() * 3 | 0) + 2,
         MOTHERSHIP_LOOP: true,
-        secondaryGameMode: "Mothership",
-        BOTS: 24
+        secondaryGameMode: "Mothership"
     },
     "Portal Mothership": {
-        BOTS: 10,
         X_GRID: 15,
         Y_GRID: 15,
         WIDTH: 5250,
@@ -348,8 +333,7 @@ const gamemodes = {
         MODE: "tdm",
         TEAMS: (Math.random() * 3 | 0) + 2,
         TAG: true,
-        secondaryGameMode: "Tag",
-        BOTS: 10
+        secondaryGameMode: "Tag"
     },
     "Portal Tag": {
         BOTS: 10,
@@ -377,8 +361,7 @@ const gamemodes = {
         MODE: "tdm",
         TEAMS: (Math.random() * 3 | 0) + 2,
         TAG: true,
-        secondaryGameMode: "Tag",
-        BOTS: 24
+        secondaryGameMode: "Tag"
     },
     "Domination": {
         MODE: "tdm",
@@ -405,8 +388,7 @@ const gamemodes = {
             ["roid", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "roid"]
         ],
         DOMINATOR_LOOP: true,
-        secondaryGameMode: "Domination",
-        BOTS: 24
+        secondaryGameMode: "Domination"
     },
     "Portal Domination": {
         MODE: "tdm",
@@ -433,8 +415,7 @@ const gamemodes = {
             ["roid", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "roid"]
         ],
         DOMINATOR_LOOP: true,
-        secondaryGameMode: "Domination",
-        BOTS: 24
+        secondaryGameMode: "Domination"
     },
     "2TDM Domination": {
         MODE: "tdm",
@@ -461,8 +442,7 @@ const gamemodes = {
             ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2", "bas2"]
         ],
         DOMINATOR_LOOP: true,
-        secondaryGameMode: "Domination",
-        BOTS: 24
+        secondaryGameMode: "Domination"
     },
     "4TDM Domination": {
         MODE: "tdm",
@@ -489,8 +469,7 @@ const gamemodes = {
             ["bas4", "bas4", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2", "bas2"]
         ],
         DOMINATOR_LOOP: true,
-        secondaryGameMode: "Domination",
-        BOTS: 24
+        secondaryGameMode: "Domination"
     },
     "Space": {
         MODE: "tdm",
@@ -512,7 +491,6 @@ const gamemodes = {
             ["norm", "norm", "norm", "norm", "rock", "norm", "norm", "norm", "norm"],
             ["rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock"]
         ],
-        BOTS: 6,
         secondaryGameMode: "Space"
     },
     "Space 4TDM": {
@@ -535,7 +513,6 @@ const gamemodes = {
             ["norm", "norm", "norm", "norm", "bas3", "norm", "norm", "norm", "norm"],
             ["rock", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "rock"]
         ],
-        BOTS: 6,
         secondaryGameMode: "Space"
     },
 };
@@ -544,9 +521,9 @@ const mode = gamemodes[gamemode];
 
 let output = {};
 for (let key in defaults) {
-    output[key] = defaults[key];
+    output[key] = !defaults.BOTS_USE_DEFAULT && key == "BOTS" ? (mode.MODE == "tdm" ? 18 : 9) : defaults[key];
     if (mode[key]) {
-        output[key] = key == "BOTS" && defaults.BOTS_USE_DEFAULT ? defaults[key] : mode[key];
+        output[key] = mode[key];
     }
 }
 
