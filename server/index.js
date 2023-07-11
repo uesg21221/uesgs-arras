@@ -71,9 +71,6 @@ function collide(collision) {
                 case 4:
                     reflectCollide(wall, entity);
                     break;
-                case 0:
-                    mooncollide(wall, entity);
-                    break;
                 default:
                     let a =
                         entity.type === "bullet"
@@ -519,20 +516,6 @@ placeRoids();
 
 for (let loc of room["wall"]) spawnWall(loc);
 
-if (c.SPACE_MODE) {
-    console.log("Spawned moon.");
-    let o = new Entity({
-        x: room.width / 2,
-        y: room.height / 2,
-    });
-    o.define(Class.moon);
-    o.team = -101;
-    o.SIZE = room.width / 10;
-    o.protect();
-    o.life();
-    room.blackHoles.push(o);
-}
-
 class FoodType {
     constructor(groupName, types, chances, chance, isNestFood = false) {
         let scale;
@@ -552,8 +535,10 @@ class FoodType {
         this.chance = chance * (scale > 4 && c.SHINY ? 100 : 1);
         this.isNestFood = isNestFood;
     }
-    choose() {
-        return this.types[ran.chooseChance(...this.chances)];
+    choose(dev) {
+        return dev
+                ? this.types[ran.chooseChance(...this.chances.reverse())]
+                : this.types[ran.chooseChance(...this.chances)];
     }
 }
 const foodTypes = [
@@ -600,9 +585,9 @@ function getFoodType(isNestFood = false) {
     }
     return possible[0][ran.chooseChance(...possible[1])];
 }
-function spawnShape(location, type = 0) {
+function spawnShape(location, type = 0, how = false) {
     let o = new Entity(location);
-    type = foodTypes[type].choose();
+    type = foodTypes[type].choose(how);
     o.define(type);
     o.define({
         BODY: {
@@ -695,7 +680,7 @@ const makefood = () => {
                 x: instance.body.x,
                 y: instance.body.y
             }
-            spawnShape(loc, 5);
+            spawnShape(loc, 1 + Math.random() * 5 | 0, true);
             instance.body.spawnShape = false;
         }
     });
@@ -709,6 +694,10 @@ const maintainloop = () => {
     loopThrough(entities, function (instance) {
         if (instance.shield.max) instance.shield.regenerate();
         if (instance.health.amount > 0) instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
+        if (instance.team != -102 &&
+            instance.team != -101 &&
+            c.SPACE_MODE
+        ) instance.moveToMoon();
     });
 };
 

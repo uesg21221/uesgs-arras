@@ -951,7 +951,6 @@ class Entity extends EventEmitter {
         if (set.FOOD != null) {
             if (set.FOOD.LEVEL != null) {
                 this.foodLevel = set.FOOD.LEVEL;
-                this.foodCountup = 0;
             }
         }
         if (set.BODY != null) {
@@ -1123,6 +1122,10 @@ class Entity extends EventEmitter {
             default:
                 return 1;
         }
+    }
+    moveToMoon() {
+        if (!this.controllers.filter(controller => controller instanceof ioTypes.moveMoon).length)
+            this.controllers.push(new ioTypes.moveMoon(this));
     }
     move() {
         let g = {
@@ -1351,8 +1354,7 @@ class Entity extends EventEmitter {
             var k = this.damp / roomSpeed,
                 drag = excess / (k + 1),
                 finalvelocity = this.maxSpeed + drag;
-            if (c.SPACE_PHYSICS)
-                finalvelocity *= this.type === "bullet" ? 1.005 : 1.1;
+            if (c.SPACE_PHYSICS) finalvelocity *= this.type === "bullet" ? 1.005 : 1.1;
             this.velocity.x = (finalvelocity * this.velocity.x) / motion;
             this.velocity.y = (finalvelocity * this.velocity.y) / motion;
         }

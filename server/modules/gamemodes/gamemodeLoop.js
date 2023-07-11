@@ -13,6 +13,22 @@ const basepro = () => {
             o.color = [10, 11, 12, 15, 25, 26, 27, 28][team - 1];
         });
     }
+    if (c.SPACE_MODE) {
+        console.log("Spawned moon.");
+        let o = new Entity({
+            x: room.width / 2,
+            y: room.height / 2,
+        });
+        o.define(Class.moon);
+        o.define({
+            BODY: {
+                ACCELERATION: 0.015 / (Class.moon.FOOD.LEVEL + 1),
+            },
+        });
+        o.team = -102;
+        o.SIZE = room.width / 10;
+        room.blackHoles.push(o);
+    }
 }
 
 if (c.MAZE && typeof c.MAZE == "number") generateMaze(c.MAZE);

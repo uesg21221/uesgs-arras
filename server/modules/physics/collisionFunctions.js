@@ -280,21 +280,6 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
     }
 }
 
-function mooncollide(moon, n) {
-    let dx = moon.x - n.x;
-    let dy = moon.y - n.y;
-    let d2 = dx * dx + dy * dy;
-    let totalRadius = moon.realSize + n.realSize;
-    if (d2 > totalRadius * totalRadius)
-        return;
-    let dist = Math.sqrt(d2);
-    let sink = totalRadius - dist;
-    dx /= dist;
-    dy /= dist;
-    n.accel.x -= dx * n.pushability * 0.05 * sink * 2;
-    n.accel.y -= dy * n.pushability * 0.05 * sink * 2;
-}
-
 function reflectCollide(wall, bounce) {
     if (bounce.god === true || bounce.passive === true || bounce.ac || bounce.master.ac) return;
     if (bounce.team === wall.team && bounce.type === "tank") return;
@@ -381,6 +366,5 @@ module.exports = {
     firmcollide,
     reflectcollide,
     advancedcollide,
-    mooncollide,
     reflectCollide
 };

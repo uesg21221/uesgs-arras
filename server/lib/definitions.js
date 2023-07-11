@@ -1026,61 +1026,84 @@ exports.squares = {
     BODY: {
         DAMAGE: basePolygonDamage,
         HEALTH: basePolygonHealth,
-        DENSITY: 4,
-        PENETRATION: 2,
+        DENSITY: 2,
+        PENETRATION: 1,
     },
 };
 exports.triangles = {
     PARENT: [exports.food],
     BODY: {
-        DAMAGE: 3 * basePolygonDamage,
+        DAMAGE: basePolygonDamage,
         HEALTH: 3 * basePolygonHealth,
-        DENSITY: 6,
-        PENETRATION: 3,
-        RESIST: 3,
+        DENSITY: 3,
+        PENETRATION: 1.5,
+        RESIST: 1.5,
     },
 };
 exports.pentagons = {
     PARENT: [exports.food],
     BODY: {
-        DAMAGE: 9 * basePolygonDamage,
-        HEALTH: 9 * basePolygonHealth,
-        DENSITY: 8,
-        PENETRATION: 4,
-        RESIST: 4,
+        DAMAGE: 1.5 * basePolygonDamage,
+        HEALTH: 6 * basePolygonHealth,
+        DENSITY: 4,
+        PENETRATION: 2,
+        RESIST: 2,
     },
 };
 exports.beta = {
     PARENT: [exports.food],
     BODY: {
-        DAMAGE: 18 * basePolygonDamage,
-        HEALTH: 18 * basePolygonHealth,
-        SHIELD: 18 * basePolygonHealth,
-        DENSITY: 10,
-        RESIST: 5,
-        REGEN: 5,
+        DAMAGE: 3 * basePolygonDamage,
+        HEALTH: 12 * basePolygonHealth,
+        SHIELD: 3 * basePolygonHealth,
+        DENSITY: 5,
+        RESIST: 3,
+        REGEN: 3,
     },
 };
 exports.alpha = {
     PARENT: [exports.food],
     BODY: {
-        DAMAGE: 36 * basePolygonDamage,
-        HEALTH: 36 * basePolygonHealth,
-        SHIELD: 36 * basePolygonHealth,
-        DENSITY: 12,
-        RESIST: 6,
-        REGEN: 6,
+        DAMAGE: 6 * basePolygonDamage,
+        HEALTH: 24 * basePolygonHealth,
+        SHIELD: 6 * basePolygonHealth,
+        DENSITY: 6,
+        RESIST: 4,
+        REGEN: 4,
     },
 };
 exports.cubes = {
     PARENT: [exports.food],
     BODY: {
-        DAMAGE: 12 * basePolygonDamage,
-        HEALTH: 12 * basePolygonHealth,
+        DAMAGE: 4 * basePolygonDamage,
+        HEALTH: 8 * basePolygonHealth,
         DENSITY: 4,
         PENETRATION: 2,
         RESIST: 2,
     },
+};
+
+// MOON
+exports.moon = {
+    PARENT: [exports.food],
+    LABEL: "Moon",
+    CONTROLLERS: ["moveMoon"],
+    FOOD: {
+        LEVEL: 6,
+    },
+    SHAPE: 20,
+    BODY: {
+        HEALTH: 1000,
+        SHIELD: 1000,
+        REGEN: 1000,
+        DENSITY: 15,
+        PENETRATION: 8,
+        RESIST: 8,
+        DAMAGE: basePolygonDamage,
+    },
+    COLOR: 9,
+    ACCEPTS_SCORE: false,
+    DRAW_HEALTH: false,
 };
 
 // EGGS

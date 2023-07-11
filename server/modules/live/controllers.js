@@ -74,18 +74,19 @@ class io_moveInCircles extends IO {
     constructor(body) {
         super(body)
         this.acceptsFromTop = false
-        this.timer = ran.irandom(10) + 3
+        this.speed = 10;
+        this.timer = ran.irandom(this.speed) + 3
         this.goal = {
-            x: this.body.x + 10 * Math.cos(-this.body.facing),
-            y: this.body.y + 10 * Math.sin(-this.body.facing),
+            x: this.body.x + this.speed * Math.cos(-this.body.facing),
+            y: this.body.y + this.speed * Math.sin(-this.body.facing),
         }
     }
     think() {
         if (!(this.timer--)) {
-            this.timer = 10
+            this.timer = this.speed
             this.goal = {
-                x: this.body.x + 10 * Math.cos(-this.body.facing),
-                y: this.body.y + 10 * Math.sin(-this.body.facing),
+                x: this.body.x + this.speed * Math.cos(-this.body.facing),
+                y: this.body.y + this.speed * Math.sin(-this.body.facing),
             }
         }
         return {
@@ -215,6 +216,32 @@ class io_goToMasterTarget extends IO {
                 },
             }
         }
+    }
+}
+class io_moveMoon extends IO {
+    constructor(body) {
+        super(body)
+        this.myGoal = {
+            x: room.width / 2,
+            y: room.height / 2,
+        }
+        this.countdown = 2
+    }
+    think() {
+        if (this.countdown > 1 && this.body.label != "Spectator") {
+            this.countdown = 0;
+            if (this.body.label != "Moon") {
+                this.myGoal.x = room.blackHoles[0].x;
+                this.myGoal.y = room.blackHoles[0].y;
+            }
+            return {
+                goal: {
+                    x: this.myGoal.x,
+                    y: this.myGoal.y,
+                },
+                power: 0.2,
+            }
+        } else { this.countdown += 1; }
     }
 }
 class io_canRepel extends IO {
@@ -697,6 +724,7 @@ let ioTypes = {
     alwaysFire: io_alwaysFire,
     mapAltToFire: io_mapAltToFire,
     mapFireToAlt: io_mapFireToAlt,
+    moveMoon: io_moveMoon,
 
     //aiming related
     nearestDifferentMaster: io_nearestDifferentMaster,

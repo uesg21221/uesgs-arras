@@ -163,7 +163,7 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            socket.talk("R", room.width, room.height, JSON.stringify(c.ROOM_SETUP), JSON.stringify(util.serverStartTime), roomSpeed, c.ARENA_TYPE);
+            socket.talk("R", room.width, room.height, JSON.stringify(c.ROOM_SETUP), JSON.stringify(util.serverStartTime), roomSpeed);
             // Log it
             util.log("[INFO] " + m[0] + (needsRoom ? " joined" : " rejoined") + " the game! Players: " + players.length);
             break;
@@ -240,19 +240,6 @@ function incoming(message, socket) {
             if (commands > 255) {
                 socket.kick("Malformed command packet.");
                 return 1;
-            }
-            if (c.SPACE_MODE && player.body) {
-                let spaceOffsetAngle = Math.atan2(
-                    room.width / 2 - player.body.x,
-                    room.height / 2 - player.body.y
-                );
-                target = rotatePoint(
-                    {
-                        x: m[0],
-                        y: m[1],
-                    },
-                    -spaceOffsetAngle
-                );
             }
             // Put the new target in
             player.target = target;
