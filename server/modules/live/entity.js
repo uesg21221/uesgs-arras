@@ -592,6 +592,7 @@ class Entity extends EventEmitter {
         super();
         if (!master) master = this;
         this.isGhost = false;
+        this.healer = false;
         this.killCount = {
             solo: 0,
             assists: 0,
@@ -676,6 +677,7 @@ class Entity extends EventEmitter {
         // Define it
         this.SIZE = 1;
         this.spawnShape = false;
+        this.needsNewBroadcast = false;
         this.define(Class.genericEntity);
         // Initalize physics and collision
         this.maxSpeed = 0;
@@ -834,7 +836,11 @@ class Entity extends EventEmitter {
             this.shapeData = set.SHAPE;
         }
         if (set.COLOR != null) this.color = set.COLOR;
-        if (set.TEAM != null) this.team = set.TEAM;
+        if (set.TEAM != null) {
+            this.team = set.TEAM;
+            this.needsNewBroadcast = true;
+        }
+        if (set.HEALER != null) this.healer = set.HEALER;
         if (set.TILE != null) {
             this.x = set.TILE.x;
             this.y = set.TILE.y;

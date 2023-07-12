@@ -1622,6 +1622,7 @@ exports.developerBullet = {
 };
 exports.healerBullet = {
     PARENT: [exports.bullet],
+    HEALER: true,
     HITS_OWN_TYPE: "normal",
 };
 exports.casing = {
@@ -15518,7 +15519,7 @@ exports.levels = {
     LABEL: "Levels",
     UPGRADES_TIER_0: [exports.developer]
 };
-for (let i = 0; i <= defineSkillCap; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_TIER is irrelevant
+for (let i = 0; i <= defineSkillCap; i += c.TIER_MULTIPLIER) {
     let LEVEL = i;
     exports["level" + LEVEL] = {
         PARENT: [exports.levels],
@@ -15527,6 +15528,30 @@ for (let i = 0; i <= defineSkillCap; i += c.TIER_MULTIPLIER) { //c.MAX_UPGRADE_T
     };
     exports.levels.UPGRADES_TIER_0.push(exports["level" + LEVEL]);
 }
+
+exports.teams = {
+    PARENT: [exports.testbedBase],
+    REALSKILL_CAP: genericSkillCap,
+    LABEL: "Teams",
+    UPGRADES_TIER_0: [exports.developer]
+};
+for (let i = 1; i <= c.TEAMS; i += 1) {
+    let team = i;
+    exports["team" + team] = {
+        PARENT: [exports.teams],
+        COLOR: [10, 11, 12, 15, 25, 26, 27, 28][team - 1],
+        TEAM: -team,
+        LABEL: "Team " + team
+    };
+    exports.teams.UPGRADES_TIER_0.push(exports["team" + team]);
+}
+exports.teamNeutral = {
+    PARENT: [exports.teams],
+    COLOR: 3,
+    TEAM: -100,
+    LABEL: "Team neurtal"
+};
+exports.teams.UPGRADES_TIER_0.push(exports.teamNeutral);
 
 // Atmosphere
 exports.atmosphere = {
@@ -15593,8 +15618,58 @@ exports.atmosphereGenerator = {
         },
     ]
 }
+exports.atmosphereHeal = {
+    PARENT: [exports.healerBullet],
+    LABEL: "",
+    TYPE: "atmosphere",
+    CONTROLLERS: ["teleportToMaster"],
+    DAMAGE_EFFECTS: false,
+    DIE_AT_RANGE: false,
+    ALPHA: 0.25,
+    CLEAR_ON_MASTER_UPGRADE: true,
+    CAN_GO_OUTSIDE_ROOM: true,
+    BODY: {
+        REGEN: 1e5,
+        HEALTH: 1e6,
+        DENSITY: 0,
+        DAMAGE: 0.25,
+        SPEED: 0,
+        PUSHABILITY: 0,
+    },
+    TURRETS: [
+        {
+            /*    SIZE         X             Y         ANGLE        ARC       Z*/
+            POSITION: [20, 0, 0, 0, 360, 1],
+            TYPE: [exports.genericEntity, { COLOR: 12 }]
+        },
+    ]
+}
+exports.atmosphereHealerGenerator = {
+    PARENT: [exports.genericTank],
+    LABEL: "Atmosphere",
+    COLOR: 9,
+    GUNS: [
+        {
+            POSITION: [0, 20, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.healer, g.atmosphere]),
+                TYPE: exports.atmosphereHeal,
+                MAX_CHILDREN: 1,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+            },
+        }, 
+    ],
+    TURRETS: [
+        {
+            /*    SIZE         X             Y         ANGLE        ARC       Z*/
+            POSITION: [20, 0, 0, 0, 360, 1],
+            TYPE: exports.healerSymbol,
+        },
+    ]
+}
 
-exports.genericDreadnought = {
+exports.genericDread = {
     PARENT: [exports.genericTank],
     REALSKILL_CAP: defineSkillCap,
     DANGER: 7,
@@ -15607,10 +15682,22 @@ exports.genericDreadnought = {
         DAMAGE: 2 * base.DAMAGE,
     },
     SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl],
+}
+exports.genericDreadnought = {
+    PARENT: [exports.genericDread],
     TURRETS: [
         {
             POSITION: [14, 0, 0, 0, 360, 1],
             TYPE: exports.atmosphereGenerator,
+        },
+    ],
+};
+exports.genericDreadnoughtHealer = {
+    PARENT: [exports.genericDread],
+    TURRETS: [
+        {
+            POSITION: [14, 0, 0, 0, 360, 1],
+            TYPE: exports.atmosphereHealerGenerator,
         },
     ],
 };
@@ -15650,10 +15737,51 @@ exports.hexagonDreadnought = {
     COLOR: 0,
 };
 
+exports.eggDreadnoughtHealer = {
+    PARENT: [exports.genericDreadnoughtHealer],
+    COLOR: 6,
+};
+
+exports.triangleDreadnoughtHealer = {
+    PARENT: [exports.genericDreadnoughtHealer],
+    SHAPE: [
+        [-1.555,0],
+        [0.778,1.347],
+        [0.778,-1.347]
+    ],
+    COLOR: 2,
+};
+exports.squareDreadnoughtHealer = {
+    PARENT: [exports.genericDreadnoughtHealer],
+    SHAPE: 4,
+    COLOR: 13,
+};
+exports.pentagonDreadnoughtHealer = {
+    PARENT: [exports.genericDreadnoughtHealer],
+    SHAPE: [
+        [-1,0],
+        [-0.3,0.95],
+        [0.8,0.58],
+        [0.8,-0.58],
+        [-0.3,-0.95]
+    ],
+    COLOR: 14,
+};
+exports.hexagonDreadnoughtHealer = {
+    PARENT: [exports.genericDreadnoughtHealer],
+    SHAPE: 6,
+    COLOR: 0,
+};
+
 exports.dreadnought = {
     PARENT: [exports.eggDreadnought],
     LABEL: "Dreadnought"
 };
+exports.dreadnoughtHealer = {
+    PARENT: [exports.eggDreadnoughtHealer],
+    LABEL: "Dreadnought Healer"
+};
+
 exports.pacifier = {
     PARENT: [exports.eggDreadnought],
     LABEL: "Dreadnought Pacifier",
@@ -16679,8 +16807,1033 @@ exports.hexagonSword = {
     ],
 };
 
+exports.pacifierHealer = {
+    PARENT: [exports.eggDreadnoughtHealer],
+    LABEL: "Dreadnought Pacifier Healer",
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.peacekeeperHealer = {
+    PARENT: [exports.eggDreadnoughtHealer],
+    LABEL: "Dreadnought Peacekeeper Healer",
+    GUNS: [
+        {
+            POSITION: [20.5, 12, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [20.5, 12, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.centaurHealer = {
+    PARENT: [exports.eggDreadnoughtHealer],
+    LABEL: "Dreadnought Centaur Healer",
+    STAT_NAMES: statnames.trap,
+    GUNS: [
+        {
+            POSITION: [13, 7, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 180, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
+exports.invaderHealer = {
+    PARENT: [exports.eggDreadnoughtHealer],
+    LABEL: "Dreadnought Invader Healer",
+    STAT_NAMES: statnames.drone,
+    GUNS: [
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+    ],
+};
+exports.swordHealer = {
+    PARENT: [exports.eggDreadnoughtHealer],
+    LABEL: "Dreadnought Sword Healer",
+    GUNS: [
+        {
+            POSITION: [24, 8.5, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [24, 8.5, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+
+exports.trianglePacifierHealer = {
+    PARENT: [exports.triangleDreadnoughtHealer],
+    LABEL: "Dreadnought trianglePacifier Healer",
+    GUNS: [
+        {
+            POSITION: [16, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.trianglePeacekeeperHealer = {
+    PARENT: [exports.triangleDreadnoughtHealer],
+    LABEL: "Dreadnought trianglePeacekeeper Healer",
+    GUNS: [
+        {
+            POSITION: [18.5, 12, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 12, 1, 0, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 12, 1, 0, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.triangleCentaurHealer = {
+    PARENT: [exports.triangleDreadnoughtHealer],
+    LABEL: "Dreadnought triangleCentaur Healer",
+    STAT_NAMES: statnames.trap,
+    GUNS: [
+        {
+            POSITION: [13, 7, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 120, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 240, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
+exports.triangleInvaderHealer = {
+    PARENT: [exports.triangleDreadnoughtHealer],
+    LABEL: "Dreadnought triangleInvader Healer",
+    STAT_NAMES: statnames.drone,
+    GUNS: [
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+    ],
+};
+exports.triangleSwordHealer = {
+    PARENT: [exports.triangleDreadnoughtHealer],
+    LABEL: "Dreadnought triangleSword Healer",
+    GUNS: [
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+
+exports.squarePacifierHealer = {
+    PARENT: [exports.squareDreadnoughtHealer],
+    LABEL: "Dreadnought squarePacifier Healer",
+    GUNS: [
+        {
+            POSITION: [16, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.squarePeacekeeperHealer = {
+    PARENT: [exports.squareDreadnoughtHealer],
+    LABEL: "Dreadnought squarePeacekeeper Healer",
+    GUNS: [
+        {
+            POSITION: [18.5, 12, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 12, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 12, 1, 0, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 12, 1, 0, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.squareCentaurHealer = {
+    PARENT: [exports.squareDreadnoughtHealer],
+    LABEL: "Dreadnought squareCentaur Healer",
+    STAT_NAMES: statnames.trap,
+    GUNS: [
+        {
+            POSITION: [13, 7, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 180, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 90, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 270, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
+exports.squareInvaderHealer = {
+    PARENT: [exports.squareDreadnoughtHealer],
+    LABEL: "Dreadnought squareInvader Healer",
+    STAT_NAMES: statnames.drone,
+    GUNS: [
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+    ],
+};
+exports.squareSwordHealer = {
+    PARENT: [exports.squareDreadnoughtHealer],
+    LABEL: "Dreadnought squareSword Healer",
+    GUNS: [
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+
+exports.pentagonPacifierHealer = {
+    PARENT: [exports.pentagonDreadnoughtHealer],
+    LABEL: "Dreadnought pentagonPacifier Healer",
+    GUNS: [
+        {
+            POSITION: [16, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 72, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 144, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 216, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 288, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.pentagonPeacekeeperHealer = {
+    PARENT: [exports.pentagonDreadnoughtHealer],
+    LABEL: "Dreadnought pentagonPeacekeeper Healer",
+    GUNS: [
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 72, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 144, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 216, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 288, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.pentagonCentaurHealer = {
+    PARENT: [exports.pentagonDreadnoughtHealer],
+    LABEL: "Dreadnought pentagonCentaur Healer",
+    STAT_NAMES: statnames.trap,
+    GUNS: [
+        {
+            POSITION: [13, 7, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 72, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 72, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 144, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 144, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 216, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 216, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 288, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 288, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
+exports.pentagonInvaderHealer = {
+    PARENT: [exports.pentagonDreadnoughtHealer],
+    LABEL: "Dreadnought pentagonInvader Healer",
+    STAT_NAMES: statnames.drone,
+    GUNS: [
+        {
+            POSITION: [4, 8, 1.3, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [4, 8, 1.3, 7, 0, 72, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [4, 8, 1.3, 7, 0, 144, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [4, 8, 1.3, 7, 0, 216, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [4, 8, 1.3, 7, 0, 288, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+    ],
+};
+exports.pentagonSwordHealer = {
+    PARENT: [exports.pentagonDreadnoughtHealer],
+    LABEL: "Dreadnought pentagonSword Healer",
+    GUNS: [
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 72, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 144, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 216, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 288, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+
+exports.hexagonPacifierHealer = {
+    PARENT: [exports.hexagonDreadnoughtHealer],
+    LABEL: "Dreadnought hexagonPacifier Healer",
+    GUNS: [
+        {
+            POSITION: [16, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 60, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 300, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.hexagonPeacekeeperHealer = {
+    PARENT: [exports.hexagonDreadnoughtHealer],
+    LABEL: "Dreadnought hexagonPeacekeeper Healer",
+    GUNS: [
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 60, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [18.5, 10, 1, 0, 0, 300, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.pound, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.hexagonCentaurHealer = {
+    PARENT: [exports.hexagonDreadnoughtHealer],
+    LABEL: "Dreadnought hexagonCentaur Healer",
+    STAT_NAMES: statnames.trap,
+    GUNS: [
+        {
+            POSITION: [13, 7, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 60, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 60, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 120, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 180, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 240, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [13, 7, 1, 0, 0, 300, 0],
+        },
+        {
+            POSITION: [3, 7, 1.7, 13, 0, 300, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.trap]),
+                TYPE: exports.trap,
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
+exports.hexagonInvaderHealer = {
+    PARENT: [exports.hexagonDreadnoughtHealer],
+    LABEL: "Dreadnought hexagonInvader Healer",
+    STAT_NAMES: statnames.drone,
+    GUNS: [
+        {
+            POSITION: [6, 8, 1.3, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 8, 1.3, 7, 0, 60, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 8, 1.3, 7, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 8, 1.3, 7, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 8, 1.3, 7, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+        {
+            POSITION: [6, 8, 1.3, 7, 0, 300, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.drone]),
+                TYPE: exports.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+            },
+        },
+    ],
+};
+exports.hexagonSwordHealer = {
+    PARENT: [exports.hexagonDreadnoughtHealer],
+    LABEL: "Dreadnought hexagonSword Healer",
+    GUNS: [
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 60, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+        {
+            POSITION: [22, 8.5, 1, 0, 0, 300, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([hexagonDreadnoughtBullet, g.sniper, g.basic]),
+                TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+
 // TOKEN "UPGRADE PATHS"
-exports.developer.UPGRADES_TIER_0 = [exports.basic, exports.substance, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.bossesMenu, exports.retrograde, exports.miscEntities, exports.levels];
+exports.developer.UPGRADES_TIER_0 = [exports.basic, exports.substance, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.bossesMenu, exports.retrograde, exports.miscEntities, exports.levels, exports.teams];
     exports.substance.UPGRADES_TIER_0 = [];
     exports.gameAdminMenu.UPGRADES_TIER_0 = [exports.basic, exports.gameModMenu, exports.spectator, exports.bossesMenu];
         exports.gameModMenu.UPGRADES_TIER_0 = [exports.basic, exports.betaTesterMenu, exports.spectator, exports.retrograde];
@@ -16698,9 +17851,9 @@ exports.miscEntities.UPGRADES_TIER_0 = [exports.dominators, exports.baseProtecto
 exports.dominators.UPGRADES_TIER_0 = [exports.dominator, exports.destroyerDominator, exports.gunnerDominator, exports.trapperDominator];
 
 // TANK UPGRADE PATHS
-exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper];
+exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.healer, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper];
         exports.basic.UPGRADES_TIER_2 = [exports.smasher];
-                exports.basic.UPGRADES_TIER_3 = [exports.single, exports.dreadnought];
+                exports.basic.UPGRADES_TIER_3 = [exports.single, exports.dreadnought, exports.dreadnoughtHealer];
                 exports.smasher.UPGRADES_TIER_3 = [exports.megaSmasher, exports.spike, exports.autoSmasher, exports.landmine];
 
         exports.twin.UPGRADES_TIER_2 = [exports.doubleTwin, exports.tripleShot, exports.gunner, exports.hexaTank];
@@ -16743,7 +17896,30 @@ exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machineGu
                 exports.builder.UPGRADES_TIER_3 = [exports.constructor, exports.autoBuilder, exports.engineer, exports.boomer, exports.architect, exports.conqueror];
                 exports.triTrapper.UPGRADES_TIER_3 = [exports.fortress, exports.hexaTrapper, exports.septaTrapper, exports.architect];
                 exports.trapGuard.UPGRADES_TIER_3 = [exports.bushwhacker, exports.gunnerTrapper, exports.bomber, exports.conqueror, exports.bulwark];
-        
+
+        exports.healer.UPGRADES_TIER_2 = [exports.medic, exports.paramedic, exports.ambulance, exports.surgeon, exports.physician, exports.doctor];
+        exports.dreadnoughtHealer.UPGRADES_TIER_3 = [exports.pacifierHealer, exports.peacekeeperHealer, exports.centaurHealer, exports.swordHealer, exports.invaderHealer];
+            exports.pacifierHealer.UPGRADES_TIER_5 = [exports.trianglePacifierHealer];
+            exports.peacekeeperHealer.UPGRADES_TIER_5 = [exports.trianglePeacekeeperHealer];
+            exports.centaurHealer.UPGRADES_TIER_5 = [exports.triangleCentaurHealer];
+            exports.swordHealer.UPGRADES_TIER_5 = [exports.triangleSwordHealer];
+            exports.invaderHealer.UPGRADES_TIER_5 = [exports.triangleInvaderHealer];
+                    exports.trianglePacifierHealer.UPGRADES_TIER_8 = [exports.squarePacifierHealer];
+                    exports.trianglePeacekeeperHealer.UPGRADES_TIER_8 = [exports.squarePeacekeeperHealer];
+                    exports.triangleCentaurHealer.UPGRADES_TIER_8 = [exports.squareCentaurHealer];
+                    exports.triangleSwordHealer.UPGRADES_TIER_8 = [exports.squareSwordHealer];
+                    exports.triangleInvaderHealer.UPGRADES_TIER_8 = [exports.squareInvaderHealer];
+                            exports.squarePacifierHealer.UPGRADES_TIER_11 = [exports.pentagonPacifierHealer];
+                            exports.squarePeacekeeperHealer.UPGRADES_TIER_11 = [exports.pentagonPeacekeeperHealer];
+                            exports.squareCentaurHealer.UPGRADES_TIER_11 = [exports.pentagonCentaurHealer];
+                            exports.squareSwordHealer.UPGRADES_TIER_11 = [exports.pentagonSwordHealer];
+                            exports.squareInvaderHealer.UPGRADES_TIER_11 = [exports.pentagonInvaderHealer];
+                                exports.pentagonPacifierHealer.UPGRADES_TIER_13 = [exports.hexagonPacifierHealer];
+                                exports.pentagonPeacekeeperHealer.UPGRADES_TIER_13 = [exports.hexagonPeacekeeperHealer];
+                                exports.pentagonCentaurHealer.UPGRADES_TIER_13 = [exports.hexagonCentaurHealer];
+                                exports.pentagonSwordHealer.UPGRADES_TIER_13 = [exports.hexagonSwordHealer];
+                                exports.pentagonInvaderHealer.UPGRADES_TIER_13 = [exports.hexagonInvaderHealer];
+
         exports.dreadnought.UPGRADES_TIER_3 = [exports.pacifier, exports.peacekeeper, exports.centaur, exports.sword, exports.invader];
                 exports.pacifier.UPGRADES_TIER_5 = [exports.trianglePacifier];
                 exports.peacekeeper.UPGRADES_TIER_5 = [exports.trianglePeacekeeper];

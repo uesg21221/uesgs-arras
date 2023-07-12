@@ -605,6 +605,7 @@ const convert = {
     broadcast: () => {
         let all = get.all();
         let by = minimapAllInt.update(all);
+        minimapTeamInt.elements = {};
         by = minimapTeamInt.update(all, by);
         by = leaderboardInt.update(all, by);
         get.take(by);

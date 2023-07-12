@@ -60,78 +60,87 @@ function collide(collision) {
         food.color = entity.color;
         food.team = entity.team;
     }
-    switch (true) {
-        case instance.type === "wall" || other.type === "wall":
-            if (instance.type === "wall" && other.type === "wall") return;
-            let wall = instance.type === "wall" ? instance : other;
-            let entity = instance.type === "wall" ? other : instance;
-            if (entity.ac || entity.master.ac) return;
-            if (entity.type == "atmosphere") return;
-            switch (wall.shape) {
-                case 4:
-                    reflectCollide(wall, entity);
-                    break;
-                default:
+    if (!(instance.healer || other.healer)) {
+        switch (true) {
+            case instance.type === "wall" || other.type === "wall":
+                if (instance.type === "wall" && other.type === "wall") return;
+                let wall = instance.type === "wall" ? instance : other;
+                let entity = instance.type === "wall" ? other : instance;
+                if (entity.ac || entity.master.ac) return;
+                if (entity.type == "atmosphere") return;
+                switch (wall.shape) {
+                    case 4:
+                        reflectCollide(wall, entity);
+                        break;
+                    default:
+                        let a =
+                            entity.type === "bullet"
+                                ? 1 + 10 / (entity.velocity.length + 10)
+                                : 1;
+                        advancedcollide(wall, entity, false, false, a);
+                        break;
+                }
+                break;
+            case instance.team === other.team &&
+                (instance.settings.hitsOwnType === "pushOnlyTeam" ||
+                    other.settings.hitsOwnType === "pushOnlyTeam"):
+                {
+                    // Dominator / Mothership collisions
+                    if (instance.settings.hitsOwnType === other.settings.hitsOwnType) return;
+                    let pusher = instance.settings.hitsOwnType === "pushOnlyTeam" ? instance : other;
+                    let entity = instance.settings.hitsOwnType === "pushOnlyTeam" ? other : instance;
+                    if (entity.type !== "tank" || entity.settings.hitsOwnType === "never") return;
                     let a =
-                        entity.type === "bullet"
-                            ? 1 + 10 / (entity.velocity.length + 10)
-                            : 1;
-                    advancedcollide(wall, entity, false, false, a);
-                    break;
-            }
-            break;
-        case instance.team === other.team &&
-            (instance.settings.hitsOwnType === "pushOnlyTeam" ||
-                other.settings.hitsOwnType === "pushOnlyTeam"):
-            {
-                // Dominator / Mothership collisions
-                if (instance.settings.hitsOwnType === other.settings.hitsOwnType) return;
-                let pusher = instance.settings.hitsOwnType === "pushOnlyTeam" ? instance : other;
-                let entity = instance.settings.hitsOwnType === "pushOnlyTeam" ? other : instance;
-                if (entity.type !== "tank" || entity.settings.hitsOwnType === "never") return;
-                let a =
-                    1 + 10 /
-                    (Math.max(entity.velocity.length, pusher.velocity.length) + 10);
-                advancedcollide(pusher, entity, false, false, a);
-            }
-            break;
-        case (instance.type === "crasher" && other.type === "food") ||
-            (other.type === "crasher" && instance.type === "food"):
-            firmcollide(instance, other);
-            break;
-        case instance.team !== other.team:
-            advancedcollide(instance, other, true, true);
-            break;
-        case instance.settings.hitsOwnType == "never" ||
-            other.settings.hitsOwnType == "never":
-            break;
-        case instance.settings.hitsOwnType === other.settings.hitsOwnType:
-            switch (instance.settings.hitsOwnType) {
-                case "push":
-                    advancedcollide(instance, other, false, false);
-                    break;
-                case "hard":
-                    firmcollide(instance, other);
-                    break;
-                case "hardWithBuffer":
-                    firmcollide(instance, other, 30);
-                    break;
-                case "hardOnlyTanks":
-                    if (
-                        instance.type === "tank" &&
-                        other.type === "tank" &&
-                        !instance.isDominator &&
-                        !other.isDominator
-                    )
+                        1 + 10 /
+                        (Math.max(entity.velocity.length, pusher.velocity.length) + 10);
+                    advancedcollide(pusher, entity, false, false, a);
+                }
+                break;
+            case (instance.type === "crasher" && other.type === "food") ||
+                (other.type === "crasher" && instance.type === "food"):
+                firmcollide(instance, other);
+                break;
+            case instance.team !== other.team:
+                advancedcollide(instance, other, true, true);
+                break;
+            case instance.settings.hitsOwnType == "never" ||
+                other.settings.hitsOwnType == "never":
+                break;
+            case instance.settings.hitsOwnType === other.settings.hitsOwnType:
+                switch (instance.settings.hitsOwnType) {
+                    case "push":
+                        advancedcollide(instance, other, false, false);
+                        break;
+                    case "hard":
                         firmcollide(instance, other);
-                case "hardOnlyBosses":
-                    if (instance.type === other.type && instance.type === "miniboss")
-                        firmcollide(instance, other);
-                case "repel":
-                    simplecollide(instance, other);
-                    break;
-            }
-            break;
+                        break;
+                    case "hardWithBuffer":
+                        firmcollide(instance, other, 30);
+                        break;
+                    case "hardOnlyTanks":
+                        if (
+                            instance.type === "tank" &&
+                            other.type === "tank" &&
+                            !instance.isDominator &&
+                            !other.isDominator
+                        )
+                            firmcollide(instance, other);
+                    case "hardOnlyBosses":
+                        if (instance.type === other.type && instance.type === "miniboss")
+                            firmcollide(instance, other);
+                    case "repel":
+                        simplecollide(instance, other);
+                        break;
+                }
+                break;
+        }
+    } else {
+        if (instance.team === other.team &&
+            instance.master.id != other.id &&
+            other.master.id != instance.id &&
+            (instance.type == "tank" || instance.type == "miniboss" || other.type == "tank" || other.type == "miniboss")
+        ) { advancedcollide(instance, other, true, true); }
+        else { advancedcollide(instance, other, false, true); }
     }
 }
 

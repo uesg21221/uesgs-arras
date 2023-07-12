@@ -1266,7 +1266,7 @@ let minimapAll = new Delta(5, () => {
     }
     return all;
 });
-let teamIDs = [1, 2, 3, 4, 5, 6, 7, 8];
+let teamIDs = [1, 2, 3, 4, 5, 6, 7, 8, 10];
 if (c.GROUPS) for (let i = 0; i < 100; i++) teamIDs.push(i + 5);
 let minimapTeams = teamIDs.map((team) =>
     new Delta(3, () => {
@@ -1359,10 +1359,11 @@ setInterval(() => {
     let leaderboardUpdate = leaderboard.update();
     for (let socket of subscribers) {
         if (!socket.status.hasSpawned) continue;
-        let team = minimapTeamUpdates[socket.player.team - 1];
-        if (socket.status.needsNewBroadcast) {
+        let team = minimapTeamUpdates[-socket.player.body.team - 1];
+        if (socket.status.needsNewBroadcast || socket.player.body.needsNewBroadcast) {
             socket.talk("b", ...minimapUpdate.reset, ...(team ? team.reset : [0, 0]), ...(socket.anon ? [0, 0] : leaderboardUpdate.reset));
             socket.status.needsNewBroadcast = false;
+            socket.player.body.needsNewBroadcast = false;
         } else {
             socket.talk("b", ...minimapUpdate.update, ...(team ? team.update : [0, 0]), ...(socket.anon ? [0, 0] : leaderboardUpdate.update));
         }
