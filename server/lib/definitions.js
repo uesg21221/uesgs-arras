@@ -15904,6 +15904,29 @@ exports.sword = {
         },
     ],
 };
+exports.suffer = {
+    PARENT: [exports.eggDreadnought],
+    LABEL: "Dreadnought Suffer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+    ],
+};
 
 exports.trianglePacifier = {
     PARENT: [exports.triangleDreadnought],
@@ -16062,6 +16085,37 @@ exports.triangleSword = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.triangleSuffer = {
+    PARENT: [exports.triangleDreadnought],
+    LABEL: "Dreadnought triangleSuffer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
@@ -16267,6 +16321,45 @@ exports.squareSword = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.squareSuffer = {
+    PARENT: [exports.squareDreadnought],
+    LABEL: "Dreadnought squareSuffer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
@@ -16515,6 +16608,53 @@ exports.pentagonSword = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.pentagonSuffer = {
+    PARENT: [exports.pentagonDreadnought],
+    LABEL: "Dreadnought pentagonSuffer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 72, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 144, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 216, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 288, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
@@ -16810,6 +16950,61 @@ exports.hexagonSword = {
         },
     ],
 };
+exports.hexagonSuffer = {
+    PARENT: [exports.hexagonDreadnought],
+    LABEL: "Dreadnought hexagonSuffer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 60, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 300, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+    ],
+};
 
 exports.pacifierHealer = {
     PARENT: [exports.eggDreadnoughtHealer],
@@ -16925,6 +17120,29 @@ exports.swordHealer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.sufferHealer = {
+    PARENT: [exports.eggDreadnoughtHealer],
+    LABEL: "Dreadnought Suffer Healer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
@@ -17087,6 +17305,37 @@ exports.triangleSwordHealer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([triangleDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.triangleSufferHealer = {
+    PARENT: [exports.triangleDreadnoughtHealer],
+    LABEL: "Dreadnought triangleSuffer Healer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
@@ -17292,6 +17541,45 @@ exports.squareSwordHealer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([squareDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.squareSufferHealer = {
+    PARENT: [exports.squareDreadnoughtHealer],
+    LABEL: "Dreadnought squareSuffer Healer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
@@ -17540,6 +17828,53 @@ exports.pentagonSwordHealer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([pentagonDreadnoughtBullet, g.sniper, g.basic]),
                 TYPE: exports.bullet,
+            },
+        },
+    ],
+};
+exports.pentagonSufferHealer = {
+    PARENT: [exports.pentagonDreadnoughtHealer],
+    LABEL: "Dreadnought pentagonSuffer Healer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 72, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 144, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 216, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 288, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
@@ -17835,6 +18170,61 @@ exports.hexagonSwordHealer = {
         },
     ],
 };
+exports.hexagonSufferHealer = {
+    PARENT: [exports.hexagonDreadnoughtHealer],
+    LABEL: "Dreadnought hexagonSuffer Healer",
+    STAT_NAMES: statnames.swarm,
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 60, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 300, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([eggDreadnoughtBullet, g.swarm]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+    ],
+};
 
 // TOKEN "UPGRADE PATHS"
 exports.developer.UPGRADES_TIER_0 = [exports.basic, exports.substance, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.bossesMenu, exports.retrograde, exports.miscEntities, exports.levels, exports.teams];
@@ -17904,49 +18294,58 @@ c.gameModeName.includes("Siege")
                 exports.trapGuard.UPGRADES_TIER_3 = [exports.bushwhacker, exports.gunnerTrapper, exports.bomber, exports.conqueror, exports.bulwark];
 
         exports.healer.UPGRADES_TIER_2 = [exports.medic, exports.paramedic, exports.ambulance, exports.surgeon, exports.physician, exports.doctor];
-        exports.dreadnoughtHealer.UPGRADES_TIER_3 = [exports.pacifierHealer, exports.peacekeeperHealer, exports.centaurHealer, exports.swordHealer, exports.invaderHealer];
+        
+        exports.dreadnoughtHealer.UPGRADES_TIER_3 = [exports.sufferHealer, exports.pacifierHealer, exports.peacekeeperHealer, exports.centaurHealer, exports.swordHealer, exports.invaderHealer];
             exports.pacifierHealer.UPGRADES_TIER_5 = [exports.trianglePacifierHealer];
             exports.peacekeeperHealer.UPGRADES_TIER_5 = [exports.trianglePeacekeeperHealer];
             exports.centaurHealer.UPGRADES_TIER_5 = [exports.triangleCentaurHealer];
             exports.swordHealer.UPGRADES_TIER_5 = [exports.triangleSwordHealer];
             exports.invaderHealer.UPGRADES_TIER_5 = [exports.triangleInvaderHealer];
+            exports.sufferHealer.UPGRADES_TIER_5 = [exports.triangleSufferHealer];
                     exports.trianglePacifierHealer.UPGRADES_TIER_8 = [exports.squarePacifierHealer];
                     exports.trianglePeacekeeperHealer.UPGRADES_TIER_8 = [exports.squarePeacekeeperHealer];
                     exports.triangleCentaurHealer.UPGRADES_TIER_8 = [exports.squareCentaurHealer];
                     exports.triangleSwordHealer.UPGRADES_TIER_8 = [exports.squareSwordHealer];
                     exports.triangleInvaderHealer.UPGRADES_TIER_8 = [exports.squareInvaderHealer];
+                    exports.triangleSufferHealer.UPGRADES_TIER_8 = [exports.squareSufferHealer];
                             exports.squarePacifierHealer.UPGRADES_TIER_11 = [exports.pentagonPacifierHealer];
                             exports.squarePeacekeeperHealer.UPGRADES_TIER_11 = [exports.pentagonPeacekeeperHealer];
                             exports.squareCentaurHealer.UPGRADES_TIER_11 = [exports.pentagonCentaurHealer];
                             exports.squareSwordHealer.UPGRADES_TIER_11 = [exports.pentagonSwordHealer];
                             exports.squareInvaderHealer.UPGRADES_TIER_11 = [exports.pentagonInvaderHealer];
-                                exports.pentagonPacifierHealer.UPGRADES_TIER_13 = [exports.hexagonPacifierHealer];
-                                exports.pentagonPeacekeeperHealer.UPGRADES_TIER_13 = [exports.hexagonPeacekeeperHealer];
-                                exports.pentagonCentaurHealer.UPGRADES_TIER_13 = [exports.hexagonCentaurHealer];
-                                exports.pentagonSwordHealer.UPGRADES_TIER_13 = [exports.hexagonSwordHealer];
-                                exports.pentagonInvaderHealer.UPGRADES_TIER_13 = [exports.hexagonInvaderHealer];
+                            exports.squareSufferHealer.UPGRADES_TIER_11 = [exports.pentagonSufferHealer];
+                                    exports.pentagonPacifierHealer.UPGRADES_TIER_13 = [exports.hexagonPacifierHealer];
+                                    exports.pentagonPeacekeeperHealer.UPGRADES_TIER_13 = [exports.hexagonPeacekeeperHealer];
+                                    exports.pentagonCentaurHealer.UPGRADES_TIER_13 = [exports.hexagonCentaurHealer];
+                                    exports.pentagonSwordHealer.UPGRADES_TIER_13 = [exports.hexagonSwordHealer];
+                                    exports.pentagonInvaderHealer.UPGRADES_TIER_13 = [exports.hexagonInvaderHealer];
+                                    exports.pentagonSufferHealer.UPGRADES_TIER_13 = [exports.hexagonSufferHealer];
 
-        exports.dreadnought.UPGRADES_TIER_3 = [exports.pacifier, exports.peacekeeper, exports.centaur, exports.sword, exports.invader];
+        exports.dreadnought.UPGRADES_TIER_3 = [exports.pacifier, exports.peacekeeper, exports.centaur, exports.sword, exports.invader, exports.suffer];
                 exports.pacifier.UPGRADES_TIER_5 = [exports.trianglePacifier];
                 exports.peacekeeper.UPGRADES_TIER_5 = [exports.trianglePeacekeeper];
                 exports.centaur.UPGRADES_TIER_5 = [exports.triangleCentaur];
                 exports.sword.UPGRADES_TIER_5 = [exports.triangleSword];
                 exports.invader.UPGRADES_TIER_5 = [exports.triangleInvader];
+                exports.suffer.UPGRADES_TIER_5 = [exports.triangleSuffer];
                         exports.trianglePacifier.UPGRADES_TIER_8 = [exports.squarePacifier];
                         exports.trianglePeacekeeper.UPGRADES_TIER_8 = [exports.squarePeacekeeper];
                         exports.triangleCentaur.UPGRADES_TIER_8 = [exports.squareCentaur];
                         exports.triangleSword.UPGRADES_TIER_8 = [exports.squareSword];
                         exports.triangleInvader.UPGRADES_TIER_8 = [exports.squareInvader];
+                        exports.triangleSuffer.UPGRADES_TIER_8 = [exports.squareSuffer];
                                 exports.squarePacifier.UPGRADES_TIER_11 = [exports.pentagonPacifier];
                                 exports.squarePeacekeeper.UPGRADES_TIER_11 = [exports.pentagonPeacekeeper];
                                 exports.squareCentaur.UPGRADES_TIER_11 = [exports.pentagonCentaur];
                                 exports.squareSword.UPGRADES_TIER_11 = [exports.pentagonSword];
                                 exports.squareInvader.UPGRADES_TIER_11 = [exports.pentagonInvader];
-                                    exports.pentagonPacifier.UPGRADES_TIER_13 = [exports.hexagonPacifier];
-                                    exports.pentagonPeacekeeper.UPGRADES_TIER_13 = [exports.hexagonPeacekeeper];
-                                    exports.pentagonCentaur.UPGRADES_TIER_13 = [exports.hexagonCentaur];
-                                    exports.pentagonSword.UPGRADES_TIER_13 = [exports.hexagonSword];
-                                    exports.pentagonInvader.UPGRADES_TIER_13 = [exports.hexagonInvader];
+                                exports.squareSuffer.UPGRADES_TIER_11 = [exports.pentagonSuffer];
+                                        exports.pentagonPacifier.UPGRADES_TIER_13 = [exports.hexagonPacifier];
+                                        exports.pentagonPeacekeeper.UPGRADES_TIER_13 = [exports.hexagonPeacekeeper];
+                                        exports.pentagonCentaur.UPGRADES_TIER_13 = [exports.hexagonCentaur];
+                                        exports.pentagonSword.UPGRADES_TIER_13 = [exports.hexagonSword];
+                                        exports.pentagonInvader.UPGRADES_TIER_13 = [exports.hexagonInvader];
+                                        exports.pentagonSuffer.UPGRADES_TIER_13 = [exports.hexagonSuffer];
 
 // To use the following branches, remove the /* and */ surrounding them.
 
