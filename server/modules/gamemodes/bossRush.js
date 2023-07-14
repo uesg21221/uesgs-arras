@@ -5,19 +5,19 @@ class BossRush {
         this.bigBossChoices = [Class.paladin, Class.freyja, Class.zaphkiel, Class.nyx, Class.theia, Class.alviss, Class.tyr];
         this.bigFodderChoices = [Class.sentryGun, Class.sentrySwarm, Class.sentryTrap, Class.shinySentryGun];
         this.smallFodderChoices = [Class.crasher];
-        this.waves = this.generateWaves()
+        this.waves = null
         this.waveId = -1
         this.gameActive = true
         this.timer = 0
-        this.remainingEnemies = 0;
+        this.remainingEnemies = 0
     }
 
     generateWaves() {
         let bosses = this.bossChoices.sort(() => 0.5 - Math.random())
         let waves = []
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 200; i++) {
             let wave = []
-            for (let j = 0; j < 2 + Math.random() * 4 + (i * .4); j++) {
+            for (let j = 0; j < Math.round(2 + i / 10); j++) {
                 wave.push(bosses[j])
             }
             bosses = bosses.sort(() => 0.5 - Math.random())
@@ -33,7 +33,7 @@ class BossRush {
         o.color = 10
         o.team = -1
         o.controllers.push(new ioTypes.nearestDifferentMaster(o))
-        o.controllers.push(new ioTypes.botMovement(o))
+        o.controllers.push(new ioTypes.wanderAroundMap(o, { immitatePlayerMovement: false, lookAtGoal: true }))
         sockets.broadcast(o.name + ' has arrived and joined your team!')
     }
 
@@ -125,6 +125,7 @@ class BossRush {
 
     //runs once when the server starts
     init() {
+        this.waves = this.generateWaves();
         for (let loc of room.bas1) this.spawnDominator(loc, -1);
         console.log('Boss rush initialized.');
     }

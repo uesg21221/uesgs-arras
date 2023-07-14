@@ -13,14 +13,17 @@ function countPlayers() {
     if (team) winner(-team[0] - 1);
 };
 
-let won = false;
-
+let won;
 function winner(teamId) {
     if (won) return;
     won = true;
     let team = ["BLUE", "GREEN", "RED", "PURPLE"][teamId];
     sockets.broadcast(team + " has won the game!");
     setTimeout(closeArena, 3e3);
+};
+
+function reset() {
+    won = false;
 };
 
 function init(g) {
@@ -64,4 +67,4 @@ function tagDeathEvent(instance) {
     setTimeout(countPlayers, 1000);
 }
 
-module.exports = { init, countPlayers, tagDeathEvent };
+module.exports = { init, countPlayers, tagDeathEvent, tagReset: reset };

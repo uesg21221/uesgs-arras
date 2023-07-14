@@ -49,12 +49,6 @@ let Region = (size) => {
 
 const global = {
     // Keys and other mathematical constants
-    KEY_ESC: 27,
-    KEY_ENTER: 13,
-    KEY_CHAT: 13,
-    KEY_FIREFOOD: 119,
-    KEY_SPLIT: 32,
-
     KEY_LEFT: 65,
     KEY_UP: 87,
     KEY_RIGHT: 68,
@@ -79,6 +73,13 @@ const global = {
     KEY_MAX_STAT: 77,
     KEY_SUICIDE: 79,
     KEY_CRASH: 190,
+    KEY_ENTER: 13,
+    KEY_G: 71,
+    KEY_SPECTATE: 188,
+    KEY_ESC: 27,
+    KEY_CHAT: 13,
+    KEY_FIREFOOD: 119,
+    KEY_SPLIT: 32,
 
     KEY_UPGRADE_ATK: 49,
     KEY_UPGRADE_HTL: 50,

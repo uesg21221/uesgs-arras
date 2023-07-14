@@ -2,7 +2,7 @@ let config = {
     types: [Class.destroyerDominator, Class.gunnerDominator, Class.trapperDominator],
     neededToWin: 4
 };
-let gameWon = false;
+let gameWon;
 let spawn = (loc, team, color, type = false) => {
     type = type ? type : ran.choose(config.types);
     let o = new Entity(loc);
@@ -30,7 +30,7 @@ let spawn = (loc, team, color, type = false) => {
             for (let player of sockets.players) {
                 if (player.body) {
                     if (player.body.team === newTeam) {
-                        player.body.sendMessage("Press H to take control of the dominator.");
+                        player.body.sendMessage("Press G to take control of the dominator.");
                     }
                 }
             }
@@ -52,6 +52,10 @@ function winner(teamId) {
     }, 1500);
 };
 
+function reset() {
+    gameWon = false;
+};
+
 function tally() {
     if (gameWon == true) return;
     let dominators = {};
@@ -64,6 +68,6 @@ function tally() {
     if (dominators["-3"] === config.neededToWin) winner(2);
     if (dominators["-4"] === config.neededToWin) winner(3);
 };
-const dominatorLoop = { spawn, tally };
+const dominatorLoop = { spawn, tally, reset };
 
 module.exports = { dominatorLoop };

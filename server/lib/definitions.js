@@ -37,12 +37,6 @@ const dreadStat = function (arr) {
     });
     return data;
 };
-const setBuild = (build) => {
-    let skills = build.split(build.includes("/") ? "/" : "").map((r) => +r);
-    if (skills.length !== 10)
-        throw new RangeError("Build must be made up of 10 numbers");
-    return [6, 4, 3, 5, 2, 9, 0, 1, 8, 7].map((r) => skills[r]);
-};
 let config = require("../config.js");
 let skcnv = {
     atk: 6,
@@ -872,12 +866,6 @@ function makeDeco(shapes, color = 16) {
     return exports["deco" + shapes + "_" + color];
 }
 
-function makeLabyrinthShape(type) {
-    let output = dereference(type);
-    let downscale = Math.max(output.SHAPE, 3);
-    return output;
-}
-
 // ENTITY BASES
 exports.genericEntity = {
     NAME: "",
@@ -1534,6 +1522,22 @@ exports.icosahedron = {
         "M -0.39 -0.245 L 0.392 -0.245 L 0 0.47 L -0.39 -0.245 Z M -0.465 -0.2 L -0.893 0.475 L -0.073 0.51 L -0.465 -0.2 Z M 0.4636 -0.2 L 0.073 0.509 L 0.891 0.4736 L 0.4636 -0.2 Z M 0 -1 L -0.39 -0.33 L 0.389 -0.328 L 0 -1 Z M -0.142 -0.925 L -0.875 -0.506 L -0.48 -0.339 L -0.142 -0.925 Z M -0.925 0.366 L -0.925 -0.431 L -0.525 -0.266 L -0.925 0.366 Z M -0.042 0.595 L -0.808 0.562 L -0.042 1 L -0.042 0.595 Z M 0.042 0.595 L 0.808 0.562 L 0.042 1 L 0.042 0.595 Z M 0.142 -0.925 L 0.858 -0.516 L 0.48 -0.339 L 0.142 -0.925 Z M 0.925 0.366 L 0.925 -0.452 L 0.523 -0.269 L 0.925 0.366 Z",
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
+};
+exports.ball = {
+    PARENT: [exports.icosahedron],
+    LABEL: "Ball",
+    VARIES_IN_SIZE: false,
+    LEVEL: 0,
+    BODY: {
+        HEALTH: 1000,
+        SHIELD: 1000,
+        REGEN: 1000,
+    },
+    FOOD: {
+        LEVEL: 5,
+    },
+    SIZE: 40,
+    DRAW_HEALTH: false,
 };
 
 // OBSTACLES
@@ -17851,7 +17855,9 @@ exports.miscEntities.UPGRADES_TIER_0 = [exports.dominators, exports.baseProtecto
 exports.dominators.UPGRADES_TIER_0 = [exports.dominator, exports.destroyerDominator, exports.gunnerDominator, exports.trapperDominator];
 
 // TANK UPGRADE PATHS
-exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.healer, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper];
+c.gameModeName.includes("Siege")
+    ? exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.healer, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper]
+    : exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper];
         exports.basic.UPGRADES_TIER_2 = [exports.smasher];
                 exports.basic.UPGRADES_TIER_3 = [exports.single, exports.dreadnought, exports.dreadnoughtHealer];
                 exports.smasher.UPGRADES_TIER_3 = [exports.megaSmasher, exports.spike, exports.autoSmasher, exports.landmine];

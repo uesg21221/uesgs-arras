@@ -65,7 +65,6 @@ function closeArena() {
             loopThrough(entities, function (instance) {
                 if (
                     (instance.isPlayer && instance.label != "Spectator") ||
-                    (instance.isDominator && instance.team !== -100) ||
                     instance.isBot ||
                     instance.isMothership
                 ) alive = true;

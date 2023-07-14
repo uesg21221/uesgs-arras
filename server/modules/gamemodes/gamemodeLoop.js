@@ -1,8 +1,12 @@
 const bossRush = new BossRush()
+const ballLoop = new BallLoop()
 
 const modesInit = () => {
     if (c.MOTHERSHIP_LOOP) mothershipLoop.spawn();
-    if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
+    if (c.SOCCER) ballLoop.spawn();
+    if (c.DOMINATOR_LOOP) dominatorLoop.reset();
+    if (c.TAG) tagReset();
+    bossRush.gameActive = true;
 }
 const basepro = () => {
     for (let team = 1; team < c.TEAMS + 1; team++) {
@@ -41,6 +45,7 @@ if (c.GROWTH && typeof c.GROWTH == "number") {
     };
 }
 if (c.DOMINATOR_LOOP) for (let loc of room.dom0) dominatorLoop.spawn(loc, -100, 3);
+if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
 modesInit();
 
 let logger = new LagLogger();
@@ -48,6 +53,7 @@ const gamemodeLoop = function() {
     logger.set();
     if (c.MOTHERSHIP_LOOP) mothershipLoop.loop();
     if (c.SPECIAL_BOSS_SPAWNS) bossRush.loop();
+    if (c.SOCCER) ballLoop.loop();
     logger.mark();
     if (logger.totalTime > 100) {
         console.log("Gamemode loop is taking a long time!");

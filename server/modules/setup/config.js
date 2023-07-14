@@ -6,6 +6,27 @@ const gamemodes = {
     "FFA": {
         BOTS: 9
     }, // "defaults" is already FFA.
+    "Soccer": {
+        BOTS: 12,
+        SOCCER: true,
+        MODE: "tdm",
+        TEAMS: 2,
+        secondaryGameMode: "soccer",
+        ROOM_SETUP: [
+            ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+            ["wall", "wall", "norm", "norm", "norm", "rock", "rock", "norm", "norm", "norm", "wall", "wall"],
+            ["wall", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "wall"],
+            ["wall", "norm", "norm", "norm", "norm", "roid", "rock", "norm", "norm", "norm", "norm", "wall"],
+            ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
+            ["bas1", "norm", "norm", "rock", "norm", "norm", "norm", "norm", "roid", "norm", "norm", "bas2"],
+            ["bas1", "norm", "norm", "roid", "norm", "norm", "norm", "norm", "rock", "norm", "norm", "bas2"],
+            ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
+            ["wall", "norm", "norm", "norm", "norm", "rock", "roid", "norm", "norm", "norm", "norm", "wall"],
+            ["wall", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "wall"],
+            ["wall", "wall", "norm", "norm", "norm", "rock", "rock", "norm", "norm", "norm", "wall", "wall"],
+            ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"]
+        ]
+    },
     "Growth FFA": {
         GROWTH: 90,
         secondaryGameMode: "growth"

@@ -76,6 +76,12 @@ class Canvas {
             case global.KEY_CRASH:
                 this.parent.socket.talk('.');
                 break;
+            case global.KEY_SPECTATE:
+                this.parent.socket.talk(',');
+                break;
+            case global.KEY_G:
+                this.parent.socket.talk('G');
+                break;
         }
         if (!event.repeat) {
             switch (event.keyCode) {

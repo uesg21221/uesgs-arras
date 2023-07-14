@@ -6,6 +6,7 @@ let mothershipLoop = (function() {
     let choices = [Class.mothership];
 
     function spawn() {
+        teamWon = false;
         let locs = [{
             x: c.WIDTH * 0.1,
             y: c.HEIGHT * 0.1

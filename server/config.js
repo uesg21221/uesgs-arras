@@ -63,6 +63,8 @@ module.exports = {
     BOTS_USE_DEFAULT: true,
     BOTS: 10,
     GLASS_HEALTH_FACTOR: 2,
+    HALF: false,
+    SOCCER: false,
     SHINY: false,
     SPECIAL_BOSS_SPAWNS: false,
     MOTHERSHIP_LOOP: false,

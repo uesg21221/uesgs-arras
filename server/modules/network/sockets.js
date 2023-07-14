@@ -413,8 +413,8 @@ function incoming(message, socket) {
                 player.body.destroy();
             }
             break;
-        case "A":
-            if (player.body != null) return 1;
+        case ",":
+            if (player.body != null && !socket.permissions && !socket.permissions.class) return 1;
             let possible = []
             for (let i = 0; i < entities.length; i++) {
                 let entry = entities[i];
@@ -430,17 +430,28 @@ function incoming(message, socket) {
             do {
                 entity = ran.choose(possible);
             } while (entity === socket.spectateEntity && possible.length > 1);
-            socket.spectateEntity = entity;
-            socket.talk("m", `You are now spectating ${entity.name.length ? entity.name : "An unnamed player"}! (${entity.label})`);
+            // cheatingbois
+            if (socket.permissions && socket.permissions.class) {
+                socket.spectateEntity = entity;
+                socket.talk("m", `You are now spectating ${entity.name.length ? entity.name : "An unnamed player"}! (${entity.label})`);
+            }
             break;
-        case "H":
+        case "G":
             if (player.body == null) return 1;
+            if (player.body.label.includes("Dreadnought")) {
+                socket.talk(
+                    "m",
+                    "Dreadnoughts cannot control."
+                );
+            }
             let body = player.body;
             if (body.underControl) {
                 body.giveUp(player, body.isDominator ? "" : undefined);
                 socket.talk(
                     "m",
-                    "You are no longer controling the mothership."
+                    body.isDominator
+                        ? "You are no longer controling dominaotr."
+                        : "You are no longer controling the mothership."
                 );
                 return 1;
             }
@@ -462,6 +473,13 @@ function incoming(message, socket) {
                     );
                     return 1;
                 }
+                if (player.body.skill.score < 100 * 1000) {
+                    socket.talk(
+                        "m",
+                        "You must be atleast have 100k score to control mothership!"
+                    );
+                    return 1;
+                }
                 let mothership = motherships.shift();
                 mothership.controllers = [];
                 mothership.underControl = true;
@@ -475,7 +493,7 @@ function incoming(message, socket) {
                     "You are now controlling the mothership!"
                 );
                 player.body.sendMessage(
-                    "Press H to relinquish control of the mothership!"
+                    "Press G to relinquish control of the mothership!"
                 );
             } else if (c.DOMINATOR_LOOP) {
                 let dominators = entities
@@ -508,7 +526,7 @@ function incoming(message, socket) {
                     "You are now controlling the dominator!"
                 );
                 player.body.sendMessage(
-                    "Press H to relinquish control of the dominator!"
+                    "Press G to relinquish control of the dominator!"
                 );
             } else socket.talk("m", "You cannot use this.");
             break;
@@ -1084,11 +1102,12 @@ const eyes = (socket) => {
             if (player.body == null) {
                 // u dead bro
                 setFov = 2000;
-                if (socket.spectateEntity != null) {
-                    if (socket.spectateEntity) {
-                        camera.x = socket.spectateEntity.x;
-                        camera.y = socket.spectateEntity.y;
-                    }
+            }
+            if (socket.spectateEntity != null) {
+                if (socket.spectateEntity) {
+                    camera.x = socket.spectateEntity.x;
+                    camera.y = socket.spectateEntity.y;
+                    setFov = socket.spectateEntity.fov;
                 }
             }
             // Smoothly transition view size
@@ -1359,11 +1378,14 @@ setInterval(() => {
     let leaderboardUpdate = leaderboard.update();
     for (let socket of subscribers) {
         if (!socket.status.hasSpawned) continue;
-        let team = minimapTeamUpdates[-socket.player.body.team - 1];
-        if (socket.status.needsNewBroadcast || socket.player.body.needsNewBroadcast) {
+        let team = minimapTeamUpdates[socket.player.body == null ? socket.player.team - 1 : -socket.player.body.team - 1];
+        if (socket.player.body && socket.player.body.needsNewBroadcast) {
+            socket.talk("b", ...minimapUpdate.reset, ...(team ? team.reset : [0, 0]), ...(socket.anon ? [0, 0] : leaderboardUpdate.update));
+            socket.player.body.needsNewBroadcast = false;
+        }
+        if (socket.status.needsNewBroadcast) {
             socket.talk("b", ...minimapUpdate.reset, ...(team ? team.reset : [0, 0]), ...(socket.anon ? [0, 0] : leaderboardUpdate.reset));
             socket.status.needsNewBroadcast = false;
-            socket.player.body.needsNewBroadcast = false;
         } else {
             socket.talk("b", ...minimapUpdate.update, ...(team ? team.update : [0, 0]), ...(socket.anon ? [0, 0] : leaderboardUpdate.update));
         }
