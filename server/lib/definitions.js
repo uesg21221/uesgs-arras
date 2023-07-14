@@ -295,7 +295,7 @@ const base = {
 };
 let dreadTeam = c.DREADNOUGHT_TEAM;
 if (c.TEAMS == 1) dreadTeam = null;
-if (c.DOMINATOR_LOOP || c.MOTHERSHIP_LOOP) dreadTeam = -100;
+if (c.DOMINATOR_LOOP || c.MOTHERSHIP_LOOP) dreadTeam = c.gameModeName.includes("Assault") ? c.TEAMS : -100;
 
 // FUNCTIONS
 function dereference(type) {

@@ -8,7 +8,8 @@ function close() {
             if (
                 instance.isPlayer ||
                 instance.team == -102 ||
-                instance.team == -100
+                instance.team == -100 ||
+                (instance.team == c.TEAMS && c.gameModeName.includes("Assault"))
             ) instance.destroy();
         });
         global.arenaClosed = false;
@@ -54,7 +55,8 @@ function closeArena() {
         let ticks = 0;
         loopThrough(entities, function (instance) {
             if (
-                instance.team == -100 &&
+                (instance.team == -100 ||
+                (instance.team == c.TEAMS && c.gameModeName.includes("Assault"))) &&
                 instance.label.includes("Dreadnought")
             ) instance.destroy();
         });

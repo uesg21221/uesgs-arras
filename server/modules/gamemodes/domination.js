@@ -3,6 +3,7 @@ let config = {
     neededToWin: 4
 };
 let gameWon;
+let timer;
 let spawn = (loc, team, color, type = false) => {
     type = type ? type : ran.choose(config.types);
     let o = new Entity(loc);
@@ -14,8 +15,9 @@ let spawn = (loc, team, color, type = false) => {
     o.SIZE = c.WIDTH / c.X_GRID / 10;
     o.isDominator = true;
     o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: true })];
+    if (team != -100) room.setType("dom" + -team, loc);
     o.on('dead', () => {
-        if (o.team === -100) {
+        if (o.team === c.gameModeName.includes("Assault") ? -c.TEAMS : -100) {
             let killers = [];
             for (let instance of o.collisionArray) {
                 if (instance.team > -(c.TEAMS + 1) && instance.team < 0 && o.team !== instance.team) {
@@ -23,10 +25,10 @@ let spawn = (loc, team, color, type = false) => {
                 }
             }
             let newTeam;
-            killers.length < 1 ? newTeam = -100 : newTeam = ran.choose(killers).team;
+            killers.length < 1 ? newTeam = c.gameModeName.includes("Assault") ? -c.TEAMS : -100 : newTeam = ran.choose(killers).team;
             spawn(loc, newTeam, 3, type);
             sockets.broadcast("A dominator is now controlled by " + ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN"][-newTeam - 1] + "!");
-            room.setType("dom" + ((newTeam < 0 && newTeam > c.TEAMS + 1) ? -newTeam : 0), loc);
+            room.setType("dom" + (newTeam == -100 ? 0 : -newTeam), loc);
             for (let player of sockets.players) {
                 if (player.body) {
                     if (player.body.team === newTeam) {
@@ -35,15 +37,17 @@ let spawn = (loc, team, color, type = false) => {
                 }
             }
         } else {
-            spawn(loc, -100, 3, type);
-            room.setType("dom0", loc);
+            spawn(loc, c.gameModeName.includes("Assault") ? -c.TEAMS : -100, 3, type);
+            room.setType("dom" + c.gameModeName.includes("Assault") ? c.TEAMS : 0, loc);
             sockets.broadcast("A dominator is being contested!");
         }
-        tally();
     });
 };
 
 function winner(teamId) {
+    let ret = false;
+    if (c.gameModeName.includes("Assault") && teamId + 1 == c.TEAMS) timer < 0 ? null : ret = true;
+    if (ret) return;
     gameWon = true;
     setTimeout(function() {
         let team = ["BLUE", "GREEN", "RED", "PURPLE"][teamId] || "An unknown team";
@@ -54,14 +58,16 @@ function winner(teamId) {
 
 function reset() {
     gameWon = false;
+    timer = 10 * room.cycleSpeed;
 };
 
 function tally() {
     if (gameWon == true) return;
+    timer -= 1;
     let dominators = {};
     for (let i = 0; i < c.TEAMS; i++) dominators[-(i + 1)] = 0;
     loopThrough(entities, function(o) {
-        if (o.isDominator && o.team !== -101 && dominators[o.team] != null) dominators[o.team]++;
+        if (o.isDominator && dominators[o.team] != null) dominators[o.team]++;
     });
     if (dominators["-1"] === config.neededToWin) winner(0);
     if (dominators["-2"] === config.neededToWin) winner(1);

@@ -6,6 +6,33 @@ const gamemodes = {
     "FFA": {
         BOTS: 9
     }, // "defaults" is already FFA.
+    "Assault": {
+        BOTS: 10,
+        MODE: "tdm",
+        TEAMS: 2,
+        secondaryGameMode: "assault",
+        X_GRID: 15,
+        Y_GRID: 15,
+        MAZE: 30,
+        DOMINATOR_LOOP: true,
+        ROOM_SETUP: [
+            ["bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1", "bas1"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "dom0", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "dom0", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+        ]
+    },
     "Soccer": {
         BOTS: 12,
         SOCCER: true,

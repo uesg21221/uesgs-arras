@@ -3,6 +3,7 @@ for (let i = 1; i < c.TEAMS + 1; i++) {
     locsToAvoid.push("bas" + i);
     locsToAvoid.push("bap" + i);
 }
+if (c.DOMINATION_LOOP) locsToAvoid.push("dom0");
 let activeLocsThatWeCantPlaceIn = 0;
 for (let loc of locsToAvoid) {
     if (room[loc].length) {

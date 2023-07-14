@@ -22,7 +22,7 @@ function winner(teamId) {
     setTimeout(closeArena, 3e3);
 };
 
-function reset() {
+function tagReset() {
     won = false;
 };
 
@@ -67,4 +67,4 @@ function tagDeathEvent(instance) {
     setTimeout(countPlayers, 1000);
 }
 
-module.exports = { init, countPlayers, tagDeathEvent, tagReset: reset };
+module.exports = { init, countPlayers, tagDeathEvent, tagReset };

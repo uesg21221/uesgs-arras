@@ -87,9 +87,9 @@ const requires = [
     "./gamemodes/mothership.js", // The mothership mode
     "./gamemodes/domination.js", // The Domination mode
     "./gamemodes/soccer.js", // The Soccer mode
-    "./gamemodes/gamemodeLoop.js", // The gamemode loop.
     "./gamemodes/groups.js", // Duos/Trios/Squads
     "./gamemodes/tag.js", // Tag
+    "./gamemodes/gamemodeLoop.js", // The gamemode loop.
     "./gamemodes/closeArena.js", // Arena Closing mechanics
     "./setup/mockups.js", // This file loads the mockups.
     "./debug/antibot.js" // Antibot :DDD

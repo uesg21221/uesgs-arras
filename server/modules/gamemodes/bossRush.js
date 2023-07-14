@@ -12,6 +12,10 @@ class BossRush {
         this.remainingEnemies = 0
     }
 
+    reset() {
+        this.gameActive = true;
+    }
+
     generateWaves() {
         let bosses = this.bossChoices.sort(() => 0.5 - Math.random())
         let waves = []

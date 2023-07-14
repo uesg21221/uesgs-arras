@@ -6,7 +6,7 @@ const modesInit = () => {
     if (c.SOCCER) ballLoop.spawn();
     if (c.DOMINATOR_LOOP) dominatorLoop.reset();
     if (c.TAG) tagReset();
-    bossRush.gameActive = true;
+    if (c.SPECIAL_BOSS_SPAWNS) bossRush.reset();
 }
 const basepro = () => {
     for (let team = 1; team < c.TEAMS + 1; team++) {
@@ -44,7 +44,9 @@ if (c.GROWTH && typeof c.GROWTH == "number") {
         return 0;
     };
 }
-if (c.DOMINATOR_LOOP) for (let loc of room.dom0) dominatorLoop.spawn(loc, -100, 3);
+if (c.DOMINATOR_LOOP)
+    for (let loc of room.dom0)
+        dominatorLoop.spawn(loc, c.gameModeName.includes("Assault") ? -c.TEAMS : -100, 3);
 if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
 modesInit();
 
@@ -52,6 +54,7 @@ let logger = new LagLogger();
 const gamemodeLoop = function() {
     logger.set();
     if (c.MOTHERSHIP_LOOP) mothershipLoop.loop();
+    if (c.DOMINATOR_LOOP) dominatorLoop.tally();
     if (c.SPECIAL_BOSS_SPAWNS) bossRush.loop();
     if (c.SOCCER) ballLoop.loop();
     logger.mark();
