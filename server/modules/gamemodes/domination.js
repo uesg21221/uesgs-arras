@@ -58,7 +58,7 @@ function winner(teamId) {
 
 function reset() {
     gameWon = false;
-    timer = 10 * room.cycleSpeed;
+    timer = 20 * room.cycleSpeed;
 };
 
 function tally() {
