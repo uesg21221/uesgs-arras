@@ -8,7 +8,7 @@ const gamemodes = {
     }, // "defaults" is already FFA.
     "TheLine": {
         MODE: "tdm",
-        TEAMS: 6,
+        TEAMS: 1 + (Math.random() * 3 | 0),
         secondaryGameMode: "TheLine",
         X_GRID: 20,
         Y_GRID: 20,
