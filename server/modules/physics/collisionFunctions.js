@@ -69,7 +69,7 @@ function reflectcollide(wall, bounce) {
     return 0;
 }
 
-function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false, healer = false) {
+function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false, healer = true) {
     // Prepare to check
     let tock = Math.min(my.stepRemaining, n.stepRemaining),
         combinedRadius = n.size + my.size,
@@ -234,13 +234,13 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false, h
                     // Now apply it
                     my.damageRecieved += damage._n * deathFactor._n > 0
                         ? damage._n * deathFactor._n
-                        : (healer
+                        : (n.healer && healer
                             ? damage._n * deathFactor._n
                             : 0);
                     n.damageRecieved += damage._me * deathFactor._me > 0
-                        ? damage._n * deathFactor._n
-                        : (healer
-                            ? damage._n * deathFactor._n
+                        ? damage._me * deathFactor._me
+                        : (my.healer && healer
+                            ? damage._me * deathFactor._me
                             : 0);
                 }
             }

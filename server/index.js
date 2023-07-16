@@ -135,12 +135,12 @@ function collide(collision) {
                 break;
         }
     } else {
-        if (instance.team === other.team &&
+        advancedcollide(instance, other, true, true, false,
+            instance.team === other.team &&
             instance.master.id != other.id &&
             other.master.id != instance.id &&
             (instance.type == "tank" || instance.type == "miniboss" || other.type == "tank" || other.type == "miniboss")
-        ) { advancedcollide(instance, other, true, true, false, true); }
-        else { advancedcollide(instance, other, false, true); }
+                ? true : false);
     }
 }
 
