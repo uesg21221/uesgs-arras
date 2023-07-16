@@ -48,7 +48,7 @@ class BossRush {
         let spot = null, m = 0;
         do { spot = room.randomType('boss'); } while (dirtyCheck(spot, 500) && ++m < 30);
         let o = new Entity(spot)
-        o.define(c.gameModeName.includes("TheLine") ? Class.Celestialeternal : ran.choose(this.bigBossChoices))
+        o.define(c.secondaryGameMode == "TheLine" ? Class.Celestialeternal : ran.choose(this.bigBossChoices))
         o.define({ DANGER: 25 + o.SIZE / 5 });
         o.team = -100
         if (c.secondaryGameMode != "TheLine") { o.controllers.push(new ioTypes.bossRushAI(o)) }
@@ -132,7 +132,7 @@ class BossRush {
         for (let i = 0; i < this.waveId / 2; i++) this.spawnEnemyWrapper(room.randomType('boss'), ran.choose(this.smallFodderChoices));
 
         //spawn a friendly boss every 20 waves
-        if (waveId % 20 == 19) setTimeout(() => this.spawnFriendlyBoss(), 5000);
+        if (waveId % 20 == 19 && c.secondaryGameMode != "TheLine") setTimeout(() => this.spawnFriendlyBoss(), 5000);
         //spawn a celestial every 30 waves
         if (waveId % 30 == 29) () => this.spawnCelestial();
     }
