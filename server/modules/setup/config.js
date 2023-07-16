@@ -1,16 +1,47 @@
 const defaults = require("../../config.js");
 
-const gamemode = "Domination"; // keep it as ffa
+const gamemode = "TheLine"; // keep it as ffa
 
 const gamemodes = {
     "FFA": {
         BOTS: 9
     }, // "defaults" is already FFA.
+    "TheLine": {
+        MODE: "tdm",
+        TEAMS: 6,
+        secondaryGameMode: "TheLine",
+        X_GRID: 20,
+        Y_GRID: 20,
+        GROWTH: 90,
+        SHINY: true,
+        SPECIAL_BOSS_SPAWNS: true,
+        ROOM_SETUP: [
+            ["rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock"],
+            ["rock", "port", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "port", "rock"],
+            ["rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock"],
+            ["wall", "wall", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "wall", "wall"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["boss", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "boss"],
+            ["wall", "wall", "wall", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "wall", "wall", "wall"],
+            ["rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock"],
+            ["rock", "port", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "port", "rock"],
+            ["rock", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "rock"],
+        ]
+    },
     "Assault": {
-        BOTS: 10,
         MODE: "tdm",
         TEAMS: 2,
-        secondaryGameMode: "assault",
+        secondaryGameMode: "Assault",
         X_GRID: 15,
         Y_GRID: 15,
         MAZE: 30,
@@ -34,11 +65,10 @@ const gamemodes = {
         ]
     },
     "Soccer": {
-        BOTS: 12,
         SOCCER: true,
         MODE: "tdm",
         TEAMS: 2,
-        secondaryGameMode: "soccer",
+        secondaryGameMode: "Soccer",
         ROOM_SETUP: [
             ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
             ["wall", "wall", "norm", "norm", "norm", "rock", "rock", "norm", "norm", "norm", "wall", "wall"],
@@ -56,12 +86,12 @@ const gamemodes = {
     },
     "Growth FFA": {
         GROWTH: 90,
-        secondaryGameMode: "growth"
+        secondaryGameMode: "Growth"
     },
     "Growth TDM": {
         MODE: "tdm",
         GROWTH: 90,
-        secondaryGameMode: "growth",
+        secondaryGameMode: "Growth",
         TEAMS: 2 + (Math.random() * 3 | 0)
     },
     "Open TDM": {
@@ -366,7 +396,6 @@ const gamemodes = {
         secondaryGameMode: "Tag"
     },
     "Portal Tag": {
-        BOTS: 10,
         X_GRID: 15,
         Y_GRID: 15,
         ROOM_SETUP: [

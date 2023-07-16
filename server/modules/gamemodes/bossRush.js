@@ -17,14 +17,16 @@ class BossRush {
     }
 
     generateWaves() {
-        let bosses = this.bossChoices.sort(() => 0.5 - Math.random())
+        let bosses = c.secondaryGameMode != "TheLine"
+            ? this.bossChoices.sort(() => 0.9 - Math.random())
+            : this.bigBossChoices.sort(() => 0.7 - Math.random());
         let waves = []
         for (let i = 0; i < 200; i++) {
             let wave = []
-            for (let j = 0; j < Math.round(2 + i / 10); j++) {
+            for (let j = 0; j < i + 1; j++) {
                 wave.push(bosses[j])
             }
-            bosses = bosses.sort(() => 0.5 - Math.random())
+            bosses = bosses.sort(() => c.secondaryGameMode != "TheLine" ? 0.9 : 0.7 - Math.random())
             waves.push(wave)
         }
         return waves
@@ -46,10 +48,14 @@ class BossRush {
         let spot = null, m = 0;
         do { spot = room.randomType('boss'); } while (dirtyCheck(spot, 500) && ++m < 30);
         let o = new Entity(spot)
-        o.define(ran.choose(this.bigBossChoices))
+        o.define(c.gameModeName.includes("TheLine") ? Class.Celestialeternal : ran.choose(this.bigBossChoices))
         o.define({ DANGER: 25 + o.SIZE / 5 });
         o.team = -100
-        o.controllers.push(new ioTypes.bossRushAI(o));
+        if (c.secondaryGameMode != "TheLine") { o.controllers.push(new ioTypes.bossRushAI(o)) }
+        else {
+            o.controllers.push(new ioTypes.nearestDifferentMaster(o));
+            o.controllers.push(new ioTypes.wanderAroundMap(o, { immitatePlayerMovement: false, lookAtGoal: true }));    
+        }
     }
 
     spawnDominator(loc, team, type = false) {
@@ -91,7 +97,11 @@ class BossRush {
         n.team = -100;
         n.FOV = 10;
         n.refreshBodyAttributes();
-        n.controllers.push(new ioTypes.bossRushAI(n));
+        if (c.secondaryGameMode != "TheLine") { n.controllers.push(new ioTypes.bossRushAI(n)) }
+        else {
+            n.controllers.push(new ioTypes.nearestDifferentMaster(n));
+            n.controllers.push(new ioTypes.wanderAroundMap(n, { immitatePlayerMovement: false, lookAtGoal: true }));    
+        }
         n.on('dead', () => {
             //this enemy has been killed, decrease the remainingEnemies counter
             //if afterwards the counter happens to be 0, announce that the wave has been defeated
@@ -130,7 +140,7 @@ class BossRush {
     //runs once when the server starts
     init() {
         this.waves = this.generateWaves();
-        for (let loc of room.bas1) this.spawnDominator(loc, -1);
+        if (c.MODE == "tdm") for (let loc of room["bas" + c.TEAMS]) this.spawnDominator(loc, -1);
         console.log('Boss rush initialized.');
     }
 

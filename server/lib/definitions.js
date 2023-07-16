@@ -73,18 +73,13 @@ const g = {
     op: [0.5, 1.3, 1, 1, 4, 4, 4, 3, 2, 1, 5, 2, 1],
 
     // Dreadnoughts
-    egg: [1, 1, 0.6, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1.5],
-    triangle: [1, 1, 0.6, 1, 1.1, 1.1, 1.1, 1, 1, 1, 2, 1, 1.5],
-    square: [1, 1, 0.6, 1, 1.2, 1.2, 1.2, 1, 1, 1, 2, 1, 1.5],
-    pentagon: [1, 1, 0.6, 1, 1.3, 1.3, 1.3, 1, 1, 1, 2, 1, 1.5],
-    hexagon: [1, 1, 0.6, 1, 1.4, 1.4, 1.4, 1, 1, 1, 2, 1, 1.5],
     atmosphere: [0.001, 0.001, 0.001, 6, 1, 1, 1, 0.001, 0.001, 1, 1, 0.001, 1],
 
     // Bases
     basic: [18, 1.4, 0.1, 1, 1, 0.75, 1, 4.5, 1, 1, 1, 15, 1],
     drone: [50, 0.25, 0.1, 0.6, 1, 1, 1, 2, 1, 1, 1, 0.1, 1],
     trap: [36, 1, 0.25, 0.6, 1, 0.75, 1, 5, 1, 1, 1, 15, 3],
-    swarm: [18, 0.25, 0.05, 0.4, 1, 0.75, 1, 4, 1, 1, 1, 5, 1],
+    swarm: [30, 0.25, 0.05, 0.4, 1, 0.75, 1, 4, 1, 1, 1, 5, 1],
     factory: [60, 1, 0.1, 0.7, 1, 0.75, 1, 3, 1, 1, 1, 0.1, 1],
     productionist: [75, 0.25, 0.05, 0.7, 1, 0.75, 1, 4, 1, 1.5, 1, 5, 1],
 
@@ -193,6 +188,7 @@ const g = {
     
     // Mixed
     celeslower: [1, 1, 1, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    celereload: [1.2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     
     // Recoil Modifiers
     tonsmorrecoil: [1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -202,7 +198,6 @@ const g = {
     halfrecoil: [1, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     
     // Reload Modifiers
-    badreload: [3.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     halfreload: [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     lessreload: [1.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     one_third_reload: [1.333, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -224,31 +219,26 @@ const g = {
     morerange: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1.5, 1, 1, 1],
 };
 const eggDreadnoughtBullet = dreadStat([
-    g.egg,
     g.morerecoil,
     g.one_third_reload,
     g.slow
 ]);
 const triangleDreadnoughtBullet = dreadStat([
-    g.triangle,
     g.morerecoil,
     g.one_third_reload,
     g.slow
 ]);
 const squareDreadnoughtBullet = dreadStat([
-    g.square,
     g.morerecoil,
     g.one_third_reload,
     g.slow
 ]);
 const pentagonDreadnoughtBullet = dreadStat([
-    g.pentagon,
     g.morerecoil,
     g.one_third_reload,
     g.slow
 ]);
 const hexagonDreadnoughtBullet = dreadStat([
-    g.hexagon,
     g.morerecoil,
     g.one_third_reload,
     g.slow
@@ -2073,7 +2063,7 @@ exports.hypermissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: [
                     exports.bullet,
@@ -2091,7 +2081,7 @@ exports.hypermissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: [
                     exports.bullet,
@@ -2109,7 +2099,7 @@ exports.hypermissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: [
                     exports.bullet,
@@ -2126,7 +2116,7 @@ exports.hypermissile = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: [
                     exports.bullet,
@@ -2152,7 +2142,7 @@ exports.minimissile = {
                     g.lowpower,
                     g.muchmorerecoil,
                     g.morespeed,
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: [exports.bullet, { PERSISTS_AFTER_DEATH: true }],
                 STAT_CALCULATOR: gunCalcNames.thruster,
@@ -2317,7 +2307,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 108, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.celereload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2325,7 +2315,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 180, 0.2],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.celereload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2333,7 +2323,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 252, 0.4],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.celereload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2341,7 +2331,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 324, 0.6],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.celereload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2349,7 +2339,7 @@ exports.hive = {
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 36, 0.8],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees, g.celereload]),
                 TYPE: exports.bee,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -2748,9 +2738,8 @@ exports.skimmerTurret = {
                     g.basic,
                     g.pound,
                     g.arty,
-                    g.arty,
                     g.skim,
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: exports.hypermissile,
             },
@@ -2784,10 +2773,9 @@ exports.twisterTurret = {
                     g.basic,
                     g.pound,
                     g.arty,
-                    g.arty,
                     g.skim,
                     g.morespeed,
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: exports.hyperspinmissile,
                 STAT_CALCULATOR: gunCalcNames.sustained,
@@ -3029,7 +3017,7 @@ exports.auto4gun = {
                     g.gunner,
                     g.twin,
                     g.slow,
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: exports.bullet,
             },
@@ -3043,7 +3031,7 @@ exports.auto4gun = {
                     g.gunner,
                     g.twin,
                     g.slow,
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: exports.bullet,
             },
@@ -3069,7 +3057,6 @@ exports.bigauto4gun = {
                     g.auto,
                     g.gunner,
                     g.twin,
-                    g.twin,
                     g.power,
                     g.halfreload,
                 ]),
@@ -3084,7 +3071,6 @@ exports.bigauto4gun = {
                     g.auto,
                     g.gunner,
                     g.twin,
-                    g.twin,
                     g.power,
                     g.halfreload,
                 ]),
@@ -3098,7 +3084,6 @@ exports.bigauto4gun = {
                     g.basic,
                     g.auto,
                     g.gunner,
-                    g.twin,
                     g.twin,
                     g.power,
                     g.halfreload,
@@ -12770,7 +12755,6 @@ exports.trapTurret = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([
                     g.trap,
-                    g.lowpower,
                     g.fast,
                     g.halfreload,
                 ]),
@@ -13849,7 +13833,7 @@ exports.swarmerTurret = {
         {
             POSITION: [14, 14, -1.2, 5, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.hive, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.hive, g.celereload]),
                 TYPE: exports.hive,
             },
         },
@@ -13876,7 +13860,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 26, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -13887,7 +13871,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 77, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -13898,7 +13882,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 129, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -13909,7 +13893,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -13920,7 +13904,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 231, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -13931,7 +13915,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 282, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -13942,7 +13926,7 @@ exports.paladinLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 333, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.paladinDrone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14057,7 +14041,7 @@ exports.cruiserTurret = {
         {
             POSITION: [7, 7.5, 0.6, 7, 4, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.celereload]),
                 TYPE: exports.swarm,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -14065,7 +14049,7 @@ exports.cruiserTurret = {
         {
             POSITION: [7, 7.5, 0.6, 7, -4, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.celereload]),
                 TYPE: exports.swarm,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -14220,7 +14204,7 @@ exports.zaphkielLowerBody = {
             //*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY
             POSITION: [3.6, 6, 1.4, 8, 0, 26, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14231,7 +14215,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 77, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14240,7 +14224,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 129, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14249,7 +14233,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14258,7 +14242,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 231, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14267,7 +14251,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 282, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14276,7 +14260,7 @@ exports.zaphkielLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 333, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.celereload]),
                 TYPE: exports.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14394,7 +14378,7 @@ exports.rocketeerTurret = {
                     g.pound,
                     g.launcher,
                     g.rocketeer,
-                    g.badreload
+                    g.celereload
                 ]),
                 TYPE: exports.rocketeerMissile,
                 STAT_CALCULATOR: gunCalcNames.sustained,
@@ -14419,7 +14403,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 26, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.celereload]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14428,7 +14412,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 77, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.celereload]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14437,7 +14421,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 129, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.celereload]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14446,7 +14430,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.celereload]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14455,7 +14439,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 231, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.celereload]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14464,7 +14448,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 282, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.celereload]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14473,7 +14457,7 @@ exports.nyxLowerBody = {
         {
             POSITION: [3.6, 7, -1.4, 8, 0, 333, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.badreload, g.lowpower]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.celereload]),
                 TYPE: exports.minion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -14632,7 +14616,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 26, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.celereload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14642,7 +14626,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 77, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.celereload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14652,7 +14636,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 129, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.celereload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14662,7 +14646,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 180, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.celereload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14672,7 +14656,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 231, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.celereload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14682,7 +14666,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 282, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.celereload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14692,7 +14676,7 @@ exports.theiaLowerBody = {
         {
             POSITION: [3.6, 6, 1.4, 8, 0, 333, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower, g.celereload]),
                 TYPE: exports.summonerDrone,
                 AUTOFIRE: true,
                 WAIT_TO_CYCLE: true,
@@ -14814,7 +14798,7 @@ exports.launcherTurret = {
         {
             POSITION: [17, 13, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.celereload]),
                 TYPE: exports.minimissile,
                 STAT_CALCULATOR: gunCalcNames.sustained,
             },
@@ -14840,7 +14824,7 @@ exports.alvissLowerTurret = {
             /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [8.5, 11, 0.6, 6, 0, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.sunchip, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.celereload]),
                 TYPE: exports.alvissDrone,
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -14997,7 +14981,7 @@ exports.tyrLowerTurret = {
         {
             POSITION: [3.4, 14, 1, 14.3, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.babyfactory, g.badreload]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.babyfactory, g.celereload]),
                 TYPE: exports.tinyMinion,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -18226,6 +18210,232 @@ exports.hexagonSufferHealer = {
     ],
 };
 
+exports.Celestialbody12 = {
+    LABEL: '',
+    CONTROLLERS: ['reversespin'], 
+    COLOR: 6,
+    SIZE: 100,
+    MAX_CHILDREN: 6,
+    SHAPE: 7,
+    INDEPENDENT: true,
+            TURRETS: [{/*********  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [  6.7,     9,      0,     260,     180,   0, ], 
+            TYPE: [exports.rocketeerTurret],
+            }, {
+        POSITION: [  6.7,     9,      0,     219,    180,   0, ],
+            TYPE: [exports.rocketeerTurret],
+            }, {
+        POSITION: [  6.7,     9,      0,     180,    180,   0, ],
+            TYPE: [exports.rocketeerTurret],
+                }, {
+        POSITION: [  6.7,     9,      0,     300,    180,   0, ],
+            TYPE: [exports.rocketeerTurret],
+                }, {
+        POSITION: [  6.7,     9,      0,     339,    180,   0, ],
+            TYPE: [exports.rocketeerTurret],
+                }, {
+        POSITION: [  6.7,     9,      0,     380,    180,   0, ],
+            TYPE: [exports.rocketeerTurret],
+                    }, {
+        POSITION: [  6.7,     9,      0,     420,    180,   0, ],
+            TYPE: [exports.rocketeerTurret],
+                    }, {
+        POSITION: [  6.7,     9,      0,     459,    180,   0, ],
+            TYPE: [exports.rocketeerTurret],
+                    }, {
+        POSITION: [  6.7,     9,      0,     500,    180,   0, ],
+            TYPE: [exports.rocketeerTurret],
+    }],
+};
+exports.cargun = {
+    PARENT: [exports.genericTank],
+    LABEL: '',
+    MAX_CHILDREN: 5,
+    BODY: {
+        FOV: 2,
+    },
+    CONTROLLERS: ['canRepel', 'onlyAcceptInArc', 'mapAltToFire', 'nearestDifferentMaster'], 
+    COLOR: 16,
+    GUNS: [ { /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+        POSITION: [   7,    7.5,    0.6,     7,      0,      0,      0,   ], 
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.swarm, g.celereload]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,   
+            }, }, {
+        POSITION: [   7,    7.5,    0.6,     7,      2,      40,    0.5,  ], 
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.swarm, g.celereload]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            }, }, {
+        POSITION: [   7,    7.5,    0.6,     7,     -2,     -40,    0.5,  ], 
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.swarm, g.celereload]),
+                TYPE: exports.swarm,
+                STAT_CALCULATOR: gunCalcNames.swarm,
+            }, }
+    ],
+};
+exports.Celestialbody22 = {
+    LABEL: '',
+    CONTROLLERS: ['spin'],
+    COLOR: 6,
+    SIZE: 100,
+    MAX_CHILDREN: 28,
+    SHAPE: 7,
+    INDEPENDENT: true,
+    TURRETS: [{//********  SIZE     X       Y     ANGLE    ARC
+        POSITION: [  6.1,     9,      0,     26,     180,   0, ], 
+            TYPE: [exports.cargun],
+            }, {
+        POSITION: [  6.1,     9,      0,     77,    180,   0, ],
+            TYPE: [exports.cargun],
+            }, {
+        POSITION: [  6.1,     9,      0,     129,    180,   0, ],
+            TYPE: [exports.cargun],
+                }, {
+        POSITION: [  6.1,     9,      0,     180,    180,   0, ],
+            TYPE: [exports.cargun], 
+                }, {
+        POSITION: [  6.1,     9,      0,     231,    180,   0, ],
+            TYPE: [exports.cargun],
+                }, {
+        POSITION: [  6.1,     9,      0,     282,    180,   0, ],
+            TYPE: [exports.cargun],
+                    }, {
+        POSITION: [  6.1,     9,      0,     333,    180,   0, ],
+            TYPE: [exports.cargun],
+    }],
+};
+exports.triplegun = {
+    PARENT: [exports.genericTank],
+    LABEL: '',
+    BODY: {
+        FOV: 2,
+    },
+    SIZE: 28,
+    CONTROLLERS: ['canRepel', 'onlyAcceptInArc', 'mapAltToFire', 'nearestDifferentMaster'], 
+    COLOR: 16,
+    GUNS: [
+        {
+        /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [18, 10, 1, 0, 5, 0, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.celereload]),
+                TYPE: exports.bullet
+            }
+        },
+        {
+            POSITION: [18, 10, 1, 0, -5, 0, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.celereload]),
+                TYPE: exports.bullet
+            }
+            },
+        {
+            POSITION: [21, 10, 1.2, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.celereload]),
+                TYPE: exports.bullet
+            }
+        }
+    ]
+};
+exports.Celestialbody32 = {
+    LABEL: '',
+    CONTROLLERS: ['reversespin'],
+    COLOR: 6,
+    SIZE: 100,
+    MAX_CHILDREN: 28,
+    SHAPE: 5,
+    TURRETS: [{//******** SIZE     X       Y     ANGLE    ARC 
+        POSITION: [  7.2,     9,      0,     35,     180,   0, ], 
+            TYPE: [exports.triplegun],
+            }, {
+        POSITION: [  7.2,     9,      0,     110,    180,   0, ],
+            TYPE: [exports.triplegun],
+            }, {
+        POSITION: [  7.2,     9,      0,     180,    180,   0, ],
+            TYPE: [exports.triplegun],
+                }, {
+        POSITION: [  7.2,     9,      0,     252,    180,   0, ],
+            TYPE: [exports.triplegun], 
+                }, {
+        POSITION: [  7.2,     9,      0,     325,    180,   0, ],
+            TYPE: [exports.triplegun],
+    }],
+};
+exports.Celestialeternal = {
+    PARENT: [exports.celestial],
+    LABEL: 'Eternal',
+    SKILL: [0,9,9,9,9,9,9,9,9,9],
+    NAME: "Kronos",
+    SHAPE: 12,
+    VALUE: 5000000,
+    COLOR: 6,
+    LEVEL: 500,
+    SIZE: 95,
+    BODY: {
+        FOV: 2.5,
+        HEALTH: 800,
+        SHIELD: 10,
+        SPEED: 0.6423,
+        DAMAGE:  25,
+    },
+    FACING_TYPE: 'autospin',
+    TURRETS: [{
+        /*********  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [  5.7,     9,      0,     270,    180,   0, ], 
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            }, {
+        POSITION: [  5.7,     9,      0,     240,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+            }, {
+        POSITION: [  5.7,     9,      0,     210,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+                }, {
+        POSITION: [  5.7,     9,      0,     180,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}], 
+                }, {
+        POSITION: [  5.7,     9,      0,     150,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+                }, {
+        POSITION: [  5.7,     9,      0,     120,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+                    }, {
+        POSITION: [  5.7,     9,      0,     90,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+                    }, {
+        POSITION: [  5.7,     9,      0,     60,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+                    }, {
+        POSITION: [  5.7,     9,      0,     30,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],  
+                        }, {
+        POSITION: [  5.7,     9,      0,     0,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}], 
+                }, {
+        POSITION: [  13.6,  0,    0,       0,    360,   1, ],  
+            TYPE: [exports.Celestialbody12]
+                }, {
+        POSITION: [  10,     0,      0,       0,    360,   1, ],  
+            TYPE: [exports.Celestialbody22]
+                    }, {
+        POSITION: [  7,    0,      0,       0,    360,   1, ],  
+            TYPE: [exports.Celestialbody32]
+                    }, {
+        POSITION: [  5.7,     9,      0,     -90,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+                    }, {
+        POSITION: [  5.7,     9,      0,     -60,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+                    }, {
+        POSITION: [  5.7,     9,      0,     -30,    180,   0, ],
+            TYPE: [exports.trapTurret, {INDEPENDENT: true,}],
+    }],
+};
+
 // TOKEN "UPGRADE PATHS"
 exports.developer.UPGRADES_TIER_0 = [exports.basic, exports.substance, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.bossesMenu, exports.retrograde, exports.miscEntities, exports.levels, exports.teams];
     exports.substance.UPGRADES_TIER_0 = [];
@@ -18237,7 +18447,7 @@ exports.developer.UPGRADES_TIER_0 = [exports.basic, exports.substance, exports.l
     exports.retrograde.UPGRADES_TIER_0 = [exports.celestialBosses, exports.eliteBosses, exports.strangeBosses, exports.nostalgiaMenu];
         exports.celestialBosses.UPGRADES_TIER_0 = [exports.paladin, exports.freyja, exports.zaphkiel, exports.nyx, exports.theia, exports.alviss, exports.tyr];
         exports.eliteBosses.UPGRADES_TIER_0 = [exports.eliteDestroyer, exports.eliteGunner, exports.eliteSprayer, exports.eliteBattleship, exports.eliteSpawner];
-        exports.strangeBosses.UPGRADES_TIER_0 = [exports.roguePalisade, exports.rogueArmada, exports.nestKeeper, exports.eliteSkimmer, exports.summoner];
+        exports.strangeBosses.UPGRADES_TIER_0 = [exports.Celestialeternal, exports.roguePalisade, exports.rogueArmada, exports.nestKeeper, exports.eliteSkimmer, exports.summoner];
         exports.nostalgiaMenu.UPGRADES_TIER_0 = [exports.oldSpreadshot, exports.bentBoomer, exports.quadBuilder, exports.quintuplet, exports.vulcan, exports.sniper3, exports.weirdSpike, exports.master, exports.oldCommander, exports.blunderbuss, exports.oldRimfire, exports.ransacker];
 
 // MISCELLANEOUS
@@ -18245,7 +18455,7 @@ exports.miscEntities.UPGRADES_TIER_0 = [exports.dominators, exports.baseProtecto
 exports.dominators.UPGRADES_TIER_0 = [exports.dominator, exports.destroyerDominator, exports.gunnerDominator, exports.trapperDominator];
 
 // TANK UPGRADE PATHS
-c.gameModeName.includes("Siege")
+c.SPECIAL_BOSS_SPAWNS
     ? exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.healer, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper]
     : exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper];
         exports.basic.UPGRADES_TIER_2 = [exports.smasher];
@@ -18369,7 +18579,7 @@ exports.basic.UPGRADES_TIER_1.push();
                 exports.machineFlank.UPGRADES_TIER_3 = [exports.machineTriple, exports.halfNHalf];
 
         exports.flankGuard.UPGRADES_TIER_2.push();
-                exports.hexaTank.UPGRADES_TIER_3.push(exports.tornado, deathStar);
+                exports.hexaTank.UPGRADES_TIER_3.push(exports.tornado, exports.deathStar);
 
         exports.pounder.UPGRADES_TIER_2.push();
                 exports.destroyer.UPGRADES_TIER_3.push(exports.blower);

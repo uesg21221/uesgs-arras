@@ -857,7 +857,7 @@ const spawn = (socket, name) => {
                 } while (dirtyCheck(loc, 50));
             } else {
                 do {
-                    loc = room.gaussInverse(5);
+                    loc = room.randomType("norm");
                 } while (dirtyCheck(loc, 50));
             }
             break;
