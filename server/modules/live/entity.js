@@ -1660,6 +1660,13 @@ class Entity extends EventEmitter {
                 sockets.broadcast(usurptText);
             }
             this.setKillers(killers);
+            if (hunters.length && killers.length && hunters[0].id == this.id) {
+                killers[0].team = -c.TEAMS;
+                killers[0].color = [10, 11, 12, 15, 25, 26, 27, 28][-killers[0].team - 1];
+                killers[0].skill.realSkillCap *= 2;
+                killers[0].setLevel(killers[0].skill.realSkillCap);
+                hunters[0] = killers[0];
+            }
             // Kill it
             return 1;
         }
@@ -1680,6 +1687,7 @@ class Entity extends EventEmitter {
         if (this.isProtected) {
             util.remove(entitiesToAvoid, entitiesToAvoid.indexOf(this));
         }
+        if (hunters.length && hunters[0].id == this.id) hunters.pop();
         // Remove from minimap
         let i = minimap.findIndex(entry => entry[0] === this.id);
         if (i != -1) {

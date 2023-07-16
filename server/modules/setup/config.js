@@ -1,11 +1,42 @@
 const defaults = require("../../config.js");
 
-const gamemode = "TheLine"; // keep it as ffa
+const gamemode = "Manhunt"; // keep it as ffa
 
 const gamemodes = {
     "FFA": {
         BOTS: 9
     }, // "defaults" is already FFA.
+    "Manhunt": {
+        MODE: "tdm",
+        TEAMS: 2,
+        secondaryGameMode: "Manhunt",
+        MAZE: 30,
+        X_GRID: 15,
+        Y_GRID: 15,
+        ROOM_SETUP: [
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm"],
+            ["norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm"],
+            ["norm", "norm", "nest", "nest", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "nest", "nest", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"],
+            ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
+        ]
+    },
+    "TrainWars": {
+        MODE: "tdm",
+        TEAMS: (Math.random() * 7 | 0) + 2,
+        TRAIN: true,
+        secondaryGameMode: "TrainWars"
+    },
     "TheLine": {
         MODE: "tdm",
         TEAMS: 1 + (Math.random() * 3 | 0),

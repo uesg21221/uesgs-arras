@@ -64,6 +64,7 @@ module.exports = {
     BOTS: 14,
     GLASS_HEALTH_FACTOR: 2,
     HALF: false,
+    TRAIN: false,
     SOCCER: false,
     SHINY: false,
     SPECIAL_BOSS_SPAWNS: false,

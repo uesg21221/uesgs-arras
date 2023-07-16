@@ -139,7 +139,7 @@ function collide(collision) {
             instance.master.id != other.id &&
             other.master.id != instance.id &&
             (instance.type == "tank" || instance.type == "miniboss" || other.type == "tank" || other.type == "miniboss")
-        ) { advancedcollide(instance, other, true, true); }
+        ) { advancedcollide(instance, other, true, true, false, true); }
         else { advancedcollide(instance, other, false, true); }
     }
 }
@@ -468,11 +468,11 @@ let makenpcs = () => {
         let o = new Entity(room.randomType("norm")),
             color = 17,
             team = o.id,
-            dread_bot = ran.chooseChance(10, 1)
+            dread_bot = c.secondaryGameMode == "Manhunt" ? false : (ran.chooseChance(10, 1)
                     ? (dread_bots.length < (Math.round(c.BOTS / 6) + 1)
                             ? true
                             : false)
-                    : (dread_bots < 1 && bots.length == c.BOTS - 1) ? true : false;
+                    : (dread_bots < 1 && bots.length == c.BOTS - 1) ? true : false);
         o.define(Class.bot);
         if (!dread_bot) {
             if (c.RANDOM_COLORS && room.gameMode === "ffa") {
@@ -712,6 +712,22 @@ const maintainloop = () => {
 };
 
 // Bring it to life
+if (c.TRAIN) {
+    setInterval(() => {
+        let teams = new Set(entities.filter(r => (r.isPlayer || r.isBot)).map(r => r.team))
+
+        for (let team of teams) {
+            let train = entities.filter(r => (r.isPlayer || r.isBot) && r.team === team && !r.inBaseProtectionLevel).sort((a, b) => b.skill.score - a.skill.score)
+
+            for (let [i, player] of train.entries()) {
+                if (i === 0) continue
+
+                player.velocity.x = util.clamp(train[i - 1].x - player.x, -90, 90) * player.damp * 2
+                player.velocity.y = util.clamp(train[i - 1].y - player.y, -90, 90) * player.damp * 2
+            }
+        }
+    }, 33.33)
+}
 setInterval(gameloop, room.cycleSpeed);
 setInterval(maintainloop, 1000);
 setInterval(speedcheckloop, 1000);

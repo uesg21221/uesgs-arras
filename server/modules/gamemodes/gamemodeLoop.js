@@ -57,6 +57,17 @@ const gamemodeLoop = function() {
     if (c.DOMINATOR_LOOP) dominatorLoop.tally();
     if (c.SPECIAL_BOSS_SPAWNS) bossRush.loop();
     if (c.SOCCER) ballLoop.loop();
+    if (c.secondaryGameMode == "Manhunt") {
+        loopThrough(entities.filter(r => r.isPlayer || r.isBot), function (instance) {
+            if (hunters.length < 1 && instance.team == -1) {
+                instance.team = -c.TEAMS;
+                instance.color = [10, 11, 12, 15, 25, 26, 27, 28][-instance.team - 1];
+                instance.skill.realSkillCap *= 2;
+                instance.setLevel(instance.skill.realSkillCap);
+                hunters[0] = instance;
+            }
+        });
+    }
     logger.mark();
     if (logger.totalTime > 100) {
         console.log("Gamemode loop is taking a long time!");

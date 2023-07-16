@@ -18459,7 +18459,7 @@ c.SPECIAL_BOSS_SPAWNS
     ? exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.healer, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper]
     : exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machineGun, exports.flankGuard, exports.director, exports.pounder, exports.trapper];
         exports.basic.UPGRADES_TIER_2 = [exports.smasher];
-                exports.basic.UPGRADES_TIER_3 = [exports.single, exports.dreadnought, exports.dreadnoughtHealer];
+                c.TRAIN || c.secondaryGameMode == "Manhunt" ? exports.basic.UPGRADES_TIER_3 = [exports.single] : exports.basic.UPGRADES_TIER_3 = [exports.single, exports.dreadnought, exports.dreadnoughtHealer];
                 exports.smasher.UPGRADES_TIER_3 = [exports.megaSmasher, exports.spike, exports.autoSmasher, exports.landmine];
 
         exports.twin.UPGRADES_TIER_2 = [exports.doubleTwin, exports.tripleShot, exports.gunner, exports.hexaTank];
