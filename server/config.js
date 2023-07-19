@@ -1,5 +1,5 @@
 module.exports = {
-    host: "localhost:3000",
+    host: "transcendent-creponne-e405ff.netlify.app",
     servesStatic: true,
     port: 3000,
     networkUpdateFactor: 24,
