@@ -3,15 +3,13 @@
   "version": "1.0.0",
   "main": "server/index.js",
   "scripts": {
-    "start": "node --optimize-for-size --no-lazy --gc_interval=120 server/index",
-    "host": "node standaloneClient/index",
-    "build": "node standaloneClient/build minify"
+    "start": "node --optimize-for-size --no-lazy --gc_interval=120 server/index"
   },
   "dependencies": {
     "ws": "^8.13.0"
   },
   "engines": {
-    "node": "16.x"
+    "node": "^18.0.0"
   },
   "license": "MIT"
 }
