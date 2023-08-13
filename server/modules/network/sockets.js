@@ -822,14 +822,14 @@ const spawn = (socket, name) => {
                 } while (dirtyCheck(loc, 50));
             } else {
                 do {
-                    loc = room.gaussInverse(5);
+                    loc = room.randomType("norm");
                 } while (dirtyCheck(loc, 50));
             }
             break;
         default:
             do {
                 if (socket.group) loc = room.near(socket.group.getSpawn(), 300);
-                else loc = room.gaussInverse(5);
+                else loc = room.randomType("norm");
             } while (dirtyCheck(loc, 50));
     }
     socket.rememberedTeam = player.team;

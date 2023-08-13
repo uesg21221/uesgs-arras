@@ -9,6 +9,7 @@ for (let gamemode of gamemodes) {
             for (let y = 0; y < mode.Y_GRID; y++) {
                 for (let x = 0; x < mode.X_GRID; x++) {
                     if (mode[key][y][x]) {
+                        output[key][y] = mode[key][y];
                         output[key][y][x] = mode[key][y][x];
                     }
                 }
