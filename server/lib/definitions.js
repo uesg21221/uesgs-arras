@@ -16632,11 +16632,11 @@ exports.dominators.UPGRADES_TIER_0 = [exports.dominator, exports.destroyerDomina
         exports.flankGuard.UPGRADES_TIER_2 = [exports.hexaTank, exports.triAngle, exports.auto3, exports.trapGuard, exports.triTrapper];
                 exports.flankGuard.UPGRADES_TIER_3 = [exports.tripleTwin];
                 exports.hexaTank.UPGRADES_TIER_3 = [exports.octoTank, exports.cyclone, exports.hexaTrapper];
-                exports.triAngle.UPGRADES_TIER_3 = [exports.fighter, exports.booster, exports.falcon, exports.bomber, exports.autoTriAngle, exports.surfer, exports.eagle, exports.phoenix];
+                exports.triAngle.UPGRADES_TIER_3 = [exports.fighter, exports.booster, exports.falcon, exports.bomber, exports.autoTriAngle, exports.surfer, exports.eagle, exports.phoenix, exports.vulture];
                 exports.auto3.UPGRADES_TIER_3 = [exports.auto5, exports.mega3, exports.auto4, exports.banshee];
 
         c.SPECIAL_BOSS_SPAWNS
-        ? exports.director.UPGRADES_TIER_2 = [exports.overseer, exports.cruiser, exports.spawner];
+        ? exports.director.UPGRADES_TIER_2 = [exports.overseer, exports.cruiser, exports.spawner]
         : exports.director.UPGRADES_TIER_2 = [exports.overseer, exports.cruiser, exports.underseer, exports.spawner];
                 exports.director.UPGRADES_TIER_3 = [exports.manager, exports.bigCheese];
                 exports.overseer.UPGRADES_TIER_3 = [exports.overlord, exports.overtrapper, exports.overgunner, exports.banshee, exports.autoOverseer, exports.overdrive, exports.commander];
