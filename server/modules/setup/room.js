@@ -165,6 +165,39 @@ room.gauss = function(clustering) {
     } while (!room.isInRoom(output));
     return output;
 };
+room.gaussInverse = function(clustering) {
+    let output;
+    do {
+        output = {
+            x: ran.gaussInverse(0, room.width, clustering),
+            y: ran.gaussInverse(0, room.height, clustering),
+        };
+    } while (!room.isInRoom(output));
+    return output;
+};
+room.gaussRing = function(radius, clustering) {
+    let output;
+    do {
+        output = ran.gaussRing(room.width * radius, clustering);
+        output = {
+            x: output.x + room.width / 2,
+            y: output.y + room.height / 2,
+        };
+    } while (!room.isInRoom(output));
+    return output;
+};
+room.gaussType = function(type, clustering) {
+    if (!room[type]) return room.random();
+    let selection = room[type][ran.irandom(room[type].length - 1)];
+    let location = {};
+    do {
+        location = {
+            x: ran.gauss(selection.x, room.width / room.xgrid / clustering),
+            y: ran.gauss(selection.y, room.height / room.ygrid / clustering),
+        };
+    } while (!room.isIn(type, location));
+    return location;
+};
 
 for (let type of room.cellTypes) room.findType(type);
 

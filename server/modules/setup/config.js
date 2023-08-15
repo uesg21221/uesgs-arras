@@ -27,6 +27,7 @@ const nameMap = {
     tdm: "TDM",
     ffa: "FFA",
     opentdm: "Open TDM",
+    shiny: "",
     //clanwars: "Clan Wars",
     trainwars: "Train Wars"
 };

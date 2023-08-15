@@ -28,6 +28,28 @@ exports.gauss = (mean, deviation) => {
   return mean + deviation * x1 * w
 }
 
+exports.gaussInverse = (min, max, clustering) => {
+  let range = max - min
+  let output = exports.gauss(0, range / clustering)
+
+  while (output < 0)
+    output += range
+
+  while (output > range)
+    output -= range
+
+  return output + min
+}
+
+exports.gaussRing = (radius, clustering) => {
+  let r = exports.random(Math.PI * 2)
+  let d = exports.gauss(radius, radius * clustering)
+  return {
+    x: d * Math.cos(r),
+    y: d * Math.sin(r),
+  }
+}
+
 exports.chance = prob => exports.random(1) < prob
 
 exports.dice = sides => exports.random(sides) < 1
