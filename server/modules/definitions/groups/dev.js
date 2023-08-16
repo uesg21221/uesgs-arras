@@ -728,7 +728,7 @@ exports.developer.UPGRADES_TIER_0 = ["healer", "basic", "lancer", "gameAdminMenu
         exports.strangeBosses.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "nestKeeper", "eliteSkimmer", "summoner"];
         exports.nostalgiaMenu.UPGRADES_TIER_0 = ["oldSpreadshot", "bentBoomer", "quadBuilder", "quintuplet", "vulcan", "sniper3", "weirdSpike", "master", "oldCommander", "blunderbuss", "oldRimfire", "ransacker"];
         exports.scrappedMenu.UPGRADES_TIER_0 = ["scrappedMenu2", "rocketeer", "crowbar", "peashooter", "autoTrapper", "megaTrapper", "railgun", "megaSpawner", "badDreadnought", "mender"];
-            exports.scrappedMenu2.UPGRADES_TIER_0 = ["scrappedMenu", "overcheese", "prodigy", "spawnerdrive", "rimfire", "productionist", "taser"];
+            exports.scrappedMenu2.UPGRADES_TIER_0 = ["scrappedMenu", "overcheese", "prodigy", "spawnerdrive", "rimfire", "productionist", "vulture"];
                 exports.productionist.UPGRADES_TIER_0 = ["bismarck"];
         exports.miscRetrograde.UPGRADES_TIER_0 = ["tracker3", "tetraGunner", "worstTank"];
 
