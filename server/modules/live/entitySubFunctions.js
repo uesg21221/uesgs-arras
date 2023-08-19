@@ -35,8 +35,8 @@ class Skill {
         // Just skill stuff.
         this.raw = inital;
         this.caps = [];
+        this.maxSkillPoints = c.SKILL_CAP;
         this.setCaps([ c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL ]);
-        this.maxSkillPoints = c.SKILL_CAP > 45 ? 80 : c.SKILL_CAP;
         this.name = [
             "Reload",
             "Bullet Penetration",
@@ -278,7 +278,7 @@ let remapTarget = (i, ref, self) => {
 
 var bringToLife = my => {
     // Size
-    /*if (my.SIZE - my.coreSize) */my.coreSize = my.SIZE;
+    my.coreSize = my.SIZE; //if (my.SIZE - my.coreSize)
     // Think
     let faucet = my.settings.independent || my.source == null || my.source === my ? {} : my.source.control;
     let b = {

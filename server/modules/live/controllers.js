@@ -675,7 +675,8 @@ class io_destroyer extends IO {
     constructor(body) {
         super(body);
         this.ability = this.body.master.ability;
-        this.limit = 1600;
+        this.limit = this.body.master.size * 20;
+        this.showLimit = this.body.master.size * 1.2;
         this.speed = 0;
         this.oldAlpha = 0;
     }
@@ -689,11 +690,11 @@ class io_destroyer extends IO {
                     if (this.body.SIZE < 1) this.body.SIZE = 1;
                 } else this.speed = 0;
             }
-            else if (this.body.SIZE < 100) {
+            else if (this.body.SIZE < this.showLimit) {
                 this.body.SIZE += this.speed;
                 this.speed += 0.02;
             }
-            else if (this.body.SIZE > 100) this.body.SIZE = 100;
+            else if (this.body.SIZE > this.showLimit) this.body.SIZE = this.showLimit;
             else this.speed = 0;
         }
         else {
@@ -731,6 +732,7 @@ class io_shapeSpawner extends IO {
     constructor(body) {
         super(body);
         this.speed = 0;
+        this.showLimit = this.body.master.size * 1.3;
     }
     think(input) {
         if (this.body.master.ability[2]) {
@@ -740,11 +742,11 @@ class io_shapeSpawner extends IO {
                 if (this.body.SIZE < 1) this.body.SIZE = 1;
             } else this.speed = 0;
         }
-        else if (this.body.SIZE < 100) {
+        else if (this.body.SIZE < this.showLimit) {
             this.body.SIZE += this.speed;
             this.speed += 0.02;
         }
-        else if (this.body.SIZE > 100) this.body.SIZE = 100;
+        else if (this.body.SIZE > this.showLimit) this.body.SIZE = this.showLimit;
         else this.speed = 0;
     }
 }

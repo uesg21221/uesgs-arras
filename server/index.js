@@ -62,7 +62,8 @@ function collide(collision) {
                 instance.type === other.type ||
                 _entity.id == pusher.master.id ||
                 _entity.settings.hitsOwnType === "pushOnlyTeam" ||
-                _entity.team == -101
+                _entity.team == -101 ||
+                pusher.DAMAGE < 1
             ) return;
             let a =
                 1 +

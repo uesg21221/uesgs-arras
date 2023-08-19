@@ -920,6 +920,7 @@ class Entity extends EventEmitter {
             this.invisible = [0, 0];
             this.alpha = 1;
             this.ability[2] = 0;
+            this.skill.maxSkillPoints = c.SKILL_CAP;
             this.skill.reset();
             this.reset();
         }
@@ -1061,7 +1062,7 @@ class Entity extends EventEmitter {
         this.move();
     }
     get level() {
-        return Math.min(c.SKILL_CAP, this.skill.level);
+        return Math.min(this.skill.maxSkillPoints > 45 ? (this.skill.maxSkillPoints - 45) * 6 + 45 : this.skill.maxSkillPoints, this.skill.level);
     }
     get size() {
         return this.bond == null ? (this.coreSize || this.SIZE) * (1 + this.level / 45) : this.bond.size * this.bound.size;

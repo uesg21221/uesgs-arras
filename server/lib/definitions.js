@@ -16754,12 +16754,13 @@ exports.plaggLayer = {
 exports.plagg = {
     PARENT: [exports.genericTank],
     LABEL: "Plagg",
-    SKILL_CAP: [16, 16, 16, 16, 16, 16, 16, 16, 16, 16],
-    LEVEL: 45 + (160 - 45) * 6,
+    SKILL_CAP: [14, 14, 14, 14, 14, 14, 14, 14, 14, 14],
+    LEVEL: 45 + (140 - 45) * 6,
+    SIZE: 8,
     //TEAM: 0,
     COLOR: 11,
     SHAPE: 0,
-    SKILL_POINTS: 160,
+    SKILL_POINTS: 140,
     BODY: {
         ACCEL: 0.2,
         SPEED: base.SPEED * 0.7,
@@ -16767,7 +16768,6 @@ exports.plagg = {
         DAMAGE: base.DAMAGE * 1.4,
         SHIELD: base.SHIELD * 1.4,
         REGEN: base.REGEN * 1.4,
-        FOV: base.FOV * 1.2,
     },
     TURRETS: [
         {
@@ -16857,12 +16857,13 @@ exports.tikkiLayer = {
 exports.tikki = {
     PARENT: [exports.genericTank],
     LABEL: "Tikki",
-    SKILL_CAP: [16, 16, 16, 16, 16, 16, 16, 16, 16, 16],
-    LEVEL: 45 + (160 - 45) * 6,
+    SKILL_CAP: [14, 14, 14, 14, 14, 14, 14, 14, 14, 14],
+    LEVEL: 45 + (140 - 45) * 6,
+    SIZE: 8,
     //TEAM: 0,
     COLOR: 9,
     SHAPE: 0,
-    SKILL_POINTS: 160,
+    SKILL_POINTS: 140,
     BODY: {
         ACCEL: 0.2,
         SPEED: base.SPEED * 0.7,
@@ -16870,7 +16871,6 @@ exports.tikki = {
         DAMAGE: base.DAMAGE * 1.4,
         SHIELD: base.SHIELD * 1.4,
         REGEN: base.REGEN * 1.4,
-        FOV: base.FOV * 1.2,
     },
     TURRETS: [
         {

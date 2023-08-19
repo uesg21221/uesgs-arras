@@ -45,7 +45,8 @@ module.exports = {
     LEVEL_SKILL_POINT_FUNCTION: (level, max_points) => {
         if (level < 2) return 0;
         if (level <= 40) return 1;
-        if (level <= max_points && level & 1 == 1) return 1;
+        if (level <= 45 && level & 1 == 1) return 1;
+        if (level % 6 == 1 && level < (max_points - 45) * 6 + 42) return 1;
         return 0;
     },
     MAX_SKILL: 9,
@@ -59,7 +60,7 @@ module.exports = {
     STEALTH: 4, // This does nothing. TODO: Find original purpose
     MIN_SPEED: 0.001,
     SKILL_BOOST: 5,
-    BOTS: 24,
+    BOTS: 6,
 
     // Food
     FOOD: [0, 0.75, 0.22, 0.1, 0.005, 0, 0],
@@ -70,7 +71,7 @@ module.exports = {
     CRASHER_RATIO: 2,
 
     // Gamemode related
-    TEAMS: 4,
+    TEAMS: 0,
     RANDOM_COLORS: false,
     SPECIAL_BOSS_SPAWNS: false,
     MOTHERSHIP_LOOP: false,
