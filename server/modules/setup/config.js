@@ -1,6 +1,6 @@
 let output = require("../../config.js");
 
-const gamemodes = ["tdm", "growth", "shiny"];
+const gamemodes = [];//["tdm", "domination"];
 
 for (let gamemode of gamemodes) {
     let mode = require(`./gamemodeconfigs/${gamemode}.js`);
@@ -10,8 +10,8 @@ for (let gamemode of gamemodes) {
     }
     for (let key in mode) {
         if (key === "ROOM_SETUP") {
-            for (let y = 0; y < mode.Y_GRID; y++) {
-                for (let x = 0; x < mode.X_GRID; x++) {
+            for (let y = 0; y < output.Y_GRID; y++) {
+                for (let x = 0; x < output.X_GRID; x++) {
                     if (mode[key][y][x]) {
                         if (output[key][y] == null) output[key][y] = [];
                         output[key][y][x] = mode[key][y][x];
