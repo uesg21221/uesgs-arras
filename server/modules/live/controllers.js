@@ -1,6 +1,3 @@
-const { filter } = require("../../permissions");
-const { Entity } = require("./entity");
-
 let compressMovementOffsets = [
     { x: 1, y: 0},
     { x: 1, y: 1},
