@@ -8,7 +8,7 @@ module.exports = {
     networkFrontlog: 1,
     networkFallbackTime: 150,
     visibleListInterval: 250,
-    gameSpeed: 3,
+    gameSpeed: 1.5,
     runSpeed: 1.5,
     maxHeartbeatInterval: 300000,
     verbose: true,
@@ -42,11 +42,10 @@ module.exports = {
     KNOCKBACK_CONSTANT: 1.5,
     GLASS_HEALTH_FACTOR: 2,
     ROOM_BOUND_FORCE: 0.01,
-    GLASS_HEALTH_FACTOR: 2,
-    LEVEL_SKILL_POINT_FUNCTION: level => {
+    LEVEL_SKILL_POINT_FUNCTION: (level, max_points) => {
         if (level < 2) return 0;
         if (level <= 40) return 1;
-        if (level <= 45 && level & 1 == 1) return 1;
+        if (level <= max_points && level & 1 == 1) return 1;
         return 0;
     },
     MAX_SKILL: 9,

@@ -1404,7 +1404,7 @@ function drawSkillBars(spacing, alcoveSize) {
     global.clickables.stat.hide();
     let vspacing = 4;
     let height = 15;
-    let gap = 35;
+    let _gap = 45;
     let len = alcoveSize; // * global.screenWidth; // The 30 is for the value modifiers
     let save = len;
     let x = -spacing - 2 * len + statMenu.get() * (2 * spacing + 2 * len);
@@ -1426,7 +1426,8 @@ function drawSkillBars(spacing, alcoveSize) {
         len = save;
         let max = 0,
             extension = cap > max,
-            blocking = cap < maxLevel;
+            blocking = cap < maxLevel,
+            gap = _gap - (maxLevel * (_gap - 28) / 16);
         if (extension) {
             max = cap;
         }
