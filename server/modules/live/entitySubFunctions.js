@@ -36,6 +36,7 @@ class Skill {
         this.raw = inital;
         this.caps = [];
         this.setCaps([ c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL ]);
+        this.maxSkillPoints = c.SKILL_CAP > 45 ? 80 : c.SKILL_CAP;
         this.name = [
             "Reload",
             "Bullet Penetration",
@@ -132,7 +133,7 @@ class Skill {
             this.deduction += this.levelScore;
             this.level += 1;
             this.points += this.levelPoints;
-            if (this.level < c.SKILL_CAP) {
+            if (this.level < this.maxSkillPoints) {
                 if (this.level % c.TIER_MULTIPLIER && this.level <= c.MAX_UPGRADE_TIER) {
                     this.canUpgrade = true;
                 }
@@ -149,7 +150,7 @@ class Skill {
         return this.levelScore ? (this.score - this.deduction) / this.levelScore : 0;
     }
     get levelPoints() {
-        return c.LEVEL_SKILL_POINT_FUNCTION(this.level);
+        return c.LEVEL_SKILL_POINT_FUNCTION(this.level, this.maxSkillPoints);
     }
     cap(skill, real = false) {
         if (!real && this.level < c.SKILL_SOFT_CAP) {

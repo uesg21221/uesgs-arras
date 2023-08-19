@@ -7,7 +7,7 @@ module.exports = {
     networkFrontlog: 1,
     networkFallbackTime: 150,
     visibleListInterval: 250,
-    gameSpeed: 3,
+    gameSpeed: 1.5,
     runSpeed: 1.5,
     maxHeartbeatInterval: 300000,
     verbose: true,
@@ -43,10 +43,10 @@ module.exports = {
     ROOM_BOUND_FORCE: 0.01,
     FOOD: [0, 0.75, 0.22, 0.1, 0.005, 0, 0],
     FOOD_NEST: [0, 0.0, 0.0, 0.75, 0.23, 0.02, 0],
-    LEVEL_SKILL_POINT_FUNCTION: level => {
+    LEVEL_SKILL_POINT_FUNCTION: (level, max_points) => {
         if (level < 2) return 0;
         if (level <= 40) return 1;
-        if (level <= 45 && level & 1 == 1) return 1;
+        if (level <= max_points && level & 1 == 1) return 1;
         return 0;
     },
     SHINY_SCALE: 0,

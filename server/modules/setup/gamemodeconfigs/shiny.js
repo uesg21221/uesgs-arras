@@ -1,3 +1,3 @@
 module.exports = {
-    SHINY_SCALE: 100
+    SHINY_SCALE: 1000
 };

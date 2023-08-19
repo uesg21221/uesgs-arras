@@ -6,8 +6,6 @@ for (let key in enviroment) {
 }
 const GLOBAL = require("./modules/global.js");
 
-console.log(`[${GLOBAL.creationDate}]: Server initialized.\nRoom Info:\n Dimensions: ${room.width} x ${room.height}\n Max Food / Nest Food: ${room.maxFood} / ${room.maxFood * room.nestFoodAmount}`);
-
 // Let's get a cheaper array removal thing
 Array.prototype.remove = function (index) {
     if (index === this.length - 1) return this.pop();
@@ -55,6 +53,23 @@ function collide(collision) {
         (other.ac && !other.alpha)
     ) return 0;
     switch (true) {
+        case instance.type === "atmosphere" || other.type === "atmosphere":
+            let pusher =
+                instance.type === "atmosphere" ? instance : other;
+            let _entity =
+                instance.type === "atmosphere" ? other : instance;
+            if (
+                instance.type === other.type ||
+                _entity.id == pusher.master.id ||
+                _entity.settings.hitsOwnType === "pushOnlyTeam" ||
+                _entity.team == -101
+            ) return;
+            let a =
+                1 +
+                10 /
+                    (Math.max(_entity.velocity.length, pusher.velocity.length) + 10);
+            advancedcollide(pusher, _entity, true, true, a);
+            break;
         case instance.type === "wall" || other.type === "wall":
             if (instance.type === "wall" && other.type === "wall") return;
             let wall = instance.type === "wall" ? instance : other;
@@ -526,7 +541,7 @@ class FoodType {
             scale = chances[1];
             chances = [];
             for (let i = types.length; i > 0; i--) {
-                chances.push(i ** scale);
+                chances.push(i ** (scale > 4 && c.SHINY_SCALE != 0 ? 1 : scale));
             }
         }
         this.name = groupName;
@@ -549,7 +564,7 @@ const foodTypes = [
     ),
     new FoodType("Shiny Food",
         [Class.gem, Class.shinySquare, Class.shinyTriangle, Class.shinyPentagon, Class.shinyBetaPentagon, Class.shinyAlphaPentagon],
-        ["scale", 4], 1
+        ["scale", 5], 1
     ),
     new FoodType("Legendary Food",
         [Class.jewel, Class.legendarySquare, Class.legendaryTriangle, Class.legendaryPentagon, Class.legendaryBetaPentagon, Class.legendaryAlphaPentagon],
@@ -557,7 +572,7 @@ const foodTypes = [
     ),
     new FoodType("Shadow Food",
         [Class.shadowSquare, Class.shadowTriangle, Class.shadowPentagon, Class.shadowBetaPentagon, Class.shadowAlphaPentagon],
-        ["scale", 5], 0.04
+        ["scale", 6], 0.04
     ),
     new FoodType("Rainbow Food",
         [Class.rainbowSquare, Class.rainbowTriangle, Class.rainbowPentagon, Class.rainbowBetaPentagon, Class.rainbowAlphaPentagon],
@@ -676,6 +691,18 @@ const makefood = () => {
         }
     }
 };
+
+const makeability = (entity) => {
+    let _a = entity.ability;
+    if (_a[0]) {
+        if (!_a[1]) entity.reset(false);
+        _a[1] = true;
+    }
+    else {
+        if (_a[1]) entity.reset();
+        _a[1] = false;
+    }
+};
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
 const maintainloop = () => {
     // Do stuff
@@ -683,6 +710,7 @@ const maintainloop = () => {
     makefood();
     // Regen health and update the grid
     loopThrough(entities, function (instance) {
+        if (instance.isPlayer || instance.isBot) makeability(instance);
         if (instance.shield.max) instance.shield.regenerate();
         if (!instance.isDead()) instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
     });

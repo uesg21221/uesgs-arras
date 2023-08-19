@@ -179,11 +179,13 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
                 };
                 /********** DO DAMAGE *********/
                 let bail = false;
+
                 if (n.type === 'food' && my.settings.necroTypes.includes(n.shape)) {
                     bail = my.necro(n);
                 } else if (my.type === 'food' && n.settings.necroTypes.includes(my.shape)) {
                     bail = n.necro(my);
                 }
+
                 if (!bail) {
                     // Calculate base damage
                     let resistDiff = my.health.resist - n.health.resist,
