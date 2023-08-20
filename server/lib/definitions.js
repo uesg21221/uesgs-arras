@@ -3667,6 +3667,7 @@ exports.basic = {
         PUSHABILITY: 1,
         HETERO: 3,
     },
+    BORDERLESS: false,
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
@@ -3682,6 +3683,7 @@ exports.basic = {
                 MAX_CHILDREN: 0,
                 ALT_FIRE: false,
                 NEGATIVE_RECOIL: false,
+                BORDERLESS: false,
             },
         },
     ],

@@ -69,6 +69,7 @@ class Gun {
             this.countsOwnKids = info.PROPERTIES.MAX_CHILDREN == null ? false : info.PROPERTIES.MAX_CHILDREN;
             this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS == null ? false : info.PROPERTIES.SYNCS_SKILLS;
             this.negRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
+            this.borderless = info.PROPERTIES.BORDERLESS == null ? false : info.PROPERTIES.BORDERLESS;
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
         }
@@ -718,6 +719,7 @@ class Entity extends EventEmitter {
         this.invuln = false;
         this.alpha = 1;
         this.invisible = [0, 0];
+        this.borderless = false;
         this.autospinBoost = 0;
         this.antiNaN = antiNaN(this);
         // Get a new unique id
@@ -897,6 +899,7 @@ class Entity extends EventEmitter {
         if (set.DANGER != null) this.dangerValue = set.DANGER;
         if (set.SKILL_POINTS != null) this.skill.maxSkillPoints = set.SKILL_POINTS;
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
+        if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
         if (set.TEAM != null) {
             if (set.TEAM == 0) this.team = this.id;
             else {
