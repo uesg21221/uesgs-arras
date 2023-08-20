@@ -656,6 +656,97 @@ class io_wanderAroundMap extends IO {
         }
     }
 }
+class io_teleportToMaster extends IO {
+    constructor(body) {
+        super(body);
+    }
+    think(input) {
+        this.body.x = this.body.source.x
+        this.body.y = this.body.source.y
+        this.body.accel.x = 0
+        this.body.accel.y = 0
+    }
+}
+
+class io_destroyer extends IO {
+    constructor(body) {
+        super(body);
+        this.ability = this.body.master.ability;
+        this.limit = this.body.master.size * 20;
+        this.showLimit = this.body.master.size * 1.2;
+        this.speed = 0;
+        this.oldAlpha = 0;
+    }
+    think(input) {
+        if (this.body.turrets[0].color == 11) {
+            if (this.ability[2] > 0 || this.ability[0]) {
+                this.ability[2]--;
+                if (this.body.SIZE > 1) {
+                    this.body.SIZE -= this.speed;
+                    this.speed += 0.02;
+                    if (this.body.SIZE < 1) this.body.SIZE = 1;
+                } else this.speed = 0;
+            }
+            else if (this.body.SIZE < this.showLimit) {
+                this.body.SIZE += this.speed;
+                this.speed += 0.02;
+            }
+            else if (this.body.SIZE > this.showLimit) this.body.SIZE = this.showLimit;
+            else this.speed = 0;
+        }
+        else {
+            this.min = (1 - this.body.alpha) * 150 - 25;
+            if (input.alt && this.ability[2] <= 0) {
+                this.ability[0] = true;
+                this.ability[2] = 20 * 60000 / room.cycleSpeed + 100;
+            }
+            if (this.ability[0] && this.body.SIZE < this.limit) {
+                this.body.SIZE += this.speed;
+                this.speed += 0.2;
+            }
+            else {
+                if (this.body.alpha > 0 && this.ability[0]) {
+                    if (!this.saved) {
+                        this.oldAlpha = this.body.alpha;
+                        this.saved = true;
+                    }
+                    this.body.alpha -= 0.005;
+                } else {
+                    if (this.oldAlpha != 0) {
+                        this.body.alpha = this.oldAlpha;
+                        this.oldAlpha = 0;
+                        this.saved = false;
+                    }
+                    this.body.SIZE = this.min;
+                    this.speed = 0;
+                    this.ability[0] = false;
+                }
+            }
+        }
+    }
+}
+class io_shapeSpawner extends IO {
+    constructor(body) {
+        super(body);
+        this.speed = 0;
+        this.showLimit = this.body.master.size * 1.3;
+    }
+    think(input) {
+        if (this.body.master.ability[2]) {
+            if (this.body.SIZE > 1) {
+                this.body.SIZE -= this.speed;
+                this.speed += 0.02;
+                if (this.body.SIZE < 1) this.body.SIZE = 1;
+            } else this.speed = 0;
+        }
+        else if (this.body.SIZE < this.showLimit) {
+            this.body.SIZE += this.speed;
+            this.speed += 0.02;
+        }
+        else if (this.body.SIZE > this.showLimit) this.body.SIZE = this.showLimit;
+        else this.speed = 0;
+    }
+}
 
 let ioTypes = {
     //misc
@@ -665,6 +756,8 @@ let ioTypes = {
     alwaysFire: io_alwaysFire,
     mapAltToFire: io_mapAltToFire,
     mapFireToAlt: io_mapFireToAlt,
+    destroyer: io_destroyer,
+    shapeSpawner: io_shapeSpawner,
 
     //aiming related
     nearestDifferentMaster: io_nearestDifferentMaster,
@@ -673,6 +766,7 @@ let ioTypes = {
     spin: io_spin,
 
     //movement related
+    teleportToMaster: io_teleportToMaster,
     canRepel: io_canRepel,
     mapTargetToGoal: io_mapTargetToGoal,
     bossRushAI: io_bossRushAI,

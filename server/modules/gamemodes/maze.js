@@ -51,7 +51,7 @@ function generateMaze(size) {
     let eroded = 0;
     let toErode = cells * 0.55;
     toErode -= activeLocsThatWeCantPlaceIn * 10;
-    if (toErode < 0) generateMaze(size + 1);
+    if (toErode <= 0) generateMaze(size + 1);
     for (let i = 0; i < toErode; i++) {
         if (eroded >= toErode) {
             console.log("Done!");
