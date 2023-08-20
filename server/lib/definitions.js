@@ -15688,6 +15688,7 @@ exports.arenaCloser = {
 exports.bot = {
     FACING_TYPE: "looseToTarget",
     NAME: "[AI] ",
+    LEVEL: c.BOTS_LEVEL,
     CONTROLLERS: ["nearestDifferentMaster", "mapAltToFire", "minion", "fleeAtLowHealth", ["mapFireToAlt", { onlyIfHasAltFireGun: true }], ["wanderAroundMap", { immitatePlayerMovement: true, lookAtGoal: true }]],
 };
 
@@ -16755,8 +16756,7 @@ exports.plagg = {
     PARENT: [exports.genericTank],
     LABEL: "Plagg",
     SKILL_CAP: [14, 14, 14, 14, 14, 14, 14, 14, 14, 14],
-    LEVEL: 45 + (140 - 45) * 6,
-    SIZE: 8,
+    LEVEL: 45 + (140 - 45) * 3,
     //TEAM: 0,
     COLOR: 11,
     SHAPE: 0,
@@ -16858,8 +16858,7 @@ exports.tikki = {
     PARENT: [exports.genericTank],
     LABEL: "Tikki",
     SKILL_CAP: [14, 14, 14, 14, 14, 14, 14, 14, 14, 14],
-    LEVEL: 45 + (140 - 45) * 6,
-    SIZE: 8,
+    LEVEL: 45 + (140 - 45) * 3,
     //TEAM: 0,
     COLOR: 9,
     SHAPE: 0,
