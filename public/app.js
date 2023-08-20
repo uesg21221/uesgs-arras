@@ -834,9 +834,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
     }
     context.closePath();
     if (!borderless) context.stroke();
-    if (fill) {
-        context.fill();
-    }
+    if (fill) context.fill();
     context.lineJoin = "round";
 }
 function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless = false) {
@@ -865,8 +863,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless 
         y + l[0] * Math.sin(angle - r[0])
     );
     context.closePath();
-    if (borderless != true)
-        context.stroke();
+    if (!borderless) context.stroke();
     context.fill();
 }
 // Entity drawing (this is a function that makes a function)
@@ -928,8 +925,7 @@ const drawEntity = (x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turret
     // Draw body
     context.globalAlpha = 1;
     setColor(context, mixColors(getColor(instance.color), render.status.getColor(), render.status.getBlend()));
-    let borderless = m.borderless;
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, borderless);
+    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless);
     // Draw turrets abovus
     for (let i = 0; i < m.turrets.length; i++) {
         let t = m.turrets[i];
