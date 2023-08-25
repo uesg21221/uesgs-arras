@@ -19,7 +19,10 @@ class Gun {
             fire: false,
         };
         this.color = 16;
+        this.alpha = false;
+        this.bulletColor = undefined;
         this.canShoot = false;
+        this.food = false;
         if (info.PROPERTIES != null && info.PROPERTIES.TYPE != null) {
             this.canShoot = true;
             this.label = info.PROPERTIES.LABEL == null ? "" : info.PROPERTIES.LABEL;
@@ -27,9 +30,7 @@ class Gun {
                 // This is to be nicer about our definitions
                 this.bulletTypes = info.PROPERTIES.TYPE;
                 this.natural = info.PROPERTIES.TYPE.BODY;
-            } else {
-                this.bulletTypes = [info.PROPERTIES.TYPE];
-            }
+            } else this.bulletTypes = [info.PROPERTIES.TYPE];
             // Pre-load bullet definitions so we don't have to recalculate them every shot
             let natural = {};
             this.bulletTypes.forEach(function setNatural(type) {
@@ -56,7 +57,7 @@ class Gun {
                 }
                 this.controllers = toAdd.concat(this.controllers);
             }
-            this.onShoot = info.PROPERTIES.ON_SHOOT == null ? null : info.PROPERTIES.ON_SHOOT;
+            this.food = info.PROPERTIES.FOOD == null ? false : info.PROPERTIES.FOOD;
             this.autofire = info.PROPERTIES.AUTOFIRE == null ? false : info.PROPERTIES.AUTOFIRE;
             this.altFire = info.PROPERTIES.ALT_FIRE == null ? false : info.PROPERTIES.ALT_FIRE;
             this.settings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : info.PROPERTIES.SHOOT_SETTINGS;
@@ -69,14 +70,13 @@ class Gun {
             this.countsOwnKids = info.PROPERTIES.MAX_CHILDREN == null ? false : info.PROPERTIES.MAX_CHILDREN;
             this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS == null ? false : info.PROPERTIES.SYNCS_SKILLS;
             this.negRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
-            this.color = info.PROPERTIES.COLOR == null ? this.color : info.PROPERTIES.COLOR;
-            this.borderless = info.PROPERTIES.BORDERLESS == null ? false : info.PROPERTIES.BORDERLESS;
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
-            if (info.PROPERTIES.COLOR != null && info.PROPERTIES != null) this.color = info.PROPERTIES.COLOR;
         }
         if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null) this.color = info.PROPERTIES.COLOR;
         if (info.PROPERTIES != null && info.PROPERTIES.BORDERLESS != null) this.borderless = info.PROPERTIES.BORDERLESS;
+        if (info.PROPERTIES != null && info.PROPERTIES.ALPHA != null) this.alpha = info.PROPERTIES.ALPHA;
+        if (info.PROPERTIES != null && info.PROPERTIES.BULLET_COLOR != null) this.bulletColor = info.PROPERTIES.BULLET_COLOR;
         if (info.PROPERTIES != null && info.PROPERTIES.ON_SHOOT != null) this.onshoot = info.PROPERTIES.ON_SHOOT;
         let position = info.POSITION;
         this.length = position[0] / 10;
@@ -198,6 +198,10 @@ class Gun {
                 this.cycle += 1 / (this.settings.reload * roomSpeed * (this.calculator == "necro" || this.calculator == "fixed reload" ? 1 : sk.rld));
             }
         }
+        if (this.body.label.includes("Tikki") && this.food) {
+            if (this.cycle >= 1) this.body.master.ability[2] = false;
+            else this.body.master.ability[2] = true;
+        }
         // Firing routines
         if (shootPermission &&
             (this.autofire || (this.altFire ? this.body.control.alt : this.body.control.fire))
@@ -238,7 +242,7 @@ class Gun {
         // Recoil
         this.lastShot.time = util.time();
         this.lastShot.power =
-            3 * Math.log(Math.sqrt(sk.spd) + this.trueRecoil + 1) + 1;
+            3 * Math.log(Math.sqrt(sk.spd) + this.trueRecoil + 1) / this.body.size * 10 + 1;
         this.motion += this.lastShot.power;
         // Find inaccuracy
         let ss, sd;
@@ -271,7 +275,7 @@ class Gun {
                 x: this.body.x + this.body.size * gx - s.x,
                 y: this.body.y + this.body.size * gy - s.y,
             },
-            this.master.master
+            this.food ? undefined : this.master.master
         );
         /*let jumpAhead = this.cycle - 1;
                 if (jumpAhead) {
@@ -282,59 +286,83 @@ class Gun {
         this.bulletInit(o);
         o.coreSize = o.SIZE;
     }
+    getType() {
+        let possible = [[], []];
+        for (let i = 0; i < this.bulletTypes.length; i++) {
+            possible[0].push(i);
+            possible[1].push(i ** 2);
+        }
+        return possible[0][ran.chooseChance(...possible[1])];
+    }
     bulletInit(o) {
+        let level = 0,
+            type = this.bulletTypes[this.getType() ? this.getType() : 0];
         // Define it by its natural properties
         o.color = undefined;
-        this.bulletTypes.forEach(type => o.define(type));
-        // Pass the gun attributes
-        o.define({
-            BODY: this.interpret(),
-            SKILL: this.getSkillRaw(),
-            SIZE: (this.body.size * this.width * this.settings.size) / 2,
-            LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + o.label
-        });
-        o.color = o.color ?? this.body.master.color;
-        // Keep track of it and give it the function it needs to deutil.log itself upon death
-        if (this.countsOwnKids) {
-            o.parent = this;
-            this.children.push(o);
-        } else if (this.body.maxChildren) {
-            o.parent = this.body;
-            this.body.children.push(o);
-            this.children.push(o);
+
+        if (type.FOOD) level = type.FOOD.LEVEL;
+        if (this.food) {
+            o.define(type);
+            o.define({
+                BODY: {
+                    ACCELERATION: 0.015 / (level + 1),
+                },
+            });
+            o.facing = ran.randomAngle();
+            o.team = -100;
         }
-        o.source = this.body;
-        o.facing = o.velocity.direction;
-        // Necromancers.
-        let oo = o;
-        o.necro = (host) => {
-            if (this.countsOwnKids ?
-                this.countsOwnKids > this.children.length * (this.bulletStats === "master" ? this.body.skill.rld : this.bulletStats.rld)
-              : this.body.maxChildren ?
-                this.body.maxChildren > this.body.children.length * (this.bulletStats === "master" ? this.body.skill.rld : this.bulletStats.rld)
-              : true
-            ) {
-                let save = {
-                    facing: host.facing,
-                    size: host.SIZE,
-                };
-                host.define(Class.genericEntity);
-                this.bulletInit(host);
-                host.team = oo.master.master.team;
-                host.master = oo.master;
-                host.color = oo.color;
-                host.facing = save.facing;
-                host.SIZE = save.size;
-                host.health.amount = host.health.max;
-                return true;
+        else {
+            this.bulletTypes.forEach(type => o.define(type));
+            // Pass the gun attributes
+            o.define({
+                BODY: this.interpret(),
+                SKILL: this.getSkillRaw(),
+                SIZE: (this.body.size * this.width * this.settings.size) / 2,
+                LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + o.label
+            });
+            o.color = o.color ?? this.bulletColor ?? this.body.master.color;
+            // Keep track of it and give it the function it needs to deutil.log itself upon death
+            if (this.countsOwnKids) {
+                o.parent = this;
+                this.children.push(o);
+            } else if (this.body.maxChildren) {
+                o.parent = this.body;
+                this.body.children.push(o);
+                this.children.push(o);
             }
-            return false;
-        };
-        // Otherwise
-        o.refreshBodyAttributes();
-        o.life();
-        this.onShootFunction();
-        this.recoilDir = this.body.facing + this.angle;
+            o.source = this.body;
+            o.facing = o.velocity.direction;
+            // Necromancers.
+            let oo = o;
+            o.necro = (host) => {
+                if (this.countsOwnKids ?
+                    this.countsOwnKids > this.children.length * (this.bulletStats === "master" ? this.body.skill.rld : this.bulletStats.rld)
+                : this.body.maxChildren ?
+                    this.body.maxChildren > this.body.children.length * (this.bulletStats === "master" ? this.body.skill.rld : this.bulletStats.rld)
+                : true
+                ) {
+                    let save = {
+                        facing: host.facing,
+                        size: host.SIZE,
+                    };
+                    host.define(Class.genericEntity);
+                    this.bulletInit(host);
+                    host.team = oo.master.master.team;
+                    host.master = oo.master;
+                    host.color = oo.color;
+                    host.facing = save.facing;
+                    host.SIZE = save.size;
+                    host.health.amount = host.health.max;
+                    return true;
+                }
+                return false;
+            };
+            // Otherwise
+            o.refreshBodyAttributes();
+            o.life();
+            this.onShootFunction();
+            this.recoilDir = this.body.facing + this.angle;
+        }
     }
     onShootHitscan() {
         if (this.body.master.health.amount < 0) return;
@@ -673,6 +701,10 @@ class Entity extends EventEmitter {
         this.define(Class.genericEntity);
         // Initalize physics and collision
         this.maxSpeed = 0;
+        this.ability = {
+            timer: 0,
+            used: 0,
+        };
         this.facingLocked = false;
         this.facing = 0;
         this.vfacing = 0;
@@ -693,6 +725,8 @@ class Entity extends EventEmitter {
         this.alpha = 1;
         this.invisible = [0, 0];
         this.borderless = false;
+        this.turret = false;
+        this._killers = [];
         this.autospinBoost = 0;
         this.antiNaN = antiNaN(this);
         // Get a new unique id
@@ -870,6 +904,7 @@ class Entity extends EventEmitter {
         if (set.ALPHA != null) this.alpha = set.ALPHA;
         if (set.INVISIBLE != null) this.invisible = set.INVISIBLE;
         if (set.DANGER != null) this.dangerValue = set.DANGER;
+        if (set.SKILL_POINTS != null) this.skill.maxSkillPoints = set.SKILL_POINTS;
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
         if (set.TEAM != null) {
@@ -877,9 +912,7 @@ class Entity extends EventEmitter {
             if (!sockets.players.length) {
                 const _entity = this;
                 for (let i = 0; i < sockets.players.length; i++) {
-                    if (sockets.players[i].body.id == _entity.id) {
-                        sockets.players[i].team = -_entity.team;
-                    }
+                    if (sockets.players[i].body.id == _entity.id) sockets.players[i].team = -_entity.team;
                 }
             }
         }
@@ -891,7 +924,10 @@ class Entity extends EventEmitter {
             this.upgrades = [];
             this.isArenaCloser = false;
             this.ac = false;
+            this.invisible = [0, 0];
             this.alpha = 1;
+            this.ability.timer = 0;
+            this.skill.maxSkillPoints = c.SKILL_CAP;
             this.skill.reset();
             this.reset();
         }
@@ -983,6 +1019,7 @@ class Entity extends EventEmitter {
                     if (type.TURRET_DANGER) turretDanger = true;
                 }
                 if (!turretDanger) o.define({ DANGER: 0 });
+                o.turret = true;
                 o.bindToMaster(def.POSITION, this);
             }
         }
@@ -1033,7 +1070,13 @@ class Entity extends EventEmitter {
         this.move();
     }
     get level() {
-        return Math.min(c.SKILL_CAP, this.skill.level);
+        return Math.min(
+            this.skill.maxSkillPoints > 45
+                ? c.secondaryGameMode == "Maze"
+                    ? 170
+                    : (this.skill.maxSkillPoints - 45) * 3 + 45
+                : this.skill.maxSkillPoints,
+        this.skill.level);
     }
     get size() {
         return this.bond == null ? (this.coreSize || this.SIZE) * (1 + this.level / 45) : this.bond.size * this.bound.size;
@@ -1249,7 +1292,12 @@ class Entity extends EventEmitter {
     }
     reset(_con = true) {
         this.controllers = this.controllers.filter(con => (con instanceof ioTypes.listenToPlayer) * _con);
-        if (this.controllers.length > 1 && _con) this.controllers = this.controllers[0];
+        if (_con) {
+            if (this.controllers.length > 1) this.controllers = this.controllers[0];
+            else if (!this.controllers.length) loopThrough(sockets.players, player => {
+                if (player.body.id == this.id) this.addController(new ioTypes.listenToPlayer(this, { player }))
+            });
+        }
     }
     face() {
         let t = this.control.target,
@@ -1557,7 +1605,10 @@ class Entity extends EventEmitter {
                     ? "a visiting " + this.label : util.addArticle(this.label)
                 : this.master.name + "'s " + this.label;
             // Calculate the jackpot
-            let jackpot = util.getJackpot(this.skill.score) / this.collisionArray.length;
+            let jackpot = this.collisionArray.length
+                ? util.getJackpot(this.skill.score) / this.collisionArray.length
+                : util.getJackpot(this.skill.score) / this._killers.length;
+            let bad = (this.type == "bullet" && !this.healer) || this.type == "crasher";
             // Now for each of the things that kill me...
             for (let i = 0; i < this.collisionArray.length; i++) {
                 let instance = this.collisionArray[i];
@@ -1565,14 +1616,32 @@ class Entity extends EventEmitter {
                 if (instance.master.settings.acceptsScore) {
                     // If it's not food, give its master the score
                     if (instance.master.type === "tank" || instance.master.type === "miniboss") {
+                        if (
+                            instance.master.type != "miniboss" &&
+                            instance.master.isPlayer &&
+                            instance.master.skill.maxSkillPoints <= c.SKILL_CAP
+                        ) {
+                            if (this.label == "Tikki Food") instance.master.define(Class.tikki);
+                            else if (this.label == "Plagg Food") instance.master.define(Class.plagg);
+                        }
                         notJustFood = true;
                     }
                     instance.master.skill.score += jackpot;
-                    killers.push(instance.master); // And keep track of who killed me
+                    if (!bad) killers.push(instance.master); // And keep track of who killed me
                 } else if (instance.settings.acceptsScore) {
                     instance.skill.score += jackpot;
                 }
                 killTools.push(instance); // Keep track of what actually killed me
+            }
+            // For abilities...
+            for (let i = 0; i < this._killers.length; i++) {
+                let instance = this._killers[i];
+                if (instance.settings.acceptsScore) {
+                    if (instance.master.type === "tank" || instance.master.type === "miniboss") notJustFood = true;
+                    instance.skill.score += jackpot;
+                    killers.push(instance);
+                }
+                killTools.push(instance);
             }
             // Remove duplicates
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));

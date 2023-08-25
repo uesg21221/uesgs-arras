@@ -7,8 +7,6 @@ for (let key in enviroment) {
 }
 const GLOBAL = require("./modules/global.js");
 
-console.log(`[${GLOBAL.creationDate}]: Server initialized.\nRoom Info:\n Dimensions: ${room.width} x ${room.height}\n Max Food / Nest Food: ${room.maxFood} / ${room.maxFood * room.nestFoodAmount}`);
-
 // Let's get a cheaper array removal thing
 Array.prototype.remove = function (index) {
     if (index === this.length - 1) return this.pop();
@@ -53,7 +51,9 @@ function collide(collision) {
     if (
         (!instance.activation.check() && !other.activation.check()) ||
         (instance.ac && !instance.alpha) ||
-        (other.ac && !other.alpha)
+        (other.ac && !other.alpha) ||
+        instance.label.includes("Ability") ||
+        other.label.includes("Ability")
     ) return 0;
     switch (true) {
         case instance.type === "wall" || other.type === "wall":
@@ -157,7 +157,7 @@ function entitiesliveloop(my) {
             logs.entities.tally();
             // Think about my actions.
             logs.life.set();
-            my.life();
+            if (!my.turret) my.life();
             logs.life.mark();
             // Apply friction.
             my.friction();
@@ -520,7 +520,7 @@ class FoodType {
             scale = chances[1];
             chances = [];
             for (let i = types.length; i > 0; i--) {
-                chances.push(i ** scale);
+                chances.push(i ** (scale > 4 && c.SHINY_SCALE != 0 ? 1 : scale));
             }
         }
         this.name = groupName;
@@ -547,24 +547,28 @@ const foodTypes = [
     ),
     new FoodType("Legendary Food",
         [Class.jewel, Class.legendarySquare, Class.legendaryTriangle, Class.legendaryPentagon, Class.legendaryBetaPentagon, Class.legendaryAlphaPentagon],
-        ["scale", 6], 0.1
+        ["scale", 5], 0.2
     ),
     new FoodType("Shadow Food",
         [Class.shadowSquare, Class.shadowTriangle, Class.shadowPentagon, Class.shadowBetaPentagon, Class.shadowAlphaPentagon],
-        ["scale", 7], 0.005
+        ["scale", 6], 0.04
     ),
     new FoodType("Rainbow Food",
         [Class.rainbowSquare, Class.rainbowTriangle, Class.rainbowPentagon, Class.rainbowBetaPentagon, Class.rainbowAlphaPentagon],
-        ["scale", 8], 0.001
+        ["scale", 6], 0.008
     ),
     // Commented out because stats aren't done yet.
     // new FoodType("Trans Food",
     //     [Class.egg],
-    //     ["scale", 9], 0.0005
+    //     ["scale", 6], 0.004
     // ),
     new FoodType("Extradimensional Food",
         [Class.sphere, Class.cube, Class.tetrahedron, Class.octahedron, Class.dodecahedron, Class.icosahedron],
-        ["scale", 10], 0.0001
+        ["scale", 7], 0.0016
+    ),
+    new FoodType("Special Food",
+        [Class.tikkiSpawn, Class.plaggSpawn],
+        ["scale", 1], 4000 // 0.0001
     ),
     new FoodType("Nest Food", // Commented out because stats aren't done yet.
         [Class.pentagon, Class.betaPentagon, Class.alphaPentagon, /*Class.alphaHexagon, Class.alphaHeptagon, Class.alphaOctogon, Class.alphaNonagon, Class.alphaDecagon, Class.icosagon*/],
@@ -670,6 +674,7 @@ const makefood = () => {
         }
     }
 };
+
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
 const maintainloop = () => {
     // Do stuff
@@ -678,12 +683,8 @@ const maintainloop = () => {
     // Regen health and update the grid
     for (let i = 0; i < entities.length; i++) {
         let instance = entities[i];
-        if (instance.shield.max) {
-            instance.shield.regenerate();
-        }
-        if (instance.health.amount) {
-            instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
-        }
+        if (instance.shield.max) instance.shield.regenerate();
+        if (!instance.isDead()) instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
     }
 };
 

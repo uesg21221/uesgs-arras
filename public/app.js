@@ -834,9 +834,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
     }
     context.closePath();
     if (!borderless) context.stroke();
-    if (fill) {
-        context.fill();
-    }
+    if (fill) context.fill();
     context.lineJoin = "round";
 }
 function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless = false) {
@@ -865,8 +863,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless 
         y + l[0] * Math.sin(angle - r[0])
     );
     context.closePath();
-    if (borderless != true)
-        context.stroke();
+    if (!borderless) context.stroke();
     context.fill();
 }
 // Entity drawing (this is a function that makes a function)
@@ -923,13 +920,12 @@ const drawEntity = (x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turret
             gunColor = g.color == null ? color.grey : getColor(g.color),
             borderless = g.borderless;
         setColor(context, mixColors(gunColor, render.status.getColor(), render.status.getBlend()));
-        drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless);
+        if (!g.hide) drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless);
     }
     // Draw body
     context.globalAlpha = 1;
     setColor(context, mixColors(getColor(instance.color), render.status.getColor(), render.status.getBlend()));
-    let borderless = m.borderless;
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, borderless);
+    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless);
     // Draw turrets abovus
     for (let i = 0; i < m.turrets.length; i++) {
         let t = m.turrets[i];
@@ -1407,7 +1403,7 @@ function drawSkillBars(spacing, alcoveSize) {
     global.clickables.stat.hide();
     let vspacing = 4;
     let height = 15;
-    let gap = 35;
+    let _gap = 45;
     let len = alcoveSize; // * global.screenWidth; // The 30 is for the value modifiers
     let save = len;
     let x = -spacing - 2 * len + statMenu.get() * (2 * spacing + 2 * len);
@@ -1429,7 +1425,8 @@ function drawSkillBars(spacing, alcoveSize) {
         len = save;
         let max = 0,
             extension = cap > max,
-            blocking = cap < maxLevel;
+            blocking = cap < maxLevel,
+            gap = _gap - (maxLevel * (_gap - 28) / 16);
         if (extension) {
             max = cap;
         }
@@ -1769,7 +1766,7 @@ let getKills = () => {
         " kills": [Math.round(global.finalKills[0].get()), 1],
         " assists": [Math.round(global.finalKills[1].get()), 0.5],
         " visitors defeated": [Math.round(global.finalKills[2].get()), 3],
-        " polygons destroyed": [Math.round(global.finalKills[2].get()), 0.05],
+        " polygons destroyed": [Math.round(global.finalKills[3].get()), 0.05],
     }, killCountTexts = [];
     let destruction = 0;
     for (let key in finalKills) {

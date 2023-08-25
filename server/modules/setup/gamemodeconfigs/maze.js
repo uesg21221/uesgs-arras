@@ -7,7 +7,6 @@ module.exports = {
     Y_GRID: 15,
     WIDTH: 5000,
     HEIGHT: 5000,
-    CLEAR_NEST: true,
     ROOM_SETUP: room,
     secondaryGameMode: "Maze"
 };
