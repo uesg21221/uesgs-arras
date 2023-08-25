@@ -568,7 +568,7 @@ const foodTypes = [
     ),
     new FoodType("Special Food",
         [Class.tikkiSpawn, Class.plaggSpawn],
-        ["scale", 1], 4000 // 0.0001
+        ["scale", 1], 0.0001 // 0.0001
     ),
     new FoodType("Nest Food", // Commented out because stats aren't done yet.
         [Class.pentagon, Class.betaPentagon, Class.alphaPentagon, /*Class.alphaHexagon, Class.alphaHeptagon, Class.alphaOctogon, Class.alphaNonagon, Class.alphaDecagon, Class.icosagon*/],

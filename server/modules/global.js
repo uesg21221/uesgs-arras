@@ -38,7 +38,11 @@ global.getWeakestTeam = (type = 0) => { // 0 - Bots only, 1 - Players only, 2 - 
         }
     }
     const entries = Object.entries(teamcounts);
-    return entries.length === 0 ? Math.ceil(Math.random() * c.TEAMS) : entries.reduce((a, b) => Math.min(a[1], b[1]), Infinity)[0];
+    let near = entries[0][1];
+    for (let i = 0; i < entries.length; i++) {
+        if (entries[i][1] < near) near = entries[i][1];
+    }
+    return near === 0 ? Math.ceil(Math.random() * c.TEAMS) : near;
 };
 
 global.getTeamName = team => ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN"][-team - 1] || "An unknown team";

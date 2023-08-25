@@ -1,6 +1,6 @@
 let output = require("../../config.js");
 
-const gamemodes = ["bigmaze", "shiny"]; // ffa default
+const gamemodes = ["bigmaze", "shiny", "growth"]; // ffa default
 
 for (let gamemode of gamemodes) {
     let mode = require(`./gamemodeconfigs/${gamemode}.js`);

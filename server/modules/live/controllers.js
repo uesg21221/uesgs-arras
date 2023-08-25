@@ -679,7 +679,7 @@ class io_ability extends IO {
         this.turrets = [];
         this.speed = 0;
         this.next = false;
-        this.check = 5;
+        this.check = 10;
     }
     log() {
         this.logged = [];
@@ -692,11 +692,8 @@ class io_ability extends IO {
                 e.master.id != this.master.id &&
                 !e.label.includes("Ability") // e.team != this.master.team
             ) {
-                // if (this.healing) {
-                //     if (e.team == this.master.team) this.logged.push(e);
-                // }
-                // else if (e.team != this.master.team) this.logged.push(e);
-                this.logged.push(e);
+                if (e.team == this.master.team && this.healing) this.logged.push(e);
+                if (e.team != this.master.team && !this.healing) this.logged.push(e);
             }
         }
         // for attack
@@ -785,11 +782,11 @@ class io_ability extends IO {
         this.limit = this.master.realSize * 30;
         this.showLimit = this.master.realSize * 1.2;
         this.check++;
-        if (this.check > 5 && this.ability.timer < 1) {
+        if (this.check > 10 && this.ability.timer < 1) {
             this.activate(input.alt);
-            this.loop();
             this.check = 0;
         }
+        this.loop();
         if (this.ability.timer > 0 || this.ability.used > 0) {
             if (this.ability.timer > 0) this.ability.timer--;
             if (this.body.SIZE > 1) {
