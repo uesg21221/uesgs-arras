@@ -2686,15 +2686,7 @@ exports.machineAutoTurret = {
         {
             POSITION: [14, 11, 1.3, 8, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.morerecoil,
-                    g.turret,
-                    g.mach,
-                    g.slow,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, g.mach, g.slow]),
                 TYPE: exports.bullet,
             },
         },
@@ -2711,14 +2703,7 @@ exports.droneAutoTurret = {
         {
             POSITION: [22, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.morerecoil,
-                    g.turret,
-                    g.overdrive,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, g.overdrive]),
                 TYPE: exports.bullet,
             },
         },
@@ -2732,18 +2717,7 @@ exports.autoSmasherTurret = {
         {
             POSITION: [20, 6, 1, 0, 5, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.morerecoil,
-                    g.turret,
-                    g.fast,
-                    g.mach,
-                    g.pound,
-                    g.morereload,
-                    g.morereload,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, g.fast, g.mach, g.pound, g.morereload, g.morereload]),
                 TYPE: exports.bullet,
                 STAT_CALCULATOR: gunCalcNames.fixedReload,
             },
@@ -2751,18 +2725,7 @@ exports.autoSmasherTurret = {
         {
             POSITION: [20, 6, 1, 0, -5, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.morerecoil,
-                    g.turret,
-                    g.fast,
-                    g.mach,
-                    g.pound,
-                    g.morereload,
-                    g.morereload,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, g.fast, g.mach, g.pound, g.morereload, g.morereload]),
                 TYPE: exports.bullet,
                 STAT_CALCULATOR: gunCalcNames.fixedReload,
             },
@@ -2777,13 +2740,7 @@ exports.oldAutoSmasherTurret = {
         {
             POSITION: [20, 7, 1, 0, -5.75, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.lotsmorrecoil,
-                    g.morereload,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.lotsmorrecoil, g.morereload]),
                 TYPE: exports.bullet,
                 STAT_CALCULATOR: gunCalcNames.fixedReload,
             },
@@ -2791,13 +2748,7 @@ exports.oldAutoSmasherTurret = {
         {
             POSITION: [20, 7, 1, 0, 5.75, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.lotsmorrecoil,
-                    g.morereload,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.lotsmorrecoil, g.morereload]),
                 TYPE: exports.bullet,
                 STAT_CALCULATOR: gunCalcNames.fixedReload,
             },

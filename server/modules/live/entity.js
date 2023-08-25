@@ -70,11 +70,11 @@ class Gun {
             this.countsOwnKids = info.PROPERTIES.MAX_CHILDREN == null ? false : info.PROPERTIES.MAX_CHILDREN;
             this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS == null ? false : info.PROPERTIES.SYNCS_SKILLS;
             this.negRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
-            this.borderless = info.PROPERTIES.BORDERLESS == null ? false : info.PROPERTIES.BORDERLESS;
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
         }
         if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null) this.color = info.PROPERTIES.COLOR;
+        if (info.PROPERTIES != null && info.PROPERTIES.BORDERLESS != null) this.borderless = info.PROPERTIES.BORDERLESS;
         if (info.PROPERTIES != null && info.PROPERTIES.ALPHA != null) this.alpha = info.PROPERTIES.ALPHA;
         if (info.PROPERTIES != null && info.PROPERTIES.BULLET_COLOR != null) this.bulletColor = info.PROPERTIES.BULLET_COLOR;
         if (info.PROPERTIES != null && info.PROPERTIES.ON_SHOOT != null) this.onshoot = info.PROPERTIES.ON_SHOOT;
@@ -908,15 +908,12 @@ class Entity extends EventEmitter {
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
         if (set.TEAM != null) {
-            if (set.TEAM == 0) this.team = this.id;
-            else {
-                this.team = set.TEAM;
-                if (!sockets.players.length) {
-                    const _entity = this;
-                    loopThrough(sockets.players, function (player) {
-                        if (player.body.id == _entity.id) player.team = -_entity.team;
-                    });
-                }    
+            this.team = set.TEAM;
+            if (!sockets.players.length) {
+                const _entity = this;
+                for (let i = 0; i < sockets.players.length; i++) {
+                    if (sockets.players[i].body.id == _entity.id) sockets.players[i].team = -_entity.team;
+                }
             }
         }
         if (set.VARIES_IN_SIZE != null) {
@@ -1609,8 +1606,8 @@ class Entity extends EventEmitter {
                 : this.master.name + "'s " + this.label;
             // Calculate the jackpot
             let jackpot = this.collisionArray.length
-                ? Math.ceil(util.getJackpot(this.skill.score) / this.collisionArray.length)
-                : Math.ceil(util.getJackpot(this.skill.score) / this._killers.length);
+                ? util.getJackpot(this.skill.score) / this.collisionArray.length
+                : util.getJackpot(this.skill.score) / this._killers.length;
             let bad = (this.type == "bullet" && !this.healer) || this.type == "crasher";
             // Now for each of the things that kill me...
             for (let i = 0; i < this.collisionArray.length; i++) {
