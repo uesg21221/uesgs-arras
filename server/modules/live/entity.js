@@ -1294,9 +1294,10 @@ class Entity extends EventEmitter {
         this.controllers = this.controllers.filter(con => (con instanceof ioTypes.listenToPlayer) * _con);
         if (_con) {
             if (this.controllers.length > 1) this.controllers = this.controllers[0];
-            else if (!this.controllers.length) loopThrough(sockets.players, player => {
-                if (player.body.id == this.id) this.addController(new ioTypes.listenToPlayer(this, { player }))
-            });
+            else if (!this.controllers.length) for (let i = 0; i < sockets.players.length; i++) {
+                let player = sockets.players[i];
+                if (player.body.id == this.id) this.addController(new ioTypes.listenToPlayer(this, { player }));
+            }
         }
     }
     face() {

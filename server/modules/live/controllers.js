@@ -683,7 +683,8 @@ class io_ability extends IO {
     }
     log() {
         this.logged = [];
-        loopThrough(entities, e => {
+        for (let i = 0; i < entities.length; i++) {
+            let e = entities[i];
             if (
                 util.getDistance(this.master, e) < this.limit &&
                 !e.turret &&
@@ -697,7 +698,7 @@ class io_ability extends IO {
                 // else if (e.team != this.master.team) this.logged.push(e);
                 this.logged.push(e);
             }
-        });
+        }
         // for attack
         let log = this.logged;
         this.logged = [];
@@ -715,9 +716,9 @@ class io_ability extends IO {
     }
     checkSave() {
         let _ret = false;
-        loopThrough(this.logged, e => {
-            if (this.ids.indexOf(e.id) == -1) _ret = true;
-        });
+        for (let i = 0; i < this.logged.length; i++) {
+            if (this.ids.indexOf(this.logged[i].id) == -1) _ret = true;
+        }
         return _ret;
     }
     loop() {
@@ -734,14 +735,15 @@ class io_ability extends IO {
                 this.turrets.push(o);
             });
             this.ids = [];
-            loopThrough(this.logged, e => this.ids.push(e.id));
+            for (let i = 0; i < this.logged.length; i++) this.ids.push(this.logged[i].id);
             this.next = false;
         }
-        loopThrough(this.turrets, e => {
+        for (let i = 0; i < this.turrets.length; i++) {
+            let e = this.turrets[i];
             e.x = e.master.x;
             e.y = e.master.y;
             if (e.skill.level != e.master.skill.level) e.skill.level = e.master.skill.level;
-        });
+        }
     }
     destroyTurrets() {
         for (let i = 0; i < this.turrets.length; i++) {
@@ -750,20 +752,22 @@ class io_ability extends IO {
         this.turrets = [];
     }
     damage() {
-        loopThrough(this.logged, e => {
+        for (let i = 0; i < this.logged.length; i++) {
+            let e = this.logged[i];
             e.shield.amount *= 0.1;
             if (e.health.amount < e.health.max * 0.2) {
                 e._killers.push(this.master);
                 e.kill();
             }
             else e.health.amount *= 0.1;
-        });
+        }
     }
     heal() {
-        loopThrough(this.logged, e => {
+        for (let i = 0; i < this.logged.length; i++) {
+            let e = this.logged[i];
             e.shield.amount = e.shield.max;
             e.health.amount = e.health.max;
-        });
+        }
     }
     activate(use) {
         if (use) {
