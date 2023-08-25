@@ -177,7 +177,7 @@ const g = {
     
     // Lances
     lancer: [0.4, 1, 1, 1, 1, 1, 1, 0.1, 0.1, 0.1, 1, 1, 1],
-    
+
     // Mixed
     celeslower: [1, 1, 1, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     atmosphere: [0.001, 0.001, 0.001, 6, 1, 1, 1, 0.001, 0.001, 1, 1, 0.001, 1],
@@ -1659,6 +1659,74 @@ exports.icosahedron = {
         PENETRATION: 22.5,
     },
     DRAW_HEALTH: true,
+    GIVE_KILL_MESSAGE: true,
+};
+
+// Spawns
+exports.tikkiSpawn = {
+    PARENT: [exports.food],
+    LABEL: "Tikki Food",
+    FOOD: {
+        LEVEL: 0,
+    },
+    VALUE: 1e8,
+    SIZE: 10,
+    COLOR: 12,
+    SHAPE: 9,
+    TURRETS: [
+        {
+            POSITION: [4, 0, 0, 0, 360, 1],
+            TYPE: makeDeco(0, 9),
+        },
+        {
+            POSITION: [4, -4.5, -4.5, 0, 360, 1],
+            TYPE: makeDeco(0, 9),
+        },
+        {
+            POSITION: [4, -4.5, 4.5, 0, 360, 1],
+            TYPE: makeDeco(0, 9),
+        },
+        {
+            POSITION: [4, 4.5, -4.5, 0, 360, 1],
+            TYPE: makeDeco(0, 9),
+        },
+        {
+            POSITION: [4, 4.5, 4.5, 0, 360, 1],
+            TYPE: makeDeco(0, 9),
+        },
+    ],
+    BODY: {
+        DAMAGE: 7,
+        DENSITY: 25,
+        HEALTH: 82,
+    },
+    DRAW_HEALTH: true,
+    IGNORED_BY_AI: true,
+    GIVE_KILL_MESSAGE: true,
+};
+exports.plaggSpawn = {
+    PARENT: [exports.food],
+    LABEL: "Plagg Food",
+    FOOD: {
+        LEVEL: 0,
+    },
+    VALUE: 1e8,
+    SIZE: 10,
+    COLOR: 9,
+    SHAPE: 9,
+    TURRETS: [
+        {
+            POSITION: [15, 0, 0, 0, 360, 1],
+            TYPE: makeDeco(0, 11),
+        },
+    ],
+    BODY: {
+        DAMAGE: 7,
+        DENSITY: 25,
+        HEALTH: 82,
+    },
+    DRAW_HEALTH: true,
+    IGNORED_BY_AI: true,
     GIVE_KILL_MESSAGE: true,
 };
 
@@ -16648,39 +16716,15 @@ exports.atmosphere = {
         REGEN: 1e5,
         HEALTH: 1e6,
         DENSITY: 0,
-        DAMAGE: 1e2,
+        DAMAGE: 0,
         SPEED: 0,
         PUSHABILITY: 0,
     },
-    TURRETS: [
-        {
-            POSITION: [20, 0, 0, 0, 360, 1],
-            TYPE: [exports.genericEntity, { COLOR: 9 }]
-        },
-    ],
 }
-exports.atmosphere1 = {
-    PARENT: [exports.atmosphere],
-    ALPHA: 0.3,
-    CONTROLLERS: ["destroyer"],
-}
-exports.atmosphere2 = {
-    PARENT: [exports.atmosphere],
-    ALPHA: 0.5,
-    CONTROLLERS: ["destroyer"],
-}
-exports.atmosphere3 = {
-    PARENT: [exports.atmosphere],
-    ALPHA: 0.8,
-    CONTROLLERS: ["destroyer"],
-}
-exports.atmosphere4 = {
+exports.atmospherePlagg = {
     PARENT: [exports.atmosphere],
     ALPHA: 0.6,
-    CONTROLLERS: ["destroyer"],
-    BODY: {
-        DAMAGE: 0,
-    },
+    CONTROLLERS: [["ability", { heal: false }]],
     TURRETS: [
         {
             POSITION: [20, 0, 0, 0, 360, 1],
@@ -16688,10 +16732,10 @@ exports.atmosphere4 = {
         },
     ],
 }
-exports.atmosphere5 = {
+exports.atmosphereTikki = {
     PARENT: [exports.atmosphere],
     ALPHA: 0.6,
-    CONTROLLERS: ["shapeSpawner"],
+    CONTROLLERS: [["ability", { heal: true }]],
     BODY: {
         DAMAGE: 0,
     },
@@ -16703,60 +16747,40 @@ exports.atmosphere5 = {
     ],
 }
 
-exports.plaggLayer = {
+exports.plaggAbility = {
     PARENT: [exports.genericTank],
     LABEL: "Plagg Ability",
-    COLOR: 9,
-    SIZE: 12,
+    FACING_TYPE: "autospin",
+    ALPHA: 0,
+    ACCEPTS_SCORE: false,
+    CAN_BE_ON_LEADERBOARD: false,
     SHAPE: 0,
-    GUNS: [
-        {
-            POSITION: [0, 20, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.atmosphere]),
-                TYPE: exports.atmosphere1,
-                MAX_CHILDREN: 1,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [0, 20, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.atmosphere]),
-                TYPE: exports.atmosphere2,
-                MAX_CHILDREN: 1,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [0, 20, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.atmosphere]),
-                TYPE: exports.atmosphere3,
-                MAX_CHILDREN: 1,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [0, 20, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.atmosphere]),
-                TYPE: exports.atmosphere4,
-                MAX_CHILDREN: 1,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-    ],
+    GUNS: (() => {
+        let e = [],
+            angle = 360 / 30;
+        for (let i = 0; i < 30; i++) {
+            e.push({
+                POSITION: [0, 6.5, 1, -50 + -Math.random(), 0, angle * i, Math.random()],
+                PROPERTIES: {
+                    TYPE: [exports.bullet, {
+                        DIE_AT_LOW_SPEED: true,
+                        MOTION_TYPE: "slow",
+                    }],
+                    ALPHA: 1,
+                    AUTOFIRE: true,
+                    BULLET_COLOR: 9,
+                    SHOOT_SETTINGS: combineStats([g.basic, g.halfreload])
+                }
+            })
+        }        
+        return e;
+    })(),
 }
 exports.plagg = {
     PARENT: [exports.genericTank],
     LABEL: "Plagg",
     SKILL_CAP: [14, 14, 14, 14, 14, 14, 14, 14, 14, 14],
-    LEVEL: 45 + (140 - 45) * 3,
+    //LEVEL: 45 + (140 - 45) * 3,
     //TEAM: 0,
     COLOR: 11,
     SHAPE: 0,
@@ -16771,8 +16795,8 @@ exports.plagg = {
     },
     TURRETS: [
         {
-            POSITION: [18, 0, 0, 0, 0, 1],
-            TYPE: exports.plaggLayer,
+            POSITION: [18, 0, 0, 0, 360, 1],
+            TYPE: makeDeco(0, 9),
         },
     ],
     GUNS: (() => {
@@ -16780,7 +16804,7 @@ exports.plagg = {
         for (let t = 0; t < 5; t++) {
             let d = (360 / 5) * (t + 1);
             for (let v = 0; v < 2; v++) {
-                let o = {
+                e.push({
                     POSITION: [10, 5, 1, 5, v == 1 ? -2.5 : 2.5, d, 0],
                     PROPERTIES: {
                         SHOOT_SETTINGS: combineStats([g.basic, g.power, g.halfrange, g.slow]),
@@ -16788,20 +16812,69 @@ exports.plagg = {
                         BULLET_COLOR: 11,
                         TYPE: exports.bullet,
                     },
-                };
-                e.push(o);
+                });
             }
         }
+        e.push({
+            POSITION: [0, 20, 1, 0, 0, 0, 1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.atmosphere]),
+                TYPE: exports.atmospherePlagg,
+                MAX_CHILDREN: 1,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+            },
+        });
         return e;
     })(),
 };
 
-exports.tikkiLayer = {
+exports.tikkiAbility = {
     PARENT: [exports.genericTank],
     LABEL: "Tikki Ability",
-    COLOR: 12,
-    SIZE: 12,
+    FACING_TYPE: "autospin",
+    ALPHA: 0,
+    ACCEPTS_SCORE: false,
+    CAN_BE_ON_LEADERBOARD: false,
     SHAPE: 0,
+    GUNS: (() => {
+        let e = [],
+            angle = 360 / 30;
+        for (let i = 0; i < 30; i++) {
+            e.push({
+                POSITION: [0, 6.5, 1, -50 + -Math.random(), 0, angle * i, Math.random()],
+                PROPERTIES: {
+                    TYPE: [exports.bullet, {
+                        DIE_AT_LOW_SPEED: true,
+                        MOTION_TYPE: "slow",
+                    }],
+                    ALPHA: 1,
+                    AUTOFIRE: true,
+                    BULLET_COLOR: 5,
+                    SHOOT_SETTINGS: combineStats([g.basic, g.halfreload])
+                }
+            })
+        }        
+        return e;
+    })(),
+}
+exports.tikki = {
+    PARENT: [exports.genericTank],
+    LABEL: "Tikki",
+    SKILL_CAP: [14, 14, 14, 14, 14, 14, 14, 14, 14, 14],
+    //LEVEL: 45 + (140 - 45) * 3,
+    //TEAM: 0,
+    COLOR: 12,
+    SHAPE: 0,
+    SKILL_POINTS: 140,
+    BODY: {
+        ACCEL: 0.2,
+        SPEED: base.SPEED * 0.7,
+        HEALTH: base.HEALTH * 2.8,
+        DAMAGE: base.DAMAGE * 1.4,
+        SHIELD: base.SHIELD * 1.4,
+        REGEN: base.REGEN * 1.4,
+    },
     TURRETS: [
         {
             POSITION: [4, 0, 0, 0, 360, 1],
@@ -16827,59 +16900,6 @@ exports.tikkiLayer = {
     GUNS: (() => {
         let e = [];
         for (let t = 0; t < 5; t++) {
-            let d = (360 / 5) * (t + 1) + 36,
-                O = {
-                    POSITION: [7, 6, 1, 5, 0, d, 0],
-                    PROPERTIES: {
-                        SHOOT_SETTINGS: combineStats([g.basic, g.noreload]),
-                        TYPE: [exports.rainbowAlphaPentagon, exports.rainbowBetaPentagon, exports.legendaryAlphaPentagon, exports.legendaryBetaPentagon, exports.shinyAlphaPentagon, exports.shinyBetaPentagon],
-                        FOOD: true,
-                        COLOR: 9,
-                        ALT_FIRE: !0,
-                    },
-                };
-            e.push(O);
-        }
-        let d = {
-            POSITION: [0, 20, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.atmosphere]),
-                TYPE: exports.atmosphere5,
-                MAX_CHILDREN: 1,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        };
-        e.push(d);
-        return e;
-    })(),
-}
-exports.tikki = {
-    PARENT: [exports.genericTank],
-    LABEL: "Tikki",
-    SKILL_CAP: [14, 14, 14, 14, 14, 14, 14, 14, 14, 14],
-    LEVEL: 45 + (140 - 45) * 3,
-    //TEAM: 0,
-    COLOR: 9,
-    SHAPE: 0,
-    SKILL_POINTS: 140,
-    BODY: {
-        ACCEL: 0.2,
-        SPEED: base.SPEED * 0.7,
-        HEALTH: base.HEALTH * 2.8,
-        DAMAGE: base.DAMAGE * 1.4,
-        SHIELD: base.SHIELD * 1.4,
-        REGEN: base.REGEN * 1.4,
-    },
-    TURRETS: [
-        {
-            POSITION: [19, 0, 0, 0, 0, 1],
-            TYPE: exports.tikkiLayer,
-        },
-    ],
-    GUNS: (() => {
-        let e = [];
-        for (let t = 0; t < 5; t++) {
             let d = (360 / 5) * (t + 1);
             for (let v = 0; v < 2; v++) {
                 let O = {
@@ -16894,25 +16914,22 @@ exports.tikki = {
                 e.push(O);
             }
         }
-        for (let t = 0; t < 5; t++) {
-            let d = (360 / 5) * (t + 1) + 36,
-                O = {
-                    POSITION: [7, 6, 1, 5, 0, d, 0],
-                    PROPERTIES: {
-                        SHOOT_SETTINGS: combineStats([g.basic, g.healer, g.halfrange, g.halfspeed]),
-                        TYPE: exports.healerBullet,
-                        AUTOFIRE: true,
-                        COLOR: 12,
-                    },
-                };
-            e.push(O);
-        }
+        e.push({
+            POSITION: [0, 20, 1, 0, 0, 0, 1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.atmosphere]),
+                TYPE: exports.atmosphereTikki,
+                MAX_CHILDREN: 1,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+            },
+        });
         return e;
     })(),
 };
 
 // TOKEN "UPGRADE PATHS"
-exports.developer.UPGRADES_TIER_0 = [exports.plagg, exports.tikki, exports.healer, exports.basic, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.eggGenerator, exports.specialTanksMenu, exports.bossesMenu, exports.memes, exports.retrograde, exports.miscEntities, exports.dominators, exports.levels, exports.teams];
+exports.developer.UPGRADES_TIER_0 = [exports.plagg, exports.plaggAbility, exports.tikki, exports.healer, exports.basic, exports.lancer, exports.gameAdminMenu, exports.spectator, exports.eggGenerator, exports.specialTanksMenu, exports.bossesMenu, exports.memes, exports.retrograde, exports.miscEntities, exports.dominators, exports.levels, exports.teams];
     exports.gameAdminMenu.UPGRADES_TIER_0 = [exports.basic, exports.gameModMenu, exports.spectator, exports.eggGenerator, exports.developer, exports.specialTanksMenu, exports.bossesMenu, exports.memes];
         exports.memes.UPGRADES_TIER_0 = [exports.vanquisher, exports.armyOfOne, exports.godbasic, exports.diamondShape, exports.rotatedTrap, exports.mummifier, exports.colorMan, exports.seventeenagon];
         exports.gameModMenu.UPGRADES_TIER_0 = [exports.basic, exports.betaTesterMenu, exports.spectator, exports.tankChangesMenu, exports.retrograde];

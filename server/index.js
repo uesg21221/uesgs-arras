@@ -50,27 +50,11 @@ function collide(collision) {
     if (
         (!instance.activation.check() && !other.activation.check()) ||
         (instance.ac && !instance.alpha) ||
-        (other.ac && !other.alpha)
+        (other.ac && !other.alpha) ||
+        instance.label.includes("Ability") ||
+        other.label.includes("Ability")
     ) return 0;
     switch (true) {
-        case instance.type === "atmosphere" || other.type === "atmosphere":
-            let pusher =
-                instance.type === "atmosphere" ? instance : other;
-            let _entity =
-                instance.type === "atmosphere" ? other : instance;
-            if (
-                instance.type === other.type ||
-                _entity.id == pusher.master.id ||
-                _entity.settings.hitsOwnType === "pushOnlyTeam" ||
-                _entity.team == -101 ||
-                pusher.DAMAGE < 1
-            ) return;
-            let a =
-                1 +
-                10 /
-                    (Math.max(_entity.velocity.length, pusher.velocity.length) + 10);
-            advancedcollide(pusher, _entity, true, true, a);
-            break;
         case instance.type === "wall" || other.type === "wall":
             if (instance.type === "wall" && other.type === "wall") return;
             let wall = instance.type === "wall" ? instance : other;
@@ -172,7 +156,7 @@ function entitiesliveloop(my) {
             logs.entities.tally();
             // Think about my actions.
             logs.life.set();
-            my.life();
+            if (!my.turret) my.life();
             logs.life.mark();
             // Apply friction.
             my.friction();
@@ -580,6 +564,10 @@ const foodTypes = [
         [Class.sphere, Class.cube, Class.tetrahedron, Class.octahedron, Class.dodecahedron, Class.icosahedron],
         ["scale", 7], 0.0016
     ),
+    new FoodType("Special Food",
+        [Class.tikkiSpawn, Class.plaggSpawn],
+        ["scale", 1], 4000 // 0.0001
+    ),
     new FoodType("Nest Food", // Commented out because stats aren't done yet.
         [Class.pentagon, Class.betaPentagon, Class.alphaPentagon, /*Class.alphaHexagon, Class.alphaHeptagon, Class.alphaOctogon, Class.alphaNonagon, Class.alphaDecagon, Class.icosagon*/],
         ["scale", 4], 1, true
@@ -685,17 +673,6 @@ const makefood = () => {
     }
 };
 
-const makeability = (entity) => {
-    let _a = entity.ability;
-    if (_a[0]) {
-        if (!_a[1]) entity.reset(false);
-        _a[1] = true;
-    }
-    else {
-        if (_a[1]) entity.reset();
-        _a[1] = false;
-    }
-};
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
 const maintainloop = () => {
     // Do stuff
@@ -703,7 +680,6 @@ const maintainloop = () => {
     makefood();
     // Regen health and update the grid
     loopThrough(entities, function (instance) {
-        if (instance.isPlayer || instance.isBot) makeability(instance);
         if (instance.shield.max) instance.shield.regenerate();
         if (!instance.isDead()) instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
     });

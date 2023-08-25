@@ -920,7 +920,7 @@ const drawEntity = (x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turret
             gunColor = g.color == null ? color.grey : getColor(g.color),
             borderless = g.borderless;
         setColor(context, mixColors(gunColor, render.status.getColor(), render.status.getBlend()));
-        drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless);
+        if (!g.hide) drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless);
     }
     // Draw body
     context.globalAlpha = 1;
@@ -1766,7 +1766,7 @@ let getKills = () => {
         " kills": [Math.round(global.finalKills[0].get()), 1],
         " assists": [Math.round(global.finalKills[1].get()), 0.5],
         " visitors defeated": [Math.round(global.finalKills[2].get()), 3],
-        " polygons destroyed": [Math.round(global.finalKills[2].get()), 0.05],
+        " polygons destroyed": [Math.round(global.finalKills[3].get()), 0.05],
     }, killCountTexts = [];
     let destruction = 0;
     for (let key in finalKills) {

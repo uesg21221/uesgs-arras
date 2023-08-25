@@ -19,6 +19,7 @@ class Gun {
             fire: false,
         };
         this.color = 16;
+        this.alpha = false;
         this.bulletColor = undefined;
         this.canShoot = false;
         this.food = false;
@@ -74,6 +75,7 @@ class Gun {
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
         }
         if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null) this.color = info.PROPERTIES.COLOR;
+        if (info.PROPERTIES != null && info.PROPERTIES.ALPHA != null) this.alpha = info.PROPERTIES.ALPHA;
         if (info.PROPERTIES != null && info.PROPERTIES.BULLET_COLOR != null) this.bulletColor = info.PROPERTIES.BULLET_COLOR;
         if (info.PROPERTIES != null && info.PROPERTIES.ON_SHOOT != null) this.onshoot = info.PROPERTIES.ON_SHOOT;
         let position = info.POSITION;
@@ -699,7 +701,10 @@ class Entity extends EventEmitter {
         this.define(Class.genericEntity);
         // Initalize physics and collision
         this.maxSpeed = 0;
-        this.ability = [0, 0, 0];
+        this.ability = {
+            timer: 0,
+            used: 0,
+        };
         this.facingLocked = false;
         this.facing = 0;
         this.vfacing = 0;
@@ -720,6 +725,8 @@ class Entity extends EventEmitter {
         this.alpha = 1;
         this.invisible = [0, 0];
         this.borderless = false;
+        this.turret = false;
+        this._killers = [];
         this.autospinBoost = 0;
         this.antiNaN = antiNaN(this);
         // Get a new unique id
@@ -922,7 +929,7 @@ class Entity extends EventEmitter {
             this.ac = false;
             this.invisible = [0, 0];
             this.alpha = 1;
-            this.ability[2] = 0;
+            this.ability.timer = 0;
             this.skill.maxSkillPoints = c.SKILL_CAP;
             this.skill.reset();
             this.reset();
@@ -1015,6 +1022,7 @@ class Entity extends EventEmitter {
                     if (type.TURRET_DANGER) turretDanger = true;
                 }
                 if (!turretDanger) o.define({ DANGER: 0 });
+                o.turret = true;
                 o.bindToMaster(def.POSITION, this);
             }
         }
@@ -1065,7 +1073,13 @@ class Entity extends EventEmitter {
         this.move();
     }
     get level() {
-        return Math.min(this.skill.maxSkillPoints > 45 ? (this.skill.maxSkillPoints - 45) * 3 + 45 : this.skill.maxSkillPoints, this.skill.level);
+        return Math.min(
+            this.skill.maxSkillPoints > 45
+                ? c.secondaryGameMode == "Maze"
+                    ? 170
+                    : (this.skill.maxSkillPoints - 45) * 3 + 45
+                : this.skill.maxSkillPoints,
+        this.skill.level);
     }
     get size() {
         return this.bond == null ? (this.coreSize || this.SIZE) * (1 + this.level / 45) : this.bond.size * this.bound.size;
@@ -1594,7 +1608,10 @@ class Entity extends EventEmitter {
                     ? "a visiting " + this.label : util.addArticle(this.label)
                 : this.master.name + "'s " + this.label;
             // Calculate the jackpot
-            let jackpot = Math.ceil(util.getJackpot(this.skill.score) / this.collisionArray.length);
+            let jackpot = this.collisionArray.length
+                ? Math.ceil(util.getJackpot(this.skill.score) / this.collisionArray.length)
+                : Math.ceil(util.getJackpot(this.skill.score) / this._killers.length);
+            let bad = (this.type == "bullet" && !this.healer) || this.type == "crasher";
             // Now for each of the things that kill me...
             for (let i = 0; i < this.collisionArray.length; i++) {
                 let instance = this.collisionArray[i];
@@ -1602,14 +1619,32 @@ class Entity extends EventEmitter {
                 if (instance.master.settings.acceptsScore) {
                     // If it's not food, give its master the score
                     if (instance.master.type === "tank" || instance.master.type === "miniboss") {
+                        if (
+                            instance.master.type != "miniboss" &&
+                            instance.master.isPlayer &&
+                            instance.master.skill.maxSkillPoints <= c.SKILL_CAP
+                        ) {
+                            if (this.label == "Tikki Food") instance.master.define(Class.tikki);
+                            else if (this.label == "Plagg Food") instance.master.define(Class.plagg);
+                        }
                         notJustFood = true;
                     }
                     instance.master.skill.score += jackpot;
-                    killers.push(instance.master); // And keep track of who killed me
+                    if (!bad) killers.push(instance.master); // And keep track of who killed me
                 } else if (instance.settings.acceptsScore) {
                     instance.skill.score += jackpot;
                 }
                 killTools.push(instance); // Keep track of what actually killed me
+            }
+            // For abilities...
+            for (let i = 0; i < this._killers.length; i++) {
+                let instance = this._killers[i];
+                if (instance.settings.acceptsScore) {
+                    if (instance.master.type === "tank" || instance.master.type === "miniboss") notJustFood = true;
+                    instance.skill.score += jackpot;
+                    killers.push(instance);
+                }
+                killTools.push(instance);
             }
             // Remove duplicates
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));
