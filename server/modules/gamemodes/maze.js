@@ -11,7 +11,11 @@ for (let loc of locsToAvoid) {
     }
 }
 
-function generateMaze(size) {
+function f(x, y, size, start) {
+    generateMaze(size, false, { x: x + start.x, y: y + start.y });
+    return x == 0 ? y : x;
+};
+function generateMaze(size, width, start) {
     let maze = JSON.parse(JSON.stringify(Array(size).fill(Array(size).fill(true))));
     maze[0] = Array(size).fill(false);
     maze[size - 1] = Array(size).fill(false);
@@ -49,9 +53,19 @@ function generateMaze(size) {
         for (let cell of row)
             if (cell) cells++;
     let eroded = 0;
+    let scale = 0;
     let toErode = cells * 0.55;
     toErode -= activeLocsThatWeCantPlaceIn * 10;
-    if (toErode <= 0) generateMaze(size + 1);
+    if (toErode < 1) generateMaze(size + 1, width, start);
+    else scale = (
+        width
+            ? room.width > room.height
+                ? f(room.height, 0, size, start)
+                : room.width < room.height
+                    ? f(0, room.width, size, start)
+                    : room.width
+            : room.height
+    ) / size;
     for (let i = 0; i < toErode; i++) {
         if (eroded >= toErode) {
             console.log("Done!");
@@ -98,7 +112,6 @@ function generateMaze(size) {
             for (let y = 0; y < size; y++) {
                 let spawnWall = true;
                 let d = {};
-                let scale = room.width / size;
                 if (maze[x][y] === 3) d = {
                     x: (x * scale) + (scale * 1.5),
                     y: (y * scale) + (scale * 1.5),
@@ -119,6 +132,8 @@ function generateMaze(size) {
                 };
                 else spawnWall = false;
                 if (spawnWall) {
+                    d.x += start.x;
+                    d.y += start.y;
                     let o = new Entity({
                         x: d.x,
                         y: d.y

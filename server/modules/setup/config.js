@@ -1,15 +1,23 @@
 let output = require("../../config.js");
 
-const gamemodes = ["tdm", "domination"];
+const gamemodes = ["bigmaze", "shiny", "growth"]; // ffa default
 
 for (let gamemode of gamemodes) {
     let mode = require(`./gamemodeconfigs/${gamemode}.js`);
+    if (gamemode.includes("maze")) for (let y = 0; y < output.Y_GRID; y++) {
+        for (let x = 0; x < output.X_GRID; x++)
+            if (
+                output.ROOM_SETUP[y][x] == "nest" ||
+                output.ROOM_SETUP[y][x] == "rock" ||
+                output.ROOM_SETUP[y][x] == "roid"
+            ) output.ROOM_SETUP[y][x] = "norm";
+    }
     for (let key in mode) {
         if (key === "ROOM_SETUP") {
-            for (let y = 0; y < mode.Y_GRID; y++) {
-                for (let x = 0; x < mode.X_GRID; x++) {
+            for (let y = 0; y < output.Y_GRID; y++) {
+                for (let x = 0; x < output.X_GRID; x++) {
                     if (mode[key][y][x]) {
-                        output[key][y] = mode[key][y];
+                        if (output[key][y] == null) output[key][y] = [];
                         output[key][y][x] = mode[key][y][x];
                     }
                 }

@@ -1,12 +1,11 @@
 const path = require('path');
 const fs = require('fs');
+Error.stackTraceLimit = Infinity;
 let enviroment = require('./lib/dotenv.js')(fs.readFileSync(path.join(__dirname, '../.env')).toString());
 for (let key in enviroment) {
     process.env[key] = enviroment[key];
 }
 const GLOBAL = require("./modules/global.js");
-
-console.log(`[${GLOBAL.creationDate}]: Server initialized.\nRoom Info:\n Dimensions: ${room.width} x ${room.height}\n Max Food / Nest Food: ${room.maxFood} / ${room.maxFood * room.nestFoodAmount}`);
 
 // Let's get a cheaper array removal thing
 Array.prototype.remove = function (index) {
@@ -52,7 +51,9 @@ function collide(collision) {
     if (
         (!instance.activation.check() && !other.activation.check()) ||
         (instance.ac && !instance.alpha) ||
-        (other.ac && !other.alpha)
+        (other.ac && !other.alpha) ||
+        instance.label.includes("Ability") ||
+        other.label.includes("Ability")
     ) return 0;
     switch (true) {
         case instance.type === "wall" || other.type === "wall":
@@ -68,10 +69,7 @@ function collide(collision) {
                     mooncollide(wall, entity);
                     break;
                 default:
-                    let a =
-                        entity.type === "bullet"
-                            ? 1 + 10 / (entity.velocity.length + 10)
-                            : 1;
+                    let a = entity.type === "bullet" ? 1 + 10 / (entity.velocity.length + 10) : 1;
                     advancedcollide(wall, entity, false, false, a);
                     break;
             }
@@ -80,19 +78,14 @@ function collide(collision) {
             (instance.settings.hitsOwnType === "pushOnlyTeam" ||
                 other.settings.hitsOwnType === "pushOnlyTeam"):
             {
-                let pusher =
-                    instance.settings.hitsOwnType === "pushOnlyTeam" ? instance : other;
-                let entity =
-                    instance.settings.hitsOwnType === "pushOnlyTeam" ? other : instance;
+                let pusher = instance.settings.hitsOwnType === "pushOnlyTeam" ? instance : other;
+                let entity = instance.settings.hitsOwnType === "pushOnlyTeam" ? other : instance;
                 // Dominator / Mothership collisions
                 if (
                     instance.settings.hitsOwnType === other.settings.hitsOwnType ||
                     entity.settings.hitsOwnType === "never"
                 ) return;
-                let a =
-                    1 +
-                    10 /
-                        (Math.max(entity.velocity.length, pusher.velocity.length) + 10);
+                let a = 1 + 10 / (Math.max(entity.velocity.length, pusher.velocity.length) + 10);
                 advancedcollide(pusher, entity, false, false, a);
             }
             break;
@@ -164,7 +157,7 @@ function entitiesliveloop(my) {
             logs.entities.tally();
             // Think about my actions.
             logs.life.set();
-            my.life();
+            if (!my.turret) my.life();
             logs.life.mark();
             // Apply friction.
             my.friction();
@@ -193,7 +186,9 @@ const gameloop = () => {
         grid.update();
         // Run collisions in each grid
         const pairs = grid.queryForCollisionPairs();
-        loopThrough(pairs, collide);
+        for (let i = 0; i < pairs.length; i++) {
+            collide(pairs[i]);
+        }
     }
     logs.collide.mark();
     // Do entities life
@@ -205,12 +200,11 @@ const gameloop = () => {
     purgeEntities();
     room.lastCycle = util.time();
     ticks++;
-    if (isEven(ticks)) {
-        loopThrough(sockets.players, function (instance) {
-            instance.socket.view.gazeUpon();
-            instance.socket.lastUptime = Infinity;
-        });
-        if (Math.min(1, (global.fps / roomSpeed / 1000) * 30) < 0.8) antiLagbot();
+    if (ticks & 1) {
+        for (let i = 0; i < sockets.players.length; i++) {
+            sockets.players[i].socket.view.gazeUpon();
+            sockets.players[i].socket.lastUptime = Infinity;
+        }
     }
 };
 
@@ -409,7 +403,7 @@ for (let team = 1; team < c.TEAMS + 1; team++) {
         let o = new Entity(loc);
         o.define(Class.baseProtector);
         o.team = -team;
-        o.color = [10, 11, 12, 15, 25, 26, 27, 28][team - 1];
+        o.color = getTeamColor(-team);
     });
 }
 
@@ -462,7 +456,7 @@ let makenpcs = () => {
         if (c.RANDOM_COLORS && room.gameMode === "ffa") {
             color = Math.floor(Math.random() * 20);
         } else if (room.gameMode === "tdm") {
-            team = getTeam(0);
+            team = getWeakestTeam(0);
             if (room["bas" + team].length) {
                 let loc;
                 do {
@@ -472,8 +466,8 @@ let makenpcs = () => {
                 o.y = loc.y;
             }
             if (c.HUNT) team = 1;
-            color = [10, 11, 12, 15, 25, 26, 27, 28][team - 1];
             team = -team;
+            color = getTeamColor(team);
         }
         o.define(Class.bot);
         o.define(Class.basic);
@@ -526,7 +520,7 @@ class FoodType {
             scale = chances[1];
             chances = [];
             for (let i = types.length; i > 0; i--) {
-                chances.push(i ** scale);
+                chances.push(i ** (scale > 4 && c.SHINY_SCALE != 0 ? 1 : scale));
             }
         }
         this.name = groupName;
@@ -553,24 +547,28 @@ const foodTypes = [
     ),
     new FoodType("Legendary Food",
         [Class.jewel, Class.legendarySquare, Class.legendaryTriangle, Class.legendaryPentagon, Class.legendaryBetaPentagon, Class.legendaryAlphaPentagon],
-        ["scale", 6], 0.1
+        ["scale", 5], 0.2
     ),
     new FoodType("Shadow Food",
         [Class.shadowSquare, Class.shadowTriangle, Class.shadowPentagon, Class.shadowBetaPentagon, Class.shadowAlphaPentagon],
-        ["scale", 7], 0.005
+        ["scale", 6], 0.04
     ),
     new FoodType("Rainbow Food",
         [Class.rainbowSquare, Class.rainbowTriangle, Class.rainbowPentagon, Class.rainbowBetaPentagon, Class.rainbowAlphaPentagon],
-        ["scale", 8], 0.001
+        ["scale", 6], 0.008
     ),
     // Commented out because stats aren't done yet.
     // new FoodType("Trans Food",
     //     [Class.egg],
-    //     ["scale", 9], 0.0005
+    //     ["scale", 6], 0.004
     // ),
     new FoodType("Extradimensional Food",
         [Class.sphere, Class.cube, Class.tetrahedron, Class.octahedron, Class.dodecahedron, Class.icosahedron],
-        ["scale", 10], 0.0001
+        ["scale", 7], 0.0016
+    ),
+    new FoodType("Special Food",
+        [Class.tikkiSpawn, Class.plaggSpawn],
+        ["scale", 1], 0.0001 // 0.0001
     ),
     new FoodType("Nest Food", // Commented out because stats aren't done yet.
         [Class.pentagon, Class.betaPentagon, Class.alphaPentagon, /*Class.alphaHexagon, Class.alphaHeptagon, Class.alphaOctogon, Class.alphaNonagon, Class.alphaDecagon, Class.icosagon*/],
@@ -676,16 +674,18 @@ const makefood = () => {
         }
     }
 };
+
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
 const maintainloop = () => {
     // Do stuff
     makenpcs();
     makefood();
     // Regen health and update the grid
-    loopThrough(entities, function (instance) {
+    for (let i = 0; i < entities.length; i++) {
+        let instance = entities[i];
         if (instance.shield.max) instance.shield.regenerate();
         if (!instance.isDead()) instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
-    });
+    }
 };
 
 // Bring it to life

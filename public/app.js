@@ -750,7 +750,7 @@ function drawBar(x1, x2, y, width, color) {
     ctx.stroke();
 }
 // Sub-drawing functions
-function drawPoly(context, centerX, centerY, radius, sides, angle = 0, fill = true) {
+function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill = true) {
     // Start drawing
     context.beginPath();
     if (sides instanceof Array) {
@@ -769,7 +769,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, fill = tr
             context.scale(radius, radius);
             context.lineWidth /= radius;
             context.rotate(angle);
-            context.stroke(path);
+            if (!borderless) context.stroke(path);
             if (fill) context.fill(path);
             context.restore();
             return;
@@ -781,13 +781,13 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, fill = tr
         let fillcolor = context.fillStyle;
         let strokecolor = context.strokeStyle;
         radius += context.lineWidth / 4;
-        context.arc(centerX, centerY, radius + context.lineWidth / 4, 0, 2 * Math.PI);
+        context.arc(centerX, centerY, radius + context.lineWidth / 4 * (!borderless), 0, 2 * Math.PI);
         context.fillStyle = strokecolor;
         context.fill();
         context.closePath();
         context.beginPath();
         context.fillStyle = fillcolor;
-        context.arc(centerX, centerY, radius - context.lineWidth / 4, 0, 2 * Math.PI);
+        context.arc(centerX, centerY, radius - context.lineWidth / 4 * (!borderless), 0, 2 * Math.PI);
         context.fill();
         context.closePath();
         return;
@@ -833,13 +833,11 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, fill = tr
         }
     }
     context.closePath();
-    context.stroke();
-    if (fill) {
-        context.fill();
-    }
+    if (!borderless) context.stroke();
+    if (fill) context.fill();
     context.lineJoin = "round";
 }
-function drawTrapezoid(context, x, y, length, height, aspect, angle) {
+function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless = false) {
     let h = [];
     h = aspect > 0 ? [height * aspect, height] : [height, -height * aspect];
     let r = [Math.atan2(h[0], length), Math.atan2(h[1], length)];
@@ -865,7 +863,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle) {
         y + l[0] * Math.sin(angle - r[0])
     );
     context.closePath();
-    context.stroke();
+    if (!borderless) context.stroke();
     context.fill();
 }
 // Entity drawing (this is a function that makes a function)
@@ -919,14 +917,15 @@ const drawEntity = (x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turret
             position = positions[i] / (g.aspect === 1 ? 2 : 1),
             gx = g.offset * Math.cos(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.cos(g.angle + rot),
             gy = g.offset * Math.sin(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.sin(g.angle + rot),
-            gunColor = g.color == null ? color.grey : getColor(g.color);
+            gunColor = g.color == null ? color.grey : getColor(g.color),
+            borderless = g.borderless;
         setColor(context, mixColors(gunColor, render.status.getColor(), render.status.getBlend()));
-        drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot);
+        if (!g.hide) drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless);
     }
     // Draw body
     context.globalAlpha = 1;
     setColor(context, mixColors(getColor(instance.color), render.status.getColor(), render.status.getBlend()));
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot);
+    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless);
     // Draw turrets abovus
     for (let i = 0; i < m.turrets.length; i++) {
         let t = m.turrets[i];
@@ -1404,7 +1403,7 @@ function drawSkillBars(spacing, alcoveSize) {
     global.clickables.stat.hide();
     let vspacing = 4;
     let height = 15;
-    let gap = 35;
+    let _gap = 45;
     let len = alcoveSize; // * global.screenWidth; // The 30 is for the value modifiers
     let save = len;
     let x = -spacing - 2 * len + statMenu.get() * (2 * spacing + 2 * len);
@@ -1426,7 +1425,8 @@ function drawSkillBars(spacing, alcoveSize) {
         len = save;
         let max = 0,
             extension = cap > max,
-            blocking = cap < maxLevel;
+            blocking = cap < maxLevel,
+            gap = _gap - (maxLevel * (_gap - 28) / 16);
         if (extension) {
             max = cap;
         }
@@ -1766,7 +1766,7 @@ let getKills = () => {
         " kills": [Math.round(global.finalKills[0].get()), 1],
         " assists": [Math.round(global.finalKills[1].get()), 0.5],
         " visitors defeated": [Math.round(global.finalKills[2].get()), 3],
-        " polygons destroyed": [Math.round(global.finalKills[2].get()), 0.05],
+        " polygons destroyed": [Math.round(global.finalKills[3].get()), 0.05],
     }, killCountTexts = [];
     let destruction = 0;
     for (let key in finalKills) {
@@ -1823,7 +1823,7 @@ const gameDrawDead = () => {
         xx = global.screenWidth / 2 - scale * position.middle.x * 0.707,
         yy = global.screenHeight / 2 - 35 + scale * position.middle.x * 0.707;
     drawEntity((xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, -Math.PI / 4, true);
-    textDead.taunt.draw("If you think you have a record, submit it using the link on the start menu. Make sure you have a screenshot.", x, y - 80, 8, color.guiwhite, "center");
+    textDead.taunt.draw("Game over man, game over.", x, y - 80, 8, color.guiwhite, "center");
     textDead.level.draw("Level " + gui.__s.getLevel() + " " + global.mockups[gui.type].name, x - 170, y - 30, 24, color.guiwhite);
     textDead.score.draw("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     textDead.time.draw("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);

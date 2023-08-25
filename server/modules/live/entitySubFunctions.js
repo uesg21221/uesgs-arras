@@ -1,5 +1,6 @@
 let Class = (function () {
     const def = require("../../lib/definitions.js");
+    //const def = require("../definitions/combined.js");
     let i = 0;
     for (let key in def) {
         if (!def.hasOwnProperty(key)) continue;
@@ -35,6 +36,7 @@ class Skill {
         // Just skill stuff.
         this.raw = inital;
         this.caps = [];
+        this.maxSkillPoints = c.SKILL_CAP;
         this.setCaps([ c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL ]);
         this.name = [
             "Reload",
@@ -132,7 +134,7 @@ class Skill {
             this.deduction += this.levelScore;
             this.level += 1;
             this.points += this.levelPoints;
-            if (this.level < c.SKILL_CAP) {
+            if (this.level < this.maxSkillPoints) {
                 if (this.level % c.TIER_MULTIPLIER && this.level <= c.MAX_UPGRADE_TIER) {
                     this.canUpgrade = true;
                 }
@@ -149,7 +151,7 @@ class Skill {
         return this.levelScore ? (this.score - this.deduction) / this.levelScore : 0;
     }
     get levelPoints() {
-        return c.LEVEL_SKILL_POINT_FUNCTION(this.level);
+        return c.LEVEL_SKILL_POINT_FUNCTION(this.level, this.maxSkillPoints);
     }
     cap(skill, real = false) {
         if (!real && this.level < c.SKILL_SOFT_CAP) {
@@ -277,7 +279,7 @@ let remapTarget = (i, ref, self) => {
 
 var bringToLife = my => {
     // Size
-    /*if (my.SIZE - my.coreSize) */my.coreSize = my.SIZE;
+    my.coreSize = my.SIZE; //if (my.SIZE - my.coreSize)
     // Think
     let faucet = my.settings.independent || my.source == null || my.source === my ? {} : my.source.control;
     let b = {

@@ -656,6 +656,153 @@ class io_wanderAroundMap extends IO {
         }
     }
 }
+class io_teleportToMaster extends IO {
+    constructor(body) {
+        super(body);
+    }
+    think(input) {
+        this.body.x = this.body.source.x
+        this.body.y = this.body.source.y
+        this.body.accel.x = 0
+        this.body.accel.y = 0
+    }
+}
+
+class io_ability extends IO {
+    constructor(body, opts = {}) {
+        super(body);
+        this.master = this.body.master;
+        this.ability = this.master.ability;
+        this.healing = opts.heal;
+        this.logged = [];
+        this.ids = [];
+        this.turrets = [];
+        this.speed = 0;
+        this.next = false;
+        this.check = 10;
+    }
+    log() {
+        this.logged = [];
+        for (let i = 0; i < entities.length; i++) {
+            let e = entities[i];
+            if (
+                util.getDistance(this.master, e) < this.limit &&
+                !e.turret &&
+                (e.type == "tank" || e.type == "miniboss" || e.type == "food") &&
+                e.master.id != this.master.id &&
+                !e.label.includes("Ability") // e.team != this.master.team
+            ) {
+                if (e.team == this.master.team && this.healing) this.logged.push(e);
+                if (e.team != this.master.team && !this.healing) this.logged.push(e);
+            }
+        }
+        // for attack
+        let log = this.logged;
+        this.logged = [];
+        for (let i = 0; i < 8; i++) {
+            let near = log[i];
+            if (near == null) return;
+            log.forEach(log => {
+                if (
+                    util.getDistance(this.master, log) < util.getDistance(this.master, near) &&
+                    this.logged.indexOf(log) == -1
+                ) near = log;
+            });
+            this.logged.push(near);
+        }
+    }
+    checkSave() {
+        let _ret = false;
+        for (let i = 0; i < this.logged.length; i++) {
+            if (this.ids.indexOf(this.logged[i].id) == -1) _ret = true;
+        }
+        return _ret;
+    }
+    loop() {
+        if (this.ability.used == 1) this.logged = [this.master];
+        if (this.ability.used == 2) this.log();
+        if (this.checkSave() || this.next) {
+            this.destroyTurrets();
+            this.logged.forEach(log => {
+                let o = new Entity(log, log);
+                o.define(this.healing ? Class.tikkiAbility : Class.plaggAbility);
+                // o.team = this.master.team;
+                // o.team = log.team;
+                o.SIZE = log.SIZE;
+                this.turrets.push(o);
+            });
+            this.ids = [];
+            for (let i = 0; i < this.logged.length; i++) this.ids.push(this.logged[i].id);
+            this.next = false;
+        }
+        for (let i = 0; i < this.turrets.length; i++) {
+            let e = this.turrets[i];
+            e.x = e.master.x;
+            e.y = e.master.y;
+            if (e.skill.level != e.master.skill.level) e.skill.level = e.master.skill.level;
+        }
+    }
+    destroyTurrets() {
+        for (let i = 0; i < this.turrets.length; i++) {
+            this.turrets[i].destroy();
+        }
+        this.turrets = [];
+    }
+    damage() {
+        for (let i = 0; i < this.logged.length; i++) {
+            let e = this.logged[i];
+            e.shield.amount *= 0.1;
+            if (e.health.amount < e.health.max * 0.2) {
+                e._killers.push(this.master);
+                e.kill();
+            }
+            else e.health.amount *= 0.1;
+        }
+    }
+    heal() {
+        for (let i = 0; i < this.logged.length; i++) {
+            let e = this.logged[i];
+            e.shield.amount = e.shield.max;
+            e.health.amount = e.health.max;
+        }
+    }
+    activate(use) {
+        if (use) {
+            this.ability.used++;
+            if (this.ability.used == 2) this.next = true;
+            if (this.ability.used > 2) {
+                this.ability.used = 0;
+                this.ability.timer = 8 * 60000 / room.cycleSpeed;
+                this.healing ? this.heal() : this.damage();
+                this.destroyTurrets();
+            }
+        }
+    }
+    think(input) {
+        this.limit = this.master.realSize * 30;
+        this.showLimit = this.master.realSize * 1.2;
+        this.check++;
+        if (this.check > 10 && this.ability.timer < 1) {
+            this.activate(input.alt);
+            this.check = 0;
+        }
+        this.loop();
+        if (this.ability.timer > 0 || this.ability.used > 0) {
+            if (this.ability.timer > 0) this.ability.timer--;
+            if (this.body.SIZE > 1) {
+                this.body.SIZE -= this.speed;
+                this.speed += 0.02;
+                if (this.body.SIZE < 1) this.body.SIZE = 1;
+            } else this.speed = 0;
+        }
+        else if (this.body.SIZE < this.showLimit) {
+            this.body.SIZE += this.speed;
+            this.speed += 0.02;
+        }
+        else if (this.body.SIZE > this.showLimit) this.body.SIZE = this.showLimit;
+        else this.speed = 0;
+    }
+}
 
 let ioTypes = {
     //misc
@@ -665,6 +812,7 @@ let ioTypes = {
     alwaysFire: io_alwaysFire,
     mapAltToFire: io_mapAltToFire,
     mapFireToAlt: io_mapFireToAlt,
+    ability: io_ability,
 
     //aiming related
     nearestDifferentMaster: io_nearestDifferentMaster,
@@ -673,6 +821,7 @@ let ioTypes = {
     spin: io_spin,
 
     //movement related
+    teleportToMaster: io_teleportToMaster,
     canRepel: io_canRepel,
     mapTargetToGoal: io_mapTargetToGoal,
     bossRushAI: io_bossRushAI,

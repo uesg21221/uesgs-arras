@@ -5,13 +5,15 @@ const hunt = new ManHunt()
 
 if (c.MOTHERSHIP_LOOP) mothershipLoop.spawn();
 if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
-if (c.MAZE && typeof c.MAZE === "number") generateMaze(c.MAZE);
+if (c.MAZE) {
+    if (typeof c.MAZE == "number") c.MAZE = [c.MAZE, 0, 0];
+    generateMaze(c.MAZE[0], true, { x: c.MAZE[1], y: c.MAZE[2] });
+}
 if (c.DOMINATOR_LOOP) for (let loc of room.dom0) dominatorLoop.spawn(loc, -100, 3);
 
 let logger = new LagLogger();
 const gamemodeLoop = function() {
     logger.set();
-    // Thnaks to Damocles (Her discord - _damocles)
     if (c.HUNT) hunt.loop();
     if (c.TRAIN) train.loop();
     if (c.SPACE_MODE) moon.loop();
