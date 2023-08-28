@@ -33,6 +33,7 @@ function getMockup(e, positionInfo) {
                 angle: rounder(gun.angle),
                 color: rounder(gun.color),
                 borderless: gun.borderless,
+                hide: gun.alpha,
             };
         }),
         turrets: e.turrets.map(function(t) {
