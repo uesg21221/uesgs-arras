@@ -177,13 +177,13 @@ class Gun {
         // Shoot, multiple times in a tick if needed
         do {
             this.fire(offset_final_x, offset_final_y, skill);
-
+            this.cycle--;
             shootPermission =
                   this.countsOwnKids    ? this.countsOwnKids    > this.children.length
                 : this.body.maxChildren ? this.body.maxChildren > this.body.children.length
                 : true;
 
-        } while (useWhile && shootPermission && --this.cycle >= 1);
+        } while (useWhile && shootPermission && this.cycle-1 >= 1);
     }
     live() {
         this.recoil();
@@ -773,11 +773,10 @@ class Entity extends EventEmitter {
         // Size
         this.coreSize = this.SIZE;
         // Invisibility
-        if (this.damageRecieved || this.x ** 2 + this.y ** 2 <= 0.01) {
-            this.alpha = Math.min(this.alphaRange[0], this.alpha + this.invisible[0]);
-        } else {
-            this.alpha = Math.max(this.alphaRange[1], this.alpha - this.invisible[1]);
-        }
+        if ((this.velocity.x ** 2 + this.velocity.y ** 2 <= 0.1) && !this.damageReceived)
+            this.alpha = Math.max(this.alphaRange[0], this.alpha - this.invisible[1]);
+        else
+            this.alpha = Math.min(this.alphaRange[1], this.alpha + this.invisible[0]);
         // Think
         let faucet = this.settings.independent || this.source == null || this.source === this ? {} : this.source.control,
         b = {
@@ -1535,20 +1534,10 @@ class Entity extends EventEmitter {
                     this.y = lerp(this.y, room.height / 2, strength);
                 }
             } else {
-                this.accel.x -=
-                    (Math.min(this.x - this.realSize + 50, 0) * c.ROOM_BOUND_FORCE) /
-                    roomSpeed;
-                this.accel.x -=
-                    (Math.max(this.x + this.realSize - room.width - 50, 0) *
-                        c.ROOM_BOUND_FORCE) /
-                    roomSpeed;
-                this.accel.y -=
-                    (Math.min(this.y - this.realSize + 50, 0) * c.ROOM_BOUND_FORCE) /
-                    roomSpeed;
-                this.accel.y -=
-                    (Math.max(this.y + this.realSize - room.height - 50, 0) *
-                        c.ROOM_BOUND_FORCE) /
-                    roomSpeed;
+                this.accel.x -= (Math.min(this.x - this.realSize               + 50, 0) * c.ROOM_BOUND_FORCE) / roomSpeed;
+                this.accel.x -= (Math.max(this.x + this.realSize - room.width  - 50, 0) * c.ROOM_BOUND_FORCE) / roomSpeed;
+                this.accel.y -= (Math.min(this.y - this.realSize               + 50, 0) * c.ROOM_BOUND_FORCE) / roomSpeed;
+                this.accel.y -= (Math.max(this.y + this.realSize - room.height - 50, 0) * c.ROOM_BOUND_FORCE) / roomSpeed;
             }
         }
         if (c.SPECIAL_BOSS_SPAWNS && (this.type === "tank" || this.type === "food") && room.isIn("outb", this)) {
@@ -1569,7 +1558,7 @@ class Entity extends EventEmitter {
                 }
             }
             if (c.TEAMS === 1) inEnemyBase = false;
-            if (room.isIn("boss", loc) && this.team !== -100) inEnemyBase = true;
+            if (room.isIn("boss", loc) && !this.canEnterEnemyBases) inEnemyBase = true;
             if (inEnemyBase && !this.isArenaCloser && !this.master.isArenaCloser) {
                 this.kill();
             }
