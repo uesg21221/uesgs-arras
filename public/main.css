@@ -229,7 +229,7 @@ div {
 .sliderHolder {
     width: 350px;
     height: 285px;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 tfoot {
