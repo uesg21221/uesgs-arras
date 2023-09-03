@@ -214,7 +214,7 @@ function reanimateColors() {
         blinker = 150 > now % 300,
 
         lesbian_magenta  = "#a50062",
-        lesbian_oredange = "#d62900",
+        lesbian_orange = "#d62900",
         lesbian_white    = "#ffffff",
         lesbian_useSecondSet = five_bars < 2,
 
@@ -228,7 +228,7 @@ function reanimateColors() {
         trans_blue  = "#55cdfc",
         trans_white = "#ffffff";
 
-    animatedColor.lesbian = getRainbow(lesbian_useSecondSet ? lesbian_oredange : lesbian_white, lesbian_useSecondSet ? lesbian_white : lesbian_magenta, (lesbian_useSecondSet ? five_bars : five_bars - 3) / 2);
+    animatedColor.lesbian = getRainbow(lesbian_useSecondSet ? lesbian_orange : lesbian_white, lesbian_useSecondSet ? lesbian_white : lesbian_magenta, (lesbian_useSecondSet ? five_bars : five_bars - 3) / 2);
     animatedColor.gay = hslToRgb(gay_transition, 0.75, 0.5);
     animatedColor.bi = [bi_pink, bi_purple, bi_blue][three_bars];
     animatedColor.trans = [trans_blue, trans_pink, trans_white, trans_pink, trans_blue][five_bars];
