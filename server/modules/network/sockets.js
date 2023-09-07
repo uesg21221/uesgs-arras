@@ -369,6 +369,19 @@ function incoming(message, socket) {
                 player.body.refreshBodyAttributes();
             }
             break;
+        case "DEV_MODE":
+            let hasToken = false
+            if (player.body != null && socket.permissions && socket.permissions.devMode) {
+                player.body.devMode.active = true
+                hasToken = true
+            }
+
+            if (player.body.devMode.active && hasToken) {
+                player.body.devMode.selectedCommand = m[0] ?? 1
+                socket.talk('DEV_MODE_UPDATE', player.body.devMode.selectedCommand)
+                socket.talk('DEV_MODE_UPDATE', player.body.devMode.selectedCommand)
+            }
+            break;
         case "0":
             // testbed cheat
             if (m.length !== 0) {

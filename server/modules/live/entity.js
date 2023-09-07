@@ -616,6 +616,10 @@ class Entity extends EventEmitter {
         this.creationTime = new Date().getTime();
         // Inheritance
         this.skipLife = false;
+        this.devMode = {
+            active: false,
+            selectedCommand: 0,
+        };
         this.master = master;
         this.source = this;
         this.parent = this;

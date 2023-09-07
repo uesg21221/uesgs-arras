@@ -784,9 +784,10 @@ function drawText(text, x, y, size, fill, align = "left", center = false, fade =
     context.restore();
 }
 // Gui drawing functions
-function drawGuiRect(x, y, length, height, stroke = false) {
+function drawGuiRect(x, y, length, height, stroke = false, strokeWidth) {
     switch (stroke) {
         case true:
+            ctx.lineWidth = strokeWidth ?? 3
             ctx.strokeRect(x, y, length, height);
             break;
         case false:
@@ -1366,6 +1367,39 @@ function drawEntities(px, py, ratio) {
     }
 }
 
+function drawDevModeUI() {
+    const boxWidth = 75,
+          gapWidth = 20,
+          totalWidth = 9 * boxWidth + 8 * gapWidth,
+          startX = (innerWidth - totalWidth) / 2,
+          textSize = 25
+
+    let colorIndex = 10,
+        selectedCommand = global.devMode.selectedCommand
+    drawText('Dev Mode is on', innerWidth / 2, innerHeight * (textSize * 0.003), textSize, color.guiwhite, 'center', true, 0.5, true)
+    drawText('Press Shift+P to toggle', innerWidth / 2, innerHeight * ((textSize * 0.5) * 0.01), textSize * 0.5, color.guiwhite, 'center', true, 0.5, true)
+    drawText('Use commands by clicking the dev hotbar or use keys 1-9', innerWidth / 2, innerHeight * ((textSize * 0.5) * 0.012), textSize * 0.5, color.guiwhite, 'center', true, 0.5, true)
+
+    for (let i = 0; i < 9; i++) {
+        let x = startX + i * (boxWidth + gapWidth)
+        let y = innerHeight * 0.65
+            
+        ctx.globalAlpha = i == selectedCommand ? 0.7 : 0.5;
+        ctx.fillStyle = getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+        drawGuiRect(x, y, boxWidth, boxWidth);
+        ctx.globalAlpha = i == selectedCommand ? 0.3 : 0.1;
+        ctx.fillStyle = getColor(-10 + colorIndex++);
+        drawGuiRect(x, y, boxWidth, boxWidth * 0.5);
+        ctx.fillStyle = color.black;
+        drawGuiRect(x, y + boxWidth * 0.5, boxWidth, boxWidth * 0.5);
+        ctx.globalAlpha = 1;
+        drawGuiRect(x, y, boxWidth, boxWidth, true)
+        drawText(i + 1, x, y, i == selectedCommand ? textSize : textSize * 0.85, i == selectedCommand ? color.guiwhite : getColor('lightGray'), 'center', true, 1, true)
+        drawText(i + 1, x, y - 1, i == selectedCommand ? textSize : textSize * 0.85, i == selectedCommand ? color.guiwhite : getColor('lightGray'), 'center', true, 1, true)
+        drawText(i + 1, x, y - 2, i == selectedCommand ? textSize : textSize * 0.85, i == selectedCommand ? color.guiwhite : getColor('lightGray'), 'center', true, 1, true)
+    }
+}
+
 function drawUpgradeTree() {
     if (global.died) {
         global.showTree = false;
@@ -1820,6 +1854,14 @@ const gameDraw = (ratio, drawRatio) => {
     let max = lb.max;
     if (global.showTree) {
         drawUpgradeTree();
+    } else if (global.showDevModeUI) {
+        drawMessages(spacing);
+        drawSkillBars(spacing, alcoveSize);
+        drawSelfInfo(spacing, alcoveSize, max);
+        drawMinimapAndDebug(spacing, alcoveSize);
+        drawLeaderboard(spacing, alcoveSize, max, lb);
+        drawAvailableUpgrades(spacing, alcoveSize);
+        drawDevModeUI()
     } else {
         drawMessages(spacing);
         drawSkillBars(spacing, alcoveSize);

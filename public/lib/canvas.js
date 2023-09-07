@@ -24,6 +24,7 @@ class Canvas {
         global.canvas = this;
     }
     keyboardDown(event) {
+        global.KEY_SHIFT = event.shiftKey
         switch (event.keyCode) {
             case 13:
                 if (global.died) this.parent.socket.talk('s', global.playerName, 0, 1 * config.game.autoLevelUp);
@@ -60,9 +61,6 @@ class Canvas {
                 break;
             case global.KEY_LEVEL_UP:
                 this.parent.socket.talk('L');
-                break;
-            case global.KEY_FUCK_YOU:
-                this.parent.socket.talk('0');
                 break;
             case global.KEY_BECOME:
                 this.parent.socket.talk('H');
@@ -104,8 +102,17 @@ class Canvas {
                 case global.KEY_CLASS_TREE:
                     global.showTree = !global.showTree;
                     break;
+                case global.KEY_FUCK_YOU:
+                    if (global.KEY_SHIFT) {
+                        global.showDevModeUI = !global.showDevModeUI
+                        global.devMode.active = !global.devMode.active
+                        this.parent.socket.talk('DEV_MODE')
+                    } else {
+                        this.parent.socket.talk('0')
+                    }
+                    break;
             }
-            if (global.canSkill) {
+            if (global.canSkill && !global.devMode.active) {
                 let skill = [
                     global.KEY_UPGRADE_ATK, global.KEY_UPGRADE_HTL, global.KEY_UPGRADE_SPD,
                     global.KEY_UPGRADE_STR, global.KEY_UPGRADE_PEN, global.KEY_UPGRADE_DAM,
@@ -113,6 +120,37 @@ class Canvas {
                     global.KEY_UPGRADE_SHI
                 ].indexOf(event.keyCode);
                 if (skill >= 0) this.parent.socket.talk('x', skill, 1 + 10 * global.statMaxing);
+            }
+            if (global.devMode.active) {
+                switch (event.keyCode) {
+                    case 49:
+                        this.parent.socket.talk('DEV_MODE', 0)
+                        break;
+                    case 50:
+                        this.parent.socket.talk('DEV_MODE', 1)
+                        break;
+                    case 51:
+                        this.parent.socket.talk('DEV_MODE', 2)
+                        break;
+                    case 52:
+                        this.parent.socket.talk('DEV_MODE', 3)
+                        break;
+                    case 53:
+                        this.parent.socket.talk('DEV_MODE', 4)
+                        break;
+                    case 54:
+                        this.parent.socket.talk('DEV_MODE', 5)
+                        break;
+                    case 55:
+                        this.parent.socket.talk('DEV_MODE', 6)
+                        break;
+                    case 56:
+                        this.parent.socket.talk('DEV_MODE', 7)
+                        break;
+                    case 57:
+                        this.parent.socket.talk('DEV_MODE', 8)
+                        break;
+                }
             }
             if (global.canUpgrade) {
                 switch (event.keyCode) {

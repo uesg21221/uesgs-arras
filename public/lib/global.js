@@ -49,6 +49,9 @@ let Region = (size) => {
 
 const global = {
     // Keys and other mathematical constants
+    KEY_SHIFT: false,
+    // add others if u want
+
     KEY_ESC: 27,
     KEY_ENTER: 13,
     KEY_BECOME: 72,
@@ -75,6 +78,7 @@ const global = {
 
     KEY_LEVEL_UP: 78,
     KEY_FUCK_YOU: 80,
+    KEY_DEV_MODE: 80,
     KEY_CLASS_TREE: 84,
     KEY_MAX_STAT: 77,
     KEY_SUICIDE: 79,
@@ -99,6 +103,11 @@ const global = {
     KEY_CHOOSE_5: 74,
     KEY_CHOOSE_6: 75,
     showTree: false,
+    showDevModeUI: false,
+    devMode: {
+        active: false,
+        selectedCommand: 0,
+    },
     scrollX: 0,
     realScrollX: 0,
     // Canvas
