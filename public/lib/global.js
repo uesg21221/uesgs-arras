@@ -103,7 +103,6 @@ const global = {
     KEY_CHOOSE_5: 74,
     KEY_CHOOSE_6: 75,
     showTree: false,
-    showDevModeUI: false,
     devMode: {
         active: false,
         selectedCommand: 0,
@@ -139,6 +138,8 @@ const global = {
         upgrade: Region(32),
         hover: Region(1),
         skipUpgrades: Region(1),
+        devMode: Region(9),
+        exitDevMode: Region(1)
     },
     statHover: false,
     upgradeHover: false,

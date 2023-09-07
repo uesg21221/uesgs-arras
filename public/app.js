@@ -926,7 +926,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     if (!borderless) context.stroke();
     if (fill) context.fill();
 }
-// Entity drawing (this is a function that makes a function)
+// Entity drawing
 const drawEntity = (drawingEntities, baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
     let context = assignedContext ? assignedContext : ctx;
     let fade = turretInfo ? 1 : render.status.getFade(),
@@ -1368,36 +1368,70 @@ function drawEntities(px, py, ratio) {
 }
 
 function drawDevModeUI() {
-    const boxWidth = 75,
-          gapWidth = 20,
-          totalWidth = 9 * boxWidth + 8 * gapWidth,
-          startX = (innerWidth - totalWidth) / 2,
-          textSize = 25
+    global.clickables.devMode.hide();
+    global.clickables.exitDevMode.hide();
+    if (!global.devMode.active) return;
 
-    let colorIndex = 10,
-        selectedCommand = global.devMode.selectedCommand
-    drawText('Dev Mode is on', innerWidth / 2, innerHeight * (textSize * 0.003), textSize, color.guiwhite, 'center', true, 0.5, true)
-    drawText('Press Shift+P to toggle', innerWidth / 2, innerHeight * ((textSize * 0.5) * 0.01), textSize * 0.5, color.guiwhite, 'center', true, 0.5, true)
-    drawText('Use commands by clicking the dev hotbar or use keys 1-9', innerWidth / 2, innerHeight * ((textSize * 0.5) * 0.012), textSize * 0.5, color.guiwhite, 'center', true, 0.5, true)
+    let boxWidth = 75,
+        gapWidth = 10,
+        halfBoxWidth = boxWidth / 2,
+        startX = (innerWidth - 9 * boxWidth - 8 * gapWidth) / 2,
+        textSize = 25,
+        colorIndex = 10,
+        toolNames = [ "Teleport", "God", "Stats", "Wall", "Move", "Spawn", "Team", "PHOLDER", "PHOLDER" ];
+    drawText('Dev Mode is on', innerWidth / 2, innerHeight * 0.125, textSize, color.guiwhite, 'center', true, 0.5, true);
+    textSize /= 2;
+    drawText('Press Shift+P to toggle', innerWidth / 2, innerHeight * 0.16, textSize, color.guiwhite, 'center', true, 0.5, true);
+    drawText('Use commands by clicking the hotbar buttons or using number keys', innerWidth / 2, innerHeight * 0.185, textSize, color.guiwhite, 'center', true, 0.5, true);
 
     for (let i = 0; i < 9; i++) {
-        let x = startX + i * (boxWidth + gapWidth)
-        let y = innerHeight * 0.65
-            
-        ctx.globalAlpha = i == selectedCommand ? 0.7 : 0.5;
-        ctx.fillStyle = getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+        let isSelected = i == global.devMode.selectedCommand,
+            x = startX + i * (boxWidth + gapWidth),
+            y = innerHeight * 0.65;
+
+        //da box
+        ctx.globalAlpha = isSelected ? 0.7 : 0.5;
+        ctx.fillStyle = getColor(i > 8 ? i - 9 : i + 10);
         drawGuiRect(x, y, boxWidth, boxWidth);
-        ctx.globalAlpha = i == selectedCommand ? 0.3 : 0.1;
-        ctx.fillStyle = getColor(-10 + colorIndex++);
+        ctx.globalAlpha = isSelected ? 0.3 : 0.1;
+        ctx.fillStyle = getColor(i);
         drawGuiRect(x, y, boxWidth, boxWidth * 0.5);
         ctx.fillStyle = color.black;
         drawGuiRect(x, y + boxWidth * 0.5, boxWidth, boxWidth * 0.5);
         ctx.globalAlpha = 1;
-        drawGuiRect(x, y, boxWidth, boxWidth, true)
-        drawText(i + 1, x, y, i == selectedCommand ? textSize : textSize * 0.85, i == selectedCommand ? color.guiwhite : getColor('lightGray'), 'center', true, 1, true)
-        drawText(i + 1, x, y - 1, i == selectedCommand ? textSize : textSize * 0.85, i == selectedCommand ? color.guiwhite : getColor('lightGray'), 'center', true, 1, true)
-        drawText(i + 1, x, y - 2, i == selectedCommand ? textSize : textSize * 0.85, i == selectedCommand ? color.guiwhite : getColor('lightGray'), 'center', true, 1, true)
+        drawGuiRect(x, y, boxWidth, boxWidth, true);
+
+        //label and hotkey button
+        let useColor = isSelected ? color.guiwhite : getColor('lightGray'),
+            useSize = isSelected ? textSize : textSize * 0.85,
+            useBoxWidth = isSelected ? boxWidth - 1 : boxWidth - 0.5;
+        drawText(`[${i + 1}]`, x + useBoxWidth - 4, y + useBoxWidth - 6, useSize, useColor, 'right');
+        drawText(toolNames[i], x + halfBoxWidth, y + 16, useSize, useColor, 'center');
+
+        //make user able to click it
+        global.clickables.devMode.place(i, x, y, boxWidth, boxWidth);
     }
+
+    // exit dev mode
+    let msg = "Exit Dev Mode",
+        textWidth = measureText(msg, textSize),
+        centerX = innerWidth / 2,
+        barStart = centerX - textWidth / 2,
+        barEnd = barStart + textWidth,
+        barYclickable = innerHeight * 0.65 + boxWidth + gapWidth + 3,
+        barY = barYclickable + textSize / 2,
+        barWidth = textSize + 6;
+
+    //button bar
+    ctx.globalAlpha = 0.95;
+    drawBar(barStart, barEnd, barY, barWidth + config.graphical.barChunk + 2, color.black);
+    drawBar(barStart, barEnd, barY, barWidth, color.white);
+
+    //label
+    drawText(msg, centerX, barY + 1.5, textSize, color.guiwhite, "center", true);
+
+    //clickablity
+    global.clickables.exitDevMode.place(0, barStart, barYclickable, textWidth, barWidth);
 }
 
 function drawUpgradeTree() {
@@ -1854,14 +1888,6 @@ const gameDraw = (ratio, drawRatio) => {
     let max = lb.max;
     if (global.showTree) {
         drawUpgradeTree();
-    } else if (global.showDevModeUI) {
-        drawMessages(spacing);
-        drawSkillBars(spacing, alcoveSize);
-        drawSelfInfo(spacing, alcoveSize, max);
-        drawMinimapAndDebug(spacing, alcoveSize);
-        drawLeaderboard(spacing, alcoveSize, max, lb);
-        drawAvailableUpgrades(spacing, alcoveSize);
-        drawDevModeUI()
     } else {
         drawMessages(spacing);
         drawSkillBars(spacing, alcoveSize);
@@ -1869,6 +1895,7 @@ const gameDraw = (ratio, drawRatio) => {
         drawMinimapAndDebug(spacing, alcoveSize);
         drawLeaderboard(spacing, alcoveSize, max, lb);
         drawAvailableUpgrades(spacing, alcoveSize);
+        drawDevModeUI();
     }
     global.metrics.lastrender = getNow();
 };

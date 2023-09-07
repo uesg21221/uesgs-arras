@@ -370,17 +370,32 @@ function incoming(message, socket) {
             }
             break;
         case "DEV_MODE":
-            let hasToken = false
-            if (player.body != null && socket.permissions && socket.permissions.devMode) {
-                player.body.devMode.active = true
-                hasToken = true
+            let hasToken = player.body != null && socket.permissions && socket.permissions.devMode,
+                command = m[0];
+
+            //no valid creds L
+            if (!hasToken) {
+                socket.talk('DEV_MODE_TOGGLE', 0);
+                break;
             }
 
-            if (player.body.devMode.active && hasToken) {
-                player.body.devMode.selectedCommand = m[0] ?? 1
-                socket.talk('DEV_MODE_UPDATE', player.body.devMode.selectedCommand)
-                socket.talk('DEV_MODE_UPDATE', player.body.devMode.selectedCommand)
+            //guy wants to toggle dev mode
+            if ("undefined" == typeof command) {
+                player.body.devMode.active = !player.body.devMode.active;
+                socket.talk('DEV_MODE_TOGGLE', player.body.devMode.active * 1);
+                break;
             }
+
+            // "Alright, and um... If you could just ban all the hackers... Just ban all of 'em. Just uhh, ban-"
+            // "Alright, great - Ban all hackers..."
+            // "SHUT UP and listen to my order... Just ban all of the hackers, and uhh... Just uninstall the game from all their computers. And you know what, ah-eh-ju. Also just ban all the Pyro mains too."
+            if ("number" !== typeof command || command < 0 || command > 8 || command !== command | 0) {
+                socket.kick("Invalid devmode command.");
+                return 1;
+            }
+
+            player.body.devMode.selectedCommand = command;
+            socket.talk('DEV_MODE_UPDATE', player.body.devMode.selectedCommand);
             break;
         case "0":
             // testbed cheat

@@ -104,15 +104,18 @@ class Canvas {
                     break;
                 case global.KEY_FUCK_YOU:
                     if (global.KEY_SHIFT) {
-                        global.showDevModeUI = !global.showDevModeUI
-                        global.devMode.active = !global.devMode.active
-                        this.parent.socket.talk('DEV_MODE')
+                        this.parent.socket.talk('DEV_MODE');
                     } else {
-                        this.parent.socket.talk('0')
+                        this.parent.socket.talk('0');
                     }
                     break;
             }
-            if (global.canSkill && !global.devMode.active) {
+            if (global.devMode.active) {
+                if (event.keyCode > 48 && event.keyCode < 58) {
+                    let command = event.keyCode - 49;
+                    this.parent.socket.talk('DEV_MODE', command);
+                }
+            } else if (global.canSkill) {
                 let skill = [
                     global.KEY_UPGRADE_ATK, global.KEY_UPGRADE_HTL, global.KEY_UPGRADE_SPD,
                     global.KEY_UPGRADE_STR, global.KEY_UPGRADE_PEN, global.KEY_UPGRADE_DAM,
@@ -120,37 +123,6 @@ class Canvas {
                     global.KEY_UPGRADE_SHI
                 ].indexOf(event.keyCode);
                 if (skill >= 0) this.parent.socket.talk('x', skill, 1 + 10 * global.statMaxing);
-            }
-            if (global.devMode.active) {
-                switch (event.keyCode) {
-                    case 49:
-                        this.parent.socket.talk('DEV_MODE', 0)
-                        break;
-                    case 50:
-                        this.parent.socket.talk('DEV_MODE', 1)
-                        break;
-                    case 51:
-                        this.parent.socket.talk('DEV_MODE', 2)
-                        break;
-                    case 52:
-                        this.parent.socket.talk('DEV_MODE', 3)
-                        break;
-                    case 53:
-                        this.parent.socket.talk('DEV_MODE', 4)
-                        break;
-                    case 54:
-                        this.parent.socket.talk('DEV_MODE', 5)
-                        break;
-                    case 55:
-                        this.parent.socket.talk('DEV_MODE', 6)
-                        break;
-                    case 56:
-                        this.parent.socket.talk('DEV_MODE', 7)
-                        break;
-                    case 57:
-                        this.parent.socket.talk('DEV_MODE', 8)
-                        break;
-                }
             }
             if (global.canUpgrade) {
                 switch (event.keyCode) {
@@ -223,6 +195,12 @@ class Canvas {
                     this.parent.socket.talk('x', statIndex, 1);
                 } else if (global.clickables.skipUpgrades.check(mpos) !== -1) {
                     global.clearUpgrades();
+                }
+                let devModeIndex = global.clickables.devMode.check(mpos);
+                if (devModeIndex !== -1) {
+                    this.parent.socket.talk('DEV_MODE', devModeIndex);
+                } else if (global.clickables.exitDevMode.check(mpos) !== -1) {
+                    this.parent.socket.talk('DEV_MODE');
                 } else {
                     let upgradeIndex = global.clickables.upgrade.check(mpos);
                     if (upgradeIndex !== -1) this.parent.socket.talk('U', upgradeIndex);

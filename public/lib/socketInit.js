@@ -898,6 +898,9 @@ const socketInit = port => {
                 console.log(m[0]);
                 global.nameColor = m[0];
                 break;
+            case 'DEV_MODE_TOGGLE':
+                global.devMode.active = !!m[0];
+                break;
             case 'DEV_MODE_UPDATE':
                 global.devMode.selectedCommand = m[0]
                 break;
