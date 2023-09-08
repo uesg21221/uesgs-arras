@@ -1443,10 +1443,7 @@ function drawDevModeUI() {
                 above: 0.9,
                 size: 12.5
             }
-
-            for (const clickable in global.clickables.devModeCommands) {
-                global.clickables.devModeCommands[clickable].hide()
-            }
+        global.clickables.command_1.hide()
         switch (command) {
             case toolNames[0]:
                 drawText('Teleport: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
@@ -1456,16 +1453,18 @@ function drawDevModeUI() {
                 let boxWidth = 75/2
                 ctx.globalAlpha = 0.7;
                 for (let i = 0; i < 3; i++) {
-                    global.clickables.devModeCommands[global.devMode.selectedCommand].place(i, i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105, settings.y * 0.9, boxWidth, boxWidth)
+                    let miniBox_x = i == 0 ? (settings.x * 1.05) * 0.895 : i == 2 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105,
+                        miniBox_y = settings.y * 0.9
                     ctx.fillStyle = getColor(i > 8 ? i - 9 : i + 10);
-                    drawGuiRect(i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105 , settings.y * 0.9, boxWidth, boxWidth);
+                    drawGuiRect(miniBox_x , miniBox_y, boxWidth, boxWidth);
                     ctx.globalAlpha = 0.3
                     ctx.fillStyle = getColor(i);
-                    drawGuiRect(i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105, settings.y * 0.9, boxWidth, boxWidth * 0.5);
+                    drawGuiRect(miniBox_x, miniBox_y, boxWidth, boxWidth * 0.5);
                     ctx.fillStyle = color.black;
-                    drawGuiRect(i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105, settings.y * 0.9 + boxWidth * 0.5, boxWidth, boxWidth * 0.5);
+                    drawGuiRect(miniBox_x, miniBox_y + boxWidth * 0.5, boxWidth, boxWidth * 0.5);
                     ctx.globalAlpha = 1;
-                    drawGuiRect(i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105, settings.y * 0.9, boxWidth, boxWidth, true);
+                    drawGuiRect(miniBox_x, miniBox_y, boxWidth, boxWidth, true);
+                    global.clickables.command_1.place(i, miniBox_x, miniBox_y, boxWidth, boxWidth)
                 }
                 break;
             case toolNames[2]:

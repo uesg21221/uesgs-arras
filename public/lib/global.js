@@ -139,9 +139,7 @@ const global = {
         hover: Region(1),
         skipUpgrades: Region(1),
         devMode: Region(9),
-        devModeCommands: {
-            1: Region(3) // godmode
-        },
+        command_1: Region(3),
         exitDevMode: Region(1)
     },
     statHover: false,

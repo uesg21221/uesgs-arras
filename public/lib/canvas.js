@@ -208,8 +208,9 @@ class Canvas {
                     if (upgradeIndex !== -1) this.parent.socket.talk('U', upgradeIndex);
                     else this.parent.socket.cmd.set(primaryFire, true);
                 }
-                let devModeCommandIndex = global.clickables.devModeCommands[global.devMode.selectedCommand].check(mpos)
+                let devModeCommandIndex = global.clickables.command_1.check(mpos)
                 if (devModeCommandIndex !== -1) {
+                    console.log(devModeCommandIndex)
                     this.parent.socket.talk('DEV_MODE_UPDATE', devModeCommandIndex)
                 }
                 break;

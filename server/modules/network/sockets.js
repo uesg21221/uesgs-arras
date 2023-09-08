@@ -408,13 +408,31 @@ function incoming(message, socket) {
                         player.body.y += target.y
                         break;
                     case 1: // godmode
-                        player.body.HEALTH += 1e99
-                        player.body.SHIELD += 1e99
-                        player.body.REGEN += 1e99
+                        let subCommand = m[0] !== null ? m[0] : socket.kick("Invalid subcommand value")
 
-                        if (m[0]) {
-                            console.log(m[0])
+                        switch (subCommand) {
+                            case 0: // first box
+                                player.body.HEALTH += 1e99 // TODO: add toggles for these and maybe fix the numbering bug
+                                player.body.SHIELD += 1e99
+                                player.body.REGEN += 1e99
+                                console.log('box 1')
+                                break
+                            case 2: // second box
+                                player.body.settings.hasNoRecoil = true
+                                player.body.ACCELERATION = 75
+                                player.body.SPEED = 2
+                                player.body.DENSITY = 0
+                                player.body.PUSHABILITY = 0
+                                player.body.removeFromGrid()
+                                console.log('box 2')
+                                break
+                            case 1: // third box
+                                player.body.alpha = 0
+                                player.body.invisible = [0, 1]
+                                console.log('box 3')
+                                break
                         }
+                        
                         break;
                 }
             }
