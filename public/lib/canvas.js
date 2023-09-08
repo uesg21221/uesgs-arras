@@ -201,10 +201,16 @@ class Canvas {
                     this.parent.socket.talk('DEV_MODE', devModeIndex);
                 } else if (global.clickables.exitDevMode.check(mpos) !== -1) {
                     this.parent.socket.talk('DEV_MODE');
+                } else if (global.devMode.active) {
+                    this.parent.socket.talk('DEV_MODE_UPDATE')
                 } else {
                     let upgradeIndex = global.clickables.upgrade.check(mpos);
                     if (upgradeIndex !== -1) this.parent.socket.talk('U', upgradeIndex);
                     else this.parent.socket.cmd.set(primaryFire, true);
+                }
+                let devModeCommandIndex = global.clickables.devModeCommands[global.devMode.selectedCommand].check(mpos)
+                if (devModeCommandIndex !== -1) {
+                    this.parent.socket.talk('DEV_MODE_UPDATE', devModeCommandIndex)
                 }
                 break;
             case 1:

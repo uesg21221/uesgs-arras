@@ -1377,7 +1377,6 @@ function drawDevModeUI() {
         halfBoxWidth = boxWidth / 2,
         startX = (innerWidth - 9 * boxWidth - 8 * gapWidth) / 2,
         textSize = 25,
-        colorIndex = 10,
         toolNames = [ "Teleport", "God", "Stats", "Wall", "Move", "Spawn", "Team", "PHOLDER", "PHOLDER" ];
     drawText('Dev Mode is on', innerWidth / 2, innerHeight * 0.125, textSize, color.guiwhite, 'center', true, 0.5, true);
     textSize /= 2;
@@ -1388,6 +1387,10 @@ function drawDevModeUI() {
         let isSelected = i == global.devMode.selectedCommand,
             x = startX + i * (boxWidth + gapWidth),
             y = innerHeight * 0.65;
+
+        if (isSelected) {
+            drawDevModeCommandUI(toolNames[i], {x, y})
+        }
 
         //da box
         ctx.globalAlpha = isSelected ? 0.7 : 0.5;
@@ -1432,6 +1435,62 @@ function drawDevModeUI() {
 
     //clickablity
     global.clickables.exitDevMode.place(0, barStart, barYclickable, textWidth, barWidth);
+
+    function drawDevModeCommandUI(command, settings) {
+            let description = {
+                x: innerWidth / 2,
+                y: innerHeight * 0.625,
+                above: 0.9,
+                size: 12.5
+            }
+
+            for (const clickable in global.clickables.devModeCommands) {
+                global.clickables.devModeCommands[clickable].hide()
+            }
+        switch (command) {
+            case toolNames[0]:
+                drawText('Teleport: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                break;
+            case toolNames[1]:
+                drawText('God Mode: You become god. Click one of the powers on the hotbar then press [LMB] to confirm and [RMB] to cancel', description.x, description.y * description.above, description.size, color.guiwhite, 'center', true)
+                let boxWidth = 75/2
+                ctx.globalAlpha = 0.7;
+                for (let i = 0; i < 3; i++) {
+                    global.clickables.devModeCommands[global.devMode.selectedCommand].place(i, i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105, settings.y * 0.9, boxWidth, boxWidth)
+                    ctx.fillStyle = getColor(i > 8 ? i - 9 : i + 10);
+                    drawGuiRect(i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105 , settings.y * 0.9, boxWidth, boxWidth);
+                    ctx.globalAlpha = 0.3
+                    ctx.fillStyle = getColor(i);
+                    drawGuiRect(i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105, settings.y * 0.9, boxWidth, boxWidth * 0.5);
+                    ctx.fillStyle = color.black;
+                    drawGuiRect(i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105, settings.y * 0.9 + boxWidth * 0.5, boxWidth, boxWidth * 0.5);
+                    ctx.globalAlpha = 1;
+                    drawGuiRect(i < 1 ? (settings.x * 1.05) * 0.895 : i > 1 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105, settings.y * 0.9, boxWidth, boxWidth, true);
+                }
+                break;
+            case toolNames[2]:
+                drawText('Stats Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                break;
+            case toolNames[3]:
+                drawText('Wall Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                break;
+            case toolNames[4]:
+                drawText('Move Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                break;
+            case toolNames[5]:
+                drawText('Spawn Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                break;
+            case toolNames[6]:
+                drawText('Team Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                break;
+            case toolNames[7]:
+                drawText('Placeholder Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                break;
+            case toolNames[8]:
+                drawText('Placeholder Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                break;
+        }
+    }
 }
 
 function drawUpgradeTree() {

@@ -397,6 +397,28 @@ function incoming(message, socket) {
             player.body.devMode.selectedCommand = command;
             socket.talk('DEV_MODE_UPDATE', player.body.devMode.selectedCommand);
             break;
+        case 'DEV_MODE_UPDATE':
+            if (player.body.devMode.active) {
+                let command = player.body.devMode.selectedCommand,
+                    target = player.body.control.target
+
+                switch (command) {
+                    case 0: // teleport
+                        player.body.x += target.x
+                        player.body.y += target.y
+                        break;
+                    case 1: // godmode
+                        player.body.HEALTH += 1e99
+                        player.body.SHIELD += 1e99
+                        player.body.REGEN += 1e99
+
+                        if (m[0]) {
+                            console.log(m[0])
+                        }
+                        break;
+                }
+            }
+            break;
         case "0":
             // testbed cheat
             if (m.length !== 0) {
