@@ -411,17 +411,14 @@ function incoming(message, socket) {
                         break;
                     case 1: // godmode
                         let subCommand = m[0] !== null ? m[0] : socket.kick("Invalid subcommand value")
-                        
+                        let interval
                         switch (subCommand) {
                             case 0: // first box
                                 if (subCommandToggle) {
-                                    player.body.HEALTH += 1e99 // TODO: add toggles for these and maybe fix the numbering bug
-                                    player.body.SHIELD += 1e99
-                                    player.body.REGEN += 1e99
+                                    interval = setInterval(() => {player.body.invuln = true}, 10)
                                 } else {
-                                    player.body.HEALTH = 20
-                                    player.body.SHIELD = 8
-                                    player.body.REGEN = 0.025
+                                    player.body.invuln = false
+                                    clearInterval(interval)
                                 }
                                 console.log('box 1')
                                 break
