@@ -106,6 +106,8 @@ const global = {
     devMode: {
         active: false,
         selectedCommand: 0,
+        toggle: false,
+        subCommandToggle: false,
     },
     scrollX: 0,
     realScrollX: 0,

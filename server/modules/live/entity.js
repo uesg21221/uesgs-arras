@@ -935,6 +935,7 @@ class Entity extends EventEmitter {
         if (set.BUFF_VS_FOOD != null) this.settings.buffVsFood = set.BUFF_VS_FOOD;
         if (set.CAN_BE_ON_LEADERBOARD != null) this.settings.leaderboardable = set.CAN_BE_ON_LEADERBOARD;
         if (set.INTANGIBLE != null) this.intangibility = set.INTANGIBLE;
+        if (set.NO_CLIP != null) this.noClip = set.NO_CLIP;
         if (set.IS_SMASHER != null) this.settings.reloadToAcceleration = set.IS_SMASHER;
         if (set.STAT_NAMES != null) this.settings.skillNames = set.STAT_NAMES;
         if (set.AI != null) this.aiSettings = set.AI;

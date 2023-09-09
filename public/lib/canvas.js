@@ -210,8 +210,8 @@ class Canvas {
                 }
                 let devModeCommandIndex = global.clickables.command_1.check(mpos)
                 if (devModeCommandIndex !== -1) {
-                    console.log(devModeCommandIndex)
-                    this.parent.socket.talk('DEV_MODE_UPDATE', devModeCommandIndex)
+                    global.devMode.subCommandToggle = !global.devMode.subCommandToggle
+                    this.parent.socket.talk('DEV_MODE_UPDATE', devModeCommandIndex, global.devMode.subCommandToggle)
                 }
                 break;
             case 1:

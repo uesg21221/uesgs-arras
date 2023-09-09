@@ -57,6 +57,7 @@ function kick(socket, reason = "No reason given.") {
     util.warn(reason + " Kicking.");
     socket.lastWords("K");
 }
+
 // Handle incoming messages
 function incoming(message, socket) {
     // Only accept binary
@@ -402,6 +403,7 @@ function incoming(message, socket) {
                 let command = player.body.devMode.selectedCommand,
                     target = player.body.control.target
 
+                let subCommandToggle = m[1] !== null ? m[1] : socket.kick('Invalid sub toggle value')
                 switch (command) {
                     case 0: // teleport
                         player.body.x += target.x
@@ -409,26 +411,46 @@ function incoming(message, socket) {
                         break;
                     case 1: // godmode
                         let subCommand = m[0] !== null ? m[0] : socket.kick("Invalid subcommand value")
-
+                        
                         switch (subCommand) {
                             case 0: // first box
-                                player.body.HEALTH += 1e99 // TODO: add toggles for these and maybe fix the numbering bug
-                                player.body.SHIELD += 1e99
-                                player.body.REGEN += 1e99
+                                if (subCommandToggle) {
+                                    player.body.HEALTH += 1e99 // TODO: add toggles for these and maybe fix the numbering bug
+                                    player.body.SHIELD += 1e99
+                                    player.body.REGEN += 1e99
+                                } else {
+                                    player.body.HEALTH = 20
+                                    player.body.SHIELD = 8
+                                    player.body.REGEN = 0.025
+                                }
                                 console.log('box 1')
                                 break
                             case 2: // second box
-                                player.body.settings.hasNoRecoil = true
-                                player.body.ACCELERATION = 75
-                                player.body.SPEED = 2
-                                player.body.DENSITY = 0
-                                player.body.PUSHABILITY = 0
-                                player.body.removeFromGrid()
+                                if (subCommandToggle) {
+                                    player.body.settings.hasNoRecoil = true
+                                    player.body.ACCELERATION = 75
+                                    player.body.SPEED = 2
+                                    player.body.DENSITY = 0
+                                    player.body.PUSHABILITY = 0
+                                    player.body.noClip = true
+                                } else {
+                                    player.body.settings.hasNoRecoil = false
+                                    player.body.ACCELERATION = 1.6
+                                    player.body.SPEED = 5.25
+                                    player.body.DENSITY = 0.5
+                                    player.body.PUSHABILITY = 1
+                                    player.body.noClip = false
+                                }
                                 console.log('box 2')
                                 break
                             case 1: // third box
-                                player.body.alpha = 0
-                                player.body.invisible = [0, 1]
+                                if (subCommandToggle) {
+                                    player.body.alpha = 0
+                                    player.body.invisible = [0, 1]
+                                } else {
+                                    player.body.alpha = 1
+                                    player.body.invisible = [0, 0]
+                                }
                                 console.log('box 3')
                                 break
                         }

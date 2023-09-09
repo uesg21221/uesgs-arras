@@ -1386,7 +1386,7 @@ function drawDevModeUI() {
     for (let i = 0; i < 9; i++) {
         let isSelected = i == global.devMode.selectedCommand,
             x = startX + i * (boxWidth + gapWidth),
-            y = innerHeight * 0.65;
+            y = innerHeight * 0.8;
 
         if (isSelected) {
             drawDevModeCommandUI(toolNames[i], {x, y})
@@ -1421,7 +1421,7 @@ function drawDevModeUI() {
         centerX = innerWidth / 2,
         barStart = centerX - textWidth / 2,
         barEnd = barStart + textWidth,
-        barYclickable = innerHeight * 0.65 + boxWidth + gapWidth + 3,
+        barYclickable = innerHeight * 0.8 + boxWidth + gapWidth + 3,
         barY = barYclickable + textSize / 2,
         barWidth = textSize + 6;
 
@@ -1439,8 +1439,8 @@ function drawDevModeUI() {
     function drawDevModeCommandUI(command, settings) {
             let description = {
                 x: innerWidth / 2,
-                y: innerHeight * 0.625,
-                above: 0.9,
+                y: innerHeight * 0.75,
+                above: 0.95,
                 size: 12.5
             }
         global.clickables.command_1.hide()
@@ -1454,7 +1454,7 @@ function drawDevModeUI() {
                 ctx.globalAlpha = 0.7;
                 for (let i = 0; i < 3; i++) {
                     let miniBox_x = i == 0 ? (settings.x * 1.05) * 0.895 : i == 2 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105,
-                        miniBox_y = settings.y * 0.9
+                        miniBox_y = settings.y * 0.915
                     ctx.fillStyle = getColor(i > 8 ? i - 9 : i + 10);
                     drawGuiRect(miniBox_x , miniBox_y, boxWidth, boxWidth);
                     ctx.globalAlpha = 0.3
@@ -1946,6 +1946,13 @@ const gameDraw = (ratio, drawRatio) => {
     let max = lb.max;
     if (global.showTree) {
         drawUpgradeTree();
+    } else if (global.devMode.active) {
+        drawDevModeUI();
+        drawMessages(spacing);
+        drawSkillBars(spacing, alcoveSize);
+        drawMinimapAndDebug(spacing, alcoveSize);
+        drawLeaderboard(spacing, alcoveSize, max, lb);
+        drawAvailableUpgrades(spacing, alcoveSize);
     } else {
         drawMessages(spacing);
         drawSkillBars(spacing, alcoveSize);
@@ -1953,7 +1960,6 @@ const gameDraw = (ratio, drawRatio) => {
         drawMinimapAndDebug(spacing, alcoveSize);
         drawLeaderboard(spacing, alcoveSize, max, lb);
         drawAvailableUpgrades(spacing, alcoveSize);
-        drawDevModeUI();
     }
     global.metrics.lastrender = getNow();
 };

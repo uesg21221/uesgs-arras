@@ -158,6 +158,7 @@ const gameloop = () => {
         // Run collisions in each grid
         const pairs = grid.queryForCollisionPairs();
         for (let i = 0; i < pairs.length; i++) {
+            if (pairs[i][0].noClip || pairs[i][1].noClip) continue;
             collide(pairs[i]);
         }
     }
@@ -182,8 +183,10 @@ const gameloop = () => {
                 my.life();
                 logs.life.mark();
                 // Apply friction.
+                if (!my.noClip) {
+                    my.confinementToTheseEarthlyShackles();
+                }
                 my.friction();
-                my.confinementToTheseEarthlyShackles();
                 logs.selfie.set();
                 my.takeSelfie();
                 logs.selfie.mark();
