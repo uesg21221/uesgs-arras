@@ -1441,15 +1441,96 @@ function drawDevModeUI() {
                 x: innerWidth / 2,
                 y: innerHeight * 0.75,
                 above: 0.95,
+                newLine: 0.97,
                 size: 12.5
             }
+        function drawDevSkillBars(spacing, alcoveSize) {
+            // Draw skill bars
+            global.canSkill = !!gui.points;
+            statMenu.set(0 + (global.died || global.statHover || (global.canSkill && !gui.skills.every(skill => skill.cap === skill.amount))));
+            global.clickables.stat.hide();
+            let vspacing = 4;
+            let height = 15;
+            let gap = 40;
+            let len = alcoveSize; // * global.screenWidth; // The 30 is for the value modifiers
+            let save = len;
+            let x = -spacing - 2 * len + statMenu.get() * (2 * spacing + 2 * len);
+            let y = global.screenHeight - spacing - height;
+            let ticker = 11;
+            let namedata = gui.getStatNames(global.mockups[gui.type].statnames || -1);
+            for (let i = 0; i < gui.skills.length; i++) {
+                ticker--;
+                //information about the bar
+                let skill = gui.skills[i],
+                    name = namedata[ticker - 1],
+                    level = skill.amount,
+                    col = color[skill.color],
+                    cap = skill.softcap,
+                    maxLevel = skill.cap;
+                if (!cap) continue;
+                len = save;
+                let max = 0,
+                    extension = cap > max,
+                    blocking = cap < maxLevel;
+                if (extension) {
+                    max = cap;
+                }
+
+                //bar fills
+                drawBar(x + height / 2, x - height / 2 + len * ska(cap), y + height / 2, height - 3 + config.graphical.barChunk, color.black);
+                drawBar(x + height / 2, x + height / 2 + len * ska(cap) - gap, y + height / 2, height - 3, color.grey);
+                drawBar(x + height / 2, x + height / 2 + len * ska(level) - gap, y + height / 2, height - 3.5, col);
+
+                // Blocked-off area
+                if (blocking) {
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = color.grey;
+                    for (let j = cap + 1; j < max; j++) {
+                        drawGuiLine(x + len * ska(j) - gap, y + 1.5, x + len * ska(j) - gap, y - 3 + height);
+                    }
+                }
+
+                // Vertical dividers
+                ctx.strokeStyle = color.black;
+                ctx.lineWidth = 1;
+                for (let j = 1; j < level + 1; j++) {
+                    drawGuiLine(x + len * ska(j) - gap, y + 1.5, x + len * ska(j) - gap, y - 3 + height);
+                }
+
+                // Skill name
+                len = save * ska(max);
+                let textcolor = level == maxLevel ? col : !gui.points || (cap !== maxLevel && level == cap) ? color.grey : color.guiwhite;
+                drawText(name, Math.round(x + len / 2) + 0.5, y + height / 2, height - 5, textcolor, "center", true);
+
+                // Skill key
+                drawText("[" + (ticker % 10) + "]", Math.round(x + len - height * 0.25) - 1.5, y + height / 2, height - 5, textcolor, "right", true);
+                if (textcolor === color.guiwhite) {
+                    // If it's active
+                    global.clickables.stat.place(ticker - 1, x, y, len, height);
+                }
+
+                // Skill value
+                if (level) {
+                    drawText(textcolor === col ? "MAX" : "+" + level, Math.round(x + len + 4) + 0.5, y + height / 2, height - 5, col, "left", true);
+                }
+
+                // Move on
+                y -= height + vspacing;
+            }
+            global.clickables.hover.place(0, 0, y, 0.8 * len, 0.8 * (global.screenHeight - y));
+            if (gui.points !== 0) {
+                // Draw skillpoints to spend
+                drawText("x" + gui.points, Math.round(x + len - 2) + 0.5, Math.round(y + height - 4) + 0.5, 20, color.guiwhite, "right");
+            }
+        }
         global.clickables.command_1.hide()
         switch (command) {
             case toolNames[0]:
                 drawText('Teleport: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
                 break;
             case toolNames[1]:
-                drawText('God Mode: You become god. Click one of the powers on the hotbar then press [LMB] to confirm and [RMB] to cancel', description.x, description.y * description.above, description.size, color.guiwhite, 'center', true)
+                drawText('God Mode: You become god. Click one of the powers on the hotbar', description.x, description.y * description.above * description.newLine, description.size, color.guiwhite, 'center', true)
+                drawText('then press [LMB] to confirm and [RMB] to cancel', description.x, description.y * description.above, description.size, color.guiwhite, 'center', true)
                 let boxWidth = 75/2
                 ctx.globalAlpha = 0.7;
                 for (let i = 0; i < 3; i++) {
@@ -1468,7 +1549,9 @@ function drawDevModeUI() {
                 }
                 break;
             case toolNames[2]:
-                drawText('Stats Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                drawText('Stats Tool: More stats you can change! Look at the left of your screen.', description.x, description.y * description.newLine, description.size, color.guiwhite, 'center', true)
+                drawText('Hover and scroll to a stat to modify its value.', description.x, description.y, description.size, color.guiwhite, 'center', true)
+                drawDevSkillBars(config.graphical.screenshotMode ? 2 : util.getRatio(), util.getScreenRatio())
                 break;
             case toolNames[3]:
                 drawText('Wall Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
@@ -1949,7 +2032,7 @@ const gameDraw = (ratio, drawRatio) => {
     } else if (global.devMode.active) {
         drawDevModeUI();
         drawMessages(spacing);
-        drawSkillBars(spacing, alcoveSize);
+        if (global.devMode.selectedCommand !== 2) drawSkillBars(spacing, alcoveSize);
         drawMinimapAndDebug(spacing, alcoveSize);
         drawLeaderboard(spacing, alcoveSize, max, lb);
         drawAvailableUpgrades(spacing, alcoveSize);
