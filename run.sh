@@ -1,2 +1,2 @@
 #!/usr/bin/sh
-node server/index
+bun run start
