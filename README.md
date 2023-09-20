@@ -6,7 +6,7 @@ This is an open beta build of an advanced private server template for Arras.io, 
 ## Requirements
 
 In order to run your server via localhost, you will need to install these first:
-- [Bun (current only for non-Windows machines)] (https://bun.sh)
+- [Bun (currently only for non-Windows machines)] (https://bun.sh)
 - [Node.js v16 or later](https://nodejs.org/en)
 - [ws](https://www.npmjs.com/package/ws)
 
