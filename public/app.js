@@ -730,6 +730,7 @@ function clearScreen(clearColor, alpha) {
 }
 // Text functions
 function arrayifyText(rawText) {
+    //we want people to be able to use the section sign in writing too
     // string with double §           txt   col   txt                      txt
     // "...§text§§text§..." => [..., "text", "", "text", ...] => [..., "text§text", ...]
     // this code is balanced on tight threads, holy shit
@@ -751,11 +752,11 @@ function arrayifyText(rawText) {
     }
     return textArray;
 }
-const measureText = (text, fontSize, twod = false) => {
+const measureText = (text, fontSize, withHeight = false) => {
     fontSize += config.graphical.fontSizeBoost;
     ctx.font = "bold " + fontSize + "px Ubuntu";
     let measurement = ctx.measureText(arrayifyText(text).reduce((a, b, i) => (i & 1) ? a : a + b, ''));
-    return twod ? { width: measurement.width, height: fontSize } : measurement.width;
+    return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
 };
 function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
     size += config.graphical.fontSizeBoost;
@@ -1084,7 +1085,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
     if (instance.drawsHealth) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
-        if (health < 1 - 1e-5 || shield < 1 - 1e-5) {
+        if (health < 1 - 1e-6 || shield < 1 - 1e-6) {
             const col = config.graphical.coloredHealthbars ? mixColors(getColor(instance.color), color.guiwhite, 0.5) : color.lgreen;
             let yy = y + 1.1 * realSize + 15;
             let barWidth = 5;

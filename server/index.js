@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const repl = require('repl').start({useGlobal: true})
+
 Error.stackTraceLimit = Infinity;
 let enviroment = require('./lib/dotenv.js')(fs.readFileSync(path.join(__dirname, '../.env')).toString());
 for (let key in enviroment) {
@@ -725,6 +725,14 @@ const maintainloop = () => {
         }
     }
 };
+
+//evaluating js with a seperate console window if enabled
+if (c.REPL_WINDOW) {
+    util.log('Starting REPL Terminal.');
+    //TODO: figure out how to spawn a seperate window and put the REPL stdio in there instead
+    //let { stdin, stdout, stderr } = (require('child_process').spawn("cmd.exe", ["/c", "node", "blank.js"], { detached: true }));
+    require('repl').start({/* stdin, stdout, stderr,*/ useGlobal: true });
+}
 
 // Bring it to life
 //TODO: compress all of these intervals into one big one
