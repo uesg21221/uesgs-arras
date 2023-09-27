@@ -1377,7 +1377,7 @@ function drawDevModeUI() {
         halfBoxWidth = boxWidth / 2,
         startX = (innerWidth - 9 * boxWidth - 8 * gapWidth) / 2,
         textSize = 25,
-        toolNames = [ "Teleport", "God", "Stats", "Wall", "Move", "Spawn", "Team", "PHOLDER", "PHOLDER" ];
+        toolNames = [ "Teleport", "God", "Stats", "Wall", "Move", "Spawn", "Team", "Admin", "PHOLDER" ];
     drawText('Dev Mode is on', innerWidth / 2, innerHeight * 0.125, textSize, color.guiwhite, 'center', true, 0.5, true);
     textSize /= 2;
     drawText('Press Shift+P to toggle', innerWidth / 2, innerHeight * 0.16, textSize, color.guiwhite, 'center', true, 0.5, true);
