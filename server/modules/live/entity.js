@@ -1849,11 +1849,23 @@ class Entity extends EventEmitter {
 
             for (let i = 0; i < killers.length; i++) {
                 let instance = killers[i];
+                switch(this.type) {
+                    case "tank":
+                        killers.length > 1 ? instance.killCount.assists++ : instance.killCount.solo++;
+                        break;
+                    
+                    case "food":
+                        instance.killCount.polygons++;
+                        break;
+                    
+                    case "crasher":
+                        instance.killCount.polygons++;
+                        break;
 
-                if (this.type === "tank") killers.length > 1 ? instance.killCount.assists++ : instance.killCount.solo++;
-                else if (this.type === "food" || this.type === "crasher") instance.killCount.polygons++;
-                else if (this.type === "miniboss") instance.killCount.bosses++;
-
+                    case "miniboss":
+                        instance.killCount.bosses++;
+                        break;
+                }
                 this.killCount.killers.push(instance.index);
             };
             // Add the killers to our death message, also send them a message
