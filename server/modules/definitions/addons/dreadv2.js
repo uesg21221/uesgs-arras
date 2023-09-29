@@ -58,7 +58,7 @@ const hexnoughtBody = {
 
 module.exports = ({ Class }) => {
 	// Comment out the line below to enable this addon, uncomment it to disable this addon.
-	return;
+	//return;
 
 	// Misc
 	Class.genericEggnought = {
