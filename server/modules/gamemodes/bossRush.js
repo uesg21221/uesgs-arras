@@ -188,7 +188,7 @@ class BossRush {
     loop() {
         //the timer has ran out? reset timer and spawn the next wave
         if (this.timer <= 0) {
-            this.timer = 150;
+            this.timer = 150; // 5 seconds
             this.waveId++;
             if (this.waves[this.waveId]) {
                 this.spawnWave(this.waveId);
