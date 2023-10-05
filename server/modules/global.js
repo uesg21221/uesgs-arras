@@ -97,7 +97,7 @@ global.Tile = class Tile {
 
 global.c = require("./setup/config.js").output;
 global.c.port = process.env.PORT || c.port;
-global.roomSpeed = c.gameSpeed;
+global.roomSpeed = 1;//c.gameSpeed;
 
 // Now that we've set up the global variables, we import all the modules, then put them into global varialbles and then export something just so this file is run.
 const requires = [

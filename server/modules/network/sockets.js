@@ -198,7 +198,7 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            socket.talk("R", room.width, room.height, JSON.stringify(c.ROOM_SETUP.map(x => x.map(t => t.color))), JSON.stringify(util.serverStartTime), roomSpeed, c.ARENA_TYPE);
+            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))), JSON.stringify(util.serverStartTime), roomSpeed, c.ARENA_TYPE);
             // Log it
             util.log("[INFO] " + m[0] + (needsRoom ? " joined" : " rejoined") + " the game! Players: " + players.length);
             break;
@@ -1138,27 +1138,29 @@ const eyes = (socket) => {
 
 // Util
 let getBarColor = (entry) => {
-    if (c.GROUPS) return 11;
-    switch (entry.team) {
-        case TEAM_ENEMIES:
-            return entry.color;
-        case -1:
-            return 10;
-        case -2:
-            return 11;
-        case -3:
-            return 12;
-        case -4:
-            return 15;
-        default:
-            if (
-                room.gameMode[0] === "2" ||
-                room.gameMode[0] === "3" ||
-                room.gameMode[0] === "4"
-            )
+    // What even is the purpose of all of this?
+    //if (c.GROUPS) return 11;
+    //switch (entry.team) {
+    //    case TEAM_ENEMIES:
+    //        return entry.color;
+    //    case -1:
+    //        return 10;
+    //    case -2:
+    //        return 11;
+    //    case -3:
+    //        return 12;
+    //    case -4:
+    //        return 15;
+    //    default:
+    //        if (
+    //            room.gameMode[0] === "2" ||
+    //            room.gameMode[0] === "3" ||
+    //            room.gameMode[0] === "4"
+    //        ) {
                 return entry.color;
-            return 11;
-    }
+    //        }
+    //        return 11;
+    //}
 };
 
 // Delta Calculator
@@ -1377,7 +1379,7 @@ const sockets = {
     },
     broadcastRoom: () => {
         for (let i = 0; i < clients.length; i++) {
-            clients[i].talk("r", room.width, room.height, JSON.stringify(c.ROOM_SETUP.map(x => x.map(t => t.color))));
+            clients[i].talk("r", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))));
         }
     },
     connect: (socket, req) => {

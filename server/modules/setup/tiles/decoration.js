@@ -1,4 +1,5 @@
 let makeDecoration = (defs) => new Tile({
+    color: "white",
     init: tile => {
         for (let [def, amount] of defs) {
             def = ensureIsClass(def);
@@ -6,8 +7,7 @@ let makeDecoration = (defs) => new Tile({
             for (; amount; amount--) {
                 let i = 0, position = {};
                 do {
-                    position.x = tile.x + room.tileWidth * (Math.random() - 0.5);
-                    position.y = tile.y + room.tileHeight * (Math.random() - 0.5);
+                    position = tile.randomInside();
                     if (++i > 200) return util.warn("Could not place a decorative obstacle entity.");
                 } while (dirtyCheck(position, checkRadius));
                 let o = new Entity(position);
