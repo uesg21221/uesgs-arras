@@ -379,31 +379,21 @@ spawnBots = () => {
 
     // then add new bots if arena is open
     if (!global.arenaClosed && bots.length < c.BOTS) {
-        let o = new Entity(getSpawnableArea());
+        let team = room.gameMode === "tdm" ? getWeakestTeam(0) : undefined,
+            limit = 20, // give up after 20 attempts
+            loc;
+        do {
+            loc = getSpawnableArea(team);
+        } while (limit-- && dirtyCheck(loc, 50))
+        let o = new Entity(loc);
         o.define('bot');
         o.define(c.SPAWN_CLASS);
         o.refreshBodyAttributes();
         o.isBot = true;
-        o.color = color;
         o.name += ran.chooseBotName();
         o.leftoverUpgrades = ran.chooseChance(1, 5, 20, 37, 37); // don't always upgrade to the latest tier
-        if (c.RANDOM_COLORS && room.gameMode === "ffa") {
-            color = Math.floor(Math.random() * 20);
-        } else if (room.gameMode === "tdm") {
-            team = getWeakestTeam(0);
-            if (room.spawnable[team].length) {
-                let loc;
-                do {
-                    loc = ran.choose(room.spawnable[team]).randomInside();
-                } while (dirtyCheck(loc, 50));
-                o.x = loc.x;
-                o.y = loc.y;
-            }
-            team = -team;
-            color = getTeamColor(team);
-        } else {
-            o.color = 17;
-        }
+        o.color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
+        if (team) o.team = team;
         bots.push(o);
     }
 };
