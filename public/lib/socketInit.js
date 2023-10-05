@@ -1,6 +1,6 @@
 import { global } from "./global.js";
 import { util } from "./util.js";
-import { config } from "./config.js";
+import { settings } from "./settings.js";
 import { protocol } from "./protocol.js";
 window.fakeLagMS = 0;
 var sync = [];
@@ -12,20 +12,18 @@ let level = 0;
 let sscore = util.Smoothbar(0, 10);
 var serverStart = 0,
     gui = {
-        getStatNames: data => {
-            return [
-                    data?.body_damage ?? 'Body Damage',
-                    data?.max_health ?? 'Max Health',
-                    data?.bullet_speed ?? 'Bullet Speed',
-                    data?.bullet_health ?? 'Bullet Health',
-                    data?.bullet_pen ?? 'Bullet Penetration',
-                    data?.bullet_damage ?? 'Bullet Damage',
-                    data?.reload ?? 'Reload',
-                    data?.move_speed ?? 'Movement Speed',
-                    data?.shield_regen ?? 'Shield Regeneration',
-                    data?.shield_cap ?? 'Shield Capacity',
-                ]
-        },
+        getStatNames: data => [
+            data?.body_damage ?? 'Body Damage',
+            data?.max_health ?? 'Max Health',
+            data?.bullet_speed ?? 'Bullet Speed',
+            data?.bullet_health ?? 'Bullet Health',
+            data?.bullet_pen ?? 'Bullet Penetration',
+            data?.bullet_damage ?? 'Bullet Damage',
+            data?.reload ?? 'Reload',
+            data?.move_speed ?? 'Movement Speed',
+            data?.shield_regen ?? 'Shield Regeneration',
+            data?.shield_cap ?? 'Shield Capacity',
+        ],
         skills: [
             { amount: 0, color: 'purple', cap: 1, softcap: 1 },
             { amount: 0, color: 'pink'  , cap: 1, softcap: 1 },
@@ -81,7 +79,7 @@ var moveCompensation = {
         yy = 0;
     },
     get: () => {
-        if (config.lag.unresponsive) {
+        if (settings.lag.unresponsive) {
             return {
                 x: 0,
                 y: 0,
@@ -102,7 +100,7 @@ var moveCompensation = {
         // Dampen motion
         let motion = Math.sqrt(_vx * _vx + _vy * _vy);
         if (motion > 0 && damp) {
-            let finalvelocity = motion / (damp / config.roomSpeed + 1);
+            let finalvelocity = motion / (damp / settings.roomSpeed + 1);
             _vx = finalvelocity * _vx / motion;
             _vy = finalvelocity * _vy / motion;
         }
@@ -268,7 +266,7 @@ var lag = {
     get: () => lags.length ? lags.reduce((a, b) => a + b) / lags.length : 0,
     add: l => {
         lags.push(l);
-        if (lags.length > config.lag.memory) {
+        if (lags.length > settings.lag.memory) {
             lags.splice(0, 1);
         }
     }
@@ -447,8 +445,8 @@ const process = (z = {}) => {
                 lastRender: global.player.time,
                 x: z.x,
                 y: z.y,
-                lastx: z.x - global.metrics.rendergap * config.roomSpeed * (1000 / 30) * z.vx,
-                lasty: z.y - global.metrics.rendergap * config.roomSpeed * (1000 / 30) * z.vy,
+                lastx: z.x - global.metrics.rendergap * settings.roomSpeed * (1000 / 30) * z.vx,
+                lasty: z.y - global.metrics.rendergap * settings.roomSpeed * (1000 / 30) * z.vy,
                 lastvx: z.vx,
                 lastvy: z.vy,
                 lastf: z.facing,
@@ -738,7 +736,7 @@ const socketInit = port => {
             case 'w': // welcome to the game
                 if (m[0]) { // Ask to spawn
                     console.log('The server has welcomed us to the game room. Sending spawn request.');
-                    socket.talk('s', global.playerName, 1, 1 * config.game.autoLevelUp);
+                    socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp);
                     global.message = '';
                 }
             break;
@@ -747,7 +745,7 @@ const socketInit = port => {
                 global.gameHeight = m[1];
                 global.roomSetup = JSON.parse(m[2]);
                 serverStart = JSON.parse(m[3]);
-                config.roomSpeed = m[4];
+                settings.roomSpeed = m[4];
                 console.log('Room data recieved. Commencing syncing process.');
                 // Start the syncing process
                 socket.talk('S', getNow());

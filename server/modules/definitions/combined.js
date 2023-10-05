@@ -1,23 +1,22 @@
 let fs = require('fs'),
-	path = require('path'),
-	groups = fs.readdirSync(path.resolve(__dirname, './groups')),
-	addons = fs.readdirSync(path.resolve(__dirname, './addons')),
-	Class = {},
-	definitionCount = 0;
-
-let definitionGroupsLoadStart = Date.now();
+    path = require('path'),
+    groups = fs.readdirSync(path.resolve(__dirname, './groups')),
+    addons = fs.readdirSync(path.resolve(__dirname, './addons')),
+    Class = {},
+    definitionCount = 0,
+    definitionGroupsLoadStart = Date.now();
 console.log(`Loading ${groups.length} groups...`);
 for (let filename of groups) {
-	console.log(`Loading group: ${filename}`);
-	let group = require('./groups/' + filename);
-	for (let key in group) {
-		if (key in Class) {
-			console.warn(`WARNING: ${key} is present in multiple definition groups!`);
-		} else {
-			definitionCount++;
-		}
-		Class[key] = group[key];
-	}
+    console.log(`Loading group: ${filename}`);
+    let group = require('./groups/' + filename);
+    for (let key in group) {
+        if (key in Class) {
+            console.warn(`WARNING: ${key} is present in multiple definition groups!`);
+        } else {
+            definitionCount++;
+        }
+        Class[key] = group[key];
+    }
 }
 
 let definitionGroupsLoadEnd = Date.now();
@@ -25,11 +24,11 @@ console.log("Loaded definitions in " + (definitionGroupsLoadEnd - definitionGrou
 
 console.log(`Loading ${addons.length} addons...`);
 for (let filename of addons) {
-	if (!filename.endsWith('.js')) continue;
-	
-	console.log(`Loading addon: ${filename}`);
+    if (!filename.endsWith('.js')) continue;
+    
+    console.log(`Loading addon: ${filename}`);
 
-	require('./addons/' + filename)({ Config: c, Class, Events: events });
+    require('./addons/' + filename)({ Config: c, Class, Events: events });
 }
 
 let addonsLoadEnd = Date.now();
@@ -37,48 +36,44 @@ console.log("Loaded addons in " + (addonsLoadEnd - definitionGroupsLoadEnd) + " 
 
 // "Flattening" refers to removing PARENT attributes and applying the parents' attributes to the definition themselves, if not overwritten later on.
 if (c.flattenDefintions) {
-	console.log(`Flattening ${definitionCount} definitions...`);
-	let flattened = {},
-		flatten = definition => {
+    console.log(`Flattening ${definitionCount} definitions...`);
+    let flatten = (output, definition) => {
 
-			// Support for string definition references
-	        if ("string" == typeof definition) {
-	            if (definition in Class) {
-	                definition = Class[definition];
-	            } else {
-	            	throw Error(`Definition ${definition} is attempted to be gotten but does not exist!`);
-	            }
-	        }
+        // Support for string definition references
+        if ("string" == typeof definition) {
+            if (definition in Class) {
+                definition = Class[definition];
+            } else {
+                throw Error(`Definition ${definition} is attempted to be gotten but does not exist!`);
+            }
+        }
 
-			let output = {};
-			for (let parent in definition.PARENT) {
+        if (definition.PARENT) {
+            if (Array.isArray(definition.PARENT)) {
+                flatten(output, definition.PARENT);
+            } else for (let parent in definition.PARENT) {
+                flatten(output, definition.PARENT[parent]);
+            }
+        }
 
-				// Some people spell a class reference wrong
-				if ("undefined" == typeof definition.PARENT[parent]) {
-					throw Error(`Definition ${definition} has an undefined parent at index ${parent}!`)
-				}
+        for (let key in definition) {
+            if (key !== "PARENT") {
+                output[key] = definition[key];
+            }
+        }
 
-				// Flatten parents too!
-				let toApply = flatten(definition.PARENT[parent]);
-				for (let key in toApply) {
-					output[key] = toApply[key];
-				}
-			}
-			for (let key in definition) {
-				if (key !== "PARENT") {
-					output[key] = definition[key];
-				}
-			}
-			return output;
-		};
+        return output;
+    };
 
-	for (let key in Class) {
-		flattened[key] = flatten(Class[key]);
-	}
-	Class = flattened;
-	definitionCount = Object.keys(Class).length;
-	let flatteningEnd = Date.now();
-	console.log("Definitions flattened in " + (flatteningEnd - addonsLoadEnd) + " milliseconds. \n");
+    let flattened = {};
+    for (let key in Class) {
+        let output = {};
+        flatten(output, Class[key]);
+        flattened[key] = output;
+    }
+    Class = flattened;
+    definitionCount = Object.keys(Class).length;
+    console.log("Definitions flattened in " + (Date.now() - addonsLoadEnd) + " milliseconds. \n");
 }
 
 console.log(`Combined ${groups.length} definition groups and ${addons.length} addons into ${definitionCount} ${c.flattenDefintions ? 'flattened ' : ''}definitions!\n`);

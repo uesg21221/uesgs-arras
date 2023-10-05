@@ -1,5 +1,5 @@
 import { global } from "./global.js";
-import { config } from "./config.js";
+import { settings } from "./settings.js";
 
 class Canvas {
     constructor() {
@@ -37,7 +37,7 @@ class Canvas {
             case global.KEY_ENTER:
                 // Enter to respawn
                 if (global.died) {
-                    this.socket.talk('s', global.playerName, 0, 1 * config.game.autoLevelUp);
+                    this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp);
                     global.died = false;
                     break;
                 }

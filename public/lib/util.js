@@ -1,5 +1,5 @@
 import { global } from "./global.js";
-import { config } from "./config.js";
+import { settings } from "./settings.js";
 const util = {
     submitToLocalStorage: name => {
         localStorage.setItem(name + 'Value', document.getElementById(name).value);
@@ -124,7 +124,7 @@ const util = {
     },
     isInView: (x, y, r, mid = false) => {
         let ratio = util.getRatio();
-        r += config.graphical.borderChunk;
+        r += settings.graphical.borderChunk;
         if (mid) {
             ratio *= 2;
             return x > -global.screenWidth / ratio - r && x < global.screenWidth / ratio + r && y > -global.screenHeight / ratio - r && y < global.screenHeight / ratio + r;

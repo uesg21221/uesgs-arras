@@ -1661,66 +1661,6 @@ class Entity extends EventEmitter {
             this.velocity.null();
             return 0;
         }
-        if (room.port.length) {
-            let loc = {
-                x: this.x,
-                y: this.y,
-            };
-            if (
-                room.isIn("port", loc) &&
-                !this.passive &&
-                !this.settings.goThruObstacle &&
-                this.facingType !== "bound"
-            ) {
-                let myRoom = room.isAt(loc);
-                let otherPortals = room.port
-                    .map((e) => e)
-                    .filter((r) => r.x !== myRoom.x && r.y !== myRoom.y);
-                let dx = loc.x - myRoom.x;
-                let dy = loc.y - myRoom.y;
-                let dist2 = dx * dx + dy * dy;
-                let force = c.ROOM_BOUND_FORCE;
-                let portals = {
-                    launchForce: 1250,
-                    gravity: 13500,
-                    threshold: 200,
-                };
-                if (this.type === "miniboss" || this.isMothership) {
-                    this.accel.x += (((3e4 * dx) / dist2) * force) / roomSpeed;
-                    this.accel.y += (((3e4 * dy) / dist2) * force) / roomSpeed;
-                } else if (this.type === "tank") {
-                    if (dist2 <= portals.threshold) {
-                        let angle = Math.random() * Math.PI * 2;
-                        let ax = Math.cos(angle);
-                        let ay = Math.sin(angle);
-                        this.velocity.x = (portals.launchForce * ax * force) / roomSpeed;
-                        this.velocity.y = (portals.launchForce * ay * force) / roomSpeed;
-                        let portTo = otherPortals.length
-                            ? ran.choose(otherPortals)
-                            : room.random();
-                        let rx = ax * (room.width / room.xgrid) + this.size * 2;
-                        let ry = ay * (room.width / room.ygrid) + this.size * 2;
-                        this.x = portTo.x + rx;
-                        this.y = portTo.y + ry;
-                        this.invuln = true;
-                        for (let o of entities)
-                            if (
-                                o.id !== this.id &&
-                                o.master.id === this.id &&
-                                (o.type === "drone" || o.type === "minion")
-                            ) {
-                                o.x = this.x + ay * 30 * (Math.random() - 0.5);
-                                o.y = portTo.y + ay * 30 * (Math.random() - 0.5);
-                            }
-                    } else {
-                        this.velocity.x -=
-                            (((portals.gravity * dx) / dist2) * force) / roomSpeed;
-                        this.velocity.y -=
-                            (((portals.gravity * dy) / dist2) * force) / roomSpeed;
-                    }
-                } else this.kill();
-            }
-        }
         if (!this.settings.canGoOutsideRoom) {
             if (c.ARENA_TYPE === "circle") {
                 let centerPoint = {
@@ -1736,29 +1676,6 @@ class Entity extends EventEmitter {
                 let padding = this.realSize - 50;
                 this.accel.x -= Math.max(this.x + padding - room.width, Math.min(this.x - padding, 0)) * c.ROOM_BOUND_FORCE / roomSpeed;
                 this.accel.y -= Math.max(this.y + padding - room.height, Math.min(this.y - padding, 0)) * c.ROOM_BOUND_FORCE / roomSpeed;
-            }
-        }
-        if (c.SPECIAL_BOSS_SPAWNS && (this.type === "tank" || this.type === "food") && room.isIn("outb", this)) {
-            this.kill();
-        }
-        if (this.type === "food" && room.isIn("boss", this)) {
-            this.kill();
-        }
-        if (room.gameMode === "tdm" && this.type !== "food" && this.master.label !== "Arena Closer") {
-            let loc = this;
-            let inEnemyBase = false;
-            for (let i = 1; i < c.TEAMS + 1; i++) {
-                if (room["bas" + i].length) {
-                    if (this.team !== -i && room.isIn("bas" + i, loc)) inEnemyBase = true;
-                }
-                if (room["bap" + i].length) {
-                    if (this.team !== -i && room.isIn("bap" + i, loc)) inEnemyBase = true;
-                }
-            }
-            if (c.TEAMS === 1) inEnemyBase = false;
-            if (room.isIn("boss", loc) && this.team != TEAM_ENEMIES) inEnemyBase = true;
-            if (inEnemyBase && !this.isArenaCloser && !this.master.isArenaCloser) {
-                this.kill();
             }
         }
     }
@@ -1852,8 +1769,8 @@ class Entity extends EventEmitter {
                 let instance = killers[i];
 
                 if (this.type === "tank") killers.length > 1 ? instance.killCount.assists++ : instance.killCount.solo++;
-                else if (this.type === "food" || this.type === "crasher") instance.killCount.polygons++;
-                else if (this.type === "miniboss") instance.killCount.bosses++;
+                if (this.type === "food" || this.type === "crasher") instance.killCount.polygons++;
+                if (this.type === "miniboss") instance.killCount.bosses++;
 
                 this.killCount.killers.push(instance.index);
             };

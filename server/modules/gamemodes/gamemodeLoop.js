@@ -5,8 +5,7 @@ const hunt = new ManHunt()
 
 if (c.MOTHERSHIP_LOOP) mothershipLoop.spawn();
 if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
-if (c.MAZE && typeof c.MAZE === "number") generateMaze(c.MAZE);
-if (c.DOMINATOR_LOOP) for (let loc of room.dom0) dominatorLoop.spawn(loc, TEAM_ENEMIES, 3);
+if (c.MAZE > 0) generateMaze(c.MAZE);
 
 let logger = new LagLogger();
 const gamemodeLoop = function() {

@@ -37,18 +37,15 @@ class io_bossRushAI extends IO {
     constructor(body) {
         super(body);
         this.enabled = true;
-        this.goal = {
-            x: room.width / 2,
-            y: room.height / 2
-        }
+        this.goalDefault = room.center;
     }
     think(input) {
-        if (room.isIn("nest", this.body)) {
+        if (new Vector( this.body.x - this.goalDefault.x, this.body.y - this.goalDefault.y ).isShorterThan(50)) {
             this.enabled = false;
         }
         if (this.enabled) {
             return {
-                goal: this.goal
+                goal: this.goalDefault
             }
         }
     }
@@ -680,11 +677,11 @@ class io_wanderAroundMap extends IO {
         super(b);
         this.lookAtGoal = opts.lookAtGoal;
         this.immitatePlayerMovement = opts.immitatePlayerMovement;
-        this.spot = room.randomType('norm');
+        this.spot = ran.choose(room.spawnableDefault).loc;
     }
     think(input) {
         if (new Vector( this.body.x - this.spot.x, this.body.y - this.spot.y ).isShorterThan(50)) {
-            this.spot = room.randomType('norm');
+            this.spot = ran.choose(room.spawnableDefault).loc;
         }
         if (input.goal == null && !this.body.autoOverride) {
             let goal = this.spot;

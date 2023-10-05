@@ -1,6 +1,6 @@
 import { util } from "./lib/util.js";
 import { global } from "./lib/global.js";
-import { config } from "./lib/config.js";
+import { settings } from "./lib/settings.js";
 import { Canvas } from "./lib/canvas.js";
 import { color } from "./lib/color.js";
 /** https://gist.github.com/jedfoster/7939513 **/
@@ -154,8 +154,8 @@ function getColor(colorNumber) {
     }
 }
 function getColorDark(givenColor) {
-    let dark = config.graphical.neon ? color.white : color.black;
-    if (config.graphical.darkBorders) return dark;
+    let dark = settings.graphical.neon ? color.white : color.black;
+    if (settings.graphical.darkBorders) return dark;
     return mixColors(givenColor, dark, color.border);
 }
 function getZoneColor(cell, real) {
@@ -187,7 +187,7 @@ function getZoneColor(cell, real) {
 }
 
 function setColor(context, givenColor) {
-    if (config.graphical.neon) {
+    if (settings.graphical.neon) {
         context.fillStyle = getColorDark(givenColor);
         context.strokeStyle = givenColor;
     } else {
