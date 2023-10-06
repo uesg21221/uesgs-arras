@@ -1,15 +1,14 @@
-let makeDecoration = (defs) => new Tile({
+let makeDecoration = defs => new Tile({
     color: "white",
     init: tile => {
         for (let [def, amount] of defs) {
             def = ensureIsClass(def);
             let checkRadius = 10 + def.SIZE;
             for (; amount; amount--) {
-                let i = 0, position = {};
+                let i = 200, position = {};
                 do {
                     position = tile.randomInside();
-                    if (++i > 200) return util.warn("Could not place a decorative obstacle entity.");
-                } while (dirtyCheck(position, checkRadius));
+                } while (i-- && dirtyCheck(position, checkRadius));
                 let o = new Entity(position);
                 o.team = TEAM_ROOM;
                 o.facing = ran.randomAngle();

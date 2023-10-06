@@ -107,13 +107,16 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 0,
+    BOTS: 8,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
 
     // The chances of a player-bot upgrading a specific skill when skill upgrades are available.
     BOT_SKILL_UPGRADE_CHANCES: [ 1, 1, 3, 4, 4, 4, 4, 2, 1, 1],
+
+    // The chances of a player-bot upgrading a specific amount of times before it stops upgrading.
+    BOT_CLASS_UPGRADE_CHANCES: [ 1, 5, 20, 37, 37],
 
     // The class that players and player-bots spawn as.
     SPAWN_CLASS: "basic",

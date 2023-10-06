@@ -391,7 +391,7 @@ spawnBots = () => {
         o.refreshBodyAttributes();
         o.isBot = true;
         o.name += ran.chooseBotName();
-        o.leftoverUpgrades = ran.chooseChance(1, 5, 20, 37, 37); // don't always upgrade to the latest tier
+        o.leftoverUpgrades = ran.chooseChance(...c.BOT_CLASS_UPGRADE_CHANCES);
         o.color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
         if (team) o.team = team;
         bots.push(o);
