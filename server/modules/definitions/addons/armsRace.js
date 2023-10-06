@@ -4,6 +4,7 @@ const g = require('../gunvals.js');
 
 const h = {
     honcho: { size: 1.4, health: 1.5, speed: 1.25 },
+    factorySwarm: combineStats([g.factory, g.swarm, g.doublereload, g.doublereload, g.doublereload, g.doublereload, g.halfspeed]),
 }
 
 // extra facilitators!
@@ -5609,10 +5610,10 @@ module.exports = ({ Class }) => {
                 },
             },
             {
-                POSITION: [15, 7, 1, 0, 0, 90, 0],
+                POSITION: [12, 7, 1, 0, 0, 90, 0],
             },
             {
-                POSITION: [3, 7, 1.7, 15, 0, 90, 0],
+                POSITION: [3, 7, 1.7, 12, 0, 90, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.flank]),
                     TYPE: "trap",
@@ -5627,10 +5628,10 @@ module.exports = ({ Class }) => {
                 },
             },
             {
-                POSITION: [15, 7, 1, 0, 0, 180, 0],
+                POSITION: [12, 7, 1, 0, 0, 180, 0],
             },
             {
-                POSITION: [3, 7, 1.7, 15, 0, 180, 0],
+                POSITION: [3, 7, 1.7, 12, 0, 180, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.flank]),
                     TYPE: "trap",
@@ -5645,10 +5646,10 @@ module.exports = ({ Class }) => {
                 },
             },
             {
-                POSITION: [15, 7, 1, 0, 0, 270, 0],
+                POSITION: [12, 7, 1, 0, 0, 270, 0],
             },
             {
-                POSITION: [3, 7, 1.7, 15, 0, 270, 0],
+                POSITION: [3, 7, 1.7, 12, 0, 270, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.flank]),
                     TYPE: "trap",
@@ -5971,10 +5972,10 @@ module.exports = ({ Class }) => {
             },
             {
                 /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-                POSITION: [13, 8, 1, 0, 5.5, 90, 0],
+                POSITION: [13, 8, 1, 0, 0, 90, 0],
             },
             {
-                POSITION: [3, 9, 1.5, 13, 5.5, 90, 0],
+                POSITION: [3, 9, 1.5, 13, 0, 90, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.twin]),
                     TYPE: "trap",
@@ -5983,10 +5984,10 @@ module.exports = ({ Class }) => {
             },
             {
                 /* LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-                POSITION: [13, 8, 1, 0, -5.5, 270, 0],
+                POSITION: [13, 8, 1, 0, 0, 270, 0],
             },
             {
-                POSITION: [3, 9, 1.5, 13, -5.5, 270, 0],
+                POSITION: [3, 9, 1.5, 13, 0, 270, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.twin]),
                     TYPE: "trap",
@@ -6104,10 +6105,10 @@ module.exports = ({ Class }) => {
                 },
             },
             {
-                POSITION: [15, 7, 1, 0, 0, 180, 0],
+                POSITION: [12, 7, 1, 0, 0, 180, 0],
             },
             {
-                POSITION: [3, 7, 1.7, 15, 0, 180, 0],
+                POSITION: [3, 7, 1.7, 12, 0, 180, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap]),
                     TYPE: "trap",
@@ -6176,7 +6177,7 @@ module.exports = ({ Class }) => {
         PARENT: ["genericTank"],
         LABEL: "Garrison",
         STAT_NAMES: statnames.generic,
-        DANGER: 7,
+        DANGER: 8,
         GUNS: [
             {
                 POSITION: [20, 8, 1, 0, 0, 0, 0],
@@ -6186,12 +6187,12 @@ module.exports = ({ Class }) => {
                 },
             },
             {
-                POSITION: [15, 14, 1, 0, 0, 0, 0],
+                POSITION: [15, 14, 1, 0, 0, 180, 0],
             },
             {
-                POSITION: [6, 14, 1.7, 15, 0, 0, 0],
+                POSITION: [6, 14, 1.7, 15, 0, 180, 0],
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.trap, g.pound, g.destroy]),
+                    SHOOT_SETTINGS: combineStats([g.trap, g.megatrap]),
                     TYPE: "trap",
                     STAT_CALCULATOR: gunCalcNames.trap,
                 },
@@ -6241,7 +6242,7 @@ module.exports = ({ Class }) => {
             },
         ],
     };
-    Class.overTrapGuard = makeOversplit(Class.trapGuard);
+    Class.overTrapGuard = makeOversplit(Class.trapGuard, "Overtrap Guard");
     Class.custodian = {
         PARENT: ["genericTank"],
         LABEL: "Custodian",
@@ -7240,10 +7241,10 @@ module.exports = ({ Class }) => {
         },
         GUNS: [
             {
-                POSITION: [16, 8, 1, 0, -2, 162.5, 0.5],
+                POSITION: [16, 7, 1, 0, -2, 162.5, 0.5],
             },
             {
-                POSITION: [3, 7, 1.7, 16, 0, 162.5, 0.5],
+                POSITION: [3, 7, 1.7, 16, -2, 162.5, 0.5],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.bent]),
                     TYPE: "trap",
@@ -7251,10 +7252,10 @@ module.exports = ({ Class }) => {
                 },
             },
             {
-                POSITION: [16, 8, 1, 0, 2, 197.5, 0.5],
+                POSITION: [16, 7, 1, 0, 2, 197.5, 0.5],
             },
             {
-                POSITION: [3, 7, 1.7, 16, 0, 197.5, 0.5],
+                POSITION: [3, 7, 1.7, 16, 2, 197.5, 0.5],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.bent]),
                     TYPE: "trap",
@@ -7262,7 +7263,7 @@ module.exports = ({ Class }) => {
                 },
             },
             {
-                POSITION: [19, 8, 1, 0, 0, 180, 0],
+                POSITION: [19, 7, 1, 0, 0, 180, 0],
             },
             {
                 POSITION: [3, 7, 1.7, 19, 0, 180, 0],
@@ -7277,6 +7278,650 @@ module.exports = ({ Class }) => {
     Class.bentBulwark = merge(Class.tripleShot, Class.bentBackTraps, "Bent Bulwark");
     Class.bentBulwark.UPGRADES_TIER_3 = [];
     Class.autoBulwark = makeAuto(Class.bulwark);
+    Class.stockade = reflect({
+        PARENT: ["genericTank"],
+        STAT_NAMES: statnames.generic,
+        GUNS: [
+            {
+                /* LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+                POSITION: [20, 8, 1, 0, 5.5, 0, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.twin]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [7, 7.5, 0.6, 7, 5.5, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.swarm]),
+                    TYPE: ["autoswarm"],
+                    STAT_CALCULATOR: gunCalcNames.swarm,
+                },
+            },
+            {
+                /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+                POSITION: [13, 8, 1, 0, 5.5, 185, 0],
+            },
+            {
+                POSITION: [3, 9, 1.5, 13, 5.5, 185, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.twin]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    }, "Stockade");
+    Class.fencer = reflect({
+        PARENT: ["genericTank"],
+        STAT_NAMES: statnames.generic,
+        GUNS: [
+            {
+                POSITION: [18, 7.5, 1, 0, 5.5, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [18, 7.5, 1, 0, 5.5, 185, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [12, 7, 1, 0, 5.5, 185, 0],
+            },
+            {
+                POSITION: [3, 7, 1.7, 12, 5.5, 185, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    }, "Fencer");
+    Class.impeder = reflect({
+        PARENT: ["genericTank"],
+        STAT_NAMES: statnames.generic,
+        GUNS: [
+            {
+                POSITION: [18, 7.5, 1, 0, 5.5, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [4, 7, 1, 11, 5.25, 185, 0],
+            },
+            {
+                POSITION: [12.5, 10, 1, 0, 5.25, 185, 0],
+            },
+            {
+                POSITION: [3, 7, 1.9, 15, 5.25, 185, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap]),
+                    TYPE: "mechTrap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    }, "Impeder");
+    Class.peashooterFront = {
+        PARENT: ["genericTank"],
+        LABEL: "Peashooter",
+        STAT_NAMES: statnames.generic,
+        DANGER: 7,
+        GUNS: [
+            {
+                POSITION: [20, 8, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [7, 7.5, 0.6, 7, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.swarm]),
+                    TYPE: ["autoswarm"],
+                    STAT_CALCULATOR: gunCalcNames.swarm,
+                },
+            },
+        ],
+    };
+    Class.fusil = merge(Class.peashooterFront, Class.backMachineTrapper, "Fusil");
+    Class.autoPeashooter = makeAuto(Class.peashooter);
+    Class.confiner = merge(Class.peashooterFront, Class.penBackMerger, "Confiner");
+    Class.patrol = merge(Class.peashooterFront, Class.mechBackMerger, "Patrol");
+    Class.peashooterdrive = makeDriveSwarm(Class.peashooter);
+    Class.pommel = {
+        PARENT: ["genericTank"],
+        LABEL: "Pommel",
+        STAT_NAMES: statnames.generic,
+        DANGER: 8,
+        GUNS: [
+            {
+                POSITION: [20, 8, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                /**** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+                POSITION: [2*2/3, 10*2/3, 1, 10.5*2/3+5, 0, 0, 0],
+            },
+            {
+                POSITION: [2*2/3, 8, 1, 15*2/3+5, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([h.factorySwarm]),
+                    TYPE: ["tinyMinionAR", { INDEPENDENT: true }],
+                    STAT_CALCULATOR: gunCalcNames.drone,
+                    AUTOFIRE: true,
+                    SYNCS_SKILLS: true,
+                },
+            },
+            //{// not needed
+            //    POSITION: [11.5*2/3+5, 8, 1, 0, 0, 0, 0],
+            //},
+            {
+                POSITION: [13, 8, 1, 0, 0, 180, 0],
+            },
+            {
+                POSITION: [4, 8, 1.7, 13, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.dotter = {
+        PARENT: ["genericTank"],
+        LABEL: "Dotter",
+        STAT_NAMES: statnames.generic,
+        DANGER: 8,
+        GUNS: [
+            {
+                POSITION: [20, 8, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [7, 10, 0.6, 7, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.swarm, g.pound]),
+                    TYPE: ["autoswarm"],
+                    STAT_CALCULATOR: gunCalcNames.swarm,
+                },
+            },
+            {
+                POSITION: [13, 8, 1, 0, 0, 180, 0],
+            },
+            {
+                POSITION: [4, 8, 1.7, 13, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.tinyMinionAR = {
+        PARENT: ["minion"],
+        LABEL: "Tiny Minion",
+        ACCEPTS_SCORE: false,
+        SHAPE: 0,
+        MOTION_TYPE: 'swarm',
+        BODY: {
+            ACCELERATION: 3,
+            PENETRATION: 1.5,
+            HEALTH: 0.35 * 0.5,
+            DAMAGE: 2.25,
+            RESIST: 1.6,
+            RANGE: 300,
+            DENSITY: 12,
+            PUSHABILITY: 0.5,
+            FOV: 1.5,
+        },
+        GUNS: [ { /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
+            POSITION: [    17,         9,            1,            0,            0,            0,            0,     ], 
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.lowpower]),
+                WAIT_TO_CYCLE: true,
+                TYPE: "bullet",
+            }, }, 
+        ],
+        DIE_AT_RANGE: true,
+        BUFF_VS_FOOD: true,
+        HAS_NO_RECOIL: true,
+    };
+    Class.operatorBackMerger = {
+        PARENT: ["genericTank"],
+        LABEL: "Operator",
+        STAT_NAMES: statnames.trap,
+        GUNS: [
+            {
+                POSITION: [21, 7.5, 1, 0, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [4, 7, 1, 11, 0, 180, 0],
+            },
+            {
+                POSITION: [12.5, 10, 1, 0, 0, 180, 0],
+            },
+            {
+                POSITION: [3, 7, 1.9, 15, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap]),
+                    TYPE: "mechTrap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.operatorBackMerger = {
+        PARENT: ["genericTank"],
+        LABEL: "Operator",
+        STAT_NAMES: statnames.trap,
+        GUNS: [
+            {
+                POSITION: [21, 7.5, 1, 0, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [4, 7, 1, 11, 0, 180, 0],
+            },
+            {
+                POSITION: [12.5, 10, 1, 0, 0, 180, 0],
+            },
+            {
+                POSITION: [3, 7, 1.9, 15, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap]),
+                    TYPE: "mechTrap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.encirclerBackMerger = {
+        PARENT: ["genericTank"],
+        LABEL: "Encircler",
+        STAT_NAMES: statnames.trap,
+        GUNS: [
+            {
+                POSITION: [21, 7.5, 1, 0, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.mach]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [15, 7, 1.6, 0, 0, 180, 0],
+            },
+            {
+                POSITION: [3, 11.2, 1.487, 15, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.mach]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.picket = merge({
+        PARENT: ["genericTank"],
+        STAT_NAMES: statnames.trap,
+        GUNS: [
+            {
+                POSITION: [21, 7.5, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+        ],
+    }, Class.encirclerBackMerger, "Picket");
+    Class.jailer = merge({
+        PARENT: ["genericTank"],
+        STAT_NAMES: statnames.trap,
+        GUNS: [
+            {
+                POSITION: [21, 7.5, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+        ],
+    }, Class.operatorBackMerger, "Jailer");
+    Class.autoIncarcerator = makeAuto(Class.incarcerator);
+    Class.megaMechBackMerger = {
+        PARENT: ["genericTank"],
+        STAT_NAMES: statnames.trap,
+        GUNS: [
+            {
+                POSITION: [4, 10.5, 1, 11, 0, 180, 0],
+            },
+            {
+                POSITION: [12.5, 15, 1, 0, 0, 180, 0],
+            },
+            {
+                POSITION: [3, 10.5, 1.9, 15, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.megatrap]),
+                    TYPE: "mechTrap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.machineMechBackMerger = {
+        PARENT: ["genericTank"],
+        STAT_NAMES: statnames.trap,
+        GUNS: [
+            {
+                POSITION: [4, 10.5, 1.6, 11, 0, 180, 0],
+            },
+            {
+                POSITION: [12.5, 15*1.6, 1, 0, 0, 180, 0],
+            },
+            {
+                POSITION: [3, 10.5*1.6, 1.9, 15, 0, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.mach]),
+                    TYPE: "mechTrap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.shepherd = merge({
+        PARENT: ["genericTank"],
+        STAT_NAMES: statnames.trap,
+        GUNS: [
+            {
+                POSITION: [21, 7.5, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+        ],
+    }, Class.machineMechBackMerger, "Jailer");
+    Class.autoMechGuard = makeAuto(Class.mechGuard);
+    Class.megaAutoTrapGuard = makeAuto(Class.trapGuard, "Mega Auto-Trap Guard", { type: "megaAutoTurret", independent: true });
+    Class.megaAutoTrapGuard.UPGRADES_TIER_3 = [];
+    Class.tripleAutoTrapGuard = dereference(Class.trapGuard);
+    Class.tripleAutoTrapGuard.TURRETS = [
+        // triple auto
+        {
+            TYPE: "autoTurret",
+            independent: true,
+            POSITION: [10, 6.25, 0, 0, 120, 1],
+        },
+        {
+            TYPE: "autoTurret",
+            independent: true,
+            POSITION: [10, 6.25, 0, 120, 120, 1],
+        },
+        {
+            TYPE: "autoTurret",
+            independent: true,
+            POSITION: [10, 6.25, 0, 240, 120, 1],
+        }
+    ];
+    Class.autoMachineGuard = makeAuto(Class.machineGuard);
+    Class.restrainer = {
+        PARENT: ["genericTank"],
+        LABEL: "Restrainer",
+        STAT_NAMES: statnames.generic,
+        DANGER: 8,
+        GUNS: [
+            {
+                POSITION: [20, 8, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [17.8125, 7, 1.9, 0, 0, 0, 0],
+            },
+            {
+                POSITION: [3, 13.3, 1.487, 17.8125, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.mach, g.mach, {size: 7/13.3}]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.equalizerGuard = {
+        PARENT: ["genericTank"],
+        LABEL: "Restrainer",
+        STAT_NAMES: statnames.generic,
+        DANGER: 8,
+        GUNS: [
+            {
+                POSITION: [20, 8, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [12, 3.5, 1, 0, 7.25, 180, 0],
+            },
+            {
+                POSITION: [2.5, 3.5, 1.5, 12, 7.25, 180, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.puregunner, g.morereload, g.one_third_reload, g.micro]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+            {
+                POSITION: [12, 3.5, 1, 0, -7.25, 180, 0],
+            },
+            {
+                POSITION: [2.5, 3.5, 1.5, 12, -7.25, 180, 0.75],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.puregunner, g.morereload, g.one_third_reload, g.micro]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+            {
+                POSITION: [16, 3.5, 1, 0, 3.75, 180, 0],
+            },
+            {
+                POSITION: [2.5, 3.5, 1.5, 16, 3.75, 180, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.puregunner, g.morereload, g.one_third_reload, g.micro]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+            {
+                POSITION: [16, 3.5, 1, 0, -3.75, 180, 0],
+            },
+            {
+                POSITION: [2.5, 3.5, 1.5, 16, -3.75, 180, 0.25],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.puregunner, g.morereload, g.one_third_reload, g.micro]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.scout = merge(Class.machineGun, Class.backMachineTrapper, "Scout");
+    Class.triangleBranchBackMerger = {
+        PARENT: ["genericTank"],
+        LABEL: "Eagle",
+        DANGER: 7,
+        TOOLTIP: "Right click to fire your main barrel.",
+        GUNS: [
+            {
+                POSITION: [16, 8, 1, 0, 0, 150, 0.1],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([
+                        g.basic,
+                        g.flank,
+                        g.tri,
+                        g.thruster,
+                        g.halfrecoil,
+                    ]),
+                    TYPE: "bullet",
+                    LABEL: gunCalcNames.thruster,
+                },
+            },
+            {
+                POSITION: [16, 8, 1, 0, 0, 210, 0.1],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([
+                        g.basic,
+                        g.flank,
+                        g.tri,
+                        g.thruster,
+                        g.halfrecoil,
+                    ]),
+                    TYPE: "bullet",
+                    LABEL: gunCalcNames.thruster,
+                },
+            },
+            {
+                POSITION: [18, 8, 1, 0, 0, 180, 0.6],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([
+                        g.basic,
+                        g.flank,
+                        g.tri,
+                        g.thruster,
+                        g.halfrecoil,
+                    ]),
+                    TYPE: "bullet",
+                    LABEL: gunCalcNames.thruster,
+                },
+            },
+        ],
+    };
+    Class.cockatiel = merge(Class.triangleBranchBackMerger, {
+        PARENT: ["genericTank"],
+        LABEL: "Pen",
+        BODY: {
+            FOV: 1.2 * base.FOV,
+        },
+        GUNS: [
+            {
+                POSITION: [18, 7.5, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                    ALT_FIRE: true,
+                },
+            },
+            {
+                POSITION: [12, 7, 1, 0, 0, 0, 0],
+            },
+            {
+                POSITION: [3, 7, 1.7, 12, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                    ALT_FIRE: true,
+                },
+            },
+        ],
+    }, "Cockatiel");
+    Class.interner = makeHybrid(Class.pen, "Interner");
+    Class.autoPen = makeAuto(Class.pen);
+    Class.fortifier = {
+        PARENT: ["genericTank"],
+        DANGER: 8,
+        LABEL: "Fortifier",
+        STAT_NAMES: statnames.trap,
+        BODY: {
+            FOV: 1.15,
+        },
+        GUNS: [
+            {
+                POSITION: [29, 8, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.mini, {reload: 1/3.75}]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [4, 8, 1.3, 22, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+            {
+                POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+            {
+                POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
+    Class.sty = {
+        PARENT: ["genericTank"],
+        LABEL: "Sty",
+        STAT_NAMES: statnames.trap,
+        GUNS: [
+            {
+                POSITION: [24, 7.5, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [15, 14, 1, 0, 0, 0, 0],
+            },
+            {
+                POSITION: [6, 14, 1.7, 15, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.megatrap]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                },
+            },
+        ],
+    };
 
     // lvl 30
     Class.trapper.UPGRADES_TIER_2.push("pen", "mech", "machineTrapper", "wark");
@@ -7320,7 +7965,15 @@ module.exports = ({ Class }) => {
     Class.triTrapGuard.UPGRADES_TIER_3 = ["triBushwhacker", "gunnerTriTrapper", "quadwark", "triPeashooter", "triIncarcerator", "triMechGuard", "triMachineGuard", "hexaTrapGuard", "septaTrapGuard", "architectGuard"];
     Class.gunnerTrapper.UPGRADES_TIER_3 = ["cleaver", "vallation", "lure", "tacker", "autoGunnerTrapper", "gunnerBuilder", "oracle", "gunnerPen", "gunnerMech", "lavisher", "gunnerTriTrapper"];
     Class.bomber.UPGRADES_TIER_3 = ["blockbuster", "shiver", "striker", "raider", "blitz", "assaulter", "autoBomber", "rider", "whizzer", "nuker", "bolter", "fleeter"];
-    Class.bulwark.UPGRADES_TIER_3 = ["parapet", "partition", "thrasher", "dam", "striker", "bentBulwark", "autoBulwark"];
+    Class.bulwark.UPGRADES_TIER_3 = ["parapet", "partition", "thrasher", "dam", "striker", "bentBulwark", "autoBulwark", "stockade", "fencer", "impeder", "quadwark"];
+    Class.peashooter.UPGRADES_TIER_3 = ["stockade", "fusil", "whizzer", "blowgun", "autoPeashooter", "confiner", "patrol", "peashooterdrive", "pommel", "dotter", "triPeashooter"];
+    Class.incarcerator.UPGRADES_TIER_3 = ["lockup", "picket", "gunnerPen", "nuker", "overthrower", "fencer", "confiner", "autoIncarcerator", "jailer", "triIncarcerator"];
+    Class.mechGuard.UPGRADES_TIER_3 = ["watchman", "shepherd", "gunnerMech", "bolter", "vanquisher", "impeder", "patrol", "autoMechGuard", "jailer", "triMechGuard"];
+    Class.autoTrapGuard.UPGRADES_TIER_3 = ["megaAutoTrapGuard", "tripleAutoTrapGuard", "autoBushwhacker", "autoGunnerTrapper", "autoBomber", "autoConqueror", "autoBulwark", "autoPeashooter", "autoIncarcerator", "autoMechGuard", "autoMachineGuard"];
+    Class.machineGuard.UPGRADES_TIER_3 = ["fusil", "shepherd", "picket", "anchor", "partition", "shiver", "vallation", "equalizerGuard", "autoMachineGuard", "restrainer", "triMachineGuard", "scout"];
+    Class.pen.UPGRADES_TIER_3 = ["stall", "triPen", "encircler", "incarcerator", "operator", "cockatiel", "hutch", "interner", "autoPen", "fortifier", "sty"];
+    Class.mech.UPGRADES_TIER_3 = [];
+    Class.machineTrapper.UPGRADES_TIER_3 = ["dieselTrapper"];
 };
 /*  DONE LIST
 
@@ -7329,12 +7982,8 @@ TRAPPER DIRECT UPGRADES
 DOUBLE TWIN ALL UPGRADES
 BUILDER ALL UPGRADES
 TRI-TRAPPER ALL UPGRADES
+TRAP GUARD ALL UPGRADES
 
-TRAP GUARD DIRECT UPGRADES
-
-BUSHWHACKER ALL UPGRADES
-GUNNER TRAPPER ALL UPGRADES
-BOMBER ALL UPGRADES
-CONQUERER ALL UPGRADES
+PEN DIRECT UPGRADES
 
 */
