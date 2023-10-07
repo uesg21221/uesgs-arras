@@ -27,6 +27,10 @@ normal = new Tile({
 nest = new Tile({
     color: "purple",
     data: { allowMazeWallSpawn: true, foodSpawnCooldown: 0, enemySpawnCooldown: 0, foodCount: 0, enemyCount: 0 },
+    init: tile => {
+        if (!room.spawnable[TEAM_ENEMIES]) room.spawnable[TEAM_ENEMIES] = [];
+        room.spawnable[TEAM_ENEMIES].push(tile);
+    },
     tick: tile => {
         if (++tile.data.enemySpawnCooldown > c.ENEMY_SPAWN_COOLDOWN) {
             tile.data.enemySpawnCooldown = 0;
