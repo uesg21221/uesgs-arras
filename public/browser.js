@@ -16,8 +16,14 @@ let iframe = document.getElementById('client'),
 //join selected server
     join = document.getElementById('join'),
 
+//list of servers and info about them that we display
     servers = [];
 
+//client wants its url to be renamed
 window.onmessage = event => iframe.src = `https://${event.data.ip}/app.html` + (event.data.key ? '?key=' + event.data.key : '');
 
+//this will be in socketInit.js or app.js
 //in iframe: window.top.postMessage('hello', '*')
+
+//additionally, since clients shouldnt HAVE to run under browsers
+// https://stackoverflow.com/a/326076/10793061
