@@ -82,7 +82,7 @@ class BossRush {
     }
 
     spawnFriendlyBoss() {
-        let o = new Entity(getSpawnableArea(TEAM_BLUE);
+        let o = new Entity(getSpawnableArea(TEAM_BLUE));
         o.define(ran.choose(this.friendlyBossChoices));
         o.define({ DANGER: 10 });
         o.team = TEAM_BLUE;
