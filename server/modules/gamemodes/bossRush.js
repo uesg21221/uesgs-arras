@@ -82,7 +82,7 @@ class BossRush {
     }
 
     spawnFriendlyBoss() {
-        let o = new Entity(room.randomType('bas1'));
+        let o = new Entity(getSpawnableArea(TEAM_BLUE);
         o.define(ran.choose(this.friendlyBossChoices));
         o.define({ DANGER: 10 });
         o.team = TEAM_BLUE;
@@ -152,7 +152,7 @@ class BossRush {
             let spot = null,
                 attempts = 0;
             do {
-                spot = room.randomType('boss');
+                spot = getSpawnableArea(TEAM_ENEMIES);
             } while (dirtyCheck(spot, 500) && ++attempts < 30);
 
             let enemy = this.spawnEnemyWrapper(spot, boss);
@@ -162,10 +162,10 @@ class BossRush {
 
         //spawn fodder enemies
         for (let i = 0; i < this.waveId / 5; i++) {
-            this.spawnEnemyWrapper(room.randomType('boss'), ran.choose(this.bigFodderChoices));
+            this.spawnEnemyWrapper(getSpawnableArea(TEAM_ENEMIES), ran.choose(this.bigFodderChoices));
         }
         for (let i = 0; i < this.waveId / 2; i++) {
-            this.spawnEnemyWrapper(room.randomType('boss'), ran.choose(this.smallFodderChoices));
+            this.spawnEnemyWrapper(getSpawnableArea(TEAM_ENEMIES), ran.choose(this.smallFodderChoices));
         }
 
         //spawn a friendly boss every 20 waves

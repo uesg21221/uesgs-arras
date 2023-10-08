@@ -14,7 +14,10 @@ outside = new Tile({ color: "#C5C5C5" }),
 
 bossSpawn = new Tile({
     color: getTeamColor(TEAM_RED),
-    init: tile => room.spawnable[TEAM_ENEMIES].push(tile),
+    init: tile => {
+        if (!room.spawnable[TEAM_ENEMIES]) room.spawnable[TEAM_ENEMIES] = [];
+        room.spawnable[TEAM_ENEMIES].push(tile);
+    },
     tick: tile => {
         for (let i = 0; i < tile.entities; i++) {
             let entity = tile.entities[i];

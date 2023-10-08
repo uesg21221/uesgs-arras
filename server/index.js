@@ -342,17 +342,12 @@ let spawnBosses = minibossCount => {
             names = ("string" == typeof names) ? [names] : names;
             sockets.broadcast(amount > 1 ? util.listify(names) + " have arrived!" : names[0] + " has arrived!");
             for (let i = 0; i < names.length; i++) {
-                let name = names[i];
-                let spot,
-                    m = 0;
-                do {
-                    spot = room.randomType(selection.location);
-                    m++;
-                } while (dirtyCheck(spot, 500) && m < 30);
+                let spot, m = 30;
+                do { spot = getSpawnableArea(TEAM_ENEMIES); } while (m-- && dirtyCheck(spot, 500));
                 let boss = new Entity(spot);
-                boss.name = name;
                 boss.define(selection.bosses.sort(() => 0.5 - Math.random())[i % selection.bosses.length]);
                 boss.team = TEAM_ENEMIES;
+                boss.name = names[i];
             }
         }, 5000);
         timer = Math.round((c.bossSpawnInterval || 8) * 65); // 5 seconds due to spawning process
