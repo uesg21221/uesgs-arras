@@ -21,6 +21,6 @@ let makeDecoration = defs => new Tile({
 });
 
 module.exports = {
-    rock: makeDecoration([['rock', 0], ['gravel', 3]]),
-    roid: makeDecoration([['rock', 2], ['gravel', 2]])
+    rock: makeDecoration([['rock', 0], ['gravel', 2]]),
+    roid: makeDecoration([['rock', 1], ['gravel', 1]])
 };
