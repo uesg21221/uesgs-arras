@@ -174,7 +174,7 @@ module.exports = {
     SANITIZE_CHAT_MESSAGE_COLORS: true,
 
     // If someone tries to get a file that does not exist, send them this instead.
-    DEFAULT_FILE: 'app.html',
+    DEFAULT_FILE: 'browser.html',
 
     // Window name of the server terminal.
     WINDOW_NAME: 'APS++ Game Server Instance',
