@@ -12,7 +12,7 @@ spawn = (tile, team, type = false) => {
     o.color = getTeamColor(team);
     o.skill.score = 111069;
     o.name = "Dominator";
-    o.SIZE = c.WIDTH / c.X_GRID / 10;
+    o.SIZE = room.tileWidth / 10;
     o.isDominator = true;
     o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: true })];
 
