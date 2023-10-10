@@ -136,8 +136,8 @@ class TileEntity {
         }
         // this.blueprint = tile.args;
         this.loc = {
-            x: room.tileWidth * loc.x + room.tileWidth / 2,
-            y: room.tileHeight * loc.y + room.tileHeight / 2
+            x: room.tileWidth * (parseFloat(loc.x) + 0.5),
+            y: room.tileHeight * (parseFloat(loc.y) + 0.5)
         };
         this.color = tile.color;
         this.init = tile.init;
