@@ -1083,11 +1083,12 @@ class Entity extends EventEmitter {
             let tierProp = 'UPGRADES_TIER_' + i;
             if (set[tierProp] != null) {
                 for (let j = 0; j < set[tierProp].length; j++) {
-                    let e = ensureIsClass(set[tierProp][j]);
+                    let upgrade = ensureIsClass(set[tierProp][j]);
                     this.upgrades.push({
-                        class: e,
+                        class: set[tierProp][j],
                         level: c.TIER_MULTIPLIER * i,
-                        index: e.index,
+                        index: upgrade.index,
+                        tooltip: upgrade.TOOLTIP,
                         tier: i
                     });
                 }
@@ -1347,12 +1348,12 @@ class Entity extends EventEmitter {
             number < this.upgrades.length &&
             this.level >= this.upgrades[number].level
         ) {
-            let upgrade = this.upgrades[number].class;
+            let upgrade = this.upgrades[number];
             this.upgrades = [];
-            this.define(upgrade);
+            this.define(upgrade.class);
             this.sendMessage("You have upgraded to " + this.label + ".");
-            if (upgrade.TOOLTIP != null && upgrade.TOOLTIP.length > 0) {
-                this.sendMessage(upgrade.TOOLTIP);
+            if (upgrade.tooltip != null && upgrade.tooltip.length > 0) {
+                this.sendMessage(upgrade.tooltip);
             }
             for (let instance of entities) {
                 if (

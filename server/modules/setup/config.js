@@ -1,10 +1,6 @@
 let output = require("../../config.js");
 
-// You change gamemodes here
-// To change specific things about specific gamemodes (such as team count for tdm), visit their config file in \gamemodeconfigs\
-const gamemodes = ['tdm', 'domination'];
-
-for (let gamemode of gamemodes) {
+for (let gamemode of output.GAME_MODES) {
     let mode = require(`./gamemodeconfigs/${gamemode}.js`);
     for (let key in mode) {
         if (key === "ROOM_SETUP") {
@@ -26,4 +22,4 @@ const nameMap = {
     trainwars: "Train Wars"
 };
 
-output.gameModeName = gamemodes.map(x => nameMap[x] || (x[0].toUpperCase() + x.slice(1))).join(' ');
+output.gameModeName = output.GAME_MODES.map(x => nameMap[x] || (x[0].toUpperCase() + x.slice(1))).join(' ');

@@ -18,10 +18,14 @@ module.exports = {
     // Flatten entity definition, which gets rid of PARENT attributes and applies the parents' attributes to the entity definition, if they're not set in the entity already.
     flattenDefintions: false,
 
+    // The \modules\setup\gamemodeconfigs\ files to load.
+    // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
+    GAME_MODES: ['tdm', 'domination'],
+
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
     // NOTE: Files starting with `map_` are maps. files starting with `overlay_` are overlays that get added on.
-    // NOTE: The prefixes are only for categorisation, a room file would work the same regardless of its prefix. APS++ does nothing based on prefixes
+    // NOTE: These prefixes are only for categorisation, a room file would work the same regardless of its prefix. APS++ does nothing based on file name prefixes.
     ROOM_SETUP: ['map_apspp_default'],
 
     // The dimensions of a single tile on the map.
@@ -73,9 +77,6 @@ module.exports = {
     // How strong the force is that confines entities to the map and portals apply to entities.
     ROOM_BOUND_FORCE: 0.01,
 
-    // TODO: Find out what the intention behind the implementation of this configuration is.
-    SOFT_MAX_SKILL: 0.59,
-
 
 
     // Gameplay
@@ -99,9 +100,6 @@ module.exports = {
 
     // Max normally achievable level.
     LEVEL_CAP: 45,
-
-    // TODO: Figure out what this does.
-    LEVEL_SOFT_CAP: 0,
 
     // Max level you get by level-up key and auto-level-up.
     LEVEL_CHEAT_CAP: 45,
@@ -172,24 +170,25 @@ module.exports = {
             [[59549, 'egg'], [6561, 'transSquare'], [729, 'transTriangle'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']]
         ]],
         [0.0001, [
-            [[1e5, 'sphere'], [1e4, 'cube'], [1e3, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']]
+            [[100000, 'sphere'], [10000, 'cube'], [1000, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']]
         ]]
     ],
 
 
 
     // Gamemode related.
-    // Please change gamemode in 'server\modules\setup\config.js' instead.
+    // Do not change these, you'll likely break stuff.
+    // Change GAME_MODES instead.
     SPECIAL_BOSS_SPAWNS: false,
     MOTHERSHIP_LOOP: false,
     RANDOM_COLORS: false,
     SPACE_PHYSICS: false,
+    ARENA_TYPE: "rect",
     SPACE_MODE: false,
     GROUPS: false,
     TRAIN: false,
     MAZE: false,
     HUNT: false,
-    TAG: false,
     MODE: "ffa",
-    ARENA_TYPE: "rect",
+    TAG: false
 }

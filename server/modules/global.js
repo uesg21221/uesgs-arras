@@ -50,8 +50,8 @@ global.getWeakestTeam = (type = 0) => { // 0 - Bots only, 1 - Players only, 2 - 
             }
         }
     }
-    const entries = Object.entries(teamcounts);
-    return entries.length === 0 ? Math.ceil(Math.random() * c.TEAMS) : ran.chooseN(entries, entries.length).reduce((a, b) => a[1] < b[1] ? a : b, [undefined, Infinity])[0];
+    const entries = Object.entries(teamcounts).reduce((a, b) => a[1] < b[1] ? a : b, [undefined, Infinity])[0];
+    return entries[0][0] === undefined ? Math.ceil(Math.random() * c.TEAMS) : ran.chooseN(entries, entries.length);
 };
 
 global.Tile = class Tile {
