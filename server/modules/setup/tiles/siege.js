@@ -7,7 +7,7 @@ let spawnPermanentAntiTankMachineGun = (loc) => {
     o.on('dead', () => spawnPermanentAntiTankMachineGun(loc));
 },
 
-atmg = new Tile({ init: tile => spawnPermanentAntiTankMachineGun(tile.loc) }),
+atmg = new Tile({ color: "white", init: tile => spawnPermanentAntiTankMachineGun(tile.loc) }),
 
 // we are not yet advanced enough to transition between two color codes
 outside = new Tile({ color: "#C5C5C5" }),

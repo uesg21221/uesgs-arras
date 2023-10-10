@@ -98,19 +98,31 @@ class BossRush {
         o.color = getTeamColor(team);
         o.skill.score = 111069;
         o.name = 'Dominator';
-        o.SIZE = c.WIDTH / c.X_GRID / 10;
+        o.SIZE = room.tileWidth / 10;
         o.isDominator = true;
         o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: true })];
         o.on('dead', () => {
-            if (o.team === TEAM_ENEMIES) {
+            let isAC;
+            for (let instance of o.collisionArray) {
+                if (TEAM_ROOM !== instance.team && instance.type !== 'food' && instance.type !== 'wall') {
+                    isAC = true;
+                }
+            }
+            if (isAC) {
+                tile.color = 'white';
+                sockets.broadcast('A dominator has been disabled by the arena!');
+
+            } else if (o.team === TEAM_ENEMIES) {
                 this.spawnDominator(tile, TEAM_BLUE, type);
                 tile.color = getTeamColor(TEAM_BLUE);
                 sockets.broadcast('A dominator has been captured by BLUE!');
+
             } else {
                 this.spawnDominator(tile, TEAM_ENEMIES, type);
                 tile.color = getTeamColor(TEAM_ENEMIES);
                 sockets.broadcast('A dominator has been captured by the bosses!');
             }
+
             sockets.broadcastRoom();
         });
     }

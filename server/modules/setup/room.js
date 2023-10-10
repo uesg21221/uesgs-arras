@@ -2,12 +2,11 @@ let importedRoom = [];
 
 for (let filename of c.ROOM_SETUP) {
     let currentRoom = require(`./rooms/${filename}.js`);
-    for (let y = 0; y < currentRoom[0].length; y++) {
-        for (let x = 0; x < currentRoom.length; x++) {
-            if (currentRoom[y][x]) {
-                if (importedRoom[y] == null) {
-                    importedRoom[y] = currentRoom[y];
-                }
+    for (let y = 0; y < currentRoom.length; y++) {
+        for (let x = 0; x < currentRoom[0].length; x++) {
+            if (importedRoom[y] == null) {
+                importedRoom[y] = currentRoom[y];
+            } else if (currentRoom[y][x]) {
                 importedRoom[y][x] = currentRoom[y][x];
             }
         }
@@ -130,8 +129,8 @@ room.getAt = location => {
 class TileEntity {
     constructor (tile, loc) {
         if (!(tile instanceof Tile)) {
-            throw new Error('A cell in the room setup is not a Tile object!' +
-                ('string' == typeof tile ? ' But it is a string, which means you probably need to update your room setup!' : '')
+            throw new Error(`The cell at ${loc.x},${loc.y} in the room setup is not a Tile object!` +
+                ('string' == typeof tile ? ' But it is a string, which means you probably need to update your room setup!' : 'But it is of type ' + typeof tile)
             );
         }
         // this.blueprint = tile.args;
