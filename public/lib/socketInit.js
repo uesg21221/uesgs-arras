@@ -916,6 +916,19 @@ const socketInit = port => {
                     }
                 }
                 break;
+            case 'REDIRECT':
+                let [ ip, key, autojoin ] = m,
+                // https://stackoverflow.com/a/326076/10793061
+                    isInIFrame = true;
+                try { isInIFrame = window.self !== window.top; } catch (e) {}
+
+                autojoin = !!autojoin;
+                if (isInIFrame) {
+                    window.top.postMessage({ ip, key, autojoin });
+                } else {
+                    console.log('redirecting\nip:', ip, '\nkey:', key, '\nautojoin:', autojoin);
+                    location.href = `https://${ip}/app` + (key || autojoin ? '?' : '') + (key ? 'key=' + key : '') + (key && autojoin ? '&' : '') + (autojoin ? 'autojoin=' + autojoin : '');
+                }
             default:
                 throw new Error('Unknown message index.');
         }

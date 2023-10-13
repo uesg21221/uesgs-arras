@@ -1,5 +1,4 @@
 let permissionsDict = {},
-    net = require('net'),
     clients = [],
     players = [],
     disconnections = [];
@@ -1513,29 +1512,13 @@ const sockets = {
             util.log("[ERROR]:");
             util.error(e);
         });
-        
-        //account for proxies
-        //very simplified reimplementation of what the forwarded-for npm package does
-        let store = req.headers['fastly-client-ip'] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
-                    req.headers['forwarded']        || req.headers['x-real-ip']       || req.connection.remoteAddress,
-            ips = store.split(',');
 
-        if (!ips) {
-            return socket.kick("Missing IP: " + store);
+        try {
+            socket.ip = getIP(req);
+        } catch (msg) {
+            util.log('Kicked: ' + msg);
+            return socket.close();
         }
-
-        for (let i = 0; i < ips.length; i++) {
-            if (net.isIPv6(ips[i])) {
-                ips[i] = ips[i].trim();
-            } else {
-                ips[i] = ips[i].split(':')[0].trim();
-            }
-            if (!net.isIP(ips[i])) {
-                return socket.kick("Invalid IP(s): " + store);
-            }
-        }
-
-        socket.ip = ips[0];
 
         // Log it
         clients.push(socket);

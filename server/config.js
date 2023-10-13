@@ -176,6 +176,9 @@ module.exports = {
     // If someone tries to get a file that does not exist, send them this instead.
     DEFAULT_FILE: 'browser.html',
 
+    // Allows server browser clients to connect to the game server with only purpose of checking ping.
+    PING_SOCKET: true,
+
     // Window name of the server terminal.
     WINDOW_NAME: 'APS++ Game Server Instance',
 

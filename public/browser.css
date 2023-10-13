@@ -1,0 +1,118 @@
+* {
+    border-radius: 10px;
+    font-family: Ubuntu;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+html, body {
+	width: 100%;
+	/* ugly as shit but it solves a scroll bar appearing out of nowhere */
+	height: calc(100% - 10px);
+    background-color: #484848;
+    padding: 0px;
+	margin: 0px;
+}
+
+iframe {
+    border-radius: 0px;
+	width: 100px;
+	height: 100px;
+}
+
+#container {
+	width: calc(100% - 40px);
+	height: calc(100% - 40px);
+	display: flex;
+    background: #454b7f;
+	margin: 20px;
+    border-radius: 20px;
+    border-bottom: 10px solid #313454;
+}
+
+#browser {
+	height: calc(100% - 85px);
+	width: calc(100% - 360px);
+	padding: 20px;
+	display: block;
+	margin: 20px;
+    background: #666666;
+    border-top: 5px solid #313454;
+}
+
+#controls {
+	display: block;
+	width: 300px;
+    background: #666666;
+    border-top: 5px solid #313454;
+	margin: 20px;
+	margin-left: 0px;
+}
+
+#manage {
+	margin-top: 5px;
+	width: 100%;
+	display: flex;
+	height: 30px;
+	margin-bottom: 7px;
+}
+
+.button {
+	display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+}
+
+.listButton {
+	width: calc(calc(100% / 3) - 10px);
+	background-color: #aaaaaa;
+    border-bottom: 5px solid #999999;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+#selected {
+	padding: 10px;
+	height: calc(100% - 70px);
+	margin-left: 5px;
+	margin-right: 5px;
+	background-color: #888888;
+    border-bottom: 2px solid #777777;
+}
+
+#metadata {
+	height: 15px;
+	color: #444444;
+    font-size: 14px;
+}
+#name {
+	height: 30px;
+	padding-top: 10px;
+    font-size: 18px;
+}
+
+#description {
+	height: calc(100% - 90px);
+}
+
+#buttons {
+	display: flex;
+}
+
+.serverButton {
+	width: calc(calc(100% / 2) - 5px);
+	background-color: #4e57a3;
+    border-bottom: 5px solid #3e4685;
+	height: 30px;
+	border-radius: 15px;
+    font-size: 16px;
+}
+
+#join {
+	margin-right: 5px;
+}
+
+#list {
+	margin-left: 5px;
+}

@@ -10,26 +10,30 @@
     <meta property="og:image:height" content="54">
     <title>OSA Server Browser</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,700">
-    <link rel="stylesheet" href="/index.css" />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/lib/json/manifest.json">
+    <link rel="stylesheet" href="./browser.css" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="./lib/json/manifest.json">
     <meta name="msapplication-TileColor" content="#454b7f">
     <meta name="theme-color" content="#454b7f">
 </head>
 <body>
-    <iframe id="client"></iframe>
+    <iframe style="display: none" id="client"></iframe>
     <div id="container">
-        <div id="browser">If you see nothing here, then check the console and report the full error messages to the server owners!</div>
+        <div id="browser">Getting list...</div>
         <div id="controls">
             <div id="manage">
-                <div id="filters"></div>
-                <div id="sorts"></div>
+                <div class="button listButton" id="filters">Filters</div>
+                <div class="button listButton" id="sorts">Sorts</div>
+                <div class="button listButton" id="favorites">Favorites</div>
             </div>
             <div id="selected">
-                <div id="metadata"></div>
-                <div id="name"></div>
-                <div id="description"></div>
-                <button id="join">Connect</button>
+                <div id="metadata">Meta</div>
+                <div id="name">Name</div>
+                <div id="description">Description</div>
+                <div id="buttons">
+                    <div class="button serverButton" id="join">Play Game</div>
+                    <div class="button serverButton" id="list">Check Browser</div>
+                </div>
             </div>
         </div>
     </div>
