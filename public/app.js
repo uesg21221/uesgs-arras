@@ -1091,66 +1091,57 @@ function drawDevSkillBars(spacing, alcoveSize) {
     }
 }
 
-function drawDevModeCommandUI(command, settings) {
+function drawDevModeCommandUI(spacing, alcoveSize, command, settings) {
     let description = {
         x: innerWidth / 2,
         y: innerHeight * 0.75,
-        above: 0.95,
-        newLine: 0.97,
+        above: -40,
+        newLine: -25,
         size: 12.5
-    }
+    },
+    entries = [
+        { texts: [ 'Teleport: Teleports to your cursor, [LMB] to teleport' ] },
+        { texts: [ 'God Mode: You become god. Click one of the powers on the hotbar', 'then press [LMB] to confirm and [RMB] to cancel' ], boxCount: 3},
+        { texts: [ 'Stats Tool: See and change stats of entities', 'Hover and scroll to a stat to modify its value.' ], hasDevSkillBars: true},
+        { texts: [ 'Wall Tool: Edits walls, [LMB] to place, [RMB] to remove, [Scroll] to change wall type' ] },
+        { texts: [ 'Move Tool: Moves entities, [LMB] to drag, [RMB] to blast, [MMB] to invert blast, [Scroll] to change blast strength' ] },
+        { texts: [ 'Spawn Tool: Spawns, [LMB] to teleport' ] },
+        { texts: [ 'Team Tool: Change teams of entities, [LMB] to set, [RMB] to copy team' ] },
+        { texts: [ 'Admin Tool: Manage other players, [LMB] to mute, [RMB] to kick, [MMB] to ban' ] },
+        { texts: [ 'Placeholder Tool: no clue what we should put here' ] }
+    ];
     global.clickables.command_1.hide()
-    switch (command) {
-        case toolNames[0]:
-            drawText('Teleport: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
-            break;
-        case toolNames[1]:
-            drawText('God Mode: You become god. Click one of the powers on the hotbar', description.x, description.y * description.above * description.newLine, description.size, color.guiwhite, 'center', true)
-            drawText('then press [LMB] to confirm and [RMB] to cancel', description.x, description.y * description.above, description.size, color.guiwhite, 'center', true)
-            let boxWidth = 75/2
-            ctx.globalAlpha = 0.7;
-            for (let i = 0; i < 3; i++) {
-                let miniBox_x = i == 0 ? (settings.x * 1.05) * 0.895 : i == 2 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105,
-                    miniBox_y = settings.y * 0.915
-                ctx.fillStyle = getColor(i > 8 ? i - 9 : i + 10);
-                drawGuiRect(miniBox_x , miniBox_y, boxWidth, boxWidth);
-                ctx.globalAlpha = 0.3
-                ctx.fillStyle = getColor(i);
-                drawGuiRect(miniBox_x, miniBox_y, boxWidth, boxWidth * 0.5);
-                ctx.fillStyle = color.black;
-                drawGuiRect(miniBox_x, miniBox_y + boxWidth * 0.5, boxWidth, boxWidth * 0.5);
-                ctx.globalAlpha = 1;
-                drawGuiRect(miniBox_x, miniBox_y, boxWidth, boxWidth, true);
-                global.clickables.command_1.place(i, miniBox_x, miniBox_y, boxWidth, boxWidth)
-            }
-            break;
-        case toolNames[2]:
-            drawText('Stats Tool: More stats you can change! Look at the left of your screen.', description.x, description.y * description.newLine, description.size, color.guiwhite, 'center', true)
-            drawText('Hover and scroll to a stat to modify its value.', description.x, description.y, description.size, color.guiwhite, 'center', true)
-            drawDevSkillBars(config.graphical.screenshotMode ? 2 : util.getRatio(), util.getScreenRatio())
-            break;
-        case toolNames[3]:
-            drawText('Wall Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
-            break;
-        case toolNames[4]:
-            drawText('Move Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
-            break;
-        case toolNames[5]:
-            drawText('Spawn Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
-            break;
-        case toolNames[6]:
-            drawText('Team Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
-            break;
-        case toolNames[7]:
-            drawText('Placeholder Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
-            break;
-        case toolNames[8]:
-            drawText('Placeholder Tool: Teleports to where your cursor is, [LMB] to teleport', description.x, description.y, description.size, color.guiwhite, 'center', true)
-            break;
+    let { boxCount = 0, texts, hasDevSkillBars } = entries[command];
+
+    for (let j = 0, i = texts.length; i--;) {
+        drawText(texts[j], description.x, description.y + j++ * description.newLine + (boxCount > 0) * description.above, description.size, color.guiwhite, 'center', true);
+    }
+
+    if (boxCount > 0) {
+        let boxWidth = 75 / 2;
+        ctx.globalAlpha = 0.7;
+        for (let i = 0; i < boxCount; i++) {
+            let miniBox_x = i == 0 ? (settings.x * 1.05) * 0.895 : i == 2 ? settings.x * 1.05 : (settings.x * 1.05) * 1.105,
+                miniBox_y = settings.y * 0.915;
+            ctx.fillStyle = getColor(i > 8 ? i - 9 : i + 10);
+            drawGuiRect(miniBox_x , miniBox_y, boxWidth, boxWidth);
+            ctx.globalAlpha = 0.3
+            ctx.fillStyle = getColor(i);
+            drawGuiRect(miniBox_x, miniBox_y, boxWidth, boxWidth * 0.6);
+            ctx.fillStyle = color.black;
+            drawGuiRect(miniBox_x, miniBox_y + boxWidth * 0.6, boxWidth, boxWidth * 0.4);
+            ctx.globalAlpha = 1;
+            drawGuiRect(miniBox_x, miniBox_y, boxWidth, boxWidth, true);
+            global.clickables.command_1.place(i, miniBox_x, miniBox_y, boxWidth, boxWidth);
+        }
+    }
+
+    if (hasDevSkillBars) {
+        drawDevSkillBars(spacing, alcoveSize);
     }
 }
 
-function drawDevModeUI() {
+function drawDevModeUI(spacing, alcoveSize) {
     global.clickables.devMode.hide();
     global.clickables.exitDevMode.hide();
     if (!global.devMode.active) return;
@@ -1172,7 +1163,7 @@ function drawDevModeUI() {
             y = innerHeight * 0.8;
 
         if (isSelected) {
-            drawDevModeCommandUI(toolNames[i], {x, y})
+            drawDevModeCommandUI(spacing, alcoveSize, toolNames[i], {x, y})
         }
 
         //da box
@@ -1704,7 +1695,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
     if (global.showTree) {
         drawUpgradeTree();
     } else if (global.devMode.active) {
-        drawDevModeUI();
+        drawDevModeUI(spacing, alcoveSize);
         drawMessages(spacing);
         if (global.devMode.selectedCommand !== 2) drawSkillBars(spacing, alcoveSize);
         drawMinimapAndDebug(spacing, alcoveSize);
