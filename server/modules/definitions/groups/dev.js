@@ -161,19 +161,9 @@ function compileMatrix(matrix, matrix2Entrance) {
             LABEL = str[0].toUpperCase() + str.slice(1).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
             code = str + 'Generator';
         exports[code] = matrix[y][x] = {
-            PARENT: ["genericTank"],
+            PARENT: "spectator",
             LABEL,
             SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
-            ALPHA: [0, 0],
-            IGNORED_BY_AI: true,
-            BODY: {
-                SPEED: 5,
-                FOV: 2.5,
-                DAMAGE: 0,
-                HEALTH: 1e100,
-                SHIELD: 1e100,
-                REGEN: 1e100,
-            },
             TURRETS: [{
                 POSITION: [5 + y * 2, 0, 0, 0, 0, 1],
                 TYPE: str,
@@ -251,19 +241,9 @@ for (let tier = 0; tier < 6; tier++) {
                 LABEL = str[0].toUpperCase() + str.slice(1).replace(/\d/, d => ["", "Beta", "Alpha", "Omega", "Gamma", "Delta"][d]).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
                 code = str + 'Generator';
             column.push(exports[code] = {
-                PARENT: ["genericTank"],
+                PARENT: "spectator",
                 LABEL,
                 SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
-                ALPHA: [0, 0],
-                IGNORED_BY_AI: true,
-                BODY: {
-                    SPEED: 5,
-                    FOV: 2.5,
-                    DAMAGE: 0,
-                    HEALTH: 1e100,
-                    SHIELD: 1e100,
-                    REGEN: 1e100,
-                },
                 TURRETS: [{
                     POSITION: [5 + tier * 2, 0, 0, 0, 0, 1],
                     TYPE: str,

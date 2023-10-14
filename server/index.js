@@ -436,10 +436,15 @@ if (c.REPL_WINDOW) {
 }
 
 // Bring it to life
-//TODO: compress all of these intervals into one big one
-setInterval(gameloop, room.cycleSpeed);
-setInterval(chatLoop, 1000);
-setInterval(maintainloop, 1000);
-setInterval(speedcheckloop, 1000);
-setInterval(gamemodeLoop, 33.33);
-setInterval(roomLoop, 40);
+let counter = 0;
+setInterval(() => {
+    gameloop()
+    gamemodeLoop();
+    roomLoop();
+
+    if (++counter > 30) {
+        chatLoop();
+        maintainloop();
+        speedcheckloop();
+    }
+}, room.cycleSpeed);

@@ -4,12 +4,12 @@ let dominatorTypes = ["destroyerDominator", "gunnerDominator", "trapperDominator
     teamcounts = {},
     gameWon = false,
 
-spawn = (tile, team, type = false) => {
+spawn = (tile, team, color, type = false) => {
     type = type ? type : ran.choose(dominatorTypes);
     let o = new Entity(tile.loc);
     o.define(type);
     o.team = team;
-    o.color = getTeamColor(team);
+    o.color = color;
     o.skill.score = 111069;
     o.name = "Dominator";
     o.SIZE = room.tileWidth / 10;
@@ -30,7 +30,8 @@ spawn = (tile, team, type = false) => {
             delete teamcounts[team];
         }
 
-        let newTeam = TEAM_ENEMIES;
+        let newTeam = TEAM_ENEMIES,
+            newColor = getTeamColor(newTeam);
 
         if (team === TEAM_ENEMIES) {
             let killers = [];
@@ -44,6 +45,7 @@ spawn = (tile, team, type = false) => {
             killer = killer ? killer.master.master : { team: TEAM_ROOM, color: room.gameMode === "tdm" ? 3 : 12 };
 
             newTeam = killer.team;
+            newColor = killer.color;
 
             for (let player of sockets.players) {
                 if (player.body && player.body.team === newTeam) {
@@ -63,12 +65,12 @@ spawn = (tile, team, type = false) => {
             sockets.broadcast("A dominator is being contested!");
         }
 
-        spawn(tile, newTeam, type);
+        spawn(tile, newTeam, newColor, type);
         sockets.broadcastRoom();
     });
 };
 
-let makeDominatorTile = (team, type) => new Tile({ init: tile => spawn(tile, team, type) }),
+let makeDominatorTile = (team, type) => new Tile({ init: tile => spawn(tile, team, getTeamColor(team), type) }),
     contested = makeDominatorTile(TEAM_ENEMIES),
     sanctuaryBlue = makeDominatorTile(TEAM_BLUE, "trapperDominator"),
     sanctuaryGreen = makeDominatorTile(TEAM_GREEN, "trapperDominator");

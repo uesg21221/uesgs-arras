@@ -145,10 +145,6 @@ class TileEntity {
         this.data = JSON.parse(JSON.stringify(tile.data));
     }
 
-    //Dummy
-    init () {}
-    tick () {}
-
     randomInside() {
         return {
             x: this.loc.x + (room.tileWidth * (Math.random() - 0.5)),
@@ -170,8 +166,9 @@ function roomLoop() {
         if (tile) tile.entities.push(entities[i]);
     }
 
-    for (let y = 0; y < room.setup; y++) {
-        for (let x = 0; x < room.setup[y]; x++) {
+    for (let y = 0; y < room.setup.length; y++) {
+        for (let x = 0; x < room.setup[y].length; x++) {
+            let tile = room.setup[y][x];
             tile.tick(tile);
             tile.entities = [];
         }

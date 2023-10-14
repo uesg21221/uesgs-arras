@@ -8,7 +8,7 @@ function close() {
 function closeArena() {
     if (arenaClosed) return;
     sockets.broadcast("Arena closed: No players may join!");
-    util.log('Arena Close intiated')
+    util.log('Arena Closing intiated');
     global.arenaClosed = true;
     for (let i = 0; i < entities.length; i++) {
         if (entities[i].isBot) {
