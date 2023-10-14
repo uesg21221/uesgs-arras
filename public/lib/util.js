@@ -171,6 +171,7 @@ const util = {
             facing: mockup.facing,
             shape: mockup.shape,
             name: mockup.name,
+            upgradeName: mockup.upgradeName,
             score: 0,
             tiggle: 0,
             layer: mockup.layer,
@@ -187,6 +188,7 @@ const util = {
                 o.offset = t.offset;
                 o.direction = t.direction;
                 o.facing = t.direction + t.angle;
+                o.render.f = o.facing;
                 return o;
             }),
         };

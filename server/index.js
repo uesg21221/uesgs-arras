@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+
 Error.stackTraceLimit = Infinity;
 let enviroment = require('./lib/dotenv.js')(fs.readFileSync(path.join(__dirname, '../.env')).toString());
 for (let key in enviroment) {
@@ -104,10 +105,12 @@ function collide(collision) {
                 instance.healer ||
                 other.healer
             )):
-            if ((instance.type === "aura" && other.type === "bullet") || 
-                (other.type === "aura" && instance.type === "bullet")) return;
-            if ((instance.type === "aura" && other.type === "crasher") || 
-                (other.type === "aura" && instance.type === "crasher")) return;
+            // Exits if the aura is not hitting a boss or tank
+            if (instance.type === "aura") {
+                if (!(other.type === "tank" || other.type === "miniboss" || other.type == "food")) return;
+            } else if (other.type === "aura") {
+                if (!(instance.type === "tank" || instance.type === "miniboss" || instance.type == "food")) return;
+            }
             advancedcollide(instance, other, true, true);
             break;
         case instance.settings.hitsOwnType == "never" ||
@@ -115,6 +118,53 @@ function collide(collision) {
             break;
         case instance.settings.hitsOwnType === other.settings.hitsOwnType:
             switch (instance.settings.hitsOwnType) {
+                case 'assembler': {
+                    if (instance.assemblerLevel == null) instance.assemblerLevel = 1;
+                    if (other.assemblerLevel == null) other.assemblerLevel = 1;
+
+                    const [target1, target2] = (instance.id > other.id) ? [instance, other] : [other, instance];
+
+                    if (
+                        target2.assemblerLevel >= 10 || target1.assemblerLevel >= 10 ||
+                        target1.isDead() || target2.isDead() ||
+                        target1.parent.id != target2.parent.id &&
+                        target1.parent.id != null &&
+                        target2.parent.id != null // idk why
+                    ) {
+                        advancedcollide(instance, other, false, false); // continue push
+                        break;
+                    }
+
+                    const better = (state) => {
+                        return target1[state] > target2[state] ? target1[state] : target2[state];
+                    }
+
+                    target1.assemblerLevel = Math.min(target2.assemblerLevel + target1.assemblerLevel, 10);
+                    target1.SIZE = better('SIZE') * 1.1;
+                    target1.SPEED = better('SPEED') * 0.9;
+                    target1.HEALTH = better('HEALTH') * 1.2;
+                    target1.health.amount = target1.health.max;
+                    target1.DAMAGE = better('DAMAGE') * 1.1;
+
+                    target2.kill();
+                    setTimeout(() => {
+                        if (target2) {
+                            target2.destroy(); // walls glitch
+                        }
+                    }, 1000);
+
+                    for (let i = 0; i < 10; ++i) {
+                        const { x, y } = target1;
+                        const o = new Entity({ x, y }, target1);
+                        o.define(Class.assemblerEffect);
+                        o.team = target1.team;
+                        o.color = target1.color;
+                        o.SIZE = target1.SIZE / 3;
+                        o.velocity = new Vector((Math.random() - 0.5) * 25, (Math.random() - 0.5) * 25);
+                        o.refreshBodyAttributes();
+                        o.life();
+                    }
+                } // don't break
                 case "push":
                     advancedcollide(instance, other, false, false);
                     break;
@@ -333,8 +383,8 @@ const bossSelections = [{
     chance: 0.1,
 }];
 
-let spawnBosses = (census) => {
-    if (!census.miniboss && !timer--) {
+let spawnBosses = minibossCount => {
+    if (!minibossCount && !timer--) {
         timer--;
         const selection = bossSelections[ran.chooseChance(...bossSelections.map((selection) => selection.chance))];
         const amount = ran.chooseChance(...selection.amount) + 1;
@@ -376,9 +426,9 @@ function getCrasherType() {
     if (seed > crasherConfig.sentryChance) return ran.choose(crasherConfig.sentries);
     return ran.choose(crasherConfig.crashers);
 }
-let spawnCrasher = (census) => {
-    if (census.crasher < crasherConfig.max) {
-        for (let i = 0; i < crasherConfig.max - census.crasher; i++) {
+let spawnCrasher = crasherCount => {
+    if (crasherCount < crasherConfig.max) {
+        for (let i = 0; i < crasherConfig.max - crasherCount; i++) {
             if (Math.random() > crasherConfig.chance) {
                 let spot,
                     i = 25;
@@ -408,46 +458,36 @@ for (let team = 1; team < c.TEAMS + 1; team++) {
         spawnPermanentBaseProtector(loc, -team);
     }
 }
+// Make anti tank machine guns if needed
+let spawnPermanentAntiTankMachineGun = (loc) => {
+    let o = new Entity(loc);
+    o.define(Class.antiTankMachineGun);
+    o.controllers = [new ioTypes.nearestDifferentMaster(o)]
+    o.team = TEAM_ROOM;
+    o.color = getTeamColor(TEAM_RED);
+    o.on('dead', () => spawnPermanentAntiTankMachineGun(loc));
+};
 
-let bots = [];
-// The NPC function
-let makenpcs = () => {
-    let census = {
-        crasher: 0,
-        miniboss: 0,
-        tank: 0,
-        mothership: 0,
-        sanctuary: 0,
-    };
-    let npcs = entities.filter(e => e)
-    .map(instance => {
-        if (instance.isSanctuary) {
-            census.sanctuary++;
-            return instance;
-        }
-        if (census[instance.type] != null) {
-            census[instance.type]++;
-            return instance;
-        }
-        if (instance.isMothership) {
-            census.mothership++;
-            return instance;
-        }
-    });
-    // Spawning
-    spawnCrasher(census);
-    spawnBosses(census);
+for (let loc of room["atmg"]) {
+    spawnPermanentAntiTankMachineGun(loc);
+}
 
+let bots = [],
+spawnBots = () => {
     // remove dead bots
     bots = bots.filter(e => !e.isDead());
 
     // upgrade existing ones
     for (let i = 0; i < bots.length; i++) {
         let o = bots[i];
-        if (o.skill.level < c.LEVEL_CAP) o.skill.score += 125;
+        if (o.skill.level < c.LEVEL_CAP) {
+            o.skill.score += c.BOT_XP;
+        }
         o.skill.maintain();
         o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(1, 1, 3, 4, 4, 4, 4, 2, 1, 1)]);
-        if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) o.leftoverUpgrades--;
+        if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) {
+            o.leftoverUpgrades--;
+        }
     }
 
     // then add new bots if arena is open
@@ -472,13 +512,13 @@ let makenpcs = () => {
             color = getTeamColor(team);
         }
         o.define(Class.bot);
-        o.define(Class.basic);
+        o.define(Class[c.SPAWN_CLASS]);
         o.refreshBodyAttributes();
         o.isBot = true;
         o.team = team;
         o.color = color;
         o.name += ran.chooseBotName();
-        o.leftoverUpgrades = ran.chooseChance(1, 5, 20, 37, 37); //some guy in discord once suggested that some bots shouldnt upgrade to latest tier
+        o.leftoverUpgrades = ran.chooseChance(1, 5, 20, 37, 37); // don't always upgrade to the latest tier
         bots.push(o);
 
         //TODO: add support for tag mode
@@ -496,7 +536,24 @@ let makenpcs = () => {
     }
 };
 
-// Place obstacles
+let makenpcs = () => {
+    let crashers = 0,
+        minibosses = 0;
+    for (let i = 0; i < entities.length; i++) {
+        switch (entities[i].type) {
+            case "crasher":
+                crashers++;
+                break;
+            case "miniboss":
+                minibosses++;
+                break;
+        }
+    }
+    spawnCrasher(crashers);
+    spawnBosses(minibosses);
+    spawnBots();
+};
+
 placeRoids();
 
 for (let loc of room["wall"]) spawnWall(loc);
@@ -525,9 +582,8 @@ class FoodType {
                 chances.push(i ** scale);
             }
         }
-        this.name = groupName;
         if (types.length !== chances.length) {
-            throw new RangeError(groupName + ": error with group. Please make sure there is the same number of types as chances.");
+            throw new RangeError(groupName + " Error: Amount of types and amount of chances are not equal.");
         }
         this.types = types;
         this.chances = chances;
@@ -559,17 +615,16 @@ const foodTypes = [
         [Class.rainbowSquare, Class.rainbowTriangle, Class.rainbowPentagon, Class.rainbowBetaPentagon, Class.rainbowAlphaPentagon],
         ["scale", 8], 0.001
     ),
-    // Commented out because stats aren't done yet.
-    // new FoodType("Trans Food",
-    //     [Class.egg],
-    //     ["scale", 9], 0.0005
-    // ),
+    new FoodType("Trans Food",
+        [Class.egg, Class.transSquare, Class.transTriangle, Class.transPentagon, Class.transBetaPentagon, Class.transAlphaPentagon],
+        ["scale", 9], 0.0005
+    ),
     new FoodType("Extradimensional Food",
         [Class.sphere, Class.cube, Class.tetrahedron, Class.octahedron, Class.dodecahedron, Class.icosahedron],
         ["scale", 10], 0.0001
     ),
     new FoodType("Nest Food", // Commented out because stats aren't done yet.
-        [Class.pentagon, Class.betaPentagon, Class.alphaPentagon, /*Class.alphaHexagon, Class.alphaHeptagon, Class.alphaOctogon, Class.alphaNonagon, Class.alphaDecagon, Class.icosagon*/],
+        [Class.pentagon, Class.betaPentagon, Class.alphaPentagon],
         ["scale", 4], 1, true
     ),
 ];
@@ -587,11 +642,6 @@ function spawnShape(location, type = 0) {
     let o = new Entity(location);
     type = foodTypes[type].choose();
     o.define(type);
-    o.define({
-        BODY: {
-            ACCELERATION: 0.015 / (type.FOOD.LEVEL + 1),
-        },
-    });
     o.facing = ran.randomAngle();
     o.team = TEAM_ENEMIES;
     return o;
@@ -681,8 +731,19 @@ const maintainloop = () => {
     }
 };
 
+//evaluating js with a seperate console window if enabled
+if (c.REPL_WINDOW) {
+    util.log('Starting REPL Terminal.');
+    //TODO: figure out how to spawn a seperate window and put the REPL stdio in there instead
+    //let { stdin, stdout, stderr } = (require('child_process').spawn("cmd.exe", ["/c", "node", "blank.js"], { detached: true }));
+    require('repl').start({/* stdin, stdout, stderr,*/ useGlobal: true });
+}
+
 // Bring it to life
+//TODO: compress all of these intervals into one big one
 setInterval(gameloop, room.cycleSpeed);
+setInterval(chatLoop, 1000);
 setInterval(maintainloop, 1000);
 setInterval(speedcheckloop, 1000);
 setInterval(gamemodeLoop, 33.33);
+setInterval(roomLoop, 40);

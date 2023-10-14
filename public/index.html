@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <meta name="description" content="Arras.io is a fan-made sequel of diep.io. Survive and shoot at others while keeping your own tank alive! Play the game at https://arras.io/.">
     <meta name="robots" content="index, follow">
-    <meta property="og:image" content="//arras.io/favicon/96x96.png">
+    <meta property="og:image" content="./round.png">
     <meta property="og:image:width" content="54">
     <meta property="og:image:height" content="54">
-    <title>Arras.io APS++</title>
+    <title>Open Source Arras</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,700">
     <link rel="stylesheet" href="/main.css" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -19,18 +19,19 @@
 <body oncontextmenu="return false" id="mainBody">
     <div id="gameAreaWrapper">
         <canvas id="gameCanvas" tabindex="1"></canvas>
+        <input id="chatInput" type="text" maxlength="256" hidden=true>
     </div>
     <div id="mainWrapper">
         <div id="startMenuWrapper">
             <div id="startMenu">
                 <div class="startMenuHolder">
-                  <center>This Arras Private Server runs on APS++.<br>For more info, visit <a href="https://github.com/Taureon/aps-plus-plus">the APS++ GitHub Repository by Taureon</a></center>
+                  <center>This Arras.io Private Server runs on Open Source Arras.<br>For more info, visit <a href="https://github.com/Taureon/aps-plus-plus">the APS++ GitHub Repository by Taureon</a></center>
                 </div>
                 <div class="startMenuHolder">
                     <div class="sliderHolder">
                         <div class="slider" id="startMenuSlidingContent">
                             <center><img width=92 height=92 src="/round.png" /></center>
-                            <h1 id="gameName">APS++</h1>
+                            <h1 id="gameName">Open Source Arras<h1>
                             <div id="serverName">
                                 <h4 class="nopadding">Connecting...</h4>
                             </div>
@@ -55,16 +56,16 @@
                             </table>
                             <options_header>Options:</options_header>
                             <select id="optColors" tabindex="-1">
-                                <option value="normal">Light Colors</option>
-                                <option value="dark">Dark Colors</option>
-                                <option value="natural">Natural</option>
-                                <option value="classic">Classic</option>
-                                <option value="forest">Forest (Fan-made)</option>
-                                <option value="midnight">Midnight (Fan-made)</option>
-                                <option value="pastel">Snow (Fan-made)</option>
-                                <option value="ocean">Coral Reef (Fan-made)</option>
-                                <option value="badlands">Badlands (Fan-made)</option>
-                                <option value="bleach">Bleach (Fan-made)</option>
+                                <option value="normal">Light Colors (by Neph)</option>
+                                <option value="dark">Dark Colors (by Neph)</option>
+                                <option value="natural">Natural (by Neph)</option>
+                                <option value="classic">Classic (by Neph)</option>
+                                <option value="forest">Forest (by Sterlon)</option>
+                                <option value="midnight">Midnight (by uoiea)</option>
+                                <option value="pastel">Snow (by Deolveopoler)</option>
+                                <option value="ocean">Coral Reef (by Celestea)</option>
+                                <option value="badlands">Badlands (by Incognious)</option>
+                                <option value="bleach">Bleach (by definitelynot.)</option>
                             </select>
                             <select id="optBorders" tabindex="-1">
                                 <option value="normal">Soft Borders</option>
@@ -103,12 +104,12 @@
                         <!--<a class="link youtube"   href="https://www.youtube.com/arrasio">Arras.io YouTube</a>
                         <a class="link reddit"    href="https://reddit.com/r/arrasio">Arras.io Subreddit</a>
                         <a class="link original"  href="https://arras.io/">Arras.io Game</a>-->
-                        <a class="link discord"   href="https://discord.gg/kvCAZfUCjy">APS++ Discord</a>
-                        <a class="link developer" href="https://github.com/Taureon/">APS++ Developer</a>
+                        <a class="link discord"   href="https://discord.gg/kvCAZfUCjy">Our Discord</a>
+                        <a class="link developer" href="https://github.com/Taureon/">Main Developer</a>
                         <a class="link github"    href="https://github.com/Taureon/aps-plus-plus">Template Source</a>
                         <a class="link discord"   href="https://discord.gg/yqBWVnj">Arras.io Discord</a>
                         <a class="link developer" href="https://momentumstudios.games/">Arras.io Developers</a>
-                        <a class="link github"    href="https://github.com/Taureon/aps-plus-plus/issues">Submit Suggestions</a>
+                        <a class="link github"    href="https://github.com/Taureon/aps-plus-plus/issues">Report Bugs</a>
                     </div>
                 </div>
             </div>
@@ -121,6 +122,7 @@
     <script type="module" src="./lib/global.js"></script>
     <script type="module" src="./lib/util.js"></script>
     <script type="module" src="./lib/canvas.js"></script>
+    <script type="module" src="./lib/gameDraw.js"></script>
     <script type="module" src="./lib/protocol.js"></script>
     <script type="module" src="./lib/socketInit.js"></script>
     <script type="module" src="./app.js"></script>

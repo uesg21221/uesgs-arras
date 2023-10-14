@@ -12,17 +12,19 @@ let level = 0;
 let sscore = util.Smoothbar(0, 10);
 var serverStart = 0,
     gui = {
-        getStatNames: num => {
-            switch (num) {
-                case 1:  return ['Body Damage', 'Max Health', 'Bullet Speed'   , 'Bullet Health'  , 'Bullet Penetration', 'Bullet Damage', 'Engine Acceleration', 'Movement Speed', 'Shield Regeneration', 'Shield Capacity'];
-                case 2:  return ['Body Damage', 'Max Health', 'Drone Speed'    , 'Drone Health'   , 'Drone Penetration' , 'Drone Damage' , 'Respawn Rate'       , 'Movement Speed', 'Shield Regeneration', 'Shield Capacity'];
-                case 3:  return ['Body Damage', 'Max Health', 'Drone Speed'    , 'Drone Health'   , 'Drone Penetration' , 'Drone Damage' , 'Max Drone Count'    , 'Movement Speed', 'Shield Regeneration', 'Shield Capacity'];
-                case 4:  return ['Body Damage', 'Max Health', 'Swarm Speed'    , 'Swarm Health'   , 'Swarm Penetration' , 'Swarm Damage' , 'Reload'             , 'Movement Speed', 'Shield Regeneration', 'Shield Capacity'];
-                case 5:  return ['Body Damage', 'Max Health', 'Placement Speed', 'Trap Health'    , 'Trap Penetration'  , 'Trap Damage'  , 'Reload'             , 'Movement Speed', 'Shield Regeneration', 'Shield Capacity'];
-                case 6:  return ['Body Damage', 'Max Health', 'Weapon Speed'   , 'Weapon Health'  , 'Weapon Penetration', 'Weapon Damage', 'Reload'             , 'Movement Speed', 'Shield Regeneration', 'Shield Capacity'];
-                case 7:  return ['Body Damage', 'Max Health', 'Lance Range'    , 'Lance Longevity', 'Lance Sharpness'   , 'Lance Damage' , 'Lance Density'      , 'Movement Speed', 'Shield Regeneration', 'Shield Capacity'];
-                default: return ['Body Damage', 'Max Health', 'Bullet Speed'   , 'Bullet Health'  , 'Bullet Penetration', 'Bullet Damage', 'Reload'             , 'Movement Speed', 'Shield Regeneration', 'Shield Capacity'];
-            }
+        getStatNames: data => {
+            return [
+                    data?.body_damage ?? 'Body Damage',
+                    data?.max_health ?? 'Max Health',
+                    data?.bullet_speed ?? 'Bullet Speed',
+                    data?.bullet_health ?? 'Bullet Health',
+                    data?.bullet_pen ?? 'Bullet Penetration',
+                    data?.bullet_damage ?? 'Bullet Damage',
+                    data?.reload ?? 'Reload',
+                    data?.move_speed ?? 'Movement Speed',
+                    data?.shield_regen ?? 'Shield Regeneration',
+                    data?.shield_cap ?? 'Shield Capacity',
+                ]
         },
         skills: [
             { amount: 0, color: 'purple', cap: 1, softcap: 1 },
@@ -64,6 +66,7 @@ var serverStart = 0,
             getLevel: () => level,
         },
         type: 0,
+        root: "",
         fps: 0,
         color: 0,
         accel: 0,
@@ -414,13 +417,13 @@ const process = (z = {}) => {
         let invuln = get.next();
         // Update health, flagging as injured if needed
         if (isNew) {
-            z.health = get.next() / 255;
-            z.shield = get.next() / 255;
+            z.health = get.next() / 65535;
+            z.shield = get.next() / 65535;
         } else {
             let hh = z.health,
                 ss = z.shield;
-            z.health = get.next() / 255;
-            z.shield = get.next() / 255;
+            z.health = get.next() / 65535;
+            z.shield = get.next() / 65535;
             // Update stuff
             if (z.health < hh || z.shield < ss) {
                 z.render.status.set('injured');
@@ -548,6 +551,7 @@ const convert = {
         let index = get.next(),
             // Translate the encoded index
             indices = {
+                root: index & 0x0200,
                 topspeed: index & 0x0100,
                 accel: index & 0x0080,
                 skills: index & 0x0040,
@@ -604,6 +608,9 @@ const convert = {
         }
         if (indices.topspeed) {
             gui.topspeed = get.next();
+        }
+        if (indices.root) {
+            gui.root = get.next();
         }
     },
     broadcast: () => {
@@ -882,7 +889,7 @@ const socketInit = port => {
                 global.finalKills[0].set(m[2]);
                 global.finalKills[1].set(m[3]);
                 global.finalKills[2].set(m[4]);
-                global.finalKills[2].set(m[5]);
+                global.finalKills[3].set(m[5]);
                 global.finalKillers = [];
                 for (let i = 0; i < m[6]; i++) {
                     global.finalKillers.push(m[7 + i]);
@@ -903,6 +910,22 @@ const socketInit = port => {
                 break;
             case 'DEV_MODE_UPDATE':
                 global.devMode.selectedCommand = m[0]
+                break
+            case 'CHAT_MESSAGE_ENTITY':
+                get.set(m);
+                global.chats = {};
+
+                for (let i = get.next(); i; i--) {
+                    let spamCollection = [];
+                    global.chats[get.next()] = spamCollection;
+
+                    for (let j = get.next(); j; j--) {
+                        spamCollection.push({
+                            text: get.next(),
+                            expires: parseFloat(get.next())
+                        });
+                    }
+                }
                 break;
             default:
                 throw new Error('Unknown message index.');

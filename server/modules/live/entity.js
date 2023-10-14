@@ -2,11 +2,6 @@ let EventEmitter = require('events'),
     events,
     init = g => events = g.events;
 
-function ensureIsClass(str) {
-    if ("object" == typeof str) return str;
-    if (str in Class) return Class[str];
-    throw Error(`Definition ${str} is attempted to be gotten but does not exist!`);
-}
 function setNatural(natural, type) {
     type = ensureIsClass(type);
     if (type.PARENT != null) {
@@ -23,6 +18,7 @@ function setNatural(natural, type) {
 let lerp = (a, b, x) => a + x * (b - a);
 class Gun {
     constructor(body, info) {
+        this.id = entitiesIdLog++;
         this.ac = false;
         this.lastShot = { time: 0, power: 0 };
         this.body = body;
@@ -30,6 +26,10 @@ class Gun {
         this.label = "";
         this.controllers = [];
         this.children = [];
+        // Stored Variables
+        this.globalStore = {}
+        this.store = {}
+        // ----------------
         this.control = {
             target: new Vector(0, 0),
             goal: new Vector(0, 0),
@@ -56,7 +56,7 @@ class Gun {
                 // Pre-load bullet definitions so we don't have to recalculate them every shot
                 let natural = {};
                 for (let type of this.bulletTypes) setNatural(natural, type);
-                this.natural = natural; // Save it
+                this.natural = natural;
                 if (info.PROPERTIES.GUN_CONTROLLERS != null) {
                     let toAdd = [];
                     for (let i = 0; i < info.PROPERTIES.GUN_CONTROLLERS.length; i++) {
@@ -70,16 +70,14 @@ class Gun {
             this.onShoot = info.PROPERTIES.ON_SHOOT == null ? null : info.PROPERTIES.ON_SHOOT;
             this.autofire = info.PROPERTIES.AUTOFIRE == null ? false : info.PROPERTIES.AUTOFIRE;
             this.altFire = info.PROPERTIES.ALT_FIRE == null ? false : info.PROPERTIES.ALT_FIRE;
-            this.settings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : info.PROPERTIES.SHOOT_SETTINGS;
-            this.settings2 = info.PROPERTIES.SHOOT_SETTINGS2 == null ? [] : info.PROPERTIES.SHOOT_SETTINGS2;
-            this.settings3 = info.PROPERTIES.SHOOT_SETTINGS3 == null ? [] : info.PROPERTIES.SHOOT_SETTINGS3;
             this.calculator = info.PROPERTIES.STAT_CALCULATOR == null ? "default" : info.PROPERTIES.STAT_CALCULATOR;
             this.waitToCycle = info.PROPERTIES.WAIT_TO_CYCLE == null ? false : info.PROPERTIES.WAIT_TO_CYCLE;
             this.bulletStats = (info.PROPERTIES.BULLET_STATS == null || info.PROPERTIES.BULLET_STATS == "master") ? "master" : new Skill(info.PROPERTIES.BULLET_STATS);
-            this.settings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : info.PROPERTIES.SHOOT_SETTINGS;
+            this.settings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : JSON.parse(JSON.stringify(info.PROPERTIES.SHOOT_SETTINGS));
             this.countsOwnKids = info.PROPERTIES.MAX_CHILDREN == null ? false : info.PROPERTIES.MAX_CHILDREN;
             this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS == null ? false : info.PROPERTIES.SYNCS_SKILLS;
             this.negRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
+            this.independentChildren = info.PROPERTIES.INDEPENDENT_CHILDREN == null ? false : info.PROPERTIES.INDEPENDENT_CHILDREN;
             if (info.PROPERTIES.COLOR != null) {
                 if (typeof info.PROPERTIES.COLOR === "number" || typeof info.PROPERTIES.COLOR === "string") {
                     if (!isNaN(info.PROPERTIES.COLOR) && !isNaN(parseFloat(info.PROPERTIES.COLOR)) || /^[a-zA-Z]*$/.test(info.PROPERTIES.COLOR))
@@ -100,16 +98,38 @@ class Gun {
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
             this.drawAbove = (info.PROPERTIES.DRAW_ABOVE == null) ? false : info.PROPERTIES.DRAW_ABOVE;
+            this.stack = (info.PROPERTIES.STACK_GUN == null) ? true : info.PROPERTIES.STACK_GUN;
+            this.onFire = (info.PROPERTIES.ON_FIRE == null) ? null : info.PROPERTIES.ON_FIRE
         }
         let position = info.POSITION;
-        this.length = position[0] / 10;
-        this.width = position[1] / 10;
-        this.aspect = position[2];
-        let _off = new Vector(position[3], position[4]);
-        this.angle = (position[5] * Math.PI) / 180;
+        if (Array.isArray(position)) {
+            position = {
+                LENGTH: position[0],
+                WIDTH: position[1],
+                ASPECT: position[2],
+                X: position[3],
+                Y: position[4],
+                ANGLE: position[5],
+                DELAY: position[6]
+            }
+        }
+        position = {
+            LENGTH: position.LENGTH ?? 18,
+            WIDTH: position.WIDTH ?? 8,
+            ASPECT: position.ASPECT ?? 1,
+            X: position.X ?? 0,
+            Y: position.Y ?? 0,
+            ANGLE: position.ANGLE ?? 0,
+            DELAY: position.DELAY ?? 0
+        };
+        this.length = position.LENGTH / 10;
+        this.width = position.WIDTH / 10;
+        this.aspect = position.ASPECT;
+        let _off = new Vector(position.X, position.Y);
+        this.angle = (position.ANGLE * Math.PI) / 180;
         this.direction = _off.direction;
         this.offset = _off.length / 10;
-        this.delay = position[6];
+        this.delay = position.DELAY;
         this.position = 0;
         this.motion = 0;
         if (this.canShoot) {
@@ -135,7 +155,7 @@ class Gun {
         if (this.canShoot && !this.body.settings.hasNoRecoil) {
             // Apply recoil to motion
             if (this.motion > 0) {
-                let recoilForce = (-this.position * this.trueRecoil * 1.08 / this.body.size) / roomSpeed;
+                let recoilForce = (-this.position * this.trueRecoil * this.body.recoilMultiplier * 1.08 / this.body.size) / roomSpeed;
                 this.body.accel.x += recoilForce * Math.cos(this.recoilDir);
                 this.body.accel.y += recoilForce * Math.sin(this.recoilDir);
             }
@@ -263,19 +283,19 @@ class Gun {
         this.lastShot.power = 3 * Math.log(Math.sqrt(sk.spd) + this.trueRecoil + 1) + 1;
         this.motion += this.lastShot.power;
         // Find inaccuracy
-        let ss, sd;
+        let shudder, spread;
         do {
-            ss = ran.gauss(0, Math.sqrt(this.settings.shudder));
-        } while (Math.abs(ss) >= this.settings.shudder * 2);
+            shudder = ran.gauss(0, Math.sqrt(this.settings.shudder));
+        } while (Math.abs(shudder) >= this.settings.shudder * 2);
         do {
-            sd = ran.gauss(0, this.settings.spray * this.settings.shudder);
-        } while (Math.abs(sd) >= this.settings.spray / 2);
-        sd *= Math.PI / 180;
+            spread = ran.gauss(0, this.settings.spray * this.settings.shudder);
+        } while (Math.abs(spread) >= this.settings.spray / 2);
+        spread *= Math.PI / 180;
         // Find speed
-        let vecLength = (this.negRecoil ? -1 : 1) * this.settings.speed * c.runSpeed * sk.spd * (1 + ss),
-            vecAngle = this.angle + this.body.facing + sd,
+        let vecLength = (this.negRecoil ? -1 : 1) * this.settings.speed * c.runSpeed * sk.spd * (1 + shudder),
+            vecAngle = this.angle + this.body.facing + spread,
         s = new Vector(vecLength * Math.cos(vecAngle), vecLength * Math.sin(vecAngle));
-        // Boost it if we shouldw
+        // Boost it if we should
         if (this.body.velocity.length) {
             let extraBoost =
                 Math.max(0, s.x * this.body.velocity.x + s.y * this.body.velocity.y) /
@@ -287,22 +307,49 @@ class Gun {
                 s.y += (this.body.velocity.length * extraBoost * s.y) / len;
             }
         }
+
+        //create an independent entity
+        if (this.independentChildren) {
+            var o = new Entity({
+                x: this.body.x + this.body.size * gx - s.x,
+                y: this.body.y + this.body.size * gy - s.y,
+            });
+            for (let type of this.bulletTypes) {
+                o.define(type);
+            }
+            o.coreSize = o.SIZE;
+            o.team = this.body.team;
+            o.refreshBodyAttributes();
+            o.life();
+            return;
+        }
+
         // Create the bullet
-        var o = new Entity(
-            {
+        var o = new Entity({
                 x: this.body.x + this.body.size * gx - s.x,
                 y: this.body.y + this.body.size * gy - s.y,
             },
             this.master.master
         );
         /*let jumpAhead = this.cycle - 1;
-                if (jumpAhead) {
-                        o.x += s.x * this.cycle / jumpAhead;
-                        o.y += s.y * this.cycle / jumpAhead;
-                }*/
+        if (jumpAhead) {
+                o.x += s.x * this.cycle / jumpAhead;
+                o.y += s.y * this.cycle / jumpAhead;
+        }*/
         o.velocity = s;
         this.bulletInit(o);
         o.coreSize = o.SIZE;
+
+        if (this.onFire != null) {
+            this.onFire({
+                body: this.master.master,
+                gun: this,
+                masterStore: this.master.master.store,
+                gunStore: this.store,
+                globalMasterStore: this.master.master.globalStore,
+                globalGunStore: this.globalStore
+            });
+        }
     }
     bulletInit(o) {
         // Define it by its natural properties
@@ -462,21 +509,13 @@ class Gun {
                 e.source = this.body;
                 switch (hitScanLevel) {
                     case 1:
-                        {
-                            if (i % 5 === 0) branch(e, branchAlt % 2 === 0);
-                        }
+                        if (i % 5 === 0) branch(e, branchAlt % 2 === 0);
                         break;
-                    case 2:
-                        {
-                            // Superlaser
-                            if (i === amount - 1) explode(e);
-                        }
+                    case 2:// Superlaser
+                        if (i === amount - 1) explode(e);
                         break;
-                    case 3:
-                        {
-                            // Death Star
-                            if (i % 3 === 0) explode(e);
-                        }
+                    case 3:// Death Star
+                        if (i % 3 === 0) explode(e);
                         break;
                 }
             }, 10 * i);
@@ -535,10 +574,8 @@ class Gun {
             case "drone":
                 out.PUSHABILITY = 1;
                 out.PENETRATION = Math.max(1, shoot.pen * (0.5 * (sk.pen - 1) + 1));
-                out.HEALTH =
-                    (shoot.health * sk.str + sizeFactor) / Math.pow(sk.pen, 0.8);
-                out.DAMAGE =
-                    shoot.damage * sk.dam * Math.sqrt(sizeFactor) * shoot.pen * sk.pen;
+                out.HEALTH = (shoot.health * sk.str + sizeFactor) / Math.pow(sk.pen, 0.8);
+                out.DAMAGE = shoot.damage * sk.dam * Math.sqrt(sizeFactor) * shoot.pen * sk.pen;
                 out.RANGE = shoot.range * Math.sqrt(sizeFactor);
                 break;
         }
@@ -552,54 +589,75 @@ class Gun {
     }
 }
 
-function resetAN(me, data) {
-    data.x = me.x;
-    data.y = me.y;
-    data.vx = me.velocity.x;
-    data.vy = me.velocity.y;
-    data.ax = me.accel.x;
-    data.ay = me.accel.y;
-}
-
-function saveAN(me, data) {
-    me.x = data.x;
-    me.y = data.y;
-    me.velocity.x = data.vx;
-    me.velocity.y = data.vy;
-    me.accel.x = data.ax;
-    me.accel.y = data.ay;
-}
-let amNaN = me => [
-    isNaN(me.x), isNaN(me.y),
-    isNaN(me.velocity.x), isNaN(me.velocity.y),
-    isNaN(me.accel.x), isNaN(me.accel.x)
-].some(x=>x);
-function antiNaN(me) {
-    let nansInARow = 0;
-    let data = { x: 1, y: 1, vx: 0, vy: 0, ax: 0, ay: 0 };
-
-    return function() {
-        if (amNaN(me)) {
-            nansInARow++;
-            if (nansInARow > 50) {
-                console.log("NaN instance found. (Repeated)");
-                console.log("Debug:", [
-                    ["x,"        , isNaN(me.x)],
-                    ["y,"        , isNaN(me.y)],
-                    ["velocity.x", isNaN(me.velocity.x)],
-                    ["velocity.y", isNaN(me.velocity.y)],
-                    ["accel.x"   , isNaN(me.accel.x)],
-                    ["accel.y"   , isNaN(me.accel.y)],
-                ].map(entry => !!entry[1]));
+class antiNaN {
+    constructor (me) {
+        this.me = me;
+        this.nansInARow = 0;
+        this.data = { x: 1, y: 1, vx: 0, vy: 0, ax: 0, ay: 0 };
+        this.amNaN = me => [ me.x, me.y, me.velocity.x, me.velocity.y, me.accel.x, me.accel.y ].some(isNaN);
+    }
+    update() {
+        if (this.amNaN(this.me)) {
+            this.nansInARow++;
+            if (this.nansInARow > 50) {
+                console.log("NaN instance found. (Repeated)\nDebug:", [
+                    ["x"         , isNaN(this.me.x)],
+                    ["y"         , isNaN(this.me.y)],
+                    ["velocity.x", isNaN(this.me.velocity.x)],
+                    ["velocity.y", isNaN(this.me.velocity.y)],
+                    ["accel.x"   , isNaN(this.me.accel.x)],
+                    ["accel.y"   , isNaN(this.me.accel.y)],
+                ].filter(entry => !!entry[1]).join(', '));
             }
-            saveAN(me, data);
-            if (amNaN(me)) console.log("NaN instance is still NaN.");
+            this.me.x = this.data.x;
+            this.me.y = this.data.y;
+            this.me.velocity.x = this.data.vx;
+            this.me.velocity.y = this.data.vy;
+            this.me.accel.x = this.data.ax;
+            this.me.accel.y = this.data.ay;
+            if (this.amNaN(this.me)) console.log("NaN instance is still NaN.");
         } else {
-            resetAN(me, data);
-            if (nansInARow > 0) nansInARow--;
+            this.data.x = this.me.x;
+            this.data.y = this.me.y;
+            this.data.vx = this.me.velocity.x;
+            this.data.vy = this.me.velocity.y;
+            this.data.ax = this.me.accel.x;
+            this.data.ay = this.me.accel.y;
+            if (this.nansInARow > 0) this.nansInARow--;
         }
     }
 }
+
+function getValidated(obj, prop, allowedType, from, optional = true) {
+    let type = typeof obj[prop];
+    if (allowedType === type || (optional && 'undefined' === type)) {
+        return obj[prop];
+    }
+    throw new TypeError(`${from} property ${prop} is of type ${type} instead of type ${allowedType}`);
+}
+let labelThing = "StatusEffect's effects argument";
+class StatusEffect extends EventEmitter {
+    constructor (duration = 0, multipliers = {}, tick = a=>a) {
+        super();
+        this.duration = getValidated({duration}, 'duration', 'number', labelThing, false);
+        this.acceleration = getValidated(multipliers, 'acceleration', 'number', labelThing);
+        this.topSpeed = getValidated(multipliers, 'topSpeed', 'number', labelThing);
+        this.health = getValidated(multipliers, 'health', 'number', labelThing);
+        this.shield = getValidated(multipliers, 'shield', 'number', labelThing);
+        this.regen = getValidated(multipliers, 'regen', 'number', labelThing);
+        this.damage = getValidated(multipliers, 'damage', 'number', labelThing);
+        this.penetration = getValidated(multipliers, 'penetration', 'number', labelThing);
+        this.range = getValidated(multipliers, 'range', 'number', labelThing);
+        this.fov = getValidated(multipliers, 'fov', 'number', labelThing);
+        this.density = getValidated(multipliers, 'density', 'number', labelThing);
+        this.stealth = getValidated(multipliers, 'stealth', 'number', labelThing);
+        this.pushability = getValidated(multipliers, 'pushability', 'number', labelThing);
+        this.recoilReceived = getValidated(multipliers, 'recoilReceived', 'number', labelThing);
+        this.size = getValidated(multipliers, 'size', 'number', labelThing);
+        this.tick = getValidated({tick}, 'tick', 'function', "StatusEffect's argument");
+    }
+}
+
 let entitiesIdLog = 0;
 class Entity extends EventEmitter {
     constructor(position, master) {
@@ -692,9 +750,11 @@ class Entity extends EventEmitter {
         this.settings = {};
         this.aiSettings = {};
         this.children = [];
+        this.statusEffects = [];
         // Define it
         this.SIZE = 1;
-        this.define(Class.genericEntity);
+        this.sizeMultiplier = 1;
+        this.define("genericEntity");
         // Initalize physics and collision
         this.alwaysShowOnMinimap = false;
         this.maxSpeed = 0;
@@ -703,6 +763,7 @@ class Entity extends EventEmitter {
         this.vfacing = 0;
         this.range = 0;
         this.damageRecieved = 0;
+        this.recoilMultiplier = 1;
         this.stepRemaining = 1;
         this.x = position.x;
         this.y = position.y;
@@ -726,67 +787,87 @@ class Entity extends EventEmitter {
         this.color = '16 0 1 0 false';
         this.invisible = [0, 0];
         this.alphaRange = [0, 1];
+        this.levelCap = undefined;
         this.autospinBoost = 0;
-        this.antiNaN = antiNaN(this);
+        this.antiNaN = new antiNaN(this);
         // Get a new unique id
         this.id = entitiesIdLog++;
         this.team = this.id;
         this.team = master.team;
         this.turnAngle = 0;
+        // Stored Variables
+        this.globalStore = {}
+        this.store = {}
         // This is for collisions
-        this.updateAABB = () => {};
-        this.getAABB = (() => {
-            let data = {},
-                savedSize = 0;
-            let getLongestEdge = (x1, y1, x2, y2) => {
-                return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
+        this.AABB_data = {};
+        this.AABB_savedSize = 0;
+        this.updateAABB = (active) => {
+            if (this.bond != null) return 0;
+            if (!active) {
+                this.AABB_data.active = false;
+                return 0;
+            }
+            if (this.isPlayer && !this.isDead()) this.refreshBodyAttributes();
+            this.antiNaN.update();
+            // Get bounds
+            let x1 = Math.min(this.x, this.x + this.velocity.x + this.accel.x) - this.realSize - 5;
+            let y1 = Math.min(this.y, this.y + this.velocity.y + this.accel.y) - this.realSize - 5;
+            let x2 = Math.max(this.x, this.x + this.velocity.x + this.accel.x) + this.realSize + 5;
+            let y2 = Math.max(this.y, this.y + this.velocity.y + this.accel.y) + this.realSize + 5;
+            let size = Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
+            let sizeDiff = this.AABB_savedSize / size;
+            // Update data
+            this.AABB_data = {
+                min: [x1, y1],
+                max: [x2, y2],
+                active: true,
+                size: size,
             };
-            this.updateAABB = (active) => {
-                if (this.bond != null) return 0;
-                if (!active) {
-                    data.active = false;
-                    return 0;
-                }
-                if (this.isPlayer && !this.isDead()) this.refreshBodyAttributes();
-                this.antiNaN();
-                // Get bounds
-                let x1 = Math.min(this.x, this.x + this.velocity.x + this.accel.x) - this.realSize - 5;
-                let y1 = Math.min(this.y, this.y + this.velocity.y + this.accel.y) - this.realSize - 5;
-                let x2 = Math.max(this.x, this.x + this.velocity.x + this.accel.x) + this.realSize + 5;
-                let y2 = Math.max(this.y, this.y + this.velocity.y + this.accel.y) + this.realSize + 5;
-                // Size check
-                let size = getLongestEdge(x1, y1, x2, y1);
-                let sizeDiff = savedSize / size;
-                // Update data
-                data = {
-                    min: [x1, y1],
-                    max: [x2, y2],
-                    active: true,
-                    size: size,
-                };
-                // Update grid if needed
-                if (sizeDiff > Math.SQRT2 || sizeDiff < Math.SQRT1_2) {
-                    this.removeFromGrid();
-                    this.addToGrid();
-                    savedSize = data.size;
-                }
-            };
-            return () => data;
-        })();
+            // Update grid if needed
+            if (sizeDiff > Math.SQRT2 || sizeDiff < Math.SQRT1_2) {
+                this.removeFromGrid();
+                this.addToGrid();
+                this.AABB_savedSize = size;
+            }
+        };
+        this.getAABB = () => this.AABB_data;
         this.updateAABB(true);
         entities.push(this);
         for (let v of views) v.add(this);
         this.activation.update();
         events.emit('spawn', this);
     }
+    addStatusEffect(effect) {
+        this.emit('newStatusEffect', effect);
+        this.statusEffects.push({ durationLeftover: effect.duration, effect });
+        this.refreshBodyAttributes();
+    }
     life() {
         // Size
         this.coreSize = this.SIZE;
         // Invisibility
-        if ((this.velocity.x ** 2 + this.velocity.y ** 2 <= 0.1) && !this.damageReceived)
+        if (!this.damageReceived && (this.velocity.x ** 2 + this.velocity.y ** 2 <= 0.1)) {
             this.alpha = Math.max(this.alphaRange[0], this.alpha - this.invisible[1]);
-        else
+        } else {
             this.alpha = Math.min(this.alphaRange[1], this.alpha + this.invisible[0]);
+        }
+
+        let lastingEffects = [], needsBodyAttribRefresh = false;
+        for (let i = 0; i < this.statusEffects.length; i++) {
+            let entry = this.statusEffects[i];
+            entry.durationLeftover -= 1 / roomSpeed;
+            if (entry.durationLeftover > 0) {
+                lastingEffects.push(entry);
+            } else {
+                needsBodyAttribRefresh = true;
+                this.emit('expiredStatusEffect', entry.effect);
+            }
+            if (entry.effect.tick) {
+                entry.effect.tick(this, entry.effect);
+            }
+        }
+        this.statusEffects = lastingEffects;
+
         // Think
         let faucet = this.settings.independent || this.source == null || this.source === this ? {} : this.source.control,
         b = {
@@ -826,7 +907,8 @@ class Entity extends EventEmitter {
         // Handle guns and turrets if we've got them
         for (let i = 0; i < this.guns.length; i++) this.guns[i].live();
         for (let i = 0; i < this.turrets.length; i++) this.turrets[i].life();
-        if (this.skill.maintain()) this.refreshBodyAttributes();
+        if (this.skill.maintain()) needsBodyAttribRefresh = true;
+        if (needsBodyAttribRefresh) this.refreshBodyAttributes();
     }
     addController(newIO) {
         let listenToPlayer;
@@ -843,17 +925,18 @@ class Entity extends EventEmitter {
         this.kick = (reason) => player.socket.kick(reason);
     }
     giveUp(player, name = "Mothership") {
-        if (!player.body.isMothership)
+        if (!player.body.isMothership) {
             player.body.controllers = [
                 new ioTypes.nearestDifferentMaster(player.body),
                 new ioTypes.spin(player.body, { onlyWhenIdle: true }),
             ];
-        else if (player.body.isMothership)
+        } else {
             player.body.controllers = [
                 new ioTypes.nearestDifferentMaster(player.body),
-                new ioTypes.wanderAroundMap(player.body, { immitatePlayerMovement: false, lookAtGoal: true }),
+                new ioTypes.wanderAroundMap(player.body, { lookAtGoal: true }),
                 new ioTypes.mapTargetToGoal(player.body),
             ];
+        }
         player.body.name = player.body.label;
         player.body.underControl = false;
         player.body.sendMessage = () => {};
@@ -863,18 +946,27 @@ class Entity extends EventEmitter {
         player.body = fakeBody;
         player.body.kill();
     }
-    define(set) {
+    define(set, emitEvent = true) {
         set = ensureIsClass(set);
+        this.store = {}
+        for (let gun of this.guns) {
+            gun.store = {}
+        }
 
         if (set.PARENT != null) {
-            for (let i = 0; i < set.PARENT.length; i++) {
-                this.define(set.PARENT[i]);
+            if (Array.isArray(set.PARENT)) {
+                for (let i = 0; i < set.PARENT.length; i++) {
+                    this.define(set.PARENT[i], false);
+                }
+            } else {
+                this.define(set.PARENT, false);
             }
         }
         if (set.LAYER != null) this.layerID = set.LAYER;
         if (set.index != null) this.index = set.index;
         if (set.NAME != null) this.name = set.NAME;
         if (set.LABEL != null) this.label = set.LABEL;
+        if (set.UPGRADE_LABEL != null) this.upgradeLabel = set.UPGRADE_LABEL;
         if (set.TYPE != null) this.type = set.TYPE;
         if (set.SHAPE != null) {
             this.shape = typeof set.SHAPE === "number" ? set.SHAPE : 0;
@@ -905,7 +997,7 @@ class Entity extends EventEmitter {
         if (set.IGNORED_BY_AI != null) this.ignoredByAi = set.IGNORED_BY_AI;
         if (set.MOTION_TYPE != null) this.motionType = set.MOTION_TYPE;
         if (set.FACING_TYPE != null) this.facingType = set.FACING_TYPE;
-        if (set.TURRET_FACES_CLIENT != null) this.settings.turretFacesClient = set.TURRET_FACES_CLIENT
+        if (set.MIRROR_MASTER_ANGLE != null) this.settings.mirrorMasterAngle = set.MIRROR_MASTER_ANGLE
         if (set.DRAW_HEALTH != null) this.settings.drawHealth = set.DRAW_HEALTH;
         if (set.DRAW_SELF != null) this.settings.drawShape = set.DRAW_SELF;
         if (set.DAMAGE_EFFECTS != null) this.settings.damageEffects = set.DAMAGE_EFFECTS;
@@ -937,7 +1029,18 @@ class Entity extends EventEmitter {
         if (set.INTANGIBLE != null) this.intangibility = set.INTANGIBLE;
         if (set.NO_CLIP != null) this.noClip = set.NO_CLIP;
         if (set.IS_SMASHER != null) this.settings.reloadToAcceleration = set.IS_SMASHER;
-        if (set.STAT_NAMES != null) this.settings.skillNames = set.STAT_NAMES;
+        if (set.STAT_NAMES != null) this.settings.skillNames = {
+            body_damage: set.STAT_NAMES?.BODY_DAMAGE ?? 'Body Damage',
+            max_health: set.STAT_NAMES?.MAX_HEALTH ?? 'Max Health',
+            bullet_speed: set.STAT_NAMES?.BULLET_SPEED ?? 'Bullet Speed',
+            bullet_health: set.STAT_NAMES?.BULLET_HEALTH ?? 'Bullet Health',
+            bullet_pen: set.STAT_NAMES?.BULLET_PEN ?? 'Bullet Penetration',
+            bullet_damage: set.STAT_NAMES?.BULLET_DAMAGE ?? 'Bullet Damage',
+            reload: set.STAT_NAMES?.RELOAD ?? 'Reload',
+            move_speed: set.STAT_NAMES?.MOVE_SPEED ?? 'Movement Speed',
+            shield_regen: set.STAT_NAMES?.SHIELD_REGEN ?? 'Shield Regeneration',
+            shield_cap: set.STAT_NAMES?.SHIELD_CAP ?? 'Shield Capacity',
+        };
         if (set.AI != null) this.aiSettings = set.AI;
         if (set.INVISIBLE != null) this.invisible = set.INVISIBLE;
         if (set.ALPHA != null) {
@@ -966,14 +1069,17 @@ class Entity extends EventEmitter {
             this.settings.variesInSize = set.VARIES_IN_SIZE;
             this.squiggle = this.settings.variesInSize ? ran.randomRange(0.8, 1.2) : 1;
         }
-        if (set.RESET_UPGRADES) {
+        if (set.RESET_UPGRADES || set.RESET_STATS) {
+            let caps = this.skill.caps.map(x=>x);
+            this.skill.setCaps(Array(10).fill(0));
+            this.skill.setCaps(caps);
             this.upgrades = [];
             this.isArenaCloser = false;
             this.ac = false;
             this.alpha = 1;
-            this.skill.reset();
             this.reset();
         }
+        if (set.RESET_UPGRADE_MENU) this.upgrades = []
         if (set.ARENA_CLOSER != null) {
             this.isArenaCloser = set.ARENA_CLOSER;
             this.ac = set.ARENA_CLOSER;
@@ -995,6 +1101,9 @@ class Entity extends EventEmitter {
         if (set.SIZE != null) {
             this.SIZE = set.SIZE * this.squiggle;
             if (this.coreSize == null) this.coreSize = this.SIZE;
+        }
+        if (set.LEVEL_CAP != null) {
+            this.levelCap = set.LEVEL_CAP;
         }
         if (set.LEVEL != null) {
             this.skill.reset();
@@ -1022,22 +1131,16 @@ class Entity extends EventEmitter {
             this.guns = newGuns;
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
-        if (set.FOOD != null) {
-            if (set.FOOD.LEVEL != null) {
-                this.foodLevel = set.FOOD.LEVEL;
-                this.foodCountup = 0;
-            }
-        }
         if ("function" === typeof set.LEVEL_SKILL_POINT_FUNCTION) {
             this.skill.LSPF = set.LEVEL_SKILL_POINT_FUNCTION;
         }
-        if (set.RECALC_SKILL) {
+        if (set.RECALC_SKILL != null) {
             let score = this.skill.score;
             this.skill.reset();
             this.skill.score = score;
             while (this.skill.maintain()) {}
         }
-        if (set.EXTRA_SKILL) {
+        if (set.EXTRA_SKILL != null) {
             this.skill.points += set.EXTRA_SKILL;
         }
         if (set.BODY != null) {
@@ -1049,9 +1152,10 @@ class Entity extends EventEmitter {
             if (set.BODY.REGEN != null) this.REGEN = set.BODY.REGEN;
             if (set.BODY.DAMAGE != null) this.DAMAGE = set.BODY.DAMAGE;
             if (set.BODY.PENETRATION != null) this.PENETRATION = set.BODY.PENETRATION;
-            if (set.BODY.FOV != null) this.FOV = set.BODY.FOV;
             if (set.BODY.RANGE != null) this.RANGE = set.BODY.RANGE;
+            if (set.BODY.FOV != null) this.FOV = set.BODY.FOV;
             if (set.BODY.SHOCK_ABSORB != null) this.SHOCK_ABSORB = set.BODY.SHOCK_ABSORB;
+            if (set.BODY.RECOIL_MULTIPLIER != null) this.RECOIL_MULTIPLIER = set.BODY.RECOIL_MULTIPLIER;
             if (set.BODY.DENSITY != null) this.DENSITY = set.BODY.DENSITY;
             if (set.BODY.STEALTH != null) this.STEALTH = set.BODY.STEALTH;
             if (set.BODY.PUSHABILITY != null) this.PUSHABILITY = set.BODY.PUSHABILITY;
@@ -1059,6 +1163,7 @@ class Entity extends EventEmitter {
             this.refreshBodyAttributes();
         }
         if (set.SPAWN_ON_DEATH) this.spawnOnDeath = set.SPAWN_ON_DEATH;
+        if (set.REROOT_UPGRADE_TREE) this.rerootUpgradeTree = set.REROOT_UPGRADE_TREE;
         if (set.TURRETS != null) {
             for (let i = 0; i < this.turrets.length; i++) {
                 this.turrets[i].destroy();
@@ -1080,23 +1185,62 @@ class Entity extends EventEmitter {
         if (set.mockup != null) {
             this.mockup = set.mockup;
         }
+
+        if (emitEvent) {
+            this.emit('define', set);
+        }
     }
     refreshBodyAttributes() {
+
+        let accelerationMultiplier = 1,
+            topSpeedMultiplier = 1,
+            healthMultiplier = 1,
+            shieldMultiplier = 1,
+            regenMultiplier = 1,
+            damageMultiplier = 1,
+            penetrationMultiplier = 1,
+            rangeMultiplier = 1,
+            fovMultiplier = 1,
+            densityMultiplier = 1,
+            stealthMultiplier = 1,
+            pushabilityMultiplier = 1,
+            sizeMultiplier = 1,
+            recoilReceivedMultiplier = 1;
+        for (let i = 0; i < this.statusEffects.length; i++) {
+            let effect = this.statusEffects[i].effect;
+            if (effect.acceleration != null) accelerationMultiplier *= effect.acceleration;
+            if (effect.topSpeed != null) topSpeedMultiplier *= effect.topSpeed;
+            if (effect.health != null) healthMultiplier *= effect.health;
+            if (effect.shield != null) shieldMultiplier *= effect.shield;
+            if (effect.regen != null) regenMultiplier *= effect.regen;
+            if (effect.damage != null) damageMultiplier *= effect.damage;
+            if (effect.penetration != null) penetrationMultiplier *= effect.penetration;
+            if (effect.range != null) rangeMultiplier *= effect.range;
+            if (effect.fov != null) fovMultiplier *= effect.fov;
+            if (effect.density != null) densityMultiplier *= effect.density;
+            if (effect.stealth != null) stealthMultiplier *= effect.stealth;
+            if (effect.pushability != null) pushabilityMultiplier *= effect.pushability;
+            if (effect.recoilReceived != null) recoilReceivedMultiplier *= effect.recoilReceived;
+            if (effect.size != null) sizeMultiplier *= effect.size;
+        }
+
         let speedReduce = Math.pow(this.size / (this.coreSize || this.SIZE), 1);
-        this.acceleration = (c.runSpeed * this.ACCELERATION) / speedReduce;
+        this.acceleration = (accelerationMultiplier * c.runSpeed * this.ACCELERATION) / speedReduce;
         if (this.settings.reloadToAcceleration) this.acceleration *= this.skill.acl;
-        this.topSpeed = (c.runSpeed * this.SPEED * this.skill.mob) / speedReduce;
+        this.topSpeed = (topSpeedMultiplier * c.runSpeed * this.SPEED * this.skill.mob) / speedReduce;
         if (this.settings.reloadToAcceleration) this.topSpeed /= Math.sqrt(this.skill.acl);
-        this.health.set(((this.settings.healthWithLevel ? 2 * this.level : 0) + this.HEALTH) * this.skill.hlt);
+        this.health.set(((this.settings.healthWithLevel ? 2 * this.level : 0) + this.HEALTH) * this.skill.hlt * healthMultiplier);
         this.health.resist = 1 - 1 / Math.max(1, this.RESIST + this.skill.brst);
-        this.shield.set(((this.settings.healthWithLevel ? 0.6 * this.level : 0) + this.SHIELD) * this.skill.shi, Math.max(0, ((this.settings.healthWithLevel ? 0.006 * this.level : 0) + 1) * this.REGEN * this.skill.rgn));
-        this.damage = this.DAMAGE * this.skill.atk;
-        this.penetration = this.PENETRATION + 1.5 * (this.skill.brst + 0.8 * (this.skill.atk - 1));
-        if (!this.settings.dieAtRange || !this.range) this.range = this.RANGE;
-        this.fov = this.FOV * 250 * Math.sqrt(this.size) * (1 + 0.003 * this.level);
-        this.density = (1 + 0.08 * this.level) * this.DENSITY;
-        this.stealth = this.STEALTH;
-        this.pushability = this.PUSHABILITY;
+        this.shield.set(((this.settings.healthWithLevel ? 0.6 * this.level : 0) + this.SHIELD) * this.skill.shi, Math.max(0, ((this.settings.healthWithLevel ? 0.006 * this.level : 0) + 1) * this.REGEN * this.skill.rgn * regenMultiplier));
+        this.damage = damageMultiplier * this.DAMAGE * this.skill.atk;
+        this.penetration = penetrationMultiplier * (this.PENETRATION + 1.5 * (this.skill.brst + 0.8 * (this.skill.atk - 1)));
+        if (!this.settings.dieAtRange || !this.range) this.range = rangeMultiplier * this.RANGE;
+        this.fov = fovMultiplier * this.FOV * 250 * Math.sqrt(this.size) * (1 + 0.003 * this.level);
+        this.density = densityMultiplier * (1 + 0.08 * this.level) * this.DENSITY;
+        this.stealth = stealthMultiplier * this.STEALTH;
+        this.pushability = pushabilityMultiplier * this.PUSHABILITY;
+        this.sizeMultiplier = sizeMultiplier;
+        this.recoilMultiplier = this.RECOIL_MULTIPLIER * recoilReceivedMultiplier;
     }
     bindToMaster(position, bond) {
         this.bond = bond;
@@ -1109,14 +1253,30 @@ class Entity extends EventEmitter {
         this.settings.drawShape = false;
         this.skipLife = true;
         // Get my position.
-        let _off = new Vector(position[1], position[2]);
+        if (Array.isArray(position)) {
+            position = {
+                SIZE: position[0],
+                X: position[1],
+                Y: position[2],
+                ANGLE: position[3],
+                ARC: position[4],
+                LAYER: position[5]
+            };
+        }
+        position.SIZE ??= 10;
+        position.X ??= 0;
+        position.Y ??= 0;
+        position.ANGLE ??= 0;
+        position.ARC ??= 360;
+        position.LAYER ??= 0;
+        let _off = new Vector(position.X, position.Y);
         this.bound = {
-            size: position[0] / 20,
-            angle: position[3] * Math.PI / 180,
+            size: position.SIZE / 20,
+            angle: position.ANGLE * Math.PI / 180,
             direction: _off.direction,
             offset: _off.length / 10,
-            arc: position[4] * Math.PI / 180,
-            layer: position[5]
+            arc: position.ARC * Math.PI / 180,
+            layer: position.LAYER
         };
         // Initalize.
         this.activation.update();
@@ -1126,10 +1286,10 @@ class Entity extends EventEmitter {
         this.move();
     }
     get level() {
-        return Math.min(c.LEVEL_CAP, this.skill.level);
+        return Math.min(this.levelCap ?? c.LEVEL_CAP, this.skill.level);
     }
     get size() {
-        return this.bond == null ? (this.coreSize || this.SIZE) * (1 + this.level / 45) : this.bond.size * this.bound.size;
+        return this.bond == null ? (this.coreSize || this.SIZE) * this.sizeMultiplier * (1 + this.level / 45) : this.bond.size * this.bound.size;
     }
     get mass() {
         return this.density * (this.size ** 2 + 1);
@@ -1174,7 +1334,7 @@ class Entity extends EventEmitter {
     syncTurrets() {
         for (let i = 0; i < this.turrets.length; i++) {
             this.turrets[i].skill = this.skill;
-            this.turrets[i].refreshBodyAttributes;
+            this.turrets[i].refreshBodyAttributes();
             this.turrets[i].syncTurrets();
         }
     }
@@ -1183,9 +1343,7 @@ class Entity extends EventEmitter {
         if (suc) {
             this.refreshBodyAttributes();
             for (let i = 0; i < this.guns.length; i++) this.guns[i].syncChildren();
-            for (let i = 0; i < this.turrets.length; i++) {
-                this.turrets[i].skillUp(stat);
-            }
+            for (let i = 0; i < this.turrets.length; i++) this.turrets[i].syncTurrets();
         }
         return suc;
     }
@@ -1330,8 +1488,9 @@ class Entity extends EventEmitter {
                     ref = this.bond;
                 this.x = ref.x + ref.size * bound.offset * Math.cos(bound.direction + bound.angle + ref.facing);
                 this.y = ref.y + ref.size * bound.offset * Math.sin(bound.direction + bound.angle + ref.facing);
-                ref.velocity.x += bound.size * this.accel.x;
-                ref.velocity.y += bound.size * this.accel.y;
+                ref.velocity.x += bound.size * this.accel.x * ref.recoilMultiplier;
+                ref.velocity.y += bound.size * this.accel.y * ref.recoilMultiplier;
+                this.velocity = ref.velocity;
                 this.firingArc = [ref.facing + bound.angle, bound.arc / 2];
                 this.accel.null();
                 this.blend = ref.blend;
@@ -1342,13 +1501,22 @@ class Entity extends EventEmitter {
                 this.velocity.x = this.source.velocity.x;
                 this.velocity.y = this.source.velocity.y;
                 break;
+            case 'assembler':
+                this.alpha -= 0.02;
+                this.SIZE += 0.17;
+                if (this.alpha <= 0) {
+                    this.kill();
+                    if (this.SIZE > 50) {
+                        this.destroy();
+                    }
+                }
+                break;
         }
         this.accel.x += engine.x * this.control.power;
         this.accel.y += engine.y * this.control.power;
     }
-    reset(_con = true) {
-        this.controllers = this.controllers.filter(con => (con instanceof ioTypes.listenToPlayer) * _con);
-        if (this.controllers.length > 1 && _con) this.controllers = this.controllers[0];
+    reset(keepPlayerController = true) {
+        this.controllers = keepPlayerController ? [this.controllers.filter(con => con instanceof ioTypes.listenToPlayer)[0]] : [];
     }
     face() {
         let t = this.control.target,
@@ -1395,9 +1563,13 @@ class Entity extends EventEmitter {
                     4 / roomSpeed
                 );
                 break;
+            case "noFacing":
+                this.facing = 0;
+                break;
             case "bound":
                 let givenangle,
-                    reduceIndependence = false;
+                    reduceIndependence = false,
+                    slowness = this.settings.mirrorMasterAngle ? 1 : 4 / roomSpeed;
                 if (this.control.main) {
                     givenangle = Math.atan2(t.y, t.x);
                     let diff = util.angleDifference(givenangle, this.firingArc[0]);
@@ -1420,7 +1592,7 @@ class Entity extends EventEmitter {
                         this.perceptionAngleIndependence = 1;
                     }
                 }
-                this.facing += util.loopSmooth(this.facing, givenangle, 4 / roomSpeed);
+                this.facing += util.loopSmooth(this.facing, givenangle, slowness);
                 break;
         }
         this.facing += this.turnAngle;
@@ -1631,6 +1803,11 @@ class Entity extends EventEmitter {
                 }
             }
 
+            // MEMORY LEAKS ARE BAD!!!!
+            for (let i = 0; i < this.turrets.length; i++) {
+                this.turrets[i].kill();
+            }
+
             // Initalize message arrays
             let killers = [],
                 killTools = [],
@@ -1639,14 +1816,15 @@ class Entity extends EventEmitter {
             let name = this.master.name == ""
                 ? this.master.type === "tank"
                     ? "an unnamed " + this.label : this.master.type === "miniboss"
-                    ? "a visiting " + this.label : util.addArticle(this.label)
+                    ? "a visiting " + this.label : this.label.substring(0, 3) == 'The'
+                    ? this.label : util.addArticle(this.label)
                 : this.master.name + "'s " + this.label;
             // Calculate the jackpot
             let jackpot = util.getJackpot(this.skill.score) / this.collisionArray.length;
             // Now for each of the things that kill me...
             for (let i = 0; i < this.collisionArray.length; i++) {
                 let instance = this.collisionArray[i];
-                if (instance.type === 'wall' || !instance.damage) return;
+                if (instance.type === 'wall' || !instance.damage) continue;
                 if (instance.master.settings.acceptsScore) {
                     // If it's not food, give its master the score
                     if (instance.master.type === "tank" || instance.master.type === "miniboss") {
@@ -1663,14 +1841,17 @@ class Entity extends EventEmitter {
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));
             // If there's no valid killers (you were killed by food), change the message to be more passive
             let killText = notJustFood ? "" : "You have been killed by ",
-                dothISendAText = this.settings.givesKillMessage,
-                killCountType = this.type == "food" ? "polygons" :
-                                this.type == "miniboss" ? "bosses" :
-                                killers.length == 1 ? "solo" : "assists";
+                dothISendAText = this.settings.givesKillMessage;
+
             for (let i = 0; i < killers.length; i++) {
-                killers[i].killCount[killCountType]++;
-                this.killCount.killers.push(killers[i].index);
-            }
+                let instance = killers[i];
+
+                if (this.type === "tank") killers.length > 1 ? instance.killCount.assists++ : instance.killCount.solo++;
+                else if (this.type === "food" || this.type === "crasher") instance.killCount.polygons++;
+                else if (this.type === "miniboss") instance.killCount.bosses++;
+
+                this.killCount.killers.push(instance.index);
+            };
             // Add the killers to our death message, also send them a message
             if (notJustFood) {
                 for (let i = 0; i < killers.length; i++) {
@@ -1770,7 +1951,6 @@ class Entity extends EventEmitter {
         if (this.parent != null)
             util.remove(this.parent.children, this.parent.children.indexOf(this));
         // Kill all of its children
-        let ID = this.id;
         for (let instance of entities) {
             if (instance.source.id === this.id) {
                 if (instance.settings.persistsAfterDeath) {
@@ -1797,4 +1977,4 @@ class Entity extends EventEmitter {
         return this.health.amount <= 0;
     }
 }
-module.exports = { init, Gun, Entity };
+module.exports = { init, StatusEffect, Gun, Entity };

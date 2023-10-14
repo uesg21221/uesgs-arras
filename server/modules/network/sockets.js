@@ -58,6 +58,43 @@ function kick(socket, reason = "No reason given.") {
     socket.lastWords("K");
 }
 
+function chatLoop() {
+    // clean up expired messages
+    let now = Date.now();
+    for (let i in chats) {
+        chats[i] = chats[i].filter(chat => chat.expires > now);
+        if (!chats[i].length) {
+            delete chats[i];
+        }
+    }
+
+    // send chat messages to everyone
+    for (let view of views) {
+        let nearby = view.getNearby(),
+            spammersAdded = 0,
+            array = [];
+
+        // data format:
+        // [ entityCount,
+        //   entityId1, chatMessageCount1, chatMsg1_1, chatExp1_1, chatMsg1_2, chatExp1_2, ... ,
+        //   entityId2, chatMessageCount2, chatMsg2_1, chatExp2_1, chatMsg2_2, chatExp2_2, ... ,
+        //   entityId3, chatMessageCount3, chatMsg3_1, chatExp3_1, chatMsg3_2, chatExp3_2, ... ,
+        //   ... ]
+        for (let entity of nearby) {
+            let id = entity.id;
+            if (chats[id]) {
+                spammersAdded++;
+                array.push(id, chats[id].length);
+                for (let chat of chats[id]) {
+                    array.push(chat.message, chat.expires.toString());
+                }
+            }
+        }
+
+        view.socket.talk('CHAT_MESSAGE_ENTITY', spammersAdded, ...array);
+    }
+}
+
 // Handle incoming messages
 function incoming(message, socket) {
     // Only accept binary
@@ -329,31 +366,31 @@ function incoming(message, socket) {
                 return 1;
             }
             let number = m[0],
-                amount = m[1];
-            // Verify the request
+                max = m[1],
+                stat = ["atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi"][number];
+
             if (typeof number != "number") {
                 socket.kick("Weird stat upgrade request number.");
                 return 1;
             }
-            if (typeof amount != "number") {
-                socket.kick("Weird stat upgrade request amount.");
+            if (typeof max != "number") {
+                socket.kick("Weird stat upgrade request max boolean.");
                 return 1;
             }
-            if (amount < 0 && Math.round(amount) == amount) {
-                socket.kick("invalid upgrade request amount.");
+            if (max !== 0 && 1 !== max) {
+                socket.kick("invalid upgrade request max boolean.");
                 return 1;
             }
-            // Decipher it
-            let stat = ["atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi"][number];
+
             if (!stat) {
                 socket.kick("Unknown stat upgrade request.");
                 return 1;
             }
-            // Apply it
+
             if (player.body != null) {
-                while (amount--) {
-                    player.body.skillUp(stat); // Ask to upgrade a stat
-                }
+                do {
+                    player.body.skillUp(stat);
+                } while (max && player.body.skill.points && player.body.skill.amount(stat) < player.body.skill.cap(stat))
             }
             break;
         case "L":
@@ -464,6 +501,7 @@ function incoming(message, socket) {
             }
             // cheatingbois
             if (player.body != null && socket.permissions && socket.permissions.class) {
+                player.body.define({ RESET_UPGRADES: true });
                 player.body.define(Class[socket.permissions.class]);
             }
             break;
@@ -504,7 +542,7 @@ function incoming(message, socket) {
             let body = player.body;
             if (body.underControl) {
                 body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You are no longer controling the mothership.");
+                socket.talk("m", "You are no longer controlling the mothership.");
                 return 1;
             }
             if (c.MOTHERSHIP_LOOP) {
@@ -556,12 +594,49 @@ function incoming(message, socket) {
                 socket.talk("m", "You cannot use this.");
             }
             break;
+
+        case "M":
+            if (player.body == null) return 1;
+            let abort, message = m[0];
+
+            if ("string" !==  typeof message) {
+                socket.kick("Non-string chat message.");
+                return 1;
+            }
+
+            events.emit('chatMessage', { message, socket, preventDefault: () => abort = true });
+
+            // we are not anti-choice here.
+            if (abort) break;
+
+            util.log(player.body.name + ': ' + message);
+
+            let id = player.body.id;
+            if (!chats[id]) {
+                chats[id] = [];
+            }
+
+            if (c.SANITIZE_CHAT_MESSAGE_COLORS) {
+                // I thought it should be "§§" but it only works if you do "§§§§"?
+                message = message.replace(/§/g, "§§§§");
+            }
+
+            // TODO: this needs to be lag compensated, so the message would not last 1 second less due to high ping
+            chats[id].unshift({ message, expires: Date.now() + c.CHAT_MESSAGE_DURATION });
+
+            // do one tick of the chat loop so they don't need to wait 100ms to receive it.
+            chatLoop();
+
+            // for (let i = 0; i < clients.length; i++) {
+            //     clients[i].talk("CHAT_MESSAGE_BOX", message);
+            // }
+            break;
     }
 }
 // Monitor traffic and handle inactivity disconnects
 function traffic(socket) {
     let strikes = 0;
-    // This function will be called in the slow loop
+    // This function wiSl be called in the slow loop
     return () => {
         // Kick if it's d/c'd
         if (util.time() - socket.status.lastHeartbeat > c.maxHeartbeatInterval) {
@@ -603,13 +678,11 @@ function floppy(value = null) {
                 switch (typeof newValue) {
                     case "number":
                     case "string":
-                        {
-                            if (newValue !== value) {
-                                eh = true;
-                            }
+                        if (newValue !== value) {
+                            eh = true;
                         }
                         break;
-                    case "object": {
+                    case "object":
                         if (Array.isArray(newValue)) {
                             if (newValue.length !== value.length) {
                                 eh = true;
@@ -620,7 +693,6 @@ function floppy(value = null) {
                             }
                             break;
                         }
-                    } // jshint ignore:line
                     default:
                         util.error(newValue);
                         throw new Error("Unsupported type for a floppyvar!");
@@ -741,6 +813,7 @@ function update(gui) {
     // Update physics
     gui.accel.update(b.acceleration);
     gui.topspeed.update(-b.team * room.partyHash);
+    gui.root.update(b.rerootUpgradeTree);
 }
 
 function publish(gui) {
@@ -755,6 +828,7 @@ function publish(gui) {
         skills: gui.skills.publish(),
         accel: gui.accel.publish(),
         top: gui.topspeed.publish(),
+        root: gui.root.publish(),
     };
     // Encode which we'll be updating and capture those values only
     let oo = [0];
@@ -796,6 +870,10 @@ function publish(gui) {
         oo[0] += 0x0100;
         oo.push(o.top);
     }
+    if (o.root != null) {
+        oo[0] += 0x0200;
+        oo.push(o.root);
+    }
     // Output it
     return oo;
 }
@@ -816,6 +894,7 @@ let newgui = (player) => {
         accel: floppy(),
         stats: container(player),
         bodyid: -1,
+        root: floppy(),
     };
     // This is the gui itself
     return {
@@ -885,39 +964,35 @@ const spawn = (socket, name) => {
         body = new Entity(loc);
         body.protect();
         body.isPlayer = true;
-        body.define(Class.basic); // Start as a basic tank
-        body.name = name; // Define the name
+        body.define(Class[c.SPAWN_CLASS]);
+        body.name = name;
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
         }
-        body.addController(new ioTypes.listenToPlayer(body, { player })); // Make it listen
-        body.sendMessage = (content) => messenger(socket, content); // Make it speak
+        body.addController(new ioTypes.listenToPlayer(body, { player }));
+        body.sendMessage = (content) => messenger(socket, content);
         socket.spectateEntity = null;
-        body.invuln = true; // Make it safe
+        body.invuln = true;
     }
     player.body = body;
     body.socket = socket;
     // Decide how to color and team the body
     switch (room.gameMode) {
         case "tdm":
-            {
-                body.team = -player.team;
-                body.color = body.color != '16 0 1 0 false' ? body.color : getTeamColor(body.team); // Allow custom starting colors
-            }
+            body.team = -player.team;
+            body.color = body.color != '16 0 1 0 false' ? body.color : getTeamColor(body.team);
             break;
         default: {
             if (socket.group) {
                 body.team = -player.team;
                 //socket.talk("J", player.team * 12345);
-                // col
             }
-            body.color = c.RANDOM_COLORS
-                ? ran.choose([
-                        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-                        17,
-                    ])
-                : 12; // red
+            if (c.RANDOM_COLORS) {
+                body.color = ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]);
+            } else {
+                body.color = '12 0 1 0 false';
+            }
         }
     }
     // Decide what to do about colors when sending updates and stuff
@@ -997,8 +1072,8 @@ function flatten(data) {
             /* 12 */ data.layer,
             /* 13 */ data.color,
             /* 14 */ data.invuln,
-            /* 15 */ Math.ceil(255 * data.health),
-            /* 16 */ Math.round(255 * data.shield),
+            /* 15 */ Math.ceil(65535 * data.health),
+            /* 16 */ Math.round(65535 * data.shield),
             /* 17 */ Math.round(255 * data.alpha)
         );
         if (data.type & 0x04) {
@@ -1023,8 +1098,6 @@ function perspective(e, player, data) {
     if (player.body != null) {
         if (player.body.id === e.master.id) {
             data = data.slice(); // So we don't mess up references to the original
-            // Set the proper color if it's on our team
-            data[12] = player.body.color;
             // And make it force to our mouse if it ought to
             if (player.command.autospin) {
                 data[10] = 1;
@@ -1033,7 +1106,7 @@ function perspective(e, player, data) {
         if (player.body.team === e.source.team && c.GROUPS) {
             // GROUPS
             data = data.slice();
-            data[12] = player.body.color;
+            data[13] = player.body.color;
         }
     }
     return data;
@@ -1057,6 +1130,8 @@ const eyes = (socket) => {
     let y = -1000;
     let fov = 0;
     let o = {
+        socket,
+        getNearby: () => nearby,
         add: (e) => {
             if (check(socket.camera, e)) nearby.push(e);
         },
@@ -1140,7 +1215,7 @@ const eyes = (socket) => {
             for (let i = 0; i < nearby.length; i++) {
                 let e = nearby[i];
                 if (e.photo &&
-                    Math.abs(e.x - x) < fov / 2 + 1.5 * e.size &&
+                    Math.abs(e.x - x) <  fov / 2             + 1.5 * e.size &&
                     Math.abs(e.y - y) < (fov / 2) * (9 / 16) + 1.5 * e.size
                 ) {
                     // Grab the photo
@@ -1560,4 +1635,4 @@ const sockets = {
         util.log("[INFO] New socket opened with ip " + socket.ip);
     }
 };
-module.exports = { sockets };
+module.exports = { sockets, chatLoop };

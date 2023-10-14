@@ -14,6 +14,7 @@ global.fps = "Unknown";
 global.minimap = [];
 global.entities = [];
 global.views = [];
+global.chats = {};
 global.entitiesToAvoid = [];
 global.grid = new hshg.HSHG();
 global.arenaClosed = false;
@@ -53,11 +54,36 @@ global.TEAM_ROOM = -100;
 global.TEAM_ENEMIES = -101;
 global.getTeamName = team => ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN"][-team - 1] || "An unknown team";
 global.getTeamColor = team => [10, 11, 12, 15, 25, 26, 27, 28][-team - 1] || 3 + " 0 1 0 false";
-global.isPlayerTeam = team => team < 0 && team > -9;
+global.isPlayerTeam = team => /*team < 0 && */team > -9;
+
+global.Tile = class Tile {
+    constructor (args) {
+        this.args = args;
+        if ("object" !== typeof this.args) {
+            throw new Error("First argument has to be an object!");
+        }
+
+        this.color = args.color ?? 8;
+        this.naturalSpawns = args.naturalSpawns ? [...args.naturalSpawns] : [];
+        this.protector = args.protector ?? null;
+        this.protectorDefaultTeam = args.protectorDefaultTeam ?? global.TEAM_ENEMIES;
+        this.protectorIsCapturable = args.protectorIsCapturable ?? false;
+        this.teams = args.teams ?? [global.TEAM_ROOM, global.TEAM_ENEMIES];
+        this.onlyAllowTeams = args.onlyAllowTeams ?? false;
+        this.roids = args.roids ? [...args.roids] : [];
+        this.init = tile.init || (()=>{});
+        if ("function" !== typeof this.init) {
+            throw new Error("'init' property must be a function!");
+        }
+        this.tick = tile.tick || (()=>{});
+        if ("function" !== typeof this.tick) {
+            throw new Error("'tick' property must be a function!");
+        }
+    }
+}
 
 // Now that we've set up the global variables, we import all the modules, then put them into global varialbles and then export something just so this file is run.
 const requires = [
-    "./live/class.js", // Class dictionary.
     "./setup/room.js", // These are the basic room functions, set up by config.json
     "./physics/relative.js", // Some basic physics functions that are used across the game.
     "./network/sockets.js", // The networking that helps players interact with the game.
@@ -65,6 +91,7 @@ const requires = [
     "./live/entitySubFunctions.js", // Skill, HealthType and other functions related to entities are here.
     "./live/controllers.js", // The AI of the game.
     "./live/entity.js", // The actual Entity constructor.
+    "./live/class.js", // Class dictionary.
     "./setup/mockups.js", // This file loads the mockups.
     "./physics/collisionFunctions.js", // The actual collision functions that make the game work.
     "./debug/logs.js", // The logging pattern for the game. Useful for pinpointing lag.

@@ -2,7 +2,7 @@ let loop;
 function close() {
     sockets.broadcast("Closing!");
     clearInterval(loop);
-    setTimeout(process.exit, 1500);
+    setTimeout(process.exit, 1000);
 }
 
 function closeArena() {
@@ -41,7 +41,7 @@ function closeArena() {
     let ticks = 0;
     loop = setInterval(() => {
         ticks++;
-        if (ticks >= 240) return close();
+        if (ticks >= 20) return close();
         let alive = false;
         for (let i = 0; i < entities.length; i++) {
             let instance = entities[i];

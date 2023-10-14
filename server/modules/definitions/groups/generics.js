@@ -1,4 +1,4 @@
-const { base, dfltskl } = require('../constants.js');
+const { base, dfltskl, smshskl } = require('../constants.js');
 
 exports.genericEntity = {
     NAME: "",
@@ -61,6 +61,7 @@ exports.genericEntity = {
     MAX_CHILDREN: 0,
     BORDERLESS: false,
     DRAW_FILL: true,
+    REROOT_UPGRADE_TREE: null,
     BODY: {
         ACCELERATION: 1,
         SPEED: 0,
@@ -72,6 +73,8 @@ exports.genericEntity = {
         PENETRATION: 1,
         RANGE: 0,
         FOV: 1,
+        SHOCK_ABSORB: 1,
+        RECOIL_MULTIPLIER: 1,
         DENSITY: 1,
         STEALTH: 1,
         PUSHABILITY: 1,
@@ -88,10 +91,11 @@ exports.genericTank = {
     DANGER: 5,
     MOTION_TYPE: "motor",
     FACING_TYPE: "toTarget",
-    SIZE: 12,
+    SIZE: 11,
     MAX_CHILDREN: 0,
     DAMAGE_EFFECTS: false,
     IGNORED_BY_AI: false,
+    REROOT_UPGRADE_TREE: "basic",
     BODY: {
         ACCELERATION: base.ACCEL,
         SPEED: base.SPEED,
@@ -256,9 +260,9 @@ exports.auraBase = {
     CLEAR_ON_MASTER_UPGRADE: true,
     CAN_GO_OUTSIDE_ROOM: true,
     BODY: {
-        SHIELD: 1000000,
-        REGEN: 100000,
-        HEALTH: 1000000,
+        SHIELD: 1e9,
+        REGEN: 1e6,
+        HEALTH: 1e9,
         DENSITY: 0,
         SPEED: 0,
         PUSHABILITY: 0,

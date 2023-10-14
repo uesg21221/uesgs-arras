@@ -305,12 +305,17 @@ class io_stackGuns extends IO {
     }
     think ({ target }) {
 
+        //why even bother?
+        if (!target) {
+            return;
+        }
+
         //find gun that is about to shoot
-        let lowestReadiness = Infinity
+        let lowestReadiness = Infinity,
             readiestGun;
-        for (let i = 0; i < this.body.guns; i++) {
+        for (let i = 0; i < this.body.guns.length; i++) {
             let gun = this.body.guns[i];
-            if (!gun.canShoot) continue;
+            if (!gun.canShoot || !gun.stack) continue;
             let reloadStat = (gun.calculator == "necro" || gun.calculator == "fixed reload") ? 1 : (gun.bulletStats === "master" ? this.body.skill : gun.bulletStats).rld,
                 readiness = (1 - gun.cycle) / (gun.settings.reload * reloadStat);
             if (lowestReadiness > readiness) {
@@ -320,12 +325,12 @@ class io_stackGuns extends IO {
         }
 
         //if we aren't ready, don't spin yet
-        if (this.timeUntilFire && this.timeUntilFire > lowestReadiness) {
+        if (!readiestGun || (this.timeUntilFire && this.timeUntilFire > lowestReadiness)) {
             return;
         }
 
         //rotate the target vector based on the gun
-        let targetAngle = Math.atan2(target.y, target.x) + readiestGun.angle,
+        let targetAngle = Math.atan2(target.y, target.x) - readiestGun.angle,
             targetLength = Math.sqrt(target.x ** 2 + target.y ** 2);
         return {
             target: {
@@ -348,7 +353,6 @@ class io_nearestDifferentMaster extends IO {
     validate(e, m, mm, sqrRange, sqrRangeMaster) {
         return (e.health.amount > 0) &&
         (!e.master.master.ignoredByAi) &&
-        (!e.master.master.isDominator) &&
         (e.master.master.team !== this.body.master.master.team) &&
         (e.master.master.team !== TEAM_ROOM) &&
         (!isNaN(e.dangerValue)) &&
@@ -623,7 +627,7 @@ class io_spin extends IO {
             return input;
         }
         this.a += this.speed;
-        let offset = (!this.independent && this.body.bond != null) ? this.body.bound.angle : 0;
+        let offset = (this.independent && this.body.bond != null) ? this.body.bound.angle : 0;
         return {
             target: {
                 x: Math.cos(this.a + offset),
@@ -655,10 +659,11 @@ class io_zoom extends IO {
         super(body);
         this.distance = opts.distance || 225;
         this.dynamic = opts.dynamic;
+        this.permanent = opts.permanent;
     }
 
     think(input) {
-        if (input.alt && input.target) {
+        if (this.permanent || (input.alt && input.target)) {
             if (this.dynamic || this.body.cameraOverrideX === null) {
                 let direction = Math.atan2(input.target.y, input.target.x);
                 this.body.cameraOverrideX = this.body.x + this.distance * Math.cos(direction);
@@ -687,7 +692,10 @@ class io_wanderAroundMap extends IO {
                 goal = compressMovement(this.body, goal);
             }
             return {
-                target: (this.lookAtGoal && input.target == null) ? this.spot : null,
+                target: (this.lookAtGoal && input.target == null) ? {
+                    x: this.spot.x - this.body.x,
+                    y: this.spot.y - this.body.y
+                } : null,
                 goal
             };
         }

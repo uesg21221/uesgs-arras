@@ -117,7 +117,13 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 24,
+    BOTS: 8,
+
+    // How much XP player-bots get per second until they reach LEVEL_CAP.
+    BOT_XP: 125,
+
+    // The class that players and player-bots spawn as.
+    SPAWN_CLASS: "basic",
 
 
 
@@ -159,11 +165,22 @@ module.exports = {
 
     // Miscellaneous
 
+    // How long a entity chat message lasts in milliseconds.
+    // Includes the fade-out period.
+    CHAT_MESSAGE_DURATION: 30_000,
+
+    // If you don't want your players to color their messages.
+    // They get sanitized after addons interpret them, but before they're added to the chat message dictionary.
+    SANITIZE_CHAT_MESSAGE_COLORS: true,
+
     // If someone tries to get a file that does not exist, send them this instead.
     DEFAULT_FILE: 'index.html',
 
     // Window name of the server terminal.
     WINDOW_NAME: 'APS++ Game Server Instance',
+
+    // Allows you to type and run javascript code in the terminal.
+    REPL_WINDOW: false,
 
     // Welcome message once a player spawns.
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"

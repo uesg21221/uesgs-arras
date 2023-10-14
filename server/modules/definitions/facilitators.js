@@ -37,6 +37,15 @@ exports.combineStats = function (array_of_objects) {
 
         for (let object = 0; object < array_of_objects.length; object++) {
             let gStat = array_of_objects[object];
+            if (Array.isArray(gStat)) {
+                gStat = {
+                    reload: data[0], recoil: data[1], shudder: data[2],
+                    size: data[3], health: data[4], damage: data[5],
+                    pen: data[6], speed: data[7], maxSpeed: data[8],
+                    range: data[9], density: data[10], spray: data[11],
+                    resist: data[12]
+                };
+            }
             data.reload *= gStat.reload ?? 1;
             data.recoil *= gStat.recoil ?? 1;
             data.shudder *= gStat.shudder ?? 1;
@@ -98,7 +107,7 @@ exports.makeGuard = (type, name = -1) => {
     }, {
         POSITION: [4, 8, 1.7, 13, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.dereference([g.trap]),
+            SHOOT_SETTINGS: exports.combineStats([g.trap]),
             TYPE: "trap",
             STAT_CALCULATOR: gunCalcNames.trap,
         },
@@ -551,7 +560,9 @@ exports.makeAuto = (type, name = -1, options = {}) => {
     let turret = {
         type: "autoTurret",
         size: 10,
-        independent: true
+        independent: true,
+        color: 16,
+        angle: 180,
     };
     if (options.type != null) {
         turret.type = options.type;
@@ -562,15 +573,22 @@ exports.makeAuto = (type, name = -1, options = {}) => {
     if (options.independent != null) {
         turret.independent = options.independent;
     }
+    if (options.color != null) {
+        turret.color = options.color;
+    }
+    if (options.angle != null) {
+        turret.angle = options.angle;
+    }
     let output = exports.dereference(type);
     let autogun = {
         /*********    SIZE                             X             Y         ANGLE        ARC */
-        POSITION: [turret.size, 0, 0, 180, 360, 1],
+        POSITION: [turret.size, 0, 0, turret.angle, 360, 1],
         TYPE: [
             turret.type,
             {
                 CONTROLLERS: ["nearestDifferentMaster"],
                 INDEPENDENT: turret.independent,
+                COLOR: turret.color,
             },
         ],
     };
@@ -642,21 +660,22 @@ exports.makeDeco = (shape = 0, color = 16) => {
     };
 }
 
-exports.addAura = (damageFactor = 1, sizeFactor = 1, auraColor) => {
+exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) => {
     let isHeal = damageFactor < 0;
     let auraType = isHeal ? "healAura" : "aura";
     let symbolType = isHeal ? "healerSymbol" : "auraSymbol";
     auraColor = auraColor ?? (isHeal ? 12 : 0);
     return {
         PARENT: ["genericTank"],
+        INDEPENDENT: true,
         LABEL: "",
         COLOR: 17,
         GUNS: [
             {
                 POSITION: [0, 20, 1, 0, 0, 0, 0,],
                 PROPERTIES: {
-                    SHOOT_SETTINGS: exports.combineStats([g.aura, [1, 1, 1, sizeFactor, 1, damageFactor, 1, 1, 1, 1, 1, 1, 1]]),
-                    TYPE: [auraType, {COLOR: auraColor}],
+                    SHOOT_SETTINGS: exports.combineStats([g.aura, { size: sizeFactor, damage: damageFactor }]),
+                    TYPE: [auraType, {COLOR: auraColor, ALPHA: opacity}],
                     MAX_CHILDREN: 1,
                     AUTOFIRE: true,
                     SYNCS_SKILLS: true,
@@ -665,8 +684,8 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, auraColor) => {
         ],
         TURRETS: [
             {
-                POSITION: [20 - 5 * isHeal, 0, 0, 0, 360, 1],
-                TYPE: [symbolType, {COLOR: auraColor}],
+                POSITION: [20 - 7.5 * isHeal, 0, 0, 0, 360, 1],
+                TYPE: [symbolType, {COLOR: auraColor, INDEPENDENT: true}],
             },
         ]
     };

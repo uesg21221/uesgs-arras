@@ -231,15 +231,14 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
             // Now apply it
             // my.damageRecieved += damage._n * deathFactor._n;
             // n.damageRecieved += damage._me * deathFactor._me;
-            const __n = damage._n * deathFactor._n;
-            const __m = damage._me * deathFactor._me;
-            my.damageRecieved += __n * (__n > 0
+            const __my = damage._n * deathFactor._n;
+            const __n = damage._me * deathFactor._me;
+            my.damageRecieved += __my * Number(__my > 0
                 ? my.team != n.team
                 : n.healer && n.team == my.team && my.type == "tank" && n.master.id != my.id);
-            n.damageRecieved += __m * (__m > 0
+            n.damageRecieved += __n * Number(__n > 0
                 ? my.team != n.team
                 : my.healer && n.team == my.team && n.type == "tank" && my.master.id != n.id);
-
         }
     }
     /************* DO MOTION ***********/
@@ -302,6 +301,7 @@ function mooncollide(moon, n) {
 
 function reflectCollide(wall, bounce) {
     if (bounce.god === true || bounce.passive === true || bounce.ac || bounce.master.ac) return;
+    if (bounce.store.noWallCollision) return;
     if (bounce.team === wall.team && bounce.type === "tank") return;
     if (bounce.x + bounce.size < wall.x - wall.size ||
         bounce.x - bounce.size > wall.x + wall.size ||
@@ -376,7 +376,7 @@ function reflectCollide(wall, bounce) {
     }
 
     if (intersected) {
-        if (bounce.type !== 'tank' && bounce.type !== 'miniboss') {
+        if (bounce.type !== 'tank' && bounce.type !== 'miniboss' && bounce.type !== 'food') {
             bounce.kill();
         } else {
             bounce.collisionArray.push(wall);
