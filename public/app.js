@@ -571,7 +571,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     if (!borderless) context.stroke();
     if (fill) context.fill();
 }
-const drawEntity = (drawingEntities, baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
+const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
     let context = assignedContext ? assignedContext : ctx;
     let fade = turretInfo ? 1 : render.status.getFade(),
         drawSize = scale * ratio * instance.size,
@@ -1114,7 +1114,7 @@ function drawDevModeCommandUI(spacing, alcoveSize, command, settings) {
     let { boxCount = 0, texts, hasDevSkillBars } = entries[command];
 
     for (let j = 0, i = texts.length; i--;) {
-        drawText(texts[j], description.x, description.y + j++ * description.newLine + (boxCount > 0) * description.above, description.size, color.guiwhite, 'center', true);
+        drawText(texts[i], description.x, description.y + j++ * description.newLine + (boxCount > 0) * description.above, description.size, color.guiwhite, 'center', true);
     }
 
     if (boxCount > 0) {
