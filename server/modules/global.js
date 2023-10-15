@@ -29,29 +29,23 @@ global.TEAM_ROOM = -100;
 global.TEAM_ENEMIES = -101;
 global.getSpawnableArea = team => ran.choose((team in room.spawnable && room.spawnable[team].length) ? room.spawnable[team] : room.spawnableDefault).randomInside();
 global.getTeamName = team => ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN"][-team - 1] || "An unknown team";
-global.getTeamColor = team => [10, 11, 12, 15, 25, 26, 27, 28][-team - 1] || 3 + " 0 1 0 false";
+global.getTeamColor = team => ([10, 11, 12, 15, 25, 26, 27, 28][-team - 1] || 3) + " 0 1 0 false";
 global.isPlayerTeam = team => /*team < 0 && */team > -9;
-global.getWeakestTeam = (type = 0) => { // 0 - Bots only, 1 - Players only, 2 - all
+global.getWeakestTeam = () => {
     let teamcounts = {};
-    for (let i = 1; i <= c.TEAMS; i++) {
-        teamcounts[-i] = 0;
-    }
-    if (type !== 1) {
-        for (let o of entities) {
-            if (o.isBot && o.team < 0 && -o.team <= c.TEAMS) {
-                teamcounts[o.team]++;
+    for (let o of entities) {
+        if ((o.isBot || o.isPlayer) && o.team < 0 && isPlayerTeam(o.team)) {
+            if (!(o.team in teamcounts)) {
+                teamcounts[o.team] = 0;
             }
+            teamcounts[o.team]++;
         }
     }
-    if (type !== 0) {
-        for (let { socket: { rememberedTeam } } of sockets.players) {
-            if (rememberedTeam > 0 && rememberedTeam <= c.TEAMS) {
-                teamcounts[rememberedTeam]++;
-            }
-        }
-    }
-    const entries = Object.entries(teamcounts).reduce((a, b) => a[1] < b[1] ? a : b, [undefined, Infinity])[0];
-    return entries[0][0] === undefined ? Math.ceil(Math.random() * c.TEAMS) : ran.chooseN(entries, entries.length);
+    teamcounts = Object.entries(teamcounts);
+    console.log(teamcounts);
+    let lowestTeamCount = teamcounts.reduce((a, b) => a < b[1] ? a : b[1], Infinity),
+        entries = teamcounts.filter(a => a[1] == lowestTeamCount);
+    return !entries.length ? -Math.ceil(Math.random() * c.TEAMS) : ran.chooseN(entries, entries.length);
 };
 
 global.Tile = class Tile {

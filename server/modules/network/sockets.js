@@ -200,7 +200,7 @@ function incoming(message, socket) {
             // Give it the room state
             socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))), JSON.stringify(util.serverStartTime), roomSpeed, c.ARENA_TYPE);
             // Log it
-            util.log("[INFO] " + m[0] + (needsRoom ? " joined" : " rejoined") + " the game! Players: " + players.length);
+            util.log(`[INFO] ${m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
             break;
         case "S":
             // clock syncing
@@ -833,8 +833,8 @@ const spawn = (socket, name) => {
             loc = getSpawnableArea(player.team);
         }
     } while (dirtyCheck(loc, 50));
-    if (room.gameMode == "tdm") {
-        let team = c.HUNT ? 1 : getWeakestTeam(1);
+    if (c.MODE == "tdm") {
+        let team = getWeakestTeam(1);
         // Choose from one of the least ones
         if (player.team == null || (player.team !== team && global.defeatedTeams.includes(player.team))
         ) {
@@ -878,7 +878,7 @@ const spawn = (socket, name) => {
     }
     player.body = body;
     body.socket = socket;
-    switch (room.gameMode) {
+    switch (c.MODE) {
         case "tdm":
             body.color = body.color != '16 0 1 0 false' ? body.color : getTeamColor(body.team);
             break;
@@ -886,10 +886,8 @@ const spawn = (socket, name) => {
             body.color = (c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12) + ' 0 1 0 false';
     }
     // Decide what to do about colors when sending updates and stuff
-    player.teamColor = !c.RANDOM_COLORS && room.gameMode === "ffa" ? 10 : body.color; // blue
-    // Set up the targeting structure
+    player.teamColor = !c.RANDOM_COLORS && c.MODE === "ffa" ? 10 : body.color; // blue
     player.target = { x: 0, y: 0 };
-    // Set up the command structure
     player.command = {
         up: false,
         down: false,
@@ -916,24 +914,18 @@ const spawn = (socket, name) => {
         player.body.killCount.killers.length,
         ...player.body.killCount.killers,
     ];
-    // Set up the player's gui
     player.gui = newgui(player);
-    // Save the the player
     player.socket = socket;
     players.push(player);
-    // Focus on the new player
     socket.camera.x = body.x;
     socket.camera.y = body.y;
     socket.camera.fov = 2000;
-    // Mark it as spawned
     socket.status.hasSpawned = true;
 
-    //send the welcome message
     let msg = c.WELCOME_MESSAGE.split("\n");
     for (let i = 0; i < msg.length; i++) {
         body.sendMessage(msg[i]);
     }
-    // Move the client camera
     socket.talk("c", socket.camera.x, socket.camera.y, socket.camera.fov);
     return player;
 };
@@ -1160,9 +1152,9 @@ let getBarColor = (entry) => {
     //        return 15;
     //    default:
     //        if (
-    //            room.gameMode[0] === "2" ||
-    //            room.gameMode[0] === "3" ||
-    //            room.gameMode[0] === "4"
+    //            c.MODE[0] === "2" ||
+    //            c.MODE[0] === "3" ||
+    //            c.MODE[0] === "4"
     //        ) {
                 return entry.color;
     //        }

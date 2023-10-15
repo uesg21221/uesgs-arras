@@ -22,7 +22,7 @@ Array.prototype.remove = function (index) {
 // https://stackoverflow.com/questions/29548477/how-do-you-set-the-terminal-tab-title-from-node-js
 process.stdout.write(String.fromCharCode(27) + "]0;" + c.WINDOW_NAME + String.fromCharCode(7));
 
-util.log(room.width + " x " + room.height + " room initalized.  Max food: " + room.maxFood + ", max nest food: " + room.maxFood * room.nestFoodAmount + ".");
+util.log(room.width + " x " + room.height + " room initalized.");
 
 // Collision stuff
 function collide(collision) {
@@ -374,7 +374,7 @@ spawnBots = () => {
 
     // then add new bots if arena is open
     if (!global.arenaClosed && bots.length < c.BOTS) {
-        let team = room.gameMode === "tdm" ? getWeakestTeam(0) : undefined,
+        let team = c.MODE === "tdm" ? getWeakestTeam(0) : undefined,
             limit = 20, // give up after 20 attempts
             loc;
         do {
@@ -446,5 +446,6 @@ setInterval(() => {
         chatLoop();
         maintainloop();
         speedcheckloop();
+        counter = 0;
     }
 }, room.cycleSpeed);
