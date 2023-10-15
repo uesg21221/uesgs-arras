@@ -867,7 +867,7 @@ const spawn = (socket, name) => {
         body.isPlayer = true;
         body.define(Class[c.SPAWN_CLASS]);
         body.name = name;
-        body.team = player.team;
+        if (player.team) body.team = player.team;
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
