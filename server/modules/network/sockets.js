@@ -825,21 +825,13 @@ const spawn = (socket, name) => {
         groups.addMember(socket, socket.party || -1);
     }
     player.team = socket.rememberedTeam;
-    do {
-        if (socket.group) {
-            loc = room.near(socket.group.getSpawn(), 300);
-        }
-        else {
-            loc = getSpawnableArea(player.team);
-        }
-    } while (dirtyCheck(loc, 50));
+
     if (c.MODE == "tdm") {
-        let team = getWeakestTeam(1);
+        let team = getWeakestTeam();
         // Choose from one of the least ones
         if (player.team == null || (player.team !== team && global.defeatedTeams.includes(player.team))
         ) {
             player.team = team;
-            player.color = getTeamColor(team);
         }
         if (socket.party) {
             let team = socket.party / room.partyHash;
@@ -848,6 +840,14 @@ const spawn = (socket, name) => {
                 console.log("Party Code with team:", team, "Party:", socket.party);
             }
         }
+    }
+    if (socket.group) {
+        do {
+            loc = room.near(socket.group.getSpawn(), 300);
+        } while (dirtyCheck(loc, 50));
+    }
+    else {
+        loc = getSpawnableArea(player.team);
     }
     socket.rememberedTeam = player.team;
 
@@ -867,6 +867,7 @@ const spawn = (socket, name) => {
         body.isPlayer = true;
         body.define(Class[c.SPAWN_CLASS]);
         body.name = name;
+        body.team = player.team;
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
@@ -880,7 +881,7 @@ const spawn = (socket, name) => {
     body.socket = socket;
     switch (c.MODE) {
         case "tdm":
-            body.color = body.color != '16 0 1 0 false' ? body.color : getTeamColor(body.team);
+            body.color = getTeamColor(body.team);
             break;
         default: 
             body.color = (c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12) + ' 0 1 0 false';

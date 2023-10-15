@@ -33,8 +33,11 @@ global.getTeamColor = team => ([10, 11, 12, 15, 25, 26, 27, 28][-team - 1] || 3)
 global.isPlayerTeam = team => /*team < 0 && */team > -9;
 global.getWeakestTeam = () => {
     let teamcounts = {};
+    for (let i = -c.TEAMS; i < 0; i++) {
+        teamcounts[i] = 0;
+    }
     for (let o of entities) {
-        if ((o.isBot || o.isPlayer) && o.team < 0 && isPlayerTeam(o.team)) {
+        if ((o.isBot || o.isPlayer) && o.team in teamcounts && o.team < 0 && isPlayerTeam(o.team)) {
             if (!(o.team in teamcounts)) {
                 teamcounts[o.team] = 0;
             }
@@ -42,10 +45,11 @@ global.getWeakestTeam = () => {
         }
     }
     teamcounts = Object.entries(teamcounts);
-    console.log(teamcounts);
-    let lowestTeamCount = teamcounts.reduce((a, b) => a < b[1] ? a : b[1], Infinity),
+    let lowestTeamCount = Math.min(...teamcounts.map(x => x[1])),
         entries = teamcounts.filter(a => a[1] == lowestTeamCount);
-    return !entries.length ? -Math.ceil(Math.random() * c.TEAMS) : ran.chooseN(entries, entries.length);
+    let result = parseInt(!entries.length ? -Math.ceil(Math.random() * c.TEAMS) : ran.choose(entries)[0]);
+    console.log('\nteamcounts', teamcounts, '\nlowestTeamCount', lowestTeamCount, '\nentries', entries, '\nresult', result);
+    return result;
 };
 
 global.Tile = class Tile {

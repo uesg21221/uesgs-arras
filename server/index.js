@@ -374,7 +374,7 @@ spawnBots = () => {
 
     // then add new bots if arena is open
     if (!global.arenaClosed && bots.length < c.BOTS) {
-        let team = c.MODE === "tdm" ? getWeakestTeam(0) : undefined,
+        let team = c.MODE === "tdm" ? getWeakestTeam() : undefined,
             limit = 20, // give up after 20 attempts
             loc;
         do {
