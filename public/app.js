@@ -4,8 +4,9 @@ import { config } from "./lib/config.js";
 import { Canvas } from "./lib/canvas.js";
 import { color } from "./lib/color.js";
 import { gameDraw } from "./lib/gameDraw.js";
+import { mobileUI } from "./lib/mobileUI.js";
 import * as socketStuff from "./lib/socketInit.js";
-(async function (util, global, config, Canvas, color, gameDraw, socketStuff) {
+(async function (util, global, config, Canvas, color, gameDraw, mobileUI, socketStuff) {
 
 let { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow } = socketStuff;
 // fetch("changelog.md", { cache: "no-cache" })
@@ -103,7 +104,8 @@ global.player = {
     screenHeight: global.screenHeight,
     nameColor: "#ffffff",
 };
-var upgradeSpin = 0,
+let isMobile = "ontouchstart" in document.body && /android|mobi/i.test(navigator.userAgent),
+    upgradeSpin = 0,
     lastPing = 0,
     renderTimes = 0,
     generatedTankTree = null;
@@ -1265,7 +1267,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
 
 function drawMinimapAndDebug(spacing, alcoveSize) {
     // Draw minimap and FPS monitors
-    //minimap stuff stards here
+    //minimap stuff starts here
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
@@ -1500,6 +1502,13 @@ const gameDrawAlive = (ratio, drawRatio) => {
     let max = lb.max;
     if (global.showTree) {
         drawUpgradeTree(spacing, alcoveSize);
+    } else if (isMobile) {
+        mobileUI.drawMessages(spacing);
+        mobileUI.drawSkillBars(spacing, alcoveSize);
+        mobileUI.drawSelfInfo(spacing, alcoveSize, max);
+        mobileUI.drawMinimapAndDebug(spacing, alcoveSize);
+        mobileUI.drawLeaderboard(spacing, alcoveSize, max, lb);
+        mobileUI.drawAvailableUpgrades(spacing, alcoveSize);
     } else {
         drawMessages(spacing);
         drawSkillBars(spacing, alcoveSize);
@@ -1655,4 +1664,4 @@ function animloop() {
     ctx.translate(-0.5, -0.5);
 }
 
-})(util, global, config, Canvas, color, gameDraw, socketStuff);
+})(util, global, config, Canvas, color, gameDraw, mobileUI, socketStuff);
