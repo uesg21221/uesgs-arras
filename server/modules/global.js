@@ -47,9 +47,7 @@ global.getWeakestTeam = () => {
     teamcounts = Object.entries(teamcounts);
     let lowestTeamCount = Math.min(...teamcounts.map(x => x[1])),
         entries = teamcounts.filter(a => a[1] == lowestTeamCount);
-    let result = parseInt(!entries.length ? -Math.ceil(Math.random() * c.TEAMS) : ran.choose(entries)[0]);
-    console.log('\nteamcounts', teamcounts, '\nlowestTeamCount', lowestTeamCount, '\nentries', entries, '\nresult', result);
-    return result;
+    return parseInt(!entries.length ? -Math.ceil(Math.random() * c.TEAMS) : ran.choose(entries)[0]);
 };
 
 global.Tile = class Tile {

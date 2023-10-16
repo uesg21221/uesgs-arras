@@ -849,10 +849,8 @@ const spawn = (socket, name) => {
     else {
         loc = getSpawnableArea(player.team);
     }
-    socket.rememberedTeam = player.team;
 
-    let body;
-    const filter = disconnections.filter(r => r.ip === socket.ip && r.body && !r.body.isDead());
+    let body, filter = disconnections.filter(r => r.ip === socket.ip && r.body && !r.body.isDead());
     if (filter.length) {
         let recover = filter[0];
         util.remove(disconnections, disconnections.indexOf(recover));
@@ -867,7 +865,11 @@ const spawn = (socket, name) => {
         body.isPlayer = true;
         body.define(Class[c.SPAWN_CLASS]);
         body.name = name;
-        if (player.team) body.team = player.team;
+        if (player.team != null) {
+            body.team = player.team;
+        } else {
+            player.team = body.team;
+        }
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
@@ -877,6 +879,8 @@ const spawn = (socket, name) => {
         socket.spectateEntity = null;
         body.invuln = true;
     }
+
+    socket.rememberedTeam = player.team;
     player.body = body;
     body.socket = socket;
     switch (c.MODE) {
