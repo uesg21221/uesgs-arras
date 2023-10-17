@@ -35,41 +35,98 @@ window.onresize = () => {
 };
 
 join.onclick = () => {
-    for (let { pingSocket } of servers) pingSocket.close();
+    for (let { motdSocket } of servers) motdSocket.close();
     console.log('setting iframe src\nip:', ip);
     iframe.src = `https://${servers[selected]}/app`;
     iframe.style.display = 'block';
 };
 
 list.onclick = () => {
-    for (let { pingSocket } of servers) pingSocket.close();
+    for (let { motdSocket } of servers) motdSocket.close();
     console.log('redirecting to browser\nip:', ip);
     location.href = `https://${servers[selected]}/browser`;
 };
 
+class DOMServerListItem {
+    constructor (ip, index) {
+        document.createElement('div');
+
+        browser.append(container);
+    }
+    setMOTD (motd) {}
+}
+
 fetch(`https://${location.host}/servers.txt`).then(x => x.text()).then(fetchedServers => {
     for (let ip of fetchedServers.split('\n')) {
-        let element = document.createElement('div'),
-            pingSocket = new WebSocket(`wss://${ip}/ping`),
-            listEntry = { ip, pingSocket, element, loading: true };
+        let element = new DOMServerListItem(ip, servers.length),
+            motdSocket = new WebSocket(`wss://${ip}/motd`),
+
+            listEntry = { ip, motdSocket, element, loading: true };
 
         //TODO: actually render the server entries in the list
 
-        pingSocket.pings = [];
-        pingSocket.onmessage = ({ data }) => {
-            let now = Date.now();
-            pingSocket.pings.push(now - parseInt(data));
-            pingSocket.send(now.toString());
+        motdSocket.pings = [];
+        motdSocket.onmessage = ({ data }) => {
+            let splitIndex = data.indexOf(' '),
+                motd = JSON.parse(data.slice(splitIndex)),
+                now = Date.now();
+            motd.ping = now - parseInt(data.slice(0, splitIndex));
+            motdSocket.send(now.toString());
+            element.setMOTD(motd);
         };
-        pingSocket.onopen = () => pingSocket.send(Date.now().toString());
+        motdSocket.onopen = () => motdSocket.send(Date.now().toString());
 
         servers.push(listEntry);
-        fetch(`https://${ip}/motd.json`)
-        .then(motd => motd.json()).catch(L=>L)
-        .then(motd => listEntry.motd = motd)
-        .finally(L => listEntry.loading = false);
 
     }
 });
 
 browser.innerHTML = '';
+
+
+
+
+//most of this is drawText from the game client but modified
+function toColored(rawText) {
+    let textArrayRaw = rawText.split('§'),
+        textArray = [];
+    if (!(textArrayRaw.length & 1)) {
+        textArrayRaw.unshift('');
+    }
+    while (textArrayRaw.length) {
+        let first = textArrayRaw.shift();
+        if (!textArrayRaw.length) {
+            textArray.push(first);
+        } else if (textArrayRaw[1]) {
+            textArray.push(first, textArrayRaw.shift());
+        } else {
+            textArrayRaw.shift();
+            textArray.push(first + '§' + textArrayRaw.shift(), textArrayRaw.shift());
+        }
+    }
+
+    while (textArray.length) {
+        let color = textArray.shift(),
+            text = textArray.shift();
+
+        // odd index = this is a color to set the fill style to
+        if (i & 1) {
+
+            //reset color to default
+            if (str === "reset") {
+                context.fillStyle = defaultFillStyle;
+            } else {
+                // try your best to get a valid color out of it
+                if (!isNaN(str)) {
+                    str = parseInt(str);
+                }
+                str = gameDraw.getColor(str) ?? str;
+            }
+            context.fillStyle = str;
+
+        } else {
+            _add_color_to_(str);
+            add_text_(str);
+        }
+    }
+}

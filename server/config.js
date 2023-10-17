@@ -2,7 +2,7 @@ module.exports = {
     // Server
 
     // Game server domain.
-    // If 'localhost:NUMBER', the port must equal the port setting.
+    // If 'localhost:NUMBER', the NUMBER must equal the port setting.
     host: "localhost:3000",
 
     // Which port to run the web server on.
@@ -176,8 +176,15 @@ module.exports = {
     // If someone tries to get a file that does not exist, send them this instead.
     DEFAULT_FILE: 'browser.html',
 
-    // Allows server browser clients to connect to the game server with only purpose of checking ping.
-    PING_SOCKET: true,
+    // Allows server browser clients to connect to the game server with the purpose of checking ping.
+    MOTD_SOCKET: true,
+
+    // Specifies what shows up in server browsers for this server.
+    MOTD_DATA: JSON.stringify({
+        name: "A Public OSA Server",
+        description: "Play Open-Source Arras with us!",
+        tags: [ "vanilla", "dreadsv1" ]
+    }),
 
     // Window name of the server terminal.
     WINDOW_NAME: 'APS++ Game Server Instance',

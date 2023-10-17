@@ -98,21 +98,25 @@ getIP = req => {
     return ips[0];
 }
 
-pingSocket = ws => {
-    socket.on("message", message => socket.readyState === socket.OPEN && (message.length < 32 ? socket.send(message) : socket.close()));
+motdSocket = ws => {
+    socket.on("message", message => {
+        if (socket.readyState !== socket.OPEN) return;
+        if (message.length > 32) return socket.close();
+        socket.send(message + ' ' + c.MOTD_DATA);
+    });
     setTimeout(() => socket.readyState === socket.OPEN && socket.close(), 60_000);
 };
 
 server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, head, ws => {
-    if (req.url == '/ping') {
+    if (req.url == '/motd') {
         try {
-            util.log('ping websocket connection from ' + getIP(req));
+            util.log('motd websocket connection from ' + getIP(req));
         } catch (msg) {
-            util.log('ping socket refused: ' + msg);
+            util.log('motd socket refused: ' + msg);
             return socket.close();
         }
-        if (c.PING_SOCKET) {
-            pingSocket(ws);
+        if (c.MOTD_SOCKET) {
+            motdSocket(ws);
         } else {
             ws.close();
         }
