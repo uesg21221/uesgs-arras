@@ -331,8 +331,8 @@ const bossSelections = [{
 let spawnBosses = minibossCount => {
     if (!minibossCount && !timer--) {
         timer--;
-        const selection = bossSelections[ran.chooseChance(...bossSelections.map((selection) => selection.chance))];
-        const amount = ran.chooseChance(...selection.amount) + 1;
+        let selection = bossSelections[ran.chooseChance(...bossSelections.map((selection) => selection.chance))],
+            amount = ran.chooseChance(...selection.amount) + 1;
         sockets.broadcast(amount > 1 ? "Visitors are coming..." : "A visitor is coming...");
         if (selection.message) {
             setTimeout(sockets.broadcast, 2500, selection.message);
@@ -347,7 +347,7 @@ let spawnBosses = minibossCount => {
                 let boss = new Entity(spot);
                 boss.define(selection.bosses.sort(() => 0.5 - Math.random())[i % selection.bosses.length]);
                 boss.team = TEAM_ENEMIES;
-                boss.name = names[i];
+                if (names && names[i]) boss.name = names[i];
             }
         }, 5000);
         timer = Math.round((c.bossSpawnInterval || 8) * 65); // 5 seconds due to spawning process
