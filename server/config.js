@@ -135,12 +135,13 @@ module.exports = {
     ENEMY_SPAWN_CHANCE_NEST: 0.9, // Likeliness of nest enemies spawn attempts succeeding.
     ENEMY_SPAWN_COOLDOWN_NEST: 60, // Cooldown (in game ticks) of nest enemies spawn attempts being made.
 
-    FOOD_TYPES_NEST: [
-        [1, [
-            [16, 'pentagon'], [ 4, 'betaPentagon'], [ 1, 'alphaPentagon']
-        ]]
-    ],
+    // Cooldown (in seconds) of boss spawns being announced.
+    BOSS_SPAWN_COOLDOWN: 60,
+    // The delay (in seconds) between the boss spawns being announced and the bosses actually spawning.
+    // NOTE: The spawn message (ex. "A strange trembling...") takes half as long to appear than the boss.
+    BOSS_SPAWN_DURATION: 5,
 
+    // The possible food types that can spawn.
     FOOD_TYPES: [
         [2000, [
             [1024, 'egg'], [256, 'square'], [64, 'triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
@@ -165,6 +166,14 @@ module.exports = {
         ]]
     ],
 
+    // The possible nest food types that can spawn.
+    FOOD_TYPES_NEST: [
+        [1, [
+            [16, 'pentagon'], [ 4, 'betaPentagon'], [ 1, 'alphaPentagon']
+        ]]
+    ],
+
+    // The possible nest enemy types that can spawn.
     ENEMY_TYPES_NEST: [
         [19, [
             [1, 'crasher']
@@ -173,6 +182,44 @@ module.exports = {
             [1, 'sentryGun'], [1, 'sentrySwarm'], [1, 'sentryTrap']
         ]]
     ],
+
+    // The possible boss types that can spawn.
+    BOSS_TYPES: [{
+        bosses: ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner"],
+        amount: [5, 5, 4, 2, 1], chance: 2, nameType: "a",
+    },{
+        bosses: ["roguePalisade"],
+        amount: [4, 1], chance: 1, nameType: "castle",
+        message: "A strange trembling...",
+    },{
+        bosses: ["summoner", "eliteSkimmer", "nestKeeper"],
+        amount: [2, 2, 1], chance: 1, nameType: "a",
+        message: "A strange trembling...",
+    },{
+        bosses: ["paladin"],
+        amount: [1], chance: 0.1,
+        message: "The world tremors as the celestials are reborn anew!",
+    },{
+        bosses: ["freyja"],
+        amount: [1], chance: 0.1,
+        message: "The world tremors as the celestials are reborn anew!",
+    },{
+        bosses: ["zaphkiel"],
+        amount: [1], chance: 0.1,
+        message: "The world tremors as the celestials are reborn anew!",
+    },{
+        bosses: ["nyx"],
+        amount: [1], chance: 0.1,
+        message: "The world tremors as the celestials are reborn anew!",
+    },{
+        bosses: ["theia"],
+        amount: [1], chance: 0.1,
+        message: "The world tremors as the celestials are reborn anew!",
+    },{
+        bosses: ["alviss"],
+        amount: [1], chance: 0.1,
+        message: "The darkness arrives as the realms are torn apart!",
+    }],
 
 
 

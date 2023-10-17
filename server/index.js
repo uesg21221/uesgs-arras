@@ -263,79 +263,15 @@ const gameloop = () => {
 
 setTimeout(closeArena, 60000 * 120); // Restart every 2 hours
 
-let timer = Math.round((c.bossSpawnInterval || 8) * 60); // It's in minutes
-const bossSelections = [{
-    bosses: ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner"],
-    location: "nest",
-    amount: [5, 5, 4, 2, 1],
-    nameType: "a",
-    chance: 2,
-},{
-    bosses: ["roguePalisade"],
-    location: "norm",
-    amount: [4, 1],
-    nameType: "castle",
-    message: "A strange trembling...",
-    chance: 1,
-},{
-    bosses: ["summoner", "eliteSkimmer", "nestKeeper"],
-    location: "norm",
-    amount: [2, 2, 1],
-    nameType: "a",
-    message: "A strange trembling...",
-    chance: 1,
-},{
-    bosses: ["paladin"],
-    location: "norm",
-    amount: [1],
-    nameType: "paladin",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: ["freyja"],
-    location: "norm",
-    amount: [1],
-    nameType: "freyja",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: ["zaphkiel"],
-    location: "norm",
-    amount: [1],
-    nameType: "zaphkiel",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: ["nyx"],
-    location: "norm",
-    amount: [1],
-    nameType: "nyx",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: ["theia"],
-    location: "norm",
-    amount: [1],
-    nameType: "theia",
-    message: "The world tremors as the celestials are reborn anew!",
-    chance: 0.1,
-},{
-    bosses: ["alviss"],
-    location: "norm",
-    amount: [1],
-    nameType: "alviss",
-    message: "The darkness arrives as the realms are torn apart!",
-    chance: 0.1,
-}];
-
-let spawnBosses = minibossCount => {
-    if (!minibossCount && !timer--) {
-        timer--;
-        let selection = bossSelections[ran.chooseChance(...bossSelections.map((selection) => selection.chance))],
+let bossTimer = 0,
+spawnBosses = minibossCount => {
+    if (!minibossCount && bossTimer++ > c.BOSS_SPAWN_COOLDOWN) {
+        bossTimer = -c.BOSS_SPAWN_DURATION;
+        let selection = c.BOSS_TYPES[ran.chooseChance(...c.BOSS_TYPES.map((selection) => selection.chance))],
             amount = ran.chooseChance(...selection.amount) + 1;
         sockets.broadcast(amount > 1 ? "Visitors are coming..." : "A visitor is coming...");
         if (selection.message) {
-            setTimeout(sockets.broadcast, 2500, selection.message);
+            setTimeout(sockets.broadcast, BOSS_SPAWN_DURATION * 500, selection.message);
         }
         setTimeout(() => {
             let names = ran.chooseBossName(selection.nameType, amount);
@@ -349,8 +285,7 @@ let spawnBosses = minibossCount => {
                 boss.team = TEAM_ENEMIES;
                 if (names && names[i]) boss.name = names[i];
             }
-        }, 5000);
-        timer = Math.round((c.bossSpawnInterval || 8) * 65); // 5 seconds due to spawning process
+        }, c.BOSS_SPAWN_DURATION * 1000);
     }
 };
 
@@ -448,4 +383,7 @@ setInterval(() => {
         speedcheckloop();
         counter = 0;
     }
+
+    syncedTimeoutLoop();
+    tickIndex++;
 }, room.cycleSpeed);
