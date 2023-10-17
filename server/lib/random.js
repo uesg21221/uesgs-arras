@@ -38,12 +38,8 @@ exports.gaussInverse = (min, max, clustering) => {
     let range = max - min
     let output = exports.gauss(0, range / clustering)
 
-    while (output < 0)
-        output += range
-
-    while (output > range)
-        output -= range
-
+    while (output < 0) output += range;
+    while (output > range) output -= range;
     return output + min
 }
 
@@ -64,8 +60,7 @@ exports.choose = (arr) => arr[exports.irandom(arr.length - 1)]
 
 exports.chooseN = (arr, n) => {
     let o = []
-    for (let i = 0; i < n; i++)
-        o.push(arr.splice(exports.irandom(arr.length - 1), 1)[0])
+    for (let i = 0; i < n; i++) o.push(arr.splice(exports.irandom(arr.length - 1), 1)[0])
     return o
 }
 
@@ -93,7 +88,5 @@ exports.chooseBossName = (code, n) => {
             return exports.chooseN([ "Berezhany", "Lutsk", "Dobromyl", "Akkerman", "Palanok", "Zolochiv", "Palanok", "Mangup", "Olseko", "Brody", "Isiaslav", "Kaffa", "Bilhorod" ], n)
         case "legion":
             return exports.chooseN([ "Vesta", "Juno", "Orcus", "Janus", "Minerva", "Ceres" ], n);
-        default:
-            return "missingno"
     }
 }
