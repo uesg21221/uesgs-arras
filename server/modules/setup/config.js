@@ -15,9 +15,9 @@ module.exports = { output };
 
 //everything past this handles the display name in the main menu
 const nameMap = {
-    tdm: "TDM",
+    tdm: `${output.TEAMS}TDM`,
     ffa: "FFA",
-    opentdm: "Open TDM",
+    opentdm: `Open ${output.TEAMS}TDM`,
     //clanwars: "Clan Wars",
     trainwars: "Train Wars"
 };
