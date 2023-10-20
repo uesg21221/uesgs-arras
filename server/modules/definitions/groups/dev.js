@@ -926,6 +926,29 @@ exports.weirdAutoBasic = {
     }]
 };
 
+exports.vulnerableTurretsBoss = {
+    PARENT: "miniboss",
+    LABEL: "Auto-4 with Vulenrable Turrets",
+    CONTROLLERS: ["nearestDifferentMaster", "minion"],
+    FACING_TYPE: "autospin",
+    SIZE: 30,
+    BODY: {
+        FOV: 1,
+        SPEED: 0.1 * base.SPEED,
+        HEALTH: 5 * base.HEALTH,
+        DAMAGE: 2 * base.DAMAGE,
+    },
+    TURRETS: [{
+        POSITION: [15, 10, 0,  45, 160, 0], TYPE: "auto4gun", VULNERABLE: true
+    }, {
+        POSITION: [15, 10, 0, 135, 160, 0], TYPE: "auto4gun", VULNERABLE: true
+    }, {
+        POSITION: [15, 10, 0, 225, 160, 0], TYPE: "auto4gun", VULNERABLE: true
+    }, {
+        POSITION: [15, 10, 0, 315, 160, 0], TYPE: "auto4gun", VULNERABLE: true
+    }]
+}
+
 exports.levels = {
     PARENT: ["menu"],
     LABEL: "Level Switcher",
@@ -981,10 +1004,10 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
     exports.tanks.UPGRADES_TIER_0 = ["basic", "healer", "specialTanks", "legacyTanks", "funTanks", "testingTanks"];
 	exports.specialTanks.UPGRADES_TIER_0 = ["arenaCloser", "bases", "mothership"];
         exports.bases.UPGRADES_TIER_0 = ["baseProtector", "dominators", "sanctuaries", "antiTankMachineGun"];
-                exports.dominators.UPGRADES_TIER_0 = ["dominator", "destroyerDominator", "gunnerDominator", "trapperDominator"];
-                exports.sanctuaries.UPGRADES_TIER_0 = [];
+            exports.dominators.UPGRADES_TIER_0 = ["dominator", "destroyerDominator", "gunnerDominator", "trapperDominator"];
+            exports.sanctuaries.UPGRADES_TIER_0 = [];
         exports.legacyTanks.UPGRADES_TIER_0 = ["weirdSpike", "oldBentBoomer", "quadBuilder", "master", "blunderbuss", "oldRimfire", "oldSpreadshot", "oldCommander", "autoTrapper", "prodigy", "mender", "tetraGunner", "corvette", "whirlwind", "flail"];
-        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3"];
+        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", "vulnerableTurretsBoss"];
         exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest"];
 
     exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "terrestrials", "celestials", "eternals", "devBosses"];

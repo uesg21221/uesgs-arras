@@ -826,6 +826,7 @@ exports.bansheegun = {
 exports.auto4gun = {
     PARENT: ["genericTank"],
     LABEL: "",
+    NAME: "Auto4Gun",
     BODY: {
         FOV: 2,
     },

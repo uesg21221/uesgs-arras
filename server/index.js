@@ -118,7 +118,7 @@ function collide(collision) {
             break;
         case instance.settings.hitsOwnType === other.settings.hitsOwnType:
             switch (instance.settings.hitsOwnType) {
-                case 'assembler': {
+                case 'assembler':
                     if (instance.assemblerLevel == null) instance.assemblerLevel = 1;
                     if (other.assemblerLevel == null) other.assemblerLevel = 1;
 
@@ -164,7 +164,7 @@ function collide(collision) {
                         o.refreshBodyAttributes();
                         o.life();
                     }
-                } // don't break
+                // don't break
                 case "push":
                     advancedcollide(instance, other, false, false);
                     break;

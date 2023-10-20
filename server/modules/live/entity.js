@@ -689,6 +689,7 @@ class Entity extends EventEmitter {
             power: 0,
         };
         this.isInGrid = false;
+        this.canBeAddedToGrid = true;
         this.removeFromGrid = () => {
             if (this.isInGrid) {
                 grid.removeObject(this);
@@ -697,7 +698,7 @@ class Entity extends EventEmitter {
         };
         this.addToGrid = () => {
             if (!mockupsLoaded) return;
-            if (!this.isInGrid && this.bond == null) {
+            if (!this.isInGrid && this.canBeAddedToGrid) {
                 grid.addObject(this);
                 this.isInGrid = true;
             }
@@ -728,7 +729,7 @@ class Entity extends EventEmitter {
                     }
                 },
                 check: () => {
-                    return active;
+                    return this.master == this ? active : this.master.activation.check();
                 },
             };
         })();
@@ -1177,7 +1178,8 @@ class Entity extends EventEmitter {
                     if (type.TURRET_DANGER) turretDanger = true;
                 }
                 if (!turretDanger) o.define({ DANGER: 0 });
-                o.bindToMaster(def.POSITION, this);
+                o.canBeAddedToGrid = !def.VULNERABLE;
+                o.bindToMaster(def.POSITION, this, !def.VULNERABLE);
             }
         }
         if (set.mockup != null) {
@@ -1240,14 +1242,14 @@ class Entity extends EventEmitter {
         this.sizeMultiplier = sizeMultiplier;
         this.recoilMultiplier = this.RECOIL_MULTIPLIER * recoilReceivedMultiplier;
     }
-    bindToMaster(position, bond) {
+    bindToMaster(position, bond, isInvulnerable) {
         this.bond = bond;
         this.source = bond;
         this.bond.turrets.push(this);
         this.skill = this.bond.skill;
         this.label = this.label.length ? this.bond.label + " " + this.label : this.bond.label;
         // It will not be in collision calculations any more nor shall it be seen or continue to run independently.
-        this.removeFromGrid();
+        if (isInvulnerable) this.removeFromGrid();
         this.settings.drawShape = false;
         this.skipLife = true;
         // Get my position.
