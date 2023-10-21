@@ -16,7 +16,7 @@ makeBase = (team, hasProtection) => new Tile({
         room.spawnable[team].push(tile);
     },
     tick: tile => {
-    	for (let i = 0; i < tile.entities; i++) {
+    	for (let i = 0; i < tile.entities.length; i++) {
     		let entity = tile.entities[i];
     		if (entity.team != team && isPlayerTeam(entity.team)) entity.kill();
     	}

@@ -94,7 +94,7 @@ global.Tile = class Tile {
 global.tickIndex = 0;
 global.tickEvents = new EventEmitter();
 global.syncedDelaysLoop = () => tickEvents.emit(tickIndex);
-global.setSyncedTimeout = (callback, ticks, ...args) => tickEvents.once(tickIndex + ticks, () => callback(...args));
+global.setSyncedTimeout = (callback, ticks, ...args) => tickEvents.once(tickIndex + Math.round(ticks), () => callback(...args));
 
 global.c = require("./setup/config.js").output;
 global.c.port = process.env.PORT || c.port;

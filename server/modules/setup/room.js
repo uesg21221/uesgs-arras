@@ -162,8 +162,9 @@ for (let y in room.setup) {
 
 function roomLoop() {
     for (let i = 0; i < entities.length; i++) {
-        let tile = room.getAt(entities[i])
-        if (tile) tile.entities.push(entities[i]);
+        let entity = entities[i],
+            tile = room.getAt(entity);
+        if (tile) tile.entities.push(entity);
     }
 
     for (let y = 0; y < room.setup.length; y++) {

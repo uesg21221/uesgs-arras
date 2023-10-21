@@ -271,9 +271,9 @@ spawnBosses = minibossCount => {
             amount = ran.chooseChance(...selection.amount) + 1;
         sockets.broadcast(amount > 1 ? "Visitors are coming..." : "A visitor is coming...");
         if (selection.message) {
-            setTimeout(sockets.broadcast, BOSS_SPAWN_DURATION * 500, selection.message);
+            setSyncedTimeout(sockets.broadcast, c.BOSS_SPAWN_DURATION * 15, selection.message);
         }
-        setTimeout(() => {
+        setSyncedTimeout(() => {
             let names = ran.chooseBossName(selection.nameType, amount);
             names = ("string" == typeof names) ? [names] : names;
             sockets.broadcast(amount > 1 ? util.listify(names) + " have arrived!" : names[0] + " has arrived!");
@@ -285,7 +285,7 @@ spawnBosses = minibossCount => {
                 boss.team = TEAM_ENEMIES;
                 if (names && names[i]) boss.name = names[i];
             }
-        }, c.BOSS_SPAWN_DURATION * 1000);
+        }, c.BOSS_SPAWN_DURATION * 30);
     }
 };
 
@@ -384,6 +384,6 @@ setInterval(() => {
         counter = 0;
     }
 
-    syncedTimeoutLoop();
+    syncedDelaysLoop();
     tickIndex++;
 }, room.cycleSpeed);
