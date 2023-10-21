@@ -274,17 +274,24 @@ spawnBosses = minibossCount => {
             setSyncedTimeout(sockets.broadcast, c.BOSS_SPAWN_DURATION * 15, selection.message);
         }
         setSyncedTimeout(() => {
-            let names = ran.chooseBossName(selection.nameType, amount);
-            names = ("string" == typeof names) ? [names] : names;
-            sockets.broadcast(amount > 1 ? util.listify(names) + " have arrived!" : names[0] + " has arrived!");
-            for (let i = 0; i < names.length; i++) {
-                let spot, m = 30;
-                do { spot = getSpawnableArea(TEAM_ENEMIES); } while (m-- && dirtyCheck(spot, 500));
+            let names = [];
+
+            for (let i = 0; i < amount; i++) {
+                let spot, attempts = 30, name = ran.chooseBossName(selection.nameType);
+                do { spot = getSpawnableArea(TEAM_ENEMIES); } while (attempts-- && dirtyCheck(spot, 500));
+
                 let boss = new Entity(spot);
                 boss.define(selection.bosses.sort(() => 0.5 - Math.random())[i % selection.bosses.length]);
                 boss.team = TEAM_ENEMIES;
-                if (names && names[i]) boss.name = names[i];
+                if (name) {
+                    boss.name = name;
+                }
+
+                names.push(boss.name);
             }
+
+            console.log(names);
+            sockets.broadcast(`${util.listify(names)} ${names.length == 1 ? 'has' : 'have'} arrived!`);
         }, c.BOSS_SPAWN_DURATION * 30);
     }
 };

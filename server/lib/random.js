@@ -80,13 +80,13 @@ exports.chooseBotName = () => {
     return exports.choose([ "Alice", "Bob", "Carmen", "David", "Edith", "Freddy", "Gustav", "Helga", "Janet", "Lorenzo", "Mary", "Nora", "Olivia", "Peter", "Queen", "Roger", "Suzanne", "Tommy", "Ursula", "Vincent", "Wilhelm", "Xerxes", "Yvonne", "Zachary", "Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Hotel", "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo", "Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-Ray", "Yankee", "Zulu" ])
 }
 
-exports.chooseBossName = (code, n) => {
+exports.chooseBossName = code => {
     switch (code) {
         case "a":
-            return exports.chooseN([ "Archimedes", "Akilina", "Anastasios", "Athena", "Alkaios", "Amyntas", "Aniketos", "Artemis", "Anaxagoras", "Apollon" ], n)
+            return exports.choose([ "Archimedes", "Akilina", "Anastasios", "Athena", "Alkaios", "Amyntas", "Aniketos", "Artemis", "Anaxagoras", "Apollon" ]);
         case "castle":
-            return exports.chooseN([ "Berezhany", "Lutsk", "Dobromyl", "Akkerman", "Palanok", "Zolochiv", "Palanok", "Mangup", "Olseko", "Brody", "Isiaslav", "Kaffa", "Bilhorod" ], n)
+            return exports.choose([ "Berezhany", "Lutsk", "Dobromyl", "Akkerman", "Palanok", "Zolochiv", "Palanok", "Mangup", "Olseko", "Brody", "Isiaslav", "Kaffa", "Bilhorod" ]);
         case "legion":
-            return exports.chooseN([ "Vesta", "Juno", "Orcus", "Janus", "Minerva", "Ceres" ], n);
+            return exports.choose([ "Vesta", "Juno", "Orcus", "Janus", "Minerva", "Ceres" ]);
     }
 }

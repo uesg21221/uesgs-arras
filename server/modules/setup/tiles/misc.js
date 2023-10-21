@@ -27,6 +27,22 @@ normal = new Tile({
     }
 }),
 
+nestTick = tile => {
+    if (++tile.data.enemySpawnCooldown > c.ENEMY_SPAWN_COOLDOWN_NEST) {
+        tile.data.enemySpawnCooldown = 0;
+        if (tile.data.enemyCount < c.ENEMY_CAP_NEST && Math.random() < c.ENEMY_SPAWN_CHANCE_NEST) {
+            spawnNatural(tile, c.ENEMY_TYPES_NEST, 'enemy');
+        }
+    }
+
+    if (++tile.data.foodSpawnCooldown > c.FOOD_SPAWN_COOLDOWN_NEST) {
+        tile.data.foodSpawnCooldown = 0;
+        if (tile.data.foodCount < c.FOOD_CAP_NEST && Math.random() < c.FOOD_SPAWN_CHANCE_NEST) {
+            spawnNatural(tile, c.FOOD_TYPES_NEST, 'food');
+        }
+    }
+},
+
 nest = new Tile({
     color: "purple",
     data: {
@@ -38,21 +54,17 @@ nest = new Tile({
         if (!room.spawnable[TEAM_ENEMIES]) room.spawnable[TEAM_ENEMIES] = [];
         room.spawnable[TEAM_ENEMIES].push(tile);
     },
-    tick: tile => {
-        if (++tile.data.enemySpawnCooldown > c.ENEMY_SPAWN_COOLDOWN_NEST) {
-            tile.data.enemySpawnCooldown = 0;
-            if (tile.data.enemyCount < c.ENEMY_CAP_NEST && Math.random() < c.ENEMY_SPAWN_CHANCE_NEST) {
-                spawnNatural(tile, c.ENEMY_TYPES_NEST, 'enemy');
-            }
-        }
+    tick: nestTick
+}),
 
-        if (++tile.data.foodSpawnCooldown > c.FOOD_SPAWN_COOLDOWN_NEST) {
-            tile.data.foodSpawnCooldown = 0;
-            if (tile.data.foodCount < c.FOOD_CAP_NEST && Math.random() < c.FOOD_SPAWN_CHANCE_NEST) {
-                spawnNatural(tile, c.FOOD_TYPES_NEST, 'food');
-            }
-        }
-    }
+nestNoBoss = new Tile({
+    color: "purple",
+    data: {
+        allowMazeWallSpawn: true,
+        foodSpawnCooldown: 0, foodCount: 0,
+        enemySpawnCooldown: 0, enemyCount: 0
+    },
+    tick: nestTick
 }),
 
 wall = new Tile({
@@ -68,4 +80,4 @@ wall = new Tile({
 });
 
 
-module.exports = { normal, nest, wall };
+module.exports = { normal, nest, wall, nestNoBoss };
