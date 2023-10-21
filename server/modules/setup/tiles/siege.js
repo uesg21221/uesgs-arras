@@ -19,12 +19,12 @@ bossSpawn = new Tile({
         room.spawnable[TEAM_ENEMIES].push(tile);
     },
     tick: tile => {
-        for (let i = 0; i < tile.entities; i++) {
+        for (let i = 0; i < tile.entities.length; i++) {
             let entity = tile.entities[i];
             if (entity.pushability) {
-                let dirToCenter = Math.atan2(entity.y - room.center.y, entity.x - room.center.x);
-                entity.velocity.x = Math.cos(centerDir) * 10 * entity.pushability;
-                entity.velocity.y = Math.sin(centerDir) * 10 * entity.pushability;
+                let dirToCenter = Math.atan2(room.center.y - entity.y, room.center.x - entity.x);
+                entity.velocity.x = Math.cos(dirToCenter) * 25 * entity.pushability;
+                entity.velocity.y = Math.sin(dirToCenter) * 25 * entity.pushability;
             }
         }
     }

@@ -27,6 +27,9 @@ exports.miniboss = {
     FACING_TYPE: "autospin",
     HITS_OWN_TYPE: "hardOnlyBosses",
     BROADCAST_MESSAGE: "A visitor has left!",
+    BODY: {
+        PUSHABILITY: 0.05
+    }
 };
 
 // GUNS

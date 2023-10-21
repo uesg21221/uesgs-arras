@@ -10,8 +10,8 @@ portal = new Tile({
     tick: tile => {
         for (let entity of tile.entities) {
             if (entity.passive || entity.settings.goThruObstacle || entity.facingType === "bound") continue;
-            let dx = entity.x - tile.x,
-                dy = entity.y - tile.y,
+            let dx = entity.x - tile.loc.x,
+                dy = entity.y - tile.loc.y,
                 dist2 = dx ** 2 + dy ** 2,
                 force = c.ROOM_BOUND_FORCE;
 
@@ -47,8 +47,8 @@ portal = new Tile({
             //launch that idiot from the outportal
             entity.velocity.x = ax * force;
             entity.velocity.y = ay * force;
-            entity.x = exitport.x + ax * room.tileWidth;
-            entity.y = exitport.y + ay * room.tileHeight;
+            entity.x = exitport.loc.x + ax * room.tileWidth;
+            entity.y = exitport.loc.y + ay * room.tileHeight;
             entity.invuln = true;
 
             //also don't forget to bring her kids along the ride

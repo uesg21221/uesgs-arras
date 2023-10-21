@@ -4,6 +4,7 @@ let { base1:  _1 , base1protected:  p1  } = require('../tiles/tdm.js'),
     { rock:   r  } = require('../tiles/decoration.js'),
     { portal:  P   } = require('../tiles/portal.js'),
 
+// Yes. I am aware that the food distract the ATMGs, but ask trplnr why he put normal's instead of outside's outside the room
 room = [
     [  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ , A  ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,WALL,  _ ,  _ ],
     [  _ , A  ,  _ ,  _ , A  ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ ,  _ , A  ,  _ ,  _ ,  _ ,  _ ,WALL, P  ,  _ ],
