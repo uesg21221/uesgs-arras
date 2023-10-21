@@ -1,8 +1,8 @@
 let { bossSpawn:   b  , atmg:  A  , outside:   o  } = require('../tiles/siege.js'),
     { wall: WALL/*, nest:  n*/, normal:   _  } = require('../tiles/misc.js'),
-	{ base1:   s  } = require('../tiles/tdm.js');
+	{ base1:   s  } = require('../tiles/tdm.js'),
 
-let room = [
+room = [
     [  o ,  o ,  o ,  o ,  o ,  o ,  o ,WALL,WALL,WALL,WALL,WALL,  o ,  o ,  o ,  o ,  o ,  o ,  o ],
     [  o ,  A ,  o ,  o ,  o ,  o ,  o ,WALL,  b ,  b ,  b ,WALL,  o ,  o ,  o ,  o ,  o ,  A ,  o ],
     [  o ,  o ,  o ,  o ,  o ,  o ,  o ,WALL,  b ,  b ,  b ,WALL,  o ,  o ,  o ,  o ,  o ,  o ,  o ],
