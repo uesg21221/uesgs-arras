@@ -7,15 +7,18 @@ class Canvas {
         this.target = global.target;
         this.socket = global.socket;
         this.directions = [];
+
         this.chatInput = document.getElementById('chatInput');
-        this.chatInput.addEventListener('change', event => {
+        this.chatInput.addEventListener('keydown', event => {
+            if (![global.KEY_ENTER, global.KEY_ESC].includes(event.keyCode)) return;
             this.chatInput.blur();
             this.cv.focus();
             this.chatInput.hidden = true;
             if (!this.chatInput.value) return;
-            this.socket.talk('M', this.chatInput.value);
+            if (event.keyCode === global.KEY_ENTER) this.socket.talk('M', this.chatInput.value);
             this.chatInput.value = "";
         });
+
         this.cv = document.getElementById('gameCanvas');
         this.cv.addEventListener('mousemove', event => this.mouseMove(event), false);
         this.cv.addEventListener("mousedown", event => this.mouseDown(event), false);
@@ -31,10 +34,15 @@ class Canvas {
         this.inverseMouse = false;
         this.spinLock = true;
         this.treeScrollSpeed = 0.5;
+        this.treeScrollSpeedMultiplier = 1;
         global.canvas = this;
     }
     keyDown(event) {
         switch (event.keyCode) {
+            case global.KEY_SHIFT:
+                this.treeScrollSpeedMultiplier = 5;
+                break;
+
             case global.KEY_ENTER:
                 // Enter to respawn
                 if (global.died) {
@@ -52,22 +60,22 @@ class Canvas {
                 break;
 
             case global.KEY_UP_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollY = -this.treeScrollSpeed;
+                if (!global.died && global.showTree) return global.shouldScrollY = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_UP:
                 this.socket.cmd.set(0, true);
                 break;
             case global.KEY_DOWN_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollY = +this.treeScrollSpeed;
+                if (!global.died && global.showTree) return global.shouldScrollY = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_DOWN:
                 this.socket.cmd.set(1, true);
                 break;
             case global.KEY_LEFT_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollX = -this.treeScrollSpeed;
+                if (!global.died && global.showTree) return global.shouldScrollX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_LEFT:
                 this.socket.cmd.set(2, true);
                 break;
             case global.KEY_RIGHT_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollX = +this.treeScrollSpeed;
+                if (!global.died && global.showTree) return global.shouldScrollX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_RIGHT:
                 this.socket.cmd.set(3, true);
                 break;
@@ -164,6 +172,9 @@ class Canvas {
     }
     keyUp(event) {
         switch (event.keyCode) {
+            case global.KEY_SHIFT:
+                this.treeScrollSpeedMultiplier = 1;
+                break;
             case global.KEY_UP_ARROW:
                 global.shouldScrollY = 0;
             case global.KEY_UP:

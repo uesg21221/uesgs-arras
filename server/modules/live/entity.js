@@ -5,8 +5,11 @@ let EventEmitter = require('events'),
 function setNatural(natural, type) {
     type = ensureIsClass(type);
     if (type.PARENT != null) {
-        for (let i = 0; i < type.PARENT.length; i++) {
-            setNatural(natural, type.PARENT[i]);
+        if (typeof type.PARENT == 'string') setNatural(natural, type.PARENT)
+        else {
+            for (let i = 0; i < type.PARENT.length; i++) {
+                setNatural(natural, type.PARENT[i]);
+            }
         }
     }
     if (type.BODY != null) {
@@ -1231,7 +1234,7 @@ class Entity extends EventEmitter {
         this.damage = damageMultiplier * this.DAMAGE * this.skill.atk;
         this.penetration = penetrationMultiplier * (this.PENETRATION + 1.5 * (this.skill.brst + 0.8 * (this.skill.atk - 1)));
         if (!this.settings.dieAtRange || !this.range) this.range = rangeMultiplier * this.RANGE;
-        this.fov = fovMultiplier * this.FOV * 250 * Math.sqrt(this.size) * (1 + 0.003 * this.level);
+        this.fov = fovMultiplier * this.FOV * 275 * Math.sqrt(this.size);
         this.density = densityMultiplier * (1 + 0.08 * this.level) * this.DENSITY;
         this.stealth = stealthMultiplier * this.STEALTH;
         this.pushability = pushabilityMultiplier * this.PUSHABILITY;

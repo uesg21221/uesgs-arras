@@ -610,11 +610,11 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
             let ang = t.direction + t.angle + rot,
                 len = t.offset * drawSize,
                 facing = 0
-            if (mirrorMasterAngle && !turretsObeyRot) {
-                facing = render.f + turretsObeyRot * rot + t.angle
-            } else {
-                facing = source.turrets[i].lerpedFacing + turretsObeyRot * rot;
-            }
+                if (mirrorMasterAngle || turretsObeyRot) {
+                    facing = rot + t.angle;
+                } else {
+                    facing = source.turrets[i].lerpedFacing;
+                }
             drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, facing, turretsObeyRot, context, source.turrets[i], render);
         }
     }
@@ -689,7 +689,13 @@ function drawHealth(x, y, instance, ratio, alpha) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
         if (health < 1 - 1e-4 || shield < 1 - 1e-4) {
-            const col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(gameDraw.getColor(instance.color), color.guiwhite, 0.5) : color.lgreen;
+            let instanceColor = null
+            let getColor = true
+            if (typeof instance.color == 'string') {
+                instanceColor = instance.color.split(' ')[0]
+                if (instanceColor[0] == '#') getColor = false
+            } else instanceColor = instance.color
+            const col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(parseInt(instanceColor)) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
             let yy = y + 1.1 * realSize + 15;
             let barWidth = 5;
             ctx.globalAlpha = alpha * alpha * fade;

@@ -1,5 +1,5 @@
 const { combineStats, skillSet, makeAuto, makeDeco } = require('../facilitators.js');
-const { base, statnames, gunCalcNames, smshskl } = require('../constants.js');
+const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js');
 const { genericTank } = require('./generics.js')
 const { trapper } = require('./tanks.js');
 const g = require('../gunvals.js');
@@ -1284,9 +1284,9 @@ exports.oldRimfire = {
 
 // SCRAPPED TANKS
 exports.autoTrapper = makeAuto(trapper);
-exports.oldDreadnought = {
+exports.corvette = {
     PARENT: ["genericTank"],
-    LABEL: "Old Dreadnought",
+    LABEL: "Corvette",
     DANGER: 7,
     FACING_TYPE: "locksFacing",
     STAT_NAMES: statnames.swarm,
@@ -1467,6 +1467,889 @@ exports.prodigy = {
             },
         },
     ],
+};
+exports.tetraGunner = {
+  PARENT: ["genericTank"],
+  LABEL: "Tetra Gunner",
+  DANGER: 7,
+  GUNS: [
+    {
+      POSITION: [14, 3.5, 1, 0, 4, 90, 1 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [14, 3.5, 1, 0, -4, 90, 2 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [14, 3.5, 1, 0, 4, 270, 1 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [14, 3.5, 1, 0, -4, 270, 2 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [18, 3.5, 1, 0, 0, 90, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [18, 3.5, 1, 0, 0, 270, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [14, 3.5, 1, 0, 4, 0, 1 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [14, 3.5, 1, 0, -4, 0, 2 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [14, 3.5, 1, 0, 4, 180, 1 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [14, 3.5, 1, 0, -4, 180, 2 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [18, 3.5, 1, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [18, 3.5, 1, 0, 0, 180, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
+        TYPE: "bullet",
+      },
+    },
+  ],
+};
+
+// WHIRLWIND!!!
+exports.whirlwindDeco = makeDeco(6);
+exports.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.05 }]];
+exports.whirlwind = {
+    PARENT: ["genericTank"],
+    LABEL: "Whirlwind",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "whirlwindDeco",
+        },
+    ],
+};
+exports.tornadoDeco = makeDeco(4);
+exports.tornadoDeco.CONTROLLERS = [["spin", { independent: true }]];
+exports.tornado = {
+    PARENT: ["genericTank"],
+    LABEL: "Tornado",
+    DANGER: 6,
+    TURRETS: [
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+};
+exports.megaTornadoDeco = makeDeco([[0,-1],[0.5,0],[0,1],[-0.5,0]])
+exports.megaTornadoDeco.CONTROLLERS = [["spin", { independent: true }]];
+exports.megaTornado = {
+    PARENT: ["genericTank"],
+    LABEL: "Mega Tornado",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [16, 0, 0, 0, 360, 1],
+            TYPE: "megaTornadoDeco",
+        },
+    ],
+};
+exports.tempestDeco1 = makeDeco(3);
+exports.tempestDeco1.CONTROLLERS = [["spin", { independent: true }]];
+exports.tempestDeco2 = makeDeco(3);
+exports.tempestDeco2.CONTROLLERS = [["spin", { independent: true, speed: 0.025 }]];
+exports.tempest = {
+    PARENT: ["genericTank"],
+    LABEL: "Tempest",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tempestDeco1",
+        },
+        {
+            POSITION: [4.5, 0, 0, 180, 360, 1],
+            TYPE: "tempestDeco2",
+        },
+    ],
+};
+exports.thunderbolt = {
+    PARENT: ["genericTank"],
+    LABEL: "Thunderbolt",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+};
+exports.hurricaneDeco = makeDeco(8);
+exports.hurricaneDeco.CONTROLLERS = [["spin", { independent: true }]];
+exports.hurricane = {
+    PARENT: ["genericTank"],
+    LABEL: "Hurricane",
+    DANGER: 6,
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "hurricaneDeco",
+        },
+    ],
+};
+exports.typhoonDeco = makeDeco(10);
+exports.typhoonDeco.CONTROLLERS = [["spin", { independent: true }]];
+exports.typhoon = {
+    PARENT: ["genericTank"],
+    LABEL: "Typhoon",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "typhoonDeco",
+        },
+    ],
+};
+exports.blizzardDeco1 = makeDeco(5);
+exports.blizzardDeco1.CONTROLLERS = [["spin", { independent: true }]];
+exports.blizzardDeco2 = makeDeco(5);
+exports.blizzardDeco2.CONTROLLERS = [["spin", { independent: true, speed: 0.025 }]];
+exports.blizzard = {
+    PARENT: ["genericTank"],
+    LABEL: "Blizzard",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "blizzardDeco1",
+        },
+        {
+            POSITION: [6.5, 0, 0, 180, 360, 1],
+            TYPE: "blizzardDeco2",
+        },
+    ],
+};
+exports.hexaWhirl = {
+    PARENT: ["genericTank"],
+    LABEL: "Hexa Whirl",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 60, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 180, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 300, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+    ],
+};
+exports.munition = {
+    PARENT: ["genericTank"],
+    DANGER: 7,
+    LABEL: "Munition",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    GUNS: [
+        {
+            POSITION: [17, 3, 1, 0, -6, -7, 0.25],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
+                TYPE: "bullet",
+                LABEL: "Secondary",
+            },
+        },
+        {
+            POSITION: [17, 3, 1, 0, 6, 7, 0.75],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
+                TYPE: "bullet",
+                LABEL: "Secondary",
+            },
+        },
+        {
+            POSITION: [19, 12, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty]),
+                TYPE: "bullet",
+                LABEL: "Heavy",
+            },
+        },
+    ],
+};
+exports.whirl3 = {
+    PARENT: ["genericTank"],
+    LABEL: "Whirl-3",
+    DANGER: 7,
+    FACING_TYPE: "autospin",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+        {
+            POSITION: [11, 8, 0, 0, 190, 0],
+            TYPE: "autoTankGun",
+        },
+        {
+            POSITION: [11, 8, 0, 120, 190, 0],
+            TYPE: "autoTankGun",
+        },
+        {
+            POSITION: [11, 8, 0, 240, 190, 0],
+            TYPE: "autoTankGun",
+        },
+    ],
+};
+exports.whirlGuard = {
+    PARENT: ["genericTank"],
+    LABEL: "Whirl Guard",
+    STAT_NAMES: statnames.mixed,
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    GUNS: [
+        {
+            POSITION: [20, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [13, 8, 1, 0, 0, 180, 0],
+        },
+        {
+            POSITION: [4, 8, 1.7, 13, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap]),
+                TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
+exports.prohpet = {
+    PARENT: ["genericTank"],
+    LABEL: "Prophet",
+    DANGER: 7,
+    STAT_NAMES: statnames.drone,
+    BODY: {
+        SPEED: 0.9 * base.SPEED,
+    },
+    SHAPE: 4,
+    MAX_CHILDREN: 14,
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    GUNS: [
+        {
+            POSITION: [5.25, 12, 1.2, 8, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+                TYPE: "sunchip",
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.necro,
+            },
+        },
+        {
+            POSITION: [5.25, 12, 1.2, 8, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+                TYPE: "sunchip",
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.necro,
+            },
+        },
+    ],
+};
+exports.vortex = {
+    PARENT: ["genericTank"],
+    LABEL: "Vortex",
+    BODY: {
+        FOV: base.FOV * 1.1,
+    },
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    GUNS: [
+        {
+            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [10, 9, 1, 9, 0, 0, 0],
+        },
+        {
+            POSITION: [17, 13, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty]),
+                TYPE: "minimissile",
+                STAT_CALCULATOR: gunCalcNames.sustained,
+            },
+        },
+    ],
+};
+
+exports.whirlwind.UPGRADES_TIER_2 = ["tornado", "hurricane"];
+    exports.whirlwind.UPGRADES_TIER_3 = ["hexaWhirl", "munition", "whirl3", "whirlGuard", "prohpet", "vortex"];
+    exports.tornado.UPGRADES_TIER_3 = ["megaTornado", "tempest", "thunderbolt"];
+    exports.hurricane.UPGRADES_TIER_3 = ["typhoon", "blizzard"];
+
+// FLAIL!!!
+exports.flailBallSpike = {
+    PARENT: ["genericTank"],
+    COLOR: 9,
+    SHAPE: 6,
+    INDEPENDENT: true,
+};
+exports.flailBall = {
+    PARENT: ["genericTank"],
+    TURRETS: [{
+        /** SIZE     X       Y     ANGLE    ARC */
+        POSITION: [21.5, 0, 0, 0, 360, 0],
+        TYPE: "flailBallSpike",
+    }, ],
+};
+exports.flailBolt1 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [40, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        POSITION: [48, 56, 0, 0, 190, 1],
+        TYPE: ["flailBall", {
+            INDEPENDENT: true
+        }]
+        },
+    ],
+};
+exports.flailBolt2 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [30, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        /*  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [20, 36, 0, 0, 190, 1],
+        TYPE: ["flailBolt1", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+exports.flailBolt3 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [30, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        /*  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [18, 36, 0, 0, 190, 1],
+        TYPE: ["flailBolt2", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+exports.flail = {
+    PARENT: ["genericTank"],
+    LABEL: "Flail",
+    STAT_NAMES: statnames.flail,
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, ],
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+};
+exports.doubleFlail = {
+    PARENT: ["genericTank"],
+    LABEL: "Double Flail",
+    DANGER: 6,
+    STAT_NAMES: statnames.flail,
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, {
+        POSITION: [6, 10, 0, 180, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, ],
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+};
+exports.tripleFlail = {
+    PARENT: ["genericTank"],
+    LABEL: "Triple Flail",
+    DANGER: 7,
+    STAT_NAMES: statnames.flail,
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, {
+        POSITION: [6, 10, 0, 120, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, {
+        POSITION: [6, 10, 0, 240, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, ],
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+};
+exports.maceBallSpike = {
+    PARENT: ["genericTank"],
+    COLOR: 9,
+    SHAPE: 3,
+    INDEPENDENT: true,
+};
+exports.maceBall = {
+    PARENT: ["genericTank"],
+    TURRETS: [{
+        /** SIZE     X       Y     ANGLE    ARC */
+        POSITION: [21.5, 0, 0, 0, 360, 0],
+        TYPE: ["maceBallSpike", { SHAPE: 3 }]
+    }, ],
+};
+exports.maceBolt1 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [48, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        POSITION: [76, 56, 0, 0, 190, 1],
+        TYPE: ["maceBall", {
+            INDEPENDENT: true
+        }]
+        },
+    ],
+};
+exports.maceBolt2 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [24, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        /*  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [20, 28, 0, 0, 190, 1],
+        TYPE: ["maceBolt1", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+exports.maceBolt3 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [24, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        /*  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [18, 28, 0, 0, 190, 1],
+        TYPE: ["maceBolt2", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+exports.mace = {
+    PARENT: ["genericTank"],
+    LABEL: "Mace",
+    DANGER: 6,
+    STAT_NAMES: statnames.flail,
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["maceBolt3", {
+            INDEPENDENT: true
+        }]
+    }, ],
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+};
+exports.mamaBolt1 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [48, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        POSITION: [104, 56, 0, 0, 190, 1],
+        TYPE: ["maceBall", {
+            INDEPENDENT: true
+        }]
+        },
+    ],
+};
+exports.mamaBolt2 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [18, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        /*  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [20, 20, 0, 0, 190, 1],
+        TYPE: ["mamaBolt1", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+exports.mamaBolt3 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [18, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        /*  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [18, 20, 0, 0, 190, 1],
+        TYPE: ["mamaBolt2", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+exports.bigMama = {
+    PARENT: ["genericTank"],
+    LABEL: "BIG MAMA",
+    DANGER: 7,
+    STAT_NAMES: statnames.flail,
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["mamaBolt3", {
+            INDEPENDENT: true
+        }]
+    }, ],
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+};
+exports.ihdtiBall = {
+    PARENT: ["genericTank"],
+    TURRETS: [{
+        /** SIZE     X       Y     ANGLE    ARC */
+        POSITION: [21.5, 0, 0, 0, 360, 0],
+        TYPE: "maceBallSpike"
+    }, {
+        /** SIZE     X       Y     ANGLE    ARC */
+        POSITION: [21.5, 0, 0, 180, 360, 0],
+        TYPE: "maceBallSpike"
+    },],
+};
+exports.ihdtiBolt1 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [48, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        POSITION: [76, 56, 0, 0, 190, 1],
+        TYPE: ["ihdtiBall", {
+            INDEPENDENT: true
+        }]
+        },
+    ],
+};
+exports.ihdtiBolt2 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [24, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        /*  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [20, 28, 0, 0, 190, 1],
+        TYPE: ["ihdtiBolt1", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+exports.ihdtiBolt3 = {
+    PARENT: ["genericTank"],
+    GUNS: [{
+        POSITION: [24, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        /*  SIZE     X       Y     ANGLE    ARC */
+        POSITION: [18, 28, 0, 0, 190, 1],
+        TYPE: ["ihdtiBolt2", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+exports.itHurtsDontTouchIt = {
+    PARENT: ["genericTank"],
+    LABEL: "It hurts dont touch it",
+    DANGER: 7,
+    STAT_NAMES: statnames.flail,
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["ihdtiBolt3", {
+            INDEPENDENT: true
+        }]
+    }, ],
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+};
+exports.flangle = {
+    PARENT: ["genericTank"],
+    LABEL: "Flangle",
+    DANGER: 6,
+    STAT_NAMES: statnames.mixed,
+    GUNS: [
+        {
+            POSITION: [16, 8, 1, 0, 0, 150, 0.1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                TYPE: "bullet",
+                LABEL: gunCalcNames.thruster,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 210, 0.1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                TYPE: "bullet",
+                LABEL: gunCalcNames.thruster,
+            },
+        },
+    ],
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, ],
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+};
+exports.flooster = {
+    PARENT: ["genericTank"],
+    LABEL: "Flooster",
+    DANGER: 7,
+    STAT_NAMES: statnames.mixed,
+    GUNS: [
+        {
+            POSITION: [13, 8, 1, 0, -1, 140, 0.6],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                TYPE: "bullet",
+                LABEL: gunCalcNames.thruster,
+            },
+        },
+        {
+            POSITION: [13, 8, 1, 0, 1, 220, 0.6],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                TYPE: "bullet",
+                LABEL: gunCalcNames.thruster,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 150, 0.1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                TYPE: "bullet",
+                LABEL: gunCalcNames.thruster,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 210, 0.1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                TYPE: "bullet",
+                LABEL: gunCalcNames.thruster,
+            },
+        },
+    ],
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, ],
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+};
+exports.flace = {
+    PARENT: ["genericTank"],
+    LABEL: "Flace",
+    DANGER: 7,
+    STAT_NAMES: statnames.mixed,
+    GUNS: [
+        {
+            POSITION: [16, 8, 1, 0, 0, 150, 0.1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                TYPE: "bullet",
+                LABEL: gunCalcNames.thruster,
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 210, 0.1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                TYPE: "bullet",
+                LABEL: gunCalcNames.thruster,
+            },
+        },
+    ],
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["maceBolt3", {
+            INDEPENDENT: true
+        }]
+    }, ],
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+};
+
+exports.flail.UPGRADES_TIER_2 = ["doubleFlail", "mace", "flangle"];
+    exports.doubleFlail.UPGRADES_TIER_3 = ["tripleFlail"];
+    exports.mace.UPGRADES_TIER_3 = ["bigMama", "itHurtsDontTouchIt", "flace"];
+    exports.flangle.UPGRADES_TIER_3 = ["flooster", "flace"];
+
+// TRACKER-3
+exports.tracker3gun = {
+  PARENT: ["genericTank"],
+  LABEL: "",
+  COLOR: 34,
+  BODY: {
+    FOV: 3,
+  },
+  CONTROLLERS: [
+    "canRepel",
+    "onlyAcceptInArc",
+    "mapAltToFire",
+    "nearestDifferentMaster",
+  ],
+  GUNS: [
+    {
+      /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+      POSITION: [22, 10, 1, 0, 0, 0, 0],
+    },
+    {
+      POSITION: [10, 10, -2, 20, 0, 0, 0],
+    },
+  ],
+};
+exports.tracker3 = {
+  PARENT: ["genericTank"],
+  LABEL: "Tracker-3",
+  FACING_TYPE: "autospin",
+  TURRETS: [
+    {
+      /*  SIZE     X       Y     ANGLE    ARC */
+      POSITION: [11, 8, 0, 0, 190, 0],
+      TYPE: ["tracker3gun", { INDEPENDENT: true }],
+    },
+    {
+      POSITION: [11, 8, 0, 120, 190, 0],
+      TYPE: ["tracker3gun", { INDEPENDENT: true }],
+    },
+    {
+      POSITION: [11, 8, 0, 240, 190, 0],
+      TYPE: ["tracker3gun", { INDEPENDENT: true }],
+    },
+  ],
 };
 
 // BOTS

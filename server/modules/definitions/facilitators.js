@@ -16,7 +16,7 @@ let skcnv = {
 };
 
 // GUN DEFINITIONS
-exports.combineStats = function (array_of_objects) {
+exports.combineStats = function (stats) {
     try {
         // Build a blank array of the appropiate length
         let data = {
@@ -35,15 +35,15 @@ exports.combineStats = function (array_of_objects) {
             resist: 1
         };
 
-        for (let object = 0; object < array_of_objects.length; object++) {
-            let gStat = array_of_objects[object];
+        for (let object = 0; object < stats.length; object++) {
+            let gStat = stats[object];
             if (Array.isArray(gStat)) {
                 gStat = {
-                    reload: data[0], recoil: data[1], shudder: data[2],
-                    size: data[3], health: data[4], damage: data[5],
-                    pen: data[6], speed: data[7], maxSpeed: data[8],
-                    range: data[9], density: data[10], spray: data[11],
-                    resist: data[12]
+                    reload: gStat[0], recoil: gStat[1], shudder: gStat[2],
+                    size: gStat[3], health: gStat[4], damage: gStat[5],
+                    pen: gStat[6], speed: gStat[7], maxSpeed: gStat[8],
+                    range: gStat[9], density: gStat[10], spray: gStat[11],
+                    resist: gStat[12]
                 };
             }
             data.reload *= gStat.reload ?? 1;
@@ -63,7 +63,7 @@ exports.combineStats = function (array_of_objects) {
         return data;
     } catch (err) {
         console.log(err);
-        console.log(JSON.stringify(array_of_objects));
+        console.log(JSON.stringify(stats));
     }
 };
 exports.setBuild = (build) => {
@@ -660,7 +660,7 @@ exports.makeDeco = (shape = 0, color = 16) => {
     };
 }
 
-exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity, auraColor) => {
+exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) => {
     let isHeal = damageFactor < 0;
     let auraType = isHeal ? "healAura" : "aura";
     let symbolType = isHeal ? "healerSymbol" : "auraSymbol";
@@ -684,7 +684,7 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity, auraColor) => {
         ],
         TURRETS: [
             {
-                POSITION: [20 - 5 * isHeal, 0, 0, 0, 360, 1],
+                POSITION: [20 - 7.5 * isHeal, 0, 0, 0, 360, 1],
                 TYPE: [symbolType, {COLOR: auraColor, INDEPENDENT: true}],
             },
         ]
