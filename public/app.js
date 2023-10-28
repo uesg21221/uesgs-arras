@@ -975,15 +975,18 @@ function drawEntities(px, py, ratio) {
         }
 
         //fix 1: just remove the camera smoothing for player
-        instance.render.x = util.lerp(instance.render.x, instance.id === gui.playerid ? instance.x : Math.round(instance.x + instance.vx), 0.1, true);
-        instance.render.y = util.lerp(instance.render.y, instance.id === gui.playerid ? instance.y : Math.round(instance.y + instance.vy), 0.1, true);
+        instance.render.x = util.lerp(instance.render.x, instance.id === gui.playerid ? config.graphical.smoothing ? Math.round(instance.x + instance.vx*config.graphical.smoothing_factor) :instance.x: Math.round(instance.x + instance.vx), 0.1, true);
+        instance.render.y = util.lerp(instance.render.y, instance.id === gui.playerid ? config.graphical.smoothing ? Math.round(instance.y + instance.vy*config.graphical.smoothing_factor) : instance.y :Math.round(instance.y + instance.vy), 0.1, true);
+
         //instance.render.x = util.lerp(instance.render.x, Math.round(instance.x + instance.vx), 0.1, true);
         //instance.render.y = util.lerp(instance.render.y, Math.round(instance.y + instance.vy), 0.1, true);
         instance.render.f = instance.id === gui.playerid && !global.autoSpin && !instance.twiggle && !global.died ? Math.atan2(global.target.y, global.target.x) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
 
-        //fix 2: player isnt always in the center, especially when predator
-        let x = instance.id === gui.playerid && config.graphical.centerTank && false ? 0 : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid && config.graphical.centerTank && false ? 0 : ratio * instance.render.y - py,
+        //why keep this? its useless nobodys gonna make their tank stuck in the mid?? 
+        //its gonna be rendered in the center anyway because the the camera follows the tank!
+        
+        let x = instance.id === gui.playerid && config.graphical.centerTank? 0 : ratio * instance.render.x - px,
+            y = instance.id === gui.playerid && config.graphical.centerTank? 0 :ratio * instance.render.y - py,
             baseColor = instance.color;
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
@@ -996,7 +999,7 @@ function drawEntities(px, py, ratio) {
 
     //draw health bars above entities
     for (let instance of global.entities) {
-        //fix 3: ahh, again, dont draw health bar in center, just draw it normally on player like other entities
+        //fix 3: this must be fixed man, this is literally the reason why the health bar doesnt follow the predator
         let x = instance.id === gui.playerid && false ? 0 : ratio * instance.render.x - px,
             y = instance.id === gui.playerid && false ? 0 : ratio * instance.render.y - py;
         x += global.screenWidth / 2;

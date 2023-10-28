@@ -12,6 +12,8 @@ const config = {
         fontSizeBoost: 1.4,
         fontStrokeRatio: 4.5,
         neon: false,
+        smoothing: true,
+        smoothing_factor: 1.5,
         coloredHealthbars: false,
         seperatedHealthbars: false
     },
