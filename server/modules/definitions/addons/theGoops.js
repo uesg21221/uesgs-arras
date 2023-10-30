@@ -85,6 +85,12 @@ module.exports = ({ Class }) => {
             }, 
         ],
     };
+    Class.goopBlobFood = {
+        PARENT: ["pentagon"],
+        LABEL: 'Goop',
+        COLOR: 'green',
+        SHAPE: 0
+    }
     Class.goopBlob = {
         PARENT: ["genericTank"],
         LABEL: "Goop Blob",
@@ -129,6 +135,17 @@ module.exports = ({ Class }) => {
                 POSITION: [4, 0, 0, 0, 360, 1],
                 TYPE: ["genericTank", {COLOR: 'green'}]
             },
+        ],
+        GUNS: [
+            ...Array(16).fill().map((_, i)=>({
+                POSITION: [0, 8, 0, 0, 0, ((360) / 8)*i, 9999],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, {speed: 3}]),
+                    TYPE: ["goopBlobFood", { PERSISTS_AFTER_DEATH: true, INDEPENDENT: true }],
+                    SHOOT_ON_DEATH: true,
+                    INDEPENDENT_CHILDREN: true,
+                },
+            }))
         ],
         CAN_BE_ON_LEADERBOARD: false,
         GIVE_KILL_MESSAGE: true,
@@ -186,13 +203,17 @@ module.exports = ({ Class }) => {
                     SHOOT_ON_DEATH: true,
                     INDEPENDENT_CHILDREN: true,
                 },
+            })),
+            ...Array(16).fill().map((_, i)=>({
+                POSITION: [0, 8, 0, 0, 0, ((360) / 8)*i, 9999],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, {speed: 3}]),
+                    TYPE: ["goopBlobFood", { PERSISTS_AFTER_DEATH: true, INDEPENDENT: true }],
+                    SHOOT_ON_DEATH: true,
+                    INDEPENDENT_CHILDREN: true,
+                },
             }))
         ],
-    }
-    Class.goopBlobFood = {
-        PARENT: ["pentagon"],
-        COLOR: 'green',
-        SHAPE: 0
     }
     Class.goopBlobFarmer = {
         PARENT: ["goopBlob"],
@@ -245,7 +266,15 @@ module.exports = ({ Class }) => {
                     INDEPENDENT_CHILDREN: true,
                     AUTOFIRE: true,
                 }
-                }, 
+            }, ...Array(16).fill().map((_, i)=>({
+                POSITION: [0, 8, 0, 0, 0, ((360) / 8)*i, 9999],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, {speed: 3}]),
+                    TYPE: ["goopBlobFood", { PERSISTS_AFTER_DEATH: true, INDEPENDENT: true }],
+                    SHOOT_ON_DEATH: true,
+                    INDEPENDENT_CHILDREN: true,
+                },
+            }))
         ]
     }
     Class.goopBlobAttacker = {
@@ -264,15 +293,141 @@ module.exports = ({ Class }) => {
                 TYPE: "bullet",
                 AUTOFIRE: true,
             },
-            }, 
+            }, ...Array(16).fill().map((_, i)=>({
+                POSITION: [0, 8, 0, 0, 0, ((360) / 8)*i, 9999],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, {speed: 3}]),
+                    TYPE: ["goopBlobFood", { PERSISTS_AFTER_DEATH: true, INDEPENDENT: true }],
+                    SHOOT_ON_DEATH: true,
+                    INDEPENDENT_CHILDREN: true,
+                },
+            }))
         ],
+    }
+    Class.goopBlobTargeterProjectile = {
+        PARENT: ['bullet'],
+        DAMAGE_CLASS: 1,
+        LABEL: "Rock",
+        FACING_TYPE: "turnWithSpeed",
+        SHAPE: -6,
+        BODY: {
+            PUSHABILITY: 0,
+            HEALTH: 10000,
+            SHIELD: 10000,
+            REGEN: 1000,
+            DAMAGE: 0.01,
+            RESIST: 100,
+            STEALTH: 1,
+            DENSITY: 1000,
+        },
+        VALUE: 0,
+        SIZE: 60,
+        COLOR: 'green',
+        VARIES_IN_SIZE: true,
+        ACCEPTS_SCORE: false,
+    };
+    Class.goopBlobTargeterTurret = {
+        PARENT: ["genericTank"],
+        LABEL: "Turret",
+        BODY: {
+            FOV: 0.3,
+        },
+        COLOR: 16,
+        GUNS: [
+            {
+                POSITION: [30, 20, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, {speed: 0.5}]),
+                    TYPE: "goopBlobTargeterProjectile",
+                },
+            },
+        ],
+    };
+    Class.goopBlobTargeter = {
+        PARENT: ["goopBlob"],
+        TURRETS: [
+            {
+                POSITION: [19, 0, 0, 0, 360, 1],
+                TYPE: ["genericTank", {COLOR: 'green'}]
+            }, {
+                POSITION: [17, 0, 0, 0, 360, 1],
+                TYPE: ["genericTank", {COLOR: 'green'}]
+            }, {
+                POSITION: [14, 0, 0, 0, 360, 1],
+                TYPE: ["genericTank", {COLOR: 'green'}]
+            }, {
+                POSITION: [9, 0, 0, 0, 360, 1],
+                TYPE: ["genericTank", {COLOR: 'green'}]
+            }, {
+                POSITION: [4, 0, 0, 0, 360, 1],
+                TYPE: ["goopBlobTargeterTurret", {COLOR: 'green', INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+            },
+        ],
+        GUNS: [
+            ...Array(16).fill().map((_, i)=>({
+                POSITION: [0, 8, 0, 0, 0, ((360) / 8)*i, 9999],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, {speed: 3}]),
+                    TYPE: ["goopBlobFood", { PERSISTS_AFTER_DEATH: true, INDEPENDENT: true }],
+                    SHOOT_ON_DEATH: true,
+                    INDEPENDENT_CHILDREN: true,
+                },
+            }))
+        ]
+    }
+    Class.goopBlobResistant = {
+        PARENT: ["goopBlob"],
+        BODY: {
+            RESIST: 100,
+            SPEED: 1.32,
+            ACCELERATION: 0.8,
+            HEALTH: 590,
+            DAMAGE: 12,
+            PENETRATION: 0.25,
+            FOV: 0.5,
+            PUSHABILITY: 0,
+            HETERO: 0,
+            SHIELD: base.SHIELD * 1.4,
+        },
+        TURRETS: [
+            {
+                POSITION: [19, 0, 0, 0, 360, 1],
+                TYPE: ["genericTank", {COLOR: 'green'}]
+            }, {
+                POSITION: [17, 0, 0, 0, 360, 1],
+                TYPE: ["genericTank", {COLOR: 'green'}]
+            }, {
+                POSITION: [14, 0, 0, 0, 360, 1],
+                TYPE: ["genericTank", {COLOR: 'green'}]
+            }, {
+                POSITION: [9, 0, 0, 0, 360, 1],
+                TYPE: ["genericTank", {COLOR: 'green'}]
+            }, {
+                POSITION: [4, 0, 0, 0, 360, 1],
+                TYPE: ["genericTank", {COLOR: 'green'}]
+            },{
+                POSITION: [22, 0, 0, 0, 360, 0],
+                TYPE: "dominationBody",
+            },
+        ],
+        GUNS: [
+            ...Array(16).fill().map((_, i)=>({
+                POSITION: [0, 8, 0, 0, 0, ((360) / 8)*i, 9999],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, {speed: 3}]),
+                    TYPE: ["goopBlobFood", { PERSISTS_AFTER_DEATH: true, INDEPENDENT: true }],
+                    SHOOT_ON_DEATH: true,
+                    INDEPENDENT_CHILDREN: true,
+                },
+            }))
+        ]
     }
 	Class.theGoops = {
 	    PARENT: "menu",
 	    LABEL: "The Goops",
-	    UPGRADES_TIER_0: ["goopBlob", "gooper"]
-	};
+	    UPGRADES_TIER_0: ["goopBlob", "gooper"],
+	};2
 	Class.addons.UPGRADES_TIER_0.push("theGoops");
 
-	console.log('[theGoops] The Amalgamation has been created..');
+	console.log('[theGoops] The Goops...');
 };

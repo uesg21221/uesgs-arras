@@ -1,6 +1,6 @@
 class TheGoops {
     constructor() {
-        this.goopBlobTypes = ["goopBlob","goopBlobBirther","goopBlobFarmer","goopBlobAttacker"],
+        this.goopBlobTypes = ["goopBlob","goopBlobBirther","goopBlobFarmer","goopBlobAttacker","goopBlobTargeter","goopBlobResistant"],
         this.gameWon = false,
         this.goops = 0,
         this.maxgoops = 0

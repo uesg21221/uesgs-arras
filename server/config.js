@@ -117,20 +117,20 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 8,
+    BOTS: 24,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
-    BOT_XP: 125,
+    BOT_XP: 12500,
 
     // The class that players and player-bots spawn as.
-    SPAWN_CLASS: "basic",
+    SPAWN_CLASS: ["basic", "basic"],
 
 
 
     // Natural Spawns
 
     // Something about the likeliness of shinies, idk.
-    SHINY_SCALE: 0,
+    SHINY_SCALE: 2,
 
     // How much food to spawn. Not an exact amount.
     FOOD_AMOUNT: 100,

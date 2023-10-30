@@ -547,7 +547,7 @@ let makenpcs = () => {
         }
     }
     spawnCrasher(crashers);
-    spawnBosses(minibosses);
+    //spawnBosses(minibosses);
     spawnBots();
 };
 
