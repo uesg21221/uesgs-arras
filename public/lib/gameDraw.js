@@ -442,6 +442,8 @@ var gameDraw = {
                 return real ? gameDraw.color.purple : gameDraw.color.lavender;
             case "dom0":
                 return gameDraw.color.gold;
+            case "goop":
+                return gameDraw.color.green;
             default:
                 return real ? gameDraw.color.white : gameDraw.color.lgrey;
         }
