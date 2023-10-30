@@ -75,8 +75,8 @@ exports.spectator = {
     ARENA_CLOSER: true,
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
-        SPEED: 5,
-        FOV: 2.5,
+        SPEED: 10,
+        FOV: 5,
         DAMAGE: 0,
         HEALTH: 1e100,
         SHIELD: 1e100,
