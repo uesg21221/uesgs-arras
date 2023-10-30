@@ -566,10 +566,58 @@ exports.mmaTest = {
         },
     ]
 }
-exports.auraBasicGen = addAura();
+
+exports.vulnturrettest_turret = {
+    PARENT: "genericTank",
+    HITS_OWN_TYPE: 'hard',
+    LABEL: 'Shield',
+    COLOR: 'teal',
+}
+
+exports.vulnturrettest = {
+    PARENT: ["genericTank"],
+    LABEL: "Vulurable Turret Test",
+    TOOLTIP: 'warning: vuln turrets aren\'t done yet',
+    BODY: {
+        FOV: 2,
+    },
+    DANGER: 6,
+    GUNS: [{
+        POSITION: {},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet'
+        }
+    }],
+    TURRETS: (() => {
+        let output = []
+        for (let i = 0; i < 10; i++) {
+            output.push({
+                POSITION: {SIZE: 20, X: 40, ANGLE: (360/10)*i},
+                TYPE: "vulnturrettest_turret",
+                VULNERABLE: true
+            })
+        }
+        return output
+    })(),
+};
+
+exports.auraBasicGen = {
+    PARENT: 'genericTank',
+    TYPE: 'aura',
+    COLOR: 'teal',
+    LABEL: 'Aura',
+    HITS_OWN_TYPE: 'never',
+    BODY: {
+        HEALTH: 1e99
+    },
+    INTANGIBLE: true,
+    ALPHA: 0.35
+};
 exports.auraBasic = {
     PARENT: ["genericTank"],
     LABEL: "Aura Basic",
+    SIZE: 40,
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
@@ -581,8 +629,9 @@ exports.auraBasic = {
     ],
     TURRETS: [
         {
-            POSITION: [14, 0, 0, 0, 0, 1],
+            POSITION: [120, 0, 0, 0, 0, 0],
             TYPE: "auraBasicGen",
+            VULNERABLE: true,
         }
     ],
 };
@@ -970,16 +1019,22 @@ exports['Team' + TEAM_ENEMIES] = {
 };
 exports.teams.UPGRADES_TIER_0.push('Team' + TEAM_ROOM, 'Team' + TEAM_ENEMIES);
 
+exports.addons = {
+    PARENT: "menu",
+    LABEL: "Addon Entities",
+    UPGRADES_TIER_0: []
+};
+
 // DEV "UPGRADE PATHS"
-exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools"];
+exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
     exports.tanks.UPGRADES_TIER_0 = ["basic", "healer", "specialTanks", "legacyTanks", "funTanks", "testingTanks"];
 	exports.specialTanks.UPGRADES_TIER_0 = ["arenaCloser", "bases", "mothership"];
         exports.bases.UPGRADES_TIER_0 = ["baseProtector", "dominators", "sanctuaries", "antiTankMachineGun"];
                 exports.dominators.UPGRADES_TIER_0 = ["dominator", "destroyerDominator", "gunnerDominator", "trapperDominator"];
                 exports.sanctuaries.UPGRADES_TIER_0 = [];
         exports.legacyTanks.UPGRADES_TIER_0 = ["weirdSpike", "oldBentBoomer", "quadBuilder", "master", "blunderbuss", "oldRimfire", "oldSpreadshot", "oldCommander", "autoTrapper", "prodigy", "mender", "tetraGunner", "corvette", "whirlwind", "flail"];
-        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3"];
-        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest"];
+        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
+        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", ["assassin", "dreadOfficialV1"], "vulnturrettest"];
 
     exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "terrestrials", "celestials", "eternals", "devBosses"];
         exports.sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap"];
@@ -990,7 +1045,7 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools"];
         exports.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"];
         exports.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia"];
         exports.eternals.UPGRADES_TIER_0 = ["ragnarok", "kronos"];
-        exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "tgsBoss"];
+        exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "tgsBoss", "dogeiscutBoss", "trplnrBoss"];
 
     exports.tools.UPGRADES_TIER_0 = ["spectator", "levels", "teams", "eggGenerator"];
 
