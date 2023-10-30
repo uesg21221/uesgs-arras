@@ -46,6 +46,7 @@ server = require('http').createServer((req, res) => {
             return fs.createReadStream(fileToGet).pipe(res);
     }
     res.writeHead(200);
+    //res.setHeader("ngrok-skip-browser-warning", "69420");
     res.end(resStr);
 });
 server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, head, ws => sockets.connect(ws, req)));

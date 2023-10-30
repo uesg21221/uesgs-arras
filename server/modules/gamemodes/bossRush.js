@@ -56,7 +56,7 @@ class BossRush {
         this.bigFodderChoices = ["sentryGun", "sentrySwarm", "sentryTrap", "shinySentryGun"];
         this.smallFodderChoices = ["crasher"];
         this.waves = this.generateWaves();
-        this.waveId = -1;
+        this.waveId = 96;
         this.gameActive = true;
         this.timer = 0;
         this.remainingEnemies = 0;;

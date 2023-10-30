@@ -75,8 +75,8 @@ exports.spectator = {
     ARENA_CLOSER: true,
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
-        SPEED: 10,
-        FOV: 5,
+        SPEED: 25,
+        FOV: 10,
         DAMAGE: 0,
         HEALTH: 1e100,
         SHIELD: 1e100,
@@ -199,6 +199,10 @@ exports.sanctuaries = {
 exports.funTanks = {
     PARENT: ["menu"],
     LABEL: "Fun Tanks",
+};
+exports.splitTanks = {
+    PARENT: ["menu"],
+    LABEL: "Split Tanks",
 };
 exports.testingTanks = {
     PARENT: ["menu"],
@@ -726,6 +730,69 @@ exports.switcheroo = {
         }
     }]
 }
+exports.spamOctoTank = {
+    PARENT: ["genericTank"],
+    LABEL: "Spam Octo Tank",
+    DANGER: 7,
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.spam, g.ohgod]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.spam, g.ohgod]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.spam, g.ohgod]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.spam, g.ohgod]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 45, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.spam, g.ohgod]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 135, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.spam, g.ohgod]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 225, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.spam, g.ohgod]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 315, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.spam, g.ohgod]),
+                TYPE: "bullet",
+            },
+        },
+    ],
+};
 
 // FUN
 exports.florr_tank_eye = {
@@ -1033,7 +1100,8 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
                 exports.dominators.UPGRADES_TIER_0 = ["dominator", "destroyerDominator", "gunnerDominator", "trapperDominator"];
                 exports.sanctuaries.UPGRADES_TIER_0 = [];
         exports.legacyTanks.UPGRADES_TIER_0 = ["weirdSpike", "oldBentBoomer", "quadBuilder", "master", "blunderbuss", "oldRimfire", "oldSpreadshot", "oldCommander", "autoTrapper", "prodigy", "mender", "tetraGunner", "corvette", "whirlwind", "flail"];
-        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
+        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", "splitTanks"];
+            exports.splitTanks.UPGRADES_TIER_0 = [["developer", "basic"], ["developer", "developer"]];
         exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", ["assassin", "dreadOfficialV1"], "vulnturrettest"];
 
     exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "terrestrials", "celestials", "eternals", "devBosses"];

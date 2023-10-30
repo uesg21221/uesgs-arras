@@ -3,7 +3,7 @@ module.exports = [
         "key": process.env.TOKEN_1,
         "discordID": "0",
         "nameColor": "#ffffff",
-        "class": "developer",
+        "class": "single",
         "name": "unnamed#0000",
         "note": "note here"
     },
@@ -11,7 +11,7 @@ module.exports = [
         "key": process.env.TOKEN_2,
         "discordID": "0",
         "nameColor": "#ffffff",
-        "class": "developer",
+        "class": "weirdspike",
         "name": "unnamed#0000",
         "note": "note here"
     },

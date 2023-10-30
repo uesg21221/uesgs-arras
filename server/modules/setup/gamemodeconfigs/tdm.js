@@ -1,5 +1,5 @@
 // you can edit this!
-let teams = 4;
+let teams = 8;
 
 // you can edit anything below this if you know what you're doing
 
@@ -19,7 +19,7 @@ if (teams > 3) {
 	room[14][0] = room[14][1] = room[13][0] = "bas4";
 	room[13][1] = "bap4";
 }
-/*
+
    if (teams > 4) {
  	   room[14][0] = room[14][1] = room[13][0] = "bas5";
  	   room[13][1] = "bap5";
@@ -36,7 +36,7 @@ if (teams > 3) {
  	   room[14][0] = room[14][1] = room[13][0] = "bas8";
  	   room[13][1] = "bap8";
    }
-*/
+
 
 module.exports = {
     MODE: "tdm",

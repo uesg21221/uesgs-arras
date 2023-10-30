@@ -38,21 +38,21 @@ module.exports = {
 
     // The tiles that the room consist of.
     ROOM_SETUP: [
-        [ "norm", "norm", "norm", "norm", "norm", "norm", "roid", "roid", "roid", "norm", "norm", "norm", "norm", "norm", "norm" ],
+        [ "port", "norm", "norm", "norm", "norm", "norm", "roid", "roid", "roid", "norm", "norm", "norm", "norm", "norm", "port" ],
         [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
         [ "norm", "norm", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "norm", "norm" ],
         [ "norm", "norm", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "norm", "norm" ],
         [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
         [ "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm" ],
-        [ "roid", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "roid" ],
-        [ "roid", "roid", "norm", "norm", "norm", "nest", "nest", "roid", "nest", "nest", "norm", "norm", "norm", "roid", "roid" ],
-        [ "roid", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "roid" ],
+        [ "roid", "norm", "norm", "norm", "norm", "nest", "roid", "rock", "roid", "nest", "norm", "norm", "norm", "norm", "roid" ],
+        [ "roid", "roid", "norm", "norm", "norm", "nest", "rock", "port", "rock", "nest", "norm", "norm", "norm", "roid", "roid" ],
+        [ "roid", "norm", "norm", "norm", "norm", "nest", "roid", "rock", "roid", "nest", "norm", "norm", "norm", "norm", "roid" ],
         [ "norm", "norm", "norm", "norm", "norm", "nest", "nest", "nest", "nest", "nest", "norm", "norm", "norm", "norm", "norm" ],
         [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
         [ "norm", "norm", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "norm", "norm" ],
         [ "norm", "norm", "rock", "rock", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "rock", "rock", "norm", "norm" ],
         [ "norm", "norm", "norm", "norm", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "norm", "norm", "norm", "norm" ],
-        [ "norm", "norm", "norm", "norm", "norm", "norm", "roid", "roid", "roid", "norm", "norm", "norm", "norm", "norm", "norm" ]
+        [ "port", "norm", "norm", "norm", "norm", "norm", "roid", "roid", "roid", "norm", "norm", "norm", "norm", "norm", "port" ]
     ],
 
     // Tile count in a row
@@ -117,7 +117,7 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 8,
+    BOTS: 5,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
@@ -167,7 +167,7 @@ module.exports = {
 
     // How long a entity chat message lasts in milliseconds.
     // Includes the fade-out period.
-    CHAT_MESSAGE_DURATION: 30_000,
+    CHAT_MESSAGE_DURATION: 3000,
 
     // If you don't want your players to color their messages.
     // They get sanitized after addons interpret them, but before they're added to the chat message dictionary.

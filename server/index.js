@@ -494,6 +494,7 @@ spawnBots = () => {
             team = o.id;
         if (c.RANDOM_COLORS && room.gameMode === "ffa") {
             color = Math.floor(Math.random() * 20);
+            console.log(color);
         } else if (room.gameMode === "tdm") {
             team = getWeakestTeam(0);
             if (room["bas" + team].length) {
@@ -734,6 +735,10 @@ if (c.REPL_WINDOW) {
     //TODO: figure out how to spawn a seperate window and put the REPL stdio in there instead
     //let { stdin, stdout, stderr } = (require('child_process').spawn("cmd.exe", ["/c", "node", "blank.js"], { detached: true }));
     require('repl').start({/* stdin, stdout, stderr,*/ useGlobal: true });
+}
+// closeArena could be used but eh
+function closeServer() {
+    setTimeout(process.exit, 1);
 }
 
 // Bring it to life

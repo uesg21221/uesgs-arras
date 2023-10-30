@@ -1696,7 +1696,7 @@ const gameDrawDead = () => {
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, -Math.PI / 4, true);
-    drawText("Game over man, game over.", x, y - 80, 8, color.guiwhite, "center");
+    drawText("U are ded, not a big surprise.", x, y - 80, 8, color.guiwhite, "center");
     drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);
