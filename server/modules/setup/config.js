@@ -22,4 +22,4 @@ const nameMap = {
     trainwars: "Train Wars"
 };
 
-output.gameModeName = output.GAME_MODES.map(x => nameMap[x] || (x[0].toUpperCase() + x.slice(1))).join(' ');
+output.gameModeName = output.GAMEMODE_NAME_PREFIXES.join(' ') + ' ' + output.GAME_MODES.map(x => nameMap[x] || (x[0].toUpperCase() + x.slice(1))).join(' ');
