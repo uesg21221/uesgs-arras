@@ -25,13 +25,13 @@ module.exports = {
 
 
     // Room
-    
+
     // Room width in grid units
     WIDTH: 6500,
-    
+
     // Room height in grid units
     HEIGHT: 6500,
-    
+
     // Shape of the arena.
     // Can be "rect" or "circle".
     ARENA_TYPE: "rect",
@@ -117,13 +117,13 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 24,
+    BOTS: 16,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
-    BOT_XP: 12500,
+    BOT_XP: 125,
 
     // The class that players and player-bots spawn as.
-    SPAWN_CLASS: ["basic", "basic"],
+    SPAWN_CLASS: "basic",
 
 
 

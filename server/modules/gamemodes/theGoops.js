@@ -6,15 +6,15 @@ function startCountdown(totalTimeInSeconds) {
             let minutesLeft = Math.ceil(timeLeft / 60);
             sockets.broadcast(`Time left: ${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''}!`);
             timeLeft -= 60; // Announce every 60 seconds (1 minute)
-            setTimeout(announceTimeLeft, 60000); // Schedule the next announcement
+            return setTimeout(announceTimeLeft, 60000); // Schedule the next announcement
         } else {
             sockets.broadcast("Time's up! Nobody wins!");
-            setTimeout(closeArena, 3000); // Close the arena when the time is up
+            return setTimeout(closeArena, 3000); // Close the arena when the time is up
         }
     }
 
     // Start the countdown
-    announceTimeLeft();
+    return announceTimeLeft();
 }
 
 class TheGoops {
@@ -23,6 +23,9 @@ class TheGoops {
         this.gameWon = false,
         this.goops = 0,
         this.maxgoops = 0
+        this.teamClaimedPanels = {}
+        this.teamNums = {};
+        this.timerTimeout
     }
 
     init() {
@@ -34,9 +37,8 @@ class TheGoops {
 
         const totalTime = 800;
 
-        setTimeout(function() {
-            startCountdown(totalTime)
-        }, 3000);
+        this.timerTimeout = startCountdown(totalTime)
+
     }
 
     spawn(loc, type = false) {
@@ -77,14 +79,74 @@ class TheGoops {
                     teamName = newTeam > 0 ? killer.name : getTeamName(newTeam);
                 room.setType((newTeam > 0) ? "dom3" : (newTeam > -9) ? "dom" + (-newTeam) : "dom0", loc);
 
-                sockets.broadcast(`A goop blob is has been destroyed by ${teamName}!`);
+                if (this.teamClaimedPanels[teamName]==undefined) {
+                    this.teamClaimedPanels[teamName]=0
+                    this.teamNums[teamName]=newTeam
+                }
+                this.teamClaimedPanels[teamName]+=1
+
+                sockets.broadcast(`A goop blob has been destroyed by ${teamName}!`);
                 sockets.broadcast(`${this.goops} goop blob${this.goops !== 1 ? 's' : ''} remain!`);
 
                 if (this.goops==0 && !this.gameWon) {
                     this.gameWon = true;
+                    clearTimeout(this.timerTimeout);
+                    // Find the winning team(s) with the highest claimed panels
+                    let winningTeams = [];
+                    let maxClaimedPanels = 0;
+
+                    for (const teamName in this.teamClaimedPanels) {
+                        const claimedPanels = this.teamClaimedPanels[teamName];
+
+                        if (claimedPanels > maxClaimedPanels) {
+                            // Found a new leader, clear previous winners
+                            maxClaimedPanels = claimedPanels;
+                            winningTeams = [teamName];
+                        } else if (claimedPanels === maxClaimedPanels) {
+                            // Found a tie, add the team to the winners
+                            winningTeams.push(teamName);
+                        }
+                    }
+                    const teamNums = this.teamNums
                     setTimeout(function() {
-                        sockets.broadcast("You have won the game!");
-                        setTimeout(closeArena, 3000);
+                        if (winningTeams.length === 1) {
+                            // Only one winner
+                            sockets.broadcast(`${winningTeams[0]} has won the game with ${maxClaimedPanels} panels!`);
+                          } else if (winningTeams.length > 1) {
+                            // Tie between multiple teams
+                            sockets.broadcast(`It's a tie between teams: ${winningTeams.join(', ')} with ${maxClaimedPanels} panels each!`);
+                            // Handle the tie as needed
+                          }
+                        setTimeout(function(){
+                            sockets.broadcast(`Celebration! Your enemies are now rare flowers!`);
+                            let transformQueue = []
+                            for (let i = 0; i < entities.length; i++) {
+                                let entity = entities[i];
+                                let isEntityInWinningTeam = false;
+
+                                for (let j = 0; j < winningTeams.length; j++) {
+                                  if (entity.team === teamNums[winningTeams[j]]) {
+                                    isEntityInWinningTeam = true;
+                                    break; // No need to check other winning teams for this entity
+                                  }
+                                }
+
+                                if (!isEntityInWinningTeam) {
+                                  transformQueue.push(entity);
+                                }
+                              }
+                            for (let i = 0; i < transformQueue.length; i++) {
+                                transformQueue[i].controllers = []
+                                transformQueue[i].define("flower");
+                                transformQueue[i].SIZE /= 3
+                                transformQueue[i].settings.diesAtRange = false
+                                transformQueue[i].settings.acceptsScore = true
+                                transformQueue[i].skill.score += 200000;
+                            }
+                            setTimeout(function(){
+                                closeArena()
+                            }, 30000);
+                        }, 3000);
                     }, 1500);
                 }
 
