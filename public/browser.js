@@ -1,22 +1,30 @@
-//game window
-let iframe = document.getElementById('client'),
+//literally not needed, but looks cleaner
+let getNode = id => document.getElementById(id),
+    makeNode = (cssClass, tag = 'div') => {
+        let temp = document.createElement(tag);
+        temp.classList.add(cssClass);
+        return temp;
+    },
+
+    //game window
+    iframe = getNode('client'),
 
     //server list
-    browser = document.getElementById('browser'),
+    browser = getNode('browser'),
 
     //list options
-    filters = document.getElementById('filters'),
-    sorts = document.getElementById('sorts'),
-    favorites = document.getElementById('favorites'),
+    filters = getNode('filters'),
+    sorts = getNode('sorts'),
+    favorites = getNode('favorites'),
 
     //info about current selected server
-    metadata = document.getElementById('metadata'),
-    name = document.getElementById('name'),
-    description = document.getElementById('description'),
+    metadata = getNode('metadata'),
+    name = getNode('name'),
+    description = getNode('description'),
 
     //join selected server
-    join = document.getElementById('join'),
-    list = document.getElementById('join'),
+    join = getNode('join'),
+    list = getNode('list'),
 
     //list of server ips
     servers = [],
@@ -49,11 +57,40 @@ list.onclick = () => {
 
 class DOMServerListItem {
     constructor (ip, index) {
-        document.createElement('div');
 
-        browser.append(container);
+        //actual properties of this entry
+        this.loading = true;
+        this.loadFail = false;
+
+        //DOM stuff
+        this.mainContainer = makeNode('mainContainer');
+        this.textContainer = makeNode('textContainer');
+        this.statsContainer= makeNode('statsContainer');
+        this.icon = makeNode('icon', 'img');
+        this.name = makeNode('name');
+        this.description = makeNode('description');
+        this.ping = makeNode('ping');
+        this.players = makeNode('players');
+        this.icon.src = `https://${ip}/iconBrowser.png`;
+        this.textContainer.append(this.name);
+        this.textContainer.append(this.description);
+        this.statsContainer.append(this.ping);
+        this.statsContainer.append(this.players);
+        this.mainContainer.append(this.icon);
+        this.mainContainer.append(this.textContainer);
+        this.mainContainer.append(this.statsContainer);
+        browser.append(this.mainContainer);
+
+        this.mainContainer.addEventListener('click', () => {
+            this.mainContainer.classList.add('selected');
+            servers[selected].element.mainContainer.classList.remove('selected');
+            selected = index;
+
+            //TODO: update info panel on right side
+        });
     }
     setMOTD (motd) {}
+    socketClosed () {}
 }
 
 fetch(`https://${location.host}/servers.txt`).then(x => x.text()).then(fetchedServers => {
@@ -62,8 +99,6 @@ fetch(`https://${location.host}/servers.txt`).then(x => x.text()).then(fetchedSe
             motdSocket = new WebSocket(`wss://${ip}/motd`),
 
             listEntry = { ip, motdSocket, element, loading: true };
-
-        //TODO: actually render the server entries in the list
 
         motdSocket.pings = [];
         motdSocket.onmessage = ({ data }) => {
@@ -74,6 +109,7 @@ fetch(`https://${location.host}/servers.txt`).then(x => x.text()).then(fetchedSe
             motdSocket.send(now.toString());
             element.setMOTD(motd);
         };
+        motdSocket.onclose = () => element.socketClosed();
         motdSocket.onopen = () => motdSocket.send(Date.now().toString());
 
         servers.push(listEntry);

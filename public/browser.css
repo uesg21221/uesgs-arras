@@ -116,3 +116,12 @@ iframe {
 #list {
 	margin-left: 5px;
 }
+
+.mainContainer {}
+.textContainer {}
+.statsContainer {}
+.icon {}
+.name {}
+.description {}
+.ping {}
+.players {}

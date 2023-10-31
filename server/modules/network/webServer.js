@@ -26,7 +26,18 @@ if (c.host.match(/localhost:(\d)/) && c.host !== 'localhost:' + c.port) {
 }
 
 let server = require('http').createServer((req, res) => {
-    let resStr = "";
+    let resStr = "",
+
+    // I dislike CORS
+    cors = req.method === 'OPTIONS' || (c.MOTD_SOCKET && req.url == '/iconBrowser.png');
+    if (cors) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        if (req.method === 'OPTIONS') {
+            res.writeHead(200);
+            return res.end();
+        }
+    }
+
     switch (req.url) {
         case "/servers.json":
             resStr = [ c.host, ...otherServers ].join('\n');
