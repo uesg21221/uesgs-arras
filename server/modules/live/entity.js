@@ -184,10 +184,10 @@ class Gun {
     }
     getPhotoInfo() {
         return {
-            ...this.lastShot, 
+            ...this.lastShot,
             color: this.color,
-            borderless: this.borderless, 
-            drawFill: this.drawFill, 
+            borderless: this.borderless,
+            drawFill: this.drawFill,
             drawAbove: this.drawAbove,
             length: this.length,
             width: this.width,
@@ -344,7 +344,8 @@ class Gun {
                     masterStore: this.master.master.store,
                     gunStore: this.store,
                     globalMasterStore: this.master.master.globalStore,
-                    globalGunStore: this.globalStore
+                    globalGunStore: this.globalStore,
+                    child: o
                 });
             }
             return;
@@ -373,7 +374,8 @@ class Gun {
                 masterStore: this.master.master.store,
                 gunStore: this.store,
                 globalMasterStore: this.master.master.globalStore,
-                globalGunStore: this.globalStore
+                globalGunStore: this.globalStore,
+                child: o
             });
         }
     }
@@ -973,7 +975,7 @@ class Entity extends EventEmitter {
     }
     define(defs, emitEvent = true) {
         if (!Array.isArray(defs)) defs = [defs];
-        
+
         // Define all primary stats
         let set = ensureIsClass(defs[0]);
         this.store = {};
@@ -1250,7 +1252,7 @@ class Entity extends EventEmitter {
         // Define additional stats for other split upgrades
         for (let branch = 1; branch < defs.length; branch++) {
             set = ensureIsClass(defs[branch]);
-            
+
             if (set.index != null) this.index += "-" + set.index;
             if (set.PARENT != null) {
                 if (Array.isArray(set.PARENT)) {

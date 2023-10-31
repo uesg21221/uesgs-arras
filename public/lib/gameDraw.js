@@ -75,7 +75,7 @@ var gameDraw = {
         // Saturation
         if (deltaC == 0)
             s = 0;
-        else 
+        else
             s = deltaC / (1 - Math.abs(2 * l - 1));
 
         return [h, s, l];
@@ -129,7 +129,7 @@ var gameDraw = {
             baseColor = parseInt(baseColor);
         }
         baseColor = gameDraw.rgbToHsl(gameDraw.getColor(baseColor) ?? baseColor);
-        
+
         // Get color config
         let hueShift = parseFloat(colorDetails[1]) / 360,
             saturationShift = parseFloat(colorDetails[2]),
@@ -443,7 +443,7 @@ var gameDraw = {
             case "dom0":
                 return gameDraw.color.gold;
             case "goop":
-                return gameDraw.color.green;
+                return "#545c24";
             default:
                 return real ? gameDraw.color.white : gameDraw.color.lgrey;
         }

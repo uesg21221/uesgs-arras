@@ -1,6 +1,12 @@
-let room = new Array(15).fill(null).map(() => new Array(15).fill('goop'));
-room[7][7] = 'bas1'; room[8][8] = 'bas1'; room[8][7] = 'bas1'; room[7][8] = 'bas1';
-room[0][0] = 'norm'; room[0][14] = 'norm'; room[14][0] = 'norm'; room[14][14] = 'norm';
+const room = new Array(15).fill().map((row, rowIndex) => {
+    if (rowIndex >= 1 && rowIndex < 14) {
+      // Create a row of 'goop' for the center 10x10 region.
+      return new Array(15).fill('goop', 1, 14);
+    } else {
+      // Create a row of empty tiles for the outer border.
+      return new Array(15).fill();
+    }
+  });
 
 module.exports = {
     THE_GOOPS_LOOP: true,

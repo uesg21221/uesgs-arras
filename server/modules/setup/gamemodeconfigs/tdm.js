@@ -1,11 +1,11 @@
 // you can edit this!
-let teams = 1;
+let teams = 4;
 
 // you can edit anything below this if you know what you're doing
 
-//let room = Array(15).fill(() => Array(15).fill()).map(x => x());
-//room[0][0] = room[1][0] = room[0][1] = "bas1";
-//room[1][1] = "bap1";
+let room = Array(15).fill(() => Array(15).fill()).map(x => x());
+room[0][0] = room[1][0] = room[0][1] = "bas1";
+room[1][1] = "bap1";
 
 if (teams > 1) { // For Nexus or those who want 1TDM
 	room[14][14] = room[13][14] = room[14][13] = "bas2";
@@ -45,5 +45,5 @@ module.exports = {
     Y_GRID: 15,
     WIDTH: 5000,
     HEIGHT: 5000,
-//    ROOM_SETUP: room
+    ROOM_SETUP: room
 };
