@@ -67,7 +67,7 @@ exports.hypermissile = {
                 AUTOFIRE: true,
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    {reload: 3},
                 ]),
                 TYPE: [
                     "bullet",
@@ -84,7 +84,7 @@ exports.hypermissile = {
                 AUTOFIRE: true,
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    {reload: 3},
                 ]),
                 TYPE: [
                     "bullet",
@@ -101,7 +101,7 @@ exports.hypermissile = {
                 AUTOFIRE: true,
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    {reload: 3},
                 ]),
                 TYPE: [
                     "bullet",
@@ -117,7 +117,7 @@ exports.hypermissile = {
                 AUTOFIRE: true,
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    {reload: 3},
                 ]),
                 TYPE: [
                     "bullet",
@@ -656,12 +656,12 @@ exports.tinyMinion = {
         BLIND: true,
     },
     GUNS: [ { /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-        POSITION: [    17,         9,            1,            0,            0,            0,            0,     ], 
+        POSITION: [    17,         9,            1,            0,            0,            0,            0,     ],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.lowpower]),
             WAIT_TO_CYCLE: true,
             TYPE: "bullet",
-        }, }, 
+        }, },
     ],
     DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
@@ -2164,7 +2164,7 @@ exports.dual = {
             },
         },
         {
-            POSITION: [18, 7, 1, 0, -5.5, 0, 0.5],
+            POSITION: [18, 7, 1, 0, -5.5, 0, .5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.dual, g.lowpower]),
                 TYPE: "bullet",
@@ -2172,14 +2172,14 @@ exports.dual = {
             },
         },
         {
-            POSITION: [16, 8.5, 1, 0, 5.5, 0, 0],
+            POSITION: [16, 8.5, 1, 0, 5.5, 0, 0.25],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.dual]),
                 TYPE: "bullet",
             },
         },
         {
-            POSITION: [16, 8.5, 1, 0, -5.5, 0, 0.5],
+            POSITION: [16, 8.5, 1, 0, -5.5, 0, .75],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.dual]),
                 TYPE: "bullet",
@@ -5612,7 +5612,7 @@ exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "
         exports.sprayer.UPGRADES_TIER_3 = ["redistributor", "phoenix", "atomizer", "focal"];
 
     exports.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "auto3", "trapGuard", "triTrapper"];
-        exports.flankGuard.UPGRADES_TIER_3 = ["tripleTwin"];
+        exports.flankGuard.UPGRADES_TIER_3 = ["tripleTwin"/*, "quadruplex"*/];
         exports.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper"];
         exports.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "surfer", "eagle", "phoenix", "vulture"];
         exports.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee"];
@@ -5637,5 +5637,5 @@ exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "
         exports.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark"];
 
     /*exports.desmos.UPGRADES_TIER_2 = ["helix", "volute"],
-        exports.helix.UPGRADES_TIER_3 = ["triplex"],
+        exports.helix.UPGRADES_TIER_3 = ["triplex", "quadruplex"],
         exports.volute.UPGRADES_TIER_3 = ["sidewinder"],*/

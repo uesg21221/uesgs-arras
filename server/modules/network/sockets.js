@@ -41,7 +41,7 @@ function close(socket) {
             }
         }
         // Disconnect everything
-        util.log("[INFO] " + (player.body ? "User " + player.body.name : "An User without an entity") + " disconnected!");
+        util.log("[INFO] " + (player.body ? "User " + player.body.name : "A user without an entity") + " disconnected!");
         util.remove(players, index);
     } else {
         util.log("[INFO] A player disconnected before entering the game.");
@@ -388,9 +388,10 @@ function incoming(message, socket) {
             }
 
             if (player.body != null) {
+                let limit = 256;
                 do {
                     player.body.skillUp(stat);
-                } while (max && player.body.skill.points && player.body.skill.amount(stat) < player.body.skill.cap(stat))
+                } while (limit-- && max && player.body.skill.points && player.body.skill.amount(stat) < player.body.skill.cap(stat))
             }
             break;
         case "L":
@@ -415,7 +416,7 @@ function incoming(message, socket) {
             }
             // cheatingbois
             if (player.body != null && socket.permissions && socket.permissions.class) {
-                player.body.define({ RESET_UPGRADES: true });
+                player.body.define({ RESET_UPGRADES: true, BATCH_UPGRADES: false });
                 player.body.define(Class[socket.permissions.class]);
             }
             break;
@@ -716,8 +717,9 @@ function update(gui) {
     // Update the upgrades
     let upgrades = [];
     for (let i = 0; i < b.upgrades.length; i++) {
+        let upgrade = b.upgrades[i];
         if (b.skill.level >= b.upgrades[i].level) {
-            upgrades.push(b.upgrades[i].index);
+            upgrades.push(upgrade.branch.toString() + "_" + upgrade.branchLabel + "_" + upgrade.index);
         }
     }
     gui.upgrades.update(upgrades);
@@ -727,7 +729,9 @@ function update(gui) {
     // Update physics
     gui.accel.update(b.acceleration);
     gui.topspeed.update(-b.team * room.partyHash);
+    // Update other
     gui.root.update(b.rerootUpgradeTree);
+    gui.class.update(b.label);
 }
 
 function publish(gui) {
@@ -743,6 +747,7 @@ function publish(gui) {
         accel: gui.accel.publish(),
         top: gui.topspeed.publish(),
         root: gui.root.publish(),
+        class: gui.class.publish(),
     };
     // Encode which we'll be updating and capture those values only
     let oo = [0];
@@ -788,6 +793,10 @@ function publish(gui) {
         oo[0] += 0x0200;
         oo.push(o.root);
     }
+    if (o.class != null) {
+        oo[0] += 0x0400;
+        oo.push(o.class);
+    }
     // Output it
     return oo;
 }
@@ -809,6 +818,7 @@ let newgui = (player) => {
         stats: container(player),
         bodyid: -1,
         root: floppy(),
+        class: floppy(),
     };
     // This is the gui itself
     return {
@@ -863,7 +873,7 @@ const spawn = (socket, name) => {
         body = new Entity(loc);
         body.protect();
         body.isPlayer = true;
-        body.define(Class[c.SPAWN_CLASS]);
+        body.define(c.SPAWN_CLASS);
         body.name = name;
         if (player.team != null) {
             body.team = player.team;
@@ -940,8 +950,17 @@ function flatten(data) {
     let output = [data.type]; // We will remove the first entry in the persepective method
     if (data.type & 0x01) {
         output.push(
-            /* 1 */ data.facing,
-            /* 2 */ data.layer
+            /*  1 */ data.facing,
+            /*  2 */ data.layer,
+            /*  3 */ data.index,
+            /*  4 */ data.color,
+            /*  5 */ data.size,
+            /*  6 */ data.realSize,
+            /*  7 */ data.sizeFactor,
+            /*  8 */ data.angle,
+            /*  9 */ data.direction,
+            /* 10 */ data.offset,
+            /* 11 */ data.mirrorMasterAngle,
         );
     } else {
         output.push(
@@ -961,7 +980,7 @@ function flatten(data) {
             /* 14 */ data.invuln,
             /* 15 */ Math.ceil(65535 * data.health),
             /* 16 */ Math.round(65535 * data.shield),
-            /* 17 */ Math.round(255 * data.alpha)
+            /* 17 */ Math.round(255 * data.alpha),
         );
         if (data.type & 0x04) {
             output.push(
@@ -972,7 +991,10 @@ function flatten(data) {
     }
     // Add the gun data to the array
     output.push(data.guns.length);
-    for (let i = 0; i < data.guns.length; i++) output.push(data.guns[i].time, data.guns[i].power);
+    for (let i = 0; i < data.guns.length; i++) {
+        for (let k in data.guns[i])
+            output.push(data.guns[i][k]);
+    }
     // For each turret, add their own output
     output.push(data.turrets.length);
     for (let i = 0; i < data.turrets.length; i++) output.push(...flatten(data.turrets[i]));
@@ -1271,7 +1293,7 @@ let minimapTeams = teamIDs.map((team) =>
         return all;
     })
 );
-let leaderboard = new Delta(6, () => {
+let leaderboard = new Delta(7, () => {
     let list = [];
     if (c.TAG)
         for (let id = 0; id < c.TEAMS; id++) {
@@ -1325,6 +1347,7 @@ let leaderboard = new Delta(6, () => {
                 entry.color,
                 getBarColor(entry),
                 entry.nameColor || "#FFFFFF",
+                entry.label,
             ],
         });
         list.splice(top, 1);

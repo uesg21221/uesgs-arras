@@ -29,7 +29,7 @@ fetch("changelog.html", { cache: "no-cache" })
         for (const title of titles) {
             title.classList.add('title');
         }
-        
+
         patchNotes.innerHTML += ParsedHTML.documentElement.innerHTML;
     } catch (error) {
         patchNotes.innerHTML = `<p>An error occured while trying to fetch 'changelogs.html'</p><p>${error}</p>`;
@@ -105,8 +105,7 @@ global.player = {
 };
 var upgradeSpin = 0,
     lastPing = 0,
-    renderTimes = 0,
-    generatedTankTree = null;
+    renderTimes = 0;
 global.clearUpgrades = () => gui.upgrades = [];
 // Build the leaderboard object
 global.player = global.player;
@@ -474,7 +473,23 @@ function drawBar(x1, x2, y, width, color) {
     ctx.closePath();
     ctx.stroke();
 }
+//checking for images in the shape so we can draw them
+function isImageURL(url) {
+    try {
+        const parsedUrl = new URL(url);
+        const path = parsedUrl.pathname;
+        const ext = path.split('.').pop().toLowerCase(); // Get the lowercase file extension
+
+        // List of common image file extensions
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
+
+        return imageExtensions.includes(ext);
+    } catch (error) {
+        return false; // URL parsing failed, or it's not an image URL.
+    }
+}
 // Sub-drawing functions
+const drawPolyImgs = []
 function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill) {
     // Start drawing
     context.beginPath();
@@ -488,17 +503,67 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
             );
     } else {
         if ("string" === typeof sides) {
-            let path = new Path2D(sides);
-            context.save();
-            context.translate(centerX, centerY);
-            context.scale(radius, radius);
-            context.lineWidth /= radius;
-            context.rotate(angle);
-            context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-            if (!borderless) context.stroke(path);
-            if (fill) context.fill(path);
-            context.restore();
-            return;
+            if (isImageURL(sides)) {
+                //ideally we'd preload images when mockups are loaded but im too lazy for that atm
+                if (!drawPolyImgs[sides]) {
+                    drawPolyImgs[sides] = new Image();
+                    drawPolyImgs[sides].src = sides
+                    drawPolyImgs[sides].isBroken = false;
+                    drawPolyImgs[sides].onerror = function() {
+                        console.log('Failed to load image!\nURL:', sides);
+                        this.isBroken = true;
+                    };
+                }
+                let img = drawPolyImgs[sides]
+                if (img.isBroken || !img.complete) { // check if img is broken and draw placeholder if so
+                    //this is probably the worst way to draw a missing texture checkerboard but im too lazy to do a better one
+                    context.translate(centerX, centerY);
+                    context.rotate(angle);
+                    context.beginPath();
+                    context.fillStyle = '#ff00ff'
+                    context.lineTo(-radius,-radius)
+                    context.lineTo(radius,-radius)
+                    context.lineTo(radius,radius)
+                    context.lineTo(-radius,radius)
+                    context.lineTo(-radius,-radius)
+                    context.fill();
+                    context.closePath();
+                    context.beginPath();
+                    context.fillStyle = '#000000'
+                    context.lineTo(-radius,-radius)
+                    context.lineTo(0,-radius)
+                    context.lineTo(0,0)
+                    context.lineTo(0, radius)
+                    context.lineTo(radius, radius)
+                    context.lineTo(radius, 0)
+                    context.lineTo(0, 0)
+                    context.lineTo(-radius, 0)
+                    context.lineTo(-radius,-radius)
+                    context.fill();
+                    context.closePath();
+                    context.rotate(-angle);
+                    context.translate(-centerX, -centerY);
+                    return;
+                }
+                context.translate(centerX, centerY);
+                context.rotate(angle);
+                context.drawImage(img, -radius, -radius, radius*2, radius*2);
+                context.rotate(-angle);
+                context.translate(-centerX, -centerY);
+                return;
+            } else {
+                let path = new Path2D(sides);
+                context.save();
+                context.translate(centerX, centerY);
+                context.scale(radius, radius);
+                context.lineWidth /= radius;
+                context.rotate(angle);
+                context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+                if (!borderless) context.stroke(path);
+                if (fill) context.fill(path);
+                context.restore();
+                return;
+            }
         }
         angle += sides % 2 ? 0 : Math.PI / sides;
     }
@@ -559,13 +624,23 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
 function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill) {
     let h = [];
     h = aspect > 0 ? [height * aspect, height] : [height, -height * aspect];
-    let r = [Math.atan2(h[0], length), Math.atan2(h[1], length)];
-    let l = [Math.sqrt(length ** 2 + h[0] ** 2), Math.sqrt(length ** 2 + h[1] ** 2)];
+
+    // Construct a trapezoid at angle 0
+    let points = [],
+        sinT = Math.sin(angle),
+        cosT = Math.cos(angle);
+    points.push([0, h[1]]);
+    points.push([length * 2, h[0]]);
+    points.push([length * 2, -h[0]]);
+    points.push([0, -h[1]]);
+
+    // Rotate it to the new angle via vector rotation
     context.beginPath();
-    context.lineTo(x + l[0] * Math.cos(angle +           r[0]), y + l[0] * Math.sin(angle           + r[0]));
-    context.lineTo(x + l[1] * Math.cos(angle + Math.PI - r[1]), y + l[1] * Math.sin(angle + Math.PI - r[1]));
-    context.lineTo(x + l[1] * Math.cos(angle + Math.PI + r[1]), y + l[1] * Math.sin(angle + Math.PI + r[1]));
-    context.lineTo(x + l[0] * Math.cos(angle           - r[0]), y + l[0] * Math.sin(angle           - r[0]));
+    for (let point of points) {
+        let newX = point[0] * cosT - point[1] * sinT + x,
+            newY = point[0] * sinT + point[1] * cosT + y;
+        context.lineTo(newX, newY);
+    }
     context.closePath();
     if (!borderless) context.stroke();
     if (fill) context.fill();
@@ -575,17 +650,13 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     let context = assignedContext ? assignedContext : ctx;
     let fade = turretInfo ? 1 : render.status.getFade(),
         drawSize = scale * ratio * instance.size,
-        m = global.mockups[instance.index],
+        indexes = instance.index.split("-"),
+        m = global.mockups[parseInt(indexes[0])],
         xx = x,
         yy = y,
-        source = turretInfo === false ? instance : turretInfo;
+        source = turretInfo === false ? instance : turretInfo,
+        blend = turretsObeyRot ? 0 : render.status.getBlend();
     source.guns.update();
-    if (source.guns.length !== m.guns.length) {
-        throw new Error("Mismatch gun number with mockup.\nMockup ID: " + instance.index + "\nLabel: " + m.label);
-    }
-    if (source.turrets.length !== m.turrets.length) {
-        throw new Error("Mismatch turret number with mockup.\nMockup ID: " + instance.index + "\nLabel: " + m.label);
-    }
     if (fade === 0 || alpha === 0) return;
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
     if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
@@ -600,68 +671,88 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     context.lineCap = "round";
     context.lineJoin = "round";
     // Draw turrets beneath us
-    for (let i = 0; i < m.turrets.length; i++) {
-        let mirrorMasterAngle = m.turrets[i].mirrorMasterAngle
-        let t = m.turrets[i];
+    for (let i = 0; i < source.turrets.length; i++) {
+        let t = source.turrets[i];
         source.turrets[i].lerpedFacing == undefined
             ? (source.turrets[i].lerpedFacing = source.turrets[i].facing)
             : (source.turrets[i].lerpedFacing = util.lerpAngle(source.turrets[i].lerpedFacing, source.turrets[i].facing, 0.1, true));
         if (!t.layer) {
             let ang = t.direction + t.angle + rot,
                 len = t.offset * drawSize,
-                facing = 0
-                if (mirrorMasterAngle || turretsObeyRot) {
-                    facing = rot + t.angle;
-                } else {
-                    facing = source.turrets[i].lerpedFacing;
-                }
+                facing = 0;
+            if (t.mirrorMasterAngle || turretsObeyRot) {
+                facing = rot + t.angle;
+            } else {
+                facing = source.turrets[i].lerpedFacing;
+            }
             drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, facing, turretsObeyRot, context, source.turrets[i], render);
         }
     }
     // Draw guns below us
     context.lineWidth = Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
-    let positions = source.guns.getPositions();
-    for (let i = 0; i < m.guns.length; i++) {
-        let g = m.guns[i];
+    let positions = source.guns.getPositions(),
+        gunConfig = source.guns.getConfig();
+    for (let i = 0; i < source.guns.length; i++) {
+        let g = gunConfig[i];
         if (!g.drawAbove) {
-            let position = positions[i] / (g.aspect === 1 ? 2 : 1),
-                gx = g.offset * Math.cos(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.cos(g.angle + rot),
-                gy = g.offset * Math.sin(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.sin(g.angle + rot),
+            let position = (turretsObeyRot ? 0 : positions[i]) / (g.aspect === 1 ? 2 : 1),
+                gx = g.offset * Math.cos(g.direction + g.angle + rot),
+                gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
                 borderless = g.borderless,
                 fill = g.drawFill;
-            gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), render.status.getBlend()));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
+            gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position : position / 2)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
         }
     }
     // Draw body
     context.globalAlpha = 1;
-    gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), render.status.getBlend()));
+    gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), turretsObeyRot ? 0 : blend));
+    
+    //just so you know, the glow implimentation is REALLY bad and subject to change in the future
+    context.shadowColor = m.glow.color!=null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
+        gameDraw.modifyColor(instance.color),
+        render.status.getColor(),
+        render.status.getBlend()
+    );
+    if (m.glow.radius && m.glow.radius>0){
+      context.shadowBlur = m.glow.radius * ((drawSize / m.size) * m.realSize);
+      context.shadowOffsetX = 0;
+      context.shadowOffsetY = 0;
+      context.globalAlpha = m.glow.alpha;
+      for (var i = 0; i < m.glow.recursion; i++) {
+        drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, true, m.drawFill);
+      }
+      context.globalAlpha = 1;
+    }
+    context.shadowBlur = 0
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 0;
+
     drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless, m.drawFill);
+    
     // Draw guns above us
-    context.lineWidth = Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
-    for (let i = 0; i < m.guns.length; i++) {
-        let g = m.guns[i];
+    for (let i = 0; i < source.guns.length; i++) {
+        let g = gunConfig[i];
         if (g.drawAbove) {
-            let position = positions[i] / (g.aspect === 1 ? 2 : 1),
-                gx = g.offset * Math.cos(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.cos(g.angle + rot),
-                gy = g.offset * Math.sin(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.sin(g.angle + rot),
+            let position = (turretsObeyRot ? 0 : positions[i]) / (g.aspect === 1 ? 2 : 1),
+                gx = g.offset * Math.cos(g.direction + g.angle + rot),
+                gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
                 borderless = g.borderless,
                 fill = g.drawFill;
-            gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), render.status.getBlend()));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
+            gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : position)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
         }
     }
     // Draw turrets above us
-    for (let i = 0; i < m.turrets.length; i++) {
-        let t = m.turrets[i];
-        let mirrorMasterAngle = m.turrets[i].mirrorMasterAngle
+    for (let i = 0; i < source.turrets.length; i++) {
+        let t = source.turrets[i];
         if (t.layer) {
             let ang = t.direction + t.angle + rot,
                 len = t.offset * drawSize,
                 facing = 0;
-            if (mirrorMasterAngle || turretsObeyRot) {
+            if (t.mirrorMasterAngle || turretsObeyRot) {
                 facing = rot + t.angle;
             } else {
                 facing = source.turrets[i].lerpedFacing;
@@ -683,44 +774,56 @@ function drawHealth(x, y, instance, ratio, alpha) {
     let fade = instance.render.status.getFade();
     ctx.globalAlpha = fade * fade;
     let size = instance.size * ratio,
-        m = global.mockups[instance.index],
+        indexes = instance.index.split("-"),
+        m = global.mockups[parseInt(indexes[0])],
         realSize = (size / m.size) * m.realSize;
     if (instance.drawsHealth) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
         if (health < 1 - 1e-4 || shield < 1 - 1e-4) {
-            let instanceColor = null
-            let getColor = true
+            let instanceColor = null;
+            let getColor = true;
             if (typeof instance.color == 'string') {
-                instanceColor = instance.color.split(' ')[0]
-                if (instanceColor[0] == '#') getColor = false
-            } else instanceColor = instance.color
-            const col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(parseInt(instanceColor)) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
-            let yy = y + 1.1 * realSize + 15;
-            let barWidth = 5;
-            ctx.globalAlpha = alpha * alpha * fade;
+                instanceColor = instance.color.split(' ')[0];
+                if (instanceColor[0] == '#') {
+                    getColor = false;
+                } else if (!isNaN(parseInt(instanceColor))) {
+                    instanceColor = parseInt(instanceColor);
+                }
+            } else {
+                instanceColor = instance.color;
+            }
+            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(instanceColor) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
+            let yy = y + realSize + 15 * ratio;
+            let barWidth = 3 * ratio;
+            ctx.globalAlpha = fade * (alpha ** 2);
             //TODO: seperate option for hp bars
             // function drawBar(x1, x2, y, width, color) {
+
+            //background bar
             drawBar(x - size, x + size, yy + barWidth * settings.graphical.seperatedHealthbars / 2, barWidth * (1 + settings.graphical.seperatedHealthbars) + settings.graphical.barChunk, color.black);
+
+            //hp bar
             drawBar(x - size, x - size + 2 * size * health, yy + barWidth * settings.graphical.seperatedHealthbars, barWidth, col);
+
+            //shield bar
             if (shield || settings.graphical.seperatedHealthbars) {
-                if (!settings.graphical.seperatedHealthbars) ctx.globalAlpha = (0.3 + shield * 0.3) * alpha * alpha * fade;
+                if (!settings.graphical.seperatedHealthbars) ctx.globalAlpha = (1 + shield) * 0.3 * (alpha ** 2) * fade;
                 drawBar(x - size, x - size + 2 * size * shield, yy, barWidth, settings.graphical.coloredHealthbars ? gameDraw.mixColors(col, color.guiblack, 0.25) : color.teal);
                 ctx.globalAlpha = 1;
             }
         }
     }
-    if (instance.id !== gui.playerid) {
-        if (instance.nameplate) {
-            var name = instance.name.substring(7, instance.name.length + 1);
-            var namecolor = instance.name.substring(0, 7);
-            ctx.globalAlpha = alpha;
-            drawText(name, x, y - realSize - 30, 16, namecolor, "center");
-            drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 16, 8, namecolor, "center");
-            ctx.globalAlpha = 1;
-        }
+    if (instance.id !== gui.playerid && instance.nameplate) {
+        var name = instance.name.substring(7, instance.name.length + 1);
+        var namecolor = instance.name.substring(0, 7);
+        ctx.globalAlpha = alpha;
+        drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor, "center");
+        drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor, "center");
+        ctx.globalAlpha = 1;
     }
 }
+
 // Start animation
 window.requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
 window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
@@ -851,7 +954,7 @@ let tiles,
     tankTree,
     measureSize = (x, y, colorIndex, { index, tier = 0 }) => {
         tiles.push({ x, y, colorIndex, index });
-        let { upgrades } = global.mockups[index],
+        let { upgrades } = global.mockups[parseInt(index)],
             xStart = x,
             cumulativeWidth = 1,
             maxHeight = 1,
@@ -894,11 +997,19 @@ let tiles,
             height: 2 + maxHeight,
         };
     };
-function generateTankTree(index) {
-    generatedTankTree = index;
+function generateTankTree(indexes) {
     tiles = [];
     branches = [];
-    tankTree = measureSize(0, 0, 10, { index });
+    let initialX = 0;
+    let maxHeight = 0;
+    if (!Array.isArray(indexes)) indexes = [indexes];
+    for (let index of indexes) {
+        tankTree = measureSize(initialX, 0, 10, { index });
+        tankTree.width += initialX;
+        maxHeight = Math.max(maxHeight, tankTree.height);
+        initialX = tankTree.width + 3;
+    }
+    tankTree.height = maxHeight;
 }
 
 function drawFloor(px, py, ratio) {
@@ -987,31 +1098,34 @@ function drawEntities(px, py, ratio) {
         drawHealth(x, y, instance, ratio, instance.alpha);
     }
 
-    let now = Date.now();
+    let now = Date.now(),
+        ratioForChat = (1 + ratio) / 2;
     for (let instance of global.entities) {
         //put chat msg above name
         let size = instance.size * ratio,
-            m = global.mockups[instance.index],
+            indexes = instance.index.split("-"),
+            m = global.mockups[parseInt(indexes[0])],
             realSize = (size / m.size) * m.realSize,
             x = instance.id === gui.playerid ? 0 : ratio * instance.render.x - px,
             y = instance.id === gui.playerid ? 0 : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
-        y += global.screenHeight / 2 - realSize - 45;
+        y += global.screenHeight / 2 - realSize - 46 * ratio;
+        if (instance.id !== gui.playerid && instance.nameplate) y -= 8 * ratio;
 
         //draw all the msgs
         for (let i in global.chats[instance.id]) {
             let chat = global.chats[instance.id][i],
                 text = chat.text,
-                msgLength = measureText(text, 15),
+                msgLengthHalf = measureText(text, 15 * ratioForChat) / 2,
                 alpha = Math.max(0, Math.min(1000, chat.expires - now) / 1000);
 
             ctx.globalAlpha = 0.5 * alpha;
-            drawBar(x - msgLength / 2, x + msgLength / 2, y, 30, gameDraw.modifyColor(instance.color));
+            drawBar(x - msgLengthHalf, x + msgLengthHalf, y, 30 * ratioForChat, gameDraw.modifyColor(instance.color));
             ctx.globalAlpha = alpha;
             settings.graphical.fontStrokeRatio *= 1.2;
-            drawText(text, x, y + 7, 15, color.guiwhite, "center");
+            drawText(text, x, y + 7 * ratioForChat, 15 * ratioForChat, color.guiwhite, "center");
             settings.graphical.fontStrokeRatio /= 1.2;
-            y -= 35;
+            y -= 35 * ratioForChat;
         }
     }
 }
@@ -1022,15 +1136,19 @@ global.shouldScrollY = global.shouldScrollX = 0;
 let lastGuiType = null;
 function drawUpgradeTree(spacing, alcoveSize) {
     if (lastGuiType != gui.type) {
-        let m = global.mockups[gui.type], // The mockup that corresponds to the player's tank
+        let m = util.getEntityImageFromMockup(gui.type), // The mockup that corresponds to the player's tank
             rootName = m.rerootUpgradeTree, // The upgrade tree root of the player's tank
-            rootIndex = rootName == undefined ? -1 : global.mockups.find(i => i.className == rootName).index; // The index of the mockup that corresponds to the root tank (-1 for no root)
-        if (rootIndex > -1) {
+            rootIndex = [];
+            for (let name of rootName) {
+                let ind = name == undefined ? -1 : global.mockups.find(i => i.className == name).index;
+                rootIndex.push(ind); // The index of the mockup that corresponds to the root tank (-1 for no root)
+            }
+        if (!rootIndex.includes(-1)) {
             generateTankTree(rootIndex);
         }
         lastGuiType = gui.type;
     }
-    
+
     if (!tankTree) {
         console.log('No tank tree rendered yet.');
         return;
@@ -1077,14 +1195,14 @@ function drawUpgradeTree(spacing, alcoveSize) {
             scale = (0.8 * size) / position.axis,
             xx = ax + 0.5 * size - scale * position.middle.x * Math.cos(angle),
             yy = ay + 0.5 * size - scale * position.middle.x * Math.sin(angle),
-            picture = util.getEntityImageFromMockup(index, gui.color),
+            picture = util.getEntityImageFromMockup(index.toString(), gui.color),
             baseColor = picture.color;
 
         ctx.globalAlpha = 0.75;
-        ctx.fillStyle = gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+        ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
         drawGuiRect(ax, ay, size, size);
         ctx.globalAlpha = 0.15;
-        ctx.fillStyle = gameDraw.getColor(-10 + colorIndex++);
+        ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
         drawGuiRect(ax, ay, size, size * 0.6);
         ctx.fillStyle = color.black;
         drawGuiRect(ax, ay + size * 0.6, size, size * 0.4);
@@ -1164,7 +1282,7 @@ function drawSkillBars(spacing, alcoveSize) {
     let x = spacing + (statMenu.get() - 1) * (height + 50 + len * ska(gui.skills.reduce((largest, skill) => Math.max(largest, skill.cap), 0)));
     let y = global.screenHeight - spacing - height;
     let ticker = 11;
-    let namedata = gui.getStatNames(global.mockups[gui.type].statnames);
+    let namedata = gui.getStatNames(global.mockups[parseInt(gui.type.split("-")[0])].statnames);
     let clickableRatio = canvas.height / global.screenHeight / global.ratio;
     for (let i = 0; i < gui.skills.length; i++) {
         ticker--;
@@ -1247,7 +1365,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     drawBar(x, x + len * gui.__s.getProgress(), y + height / 2, height - 3.5, color.gold);
 
     // Draw the class type
-    drawText("Level " + gui.__s.getLevel() + " " + global.mockups[gui.type].name, x + len / 2, y + height / 2, height - 4, color.guiwhite, "center", true);
+    drawText("Level " + gui.__s.getLevel() + " " + gui.class, x + len / 2, y + height / 2, height - 4, color.guiwhite, "center", true);
     height = 14;
     y -= height + vspacing;
 
@@ -1391,46 +1509,70 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
     if (gui.upgrades.length > 0) {
         global.canUpgrade = true;
         let internalSpacing = 8;
-        let len = alcoveSize / 2; // * global.screenWidth / 2 * 1;
+        let len = alcoveSize / 2;
         let height = len;
         let x = glide * 2 * spacing - spacing;
-        let y = spacing;
+        let y = spacing - height - internalSpacing;
         let xStart = x;
-        let xo = x;
-        let xxx = 0;
-        let yo = y;
+        let initialX = x;
+        let rowWidth = 0;
+        let initialY = y;
         let ticker = 0;
+        let upgradeNum = 0;
         let colorIndex = 10;
         let columnCount = Math.max(3, Math.ceil(gui.upgrades.length / 4));
         let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
+        let lastBranch = -1;
         upgradeSpin += 0.01;
         for (let i = 0; i < gui.upgrades.length; i++) {
-            let model = gui.upgrades[i];
-            if (y > yo) yo = y;
-            xxx = x;
+            let upgrade = gui.upgrades[i];
+            let upgradeBranch = upgrade[0];
+            let upgradeBranchLabel = upgrade[1] == "undefined" ? "" : upgrade[1];
+            let model = upgrade[2];
+
+            // Draw either in the next row or next column
+            if (ticker === columnCount || upgradeBranch != lastBranch) {
+                x = xStart;
+                y += height + internalSpacing;
+                if (upgradeBranch != lastBranch) {
+                    if (upgradeBranchLabel.length > 0) {
+                        drawText(" " + upgradeBranchLabel, xStart, y + internalSpacing * 2, internalSpacing * 2.3, color.guiwhite, "left", false);
+                        y += 3 * internalSpacing;
+                    }
+                    colorIndex = 10;
+                }
+                lastBranch = upgradeBranch;
+                ticker = 0;
+            } else {
+                x += glide * (len + internalSpacing);
+            }
+
+            if (y > initialY) initialY = y;
+            rowWidth = x;
+
             global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
 
-            let position = global.mockups[model].position,
+            let picture = util.getEntityImageFromMockup(model, gui.color),
+                position = picture.position,
                 scale = (0.6 * len) / position.axis,
-                xx = x + 0.5 * len - scale * position.middle.x * Math.cos(upgradeSpin),
-                yy = y + 0.5 * height - scale * position.middle.x * Math.sin(upgradeSpin),
-                picture = util.getEntityImageFromMockup(model, gui.color),
+                entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(upgradeSpin),
+                entityY = y + 0.5 * height - scale * position.middle.x * Math.sin(upgradeSpin),
                 baseColor = picture.color;
 
             // Draw box
             ctx.globalAlpha = 0.5;
-            ctx.fillStyle = gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+            ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
             drawGuiRect(x, y, len, height);
             ctx.globalAlpha = 0.1;
-            ctx.fillStyle = gameDraw.getColor(-10 + colorIndex++);
+            ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
             drawGuiRect(x, y, len, height * 0.6);
             ctx.fillStyle = color.black;
             drawGuiRect(x, y + height * 0.6, len, height * 0.4);
             ctx.globalAlpha = 1;
 
             // Draw Tank
-            drawEntity(baseColor, xx, yy, picture, 1, 1, scale / picture.size, upgradeSpin, true);
-            let upgradeKey = getClassUpgradeKey(ticker);
+            drawEntity(baseColor, entityX, entityY, picture, 1, 1, scale / picture.size, upgradeSpin, true);
+            let upgradeKey = getClassUpgradeKey(upgradeNum);
 
             // Tank name
             drawText(picture.upgradeName ?? picture.name, x + ((upgradeKey ? 0.9 : 1) * len) / 2, y + height - 6, height / 8 - 3, color.guiwhite, "center");
@@ -1443,26 +1585,20 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             ctx.globalAlpha = 1;
             ctx.lineWidth = 3;
             drawGuiRect(x, y, len, height, true); // Border
-
-            //draw either in the next row or next column
-            if (++ticker % columnCount === 0) {
-                x = xStart;
-                y += height + internalSpacing;
-            } else {
-                x += glide * (len + internalSpacing);
-            }
+            ticker++;
+            upgradeNum++;
         }
 
         // Draw dont upgrade button
         let h = 14,
             msg = "Don't Upgrade",
             m = measureText(msg, h - 3) + 10;
-        let xx = xo + (xxx + len + internalSpacing - xo) / 2,
-            yy = yo + height + internalSpacing;
-        drawBar(xx - m / 2, xx + m / 2, yy + h / 2, h + settings.graphical.barChunk, color.black);
-        drawBar(xx - m / 2, xx + m / 2, yy + h / 2, h, color.white);
-        drawText(msg, xx, yy + h / 2, h - 2, color.guiwhite, "center", true);
-        global.clickables.skipUpgrades.place(0, (xx - m / 2) * clickableRatio, yy * clickableRatio, m * clickableRatio, h * clickableRatio);
+        let buttonX = initialX + (rowWidth + len + internalSpacing - initialX) / 2,
+            buttonY = initialY + height + internalSpacing;
+        drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h + settings.graphical.barChunk, color.black);
+        drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
+        drawText(msg, buttonX, buttonY + h / 2, h - 2, color.guiwhite, "center", true);
+        global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
     } else {
         global.canUpgrade = false;
         global.clickables.upgrade.hide();
@@ -1492,7 +1628,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
     scaleScreenRatio(ratio, true);
 
     //draw hud
-    let alcoveSize = 200 / ratio; // / drawRatio * global.screenWidth;
+    let alcoveSize = 200 / ratio; // drawRatio * global.screenWidth;
     let spacing = 20;
     gui.__s.update();
     let lb = leaderboard.get();
@@ -1542,7 +1678,7 @@ let getDeath = () => {
     if (global.finalKillers.length) {
         txt = "🔪 Succumbed to";
         for (let e of global.finalKillers) {
-            txt += " " + util.addArticle(global.mockups[e].name) + " and";
+            txt += " " + util.addArticle(util.getEntityImageFromMockup(e).name) + " and";
         }
         txt = txt.slice(0, -4);
     } else {
@@ -1565,7 +1701,7 @@ const gameDrawDead = () => {
     let x = global.screenWidth / 2,
         y = global.screenHeight / 2 - 50;
     let len = 140,
-        position = global.mockups[gui.type].position,
+        position = global.mockups[parseInt(gui.type.split("-")[0])].position,
         scale = len / position.axis,
         xx = global.screenWidth / 2 - scale * position.middle.x * 0.707,
         yy = global.screenHeight / 2 - 35 + scale * position.middle.x * 0.707,
@@ -1573,7 +1709,7 @@ const gameDrawDead = () => {
         baseColor = picture.color;
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, -Math.PI / 4, true);
     drawText("Game over man, game over.", x, y - 80, 8, color.guiwhite, "center");
-    drawText("Level " + gui.__s.getLevel() + " " + global.mockups[gui.type].name, x - 170, y - 30, 24, color.guiwhite);
+    drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);
     drawText(getKills(), x - 170, y + 77, 16, color.guiwhite);
