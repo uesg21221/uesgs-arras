@@ -392,5 +392,4 @@ setInterval(() => {
     }
 
     syncedDelaysLoop();
-    tickIndex++;
 }, room.cycleSpeed);
