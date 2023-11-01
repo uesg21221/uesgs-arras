@@ -27,6 +27,7 @@ class Gun {
         this.body = body;
         this.master = body.source;
         this.label = "";
+        this.identifier = "";
         this.controllers = [];
         this.children = [];
         // Stored Variables
@@ -104,6 +105,7 @@ class Gun {
             this.drawAbove = (info.PROPERTIES.DRAW_ABOVE == null) ? false : info.PROPERTIES.DRAW_ABOVE;
             this.stack = (info.PROPERTIES.STACK_GUN == null) ? true : info.PROPERTIES.STACK_GUN;
             this.onFire = (info.PROPERTIES.ON_FIRE == null) ? null : info.PROPERTIES.ON_FIRE
+            this.identifier = (info.PROPERTIES.IDENTIFIER == null) ? null : info.PROPERTIES.IDENTIFIER
         }
         let position = info.POSITION;
         if (Array.isArray(position)) {
@@ -366,6 +368,8 @@ class Gun {
         o.velocity = s;
         this.bulletInit(o);
         o.coreSize = o.SIZE;
+
+        this.master.ON(undefined, 'fire', this)
 
         if (this.onFire != null) {
             this.onFire({
@@ -1237,6 +1241,7 @@ class Entity extends EventEmitter {
                 o.bindToMaster(def.POSITION, this, def.VULNERABLE);
             }
         }
+        if (set.ON != null) this.onDef = set.ON
         if (set.mockup != null) {
             this.mockup = set.mockup;
         }
@@ -1385,6 +1390,16 @@ class Entity extends EventEmitter {
                 branchLabel: "",
                 redefineAll: true,
             });
+        }
+    }
+    ON(on = this.onDef, actionName, value) {
+        if (on == null) return
+        for (let onPairs of on) {
+            switch (onPairs.action) {
+                case 'fire':
+                    if (actionName == 'fire') onPairs.execute({ body: this, gun: value })
+                    break;
+            }
         }
     }
     refreshBodyAttributes() {
