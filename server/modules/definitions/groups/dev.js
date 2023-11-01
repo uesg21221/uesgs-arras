@@ -605,14 +605,37 @@ exports.vulnturrettest = {
 exports.onTest = {
     PARENT: 'genericTank',
     LABEL: '`ON` property test',
-    TOOLTIP: 'Refer to exports.onTest to know more',
+    TOOLTIP: 'Refer to exports.onTest to know more \n' + 'On collide is a bit buggy right now, please use other methods until its fixed',
     ON: [{
         action: "fire",
         execute: ({ body, gun }) => {
-            if (gun.identifier != 'mainGun') return
-            body.sendMessage('fired main gun')
+            switch (gun.identifier) {
+                case 'mainGun':
+                    body.sendMessage('fired main gun')
+                    break;
+                case 'secondaryGun':
+                    body.sendMessage('fired secondary gun')
+                    break;
+            }
         }
-    }],
+    }, {
+        action: "altFire",
+        execute: ({ body, gun }) => {
+            body.sendMessage('fired alt gun')
+        }
+    },
+    {
+        action: "death",
+        execute: ({ body }) => {
+            let o = new Entity(body)
+            o.define('sorcerer'),
+            o.SIZE = body.SIZE
+            o.HEALTH = 5,
+            o.team = body.team
+            o.color = body.color
+            o.life()
+        }
+    }, false],
     GUNS: [{
         POSITION: {},
         PROPERTIES: {
@@ -626,6 +649,13 @@ exports.onTest = {
             SHOOT_SETTINGS: combineStats([g.basic]),
             TYPE: 'bullet',
             ALT_FIRE: true
+        }
+    }, {
+        POSITION: { ANGLE: 180, DELAY: 0.5 },
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet',
+            IDENTIFIER: 'secondaryGun'
         }
     }]
 }
@@ -711,24 +741,29 @@ exports.ghoster = {
         SPEED: base.SPEED,
         ACCELERATION: base.ACCEL,
     },
-    GUNS: [{
-        POSITION: {WIDTH: 20, LENGTH: 20},
-        PROPERTIES: {
-            TYPE: 'bullet',
-            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni]),
-            ON_FIRE: ({body}) => {
+    ON: [
+        {
+            action: 'fire',
+            execute: ({ body }) => {
                 body.define(Class.ghoster_ghostForm)
-                setTimeout(() => { 
+                setTimeout(() => {
                     body.SPEED = 1e-99
                     body.ACCEL = 1e-99
                     body.FOV *= 2
                     body.alpha = 1
                 }, 2000)
-                setTimeout(() => { 
-                    body.SPEED = base.SPEED 
-                    body.define(Class.ghoster) 
+                setTimeout(() => {
+                    body.SPEED = base.SPEED
+                    body.define(Class.ghoster)
                 }, 2500)
             }
+        }
+    ],
+    GUNS: [{
+        POSITION: {WIDTH: 20, LENGTH: 20},
+        PROPERTIES: {
+            TYPE: 'bullet',
+            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni]),
         }
     }],
     ALPHA: 1,
@@ -739,18 +774,25 @@ exports.switcheroo = {
     LABEL: 'Switcheroo',
     UPGRADES_TIER_0: [],
     RESET_UPGRADE_MENU: true,
-    GUNS: [{
-        POSITION: {},
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic]),
-            TYPE: 'bullet',
-            ON_FIRE: ({ body, globalMasterStore: store }) => {
+    ON: [
+        {
+            action: "fire",
+            execute: ({ body, globalMasterStore: store, gun }) => {
+                if (gun.identifier != 'switcherooGun') return
                 store.switcheroo_i ??= 0;
                 store.switcheroo_i++;
                 store.switcheroo_i %= 6;
                 body.define(Class.basic.UPGRADES_TIER_1[store.switcheroo_i]);
                 setTimeout(() => body.define("switcheroo"), 6000);
             }
+        }
+    ],
+    GUNS: [{
+        POSITION: {},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet',
+            IDENTIFIER: 'switcherooGun'
         }
     }]
 }

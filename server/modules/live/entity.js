@@ -104,7 +104,6 @@ class Gun {
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
             this.drawAbove = (info.PROPERTIES.DRAW_ABOVE == null) ? false : info.PROPERTIES.DRAW_ABOVE;
             this.stack = (info.PROPERTIES.STACK_GUN == null) ? true : info.PROPERTIES.STACK_GUN;
-            this.onFire = (info.PROPERTIES.ON_FIRE == null) ? null : info.PROPERTIES.ON_FIRE
             this.identifier = (info.PROPERTIES.IDENTIFIER == null) ? null : info.PROPERTIES.IDENTIFIER
         }
         let position = info.POSITION;
@@ -339,17 +338,25 @@ class Gun {
             o.team = this.body.team;
             o.refreshBodyAttributes();
             o.life();
-            if (this.onFire != null) {
-                this.onFire({
-                    body: this.master.master,
+            this.altFire ? this.master.ON(
+                undefined,
+                'altFire',
+                {
                     gun: this,
-                    masterStore: this.master.master.store,
-                    gunStore: this.store,
-                    globalMasterStore: this.master.master.globalStore,
-                    globalGunStore: this.globalStore,
+                    store: this.store,
+                    globalStore: this.globalStore,
                     child: o
-                });
-            }
+                }
+            ) : this.master.ON(
+                undefined,
+                'fire',
+                {
+                    gun: this,
+                    store: this.store,
+                    globalStore: this.globalStore,
+                    child: o
+                }
+            )
             return;
         }
 
@@ -369,19 +376,27 @@ class Gun {
         this.bulletInit(o);
         o.coreSize = o.SIZE;
 
-        this.master.ON(undefined, 'fire', this)
-
-        if (this.onFire != null) {
-            this.onFire({
-                body: this.master.master,
-                gun: this,
-                masterStore: this.master.master.store,
-                gunStore: this.store,
-                globalMasterStore: this.master.master.globalStore,
-                globalGunStore: this.globalStore,
-                child: o
-            });
-        }
+        this.altFire ? this.master.ON(
+            undefined, 
+            'altFire',   
+                {   
+                    gun: this, 
+                    store: this.store, 
+                    globalStore: this.
+                    globalStore, 
+                    child: o 
+                }
+            ) : this.master.ON(
+                undefined, 
+                'fire', 
+                { 
+                    gun: this, 
+                    store: this.store, 
+                    globalStore: 
+                    this.globalStore, 
+                    child: o 
+                }
+            )
     }
     bulletInit(o) {
         // Define it by its natural properties
@@ -820,6 +835,7 @@ class Entity extends EventEmitter {
         this.levelCap = undefined;
         this.autospinBoost = 0;
         this.antiNaN = new antiNaN(this);
+        this.keepOn = false
         // Get a new unique id
         this.id = entitiesIdLog++;
         this.team = this.id;
@@ -1241,7 +1257,11 @@ class Entity extends EventEmitter {
                 o.bindToMaster(def.POSITION, this, def.VULNERABLE);
             }
         }
-        if (set.ON != null) this.onDef = set.ON
+        if (set.ON != null && this.onDef == null) {
+            this.onDef = set.ON
+        } else if (!this.keepOn) {
+            this.onDef = set.ON != null ? set.ON : null
+        }
         if (set.mockup != null) {
             this.mockup = set.mockup;
         }
@@ -1394,10 +1414,42 @@ class Entity extends EventEmitter {
     }
     ON(on = this.onDef, actionName, value) {
         if (on == null) return
+        let onPairs = []
+        for (let pairs of on) {
+            if (typeof pairs == 'boolean') {
+                this.keepOn = pairs
+                continue
+            }
+            onPairs.push(pairs)
+        }
         for (let onPairs of on) {
             switch (onPairs.action) {
                 case 'fire':
-                    if (actionName == 'fire') onPairs.execute({ body: this, gun: value })
+                    if (actionName == 'fire') onPairs.execute({
+                        body: this,
+                        gun: value.gun,
+                        child: value.child,
+                        masterStore: this.store,
+                        globalMasterStore: this.globalStore,
+                        gunStore: value.store,
+                        globalGunStore: value.globalStore
+                     })
+                    break;
+                case 'altFire':
+                    if (actionName == 'altFire') onPairs.execute({
+                        body: this,
+                        gun: value.gun,
+                        child: value.child,
+                        masterStore: this.store,
+                        globalMasterStore: this.globalStore,
+                        gunStore: value.store,
+                        globalGunStore: value.globalStore
+                     })
+                case 'death':
+                    if (actionName == 'death') onPairs.execute({ body: this })
+                    break;
+                case 'collide':
+                    if (actionName == 'collide') onPairs.execute({ instance: value.instance, other: value.other })
                     break;
             }
         }
@@ -2032,6 +2084,8 @@ class Entity extends EventEmitter {
         this.damageRecieved = 0;
         // Check for death
         if (this.isDead()) {
+            this.ON(this.onDef, 'death')
+
             this.emit('dead');
 
             //Shoot on death
