@@ -102,7 +102,7 @@ makeRare = (type, level) => ({
 
 makeLaby = (type, level) => {
     let usableSHAPE = Math.max(type.SHAPE, 3),
-        downscale = Math.cos(Math.PI / usableSHAPE),
+        downscale = Math.cos(Math.PI / usableSHAPE), // https://www.calculatorsoup.com/calculators/geometry-plane/polygon.php
         strenghtMultiplier = 5 ** (level - 1);
     return {
         PARENT: ["food"],
