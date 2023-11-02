@@ -626,16 +626,15 @@ exports.onTest = {
         execute: ({ body, gun }) => {
             body.sendMessage('fired alt gun')
         }
-    },
-    {
+    }, {
         action: "death",
         execute: ({ body, killers, killTools }) => {
             body.sendMessage('you died')
         }
     }, {
-        action: "damage",
+        action: "tick",
         execute: ({ body }) => {
-            body.sendMessage(`ouch! ${body.damageRecieved}`)
+            body.color = Math.floor(Math.random() * 39) + " 0 1 0 false"
         }
     }],
     GUNS: [{

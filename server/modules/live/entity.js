@@ -1265,6 +1265,10 @@ class Entity extends EventEmitter {
             this.emit('define', set);
         }
 
+        if (this.onDef != null) {
+            this.ON(this.onDef, 'define')
+        }
+
         this.defs = [];
         for (let def of defs) this.defs.push(def);
 
@@ -1443,6 +1447,13 @@ class Entity extends EventEmitter {
                     break;
                 case 'upgrade':
                     if (actionName == 'upgrade') onPairs.execute({ body: this, oldEntity: value.oldEntity })
+                    break;
+                case 'tick':
+                    if (actionName == 'tick') onPairs.execute({ body: this })
+                    break;
+                case 'define':
+                    if (actionName == 'define') onPairs.execute({ body: this })
+                    break;
             }
         }
     }
@@ -2049,7 +2060,7 @@ class Entity extends EventEmitter {
             return 0;
         }
         if (this.damageRecieved > 0) {
-            this.ON != null ? this.ON(undefined, 'damage') : null
+            this.onDef != null ? this.ON(undefined, 'damage') : null
             // TODO: find out how to fix 'collide' and 'damage'
         }
         // Life-limiting effects
@@ -2131,7 +2142,7 @@ class Entity extends EventEmitter {
             }
             // Remove duplicates
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));
-            this.ON != null ? this.ON(this.onDef, 'death', { killers, killTools }) : null
+            this.onDef != null ? this.ON(this.onDef, 'death', { killers, killTools }) : null
             // If there's no valid killers (you were killed by food), change the message to be more passive
             let killText = notJustFood ? "" : "You have been killed by ",
                 dothISendAText = this.settings.givesKillMessage;
