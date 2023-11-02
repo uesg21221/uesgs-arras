@@ -27,6 +27,7 @@ class Gun {
         this.body = body;
         this.master = body.source;
         this.label = "";
+        this.identifier = "";
         this.controllers = [];
         this.children = [];
         // Stored Variables
@@ -103,7 +104,7 @@ class Gun {
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
             this.drawAbove = (info.PROPERTIES.DRAW_ABOVE == null) ? false : info.PROPERTIES.DRAW_ABOVE;
             this.stack = (info.PROPERTIES.STACK_GUN == null) ? true : info.PROPERTIES.STACK_GUN;
-            this.onFire = (info.PROPERTIES.ON_FIRE == null) ? null : info.PROPERTIES.ON_FIRE
+            this.identifier = (info.PROPERTIES.IDENTIFIER == null) ? null : info.PROPERTIES.IDENTIFIER
         }
         let position = info.POSITION;
         if (Array.isArray(position)) {
@@ -337,17 +338,25 @@ class Gun {
             o.team = this.body.team;
             o.refreshBodyAttributes();
             o.life();
-            if (this.onFire != null) {
-                this.onFire({
-                    body: this.master.master,
+            this.altFire ? this.master.ON(
+                undefined,
+                'altFire',
+                {
                     gun: this,
-                    masterStore: this.master.master.store,
-                    gunStore: this.store,
-                    globalMasterStore: this.master.master.globalStore,
-                    globalGunStore: this.globalStore,
+                    store: this.store,
+                    globalStore: this.globalStore,
                     child: o
-                });
-            }
+                }
+            ) : this.master.ON(
+                undefined,
+                'fire',
+                {
+                    gun: this,
+                    store: this.store,
+                    globalStore: this.globalStore,
+                    child: o
+                }
+            )
             return;
         }
 
@@ -367,17 +376,27 @@ class Gun {
         this.bulletInit(o);
         o.coreSize = o.SIZE;
 
-        if (this.onFire != null) {
-            this.onFire({
-                body: this.master.master,
-                gun: this,
-                masterStore: this.master.master.store,
-                gunStore: this.store,
-                globalMasterStore: this.master.master.globalStore,
-                globalGunStore: this.globalStore,
-                child: o
-            });
-        }
+        this.altFire ? this.master.ON(
+            undefined, 
+            'altFire',   
+                {   
+                    gun: this, 
+                    store: this.store, 
+                    globalStore: this.
+                    globalStore, 
+                    child: o 
+                }
+            ) : this.master.ON(
+                undefined, 
+                'fire', 
+                { 
+                    gun: this, 
+                    store: this.store, 
+                    globalStore: 
+                    this.globalStore, 
+                    child: o 
+                }
+            )
     }
     bulletInit(o) {
         // Define it by its natural properties
@@ -1237,12 +1256,17 @@ class Entity extends EventEmitter {
                 o.bindToMaster(def.POSITION, this, def.VULNERABLE);
             }
         }
+        if (set.ON != null) this.onDef = set.ON
         if (set.mockup != null) {
             this.mockup = set.mockup;
         }
 
         if (emitEvent) {
             this.emit('define', set);
+        }
+
+        if (this.onDef != null) {
+            this.ON(this.onDef, 'define')
         }
 
         this.defs = [];
@@ -1385,6 +1409,52 @@ class Entity extends EventEmitter {
                 branchLabel: "",
                 redefineAll: true,
             });
+        }
+    }
+    ON(on = this.onDef, actionName, value) {
+        if (on == null) return
+        for (let onPairs of on) {
+            switch (onPairs.action) {
+                case 'fire':
+                    if (actionName == 'fire') onPairs.execute({
+                        body: this,
+                        gun: value.gun,
+                        child: value.child,
+                        masterStore: this.store,
+                        globalMasterStore: this.globalStore,
+                        gunStore: value.store,
+                        globalGunStore: value.globalStore
+                     })
+                    break;
+                case 'altFire':
+                    if (actionName == 'altFire') onPairs.execute({
+                        body: this,
+                        gun: value.gun,
+                        child: value.child,
+                        masterStore: this.store,
+                        globalMasterStore: this.globalStore,
+                        gunStore: value.store,
+                        globalGunStore: value.globalStore
+                     })
+                case 'death':
+                    if (actionName == 'death') onPairs.execute({ body: this, killers: value.killers, killTools: value.killTools })
+                    break;
+                case 'collide':
+                    if (actionName == 'collide') onPairs.execute({ instance: value.instance, other: value.other })
+                    break;
+                case 'damage':
+                    if (actionName == 'damage') onPairs.execute({ body: this })
+                    break;
+                case 'upgrade':
+                    if (actionName == 'upgrade') onPairs.execute({ body: this, oldEntity: value.oldEntity })
+                    break;
+                case 'tick':
+                    if (actionName == 'tick') onPairs.execute({ body: this })
+                    break;
+                case 'define':
+                    if (actionName == 'define') onPairs.execute({ body: this })
+                    break;
+            }
         }
     }
     refreshBodyAttributes() {
@@ -1557,6 +1627,7 @@ class Entity extends EventEmitter {
         return suc;
     }
     upgrade(number) {
+        let old = this
         if (
             number < this.upgrades.length &&
             this.level >= this.upgrades[number].level
@@ -1571,16 +1642,19 @@ class Entity extends EventEmitter {
                 }
                 this.upgrades = [];
                 this.define(upgradeClass);
+                this.ON(this.onDef, "upgrade", { oldEntity: old })
             } else {
                 this.defs.splice(upgradeBranch, 1, ...upgradeClass);
                 this.upgrades = [];
                 this.define(this.defs);
+                this.ON(this.onDef, "upgrade", { oldEntity: old })
             }
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
                 def = ensureIsClass(def);
                 if (def.TOOLTIP != null && def.TOOLTIP.length > 0) {
-                    this.sendMessage(def.TOOLTIP);
+                    let tooltips = Array.isArray(def.TOOLTIP) ? def.TOOLTIP : [def.TOOLTIP]
+                    for (let tooltip of tooltips.reverse()) this.sendMessage(tooltip)
                 }
             }
             for (let instance of entities) {
@@ -1985,6 +2059,10 @@ class Entity extends EventEmitter {
             this.damageRecieved = 0;
             return 0;
         }
+        if (this.damageRecieved > 0) {
+            this.onDef != null ? this.ON(undefined, 'damage') : null
+            // TODO: find out how to fix 'collide' and 'damage'
+        }
         // Life-limiting effects
         if (this.settings.diesAtRange) {
             this.range -= 1 / roomSpeed;
@@ -2017,6 +2095,7 @@ class Entity extends EventEmitter {
         this.damageRecieved = 0;
         // Check for death
         if (this.isDead()) {
+
             this.emit('dead');
 
             //Shoot on death
@@ -2063,6 +2142,7 @@ class Entity extends EventEmitter {
             }
             // Remove duplicates
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));
+            this.onDef != null ? this.ON(this.onDef, 'death', { killers, killTools }) : null
             // If there's no valid killers (you were killed by food), change the message to be more passive
             let killText = notJustFood ? "" : "You have been killed by ",
                 dothISendAText = this.settings.givesKillMessage;
