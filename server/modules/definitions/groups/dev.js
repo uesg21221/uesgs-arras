@@ -635,7 +635,7 @@ exports.onTest = {
             o.color = body.color
             o.life()
         }
-    }, false],
+    }],
     GUNS: [{
         POSITION: {},
         PROPERTIES: {

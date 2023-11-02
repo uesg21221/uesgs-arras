@@ -835,7 +835,6 @@ class Entity extends EventEmitter {
         this.levelCap = undefined;
         this.autospinBoost = 0;
         this.antiNaN = new antiNaN(this);
-        this.keepOn = false
         // Get a new unique id
         this.id = entitiesIdLog++;
         this.team = this.id;
@@ -1257,11 +1256,7 @@ class Entity extends EventEmitter {
                 o.bindToMaster(def.POSITION, this, def.VULNERABLE);
             }
         }
-        if (set.ON != null && this.onDef == null) {
-            this.onDef = set.ON
-        } else if (!this.keepOn) {
-            this.onDef = set.ON != null ? set.ON : null
-        }
+        if (set.ON != null) this.onDef = set.ON
         if (set.mockup != null) {
             this.mockup = set.mockup;
         }
@@ -1414,14 +1409,6 @@ class Entity extends EventEmitter {
     }
     ON(on = this.onDef, actionName, value) {
         if (on == null) return
-        let onPairs = []
-        for (let pairs of on) {
-            if (typeof pairs == 'boolean') {
-                this.keepOn = pairs
-                continue
-            }
-            onPairs.push(pairs)
-        }
         for (let onPairs of on) {
             switch (onPairs.action) {
                 case 'fire':
