@@ -605,7 +605,10 @@ exports.vulnturrettest = {
 exports.onTest = {
     PARENT: 'genericTank',
     LABEL: '`ON` property test',
-    TOOLTIP: 'Refer to exports.onTest to know more \n' + 'On collide is a bit buggy right now, please use other methods until its fixed',
+    TOOLTIP: [
+        'Refer to exports.onTest to know more ',
+        'On collide is a bit buggy right now, please use other methods until its fixed'
+    ],
     ON: [{
         action: "fire",
         execute: ({ body, gun }) => {
@@ -626,14 +629,13 @@ exports.onTest = {
     },
     {
         action: "death",
+        execute: ({ body, killers, killTools }) => {
+            body.sendMessage('you died')
+        }
+    }, {
+        action: "damage",
         execute: ({ body }) => {
-            let o = new Entity(body)
-            o.define('sorcerer'),
-            o.SIZE = body.SIZE
-            o.HEALTH = 5,
-            o.team = body.team
-            o.color = body.color
-            o.life()
+            body.sendMessage(`ouch! ${body.damageRecieved}`)
         }
     }],
     GUNS: [{

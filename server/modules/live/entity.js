@@ -1433,11 +1433,16 @@ class Entity extends EventEmitter {
                         globalGunStore: value.globalStore
                      })
                 case 'death':
-                    if (actionName == 'death') onPairs.execute({ body: this })
+                    if (actionName == 'death') onPairs.execute({ body: this, killers: value.killers, killTools: value.killTools })
                     break;
                 case 'collide':
                     if (actionName == 'collide') onPairs.execute({ instance: value.instance, other: value.other })
                     break;
+                case 'damage':
+                    if (actionName == 'damage') onPairs.execute({ body: this })
+                    break;
+                case 'upgrade':
+                    if (actionName == 'upgrade') onPairs.execute({ body: this, oldEntity: value.oldEntity })
             }
         }
     }
@@ -1611,6 +1616,7 @@ class Entity extends EventEmitter {
         return suc;
     }
     upgrade(number) {
+        let old = this
         if (
             number < this.upgrades.length &&
             this.level >= this.upgrades[number].level
@@ -1625,16 +1631,19 @@ class Entity extends EventEmitter {
                 }
                 this.upgrades = [];
                 this.define(upgradeClass);
+                this.ON(this.onDef, "upgrade", { oldEntity: old })
             } else {
                 this.defs.splice(upgradeBranch, 1, ...upgradeClass);
                 this.upgrades = [];
                 this.define(this.defs);
+                this.ON(this.onDef, "upgrade", { oldEntity: old })
             }
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
                 def = ensureIsClass(def);
                 if (def.TOOLTIP != null && def.TOOLTIP.length > 0) {
-                    this.sendMessage(def.TOOLTIP);
+                    let tooltips = Array.isArray(def.TOOLTIP) ? def.TOOLTIP : [def.TOOLTIP]
+                    for (let tooltip of tooltips.reverse()) this.sendMessage(tooltip)
                 }
             }
             for (let instance of entities) {
@@ -2039,6 +2048,10 @@ class Entity extends EventEmitter {
             this.damageRecieved = 0;
             return 0;
         }
+        if (this.damageRecieved > 0) {
+            this.ON != null ? this.ON(undefined, 'damage') : null
+            // TODO: find out how to fix 'collide' and 'damage'
+        }
         // Life-limiting effects
         if (this.settings.diesAtRange) {
             this.range -= 1 / roomSpeed;
@@ -2071,7 +2084,6 @@ class Entity extends EventEmitter {
         this.damageRecieved = 0;
         // Check for death
         if (this.isDead()) {
-            this.ON(this.onDef, 'death')
 
             this.emit('dead');
 
@@ -2119,6 +2131,7 @@ class Entity extends EventEmitter {
             }
             // Remove duplicates
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));
+            this.ON != null ? this.ON(this.onDef, 'death', { killers, killTools }) : null
             // If there's no valid killers (you were killed by food), change the message to be more passive
             let killText = notJustFood ? "" : "You have been killed by ",
                 dothISendAText = this.settings.givesKillMessage;
