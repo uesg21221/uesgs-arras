@@ -338,17 +338,17 @@ var gameDraw = {
                 return gameDraw.animatedColor.grey_red;
             case 25:
             case "mustard":
-                return "#C49608";
+                return gameDraw.color.mustard;
             case 26:
             case "darkOrange":
-                return "#EC7B0F";
+                return gameDraw.color.dorange;
             case 27:
             case "brown":
-                return "#895918";
+                return gameDraw.color.brown;
             case 28:
             case "cyan":
             case "turquoise":
-                return "#13808E";
+                return gameDraw.color.cyan;
             case 29:
             case "animatedLesbian":
                 return gameDraw.animatedColor.lesbian;
