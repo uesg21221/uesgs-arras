@@ -1,4 +1,4 @@
-const { combineStats, skillSet, makeAuto, makeDeco, makeMulti } = require('../facilitators.js');
+const { combineStats, skillSet, makeAuto, makeDeco, makeMulti, makePermanentEntity } = require('../facilitators.js');
 const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js');
 const { genericTank } = require('./generics.js')
 const { trapper, healer } = require('./tanks.js');
@@ -717,6 +717,9 @@ exports.baseProtector = {
         },
     ],
 };
+
+exports.permanentBaseProtector = makePermanentEntity(exports.baseProtector)
+
 exports.mothership = {
     PARENT: ["genericTank"],
     LABEL: "Mothership",
@@ -902,6 +905,8 @@ exports.antiTankMachineGun = {
         TYPE: ["dominationBody"]
     }]
 }
+
+exports.permanentAntiTankMachineGun = makePermanentEntity(exports.antiTankMachineGun)
 
 // OLD TANKS
 exports.oldSpreadshot = {
