@@ -2,7 +2,7 @@ atmg = new Tile({ color: "white", init: tile => {
     let entity = new Entity(tile.loc)
     entity.define('permanentAntiTankMachineGun')
     entity.team = TEAM_ROOM
-    entity.controllers = [new ioTypes.nearestDifferentMaster(o)]
+    entity.controllers = [new ioTypes.nearestDifferentMaster(entity)]
     entity.color = getTeamColor(TEAM_RED)
 } }),
 
