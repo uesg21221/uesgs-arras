@@ -1,14 +1,17 @@
 let bases = {},
 
+spawnPermanentBaseProtector = (loc, team) => {
+    let o = new Entity(loc);
+    o.define('baseProtector');
+    o.team = team;
+    o.color = getTeamColor(team);
+    o.on('dead', () => spawnPermanentBaseProtector(loc, team));
+};
+
 makeBase = (team, hasProtection) => new Tile({
     color: getTeamColor(team),
     init: tile => {
-        if (hasProtection) {
-            let entity = new Entity(tile.loc)
-            entity.define('permanentBaseProtector')
-            entity.team = team
-            entity.color = getTeamColor(team)
-        };
+        if (hasProtection) spawnPermanentBaseProtector(tile.loc, team);
         if (!room.spawnable[team]) room.spawnable[team] = [];
         room.spawnable[team].push(tile);
     },
