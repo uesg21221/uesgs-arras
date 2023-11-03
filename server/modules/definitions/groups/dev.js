@@ -286,7 +286,7 @@ for (let tier = 0; tier < 6; tier++) {
         let column = [];
         for (let shiny of [ "", "Shiny", "Legendary", "Shadow", "Rainbow", "Trans" ]) {
             let str = `laby${tier}${shiny}${poly}`,
-                LABEL = str[0].toUpperCase() + str.slice(1).replace(/\d/, d => ["", "Beta", "Alpha", "Omega", "Gamma", "Delta"][d]).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
+                LABEL = str[0].toUpperCase() + str.slice(1).replace(/\d/, d => ["", "Beta", "Alpha", "Omega", "Omega+1", "Omega+2"][d]).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
                 code = str + 'Generator';
             column.push(exports[code] = {
                 PARENT: "spectator",
