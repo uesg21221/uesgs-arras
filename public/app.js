@@ -198,9 +198,9 @@ window.onload = async () => {
             startGame();
         }
     };
-    window.addEventListener("resize", resizeEvent);
+    //window.addEventListener("resize", resizeEvent);
     // Resizing stuff
-    resizeEvent();
+    //resizeEvent();
 };
 // Prepare canvas stuff
 function resizeEvent() {
@@ -621,7 +621,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
     if (fill) context.fill();
     context.lineJoin = "round";
 }
-function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill) {
+function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha) {
     let h = [];
     h = aspect > 0 ? [height * aspect, height] : [height, -height * aspect];
 
@@ -635,6 +635,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     points.push([0, -h[1]]);
 
     // Rotate it to the new angle via vector rotation
+    context.globalAlpha = alpha
     context.beginPath();
     for (let point of points) {
         let newX = point[0] * cosT - point[1] * sinT + x,
@@ -644,6 +645,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     context.closePath();
     if (!borderless) context.stroke();
     if (fill) context.fill();
+    context.globalAlpha = 1
 }
 // Entity drawing (this is a function that makes a function)
 const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
@@ -699,10 +701,11 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
                 gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
+                alpha = g.alpha,
                 borderless = g.borderless,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position : position / 2)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position : position / 2)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill, alpha);
         }
     }
     // Draw body
@@ -739,10 +742,11 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
                 gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
+                alpha = g.alpha,
                 borderless = g.borderless,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : position)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : position)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill, alpha);
         }
     }
     // Draw turrets above us

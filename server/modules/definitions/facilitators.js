@@ -172,9 +172,9 @@ exports.addBackGunner = (type, name = -1) => {
     output.LABEL = name == -1 ? type.LABEL : name;
     return output;
 }
-let greekNumbers = ',Double ,Triple ,Quad ,Penta ,Hexa ,Septa ,Octo ,Nona ,Deca ,Undeca ,Dodeca ,Trideca ,Tetradeca ,Pentadeca ,Hexadeca ,Heptadeca ,Octadeca ,Nonadeca ,Icosa ,Henicosa ,Docosa ,Tricosa ,Triaconta ,Hentriaconta '.split(',')
 exports.makeMulti = (type, count, name = -1, startRotation = 0) => {
-    let output = exports.dereference(type),
+    let greekNumbers = ',Double ,Triple ,Quad ,Penta ,Hexa ,Septa ,Octo ,Nona ,Deca ,Undeca ,Dodeca ,Trideca ,Tetradeca ,Pentadeca ,Hexadeca ,Heptadeca ,Octadeca ,Nonadeca ,Icosa ,Henicosa ,Docosa ,Tricosa ,Triaconta ,Hentriaconta '.split(','),
+        output = exports.dereference(type),
         shootyBois = output.GUNS,
         fraction = 360 / count;
     output.GUNS = [];

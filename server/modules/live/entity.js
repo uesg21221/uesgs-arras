@@ -49,6 +49,7 @@ class Gun {
             allowBrightnessInvert: false,
         };
         this.color = '16 0 1 0 false';
+        this.alpha = 1;
         this.canShoot = false;
         this.borderless = false;
         this.drawFill = true;
@@ -98,6 +99,7 @@ class Gun {
                     };
                 this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
             }
+            this.alpha = info.PROPERTIES.ALPHA == null ? 1 : info.PROPERTIES.ALPHA
             this.borderless = info.PROPERTIES.BORDERLESS == null ? false : info.PROPERTIES.BORDERLESS;
             this.drawFill = info.PROPERTIES.DRAW_FILL == null ? true : info.PROPERTIES.drawFill;
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
