@@ -49,7 +49,7 @@ portal = new Tile({
             entity.velocity.y = ay * force;
             entity.x = exitport.loc.x + ax * room.tileWidth;
             entity.y = exitport.loc.y + ay * room.tileHeight;
-            entity.invuln = true;
+            entity.protect()
 
             //also don't forget to bring her kids along the ride
             for (let o of entities) {
