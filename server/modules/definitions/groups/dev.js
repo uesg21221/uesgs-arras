@@ -162,16 +162,6 @@ exports.specialTanks = {
     PARENT: ["menu"],
     LABEL: "Special Tanks",
 };
-exports.bases = {
-    PARENT: ["menu"],
-    LABEL: "Bases",
-    TURRETS: [
-        {
-            POSITION: [22, 0, 0, 0, 360, 0],
-            TYPE: "dominationBody",
-        },
-    ],
-};
 exports.dominators = {
     PARENT: ["menu"],
     LABEL: "Dominators",
@@ -296,7 +286,7 @@ for (let tier = 0; tier < 6; tier++) {
         let column = [];
         for (let shiny of [ "", "Shiny", "Legendary", "Shadow", "Rainbow", "Trans" ]) {
             let str = `laby${tier}${shiny}${poly}`,
-                LABEL = str[0].toUpperCase() + str.slice(1).replace(/\d/, d => ["", "Beta", "Alpha", "Omega", "Gamma", "Delta"][d]).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
+                LABEL = str[0].toUpperCase() + str.slice(1).replace(/\d/, d => ["", "Beta", "Alpha", "Omega", "Omega+1", "Omega+2"][d]).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
                 code = str + 'Generator';
             column.push(exports[code] = {
                 PARENT: "spectator",
@@ -1097,10 +1087,9 @@ exports.addons = {
 // DEV "UPGRADE PATHS"
 exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
     exports.tanks.UPGRADES_TIER_0 = ["basic", "healer", "specialTanks", "legacyTanks", "funTanks", "testingTanks"];
-	exports.specialTanks.UPGRADES_TIER_0 = ["arenaCloser", "bases", "mothership"];
-        exports.bases.UPGRADES_TIER_0 = ["baseProtector", "dominators", "sanctuaries", "antiTankMachineGun"];
-                exports.dominators.UPGRADES_TIER_0 = ["dominator", "destroyerDominator", "gunnerDominator", "trapperDominator"];
-                exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", /*misc*/"sanctuaryTier4", "sanctuaryTier5"];
+	exports.specialTanks.UPGRADES_TIER_0 = ["baseProtector", "dominators", "sanctuaries", "arenaCloser", "mothership", "antiTankMachineGun"];
+            exports.dominators.UPGRADES_TIER_0 = ["dominator", "destroyerDominator", "gunnerDominator", "trapperDominator"];
+            exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", /*misc*/"sanctuaryTier4", "sanctuaryTier5"];
         exports.legacyTanks.UPGRADES_TIER_0 = ["weirdSpike", "oldBentBoomer", "quadBuilder", "master", "blunderbuss", "oldRimfire", "oldSpreadshot", "oldCommander", "autoTrapper", "prodigy", "mender", "tetraGunner", "corvette", "whirlwind", "flail"];
         exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
         exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", ["assassin", "dreadOfficialV1"], "vulnturrettest", "onTest", "alphaGunTest"];
