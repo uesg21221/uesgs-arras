@@ -733,35 +733,3 @@ exports.makeLabyrinthShape = (type) => {
     let downscale = Math.max(output.SHAPE, 3);
     return output;
 }
-
-// Misc Functions
-
-exports.makePermanentEntity = (type) => {
-    let output = exports.dereference(type)
-    if (output.ON != null) {
-        output.ON.push({
-            action: 'death',
-            execute: ({ body }) => {
-                let newEntity = new Entity(body)
-                newEntity.define(body.defs)
-                newEntity.team = body.team
-                newEntity.color = body.color
-                newEntity.SIZE = body.SIZE
-                newEntity.life()
-            }
-        })
-    } else {
-        output.ON = [{
-            action: 'death',
-            execute: ({ body }) => {
-                let newEntity = new Entity(body)
-                newEntity.define(body.defs)
-                newEntity.team = body.team
-                newEntity.color = body.color
-                newEntity.SIZE = body.SIZE
-                newEntity.life()
-            }
-        }]
-    }
-    return output
-}
