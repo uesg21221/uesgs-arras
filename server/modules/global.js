@@ -94,7 +94,7 @@ global.Tile = class Tile {
 global.clockTick = 0;
 global.tickQueue = [];
 global.syncedDelaysLoop = () => {
-    while (tickQueue[0][0] <= clockTick) {
+    while (tickQueue[0] && tickQueue[0][0] <= clockTick) {
         let current = tickQueue.shift();
         current[1](...current[2]);
     }
