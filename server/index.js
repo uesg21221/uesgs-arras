@@ -292,7 +292,6 @@ spawnBosses = minibossCount => {
                 names.push(boss.name);
             }
 
-            console.log(names);
             sockets.broadcast(`${util.listify(names)} ${names.length == 1 ? 'has' : 'have'} arrived!`);
         }, c.BOSS_SPAWN_DURATION * 30);
     }

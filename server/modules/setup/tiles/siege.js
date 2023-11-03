@@ -1,13 +1,10 @@
-let spawnPermanentAntiTankMachineGun = (loc) => {
-    let o = new Entity(loc);
-    o.define('antiTankMachineGun');
-    o.controllers = [new ioTypes.nearestDifferentMaster(o)]
-    o.team = TEAM_ROOM;
-    o.color = getTeamColor(TEAM_RED);
-    o.on('dead', () => spawnPermanentAntiTankMachineGun(loc));
-},
-
-atmg = new Tile({ color: "white", init: tile => spawnPermanentAntiTankMachineGun(tile.loc) }),
+atmg = new Tile({ color: "white", init: tile => {
+    let entity = new Entity(tile.loc)
+    entity.define('permanentAntiTankMachineGun')
+    entity.team = TEAM_ROOM
+    entity.controllers = [new ioTypes.nearestDifferentMaster(o)]
+    entity.color = getTeamColor(TEAM_RED)
+} }),
 
 // we are not yet advanced enough to transition between two color codes
 outside = new Tile({ color: "#C5C5C5" }),
