@@ -347,6 +347,7 @@ const GunContainer = n => {
         getConfig: () => a.map(g => {
             return {
                 color: g.color,
+                alpha: g.alpha,
                 borderless: g.borderless, 
                 drawFill: g.drawFill,
                 drawAbove: g.drawAbove,

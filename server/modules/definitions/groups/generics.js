@@ -62,6 +62,7 @@ exports.genericEntity = {
     BORDERLESS: false,
     DRAW_FILL: true,
     REROOT_UPGRADE_TREE: null,
+    ON: [],
     BODY: {
         ACCELERATION: 1,
         SPEED: 0,
@@ -111,6 +112,7 @@ exports.genericTank = {
     },
     GUNS: [],
     TURRETS: [],
+    ON: [],
     GIVE_KILL_MESSAGE: true,
     DRAW_HEALTH: true,
     HITS_OWN_TYPE: "hardOnlyTanks",

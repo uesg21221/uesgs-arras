@@ -1,7 +1,7 @@
-const { combineStats, skillSet, makeAuto, makeDeco } = require('../facilitators.js');
+const { combineStats, skillSet, makeAuto, makeDeco, makeMulti, makePermanentEntity } = require('../facilitators.js');
 const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js');
 const { genericTank } = require('./generics.js')
-const { trapper } = require('./tanks.js');
+const { trapper, healer } = require('./tanks.js');
 const g = require('../gunvals.js');
 
 // OBSTACLES
@@ -227,6 +227,97 @@ exports.trapperDominator = {
         },
     ],
 };
+
+// SANCTUARIES
+exports.sanctuaryHealer = {
+    PARENT: "genericTank",
+    LABEL: "",
+    BODY: {
+        FOV: base.FOV * 1.2,
+    },
+    CONTROLLERS: [["spin", { independent: true, speed: -0.05 }]],
+    TURRETS: [{ 
+        POSITION: { SIZE: 13, LAYER: 1 },
+        TYPE: ['healerSymbol', { CONTROLLERS: [["spin", { startAngle: Math.PI / 2, speed: 0, independent: true }]] }]
+    }],
+};
+
+let sancHealerTiers = [2, 3, 4, 5, 6]
+for (let tier of sancHealerTiers) {
+    exports['sanctuaryHealerTier' + (sancHealerTiers.indexOf(tier) + 1)] = {
+        PARENT: "sanctuaryHealer",
+        GUNS: (() => {
+            let output = []
+            for (let i = 0; i < tier; i++) {
+                output.push({
+                    POSITION: { LENGTH: 8, WIDTH: 9, ASPECT: -0.5, X: 12.5, ANGLE: (360 / tier) * i },
+                }, {
+                    POSITION: { LENGTH: 8, WIDTH: 10, X: 10, ANGLE: (360 / tier) * i },
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.healer, {shudder: 0.1, spray: 0.1, speed: 0.8, reload: 1.2}]),
+                        TYPE: "healerBullet",
+                        AUTOFIRE: true,
+                    }
+                })
+            }
+            return output
+        })()
+    }
+}
+
+exports.sanctuary = {
+    PARENT: "dominator",
+    LABEL: "Sanctuary",
+    LEVEL: 45,
+    SIZE: 20,
+    CONTROLLERS: [["spin", { independent: true, speed: 0.04 }]],
+    SKILL: skillSet({
+        rld: 1.25,
+        dam: 1.25,
+        str: 1.25,
+    }),
+    BODY: {
+        HEALTH: 750,
+        DAMAGE: 7.5,
+        SHIELD: base.SHIELD * 1.5,
+    },
+    TURRETS: [{
+        POSITION: { SIZE: 22 },
+        TYPE: "dominationBody",
+    }]
+};
+
+let sancTiers = [3, 8, 12, 17, 21]
+for (let tier of sancTiers) {
+    exports['sanctuaryTier' + (sancTiers.indexOf(tier) + 1)] = {
+        PARENT: "sanctuary",
+        TURRETS: [],
+        GUNS: (() => {
+            let output = []
+            for (let i = 0; i < tier; i++) {
+                output.push({
+                    POSITION: {LENGTH: 12, WIDTH: 4, ANGLE: (360/tier)*i}
+                }, {
+                    POSITION: {LENGTH: 1.5, WIDTH: 4, ASPECT: 1.7, X: 12, ANGLE: (360/tier)*i},
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.trap, {shudder: 2, spray: 1.2, speed: 0.8, reload: 1.5}]),
+                        TYPE: "trap",
+                        STAT_CALCULATOR: gunCalcNames.trap,
+                        AUTOFIRE: true,
+                    },
+                })
+            }
+            return output
+        })()
+    }
+    exports['sanctuaryTier' + (sancTiers.indexOf(tier) + 1)].TURRETS.push({
+        POSITION: { SIZE: 22 },
+        TYPE: "dominationBody",
+    }, {
+        POSITION: { SIZE: 8.5, LAYER: 1 },
+        TYPE: "sanctuaryHealerTier" + (sancTiers.indexOf(tier) + 1),
+    })
+}
 
 // CRASHERS
 exports.crasher = {
@@ -626,6 +717,9 @@ exports.baseProtector = {
         },
     ],
 };
+
+exports.permanentBaseProtector = makePermanentEntity(exports.baseProtector)
+
 exports.mothership = {
     PARENT: ["genericTank"],
     LABEL: "Mothership",
@@ -811,6 +905,8 @@ exports.antiTankMachineGun = {
         TYPE: ["dominationBody"]
     }]
 }
+
+exports.permanentAntiTankMachineGun = makePermanentEntity(exports.antiTankMachineGun)
 
 // OLD TANKS
 exports.oldSpreadshot = {

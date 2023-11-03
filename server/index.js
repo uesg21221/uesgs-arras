@@ -29,6 +29,7 @@ function collide(collision) {
     // Pull the two objects from the collision grid
     let instance = collision[0],
         other = collision[1];
+    if (instance.onDef != null) instance.ON(undefined, 'collide', { instance, other })
     // Check for ghosts...
     if (other.isGhost) {
         util.error("GHOST FOUND");
@@ -246,6 +247,7 @@ const gameloop = () => {
         }
         // Update collisions.
         my.collisionArray = [];
+        if (my.onDef != null) my.ON(undefined, 'tick')
     }
     logs.entities.mark();
     logs.master.mark();

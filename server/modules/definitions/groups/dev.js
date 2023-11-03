@@ -582,6 +582,83 @@ exports.vulnturrettest = {
     })(),
 };
 
+// unfinished
+exports.alphaGunTest = {
+    PARENT: "basic",
+    LABEL: "Alpha Gun Test",
+    ON: [{
+        action: "fire",
+        execute: ({ gun }) => console.log(gun.alpha)
+    }],
+    GUNS: [{
+        POSITION: {},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet',
+            ALPHA: 0
+        }
+    }]
+}
+
+exports.onTest = {
+    PARENT: 'genericTank',
+    LABEL: '`ON` property test',
+    TOOLTIP: [
+        'Refer to exports.onTest to know more ',
+        'On collide is a bit buggy right now, please use other methods until its fixed'
+    ],
+    ON: [{
+        action: "fire",
+        execute: ({ body, gun }) => {
+            switch (gun.identifier) {
+                case 'mainGun':
+                    body.sendMessage('fired main gun')
+                    break;
+                case 'secondaryGun':
+                    body.sendMessage('fired secondary gun')
+                    break;
+            }
+        }
+    }, {
+        action: "altFire",
+        execute: ({ body, gun }) => {
+            body.sendMessage('fired alt gun')
+        }
+    }, {
+        action: "death",
+        execute: ({ body, killers, killTools }) => {
+            body.sendMessage('you died')
+        }
+    }, {
+        action: "tick",
+        execute: ({ body }) => {
+            body.color = Math.floor(Math.random() * 39) + " 0 1 0 false"
+        }
+    }],
+    GUNS: [{
+        POSITION: {},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet',
+            IDENTIFIER: 'mainGun'
+        }
+    }, {
+        POSITION: { ANGLE: 90 },
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet',
+            ALT_FIRE: true
+        }
+    }, {
+        POSITION: { ANGLE: 180, DELAY: 0.5 },
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet',
+            IDENTIFIER: 'secondaryGun'
+        }
+    }]
+}
+
 exports.auraBasicGen = {
     PARENT: 'genericTank',
     TYPE: 'aura',
@@ -663,24 +740,29 @@ exports.ghoster = {
         SPEED: base.SPEED,
         ACCELERATION: base.ACCEL,
     },
-    GUNS: [{
-        POSITION: {WIDTH: 20, LENGTH: 20},
-        PROPERTIES: {
-            TYPE: 'bullet',
-            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni]),
-            ON_FIRE: ({body}) => {
+    ON: [
+        {
+            action: 'fire',
+            execute: ({ body }) => {
                 body.define(Class.ghoster_ghostForm)
-                setTimeout(() => { 
+                setTimeout(() => {
                     body.SPEED = 1e-99
                     body.ACCEL = 1e-99
                     body.FOV *= 2
                     body.alpha = 1
                 }, 2000)
-                setTimeout(() => { 
-                    body.SPEED = base.SPEED 
-                    body.define(Class.ghoster) 
+                setTimeout(() => {
+                    body.SPEED = base.SPEED
+                    body.define(Class.ghoster)
                 }, 2500)
             }
+        }
+    ],
+    GUNS: [{
+        POSITION: {WIDTH: 20, LENGTH: 20},
+        PROPERTIES: {
+            TYPE: 'bullet',
+            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni]),
         }
     }],
     ALPHA: 1,
@@ -691,18 +773,25 @@ exports.switcheroo = {
     LABEL: 'Switcheroo',
     UPGRADES_TIER_0: [],
     RESET_UPGRADE_MENU: true,
-    GUNS: [{
-        POSITION: {},
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic]),
-            TYPE: 'bullet',
-            ON_FIRE: ({ body, globalMasterStore: store }) => {
+    ON: [
+        {
+            action: "fire",
+            execute: ({ body, globalMasterStore: store, gun }) => {
+                if (gun.identifier != 'switcherooGun') return
                 store.switcheroo_i ??= 0;
                 store.switcheroo_i++;
                 store.switcheroo_i %= 6;
                 body.define(Class.basic.UPGRADES_TIER_1[store.switcheroo_i]);
                 setTimeout(() => body.define("switcheroo"), 6000);
             }
+        }
+    ],
+    GUNS: [{
+        POSITION: {},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet',
+            IDENTIFIER: 'switcherooGun'
         }
     }]
 }
@@ -1009,12 +1098,12 @@ exports.addons = {
 exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
     exports.tanks.UPGRADES_TIER_0 = ["basic", "healer", "specialTanks", "legacyTanks", "funTanks", "testingTanks"];
 	exports.specialTanks.UPGRADES_TIER_0 = ["arenaCloser", "bases", "mothership"];
-        exports.bases.UPGRADES_TIER_0 = ["baseProtector", "dominators", "sanctuaries", "antiTankMachineGun"];
+        exports.bases.UPGRADES_TIER_0 = ["baseProtector", "permanentBaseProtector", "dominators", "sanctuaries", "antiTankMachineGun", "permanentAntiTankMachineGun"];
                 exports.dominators.UPGRADES_TIER_0 = ["dominator", "destroyerDominator", "gunnerDominator", "trapperDominator"];
-                exports.sanctuaries.UPGRADES_TIER_0 = [];
+                exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", /*misc*/"sanctuaryTier4", "sanctuaryTier5"];
         exports.legacyTanks.UPGRADES_TIER_0 = ["weirdSpike", "oldBentBoomer", "quadBuilder", "master", "blunderbuss", "oldRimfire", "oldSpreadshot", "oldCommander", "autoTrapper", "prodigy", "mender", "tetraGunner", "corvette", "whirlwind", "flail"];
         exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
-        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", ["assassin", "dreadOfficialV1"], "vulnturrettest"];
+        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", ["assassin", "dreadOfficialV1"], "vulnturrettest", "onTest", "alphaGunTest"];
 
     exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "terrestrials", "celestials", "eternals", "devBosses"];
         exports.sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap"];
