@@ -1611,6 +1611,7 @@ class Entity extends EventEmitter {
         };
     }
     syncTurrets() {
+        for (let i = 0; i < this.guns.length; i++) this.guns[i].syncChildren();
         for (let i = 0; i < this.turrets.length; i++) {
             this.turrets[i].skill = this.skill;
             this.turrets[i].refreshBodyAttributes();
