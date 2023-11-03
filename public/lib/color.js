@@ -50,7 +50,7 @@ var color = {
         "guiblack": "#000000",
         "mustard": "#C49608",
         "dorange": "#EC7B0F",
-        "brown": "#895918",
+        "brown": "#D68163",
         "cyan": "#13808E",
         "paletteSize": 10,
         "border": 0.5
