@@ -91,14 +91,23 @@ global.Tile = class Tile {
     }
 }
 
-global.tickIndex = 0;
-global.tickEvents = new EventEmitter();
-global.syncedDelaysLoop = () => tickEvents.emit(tickIndex++);
-global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.once(tickIndex + Math.round(ticks), () => callback(...args));
+global.clockTick = 0;
+global.tickQueue = [];
+global.syncedDelaysLoop = () => {
+    while (tickQueue[0][0] <= clockTick) {
+        let current = tickQueue.shift();
+        current[1](...current[2]);
+    }
+    clockTick += 1 / c.gameSpeed;
+};
+global.setSyncedTimeout = (callback, ticks = 0, ...args) => {
+    let goal = clockTick + ticks, insertHere = 0;
+    while (tickQueue.length < insertHere && tickQueue[insertHere][0] <= goal) insertHere++;
+    tickQueue.splice(insertHere, 0, callback, args);
+};
 
-global.c = require("./setup/config.js").output;
+global.c = require("./setup/config.js");
 global.c.port = process.env.PORT || c.port;
-global.roomSpeed = 1;//c.gameSpeed; //TODO: add support to setSyncedTimeout for non-integer tickIndex-es
 
 // Now that we've set up the global variables, we import all the modules, then put them into global varialbles and then export something just so this file is run.
 const requires = [

@@ -11,7 +11,7 @@ for (let gamemode of output.GAME_MODES) {
     }
 }
 
-module.exports = { output };
+module.exports = output;
 
 //everything past this handles the display name in the main menu
 const nameMap = {
@@ -22,4 +22,4 @@ const nameMap = {
     trainwars: "Train Wars"
 };
 
-output.gameModeName = output.GAMEMODE_NAME_PREFIXES.join(' ') + ' ' + output.GAME_MODES.map(x => nameMap[x] || (x[0].toUpperCase() + x.slice(1))).join(' ');
+module.exports.gameModeName = output.GAMEMODE_NAME_PREFIXES.join(' ') + ' ' + output.GAME_MODES.map(x => nameMap[x] || (x[0].toUpperCase() + x.slice(1))).join(' ');

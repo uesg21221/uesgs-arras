@@ -198,7 +198,7 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))), JSON.stringify(util.serverStartTime), roomSpeed, c.ARENA_TYPE);
+            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))), JSON.stringify(util.serverStartTime), c.gameSpeed, c.ARENA_TYPE);
             // Log it
             util.log(`[INFO] ${m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
             break;
@@ -709,7 +709,7 @@ function update(gui) {
     if (!b) return 0;
     gui.bodyid = b.id;
     // Update most things
-    gui.fps.update(Math.min(1, (global.fps / roomSpeed / 1000) * 30));
+    gui.fps.update(Math.min(1, (global.fps / c.gameSpeed / 1000) * 30));
     gui.color.update(gui.master.teamColor);
     gui.label.update(b.index);
     gui.score.update(b.skill.score);

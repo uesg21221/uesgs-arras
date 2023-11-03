@@ -1,5 +1,5 @@
 function simplecollide(my, n) {
-    let difference = (1 + util.getDistance(my, n) / 2) * roomSpeed;
+    let difference = (1 + util.getDistance(my, n) / 2) * c.gameSpeed;
     let a = (my.intangibility) ? 1 : my.pushability,
         b = (n.intangibility) ? 1 : n.pushability,
         c = 0.05 * (my.x - n.x) / difference,
@@ -24,7 +24,7 @@ function firmcollide(my, n, buffer = 0) {
     let s2 = Math.max(n.velocity.length, n.topSpeed);
     let strike1, strike2;
     if (buffer > 0 && dist <= my.realSize + n.realSize + buffer) {
-        let repel = (my.acceleration + n.acceleration) * (my.realSize + n.realSize + buffer - dist) / buffer / roomSpeed;
+        let repel = (my.acceleration + n.acceleration) * (my.realSize + n.realSize + buffer - dist) / buffer / c.gameSpeed;
         my.accel.x += repel * (item1.x - item2.x) / dist;
         my.accel.y += repel * (item1.y - item2.y) / dist;
         n.accel.x -= repel * (item1.x - item2.x) / dist;
@@ -34,14 +34,14 @@ function firmcollide(my, n, buffer = 0) {
         strike1 = false;
         strike2 = false;
         if (my.velocity.length <= s1) {
-            my.velocity.x -= 0.05 * (item2.x - item1.x) / dist / roomSpeed;
-            my.velocity.y -= 0.05 * (item2.y - item1.y) / dist / roomSpeed;
+            my.velocity.x -= 0.05 * (item2.x - item1.x) / dist / c.gameSpeed;
+            my.velocity.y -= 0.05 * (item2.y - item1.y) / dist / c.gameSpeed;
         } else {
             strike1 = true;
         }
         if (n.velocity.length <= s2) {
-            n.velocity.x += 0.05 * (item2.x - item1.x) / dist / roomSpeed;
-            n.velocity.y += 0.05 * (item2.y - item1.y) / dist / roomSpeed;
+            n.velocity.x += 0.05 * (item2.x - item1.x) / dist / c.gameSpeed;
+            n.velocity.y += 0.05 * (item2.y - item1.y) / dist / c.gameSpeed;
         } else {
             strike2 = true;
         }
@@ -259,7 +259,7 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
         } else {
             elasticity *= 2;
         }
-        let spring = 2 * Math.sqrt(savedHealthRatio._me * savedHealthRatio._n) / roomSpeed,
+        let spring = 2 * Math.sqrt(savedHealthRatio._me * savedHealthRatio._n) / c.gameSpeed,
             elasticImpulse =
             Math.pow(combinedDepth.down, 2) *
             elasticity * component *

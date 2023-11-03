@@ -120,11 +120,6 @@ class io_listenToPlayer extends IO {
                 y: 100 * Math.sin(kk),
             };
         }
-        if (this.body.invuln) {
-            if (this.player.command.right || this.player.command.left || this.player.command.up || this.player.command.down || this.player.command.lmb) {
-                this.body.invuln = false;
-            }
-        }
         this.body.autoOverride = this.player.command.override;
         return {
             target,
@@ -415,7 +410,7 @@ class io_nearestDifferentMaster extends IO {
             this.tick = 100;
         }
         // Think damn hard
-        if (this.tick++ > 15 * roomSpeed) {
+        if (this.tick++ > 15 * c.gameSpeed) {
             this.tick = 0;
             this.validTargets = this.buildList(range);
             // Ditch our old target if it's invalid

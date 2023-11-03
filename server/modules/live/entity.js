@@ -148,7 +148,7 @@ class Gun {
     recoil() {
         if (this.motion || this.position) {
             // Simulate recoil
-            this.motion -= (0.25 * this.position) / roomSpeed;
+            this.motion -= (0.25 * this.position) / c.gameSpeed;
             this.position += this.motion;
             if (this.position < 0) {
                 // Bouncing off the back
@@ -162,7 +162,7 @@ class Gun {
         if (this.canShoot && !this.body.settings.hasNoRecoil) {
             // Apply recoil to motion
             if (this.motion > 0) {
-                let recoilForce = (-this.position * this.trueRecoil * this.body.recoilMultiplier * 1.08 / this.body.size) / roomSpeed;
+                let recoilForce = (-this.position * this.trueRecoil * this.body.recoilMultiplier * 1.08 / this.body.size) / c.gameSpeed;
                 this.body.accel.x += recoilForce * Math.cos(this.recoilDir);
                 this.body.accel.y += recoilForce * Math.sin(this.recoilDir);
             }
@@ -257,7 +257,7 @@ class Gun {
         // Cycle up if we should
         if (shootPermission || !this.waitToCycle) {
             if (this.cycle < 1) {
-                this.cycle += 1 / (this.settings.reload * roomSpeed * (this.calculator == "necro" || this.calculator == "fixed reload" ? 1 : sk.rld));
+                this.cycle += 1 / (this.settings.reload * c.gameSpeed * (this.calculator == "necro" || this.calculator == "fixed reload" ? 1 : sk.rld));
             }
         }
         // Firing routines
@@ -903,15 +903,15 @@ class Entity extends EventEmitter {
         let lastingEffects = [], needsBodyAttribRefresh = false;
         for (let i = 0; i < this.statusEffects.length; i++) {
             let entry = this.statusEffects[i];
-            entry.durationLeftover -= 1 / roomSpeed;
+            entry.durationLeftover -= 1 / c.gameSpeed;
             if (entry.durationLeftover > 0) {
                 lastingEffects.push(entry);
             } else {
                 needsBodyAttribRefresh = true;
                 this.emit('expiredStatusEffect', entry.effect);
             }
-            if (entry.effect.tick) {
-                entry.effect.tick(this, entry.effect);
+            if (entry.effect.tick && entry.effect.tick(this, entry.effect)) {
+                needsBodyAttribRefresh = true
             }
         }
         this.statusEffects = lastingEffects;
@@ -949,6 +949,11 @@ class Entity extends EventEmitter {
         this.control.main = b.main;
         this.control.alt = b.alt;
         this.control.power = b.power == null ? 1 : b.power;
+
+        if (this.invuln && (this.control.goal.x !== this.x || this.control.goal.y !== this.y)) {
+            this.body.invuln = false;
+        }
+
         // React
         this.move();
         this.face();
@@ -1570,10 +1575,10 @@ class Entity extends EventEmitter {
         return this.size * lazyRealSizes[Math.floor(Math.abs(this.shape))];
     }
     get xMotion() {
-        return (this.velocity.x + this.accel.x) / roomSpeed;
+        return (this.velocity.x + this.accel.x) / c.gameSpeed;
     }
     get yMotion() {
-        return (this.velocity.y + this.accel.y) / roomSpeed;
+        return (this.velocity.y + this.accel.y) / c.gameSpeed;
     }
     camera(tur = false) {
         return {
@@ -1655,9 +1660,9 @@ class Entity extends EventEmitter {
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
                 def = ensureIsClass(def);
-                if (def.TOOLTIP != null && def.TOOLTIP.length > 0) {
-                    let tooltips = Array.isArray(def.TOOLTIP) ? def.TOOLTIP : [def.TOOLTIP]
-                    for (let tooltip of tooltips.reverse()) this.sendMessage(tooltip)
+                if (typeof def.TOOLTIP == 'string' && def.TOOLTIP.length > 0) {
+                    let tooltips = Array.isArray(def.TOOLTIP) ? def.TOOLTIP : [def.TOOLTIP];
+                    for (let i = tooltips.length; i--;) this.sendMessage(tooltips[i]);
                 }
             }
             for (let instance of entities) {
@@ -1691,7 +1696,7 @@ class Entity extends EventEmitter {
                 x: 0,
                 y: 0,
             },
-            a = this.acceleration / roomSpeed;
+            a = this.acceleration / c.gameSpeed;
         if (c.SPACE_PHYSICS) {
             this.maxSpeed = this.topSpeed;
             this.damp = 100;
@@ -1826,27 +1831,23 @@ class Entity extends EventEmitter {
             oldVFacing = this.vfacing;
         switch (this.facingType) {
             case "autospin":
-                this.facing += 0.02 / roomSpeed;
+                this.facing += 0.02 / c.gameSpeed;
                 break;
             case "turnWithSpeed":
-                this.facing += ((this.velocity.length / 90) * Math.PI) / roomSpeed;
+                this.facing += ((this.velocity.length / 90) * Math.PI) / c.gameSpeed;
                 break;
             case "spin":
-                this.facing += 0.05 / roomSpeed;
+                this.facing += 0.05 / c.gameSpeed;
                 break;
             case "fastspin":
-                this.facing += 0.1 / roomSpeed;
+                this.facing += 0.1 / c.gameSpeed;
                 break;
             case "withMotion":
                 this.facing = this.velocity.direction;
                 break;
             case "smoothWithMotion":
             case "looseWithMotion":
-                this.facing += util.loopSmooth(
-                    this.facing,
-                    this.velocity.direction,
-                    4 / roomSpeed
-                );
+                this.facing += util.loopSmooth(this.facing, this.velocity.direction, 4 / c.gameSpeed);
                 break;
             case "withTarget":
             case "toTarget":
@@ -1858,11 +1859,7 @@ class Entity extends EventEmitter {
             case "looseWithTarget":
             case "looseToTarget":
             case "smoothToTarget":
-                this.facing += util.loopSmooth(
-                    this.facing,
-                    Math.atan2(t.y, t.x),
-                    4 / roomSpeed
-                );
+                this.facing += util.loopSmooth(this.facing, Math.atan2(t.y, t.x), 4 / c.gameSpeed);
                 break;
             case "noFacing":
                 this.facing = 0;
@@ -1870,7 +1867,7 @@ class Entity extends EventEmitter {
             case "bound":
                 let givenangle,
                     reduceIndependence = false,
-                    slowness = this.settings.mirrorMasterAngle ? 1 : 4 / roomSpeed;
+                    slowness = this.settings.mirrorMasterAngle ? 1 : 4 / c.gameSpeed;
                 if (this.control.main) {
                     givenangle = Math.atan2(t.y, t.x);
                     let diff = util.angleDifference(givenangle, this.firingArc[0]);
@@ -1883,12 +1880,12 @@ class Entity extends EventEmitter {
                     reduceIndependence = true;
                 }
                 if (reduceIndependence) {
-                    this.perceptionAngleIndependence -= 0.3 / roomSpeed;
+                    this.perceptionAngleIndependence -= 0.3 / c.gameSpeed;
                     if (this.perceptionAngleIndependence < 0) {
                         this.perceptionAngleIndependence = 0;
                     }
                 } else {
-                    this.perceptionAngleIndependence += 0.3 / roomSpeed;
+                    this.perceptionAngleIndependence += 0.3 / c.gameSpeed;
                     if (this.perceptionAngleIndependence > 1) {
                         this.perceptionAngleIndependence = 1;
                     }
@@ -1904,7 +1901,7 @@ class Entity extends EventEmitter {
             this.vfacing = oldVFacing;
         } else {
             this.facing = ((this.facing % TAU) + TAU) % TAU;
-            this.vfacing = util.angleDifference(oldFacing, this.facing) * roomSpeed;
+            this.vfacing = util.angleDifference(oldFacing, this.facing) * c.gameSpeed;
         }
     }
     takeSelfie() {
@@ -1930,14 +1927,14 @@ class Entity extends EventEmitter {
         // Apply motion
         this.stepRemaining = 1;
         if (c.SPACE_PHYSICS) this.stepRemaining = 2;
-        this.x += (this.stepRemaining * this.velocity.x) / roomSpeed;
-        this.y += (this.stepRemaining * this.velocity.y) / roomSpeed;
+        this.x += (this.stepRemaining * this.velocity.x) / c.gameSpeed;
+        this.y += (this.stepRemaining * this.velocity.y) / c.gameSpeed;
     }
     friction() {
         var motion = this.velocity.length,
             excess = motion - this.maxSpeed;
         if (excess > 0 && this.damp) {
-            var k = this.damp / roomSpeed,
+            var k = this.damp / c.gameSpeed,
                 drag = excess / (k + 1),
                 finalvelocity = this.maxSpeed + drag;
             if (c.SPACE_PHYSICS)
@@ -1963,14 +1960,14 @@ class Entity extends EventEmitter {
                     y: room.height / 2,
                 }, dist = util.getDistance(this, centerPoint);
                 if (dist > room.width / 2) {
-                    let strength = (dist - room.width / 2) * c.ROOM_BOUND_FORCE / (roomSpeed * 750);
+                    let strength = (dist - room.width / 2) * c.ROOM_BOUND_FORCE / (c.gameSpeed * 750);
                     this.x = lerp(this.x, centerPoint.x, strength);
                     this.y = lerp(this.y, centerPoint.y, strength);
                 }
             } else {
                 let padding = this.realSize - 50;
-                this.accel.x -= Math.max(this.x + padding - room.width, Math.min(this.x - padding, 0)) * c.ROOM_BOUND_FORCE / roomSpeed;
-                this.accel.y -= Math.max(this.y + padding - room.height, Math.min(this.y - padding, 0)) * c.ROOM_BOUND_FORCE / roomSpeed;
+                this.accel.x -= Math.max(this.x + padding - room.width, Math.min(this.x - padding, 0)) * c.ROOM_BOUND_FORCE / c.gameSpeed;
+                this.accel.y -= Math.max(this.y + padding - room.height, Math.min(this.y - padding, 0)) * c.ROOM_BOUND_FORCE / c.gameSpeed;
             }
         }
     }
@@ -1985,7 +1982,7 @@ class Entity extends EventEmitter {
         }
         // Life-limiting effects
         if (this.settings.diesAtRange) {
-            this.range -= 1 / roomSpeed;
+            this.range -= 1 / c.gameSpeed;
             if (this.range < 0) {
                 this.kill();
             }
@@ -1995,7 +1992,7 @@ class Entity extends EventEmitter {
                 !this.collisionArray.length &&
                 this.velocity.length < this.topSpeed / 2
             ) {
-                this.health.amount -= this.health.getDamage(1 / roomSpeed);
+                this.health.amount -= this.health.getDamage(1 / c.gameSpeed);
             }
         }
         // Shield regen and damage
