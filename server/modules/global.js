@@ -98,7 +98,7 @@ global.syncedDelaysLoop = () => {
         let current = tickQueue.shift();
         current[1](...current[2]);
     }
-    clockTick += 1 / c.gameSpeed;
+    clockTick += 1 / c.runSpeed;
 };
 global.setSyncedTimeout = (callback, ticks = 0, ...args) => {
     let goal = clockTick + ticks, insertHere = 0;

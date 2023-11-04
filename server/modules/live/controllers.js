@@ -410,7 +410,7 @@ class io_nearestDifferentMaster extends IO {
             this.tick = 100;
         }
         // Think damn hard
-        if (this.tick++ > 15 * c.gameSpeed) {
+        if (this.tick++ > 15 * c.runSpeed) {
             this.tick = 0;
             this.validTargets = this.buildList(range);
             // Ditch our old target if it's invalid
