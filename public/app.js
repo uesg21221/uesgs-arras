@@ -1,11 +1,11 @@
 import { util } from "./lib/util.js";
 import { global } from "./lib/global.js";
-import { config } from "./lib/config.js";
+import { settings } from "./lib/settings.js";
 import { Canvas } from "./lib/canvas.js";
 import { color } from "./lib/color.js";
 import { gameDraw } from "./lib/gameDraw.js";
 import * as socketStuff from "./lib/socketInit.js";
-(async function (util, global, config, Canvas, color, gameDraw, socketStuff) {
+(async function (util, global, settings, Canvas, color, gameDraw, socketStuff) {
 
 let { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow } = socketStuff;
 // fetch("changelog.md", { cache: "no-cache" })
@@ -57,7 +57,7 @@ class Animation {
         return this.value;
     }
     get() {
-        return config.graphical.fancyAnimations
+        return settings.graphical.fancyAnimations
             ? this.getLerp()
             : this.getNoLerp();
     }
@@ -198,14 +198,14 @@ window.onload = async () => {
             startGame();
         }
     };
-    window.addEventListener("resize", resizeEvent);
+    //window.addEventListener("resize", resizeEvent);
     // Resizing stuff
-    resizeEvent();
+    //resizeEvent();
 };
 // Prepare canvas stuff
 function resizeEvent() {
     let scale = window.devicePixelRatio;
-    if (!config.graphical.fancyAnimations) {
+    if (!settings.graphical.fancyAnimations) {
         scale *= 0.5;
     }
     global.screenWidth = window.innerWidth * scale;
@@ -270,28 +270,28 @@ function startGame() {
     util.submitToLocalStorage("optScreenshotMode");
     util.submitToLocalStorage("coloredHealthbars");
     util.submitToLocalStorage("seperatedHealthbars");
-    config.graphical.fancyAnimations = !document.getElementById("optFancy").checked;
-    config.graphical.centerTank = document.getElementById("centerTank").checked;
-    config.graphical.pointy = !document.getElementById("optNoPointy").checked;
-    config.game.autoLevelUp = document.getElementById("autoLevelUp").checked;
-    config.lag.unresponsive = document.getElementById("optPredictive").checked;
-    config.graphical.screenshotMode = document.getElementById("optScreenshotMode").checked;
-    config.graphical.coloredHealthbars = document.getElementById("coloredHealthbars").checked;
-    config.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
+    settings.graphical.fancyAnimations = !document.getElementById("optFancy").checked;
+    settings.graphical.centerTank = document.getElementById("centerTank").checked;
+    settings.graphical.pointy = !document.getElementById("optNoPointy").checked;
+    settings.game.autoLevelUp = document.getElementById("autoLevelUp").checked;
+    settings.lag.unresponsive = document.getElementById("optPredictive").checked;
+    settings.graphical.screenshotMode = document.getElementById("optScreenshotMode").checked;
+    settings.graphical.coloredHealthbars = document.getElementById("coloredHealthbars").checked;
+    settings.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
     switch (document.getElementById("optBorders").value) {
         case "normal":
-            config.graphical.darkBorders = config.graphical.neon = false;
+            settings.graphical.darkBorders = settings.graphical.neon = false;
             break;
         case "dark":
-            config.graphical.darkBorders = true;
-            config.graphical.neon = false;
+            settings.graphical.darkBorders = true;
+            settings.graphical.neon = false;
             break;
         case "glass":
-            config.graphical.darkBorders = false;
-            config.graphical.neon = true;
+            settings.graphical.darkBorders = false;
+            settings.graphical.neon = true;
             break;
         case "neon":
-            config.graphical.darkBorders = config.graphical.neon = true;
+            settings.graphical.darkBorders = settings.graphical.neon = true;
             break;
     }
     util.submitToLocalStorage("optColors");
@@ -355,13 +355,13 @@ function arrayifyText(rawText) {
     return textArray;
 }
 const measureText = (text, fontSize, withHeight = false) => {
-    fontSize += config.graphical.fontSizeBoost;
+    fontSize += settings.graphical.fontSizeBoost;
     ctx.font = "bold " + fontSize + "px Ubuntu";
     let measurement = ctx.measureText(arrayifyText(text).reduce((a, b, i) => (i & 1) ? a : a + b, ''));
     return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
 };
 function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
-    size += config.graphical.fontSizeBoost;
+    size += settings.graphical.fontSizeBoost;
     // Get text dimensions and resize/reset the canvas
     let offset = size / 5,
         ratio = 1,
@@ -392,14 +392,14 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
         Xoffset -= ctx.measureText(renderedFullText).width * alignMultiplier;
     }
     // Draw it
-    context.lineWidth = (size + 1) / config.graphical.fontStrokeRatio;
+    context.lineWidth = (size + 1) / settings.graphical.fontStrokeRatio;
     context.textAlign = "left";
     context.textBaseline = "middle";
     context.strokeStyle = color.black;
     context.fillStyle = defaultFillStyle;
     context.save();
-    context.lineCap = config.graphical.miterText ? "miter" : "round";
-    context.lineJoin = config.graphical.miterText ? "miter" : "round";
+    context.lineCap = settings.graphical.miterText ? "miter" : "round";
+    context.lineJoin = settings.graphical.miterText ? "miter" : "round";
     if (ratio !== 1) {
         context.scale(1 / ratio, 1 / ratio);
     }
@@ -584,7 +584,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
         return;
     } else if (sides < 0) {
         // Star
-        if (config.graphical.pointy) context.lineJoin = "miter";
+        if (settings.graphical.pointy) context.lineJoin = "miter";
         sides = -sides;
         angle += (sides % 1) * Math.PI * 2;
         sides = Math.floor(sides);
@@ -621,7 +621,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
     if (fill) context.fill();
     context.lineJoin = "round";
 }
-function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill) {
+function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha) {
     let h = [];
     h = aspect > 0 ? [height * aspect, height] : [height, -height * aspect];
 
@@ -635,6 +635,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     points.push([0, -h[1]]);
 
     // Rotate it to the new angle via vector rotation
+    context.globalAlpha = alpha
     context.beginPath();
     for (let point of points) {
         let newX = point[0] * cosT - point[1] * sinT + x,
@@ -644,6 +645,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     context.closePath();
     if (!borderless) context.stroke();
     if (fill) context.fill();
+    context.globalAlpha = 1
 }
 // Entity drawing (this is a function that makes a function)
 const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
@@ -659,7 +661,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     source.guns.update();
     if (fade === 0 || alpha === 0) return;
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
-    if (config.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
+    if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
         context = ctx2;
         context.canvas.width = context.canvas.height = drawSize * m.position.axis + ratio * 20;
         xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
@@ -689,7 +691,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
         }
     }
     // Draw guns below us
-    context.lineWidth = Math.max(config.graphical.mininumBorderChunk, ratio * config.graphical.borderChunk);
+    context.lineWidth = Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
     let positions = source.guns.getPositions(),
         gunConfig = source.guns.getConfig();
     for (let i = 0; i < source.guns.length; i++) {
@@ -699,10 +701,11 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
                 gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
+                alpha = g.alpha,
                 borderless = g.borderless,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position : position / 2)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position : position / 2)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill, alpha);
         }
     }
     // Draw body
@@ -739,10 +742,11 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
                 gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
+                alpha = g.alpha,
                 borderless = g.borderless,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : position)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : position)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill, alpha);
         }
     }
     // Draw turrets above us
@@ -781,38 +785,49 @@ function drawHealth(x, y, instance, ratio, alpha) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
         if (health < 1 - 1e-4 || shield < 1 - 1e-4) {
-            let instanceColor = null
-            let getColor = true
+            let instanceColor = null;
+            let getColor = true;
             if (typeof instance.color == 'string') {
-                instanceColor = instance.color.split(' ')[0]
-                if (instanceColor[0] == '#') getColor = false
-            } else instanceColor = instance.color
-            const col = config.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(parseInt(instanceColor)) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
-            let yy = y + 1.1 * realSize + 15;
-            let barWidth = 5;
-            ctx.globalAlpha = alpha * alpha * fade;
+                instanceColor = instance.color.split(' ')[0];
+                if (instanceColor[0] == '#') {
+                    getColor = false;
+                } else if (!isNaN(parseInt(instanceColor))) {
+                    instanceColor = parseInt(instanceColor);
+                }
+            } else {
+                instanceColor = instance.color;
+            }
+            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(instanceColor) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
+            let yy = y + realSize + 15 * ratio;
+            let barWidth = 3 * ratio;
+            ctx.globalAlpha = fade * (alpha ** 2);
             //TODO: seperate option for hp bars
             // function drawBar(x1, x2, y, width, color) {
-            drawBar(x - size, x + size, yy + barWidth * config.graphical.seperatedHealthbars / 2, barWidth * (1 + config.graphical.seperatedHealthbars) + config.graphical.barChunk, color.black);
-            drawBar(x - size, x - size + 2 * size * health, yy + barWidth * config.graphical.seperatedHealthbars, barWidth, col);
-            if (shield || config.graphical.seperatedHealthbars) {
-                if (!config.graphical.seperatedHealthbars) ctx.globalAlpha = (0.3 + shield * 0.3) * alpha * alpha * fade;
-                drawBar(x - size, x - size + 2 * size * shield, yy, barWidth, config.graphical.coloredHealthbars ? gameDraw.mixColors(col, color.guiblack, 0.25) : color.teal);
+
+            //background bar
+            drawBar(x - size, x + size, yy + barWidth * settings.graphical.seperatedHealthbars / 2, barWidth * (1 + settings.graphical.seperatedHealthbars) + settings.graphical.barChunk, color.black);
+
+            //hp bar
+            drawBar(x - size, x - size + 2 * size * health, yy + barWidth * settings.graphical.seperatedHealthbars, barWidth, col);
+
+            //shield bar
+            if (shield || settings.graphical.seperatedHealthbars) {
+                if (!settings.graphical.seperatedHealthbars) ctx.globalAlpha = (1 + shield) * 0.3 * (alpha ** 2) * fade;
+                drawBar(x - size, x - size + 2 * size * shield, yy, barWidth, settings.graphical.coloredHealthbars ? gameDraw.mixColors(col, color.guiblack, 0.25) : color.teal);
                 ctx.globalAlpha = 1;
             }
         }
     }
-    if (instance.id !== gui.playerid) {
-        if (instance.nameplate) {
-            var name = instance.name.substring(7, instance.name.length + 1);
-            var namecolor = instance.name.substring(0, 7);
-            ctx.globalAlpha = alpha;
-            drawText(name, x, y - realSize - 30, 16, namecolor, "center");
-            drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 16, 8, namecolor, "center");
-            ctx.globalAlpha = 1;
-        }
+    if (instance.id !== gui.playerid && instance.nameplate) {
+        var name = instance.name.substring(7, instance.name.length + 1);
+        var namecolor = instance.name.substring(0, 7);
+        ctx.globalAlpha = alpha;
+        drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor, "center");
+        drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor, "center");
+        ctx.globalAlpha = 1;
     }
 }
+
 // Start animation
 window.requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
 window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
@@ -888,7 +903,7 @@ const compensation = () => {
                 t = (1000 * 1000 * Math.sin(t / 1000 - 1)) / t + 1000;
             }
             tt = t / interval;
-            ts = (config.roomSpeed * 30 * t) / 1000;
+            ts = (settings.roomSpeed * 30 * t) / 1000;
         },
         predict: (p1, p2, v1, v2) => {
             return t >= 0
@@ -1028,15 +1043,15 @@ function drawFloor(px, py, ratio) {
             //draw it
             let tile = row[j];
             ctx.globalAlpha = 1;
-            ctx.fillStyle = config.graphical.screenshotMode ? color.guiwhite : color.white;
+            ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : color.white;
             ctx.fillRect(left, top, right - left, bottom - top);
             ctx.globalAlpha = 0.3;
-            ctx.fillStyle = config.graphical.screenshotMode ? color.guiwhite : gameDraw.getZoneColor(tile, true);
+            ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : gameDraw.modifyColor(tile);
             ctx.fillRect(left, top, right - left, bottom - top);
         }
     }
     ctx.lineWidth = 1.5;
-    ctx.strokeStyle = config.graphical.screenshotMode ? color.guiwhite : color.guiblack;
+    ctx.strokeStyle = settings.graphical.screenshotMode ? color.guiwhite : color.guiblack;
     ctx.globalAlpha = 0.04;
     ctx.beginPath();
     let gridsize = 30 * ratio;
@@ -1047,7 +1062,6 @@ function drawFloor(px, py, ratio) {
     for (let y = (global.screenHeight / 2 - py) % gridsize; y < global.screenHeight; y += gridsize) {
         ctx.moveTo(0, y);
         ctx.lineTo(global.screenWidth, y);
-
     }
     ctx.stroke();
     ctx.globalAlpha = 1;
@@ -1068,8 +1082,8 @@ function drawEntities(px, py, ratio) {
         instance.render.x = util.lerp(instance.render.x, Math.round(instance.x + instance.vx), 0.1, true);
         instance.render.y = util.lerp(instance.render.y, Math.round(instance.y + instance.vy), 0.1, true);
         instance.render.f = instance.id === gui.playerid && !global.autoSpin && !instance.twiggle && !global.died ? Math.atan2(global.target.y, global.target.x) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
-        let x = instance.id === gui.playerid && config.graphical.centerTank ? 0 : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid && config.graphical.centerTank ? 0 : ratio * instance.render.y - py,
+        let x = instance.id === gui.playerid && settings.graphical.centerTank ? 0 : ratio * instance.render.x - px,
+            y = instance.id === gui.playerid && settings.graphical.centerTank ? 0 : ratio * instance.render.y - py,
             baseColor = instance.color;
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
@@ -1077,7 +1091,7 @@ function drawEntities(px, py, ratio) {
     }
 
     //dont draw healthbars and chat messages in screenshot mode
-    if (config.graphical.screenshotMode) return;
+    if (settings.graphical.screenshotMode) return;
 
     //draw health bars above entities
     for (let instance of global.entities) {
@@ -1088,7 +1102,8 @@ function drawEntities(px, py, ratio) {
         drawHealth(x, y, instance, ratio, instance.alpha);
     }
 
-    let now = Date.now();
+    let now = Date.now(),
+        ratioForChat = (1 + ratio) / 2;
     for (let instance of global.entities) {
         //put chat msg above name
         let size = instance.size * ratio,
@@ -1098,22 +1113,23 @@ function drawEntities(px, py, ratio) {
             x = instance.id === gui.playerid ? 0 : ratio * instance.render.x - px,
             y = instance.id === gui.playerid ? 0 : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
-        y += global.screenHeight / 2 - realSize - 45;
+        y += global.screenHeight / 2 - realSize - 46 * ratio;
+        if (instance.id !== gui.playerid && instance.nameplate) y -= 8 * ratio;
 
         //draw all the msgs
         for (let i in global.chats[instance.id]) {
             let chat = global.chats[instance.id][i],
                 text = chat.text,
-                msgLength = measureText(text, 15),
+                msgLengthHalf = measureText(text, 15 * ratioForChat) / 2,
                 alpha = Math.max(0, Math.min(1000, chat.expires - now) / 1000);
 
             ctx.globalAlpha = 0.5 * alpha;
-            drawBar(x - msgLength / 2, x + msgLength / 2, y, 30, gameDraw.modifyColor(instance.color));
+            drawBar(x - msgLengthHalf, x + msgLengthHalf, y, 30 * ratioForChat, gameDraw.modifyColor(instance.color));
             ctx.globalAlpha = alpha;
-            config.graphical.fontStrokeRatio *= 1.2;
-            drawText(text, x, y + 7, 15, color.guiwhite, "center");
-            config.graphical.fontStrokeRatio /= 1.2;
-            y -= 35;
+            settings.graphical.fontStrokeRatio *= 1.2;
+            drawText(text, x, y + 7 * ratioForChat, 15 * ratioForChat, color.guiwhite, "center");
+            settings.graphical.fontStrokeRatio /= 1.2;
+            y -= 35 * ratioForChat;
         }
     }
 }
@@ -1291,7 +1307,7 @@ function drawSkillBars(spacing, alcoveSize) {
         }
 
         //bar fills
-        drawBar(x + height / 2, x - height / 2 + len * ska(cap), y + height / 2, height - 3 + config.graphical.barChunk, color.black);
+        drawBar(x + height / 2, x - height / 2 + len * ska(cap), y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
         drawBar(x + height / 2, x + height / 2 + len * ska(cap) - gap, y + height / 2, height - 3, color.grey);
         drawBar(x + height / 2, x + height / 2 + len * ska(level) - gap, y + height / 2, height - 3.5, col);
 
@@ -1348,7 +1364,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     ctx.lineWidth = 1;
 
     // Draw the exp bar
-    drawBar(x, x + len, y + height / 2, height - 3 + config.graphical.barChunk, color.black);
+    drawBar(x, x + len, y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
     drawBar(x, x + len, y + height / 2, height - 3, color.grey);
     drawBar(x, x + len * gui.__s.getProgress(), y + height / 2, height - 3.5, color.gold);
 
@@ -1358,7 +1374,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     y -= height + vspacing;
 
     // Draw the %-of-leader bar
-    drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3 + config.graphical.barChunk, color.black);
+    drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
     drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3, color.grey);
     drawBar(x + len * 0.1, x + len * (0.1 + 0.8 * (max ? Math.min(1, gui.__s.getScore() / max) : 1)), y + height / 2, height - 3.5, color.green);
 
@@ -1401,8 +1417,8 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
         let j = 0;
         for (let xcell = 0; xcell < W; xcell++) {
             let cell = global.roomSetup[ycell][xcell];
-            ctx.fillStyle = gameDraw.getZoneColor(cell);
-            if (gameDraw.getZoneColor(cell) !== color.white) {
+            ctx.fillStyle = gameDraw.modifyColor(cell);
+            if (gameDraw.modifyColor(cell) !== color.white) {
                 drawGuiRect(x + (j * len) / W, y + (i * height) / H, len / W, height / H);
             }
             j++;
@@ -1471,7 +1487,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     drawText("Leaderboard:", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 4, color.guiwhite, "center");
     for (let i = 0; i < lb.data.length; i++) {
         let entry = lb.data[i];
-        drawBar(x, x + len, y + height / 2, height - 3 + config.graphical.barChunk, color.black);
+        drawBar(x, x + len, y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
         drawBar(x, x + len, y + height / 2, height - 3, color.grey);
         let shift = Math.min(1, entry.score / max);
         drawBar(x, x + len * shift, y + height / 2, height - 3.5, gameDraw.modifyColor(entry.barColor));
@@ -1583,7 +1599,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             m = measureText(msg, h - 3) + 10;
         let buttonX = initialX + (rowWidth + len + internalSpacing - initialX) / 2,
             buttonY = initialY + height + internalSpacing;
-        drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h + config.graphical.barChunk, color.black);
+        drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h + settings.graphical.barChunk, color.black);
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
         drawText(msg, buttonX, buttonY + h / 2, h - 2, color.guiwhite, "center", true);
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
@@ -1742,7 +1758,7 @@ function animloop() {
     global.animLoopHandle = window.requestAnimFrame(animloop);
     gameDraw.reanimateColors();
     global.player.renderv += (global.player.view - global.player.renderv) / 30;
-    var ratio = config.graphical.screenshotMode ? 2 : util.getRatio();
+    var ratio = settings.graphical.screenshotMode ? 2 : util.getRatio();
     // Set the drawing style
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -1778,4 +1794,4 @@ function animloop() {
     ctx.translate(-0.5, -0.5);
 }
 
-})(util, global, config, Canvas, color, gameDraw, socketStuff);
+})(util, global, settings, Canvas, color, gameDraw, socketStuff);

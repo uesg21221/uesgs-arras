@@ -40,6 +40,7 @@ function getMockup(e, positionInfo) {
                 aspect: rounder(gun.aspect),
                 angle: rounder(gun.angle),
                 color: gun.color,
+                alpha: gun.alpha,
                 borderless: gun.borderless,
                 drawFill: gun.drawFill,
                 drawAbove: gun.drawAbove,

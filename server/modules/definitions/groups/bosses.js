@@ -27,6 +27,9 @@ exports.miniboss = {
     FACING_TYPE: "autospin",
     HITS_OWN_TYPE: "hardOnlyBosses",
     BROADCAST_MESSAGE: "A visitor has left!",
+    BODY: {
+        PUSHABILITY: 0.05
+    }
 };
 
 // GUNS
@@ -329,6 +332,7 @@ exports.elite = {
 };
 exports.eliteDestroyer = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Destroyer",
     GUNS: [
         {
             POSITION: [5, 16, 1, 6, 0, 180, 0],
@@ -382,6 +386,7 @@ exports.eliteDestroyer = {
 };
 exports.eliteGunner = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Gunner",
     FACING_TYPE: "toTarget",
     GUNS: [
         {
@@ -422,6 +427,7 @@ exports.eliteGunner = {
 };
 exports.eliteSprayer = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Sprayer",
     SKILL: [0, 9, 3, 9, 2, 9, 9, 9, 9, 0],
     AI: { NO_LEAD: false },
     HAS_NO_RECOIL: true,
@@ -459,6 +465,7 @@ exports.eliteSprayer = {
 };
 exports.eliteBattleship = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Battleship",
     GUNS: [
         {
             POSITION: [4, 6, 0.6, 7, -8, 60, 0],
@@ -568,6 +575,7 @@ exports.eliteBattleship = {
 };
 exports.eliteSpawner = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Spawner",
     MAX_CHILDREN: 9,
     AI: { STRAFE: false },
     GUNS: [
@@ -623,6 +631,7 @@ exports.eliteSpawner = {
 };
 exports.eliteTrapGuard = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Trap Guard",
     AI: { STRAFE: false },
     GUNS: [],
     TURRETS: [
@@ -659,6 +668,7 @@ for (let i = 0; i < 3; i++) {
 };
 exports.eliteSpinner = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Spinner",
     AI: { STRAFE: false },
     FACING_TYPE: "spin",
     GUNS: [],
@@ -701,6 +711,7 @@ for (let i = 0; i < 3; i++) {
 // OLD ELITE
 exports.oldEliteSprayer = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Sprayer (Old)",
     AI: {
         NO_LEAD: false,
     },
@@ -863,6 +874,7 @@ for (let i = 0; i < 3; i++) {
 
 exports.sprayerLegion = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Sprayer Legion",
     AI: {
         NO_LEAD: false,
     },
@@ -1607,6 +1619,7 @@ for(let i = 0; i < 5; i++) {
 exports.ares = {
     PARENT: ["terrestrial"],
     NAME: "Ares",
+    UPGRADE_LABEL: "Ares",
     COLOR: 14,
     TURRETS: [
         {
@@ -1721,6 +1734,7 @@ for(let i = 0; i < 3; i++) {
 exports.gersemi = {
     PARENT: ["terrestrial"],
     NAME: "Gersemi",
+    UPGRADE_LABEL: "Gersemi",
     COLOR: 1,
     TURRETS: [
         {
@@ -1795,6 +1809,7 @@ for(let i = 0; i < 3; i++) {
 exports.ezekiel = {
     PARENT: ["terrestrial"],
     NAME: "Ezekiel",
+    UPGRADE_LABEL: "Ezekiel",
     COLOR: 2,
     TURRETS: [
         {
@@ -1869,6 +1884,7 @@ for(let i = 0; i < 5; i++) {
 exports.eris = {
     PARENT: ["terrestrial"],
     NAME: "Eris",
+    UPGRADE_LABEL: "Eris",
     COLOR: 5,
     TURRETS: [
         {
@@ -1943,6 +1959,7 @@ for(let i = 0; i < 3; i++) {
 exports.selene = {
     PARENT: ["terrestrial"],
     NAME: "Selene",
+    UPGRADE_LABEL: "Selene",
     COLOR: 13,
     TURRETS: [
         {
@@ -2119,6 +2136,7 @@ exports.paladinUpperBody = {
 exports.paladin = {
     PARENT: ["celestial"],
     NAME: "Paladin",
+    UPGRADE_LABEL: "Paladin",
     COLOR: 14,
     TURRETS: [
         {
@@ -2280,6 +2298,7 @@ exports.freyjaUpperBody = {
 exports.freyja = {
     PARENT: ["celestial"],
     NAME: "Freyja",
+    UPGRADE_LABEL: "Freyja",
     COLOR: 1,
     TURRETS: [
         {
@@ -2451,6 +2470,7 @@ exports.zaphkielUpperBody = {
 exports.zaphkiel = {
     PARENT: ["celestial"],
     NAME: "Zaphkiel",
+    UPGRADE_LABEL: "Zaphkiel",
     COLOR: 2,
     TURRETS: [
         {
@@ -2648,6 +2668,7 @@ exports.nyxUpperBody = {
 exports.nyx = {
     PARENT: ["celestial"],
     NAME: "Nyx",
+    UPGRADE_LABEL: "Nyx",
     COLOR: 5,
     TURRETS: [
         {
@@ -2869,6 +2890,7 @@ exports.theiaUpperBody = {
 exports.theia = {
     PARENT: ["celestial"],
     NAME: "Theia",
+    UPGRADE_LABEL: "Theia",
     COLOR: 3,
     TURRETS: [
         {
@@ -3056,6 +3078,7 @@ exports.alvissUpperBody = {
 exports.alviss = {
     PARENT: ["rogueCelestial"],
     NAME: "Alviss",
+    UPGRADE_LABEL: "Alviss",
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
@@ -3198,6 +3221,7 @@ exports.tyrUpperBody = {
 exports.tyr = {
     PARENT: ["rogueCelestial"],
     NAME: "Tyr",
+    UPGRADE_LABEL: "Tyr",
     TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
         POSITION: [6.5, 9, 0, 260, 180, 0],
         TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
@@ -3357,6 +3381,7 @@ exports.fiolnirUpperBody = {
 exports.fiolnir = {
     PARENT: ["rogueCelestial"],
     NAME: "Fiolnir",
+    UPGRADE_LABEL: "Fiolnir",
     TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
         POSITION: [6.5, 9, 0, 260, 180, 0],
         TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
@@ -3641,6 +3666,7 @@ for(let i = 0; i < 5; i++) {
 exports.kronos = {
     PARENT: ["eternal"],
     NAME: "Kronos",
+    UPGRADE_LABEL: "Kronos",
     COLOR: 6,
     TURRETS: [
         {
@@ -3867,6 +3893,7 @@ for(let i = 0; i < 5; i++) {
 exports.ragnarok = {
     PARENT: ["eternal"],
     NAME: "Ragnarok",
+    UPGRADE_LABEL: "Ragnarok",
     COLOR: 0,
     TURRETS: [
         {
@@ -4120,10 +4147,10 @@ exports.shinybetawaferbread = {
         TYPE: "shinyEggDummy"
     },]
 };;
-exports.tgsBoss = {
+exports.zenphiaBoss = {
     PARENT: "miniboss",
     LABEL: "Shiny Omega Thaumaturge",
-    NAME: "TGS",
+    NAME: "Zenphia",
     DANGER: 10,
     SHAPE: 4,
     COLOR: 1,
@@ -4475,8 +4502,8 @@ exports.dogeiscutBoss = {
         },
     ]
 }
-exports.trplnrBoss_auraBullet_aura = addAura(1, 1)
-exports.trplnrBoss_auraBullet = {
+exports.trplnrBossAuraBulletAura = addAura(1, 1)
+exports.trplnrBossAuraBullet = {
     PARENT: 'genericTank',
     LABEL: 'Nest',
     SHAPE: -4,
@@ -4510,11 +4537,11 @@ exports.trplnrBoss_auraBullet = {
     TURRETS: [
         {
             POSITION: {SIZE: 10, LAYER: 1},
-            TYPE: "trplnrBoss_auraBullet_aura"
+            TYPE: "trplnrBossAuraBulletAura"
         }
     ]
 }
-const trplnrBoss_decor = {
+const trplnrBossDecor = {
     COLOR: '#F49EFF',
     LABEL: 'Lavender',
     NAME: 'Trioplane',
@@ -4541,10 +4568,41 @@ const trplnrBoss_decor = {
 }
 exports.trplnrBoss = {
     PARENT: "miniboss",
-    ...trplnrBoss_decor,
+    ...trplnrBossDecor,
     BODY: {
         HEALTH: 500,
     },
+    ON: [
+        {
+            action: 'fire',
+            execute: ({ body, gun }) => {
+                if (gun.identifier != 'onExecuter') return
+                const messages = [
+                    'Attack my little swarms!',
+                    'Deploying, Attack swarms',
+                    'You really think you can defeat me? Heres a little challenge for you.',
+                    'This thing is really gonna annoy you HAHA!',
+                    'I don\'t know what to say uhhh, die i guess.'
+                ]
+                body.sendMessage(messages[Math.floor(Math.random() * messages.length)])
+                body.sendMessage('Lavender will turn into `BULL3T HELL F0rM`, Run!')
+                for (let i = 0; i < 24; i++) {
+                    i < 12 ?
+                        setTimeout(() => { body.SIZE /= 1.1; body.alpha /= 1.2 }, i * 50)
+                        :
+                        setTimeout(() => { body.SIZE *= 1.1; body.alpha *= 1.2 }, i * 50)
+                }
+                setTimeout(() => {
+                    let range = 500
+                    let whereToGoX = Math.random() > 0.5 ? Math.floor(Math.random() * -range) : Math.floor(Math.random() * range)
+                    let whereToGoY = Math.random() > 0.5 ? Math.floor(Math.random() * -range) : Math.floor(Math.random() * range)
+                    body.x += whereToGoX
+                    body.y += whereToGoY
+                }, 12 * 50);
+                setTimeout(() => body.define('trplnrBossBulletHellForm'), 24 * 50)
+            }
+        }
+    ],
     GUNS: (() => {
         let output = []
         for (let i = 0; i<2; i++) {
@@ -4553,7 +4611,7 @@ exports.trplnrBoss = {
                 PROPERTIES: {
                     COLOR: 'white',
                     SHOOT_SETTINGS: combineStats([g.basic, {reload: 100}]),
-                    TYPE: "trplnrBoss_auraBullet",
+                    TYPE: "trplnrBossAuraBullet",
                     INDEPENDENT_CHILDREN: true,
                 }
             })
@@ -4563,33 +4621,9 @@ exports.trplnrBoss = {
             PROPERTIES: {
                 COLOR: 'white',
                 SHOOT_SETTINGS: combineStats([g.basic, {reload: 100}]),
-                TYPE: "trplnrBoss_auraBullet",
+                TYPE: "trplnrBossAuraBullet",
                 INDEPENDENT_CHILDREN: true,
-                ON_FIRE: ({ body }) => {
-                    const messages = [
-                        'Attack my little swarms!',
-                        'Deploying, Attack swarms',
-                        'You really think you can defeat me? Heres a little challenge for you.',
-                        'This thing is really gonna annoy you HAHA!',
-                        'I don\'t know what to say uhhh, die i guess.'
-                    ]
-                    body.sendMessage(messages[Math.floor(Math.random() * messages.length)])
-                    body.sendMessage('Lavender will turn into `BULL3T HELL F0rM`, Run!')
-                    for (let i = 0; i < 24; i++) {
-                        i < 12 ? 
-                            setTimeout(() => {body.SIZE /= 1.1; body.alpha /= 1.2}, i*50)
-                            : 
-                            setTimeout(() => {body.SIZE *= 1.1; body.alpha *= 1.2}, i*50)
-                    }
-                    setTimeout(() => {
-                        let range = 500
-                        let whereToGoX = Math.random() > 0.5 ? Math.floor(Math.random() * -range) : Math.floor(Math.random() * range)
-                        let whereToGoY = Math.random() > 0.5 ? Math.floor(Math.random() * -range) : Math.floor(Math.random() * range)
-                        body.x += whereToGoX
-                        body.y += whereToGoY
-                    }, 12*50);
-                    setTimeout(() => body.define('trplnrBoss_bulletHellForm'), 24*50)
-                }
+                IDENTIFIER: 'onExecuter'
             }
         })
         for (let i = 0; i < 3; i++) {
@@ -4615,15 +4649,15 @@ exports.trplnrBoss = {
     })()
 }
 
-exports.trplnrBoss_bulletHellForm_pentagons_auraBullet = {
+exports.trplnrBossBulletHellFormPentagonsAuraBullet = {
     PARENT: 'bullet',
     TURRETS: [{
         POSITION: {SIZE: 15, LAYER: 1},
-        TYPE: "trplnrBoss_auraBullet_aura"
+        TYPE: "trplnrBossAuraBulletAura"
     }]
 } 
 
-exports.trplnrBoss_bulletHellForm_pentagons = {
+exports.trplnrBossBulletHellFormPentagons = {
     PARENT: 'bullet',
     LABEL: 'Pentagon',
     SHAPE: -5,
@@ -4638,7 +4672,7 @@ exports.trplnrBoss_bulletHellForm_pentagons = {
                 POSITION: { WIDTH: 10, HEIGHT: 10, ANGLE: ((360/5)*i) - 180, DELAY: 1 },
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.basic, g.pound, {reload: 0.8}]),
-                    TYPE: 'trplnrBoss_bulletHellForm_pentagons_auraBullet',
+                    TYPE: 'trplnrBossBulletHellFormPentagonsAuraBullet',
                     AUTOFIRE: true,
                     COLOR: 'white'
                 }
@@ -4647,13 +4681,50 @@ exports.trplnrBoss_bulletHellForm_pentagons = {
         return output
     })()
 }
-exports.trplnrBoss_bulletHellForm = {
+exports.trplnrBossBulletHellForm = {
     PARENT: "miniboss",
-    ...trplnrBoss_decor,
+    ...trplnrBossDecor,
     LABEL: 'Lavender - Bullet Hell Form',
     BODY: {
         HEALTH: 500,
     },
+    ON: [
+        {
+            action: "fire",
+            execute: ({ body, masterStore, gun }) => {
+                if (gun.identifier != 'onExecuter') return
+                masterStore.shotsFired ??= 0
+                masterStore.shotsFired++
+
+                for (let i = 0; i < 24; i++) {
+                    i < 12 ?
+                        setTimeout(() => { body.SIZE /= 1.1; body.alpha /= 1.2 }, i * 50)
+                        :
+                        setTimeout(() => { body.SIZE *= 1.1; body.alpha *= 1.2 }, i * 50)
+                }
+                setTimeout(() => {
+                    let range = 500
+                    let whereToGoX = Math.random() > 0.5 ? Math.floor(Math.random() * -range) : Math.floor(Math.random() * range)
+                    let whereToGoY = Math.random() > 0.5 ? Math.floor(Math.random() * -range) : Math.floor(Math.random() * range)
+                    body.x += whereToGoX
+                    body.y += whereToGoY
+                }, 12 * 50)
+
+                if (masterStore.shotsFired > 5) {
+                    body.define('trplnrBossVulnerableForm')
+                    const messages = [
+                        'I\'m a little tired right now',
+                        'Ouch my leg!',
+                        'i sleep',
+                        'Bruh my keyboard isn\'t working',
+                        'Omg bruh I chose the wrong form'
+                    ]
+                    body.sendMessage(messages[Math.floor(Math.random() * messages.length)])
+                    body.sendMessage('Lavender is in its `VULN3RABLE F0RM`, Attack!')
+                }
+            }
+        }
+    ],
     GUNS: (() => {
         let output = []
         for (let i = 0; i<3; i++) {
@@ -4661,7 +4732,7 @@ exports.trplnrBoss_bulletHellForm = {
                 POSITION: { WIDTH: 15, HEIGHT: 5, ANGLE: ((360 / 3) * i)-180, ASPECT: 0, X: -25 },
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni, { reload: 1 }]),
-                    TYPE: 'trplnrBoss_bulletHellForm_pentagons_auraBullet',
+                    TYPE: 'trplnrBossBulletHellFormPentagonsAuraBullet',
                     COLOR: 'black'
                 }
             }, {
@@ -4673,7 +4744,7 @@ exports.trplnrBoss_bulletHellForm = {
                 POSITION: { WIDTH: 10, HEIGHT: 5, ASPECT: 1.5, ANGLE: ((360 / 3) * i) - 180 },
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni, { reload: 2 }]),
-                    TYPE: 'trplnrBoss_bulletHellForm_pentagons',
+                    TYPE: 'trplnrBossBulletHellFormPentagons',
                     COLOR: 'white'
                 }
             }, {
@@ -4693,63 +4764,40 @@ exports.trplnrBoss_bulletHellForm = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni, { reload: 2 }, g.fake]),
                 TYPE: 'bullet',
-                ON_FIRE: ({body, masterStore}) => {
-                    masterStore.shotsFired ??= 0
-                    masterStore.shotsFired++
-
-                    for (let i = 0; i < 24; i++) {
-                        i < 12 ?
-                            setTimeout(() => { body.SIZE /= 1.1; body.alpha /= 1.2 }, i * 50)
-                            :
-                            setTimeout(() => { body.SIZE *= 1.1; body.alpha *= 1.2 }, i * 50)
-                    }
-                    setTimeout(() => {
-                        let range = 500
-                        let whereToGoX = Math.random() > 0.5 ? Math.floor(Math.random() * -range) : Math.floor(Math.random() * range)
-                        let whereToGoY = Math.random() > 0.5 ? Math.floor(Math.random() * -range) : Math.floor(Math.random() * range)
-                        body.x += whereToGoX
-                        body.y += whereToGoY
-                    }, 12*50)
-
-                    if (masterStore.shotsFired > 5) {
-                        body.define('trplnrBoss_vulnerableForm')
-                        const messages = [
-                            'I\'m a little tired right now',
-                            'Ouch my leg!',
-                            'i sleep',
-                            'Bruh my keyboard isn\'t working',
-                            'Omg bruh I chose the wrong form'
-                        ]
-                        body.sendMessage(messages[Math.floor(Math.random() * messages.length)])
-                        body.sendMessage('Lavender is in its `VULN3RABLE F0RM`, Attack!')
-                    }
-                }
+                IDENTIFIER: 'onExecuter'
             }
         })
         return output
     })()
 }
-exports.trplnrBoss_vulnerableForm = {
+exports.trplnrBossVulnerableForm = {
     PARENT: "miniboss",
-    ...trplnrBoss_decor,
+    ...trplnrBossDecor,
     LABEL: 'Lavender - Vulnerable Form',
     BODY: {
         HEALTH: 500,
         SPEED: 0.01
     },
-    GUNS: [{
-        POSITION: {LENGTH: 0, WIDTH: 0},
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, {reload: 500}]),
-            TYPE: 'bullet',
-            AUTOFIRE: true,
-            ON_FIRE: ({body}) => {
+    ON: [
+        {
+            action: "fire",
+            execute: ({ body, gun }) => {
+                if (gun.identifier != 'onExecuter') return
                 setTimeout(() => {
                     body.define('trplnrBoss')
                     body.sendMessage('im awake')
                 }, 15000)
                 setTimeout(() => body.sendMessage('Lavender will activate in 10 seconds and turn into S4nctuary F0rM'), 5000)
             }
+        }
+    ],
+    GUNS: [{
+        POSITION: {LENGTH: 0, WIDTH: 0},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, {reload: 500}]),
+            TYPE: 'bullet',
+            AUTOFIRE: true,
+            IDENTIFIER: 'onExecuter'
         }
     }]
 }

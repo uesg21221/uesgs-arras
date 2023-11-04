@@ -1,5 +1,5 @@
 import { global } from "./global.js";
-import { config } from "./config.js";
+import { settings } from "./settings.js";
 const util = {
     submitToLocalStorage: name => {
         localStorage.setItem(name + 'Value', document.getElementById(name).value);
@@ -124,7 +124,7 @@ const util = {
     },
     isInView: (x, y, r, mid = false) => {
         let ratio = util.getRatio();
-        r += config.graphical.borderChunk;
+        r += settings.graphical.borderChunk;
         if (mid) {
             ratio *= 2;
             return x > -global.screenWidth / ratio - r && x < global.screenWidth / ratio + r && y > -global.screenHeight / ratio - r && y < global.screenHeight / ratio + r;
@@ -147,7 +147,7 @@ const util = {
             guns.push(...mockup.guns);
             turrets.push(...mockup.turrets);
             name += mockup.name.length > 0 ? "-" + mockup.name : "";
-            if (mockup.rerootUpgradeTree) allRoots.push(...mockup.rerootUpgradeTree.split("_"));
+            if (mockup.rerootUpgradeTree) allRoots.push(...mockup.rerootUpgradeTree.split("\\/"));
         }
         for (let root of allRoots) {
             if (!rerootUpgradeTree.includes(root))
@@ -203,6 +203,7 @@ const util = {
                 getConfig: () => guns.map(g => {
                     return {
                         color: g.color,
+                        alpha: g.alpha,
                         borderless: g.borderless, 
                         drawFill: g.drawFill,
                         drawAbove: g.drawAbove,

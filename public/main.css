@@ -40,7 +40,11 @@ body {
 body {
     font-family: Ubuntu;
     font-size: 14px;
-    background-color: #484848;
+    background-blend-mode: multiply;
+    background-image: url('./osa_bg.png');
+    background-color: gray;
+    background-position: center;
+    background-size: cover;
 }
 
 html,
