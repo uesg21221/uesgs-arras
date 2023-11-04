@@ -329,7 +329,7 @@ module.exports = ({ Class }) => {
 	        POSITION: [1.5, 10, 1, 13.5, 0, 120*i, 0],
 	        PROPERTIES: {
 	            MAX_CHILDREN: 4,
-	            SHOOT_SETTINGS: combineStats([g.factory, g.weak, g.morespeed]),
+	            SHOOT_SETTINGS: combineStats([g.factory, g.weak, g.weak, g.weak, g.morespeed, g.morespeed, g.morespeed, g.morespeed, g.doublereload, g.doublereload]),
 	            TYPE: "minion",
 	            STAT_CALCULATOR: gunCalcNames.drone,
 	            AUTOFIRE: true,
