@@ -45,7 +45,7 @@ spawn = (tile, team, color, type = false) => {
             killer = killer ? killer.master.master : { team: TEAM_ROOM, color: c.MODE === "tdm" ? 3 : 12 };
 
             newTeam = killer.team;
-            newColor = killer.color;
+            newColor = getTeamColor(newTeam);
 
             for (let player of sockets.players) {
                 if (player.body && player.body.team === newTeam) {
