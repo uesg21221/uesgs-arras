@@ -317,7 +317,7 @@ for (let tier of sancTiers) {
         TYPE: "dominationBody",
     }, {
         POSITION: { SIZE: 8.5, LAYER: 1 },
-        TYPE: "sanctuaryHealerTier" + (sancIndex < 1 ? 1 : sancIndex < 3 ? 2 : sancIndex < 5 ? 3 : 3),
+        TYPE: "sanctuaryHealerTier" + (sancIndex < 2 ? 1 : sancIndex < 4 ? 2 : sancIndex < 6 ? 3 : 3),
     })
 }
 
