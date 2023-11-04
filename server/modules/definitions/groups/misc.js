@@ -242,7 +242,8 @@ exports.sanctuaryHealer = {
     }],
 };
 
-let sancHealerTiers = [2, 3, 4, 5, 6]
+let sancTiers =       [3, 6, 8, 9, 10, 12]
+let sancHealerTiers = [2, 3, 4]
 for (let tier of sancHealerTiers) {
     exports['sanctuaryHealerTier' + (sancHealerTiers.indexOf(tier) + 1)] = {
         PARENT: "sanctuaryHealer",
@@ -287,11 +288,12 @@ exports.sanctuary = {
     }]
 };
 
-let sancTiers = [3, 8, 12, 17, 21]
 for (let tier of sancTiers) {
-    exports['sanctuaryTier' + (sancTiers.indexOf(tier) + 1)] = {
+    let sancIndex = sancTiers.indexOf(tier)
+    exports['sanctuaryTier' + (sancIndex + 1)] = {
         PARENT: "sanctuary",
         TURRETS: [],
+        UPGRADE_LABEL: 'Sanctuary T' + (sancIndex + 1),
         GUNS: (() => {
             let output = []
             for (let i = 0; i < tier; i++) {
@@ -310,12 +312,12 @@ for (let tier of sancTiers) {
             return output
         })()
     }
-    exports['sanctuaryTier' + (sancTiers.indexOf(tier) + 1)].TURRETS.push({
+    exports['sanctuaryTier' + (sancIndex + 1)].TURRETS.push({
         POSITION: { SIZE: 22 },
         TYPE: "dominationBody",
     }, {
         POSITION: { SIZE: 8.5, LAYER: 1 },
-        TYPE: "sanctuaryHealerTier" + (sancTiers.indexOf(tier) + 1),
+        TYPE: "sanctuaryHealerTier" + (sancIndex < 1 ? 1 : sancIndex < 3 ? 2 : sancIndex < 5 ? 3 : 3),
     })
 }
 
