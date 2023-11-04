@@ -98,6 +98,7 @@ exports.dominator = {
 };
 exports.destroyerDominator = {
     PARENT: ["dominator"],
+    UPGRADE_LABEL: 'D. Dominator',
     GUNS: [
         {
             POSITION: [15.25, 6.75, 1, 0, 0, 0, 0],
@@ -113,6 +114,7 @@ exports.destroyerDominator = {
 };
 exports.gunnerDominator = {
     PARENT: ["dominator"],
+    UPGRADE_LABEL: 'G. Dominator',
     GUNS: [
         {
             POSITION: [14.25, 3, 1, 0, -2, 0, 0.5],
@@ -142,6 +144,7 @@ exports.gunnerDominator = {
 };
 exports.trapperDominator = {
     PARENT: ["dominator"],
+    UPGRADE_LABEL: 'T. Dominator',
     FACING_TYPE: "autospin",
     CONTROLLERS: ["alwaysFire"],
     GUNS: [
@@ -548,6 +551,7 @@ exports.barricadeTurret = {
 
 exports.sentrySwarm = {
     PARENT: ["sentry"],
+    UPGRADE_LABEL: "Swarm Sentry",
     GUNS: [
         {
             POSITION: [7, 14, 0.6, 7, 0, 180, 0],
@@ -563,10 +567,12 @@ exports.sentryGun = makeAuto(exports.sentry, "Sentry", {
     type: exports.megaAutoTankgun,
     size: 12,
 });
+exports.sentryGun.UPGRADE_LABEL = "Gun Sentry";
 exports.sentryTrap = makeAuto(exports.sentry, "Sentry", {
     type: exports.trapTurret,
     size: 12,
 });
+exports.sentryTrap.UPGRADE_LABEL = "Trap Sentry";
 
 exports.shinySentry = {
     PARENT: ["sentry"],
@@ -580,6 +586,7 @@ exports.shinySentry = {
 };
 exports.shinySentrySwarm = {
     PARENT: ["shinySentry"],
+    UPGRADE_LABEL: "Shiny Swarm Sentry",
     GUNS: [
         {
             POSITION: [6, 11, 1.3, 7, 0, 180, 0],
@@ -595,10 +602,12 @@ exports.shinySentryGun = makeAuto(exports.shinySentry, "Sentry", {
     type: exports.artilleryAutoTankgun,
     size: 12,
 });
+exports.shinySentryGun.UPGRADE_LABEL = "Shiny Gun Sentry";
 exports.shinySentryTrap = makeAuto(exports.shinySentry, "Sentry", {
     type: exports.barricadeTurret,
     size: 12,
 });
+exports.shinySentryTrap.UPGRADE_LABEL = "Shiny Trap Sentry";
 
 // MISCELLANEOUS TANKS
 exports.baseSwarmTurret = {
