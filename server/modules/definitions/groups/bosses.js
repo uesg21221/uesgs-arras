@@ -332,6 +332,7 @@ exports.elite = {
 };
 exports.eliteDestroyer = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Destroyer",
     GUNS: [
         {
             POSITION: [5, 16, 1, 6, 0, 180, 0],
@@ -385,6 +386,7 @@ exports.eliteDestroyer = {
 };
 exports.eliteGunner = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Gunner",
     FACING_TYPE: "toTarget",
     GUNS: [
         {
@@ -425,6 +427,7 @@ exports.eliteGunner = {
 };
 exports.eliteSprayer = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Sprayer",
     SKILL: [0, 9, 3, 9, 2, 9, 9, 9, 9, 0],
     AI: { NO_LEAD: false },
     HAS_NO_RECOIL: true,
@@ -462,6 +465,7 @@ exports.eliteSprayer = {
 };
 exports.eliteBattleship = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Battleship",
     GUNS: [
         {
             POSITION: [4, 6, 0.6, 7, -8, 60, 0],
@@ -571,6 +575,7 @@ exports.eliteBattleship = {
 };
 exports.eliteSpawner = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Spawner",
     MAX_CHILDREN: 9,
     AI: { STRAFE: false },
     GUNS: [
@@ -626,6 +631,7 @@ exports.eliteSpawner = {
 };
 exports.eliteTrapGuard = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Trap Guard",
     AI: { STRAFE: false },
     GUNS: [],
     TURRETS: [
@@ -662,6 +668,7 @@ for (let i = 0; i < 3; i++) {
 };
 exports.eliteSpinner = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Spinner",
     AI: { STRAFE: false },
     FACING_TYPE: "spin",
     GUNS: [],
@@ -704,6 +711,7 @@ for (let i = 0; i < 3; i++) {
 // OLD ELITE
 exports.oldEliteSprayer = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Elite Sprayer (Old)",
     AI: {
         NO_LEAD: false,
     },
@@ -866,6 +874,7 @@ for (let i = 0; i < 3; i++) {
 
 exports.sprayerLegion = {
     PARENT: ["elite"],
+    UPGRADE_LABEL: "Sprayer Legion",
     AI: {
         NO_LEAD: false,
     },
@@ -1610,6 +1619,7 @@ for(let i = 0; i < 5; i++) {
 exports.ares = {
     PARENT: ["terrestrial"],
     NAME: "Ares",
+    UPGRADE_LABEL: "Ares",
     COLOR: 14,
     TURRETS: [
         {
@@ -1724,6 +1734,7 @@ for(let i = 0; i < 3; i++) {
 exports.gersemi = {
     PARENT: ["terrestrial"],
     NAME: "Gersemi",
+    UPGRADE_LABEL: "Gersemi",
     COLOR: 1,
     TURRETS: [
         {
@@ -1798,6 +1809,7 @@ for(let i = 0; i < 3; i++) {
 exports.ezekiel = {
     PARENT: ["terrestrial"],
     NAME: "Ezekiel",
+    UPGRADE_LABEL: "Ezekiel",
     COLOR: 2,
     TURRETS: [
         {
@@ -1872,6 +1884,7 @@ for(let i = 0; i < 5; i++) {
 exports.eris = {
     PARENT: ["terrestrial"],
     NAME: "Eris",
+    UPGRADE_LABEL: "Eris",
     COLOR: 5,
     TURRETS: [
         {
@@ -1946,6 +1959,7 @@ for(let i = 0; i < 3; i++) {
 exports.selene = {
     PARENT: ["terrestrial"],
     NAME: "Selene",
+    UPGRADE_LABEL: "Selene",
     COLOR: 13,
     TURRETS: [
         {
@@ -2122,6 +2136,7 @@ exports.paladinUpperBody = {
 exports.paladin = {
     PARENT: ["celestial"],
     NAME: "Paladin",
+    UPGRADE_LABEL: "Paladin",
     COLOR: 14,
     TURRETS: [
         {
@@ -2283,6 +2298,7 @@ exports.freyjaUpperBody = {
 exports.freyja = {
     PARENT: ["celestial"],
     NAME: "Freyja",
+    UPGRADE_LABEL: "Freyja",
     COLOR: 1,
     TURRETS: [
         {
@@ -2454,6 +2470,7 @@ exports.zaphkielUpperBody = {
 exports.zaphkiel = {
     PARENT: ["celestial"],
     NAME: "Zaphkiel",
+    UPGRADE_LABEL: "Zaphkiel",
     COLOR: 2,
     TURRETS: [
         {
@@ -2651,6 +2668,7 @@ exports.nyxUpperBody = {
 exports.nyx = {
     PARENT: ["celestial"],
     NAME: "Nyx",
+    UPGRADE_LABEL: "Nyx",
     COLOR: 5,
     TURRETS: [
         {
@@ -2872,6 +2890,7 @@ exports.theiaUpperBody = {
 exports.theia = {
     PARENT: ["celestial"],
     NAME: "Theia",
+    UPGRADE_LABEL: "Theia",
     COLOR: 3,
     TURRETS: [
         {
@@ -3059,6 +3078,7 @@ exports.alvissUpperBody = {
 exports.alviss = {
     PARENT: ["rogueCelestial"],
     NAME: "Alviss",
+    UPGRADE_LABEL: "Alviss",
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
@@ -3201,6 +3221,7 @@ exports.tyrUpperBody = {
 exports.tyr = {
     PARENT: ["rogueCelestial"],
     NAME: "Tyr",
+    UPGRADE_LABEL: "Tyr",
     TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
         POSITION: [6.5, 9, 0, 260, 180, 0],
         TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
@@ -3360,6 +3381,7 @@ exports.fiolnirUpperBody = {
 exports.fiolnir = {
     PARENT: ["rogueCelestial"],
     NAME: "Fiolnir",
+    UPGRADE_LABEL: "Fiolnir",
     TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
         POSITION: [6.5, 9, 0, 260, 180, 0],
         TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
@@ -3644,6 +3666,7 @@ for(let i = 0; i < 5; i++) {
 exports.kronos = {
     PARENT: ["eternal"],
     NAME: "Kronos",
+    UPGRADE_LABEL: "Kronos",
     COLOR: 6,
     TURRETS: [
         {
@@ -3870,6 +3893,7 @@ for(let i = 0; i < 5; i++) {
 exports.ragnarok = {
     PARENT: ["eternal"],
     NAME: "Ragnarok",
+    UPGRADE_LABEL: "Ragnarok",
     COLOR: 0,
     TURRETS: [
         {
