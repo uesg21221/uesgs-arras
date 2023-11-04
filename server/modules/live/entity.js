@@ -101,7 +101,7 @@ class Gun {
             }
             this.alpha = info.PROPERTIES.ALPHA == null ? 1 : info.PROPERTIES.ALPHA
             this.borderless = info.PROPERTIES.BORDERLESS == null ? false : info.PROPERTIES.BORDERLESS;
-            this.drawFill = info.PROPERTIES.DRAW_FILL == null ? true : info.PROPERTIES.drawFill;
+            this.drawFill = info.PROPERTIES.DRAW_FILL == null ? true : info.PROPERTIES.DRAW_FILL;
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
             this.drawAbove = (info.PROPERTIES.DRAW_ABOVE == null) ? false : info.PROPERTIES.DRAW_ABOVE;
