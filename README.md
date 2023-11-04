@@ -1,26 +1,10 @@
-# Open Source Arras
-Formerly (and commonly) known as APS++
+# NArras
+brah momento numero dos (REAL SEQUEL TO NDIEP 2023 UNCONFIRMED BY NOOBER)
 
-This is an open beta build of an advanced private server template for Arras.io, independent from the official client. This is **not** representative of the final product. Some things may not either be present or work correctly.
+## le features
+- i forgor
 
-## Requirements
+# IMPORTANT MAKE SURE TO DO THIS BEFORE RUNNING LE SERVER
+open cmd, go to the folder that this is in and type "npm install"
 
-In order to run your server via localhost, you will need to install these first:
-- [Node.js v16 or later](https://nodejs.org/en)
-- [ws](https://www.npmjs.com/package/ws)
-
-Once the required software is installed, open either run.bat (if you're on Windows) or run.sh (if you're not). If there aren't any errors, your server will start up. Go to `localhost:3000` in your favourite web browser (keep the terminal window open, closing it will shut down the server) to play.
-
-If you want to stay up to date, fork this template, download a git client, and sync the fork whenever there's a major update.
-
-## Useful Tools
-
-- [Create a custom shape](https://arras.io/ext/custom-shape)
-- [Create a custom theme](https://codepen.io/road-to-100k/full/GRpvMzb)
-- [Random Tank Generator](https://perchance.org/chomp-arras-gen)
-
-## Other Links
-
-- [Our Discord server](https://discord.gg/kvCAZfUCjy)
-
-p.s. if something goes terribly wrong its not our fault
+MAKE SURE YOU HAVE NODEJS TO RUN THE SERVER!!!!!!!!!!!!!!!!!!!!!!!!!

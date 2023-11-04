@@ -1,3 +1,6 @@
-:arras
+
+:server
+color a
 "C:\Program Files\nodejs\node.exe" ".\server\index.js"
-goto arras
+color a
+goto server
