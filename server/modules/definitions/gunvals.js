@@ -1,6 +1,6 @@
 module.exports = {
     // Misc
-    blank: { },
+    blank: { reload: 1, recoil: 1, shudder: 1, size: 1, health: 1, damage: 1, pen: 1, speed: 1, maxSpeed: 1, range: 1, density: 1, spray: 1, resist: 1 },
     small: { size: 0.8 },
     micro: { size: 0.4 },
     weak: { reload: 2, health: 0.6, damage: 0.6, pen: 0.8, speed: 0.5, maxSpeed: 0.7, range: 0.25, density: 0.3 },
