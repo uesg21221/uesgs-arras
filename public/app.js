@@ -1356,30 +1356,30 @@ function drawSkillBars(spacing, alcoveSize) {
 
 function drawSelfInfo(spacing, alcoveSize, max) {
     //rendering information
-    let vspacing = 4;
-    let len = 1.65 * alcoveSize; // * global.screenWidth;
-    let height = 25;
+    let vspacing = 4.5;
+    let len = 1.75 * alcoveSize; // * global.screenWidth;
+    let height = 23;
     let x = (global.screenWidth - len) / 2;
-    let y = global.screenHeight - spacing - height;
+    let y = global.screenHeight - spacing - height - 1;
     ctx.lineWidth = 1;
 
     // Draw the exp bar
-    drawBar(x, x + len, y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
-    drawBar(x, x + len, y + height / 2, height - 3, color.grey);
-    drawBar(x, x + len * gui.__s.getProgress(), y + height / 2, height - 3.5, color.gold);
+    drawBar(x, x + len, y + height / 2, height + settings.graphical.barChunk, color.black);
+    drawBar(x, x + len, y + height / 2, height - settings.graphical.barChunk / 4, color.grey);
+    drawBar(x, x + len * gui.__s.getProgress(), y + height / 2, height - 2, color.gold);
 
     // Draw the class type
-    drawText("Level " + gui.__s.getLevel() + " " + gui.class, x + len / 2, y + height / 2, height - 4, color.guiwhite, "center", true);
-    height = 14;
+    drawText("Level " + gui.__s.getLevel() + " " + gui.class, x + len / 2, y + height / 2 + 1, height - 2.5, color.guiwhite, "center", true);
+    height = 16;
     y -= height + vspacing;
 
     // Draw the %-of-leader bar
     drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
-    drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3, color.grey);
+    drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3 - settings.graphical.barChunk / 2, color.grey);
     drawBar(x + len * 0.1, x + len * (0.1 + 0.8 * (max ? Math.min(1, gui.__s.getScore() / max) : 1)), y + height / 2, height - 3.5, color.green);
 
     //write the score and name
-    drawText("Score: " + util.handleLargeNumber(gui.__s.getScore()), x + len / 2, y + height / 2, height - 2, color.guiwhite, "center", true);
+    drawText("Score: " + util.formatLargeNumber(Math.floor(gui.__s.getScore())), x + len / 2, y + height / 2 + 1, height - 3.5, color.guiwhite, "center", true);
     ctx.lineWidth = 4;
     drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor, "center");
 }
@@ -1484,7 +1484,8 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     let height = 14;
     let x = global.screenWidth - len - spacing;
     let y = spacing + height + 7;
-    drawText("Leaderboard:", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 4, color.guiwhite, "center");
+    drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 3.5, color.guiwhite, "center");
+    y += 7;
     for (let i = 0; i < lb.data.length; i++) {
         let entry = lb.data[i];
         drawBar(x, x + len, y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
@@ -1512,7 +1513,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
     global.clickables.upgrade.hide();
     if (gui.upgrades.length > 0) {
         global.canUpgrade = true;
-        let internalSpacing = 8;
+        let internalSpacing = 15;
         let len = alcoveSize / 2;
         let height = len;
         let x = glide * 2 * spacing - spacing;
