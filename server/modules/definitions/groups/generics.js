@@ -61,7 +61,8 @@ exports.genericEntity = {
     MAX_CHILDREN: 0,
     BORDERLESS: false,
     DRAW_FILL: true,
-    REROOT_UPGRADE_TREE: false,
+    REROOT_UPGRADE_TREE: null,
+    ON: [],
     BODY: {
         ACCELERATION: 1,
         SPEED: 0,
@@ -91,10 +92,11 @@ exports.genericTank = {
     DANGER: 5,
     MOTION_TYPE: "motor",
     FACING_TYPE: "toTarget",
-    SIZE: 12,
+    SIZE: 11,
     MAX_CHILDREN: 0,
     DAMAGE_EFFECTS: false,
     IGNORED_BY_AI: false,
+    REROOT_UPGRADE_TREE: "basic",
     BODY: {
         ACCELERATION: base.ACCEL,
         SPEED: base.SPEED,
@@ -110,6 +112,7 @@ exports.genericTank = {
     },
     GUNS: [],
     TURRETS: [],
+    ON: [],
     GIVE_KILL_MESSAGE: true,
     DRAW_HEALTH: true,
     HITS_OWN_TYPE: "hardOnlyTanks",
@@ -272,7 +275,7 @@ exports.aura = {
     LABEL: "Aura",
     COLOR: 0,
     BODY: {
-        DAMAGE: 0.25,
+        DAMAGE: 0.5,
     },
 };
 exports.healAura = {
@@ -281,7 +284,7 @@ exports.healAura = {
     HEALER: true,
     COLOR: 12,
     BODY: {
-        DAMAGE: 0.25/3,
+        DAMAGE: 0.5/3,
     },
 };
 exports.auraSymbol = {

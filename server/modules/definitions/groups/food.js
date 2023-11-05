@@ -7,11 +7,13 @@ makeRelic = (type, scale = 1, gem, SIZE) => {
         PARENT: ['genericEntity'],
         LABEL: 'Relic Casing',
         COLOR: type.COLOR,
+        MIRROR_MASTER_ANGLE: true,
         SHAPE: [[-0.4,-1],[0.4,-0.25],[0.4,0.25],[-0.4,1]].map(r => r.map(s => s * scale))
     }, relicBody = {
         PARENT: ['genericEntity'],
         LABEL: 'Relic Mantle',
         COLOR: type.COLOR,
+        MIRROR_MASTER_ANGLE: true,
         SHAPE: type.SHAPE
     };
     exports[Math.random().toString(36)] = relicCasing;
@@ -62,7 +64,7 @@ makeRelic = (type, scale = 1, gem, SIZE) => {
     if (gem) {
         TURRETS.push({
             POSITION: [8, 0, 0, 0, 0, 1],
-            TYPE: gem
+            TYPE: [gem, { MIRROR_MASTER_ANGLE: true }]
         });
     }
 
@@ -85,7 +87,7 @@ makeRare = (type, level) => ({
     LABEL: ["Shiny", "Legendary", "Shadow", "Rainbow", "Transgender"][level] + " " + type.LABEL,
     VALUE: [100, 500, 2000, 4000, 5000][level] * type.VALUE,
     SHAPE: type.SHAPE,
-    SIZE: type.SHAPE + level,
+    SIZE: type.SIZE + level,
     COLOR: [1, 0, 19, 36, 37][level],
     ALPHA: level == 2 ? 0.25 : 1,
     BODY: {
@@ -100,16 +102,18 @@ makeRare = (type, level) => ({
     GIVE_KILL_MESSAGE: true,
 }),
 
+lerp = (a, b, t) => a + (b - a) * t,
+
 makeLaby = (type, level) => {
     let usableSHAPE = Math.max(type.SHAPE, 3),
         downscale = Math.cos(Math.PI / usableSHAPE),
         strenghtMultiplier = 5 ** (level - 1);
     return {
-        PARENT: ["food"],
+        PARENT: "food",
         LABEL: ["", "Beta ", "Alpha ", "Omega ", "Gamma ", "Delta "][level] + type.LABEL,
         VALUE: type.VALUE * strenghtMultiplier,
         SHAPE: type.SHAPE,
-        SIZE: type.SIZE / downscale ** (level - 1),
+        SIZE: level > 3 ? Math.max(40, type.SIZE * 2) * (1 + (level - 3) / 6) : type.SIZE * lerp(2 ** level, 1 + level / 3, Math.min(1, (type.SIZE - 5) / 17)),
         COLOR: type.COLOR,
         ALPHA: type.ALPHA,
         BODY: {
@@ -119,12 +123,13 @@ makeLaby = (type, level) => {
             PENETRATION: type.BODY.PENETRATION,
             ACCELERATION: type.BODY.ACCELERATION
         },
+        VARIES_IN_SIZE: false,
         DRAW_HEALTH: type.DRAW_HEALTH,
         GIVE_KILL_MESSAGE: type.GIVE_KILL_MESSAGE || level > 2,
         GUNS: type.GUNS,
         TURRETS: [...(type.TURRETS ? type.TURRETS : []), ...Array(level).fill().map((_, i) => ({
             POSITION: [20 * downscale ** (i + 1), 0, 0, !(i & 1) ? 180 / usableSHAPE : 0, 0, 1],
-            TYPE: type
+            TYPE: [type, { MIRROR_MASTER_ANGLE: true }]
         }))]
     };
 };
@@ -222,7 +227,7 @@ exports.triangle = {
     LABEL: "Triangle",
     VALUE: 120,
     SHAPE: 3,
-    SIZE: 9,
+    SIZE: 10,
     COLOR: 2,
     BODY: {
         DAMAGE: basePolygonDamage,
@@ -246,7 +251,7 @@ exports.pentagon = {
     LABEL: "Pentagon",
     VALUE: 400,
     SHAPE: 5,
-    SIZE: 16,
+    SIZE: 20,
     COLOR: 14,
     BODY: {
         DAMAGE: 1.5 * basePolygonDamage,
@@ -322,7 +327,7 @@ exports.hexagon = {
     LABEL: "Hexagon",
     VALUE: 500,
     SHAPE: 6,
-    SIZE: 18,
+    SIZE: 22,
     COLOR: 0,
     BODY: {
         DAMAGE: 1.7 * basePolygonDamage,
@@ -341,13 +346,18 @@ exports.rainbowHexagon = makeRare(exports.hexagon, 3);
 exports.transHexagon = makeRare(exports.hexagon, 4);
 
 // 3D POLYGONS
+exports.sphereGlow = { BORDERLESS: true }
 exports.sphere = {
     PARENT: ["food"],
     LABEL: "The Sphere",
+    FACING_TYPE: "noFacing",
     VALUE: 1e7,
     SHAPE: 0,
     SIZE: 9,
-    COLOR: 18,
+    COLOR: {
+        BASE: 18,
+        BRIGHTNESS_SHIFT: -15,
+    },
     BODY: {
         DAMAGE: 10,
         DENSITY: 15,
@@ -357,9 +367,24 @@ exports.sphere = {
     },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
-    TURRET: [{
-        POSITION: [15, 2, 2, 0, 0, 1],
-        TYPE: { COLOR: 8, SHAPE: 0 }
+    TURRETS: [{
+        POSITION: [17, 0, 0, 0, 0, 1],
+        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: -14 } }]
+    }, {
+        POSITION: [15, 1, -1, 0, 0, 1],
+        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: -9 } }]
+    }, {
+        POSITION: [13, 2, -2, 0, 0, 1],
+        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: -8 } }]
+    }, {
+        POSITION: [11, 3, -3, 0, 0, 1],
+        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: -3 } }]
+    }, {
+        POSITION: [8, 3.25, -3.25, 0, 0, 1],
+        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: 3 } }]
+    }, {
+        POSITION: [6, 3, -3, 0, 0, 1],
+        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: 9 } }]
     }]
 };
 exports.cube = {

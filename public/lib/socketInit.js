@@ -1,6 +1,6 @@
 import { global } from "./global.js";
 import { util } from "./util.js";
-import { config } from "./config.js";
+import { settings } from "./settings.js";
 import { protocol } from "./protocol.js";
 window.fakeLagMS = 0;
 var sync = [];
@@ -12,20 +12,18 @@ let level = 0;
 let sscore = util.Smoothbar(0, 10);
 var serverStart = 0,
     gui = {
-        getStatNames: data => {
-            return [
-                    data?.body_damage ?? 'Body Damage',
-                    data?.max_health ?? 'Max Health',
-                    data?.bullet_speed ?? 'Bullet Speed',
-                    data?.bullet_health ?? 'Bullet Health',
-                    data?.bullet_pen ?? 'Bullet Penetration',
-                    data?.bullet_damage ?? 'Bullet Damage',
-                    data?.reload ?? 'Reload',
-                    data?.move_speed ?? 'Movement Speed',
-                    data?.shield_regen ?? 'Shield Regeneration',
-                    data?.shield_cap ?? 'Shield Capacity',
-                ]
-        },
+        getStatNames: data => [
+            data?.body_damage ?? 'Body Damage',
+            data?.max_health ?? 'Max Health',
+            data?.bullet_speed ?? 'Bullet Speed',
+            data?.bullet_health ?? 'Bullet Health',
+            data?.bullet_pen ?? 'Bullet Penetration',
+            data?.bullet_damage ?? 'Bullet Damage',
+            data?.reload ?? 'Reload',
+            data?.move_speed ?? 'Movement Speed',
+            data?.shield_regen ?? 'Shield Regeneration',
+            data?.shield_cap ?? 'Shield Capacity',
+        ],
         skills: [
             { amount: 0, color: 'purple', cap: 1, softcap: 1 },
             { amount: 0, color: 'pink'  , cap: 1, softcap: 1 },
@@ -66,6 +64,8 @@ var serverStart = 0,
             getLevel: () => level,
         },
         type: 0,
+        root: "",
+        class: "",
         fps: 0,
         color: 0,
         accel: 0,
@@ -81,7 +81,7 @@ var moveCompensation = {
         yy = 0;
     },
     get: () => {
-        if (config.lag.unresponsive) {
+        if (settings.lag.unresponsive) {
             return {
                 x: 0,
                 y: 0,
@@ -102,7 +102,7 @@ var moveCompensation = {
         // Dampen motion
         let motion = Math.sqrt(_vx * _vx + _vy * _vy);
         if (motion > 0 && damp) {
-            let finalvelocity = motion / (damp / config.roomSpeed + 1);
+            let finalvelocity = motion / (damp / settings.roomSpeed + 1);
             _vx = finalvelocity * _vx / motion;
             _vy = finalvelocity * _vy / motion;
         }
@@ -217,16 +217,19 @@ const Entry = class {
         this.score.set(to.score);
         this.old = false;
         this.nameColor = to.nameColor;
+        this.id = to.id;
+        this.label = to.label;
     }
     publish() {
-        let ref = global.mockups[this.index];
+        let indexes = this.index.split("-"),
+            ref = global.mockups[parseInt(indexes[0])];
         return {
             image: util.getEntityImageFromMockup(this.index, this.color),
             position: ref.position,
             barColor: this.bar,
-            label: this.name ? this.name + " - " + ref.name : ref.name,
+            label: this.name ? this.name + " - " + this.label : this.label,
             score: this.score.get(),
-            nameColor: this.nameColor
+            nameColor: this.nameColor,
         };
     }
 };
@@ -260,7 +263,7 @@ const Leaderboard = class {
 };
 let minimapAllInt = new Integrate(5),
     minimapTeamInt = new Integrate(3),
-    leaderboardInt = new Integrate(6),
+    leaderboardInt = new Integrate(7),
     leaderboard = new Leaderboard(),
     minimap = new Minimap(200);
 let lags = [];
@@ -268,7 +271,7 @@ var lag = {
     get: () => lags.length ? lags.reduce((a, b) => a + b) / lags.length : 0,
     add: l => {
         lags.push(l);
-        if (lags.length > config.lag.memory) {
+        if (lags.length > settings.lag.memory) {
             lags.splice(0, 1);
         }
     }
@@ -324,12 +327,54 @@ const GunContainer = n => {
             motion: 0,
             position: 0,
             isUpdated: true,
+            configLoaded: false,
+            color: "",
+            borderless: false, 
+            drawFill: true, 
+            drawAbove: false,
+            length: 0,
+            width: 0,
+            aspect: 0,
+            angle: 0,
+            direction: 0,
+            offset: 0,
         });
     }
     return {
         getPositions: () => a.map(g => {
             return g.position;
         }),
+        getConfig: () => a.map(g => {
+            return {
+                color: g.color,
+                alpha: g.alpha,
+                borderless: g.borderless, 
+                drawFill: g.drawFill,
+                drawAbove: g.drawAbove,
+                length: g.length,
+                width: g.width,
+                aspect: g.aspect,
+                angle: g.angle,
+                direction: g.direction,
+                offset: g.offset,
+            };
+        }),
+        setConfig: (ind, c) => {
+            let g = a[ind];
+            if (!g.configLoaded) {
+                g.configLoaded = true;
+                g.color = c.color;
+                g.borderless = c.borderless; 
+                g.drawFill = c.drawFill;
+                g.drawAbove = c.drawAbove;
+                g.length = c.length;
+                g.width = c.width;
+                g.aspect = c.aspect;
+                g.angle = c.angle;
+                g.direction = c.direction;
+                g.offset = c.offset;
+            }
+        },
         update: () => {
             for (let instance of a) {
                 physics(instance);
@@ -379,6 +424,15 @@ const process = (z = {}) => {
     if (type & 0x01) { // issa turret
         z.facing = get.next();
         z.layer = get.next();
+        z.index = get.next();
+        z.color = get.next();
+        z.size = get.next();
+        z.realSize = get.next();
+        z.sizeFactor = get.next();
+        z.angle = get.next();
+        z.direction = get.next();
+        z.offset = get.next();
+        z.mirrorMasterAngle = get.next();
     } else { // issa something real
         z.interval = global.metrics.rendergap;
         z.id = get.next();
@@ -447,8 +501,8 @@ const process = (z = {}) => {
                 lastRender: global.player.time,
                 x: z.x,
                 y: z.y,
-                lastx: z.x - global.metrics.rendergap * config.roomSpeed * (1000 / 30) * z.vx,
-                lasty: z.y - global.metrics.rendergap * config.roomSpeed * (1000 / 30) * z.vy,
+                lastx: z.x - global.metrics.rendergap * settings.roomSpeed * (1000 / 30) * z.vx,
+                lasty: z.y - global.metrics.rendergap * settings.roomSpeed * (1000 / 30) * z.vy,
                 lastvx: z.vx,
                 lastvy: z.vy,
                 lastf: z.facing,
@@ -484,10 +538,19 @@ const process = (z = {}) => {
     // Decide if guns need to be fired one by one
     for (let i = 0; i < gunnumb; i++) {
         let time = get.next(),
-            power = get.next();
-        if (time > global.player.lastUpdate - global.metrics.rendergap) { // shoot it
-            z.guns.fire(i, power);
-        }
+            power = get.next(),
+            color = get.next(),
+            borderless = get.next(),
+            drawFill = get.next(),
+            drawAbove = get.next(),
+            length = get.next(),
+            width = get.next(),
+            aspect = get.next(),
+            angle = get.next(),
+            direction = get.next(),
+            offset = get.next();
+        z.guns.setConfig(i, {color, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
+        if (time > global.player.lastUpdate - global.metrics.rendergap) z.guns.fire(i, power); // Shoot it
     }
     // Update turrets
     let turnumb = get.next();
@@ -550,6 +613,8 @@ const convert = {
         let index = get.next(),
             // Translate the encoded index
             indices = {
+                class: index & 0x0400,
+                root: index & 0x0200,
                 topspeed: index & 0x0100,
                 accel: index & 0x0080,
                 skills: index & 0x0040,
@@ -578,7 +643,7 @@ const convert = {
         if (indices.upgrades) {
             gui.upgrades = [];
             for (let i = 0, len = get.next(); i < len; i++) {
-                gui.upgrades.push(get.next());
+                gui.upgrades.push(get.next().split("\\\\//"));
             }
         }
         if (indices.statsdata) {
@@ -606,6 +671,12 @@ const convert = {
         }
         if (indices.topspeed) {
             gui.topspeed = get.next();
+        }
+        if (indices.root) {
+            gui.root = get.next();
+        }
+        if (indices.class) {
+            gui.class = get.next();
         }
     },
     broadcast: () => {
@@ -655,7 +726,8 @@ const convert = {
                 name: data[2],
                 color: data[3],
                 bar: data[4],
-                nameColor: data[5]
+                nameColor: data[5],
+                label: data[6],
             })
         }
         leaderboard.update(entries);
@@ -738,7 +810,7 @@ const socketInit = port => {
             case 'w': // welcome to the game
                 if (m[0]) { // Ask to spawn
                     console.log('The server has welcomed us to the game room. Sending spawn request.');
-                    socket.talk('s', global.playerName, 1, 1 * config.game.autoLevelUp);
+                    socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp);
                     global.message = '';
                 }
             break;
@@ -747,7 +819,7 @@ const socketInit = port => {
                 global.gameHeight = m[1];
                 global.roomSetup = JSON.parse(m[2]);
                 serverStart = JSON.parse(m[3]);
-                config.roomSpeed = m[4];
+                settings.roomSpeed = m[4];
                 console.log('Room data recieved. Commencing syncing process.');
                 // Start the syncing process
                 socket.talk('S', getNow());

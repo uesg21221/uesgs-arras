@@ -1,9 +1,9 @@
-const config = {
+const settings = {
     graphical: {
         screenshotMode: false,
-        borderChunk: 6,
+        borderChunk: 5,
         barChunk: 4,
-        mininumBorderChunk: 1,
+        mininumBorderChunk: 3,
         deathBlurAmount: 3,
         darkBorders: false,
         fancyAnimations: true,
@@ -23,6 +23,4 @@ const config = {
         autoLevelUp: false
     }
 };
-export {
-    config
-}
+export { settings }

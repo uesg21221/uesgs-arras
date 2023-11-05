@@ -1,3 +1,5 @@
+const { serverStartTime } = require("../../lib/util");
+
 function rounder(val) {
     if (Math.abs(val) < 0.00001) val = 0;
     return +val.toPrecision(6);
@@ -7,20 +9,24 @@ function getMockup(e, positionInfo) {
     return {
         index: e.index,
         name: e.label,
+        upgradeName: e.upgradeLabel,
         x: rounder(e.x),
         y: rounder(e.y),
         color: e.color,
+        upgradeColor: e.upgradeColor,
+        glow: e.glow,
         borderless: e.borderless,
         drawFill: e.drawFill,
         shape: e.shapeData,
         size: rounder(e.size),
         realSize: rounder(e.realSize),
         facing: rounder(e.facing),
-        turretFacesClient: e.settings.turretFacesClient,
+        mirrorMasterAngle: e.settings.mirrorMasterAngle,
         layer: e.layer,
         statnames: e.settings.skillNames,
         position: positionInfo,
         rerootUpgradeTree: e.rerootUpgradeTree,
+        className: e.className,
         upgrades: e.upgrades.map(r => ({
             tier: r.tier,
             index: r.index
@@ -34,6 +40,7 @@ function getMockup(e, positionInfo) {
                 aspect: rounder(gun.aspect),
                 angle: rounder(gun.angle),
                 color: gun.color,
+                alpha: gun.alpha,
                 borderless: gun.borderless,
                 drawFill: gun.drawFill,
                 drawAbove: gun.drawAbove,
@@ -238,6 +245,7 @@ function getDimensions(entities) {
 }
 
 console.log("Started loading mockups...");
+let mockupsLoadStartTime = Date.now();
 
 let mockupData = [];
 for (let k in Class) {
@@ -247,6 +255,7 @@ for (let k in Class) {
         // Create a reference entities which we'll then take an image of.
         let temptank = new Entity({ x: 0, y: 0 });
         temptank.define(type);
+        temptank.className = k;
         temptank.name = type.LABEL; // Rename it (for the upgrades menu).
         // Fetch the mockup.
         type.mockup = {
@@ -269,7 +278,10 @@ for (let k in Class) {
 // Remove them
 purgeEntities();
 
+let mockupsLoadEndTime = Date.now();
 console.log("Finished compiling " + mockupData.length + " classes into mockups.");
+console.log("Mockups generated in " + (mockupsLoadEndTime - mockupsLoadStartTime) + " milliseconds.\n");
+console.log("Server loaded in " + (mockupsLoadEndTime - serverStartTime) + " milliseconds.\n");
 mockupsLoaded = true;
 
 let mockupJsonData = JSON.stringify(mockupData);

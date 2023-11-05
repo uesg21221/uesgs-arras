@@ -16,7 +16,7 @@ let skcnv = {
 };
 
 // GUN DEFINITIONS
-exports.combineStats = function (array_of_objects) {
+exports.combineStats = function (stats) {
     try {
         // Build a blank array of the appropiate length
         let data = {
@@ -35,15 +35,15 @@ exports.combineStats = function (array_of_objects) {
             resist: 1
         };
 
-        for (let object = 0; object < array_of_objects.length; object++) {
-            let gStat = array_of_objects[object];
+        for (let object = 0; object < stats.length; object++) {
+            let gStat = stats[object];
             if (Array.isArray(gStat)) {
                 gStat = {
-                    reload: data[0], recoil: data[1], shudder: data[2],
-                    size: data[3], health: data[4], damage: data[5],
-                    pen: data[6], speed: data[7], maxSpeed: data[8],
-                    range: data[9], density: data[10], spray: data[11],
-                    resist: data[12]
+                    reload: gStat[0], recoil: gStat[1], shudder: gStat[2],
+                    size: gStat[3], health: gStat[4], damage: gStat[5],
+                    pen: gStat[6], speed: gStat[7], maxSpeed: gStat[8],
+                    range: gStat[9], density: gStat[10], spray: gStat[11],
+                    resist: gStat[12]
                 };
             }
             data.reload *= gStat.reload ?? 1;
@@ -63,7 +63,7 @@ exports.combineStats = function (array_of_objects) {
         return data;
     } catch (err) {
         console.log(err);
-        console.log(JSON.stringify(array_of_objects));
+        console.log(JSON.stringify(stats));
     }
 };
 exports.setBuild = (build) => {
@@ -172,6 +172,42 @@ exports.addBackGunner = (type, name = -1) => {
     output.LABEL = name == -1 ? type.LABEL : name;
     return output;
 }
+exports.makeMulti = (type, count, name = -1, startRotation = 0) => {
+    let greekNumbers = ',Double ,Triple ,Quad ,Penta ,Hexa ,Septa ,Octo ,Nona ,Deca ,Undeca ,Dodeca ,Trideca ,Tetradeca ,Pentadeca ,Hexadeca ,Heptadeca ,Octadeca ,Nonadeca ,Icosa ,Henicosa ,Docosa ,Tricosa ,Triaconta ,Hentriaconta '.split(','),
+        output = exports.dereference(type),
+        shootyBois = output.GUNS,
+        fraction = 360 / count;
+    output.GUNS = [];
+    for (let gun of type.GUNS) {
+        for (let i = 0; i < count; i++) {
+            let newgun = exports.dereference(gun);
+            newgun.POSITION[5] += startRotation + fraction * i;
+            if (gun.PROPERTIES) newgun.PROPERTIES.TYPE = gun.PROPERTIES.TYPE;
+            output.GUNS.push(newgun);
+        };
+    }
+    output.LABEL = name == -1 ? (greekNumbers[count - 1] || (count + ' ')) + type.LABEL : name;
+    return output;
+},
+exports.makeBird = (type, name = -1, color) => {
+    let output = exports.dereference(type),
+        shootyBois = [{
+            POSITION: [16, 8, 1, 0, 0, 150, 0.1],
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, g.halfrecoil]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+        },{
+            POSITION: [16, 8, 1, 0, 0, 210, 0.1],
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, g.halfrecoil]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+        },{
+            POSITION: [18, 8, 1, 0, 0, 180, 0.6],
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, g.halfrecoil]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+        }];
+    if (color) for (let i = 0; i < 3; i++) shootyBois[i].PROPERTIES.TYPE = [shootyBois[i].PROPERTIES.TYPE, { COLOR: color, KEEP_OWN_COLOR: true }];
+    for (let i in output.GUNS) if (output.GUNS[i].PROPERTIES) output.GUNS[i].PROPERTIES.ALT_FIRE = true;
+    if (output.FACING_TYPE == "locksFacing") output.FACING_TYPE = "toTarget";
+    output.GUNS = type.GUNS == null ? [...shootyBois] : [...output.GUNS, ...shootyBois];
+    output.LABEL = name == -1 ? "Bird " + type.LABEL : name;
+    return output;
+};
 
 // SPAWNER FUNCTIONS
 exports.makeHybrid = (type, name = -1) => {
@@ -660,7 +696,7 @@ exports.makeDeco = (shape = 0, color = 16) => {
     };
 }
 
-exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity, auraColor) => {
+exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) => {
     let isHeal = damageFactor < 0;
     let auraType = isHeal ? "healAura" : "aura";
     let symbolType = isHeal ? "healerSymbol" : "auraSymbol";
@@ -684,7 +720,7 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity, auraColor) => {
         ],
         TURRETS: [
             {
-                POSITION: [20 - 5 * isHeal, 0, 0, 0, 360, 1],
+                POSITION: [20 - 7.5 * isHeal, 0, 0, 0, 360, 1],
                 TYPE: [symbolType, {COLOR: auraColor, INDEPENDENT: true}],
             },
         ]

@@ -37,18 +37,15 @@ class io_bossRushAI extends IO {
     constructor(body) {
         super(body);
         this.enabled = true;
-        this.goal = {
-            x: room.width / 2,
-            y: room.height / 2
-        }
+        this.goalDefault = room.center;
     }
     think(input) {
-        if (room.isIn("nest", this.body)) {
+        if (new Vector( this.body.x - this.goalDefault.x, this.body.y - this.goalDefault.y ).isShorterThan(50)) {
             this.enabled = false;
         }
         if (this.enabled) {
             return {
-                goal: this.goal
+                goal: this.goalDefault
             }
         }
     }
@@ -122,11 +119,6 @@ class io_listenToPlayer extends IO {
                 x: 100 * Math.cos(kk),
                 y: 100 * Math.sin(kk),
             };
-        }
-        if (this.body.invuln) {
-            if (this.player.command.right || this.player.command.left || this.player.command.up || this.player.command.down || this.player.command.lmb) {
-                this.body.invuln = false;
-            }
         }
         this.body.autoOverride = this.player.command.override;
         return {
@@ -418,7 +410,7 @@ class io_nearestDifferentMaster extends IO {
             this.tick = 100;
         }
         // Think damn hard
-        if (this.tick++ > 15 * roomSpeed) {
+        if (this.tick++ > 15 * c.runSpeed) {
             this.tick = 0;
             this.validTargets = this.buildList(range);
             // Ditch our old target if it's invalid
@@ -680,11 +672,11 @@ class io_wanderAroundMap extends IO {
         super(b);
         this.lookAtGoal = opts.lookAtGoal;
         this.immitatePlayerMovement = opts.immitatePlayerMovement;
-        this.spot = room.randomType('norm');
+        this.spot = ran.choose(room.spawnableDefault).loc;
     }
     think(input) {
         if (new Vector( this.body.x - this.spot.x, this.body.y - this.spot.y ).isShorterThan(50)) {
-            this.spot = room.randomType('norm');
+            this.spot = ran.choose(room.spawnableDefault).loc;
         }
         if (input.goal == null && !this.body.autoOverride) {
             let goal = this.spot;

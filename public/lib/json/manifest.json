@@ -2,7 +2,7 @@
     "name": "arras.io",
     "theme_color": "#8abc3f",
     "background_color": "#484948",
-    "description": "Arras.io is a fan-made sequel of diep.io! Survive and shoot at others while keeping your own tank alive!",
+    "description": "This server runs on Open Source Arras.",
     "orientation": "landscape",
     "start_url": "/",
     "scope": "/",

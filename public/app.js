@@ -1,10 +1,11 @@
 import { util } from "./lib/util.js";
 import { global } from "./lib/global.js";
-import { config } from "./lib/config.js";
+import { settings } from "./lib/settings.js";
 import { Canvas } from "./lib/canvas.js";
 import { color } from "./lib/color.js";
+import { gameDraw } from "./lib/gameDraw.js";
 import * as socketStuff from "./lib/socketInit.js";
-(async function (util, global, config, Canvas, color, socketStuff) {
+(async function (util, global, settings, Canvas, color, gameDraw, socketStuff) {
 
 let { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow } = socketStuff;
 // fetch("changelog.md", { cache: "no-cache" })
@@ -28,7 +29,7 @@ fetch("changelog.html", { cache: "no-cache" })
         for (const title of titles) {
             title.classList.add('title');
         }
-        
+
         patchNotes.innerHTML += ParsedHTML.documentElement.innerHTML;
     } catch (error) {
         patchNotes.innerHTML = `<p>An error occured while trying to fetch 'changelogs.html'</p><p>${error}</p>`;
@@ -56,7 +57,7 @@ class Animation {
         return this.value;
     }
     get() {
-        return config.graphical.fancyAnimations
+        return settings.graphical.fancyAnimations
             ? this.getLerp()
             : this.getNoLerp();
     }
@@ -80,407 +81,7 @@ let animations = window.animations = {
     minimap: new Animation(-1, 1, 0.025),
     leaderboard: new Animation(-1, 1, 0.025)
 };
-// Color functions
-/** https://gist.github.com/jedfoster/7939513 **/
-function decimal2hex(d) {
-    return d.toString(16);
-} // convert a decimal value to hex
-function hex2decimal(h) {
-    return parseInt(h, 16);
-} // convert a hex value to decimal
-let mixColors = (color_2, color_1, weight = 0.5) => {
-    if (weight === 1) return color_1;
-    if (weight === 0) return color_2;
-    var col = "#";
-    for (var i = 1; i <= 6; i += 2) {
-        // loop through each of the 3 hex pairs—red, green, and blue, skip the '#'
-        var v1 = hex2decimal(color_1.substr(i, 2)), // extract the current pairs
-            v2 = hex2decimal(color_2.substr(i, 2)),
-            // combine the current pairs from each source color, according to the specified weight
-            val = decimal2hex(Math.floor(v2 + (v1 - v2) * weight));
-        while (val.length < 2) {
-            val = "0" + val;
-        } // prepend a '0' if val results in a single digit
-        col += val; // concatenate val to our new color string
-    }
-    return col; // PROFIT!
-};
-function hslToRgb(h, s, l) {
-    let r, g, b;
 
-    if (s === 0) {
-        r = g = b = l; // achromatic
-    } else {
-        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        const p = 2 * l - q;
-        r = hueToRgb(p, q, h + 1/3);
-        g = hueToRgb(p, q, h);
-        b = hueToRgb(p, q, h - 1/3);
-    }
-    return '#' +
-        Math.round(r * 255).toString(16).padStart(2, '0') +
-        Math.round(g * 255).toString(16).padStart(2, '0') +
-        Math.round(b * 255).toString(16).padStart(2, '0');
-}
-function rgbToHsl(rgb) {
-    let r, g, b, h, s, l;
-
-    r = parseInt(rgb.substring(1, 3), 16) / 255;
-    g = parseInt(rgb.substring(3, 5), 16) / 255;
-    b = parseInt(rgb.substring(5, 7), 16) / 255;
-
-    let cmax = Math.max(r, g, b);
-    let cmin = Math.min(r, g, b);
-    let deltaC = cmax - cmin;
-
-    // Hue
-    switch (true){
-        case deltaC == 0:
-            h = 0;
-            break;
-        case cmax == r:
-            h = 1/6 * (((g - b) / deltaC) % 6);
-            break;
-        case cmax == g:
-            h = 1/6 * ((b - r) / deltaC + 2);
-            break;
-        case cmax == b:
-            h = 1/6 * ((r - g) / deltaC + 4);
-            break;
-    }
-    // Brightness
-    l = (cmax + cmin) / 2
-    // Saturation
-    if (deltaC == 0)
-        s = 0;
-    else 
-        s = deltaC / (1 - Math.abs(2 * l - 1));
-
-    return [h, s, l];
-}
-function hueToRgb(p, q, t) {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 0.166) return p + (q - p) * 6 * t;
-    if (t < 0.5  ) return q;
-    if (t < 0.666) return p + (q - p) * (2/3 - t) * 6;
-    return p;
-}
-function clamp(n, lower, upper) {
-    return Math.min(upper, Math.max(lower, n));
-}
-//TODO: somehow move the calculation to these in reanimateColors to improve performance
-function modifyColor(color, base = "16 0 1 0 false") {
-    // Edge cases because spaghetti
-    if (typeof color == 'number') {
-        color = color + " 0 1 0 false";
-    }
-    if (typeof base == 'number') {
-        base = base + " 0 1 0 false";
-    }
-    // Split into array
-    let colorDetails = color.split(" "),
-        baseDetails = base.split(" ");
-
-    // Color mirroring
-    if (colorDetails[0] == "-1") {
-        colorDetails[0] = baseDetails[0];
-    }
-
-    // Get HSL values
-    let baseColor = colorDetails[0];
-    // check if color.base is not a word.
-    if (!isNaN(baseColor)) {
-        baseColor = parseInt(baseColor);
-    }
-    baseColor = rgbToHsl(getColor(baseColor) ?? baseColor);
-    
-    // Get color config
-    let hueShift = parseFloat(colorDetails[1]) / 360,
-        saturationShift = parseFloat(colorDetails[2]),
-        brightnessShift = parseFloat(colorDetails[3]) / 100,
-        allowBrightnessInvert = colorDetails[4] == 'true';
-
-    // Apply config
-    let finalHue = (baseColor[0] + hueShift) % 1,
-        finalSaturation = clamp(baseColor[1] * saturationShift, 0, 1),
-        finalBrightness = baseColor[2] + brightnessShift;
-
-    if (allowBrightnessInvert && (finalBrightness > 1 || finalBrightness < 0)) {
-        finalBrightness -= brightnessShift * 2;
-    }
-    finalBrightness = clamp(finalBrightness, 0, 1);
-    // Gaming.
-    return hslToRgb(finalHue, finalSaturation, finalBrightness);
-}
-function getRainbow(a, b, c = 0.5) {
-    if (0 >= c) return a;
-    if (1 <= c) return b;
-    let f = 1 - c;
-    a = parseInt(a.slice(1, 7), 16);
-    b = parseInt(b.slice(1, 7), 16);
-    return (
-        "#" +
-        (
-            (((a & 0xff0000) * f + (b & 0xff0000) * c) & 0xff0000) |
-            (((a & 0x00ff00) * f + (b & 0x00ff00) * c) & 0x00ff00) |
-            (((a & 0x0000ff) * f + (b & 0x0000ff) * c) & 0x0000ff)
-        )
-            .toString(16)
-            .padStart(6, "0")
-    );
-}
-let animatedColor = {
-    lesbian: "",
-    gay: "",
-    bi: "",
-    trans: "",
-    blue_red: "",
-    blue_grey: "",
-    grey_blue: "",
-    red_grey: "",
-    grey_red: ""
-};
-function reanimateColors() {
-    let now = Date.now(),
-
-        //six_gradient = Math.floor((now / 200) % 6),
-        five_bars = Math.floor((now % 2000) / 400),
-        three_bars = Math.floor((now % 2000) * 3 / 2000),
-        blinker = 150 > now % 300,
-
-        lesbian_magenta  = "#a50062",
-        lesbian_oredange = "#d62900",
-        lesbian_white    = "#ffffff",
-        lesbian_useSecondSet = five_bars < 2,
-
-        gay_transition = (now / 2000) % 1,
-
-        bi_pink   = "#D70071",
-        bi_purple = "#9C4E97",
-        bi_blue   = "#0035AA",
-
-        trans_pink  = "#f7a8b8",
-        trans_blue  = "#55cdfc",
-        trans_white = "#ffffff";
-
-    animatedColor.lesbian = getRainbow(lesbian_useSecondSet ? lesbian_oredange : lesbian_white, lesbian_useSecondSet ? lesbian_white : lesbian_magenta, (lesbian_useSecondSet ? five_bars : five_bars - 3) / 2);
-    animatedColor.gay = hslToRgb(gay_transition, 0.75, 0.5);
-    animatedColor.bi = [bi_pink, bi_purple, bi_blue][three_bars];
-    animatedColor.trans = [trans_blue, trans_pink, trans_white, trans_pink, trans_blue][five_bars];
-
-    animatedColor.blue_red = blinker ? color.blue : color.red;
-    animatedColor.blue_grey = blinker ? color.blue : color.grey;
-    animatedColor.grey_blue = blinker ? color.grey : color.blue;
-    animatedColor.red_grey = blinker ? color.red : color.grey;
-    animatedColor.grey_red = blinker ? color.grey : color.red;
-}
-function getColor(colorNumber) {
-    switch (colorNumber) {
-        case 0:
-        case "teal":
-        case "aqua":
-            return color.teal;
-        case 1:
-        case "lightGreen":
-            return color.lgreen;
-        case 2:
-        case "orange":
-            return color.orange;
-        case 3:
-        case "yellow":
-            return color.yellow;
-        case 4:
-        case "lavender":
-            return color.lavender;
-        case 5:
-        case "pink":
-            return color.pink;
-        case 6:
-        case "veryLightGrey":
-        case "veryLightGray":
-            return color.vlgrey;
-        case 7:
-        case "lightGrey":
-        case "lightGray":
-            return color.lgrey;
-        case 8:
-        case "pureWhite":
-            return color.guiwhite;
-        case 9:
-        case "black":
-            return color.black;
-        case 10:
-        case "blue":
-            return color.blue;
-        case 11:
-        case "green":
-            return color.green;
-        case 12:
-        case "red":
-            return color.red;
-        case 13:
-        case "gold":
-            return color.gold;
-        case 14:
-        case "purple":
-            return color.purple;
-        case 15:
-        case "magenta":
-            return color.magenta;
-        case 16:
-        case "grey":
-        case "gray":
-            return color.grey;
-        case 17:
-        case "darkGrey":
-        case "darkGray":
-            return color.dgrey;
-        case 18:
-        case "white":
-            return color.white;
-        case 19:
-        case "pureBlack":
-            return color.guiblack;
-        case 20:
-        case "animatedBlueRed":
-            return animatedColor.blue_red;
-        case 21:
-        case "animatedBlueGrey":
-        case "animatedBlueGray":
-            return animatedColor.blue_grey;
-        case 22:
-        case "animatedGreyBlue":
-        case "animatedGrayBlue":
-            return animatedColor.grey_blue;
-        case 23:
-        case "animatedRedGrey":
-        case "animatedRedGray":
-            return animatedColor.red_grey;
-        case 24:
-        case "animatedGreyRed":
-        case "animatedGrayRed":
-            return animatedColor.grey_red;
-        case 25:
-        case "mustard":
-            return "#C49608";
-        case 26:
-        case "darkOrange":
-            return "#EC7B0F";
-        case 27:
-        case "brown":
-            return "#895918";
-        case 28:
-        case "cyan":
-        case "turquoise":
-            return "#13808E";
-        case 29:
-        case "animatedLesbian":
-            return animatedColor.lesbian;
-        case 30:
-        case "powerGem":
-        case "powerStone":
-            return "#a913cf";
-        case 31:
-        case "spaceGem":
-        case "spaceStone":
-            return "#226ef6";
-        case 32:
-        case "realityGem":
-        case "realityStone":
-            return "#ff1000";
-        case 33:
-        case "soulGem":
-        case "soulStone":
-            return "#ff9000";
-        case 34:
-        case "timeGem":
-        case "timeStone":
-            return "#00e00b";
-        case 35:
-        case "mindGem":
-        case "mindStone":
-            return "#ffd300";
-        case 36:
-        case "rainbow":
-            return animatedColor.gay;
-        case 37:
-        case "animatedTrans":
-            return animatedColor.trans;
-        case 38:
-        case "animatedBi":
-            return animatedColor.bi;
-        case 39:
-        case "pumpkinStem":
-            return "#654321";
-        case 40:
-        case "pumpkinBody":
-            return "#e58100";
-        case 41:
-        case "tree":
-            return "#267524";
-    }
-}
-function getColorDark(givenColor) {
-    let dark = config.graphical.neon ? color.white : color.black;
-    if (config.graphical.darkBorders) return dark;
-    return mixColors(givenColor, dark, color.border);
-}
-function getZoneColor(cell, real) {
-    switch (cell) {
-        case "bas1":
-        case "bap1":
-        case "dom1":
-            return color.blue;
-        case "bas2":
-        case "bap2":
-        case "dom2":
-            return color.green;
-        case "bas3":
-        case "bap3":
-        case "dom3":
-        case "boss":
-            return color.red;
-        case "bas4":
-        case "bap4":
-        case "dom4":
-            return color.magenta;
-        case "bas5":
-        case "bap5":
-        case "dom5":
-            return "#C49608";
-        case "bas6":
-        case "bap6":
-        case "dom6":
-            return "#EC7B0F";
-        case "bas7":
-        case "bap7":
-        case "dom7":
-            return "#895918";
-        case "bas8":
-        case "bap8":
-        case "dom8":
-            return "#13808E";
-        case "port":
-            return color.guiblack;
-        case "nest":
-            return real ? color.purple : color.lavender;
-        case "dom0":
-            return color.gold;
-        default:
-            return real ? color.white : color.lgrey;
-    }
-}
-
-function setColor(context, givenColor) {
-    if (config.graphical.neon) {
-        context.fillStyle = getColorDark(givenColor);
-        context.strokeStyle = givenColor;
-    } else {
-        context.fillStyle = givenColor;
-        context.strokeStyle = getColorDark(givenColor);
-    }
-}
 // Mockup functions
 // Prepare stuff
 global.player = {
@@ -504,8 +105,7 @@ global.player = {
 };
 var upgradeSpin = 0,
     lastPing = 0,
-    renderTimes = 0,
-    generatedTankTree = null;
+    renderTimes = 0;
 global.clearUpgrades = () => gui.upgrades = [];
 // Build the leaderboard object
 global.player = global.player;
@@ -605,7 +205,7 @@ window.onload = async () => {
 // Prepare canvas stuff
 function resizeEvent() {
     let scale = window.devicePixelRatio;
-    if (!config.graphical.fancyAnimations) {
+    if (!settings.graphical.fancyAnimations) {
         scale *= 0.5;
     }
     global.screenWidth = window.innerWidth * scale;
@@ -670,33 +270,34 @@ function startGame() {
     util.submitToLocalStorage("optScreenshotMode");
     util.submitToLocalStorage("coloredHealthbars");
     util.submitToLocalStorage("seperatedHealthbars");
-    config.graphical.fancyAnimations = !document.getElementById("optFancy").checked;
-    config.graphical.centerTank = document.getElementById("centerTank").checked;
-    config.graphical.pointy = !document.getElementById("optNoPointy").checked;
-    config.game.autoLevelUp = document.getElementById("autoLevelUp").checked;
-    config.lag.unresponsive = document.getElementById("optPredictive").checked;
-    config.graphical.screenshotMode = document.getElementById("optScreenshotMode").checked;
-    config.graphical.coloredHealthbars = document.getElementById("coloredHealthbars").checked;
-    config.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
+    settings.graphical.fancyAnimations = !document.getElementById("optFancy").checked;
+    settings.graphical.centerTank = document.getElementById("centerTank").checked;
+    settings.graphical.pointy = !document.getElementById("optNoPointy").checked;
+    settings.game.autoLevelUp = document.getElementById("autoLevelUp").checked;
+    settings.lag.unresponsive = document.getElementById("optPredictive").checked;
+    settings.graphical.screenshotMode = document.getElementById("optScreenshotMode").checked;
+    settings.graphical.coloredHealthbars = document.getElementById("coloredHealthbars").checked;
+    settings.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
     switch (document.getElementById("optBorders").value) {
         case "normal":
-            config.graphical.darkBorders = config.graphical.neon = false;
+            settings.graphical.darkBorders = settings.graphical.neon = false;
             break;
         case "dark":
-            config.graphical.darkBorders = true;
-            config.graphical.neon = false;
+            settings.graphical.darkBorders = true;
+            settings.graphical.neon = false;
             break;
         case "glass":
-            config.graphical.darkBorders = false;
-            config.graphical.neon = true;
+            settings.graphical.darkBorders = false;
+            settings.graphical.neon = true;
             break;
         case "neon":
-            config.graphical.darkBorders = config.graphical.neon = true;
+            settings.graphical.darkBorders = settings.graphical.neon = true;
             break;
     }
     util.submitToLocalStorage("optColors");
     let a = document.getElementById("optColors").value;
     color = color[a === "" ? "normal" : a];
+    gameDraw.color = color;
     // Other more important stuff
     let playerNameInput = document.getElementById("playerNameInput");
     let playerKeyInput = document.getElementById("playerKeyInput");
@@ -754,13 +355,13 @@ function arrayifyText(rawText) {
     return textArray;
 }
 const measureText = (text, fontSize, withHeight = false) => {
-    fontSize += config.graphical.fontSizeBoost;
+    fontSize += settings.graphical.fontSizeBoost;
     ctx.font = "bold " + fontSize + "px Ubuntu";
     let measurement = ctx.measureText(arrayifyText(text).reduce((a, b, i) => (i & 1) ? a : a + b, ''));
     return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
 };
 function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
-    size += config.graphical.fontSizeBoost;
+    size += settings.graphical.fontSizeBoost;
     // Get text dimensions and resize/reset the canvas
     let offset = size / 5,
         ratio = 1,
@@ -791,14 +392,14 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
         Xoffset -= ctx.measureText(renderedFullText).width * alignMultiplier;
     }
     // Draw it
-    context.lineWidth = (size + 1) / config.graphical.fontStrokeRatio;
+    context.lineWidth = (size + 1) / settings.graphical.fontStrokeRatio;
     context.textAlign = "left";
     context.textBaseline = "middle";
     context.strokeStyle = color.black;
     context.fillStyle = defaultFillStyle;
     context.save();
-    context.lineCap = config.graphical.miterText ? "miter" : "round";
-    context.lineJoin = config.graphical.miterText ? "miter" : "round";
+    context.lineCap = settings.graphical.miterText ? "miter" : "round";
+    context.lineJoin = settings.graphical.miterText ? "miter" : "round";
     if (ratio !== 1) {
         context.scale(1 / ratio, 1 / ratio);
     }
@@ -821,7 +422,7 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
                 if (!isNaN(str)) {
                     str = parseInt(str);
                 }
-                str = getColor(str) ?? str;
+                str = gameDraw.getColor(str) ?? str;
             }
             context.fillStyle = str;
 
@@ -872,7 +473,23 @@ function drawBar(x1, x2, y, width, color) {
     ctx.closePath();
     ctx.stroke();
 }
+//checking for images in the shape so we can draw them
+function isImageURL(url) {
+    try {
+        const parsedUrl = new URL(url);
+        const path = parsedUrl.pathname;
+        const ext = path.split('.').pop().toLowerCase(); // Get the lowercase file extension
+
+        // List of common image file extensions
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
+
+        return imageExtensions.includes(ext);
+    } catch (error) {
+        return false; // URL parsing failed, or it's not an image URL.
+    }
+}
 // Sub-drawing functions
+const drawPolyImgs = []
 function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill) {
     // Start drawing
     context.beginPath();
@@ -886,17 +503,67 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
             );
     } else {
         if ("string" === typeof sides) {
-            let path = new Path2D(sides);
-            context.save();
-            context.translate(centerX, centerY);
-            context.scale(radius, radius);
-            context.lineWidth /= radius;
-            context.rotate(angle);
-            context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-            if (!borderless) context.stroke(path);
-            if (fill) context.fill(path);
-            context.restore();
-            return;
+            if (isImageURL(sides)) {
+                //ideally we'd preload images when mockups are loaded but im too lazy for that atm
+                if (!drawPolyImgs[sides]) {
+                    drawPolyImgs[sides] = new Image();
+                    drawPolyImgs[sides].src = sides
+                    drawPolyImgs[sides].isBroken = false;
+                    drawPolyImgs[sides].onerror = function() {
+                        console.log('Failed to load image!\nURL:', sides);
+                        this.isBroken = true;
+                    };
+                }
+                let img = drawPolyImgs[sides]
+                if (img.isBroken || !img.complete) { // check if img is broken and draw placeholder if so
+                    //this is probably the worst way to draw a missing texture checkerboard but im too lazy to do a better one
+                    context.translate(centerX, centerY);
+                    context.rotate(angle);
+                    context.beginPath();
+                    context.fillStyle = '#ff00ff'
+                    context.lineTo(-radius,-radius)
+                    context.lineTo(radius,-radius)
+                    context.lineTo(radius,radius)
+                    context.lineTo(-radius,radius)
+                    context.lineTo(-radius,-radius)
+                    context.fill();
+                    context.closePath();
+                    context.beginPath();
+                    context.fillStyle = '#000000'
+                    context.lineTo(-radius,-radius)
+                    context.lineTo(0,-radius)
+                    context.lineTo(0,0)
+                    context.lineTo(0, radius)
+                    context.lineTo(radius, radius)
+                    context.lineTo(radius, 0)
+                    context.lineTo(0, 0)
+                    context.lineTo(-radius, 0)
+                    context.lineTo(-radius,-radius)
+                    context.fill();
+                    context.closePath();
+                    context.rotate(-angle);
+                    context.translate(-centerX, -centerY);
+                    return;
+                }
+                context.translate(centerX, centerY);
+                context.rotate(angle);
+                context.drawImage(img, -radius, -radius, radius*2, radius*2);
+                context.rotate(-angle);
+                context.translate(-centerX, -centerY);
+                return;
+            } else {
+                let path = new Path2D(sides);
+                context.save();
+                context.translate(centerX, centerY);
+                context.scale(radius, radius);
+                context.lineWidth /= radius;
+                context.rotate(angle);
+                context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+                if (!borderless) context.stroke(path);
+                if (fill) context.fill(path);
+                context.restore();
+                return;
+            }
         }
         angle += sides % 2 ? 0 : Math.PI / sides;
     }
@@ -917,7 +584,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
         return;
     } else if (sides < 0) {
         // Star
-        if (config.graphical.pointy) context.lineJoin = "miter";
+        if (settings.graphical.pointy) context.lineJoin = "miter";
         sides = -sides;
         angle += (sides % 1) * Math.PI * 2;
         sides = Math.floor(sides);
@@ -954,39 +621,47 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
     if (fill) context.fill();
     context.lineJoin = "round";
 }
-function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill) {
+function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha) {
     let h = [];
     h = aspect > 0 ? [height * aspect, height] : [height, -height * aspect];
-    let r = [Math.atan2(h[0], length), Math.atan2(h[1], length)];
-    let l = [Math.sqrt(length ** 2 + h[0] ** 2), Math.sqrt(length ** 2 + h[1] ** 2)];
+
+    // Construct a trapezoid at angle 0
+    let points = [],
+        sinT = Math.sin(angle),
+        cosT = Math.cos(angle);
+    points.push([0, h[1]]);
+    points.push([length * 2, h[0]]);
+    points.push([length * 2, -h[0]]);
+    points.push([0, -h[1]]);
+
+    // Rotate it to the new angle via vector rotation
+    context.globalAlpha = alpha
     context.beginPath();
-    context.lineTo(x + l[0] * Math.cos(angle +           r[0]), y + l[0] * Math.sin(angle           + r[0]));
-    context.lineTo(x + l[1] * Math.cos(angle + Math.PI - r[1]), y + l[1] * Math.sin(angle + Math.PI - r[1]));
-    context.lineTo(x + l[1] * Math.cos(angle + Math.PI + r[1]), y + l[1] * Math.sin(angle + Math.PI + r[1]));
-    context.lineTo(x + l[0] * Math.cos(angle           - r[0]), y + l[0] * Math.sin(angle           - r[0]));
+    for (let point of points) {
+        let newX = point[0] * cosT - point[1] * sinT + x,
+            newY = point[0] * sinT + point[1] * cosT + y;
+        context.lineTo(newX, newY);
+    }
     context.closePath();
     if (!borderless) context.stroke();
     if (fill) context.fill();
+    context.globalAlpha = 1
 }
 // Entity drawing (this is a function that makes a function)
-const drawEntity = (drawingEntities, baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
+const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
     let context = assignedContext ? assignedContext : ctx;
     let fade = turretInfo ? 1 : render.status.getFade(),
         drawSize = scale * ratio * instance.size,
-        m = global.mockups[instance.index],
+        indexes = instance.index.split("-"),
+        m = global.mockups[parseInt(indexes[0])],
         xx = x,
         yy = y,
-        source = turretInfo === false ? instance : turretInfo;
+        source = turretInfo === false ? instance : turretInfo,
+        blend = turretsObeyRot ? 0 : render.status.getBlend();
     source.guns.update();
-    if (source.guns.length !== m.guns.length) {
-        throw new Error("Mismatch gun number with mockup.\nMockup ID: " + instance.index + "\nLabel: " + m.label);
-    }
-    if (source.turrets.length !== m.turrets.length) {
-        throw new Error("Mismatch turret number with mockup.\nMockup ID: " + instance.index + "\nLabel: " + m.label);
-    }
     if (fade === 0 || alpha === 0) return;
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
-    if (config.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
+    if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
         context = ctx2;
         context.canvas.width = context.canvas.height = drawSize * m.position.axis + ratio * 20;
         xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
@@ -998,73 +673,95 @@ const drawEntity = (drawingEntities, baseColor, x, y, instance, ratio, alpha = 1
     context.lineCap = "round";
     context.lineJoin = "round";
     // Draw turrets beneath us
-    for (let i = 0; i < m.turrets.length; i++) {
-        let turretFacesClient = m.turrets[i].turretFacesClient
-        let t = m.turrets[i];
+    for (let i = 0; i < source.turrets.length; i++) {
+        let t = source.turrets[i];
         source.turrets[i].lerpedFacing == undefined
             ? (source.turrets[i].lerpedFacing = source.turrets[i].facing)
             : (source.turrets[i].lerpedFacing = util.lerpAngle(source.turrets[i].lerpedFacing, source.turrets[i].facing, 0.1, true));
         if (!t.layer) {
             let ang = t.direction + t.angle + rot,
                 len = t.offset * drawSize,
-                facing = 0
-            if (turretFacesClient && drawingEntities) {
-                facing = instance.render.f + turretsObeyRot * rot + t.angle
+                facing = 0;
+            if (t.mirrorMasterAngle || turretsObeyRot) {
+                facing = rot + t.angle;
             } else {
-                facing = source.turrets[i].lerpedFacing + turretsObeyRot * rot;
+                facing = source.turrets[i].lerpedFacing;
             }
-            drawEntity(drawingEntities, baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, facing, turretsObeyRot, context, source.turrets[i], render);
+            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, facing, turretsObeyRot, context, source.turrets[i], render);
         }
     }
     // Draw guns below us
-    context.lineWidth = Math.max(config.graphical.mininumBorderChunk, ratio * config.graphical.borderChunk);
-    let positions = source.guns.getPositions();
-    for (let i = 0; i < m.guns.length; i++) {
-        let g = m.guns[i];
+    context.lineWidth = Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
+    let positions = source.guns.getPositions(),
+        gunConfig = source.guns.getConfig();
+    for (let i = 0; i < source.guns.length; i++) {
+        let g = gunConfig[i];
         if (!g.drawAbove) {
-            let position = positions[i] / (g.aspect === 1 ? 2 : 1),
-                gx = g.offset * Math.cos(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.cos(g.angle + rot),
-                gy = g.offset * Math.sin(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.sin(g.angle + rot),
-                gunColor = g.color == null ? color.grey : modifyColor(g.color, baseColor),
+            let position = (turretsObeyRot ? 0 : positions[i]) / (g.aspect === 1 ? 2 : 1),
+                gx = g.offset * Math.cos(g.direction + g.angle + rot),
+                gy = g.offset * Math.sin(g.direction + g.angle + rot),
+                gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
+                alpha = g.alpha,
                 borderless = g.borderless,
                 fill = g.drawFill;
-            setColor(context, mixColors(gunColor, render.status.getColor(), render.status.getBlend()));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
+            gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position : position / 2)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill, alpha);
         }
     }
     // Draw body
     context.globalAlpha = 1;
-    setColor(context, mixColors(modifyColor(instance.color, baseColor), render.status.getColor(), render.status.getBlend()));
+    gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), turretsObeyRot ? 0 : blend));
+    
+    //just so you know, the glow implimentation is REALLY bad and subject to change in the future
+    context.shadowColor = m.glow.color!=null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
+        gameDraw.modifyColor(instance.color),
+        render.status.getColor(),
+        render.status.getBlend()
+    );
+    if (m.glow.radius && m.glow.radius>0){
+      context.shadowBlur = m.glow.radius * ((drawSize / m.size) * m.realSize);
+      context.shadowOffsetX = 0;
+      context.shadowOffsetY = 0;
+      context.globalAlpha = m.glow.alpha;
+      for (var i = 0; i < m.glow.recursion; i++) {
+        drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, true, m.drawFill);
+      }
+      context.globalAlpha = 1;
+    }
+    context.shadowBlur = 0
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 0;
+
     drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless, m.drawFill);
+    
     // Draw guns above us
-    context.lineWidth = Math.max(config.graphical.mininumBorderChunk, ratio * config.graphical.borderChunk);
-    for (let i = 0; i < m.guns.length; i++) {
-        let g = m.guns[i];
+    for (let i = 0; i < source.guns.length; i++) {
+        let g = gunConfig[i];
         if (g.drawAbove) {
-            let position = positions[i] / (g.aspect === 1 ? 2 : 1),
-                gx = g.offset * Math.cos(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.cos(g.angle + rot),
-                gy = g.offset * Math.sin(g.direction + g.angle + rot) + (g.length / 2 - position) * Math.sin(g.angle + rot),
-                gunColor = g.color == null ? color.grey : modifyColor(g.color, baseColor),
+            let position = (turretsObeyRot ? 0 : positions[i]) / (g.aspect === 1 ? 2 : 1),
+                gx = g.offset * Math.cos(g.direction + g.angle + rot),
+                gy = g.offset * Math.sin(g.direction + g.angle + rot),
+                gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
+                alpha = g.alpha,
                 borderless = g.borderless,
                 fill = g.drawFill;
-            setColor(context, mixColors(gunColor, render.status.getColor(), render.status.getBlend()));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : 0)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill);
+            gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : position)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill, alpha);
         }
     }
     // Draw turrets above us
-    for (let i = 0; i < m.turrets.length; i++) {
-        let t = m.turrets[i];
-        let turretFacesClient = m.turrets[i].turretFacesClient
+    for (let i = 0; i < source.turrets.length; i++) {
+        let t = source.turrets[i];
         if (t.layer) {
             let ang = t.direction + t.angle + rot,
                 len = t.offset * drawSize,
-                facing = 0
-            if (turretFacesClient && drawingEntities) {
-                facing = render.f + turretsObeyRot * rot + t.angle
+                facing = 0;
+            if (t.mirrorMasterAngle || turretsObeyRot) {
+                facing = rot + t.angle;
             } else {
-                facing = source.turrets[i].lerpedFacing + turretsObeyRot * rot;
+                facing = source.turrets[i].lerpedFacing;
             }
-            drawEntity(drawingEntities, baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, facing, turretsObeyRot, context, source.turrets[i], render);
+            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, facing, turretsObeyRot, context, source.turrets[i], render);
         }
     }
     if (assignedContext == false && context != ctx && context.canvas.width > 0 && context.canvas.height > 0) {
@@ -1081,38 +778,56 @@ function drawHealth(x, y, instance, ratio, alpha) {
     let fade = instance.render.status.getFade();
     ctx.globalAlpha = fade * fade;
     let size = instance.size * ratio,
-        m = global.mockups[instance.index],
+        indexes = instance.index.split("-"),
+        m = global.mockups[parseInt(indexes[0])],
         realSize = (size / m.size) * m.realSize;
     if (instance.drawsHealth) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
         if (health < 1 - 1e-4 || shield < 1 - 1e-4) {
-            const col = config.graphical.coloredHealthbars ? mixColors(getColor(instance.color), color.guiwhite, 0.5) : color.lgreen;
-            let yy = y + 1.1 * realSize + 15;
-            let barWidth = 5;
-            ctx.globalAlpha = alpha * alpha * fade;
+            let instanceColor = null;
+            let getColor = true;
+            if (typeof instance.color == 'string') {
+                instanceColor = instance.color.split(' ')[0];
+                if (instanceColor[0] == '#') {
+                    getColor = false;
+                } else if (!isNaN(parseInt(instanceColor))) {
+                    instanceColor = parseInt(instanceColor);
+                }
+            } else {
+                instanceColor = instance.color;
+            }
+            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(instanceColor) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
+            let yy = y + realSize + 15 * ratio;
+            let barWidth = 3 * ratio;
+            ctx.globalAlpha = fade * (alpha ** 2);
             //TODO: seperate option for hp bars
             // function drawBar(x1, x2, y, width, color) {
-            drawBar(x - size, x + size, yy + barWidth * config.graphical.seperatedHealthbars / 2, barWidth * (1 + config.graphical.seperatedHealthbars) + config.graphical.barChunk, color.black);
-            drawBar(x - size, x - size + 2 * size * health, yy + barWidth * config.graphical.seperatedHealthbars, barWidth, col);
-            if (shield || config.graphical.seperatedHealthbars) {
-                if (!config.graphical.seperatedHealthbars) ctx.globalAlpha = (0.3 + shield * 0.3) * alpha * alpha * fade;
-                drawBar(x - size, x - size + 2 * size * shield, yy, barWidth, config.graphical.coloredHealthbars ? mixColors(col, color.guiblack, 0.25) : color.teal);
+
+            //background bar
+            drawBar(x - size, x + size, yy + barWidth * settings.graphical.seperatedHealthbars / 2, barWidth * (1 + settings.graphical.seperatedHealthbars) + settings.graphical.barChunk, color.black);
+
+            //hp bar
+            drawBar(x - size, x - size + 2 * size * health, yy + barWidth * settings.graphical.seperatedHealthbars, barWidth, col);
+
+            //shield bar
+            if (shield || settings.graphical.seperatedHealthbars) {
+                if (!settings.graphical.seperatedHealthbars) ctx.globalAlpha = (1 + shield) * 0.3 * (alpha ** 2) * fade;
+                drawBar(x - size, x - size + 2 * size * shield, yy, barWidth, settings.graphical.coloredHealthbars ? gameDraw.mixColors(col, color.guiblack, 0.25) : color.teal);
                 ctx.globalAlpha = 1;
             }
         }
     }
-    if (instance.id !== gui.playerid) {
-        if (instance.nameplate) {
-            var name = instance.name.substring(7, instance.name.length + 1);
-            var namecolor = instance.name.substring(0, 7);
-            ctx.globalAlpha = alpha;
-            drawText(name, x, y - realSize - 30, 16, namecolor, "center");
-            drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 16, 8, namecolor, "center");
-            ctx.globalAlpha = 1;
-        }
+    if (instance.id !== gui.playerid && instance.nameplate) {
+        var name = instance.name.substring(7, instance.name.length + 1);
+        var namecolor = instance.name.substring(0, 7);
+        ctx.globalAlpha = alpha;
+        drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor, "center");
+        drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor, "center");
+        ctx.globalAlpha = 1;
     }
 }
+
 // Start animation
 window.requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
 window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
@@ -1188,7 +903,7 @@ const compensation = () => {
                 t = (1000 * 1000 * Math.sin(t / 1000 - 1)) / t + 1000;
             }
             tt = t / interval;
-            ts = (config.roomSpeed * 30 * t) / 1000;
+            ts = (settings.roomSpeed * 30 * t) / 1000;
         },
         predict: (p1, p2, v1, v2) => {
             return t >= 0
@@ -1238,45 +953,67 @@ var getClassUpgradeKey = function (number) {
     }
 };
 
-let tiles = [],
-    branches = [],
+let tiles,
+    branches,
+    tankTree,
     measureSize = (x, y, colorIndex, { index, tier = 0 }) => {
         tiles.push({ x, y, colorIndex, index });
-        let { upgrades } = global.mockups[index];
-        switch (tier) {
-            case 3:
-                return { width: 1, height: 1 };
-            case 2:
-                for (let i = 0; i < upgrades.length; i++) {
-                    measureSize(x, y + 2 + i, i, upgrades[i]);   
-                }
-                branches.push([{ x, y }, { x, y: y + 1 + upgrades.length }]);
-                return { width: 1, height: 2 + upgrades.length };
-            case 1:
-            case 0:
-                let xStart = x,
-                    us = upgrades.map((u, i) => {
-                        let spacing = 2 * u.tier,
-                            measure = measureSize(x, y + spacing, i, u);
-                        branches.push([{ x, y: y + Math.sign(i) }, { x, y: y + spacing }]);
-                        if (i + 1 === upgrades.length) {
-                            branches.push([{ x: xStart, y: y + 1 }, { x, y: y + 1 }]);
-                        }
-                        x += measure.width;
-                        return measure;
-                    });
-                return {
-                    width: us.map((r) => r.width).reduce((a, b) => a + b, 0),
-                    height: 2 + Math.max(...us.map((r) => r.height)),
-                };
+        let { upgrades } = global.mockups[parseInt(index)],
+            xStart = x,
+            cumulativeWidth = 1,
+            maxHeight = 1,
+            hasUpgrades = [],
+            noUpgrades = [];
+        for (let i = 0; i < upgrades.length; i++) {
+            let upgrade = upgrades[i];
+            if (global.mockups[upgrade.index].upgrades.length) {
+                hasUpgrades.push(upgrade);
+            } else {
+                noUpgrades.push(upgrade);
+            }
         }
-    },
-    tankTree;
-function generateTankTree(rootIndex) {
-    generatedTankTree = rootIndex;
+        for (let i = 0; i < hasUpgrades.length; i++) {
+            let upgrade = hasUpgrades[i],
+                spacing = 2 * Math.max(1, upgrade.tier - tier),
+                measure = measureSize(x, y + spacing, 10 + i, upgrade);
+            branches.push([{ x, y: y + Math.sign(i) }, { x, y: y + spacing + 1 }]);
+            if (i === hasUpgrades.length - 1 && !noUpgrades.length) {
+                branches.push([{ x: xStart, y: y + 1 }, { x, y: y + 1 }]);
+            }
+            x += measure.width;
+            cumulativeWidth += measure.width;
+            if (maxHeight < measure.height) maxHeight = measure.height;
+        }
+        y++;
+        for (let i = 0; i < noUpgrades.length; i++) {
+            let upgrade = noUpgrades[i],
+                height = 2 + upgrades.length;
+            measureSize(x, y + 1 + i + Math.sign(hasUpgrades.length) * 2, 10 + i, upgrade);
+            if (i === noUpgrades.length - 1) {
+                if (hasUpgrades.length > 1) cumulativeWidth++;
+                branches.push([{ x: xStart, y }, { x, y }]);
+                branches.push([{ x, y }, { x, y: y + noUpgrades.length + Math.sign(hasUpgrades.length) * 2 }]);
+            }
+            if (maxHeight < height) maxHeight = height;
+        }
+        return {
+            width: cumulativeWidth,
+            height: 2 + maxHeight,
+        };
+    };
+function generateTankTree(indexes) {
     tiles = [];
     branches = [];
-    tankTree = measureSize(0, 0, 0, { index: rootIndex });
+    let initialX = 0;
+    let maxHeight = 0;
+    if (!Array.isArray(indexes)) indexes = [indexes];
+    for (let index of indexes) {
+        tankTree = measureSize(initialX, 0, 10, { index });
+        tankTree.width += initialX;
+        maxHeight = Math.max(maxHeight, tankTree.height);
+        initialX = tankTree.width + 3;
+    }
+    tankTree.height = maxHeight;
 }
 
 function drawFloor(px, py, ratio) {
@@ -1306,15 +1043,15 @@ function drawFloor(px, py, ratio) {
             //draw it
             let tile = row[j];
             ctx.globalAlpha = 1;
-            ctx.fillStyle = config.graphical.screenshotMode ? color.guiwhite : color.white;
+            ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : color.white;
             ctx.fillRect(left, top, right - left, bottom - top);
             ctx.globalAlpha = 0.3;
-            ctx.fillStyle = config.graphical.screenshotMode ? color.guiwhite : getZoneColor(tile, true);
+            ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : gameDraw.modifyColor(tile);
             ctx.fillRect(left, top, right - left, bottom - top);
         }
     }
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = config.graphical.screenshotMode ? color.guiwhite : color.guiblack;
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = settings.graphical.screenshotMode ? color.guiwhite : color.guiblack;
     ctx.globalAlpha = 0.04;
     ctx.beginPath();
     let gridsize = 30 * ratio;
@@ -1325,7 +1062,6 @@ function drawFloor(px, py, ratio) {
     for (let y = (global.screenHeight / 2 - py) % gridsize; y < global.screenHeight; y += gridsize) {
         ctx.moveTo(0, y);
         ctx.lineTo(global.screenWidth, y);
-
     }
     ctx.stroke();
     ctx.globalAlpha = 1;
@@ -1346,16 +1082,16 @@ function drawEntities(px, py, ratio) {
         instance.render.x = util.lerp(instance.render.x, Math.round(instance.x + instance.vx), 0.1, true);
         instance.render.y = util.lerp(instance.render.y, Math.round(instance.y + instance.vy), 0.1, true);
         instance.render.f = instance.id === gui.playerid && !global.autoSpin && !instance.twiggle && !global.died ? Math.atan2(global.target.y, global.target.x) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
-        let x = instance.id === gui.playerid && config.graphical.centerTank ? 0 : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid && config.graphical.centerTank ? 0 : ratio * instance.render.y - py,
+        let x = instance.id === gui.playerid && settings.graphical.centerTank ? 0 : ratio * instance.render.x - px,
+            y = instance.id === gui.playerid && settings.graphical.centerTank ? 0 : ratio * instance.render.y - py,
             baseColor = instance.color;
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
-        drawEntity(true, baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, instance.render.f);
+        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, instance.render.f);
     }
 
     //dont draw healthbars and chat messages in screenshot mode
-    if (config.graphical.screenshotMode) return;
+    if (settings.graphical.screenshotMode) return;
 
     //draw health bars above entities
     for (let instance of global.entities) {
@@ -1366,63 +1102,83 @@ function drawEntities(px, py, ratio) {
         drawHealth(x, y, instance, ratio, instance.alpha);
     }
 
-    let now = Date.now();
+    let now = Date.now(),
+        ratioForChat = (1 + ratio) / 2;
     for (let instance of global.entities) {
         //put chat msg above name
         let size = instance.size * ratio,
-            m = global.mockups[instance.index],
+            indexes = instance.index.split("-"),
+            m = global.mockups[parseInt(indexes[0])],
             realSize = (size / m.size) * m.realSize,
             x = instance.id === gui.playerid ? 0 : ratio * instance.render.x - px,
             y = instance.id === gui.playerid ? 0 : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
-        y += global.screenHeight / 2 - realSize - 45;
+        y += global.screenHeight / 2 - realSize - 46 * ratio;
+        if (instance.id !== gui.playerid && instance.nameplate) y -= 8 * ratio;
 
         //draw all the msgs
         for (let i in global.chats[instance.id]) {
             let chat = global.chats[instance.id][i],
                 text = chat.text,
-                msgLength = measureText(text, 15),
+                msgLengthHalf = measureText(text, 15 * ratioForChat) / 2,
                 alpha = Math.max(0, Math.min(1000, chat.expires - now) / 1000);
 
             ctx.globalAlpha = 0.5 * alpha;
-            drawBar(x - msgLength / 2, x + msgLength / 2, y, 30, modifyColor(instance.color));
+            drawBar(x - msgLengthHalf, x + msgLengthHalf, y, 30 * ratioForChat, gameDraw.modifyColor(instance.color));
             ctx.globalAlpha = alpha;
-            config.graphical.fontStrokeRatio *= 1.2;
-            drawText(text, x, y + 7, 15, color.guiwhite, "center");
-            config.graphical.fontStrokeRatio /= 1.2;
-            y -= 35;
+            settings.graphical.fontStrokeRatio *= 1.2;
+            drawText(text, x, y + 7 * ratioForChat, 15 * ratioForChat, color.guiwhite, "center");
+            settings.graphical.fontStrokeRatio /= 1.2;
+            y -= 35 * ratioForChat;
         }
     }
 }
 
-function drawUpgradeTree() {
-    if (global.died) {
-        global.showTree = false;
-        global.scrollX = global.realScrollX = 0;
+global.showTree = false;
+global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1;
+global.shouldScrollY = global.shouldScrollX = 0;
+let lastGuiType = null;
+function drawUpgradeTree(spacing, alcoveSize) {
+    if (lastGuiType != gui.type) {
+        let m = util.getEntityImageFromMockup(gui.type), // The mockup that corresponds to the player's tank
+            rootName = m.rerootUpgradeTree, // The upgrade tree root of the player's tank
+            rootIndex = [];
+            for (let name of rootName) {
+                let ind = name == undefined ? -1 : global.mockups.find(i => i.className == name).index;
+                rootIndex.push(ind); // The index of the mockup that corresponds to the root tank (-1 for no root)
+            }
+        if (!rootIndex.includes(-1)) {
+            generateTankTree(rootIndex);
+        }
+        lastGuiType = gui.type;
     }
-    global.scrollX = util.lerp(global.scrollX, global.realScrollX, 0.1);
 
-    let instance = global.entities.find((i) => i.id === gui.playerid),
-        m = global.mockups[instance.index],
-        rootIndex = m.index;
-    if (m.rerootUpgradeTree && rootIndex !== generatedTankTree) {
-        console.log(m.upgrades);
-        generateTankTree(rootIndex);
-    }
-    
     if (!tankTree) {
-        console.log('No tank tree rendered yet');
+        console.log('No tank tree rendered yet.');
         return;
     }
 
-    let tileDiv = true ? 1 : 1.25,
-        tileSize = Math.min(((global.screenWidth * 0.9) / tankTree.width) * 55, (global.screenHeight * 0.9) / tankTree.height) / tileDiv,
-        size = tileSize - 4;
+    let tileSize = alcoveSize / 2,
+        size = tileSize - 4,
+        spaceBetween = 8,
+        padding = 0.5 + spaceBetween / tileSize;
+
+    if (global.died) {
+        global.showTree = false;
+        global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1;
+        global.shouldScrollY = global.shouldScrollX = 0;
+    }
+    global.fixedScrollX = Math.max(-padding, Math.min(tankTree.width + padding, global.fixedScrollX + global.shouldScrollX));
+    global.fixedScrollY = Math.max(-padding, Math.min(tankTree.height + padding, global.fixedScrollY + global.shouldScrollY));
+    global.scrollX = util.lerp(global.scrollX, global.fixedScrollX, 0.1);
+    global.scrollY = util.lerp(global.scrollY, global.fixedScrollY, 0.1);
+
     for (let [start, end] of branches) {
-        let sx = global.screenWidth / 2 + (start.x - tankTree.width * global.scrollX) * tileSize + 1 + 0.5 * size,
-            sy = global.screenHeight / 2 + (start.y - tankTree.height / 2) * tileSize + 1 + 0.5 * size,
-            ex = global.screenWidth / 2 + (end.x - tankTree.width * global.scrollX) * tileSize + 1 + 0.5 * size,
-            ey = global.screenHeight / 2 + (end.y - tankTree.height / 2) * tileSize + 1 + 0.5 * size;
+        let sx = start.x * spaceBetween + (start.x - global.scrollX) * tileSize + 1 + 0.5 * size,
+            sy = start.y * spaceBetween + (start.y - global.scrollY) * tileSize + 1 + 0.5 * size,
+            ex = end.x * spaceBetween + (end.x - global.scrollX) * tileSize + 1 + 0.5 * size,
+            ey = end.y * spaceBetween + (end.y - global.scrollY) * tileSize + 1 + 0.5 * size;
+        if (ex < 0 || sx > global.screenWidth || ey < 0 || sy > global.screenHeight) continue;
         ctx.strokeStyle = color.black;
         ctx.lineWidth = 2;
         drawGuiLine(sx, sy, ex, ey);
@@ -1430,44 +1186,48 @@ function drawUpgradeTree() {
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = color.guiwhite;
     ctx.fillRect(0, 0, innerWidth, innerHeight);
+    ctx.globalAlpha = 1;
+
+    //draw the various tank icons
+    for (let { x, y, colorIndex, index } of tiles) {
+        let ax = x * spaceBetween + (x - global.scrollX) * tileSize,
+            ay = y * spaceBetween + (y - global.scrollY) * tileSize,
+            size = tileSize;
+        if (ax < -size || ax > global.screenWidth + size || ay < -size || ay > global.screenHeight + size) continue;
+        let angle = -Math.PI / 4,
+            position = global.mockups[index].position,
+            scale = (0.8 * size) / position.axis,
+            xx = ax + 0.5 * size - scale * position.middle.x * Math.cos(angle),
+            yy = ay + 0.5 * size - scale * position.middle.x * Math.sin(angle),
+            picture = util.getEntityImageFromMockup(index.toString(), gui.color),
+            baseColor = picture.color;
+
+        ctx.globalAlpha = 0.75;
+        ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+        drawGuiRect(ax, ay, size, size);
+        ctx.globalAlpha = 0.15;
+        ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
+        drawGuiRect(ax, ay, size, size * 0.6);
+        ctx.fillStyle = color.black;
+        drawGuiRect(ax, ay + size * 0.6, size, size * 0.4);
+        ctx.globalAlpha = 1;
+
+        drawEntity(baseColor, xx, yy, picture, 1, 1, scale / picture.size, angle, true);
+
+        drawText(picture.upgradeName ?? picture.name, ax + size / 2, ay + size - 5, size / 8 - 3, color.guiwhite, "center");
+
+        ctx.lineWidth = 3;
+        drawGuiRect(ax, ay, size, size, true);
+    }
+
     let text = "Use the arrow keys to navigate the class tree. Press T again to close it.";
-    let w = measureText(text);
+    let w = measureText(text, 16);
     ctx.globalAlpha = 1;
     ctx.lineWidth = 1;
     ctx.fillStyle = color.red;
     ctx.strokeStyle = color.black;
     ctx.fillText(text, innerWidth / 2 - w / 2, innerHeight * 0.04);
     ctx.strokeText(text, innerWidth / 2 - w / 2, innerHeight * 0.04);
-    ctx.globalAlpha = 1;
-
-    //draw the various tank icons
-    for (let { x, y, colorIndex, index } of tiles) {
-        let ax = global.screenWidth / 2 + (x - tankTree.width * global.scrollX) * tileSize,
-            ay = global.screenHeight / 2 + (y - tankTree.height / 2) * tileSize,
-            size = tileSize;
-        if (ax < -50 || ax + size - 50 > global.screenWidth) continue;
-        ctx.globalAlpha = 0.75;
-        ctx.fillStyle = getColor(10);
-        drawGuiRect(ax, ay, size, size);
-        ctx.globalAlpha = 0.15;
-        ctx.fillStyle = getColor(0);
-        drawGuiRect(ax, ay, size, size * 0.6);
-        ctx.fillStyle = color.black;
-        drawGuiRect(ax, ay + size * 0.6, size, size * 0.4);
-        ctx.globalAlpha = 1;
-        let angle = -Math.PI / 4,
-            position = global.mockups[index].position,
-            scale = (0.8 * size) / position.axis,
-            xx = ax + 0.5 * size - scale * position.middle.x * Math.cos(angle),
-            yy = ay + 0.5 * size - scale * position.middle.x * Math.sin(angle),
-            baseColor = gui.color,
-            picture = util.getEntityImageFromMockup(index, baseColor, baseColor);
-        drawEntity(false, baseColor, xx, yy, picture, 0.5, 1, (scale / picture.size) * 2, angle, true);
-        ctx.strokeStyle = color.black;
-        ctx.globalAlpha = 1;
-        ctx.lineWidth = 2;
-        drawGuiRect(ax, ay, size, size, true);
-    }
 }
 
 function drawMessages(spacing) {
@@ -1526,7 +1286,7 @@ function drawSkillBars(spacing, alcoveSize) {
     let x = spacing + (statMenu.get() - 1) * (height + 50 + len * ska(gui.skills.reduce((largest, skill) => Math.max(largest, skill.cap), 0)));
     let y = global.screenHeight - spacing - height;
     let ticker = 11;
-    let namedata = gui.getStatNames(global.mockups[gui.type].statnames);
+    let namedata = gui.getStatNames(global.mockups[parseInt(gui.type.split("-")[0])].statnames);
     let clickableRatio = canvas.height / global.screenHeight / global.ratio;
     for (let i = 0; i < gui.skills.length; i++) {
         ticker--;
@@ -1547,7 +1307,7 @@ function drawSkillBars(spacing, alcoveSize) {
         }
 
         //bar fills
-        drawBar(x + height / 2, x - height / 2 + len * ska(cap), y + height / 2, height - 3 + config.graphical.barChunk, color.black);
+        drawBar(x + height / 2, x - height / 2 + len * ska(cap), y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
         drawBar(x + height / 2, x + height / 2 + len * ska(cap) - gap, y + height / 2, height - 3, color.grey);
         drawBar(x + height / 2, x + height / 2 + len * ska(level) - gap, y + height / 2, height - 3.5, col);
 
@@ -1596,30 +1356,30 @@ function drawSkillBars(spacing, alcoveSize) {
 
 function drawSelfInfo(spacing, alcoveSize, max) {
     //rendering information
-    let vspacing = 4;
-    let len = 1.65 * alcoveSize; // * global.screenWidth;
-    let height = 25;
+    let vspacing = 4.5;
+    let len = 1.75 * alcoveSize; // * global.screenWidth;
+    let height = 23;
     let x = (global.screenWidth - len) / 2;
-    let y = global.screenHeight - spacing - height;
+    let y = global.screenHeight - spacing - height - 1;
     ctx.lineWidth = 1;
 
     // Draw the exp bar
-    drawBar(x, x + len, y + height / 2, height - 3 + config.graphical.barChunk, color.black);
-    drawBar(x, x + len, y + height / 2, height - 3, color.grey);
-    drawBar(x, x + len * gui.__s.getProgress(), y + height / 2, height - 3.5, color.gold);
+    drawBar(x, x + len, y + height / 2, height + settings.graphical.barChunk, color.black);
+    drawBar(x, x + len, y + height / 2, height - settings.graphical.barChunk / 4, color.grey);
+    drawBar(x, x + len * gui.__s.getProgress(), y + height / 2, height - 2, color.gold);
 
     // Draw the class type
-    drawText("Level " + gui.__s.getLevel() + " " + global.mockups[gui.type].name, x + len / 2, y + height / 2, height - 4, color.guiwhite, "center", true);
-    height = 14;
+    drawText("Level " + gui.__s.getLevel() + " " + gui.class, x + len / 2, y + height / 2 + 1, height - 2.5, color.guiwhite, "center", true);
+    height = 16;
     y -= height + vspacing;
 
     // Draw the %-of-leader bar
-    drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3 + config.graphical.barChunk, color.black);
-    drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3, color.grey);
+    drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
+    drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3 - settings.graphical.barChunk / 2, color.grey);
     drawBar(x + len * 0.1, x + len * (0.1 + 0.8 * (max ? Math.min(1, gui.__s.getScore() / max) : 1)), y + height / 2, height - 3.5, color.green);
 
     //write the score and name
-    drawText("Score: " + util.handleLargeNumber(gui.__s.getScore()), x + len / 2, y + height / 2, height - 2, color.guiwhite, "center", true);
+    drawText("Score: " + util.formatLargeNumber(Math.floor(gui.__s.getScore())), x + len / 2, y + height / 2 + 1, height - 3.5, color.guiwhite, "center", true);
     ctx.lineWidth = 4;
     drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor, "center");
 }
@@ -1657,8 +1417,8 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
         let j = 0;
         for (let xcell = 0; xcell < W; xcell++) {
             let cell = global.roomSetup[ycell][xcell];
-            ctx.fillStyle = getZoneColor(cell);
-            if (getZoneColor(cell) !== color.white) {
+            ctx.fillStyle = gameDraw.modifyColor(cell);
+            if (gameDraw.modifyColor(cell) !== color.white) {
                 drawGuiRect(x + (j * len) / W, y + (i * height) / H, len / W, height / H);
             }
             j++;
@@ -1672,7 +1432,7 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
     ctx.fillStyle = color.black;
     drawGuiRect(x, y, len, height, true); // Border
     for (let entity of minimap.get()) {
-        ctx.fillStyle = mixColors(modifyColor(entity.color), color.black, 0.3);
+        ctx.fillStyle = gameDraw.mixColors(gameDraw.modifyColor(entity.color), color.black, 0.3);
         ctx.globalAlpha = entity.alpha;
         switch (entity.type) {
             case 2:
@@ -1724,13 +1484,14 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     let height = 14;
     let x = global.screenWidth - len - spacing;
     let y = spacing + height + 7;
-    drawText("Leaderboard:", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 4, color.guiwhite, "center");
+    drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 3.5, color.guiwhite, "center");
+    y += 7;
     for (let i = 0; i < lb.data.length; i++) {
         let entry = lb.data[i];
-        drawBar(x, x + len, y + height / 2, height - 3 + config.graphical.barChunk, color.black);
+        drawBar(x, x + len, y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
         drawBar(x, x + len, y + height / 2, height - 3, color.grey);
         let shift = Math.min(1, entry.score / max);
-        drawBar(x, x + len * shift, y + height / 2, height - 3.5, modifyColor(entry.barColor));
+        drawBar(x, x + len * shift, y + height / 2, height - 3.5, gameDraw.modifyColor(entry.barColor));
         // Leadboard name + score
         let nameColor = entry.nameColor || "#FFFFFF";
         drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor, "center", true);
@@ -1738,8 +1499,8 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         let scale = height / entry.position.axis,
             xx = x - 1.5 * height - scale * entry.position.middle.x * 0.707,
             yy = y + 0.5 * height + scale * entry.position.middle.x * 0.707,
-            baseColor = entry.barColor;
-        drawEntity(false, baseColor, xx, yy, entry.image, 1 / scale, 1, (scale * scale) / entry.image.size, -Math.PI / 4, true);
+            baseColor = entry.image.color;
+        drawEntity(baseColor, xx, yy, entry.image, 1 / scale, 1, (scale * scale) / entry.image.size, -Math.PI / 4, true);
         // Move down
         y += vspacing + height;
     }
@@ -1752,49 +1513,74 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
     global.clickables.upgrade.hide();
     if (gui.upgrades.length > 0) {
         global.canUpgrade = true;
-        let internalSpacing = 8;
-        let len = alcoveSize / 2; // * global.screenWidth / 2 * 1;
+        let internalSpacing = 15;
+        let len = alcoveSize / 2;
         let height = len;
         let x = glide * 2 * spacing - spacing;
-        let y = spacing;
+        let y = spacing - height - internalSpacing;
         let xStart = x;
-        let xo = x;
-        let xxx = 0;
-        let yo = y;
+        let initialX = x;
+        let rowWidth = 0;
+        let initialY = y;
         let ticker = 0;
+        let upgradeNum = 0;
         let colorIndex = 10;
         let columnCount = Math.max(3, Math.ceil(gui.upgrades.length / 4));
         let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
+        let lastBranch = -1;
         upgradeSpin += 0.01;
         for (let i = 0; i < gui.upgrades.length; i++) {
-            let model = gui.upgrades[i];
-            if (y > yo) yo = y;
-            xxx = x;
+            let upgrade = gui.upgrades[i];
+            let upgradeBranch = upgrade[0];
+            let upgradeBranchLabel = upgrade[1] == "undefined" ? "" : upgrade[1];
+            let model = upgrade[2];
+
+            // Draw either in the next row or next column
+            if (ticker === columnCount || upgradeBranch != lastBranch) {
+                x = xStart;
+                y += height + internalSpacing;
+                if (upgradeBranch != lastBranch) {
+                    if (upgradeBranchLabel.length > 0) {
+                        drawText(" " + upgradeBranchLabel, xStart, y + internalSpacing * 2, internalSpacing * 2.3, color.guiwhite, "left", false);
+                        y += 3 * internalSpacing;
+                    }
+                    colorIndex = 10;
+                }
+                lastBranch = upgradeBranch;
+                ticker = 0;
+            } else {
+                x += glide * (len + internalSpacing);
+            }
+
+            if (y > initialY) initialY = y;
+            rowWidth = x;
+
             global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
+
+            let picture = util.getEntityImageFromMockup(model, gui.color),
+                position = picture.position,
+                scale = (0.6 * len) / position.axis,
+                entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(upgradeSpin),
+                entityY = y + 0.5 * height - scale * position.middle.x * Math.sin(upgradeSpin),
+                baseColor = picture.color;
 
             // Draw box
             ctx.globalAlpha = 0.5;
-            ctx.fillStyle = getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+            ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
             drawGuiRect(x, y, len, height);
             ctx.globalAlpha = 0.1;
-            ctx.fillStyle = getColor(-10 + colorIndex++);
+            ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
             drawGuiRect(x, y, len, height * 0.6);
             ctx.fillStyle = color.black;
             drawGuiRect(x, y + height * 0.6, len, height * 0.4);
             ctx.globalAlpha = 1;
 
             // Draw Tank
-            let position = global.mockups[model].position,
-                scale = (0.6 * len) / position.axis,
-                xx = x + 0.5 * len - scale * position.middle.x * Math.cos(upgradeSpin),
-                yy = y + 0.5 * height - scale * position.middle.x * Math.sin(upgradeSpin),
-                baseColor = gui.color,
-                picture = util.getEntityImageFromMockup(model, baseColor, baseColor);
-            drawEntity(false, baseColor, xx, yy, picture, 1, 1, scale / picture.size, upgradeSpin, true);
-            let upgradeKey = getClassUpgradeKey(ticker);
+            drawEntity(baseColor, entityX, entityY, picture, 1, 1, scale / picture.size, upgradeSpin, true);
+            let upgradeKey = getClassUpgradeKey(upgradeNum);
 
             // Tank name
-            drawText(picture.name, x + ((upgradeKey ? 0.9 : 1) * len) / 2, y + height - 6, height / 8 - 3, color.guiwhite, "center");
+            drawText(picture.upgradeName ?? picture.name, x + ((upgradeKey ? 0.9 : 1) * len) / 2, y + height - 6, height / 8 - 3, color.guiwhite, "center");
 
             // Upgrade key
             if (upgradeKey) {
@@ -1804,26 +1590,20 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             ctx.globalAlpha = 1;
             ctx.lineWidth = 3;
             drawGuiRect(x, y, len, height, true); // Border
-
-            //draw either in the next row or next column
-            if (++ticker % columnCount === 0) {
-                x = xStart;
-                y += height + internalSpacing;
-            } else {
-                x += glide * (len + internalSpacing);
-            }
+            ticker++;
+            upgradeNum++;
         }
 
         // Draw dont upgrade button
         let h = 14,
             msg = "Don't Upgrade",
             m = measureText(msg, h - 3) + 10;
-        let xx = xo + (xxx + len + internalSpacing - xo) / 2,
-            yy = yo + height + internalSpacing;
-        drawBar(xx - m / 2, xx + m / 2, yy + h / 2, h + config.graphical.barChunk, color.black);
-        drawBar(xx - m / 2, xx + m / 2, yy + h / 2, h, color.white);
-        drawText(msg, xx, yy + h / 2, h - 2, color.guiwhite, "center", true);
-        global.clickables.skipUpgrades.place(0, (xx - m / 2) * clickableRatio, yy * clickableRatio, m * clickableRatio, h * clickableRatio);
+        let buttonX = initialX + (rowWidth + len + internalSpacing - initialX) / 2,
+            buttonY = initialY + height + internalSpacing;
+        drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h + settings.graphical.barChunk, color.black);
+        drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
+        drawText(msg, buttonX, buttonY + h / 2, h - 2, color.guiwhite, "center", true);
+        global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
     } else {
         global.canUpgrade = false;
         global.clickables.upgrade.hide();
@@ -1831,7 +1611,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
     }
 }
 
-const gameDraw = (ratio, drawRatio) => {
+const gameDrawAlive = (ratio, drawRatio) => {
     let GRAPHDATA = 0;
     // Prep stuff
     renderTimes++;
@@ -1853,13 +1633,13 @@ const gameDraw = (ratio, drawRatio) => {
     scaleScreenRatio(ratio, true);
 
     //draw hud
-    let alcoveSize = 200 / ratio; // / drawRatio * global.screenWidth;
+    let alcoveSize = 200 / ratio; // drawRatio * global.screenWidth;
     let spacing = 20;
     gui.__s.update();
     let lb = leaderboard.get();
     let max = lb.max;
     if (global.showTree) {
-        drawUpgradeTree();
+        drawUpgradeTree(spacing, alcoveSize);
     } else {
         drawMessages(spacing);
         drawSkillBars(spacing, alcoveSize);
@@ -1903,7 +1683,7 @@ let getDeath = () => {
     if (global.finalKillers.length) {
         txt = "🔪 Succumbed to";
         for (let e of global.finalKillers) {
-            txt += " " + util.addArticle(global.mockups[e].name) + " and";
+            txt += " " + util.addArticle(util.getEntityImageFromMockup(e).name) + " and";
         }
         txt = txt.slice(0, -4);
     } else {
@@ -1926,15 +1706,15 @@ const gameDrawDead = () => {
     let x = global.screenWidth / 2,
         y = global.screenHeight / 2 - 50;
     let len = 140,
-        position = global.mockups[gui.type].position,
+        position = global.mockups[parseInt(gui.type.split("-")[0])].position,
         scale = len / position.axis,
         xx = global.screenWidth / 2 - scale * position.middle.x * 0.707,
         yy = global.screenHeight / 2 - 35 + scale * position.middle.x * 0.707,
-        baseColor = gui.color,
-        picture = util.getEntityImageFromMockup(gui.type, baseColor, baseColor);
-    drawEntity(false, baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, -Math.PI / 4, true);
+        picture = util.getEntityImageFromMockup(gui.type, gui.color),
+        baseColor = picture.color;
+    drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, -Math.PI / 4, true);
     drawText("Game over man, game over.", x, y - 80, 8, color.guiwhite, "center");
-    drawText("Level " + gui.__s.getLevel() + " " + global.mockups[gui.type].name, x - 170, y - 30, 24, color.guiwhite);
+    drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);
     drawText(getKills(), x - 170, y + 77, 16, color.guiwhite);
@@ -1967,7 +1747,7 @@ const gameDrawDisconnected = () => {
         if (!unset) ratio *= by;
     };
     scaleScreenRatio(ratio, true);
-    clearScreen(mixColors(color.red, color.guiblack, 0.3), 0.25);
+    clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.3), 0.25);
     let shift = animations.disconnected.get();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("Disconnected", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
@@ -1977,9 +1757,9 @@ const gameDrawDisconnected = () => {
 // The main function
 function animloop() {
     global.animLoopHandle = window.requestAnimFrame(animloop);
-    reanimateColors();
+    gameDraw.reanimateColors();
     global.player.renderv += (global.player.view - global.player.renderv) / 30;
-    var ratio = config.graphical.screenshotMode ? 2 : util.getRatio();
+    var ratio = settings.graphical.screenshotMode ? 2 : util.getRatio();
     // Set the drawing style
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -2002,7 +1782,7 @@ function animloop() {
     }
     ctx.translate(0.5, 0.5);
     if (global.gameStart) {
-        gameDraw(ratio, util.getScreenRatio());
+        gameDrawAlive(ratio, util.getScreenRatio());
     } else if (!global.disconnected) {
         gameDrawBeforeStart();
     }
@@ -2015,4 +1795,4 @@ function animloop() {
     ctx.translate(-0.5, -0.5);
 }
 
-})(util, global, config, Canvas, color, socketStuff);
+})(util, global, settings, Canvas, color, gameDraw, socketStuff);
