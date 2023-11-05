@@ -198,9 +198,9 @@ window.onload = async () => {
             startGame();
         }
     };
-    //window.addEventListener("resize", resizeEvent);
+    window.addEventListener("resize", resizeEvent);
     // Resizing stuff
-    //resizeEvent();
+    resizeEvent();
 };
 // Prepare canvas stuff
 function resizeEvent() {
