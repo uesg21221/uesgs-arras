@@ -57,9 +57,7 @@ class Animation {
         return this.value;
     }
     get() {
-        return settings.graphical.fancyAnimations
-            ? this.getLerp()
-            : this.getNoLerp();
+        return settings.graphical.fancyAnimations ? this.getLerp() : this.getNoLerp();
     }
     flip() {
         const start = this.to;
@@ -199,10 +197,8 @@ window.onload = async () => {
         }
     };
     window.addEventListener("resize", resizeEvent);
-    // Resizing stuff
     resizeEvent();
 };
-// Prepare canvas stuff
 function resizeEvent() {
     let scale = window.devicePixelRatio;
     if (!settings.graphical.fancyAnimations) {
