@@ -1418,12 +1418,12 @@ class Entity extends EventEmitter {
             });
         }
     }
-    ON(on = this.onDef, actionName, value) {
+    ON(on = this.onDef, eventName, value) {
         if (on == null) return
         for (let onPairs of on) {
-            switch (onPairs.action) {
+            switch (onPairs.event) {
                 case 'fire':
-                    if (actionName == 'fire') onPairs.execute({
+                    if (eventName == 'fire') onPairs.handler({
                         body: this,
                         gun: value.gun,
                         child: value.child,
@@ -1434,7 +1434,7 @@ class Entity extends EventEmitter {
                      })
                     break;
                 case 'altFire':
-                    if (actionName == 'altFire') onPairs.execute({
+                    if (eventName == 'altFire') onPairs.handler({
                         body: this,
                         gun: value.gun,
                         child: value.child,
@@ -1444,22 +1444,22 @@ class Entity extends EventEmitter {
                         globalGunStore: value.globalStore
                      })
                 case 'death':
-                    if (actionName == 'death') onPairs.execute({ body: this, killers: value.killers, killTools: value.killTools })
+                    if (eventName == 'death') onPairs.handler({ body: this, killers: value.killers, killTools: value.killTools })
                     break;
                 case 'collide':
-                    if (actionName == 'collide') onPairs.execute({ instance: value.instance, other: value.other })
+                    if (eventName == 'collide') onPairs.handler({ instance: value.instance, other: value.other })
                     break;
                 case 'damage':
-                    if (actionName == 'damage') onPairs.execute({ body: this })
+                    if (eventName == 'damage') onPairs.handler({ body: this, damageInflictor: value.damageInflictor, damageTool: value.damageTool })
                     break;
                 case 'upgrade':
-                    if (actionName == 'upgrade') onPairs.execute({ body: this, oldEntity: value.oldEntity })
+                    if (eventName == 'upgrade') onPairs.handler({ body: this, oldEntity: value.oldEntity })
                     break;
                 case 'tick':
-                    if (actionName == 'tick') onPairs.execute({ body: this })
+                    if (eventName == 'tick') onPairs.handler({ body: this })
                     break;
                 case 'define':
-                    if (actionName == 'define') onPairs.execute({ body: this })
+                    if (eventName == 'define') onPairs.handler({ body: this })
                     break;
             }
         }
@@ -1977,7 +1977,16 @@ class Entity extends EventEmitter {
             return 0;
         }
         if (this.damageRecieved > 0) {
-            this.onDef != null ? this.ON(undefined, 'damage') : null
+            let damageInflictor = []
+            let damageTool = []
+
+            for (let i = 0; i < this.collisionArray.length; i++) {
+                let instance = this.collisionArray[i];
+                if (instance.type === 'wall' || !instance.damage) continue;
+                damageInflictor.push(instance.master)
+                damageTool.push(instance)
+            }
+            this.onDef != null ? this.ON(undefined, 'damage', { damageInflictor, damageTool }) : null
             // TODO: find out how to fix 'collide' and 'damage'
         }
         // Life-limiting effects
