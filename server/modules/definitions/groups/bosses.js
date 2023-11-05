@@ -4574,9 +4574,9 @@ exports.trplnrBoss = {
     },
     ON: [
         {
-            action: 'fire',
-            execute: ({ body, gun }) => {
-                if (gun.identifier != 'onExecuter') return
+            event: 'fire',
+            handler: ({ body, gun }) => {
+                if (gun.identifier != 'onHandler') return
                 const messages = [
                     'Attack my little swarms!',
                     'Deploying, Attack swarms',
@@ -4623,7 +4623,7 @@ exports.trplnrBoss = {
                 SHOOT_SETTINGS: combineStats([g.basic, {reload: 100}]),
                 TYPE: "trplnrBossAuraBullet",
                 INDEPENDENT_CHILDREN: true,
-                IDENTIFIER: 'onExecuter'
+                IDENTIFIER: 'onHandler'
             }
         })
         for (let i = 0; i < 3; i++) {
@@ -4690,9 +4690,9 @@ exports.trplnrBossBulletHellForm = {
     },
     ON: [
         {
-            action: "fire",
-            execute: ({ body, masterStore, gun }) => {
-                if (gun.identifier != 'onExecuter') return
+            event: "fire",
+            handler: ({ body, masterStore, gun }) => {
+                if (gun.identifier != 'onHandler') return
                 masterStore.shotsFired ??= 0
                 masterStore.shotsFired++
 
@@ -4764,7 +4764,7 @@ exports.trplnrBossBulletHellForm = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni, { reload: 2 }, g.fake]),
                 TYPE: 'bullet',
-                IDENTIFIER: 'onExecuter'
+                IDENTIFIER: 'onHandler'
             }
         })
         return output
@@ -4780,9 +4780,9 @@ exports.trplnrBossVulnerableForm = {
     },
     ON: [
         {
-            action: "fire",
-            execute: ({ body, gun }) => {
-                if (gun.identifier != 'onExecuter') return
+            event: "fire",
+            handler: ({ body, gun }) => {
+                if (gun.identifier != 'onHandler') return
                 setTimeout(() => {
                     body.define('trplnrBoss')
                     body.sendMessage('im awake')
@@ -4797,7 +4797,7 @@ exports.trplnrBossVulnerableForm = {
             SHOOT_SETTINGS: combineStats([g.basic, {reload: 500}]),
             TYPE: 'bullet',
             AUTOFIRE: true,
-            IDENTIFIER: 'onExecuter'
+            IDENTIFIER: 'onHandler'
         }
     }]
 }
