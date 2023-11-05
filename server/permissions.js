@@ -26,7 +26,7 @@ module.exports = [
     {
         "key": process.env.TOKEN_4,
         "discordID": "0",
-        "nameColor": "#ffffff",
+        "nameColor": "#2AD52A",
         "class": "developer",
         "infiniteLevelUp": true,
         "name": "unnamed#0000",

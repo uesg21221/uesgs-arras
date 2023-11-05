@@ -1,6 +1,8 @@
 const { combineStats, addAura } = require('../facilitators.js');
 const { base, gunCalcNames, basePolygonDamage, basePolygonHealth, dfltskl, statnames } = require('../constants.js');
 const g = require('../gunvals.js');
+const Class = require("../combined.js");
+const food = require("./food.js");
 
 // TESTBED TANKS
 exports.menu = {
@@ -236,11 +238,13 @@ function compileMatrix(matrix, matrix2Entrance) {
         let str = matrix[y][x],
             LABEL = str[0].toUpperCase() + str.slice(1).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
             code = str + 'Generator';
+            
         exports[code] = matrix[y][x] = {
             PARENT: "sextator",
             LABEL,
             SKILL_CAP: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
             SKILL: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+            
             TURRETS: [{
                 POSITION: [5 + y * 2, 0, 0, 0, 0, 1],
                 TYPE: str,
@@ -256,7 +260,8 @@ function compileMatrix(matrix, matrix2Entrance) {
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
                     INDEPENDENT_CHILDREN: true,
-                    TYPE: str
+                    TYPE: str,
+                    IDENTIFIER: "mainGun"
                 },
             }],
         };
@@ -287,14 +292,14 @@ function connectMatrix(matrix, matrix2Entrance) {
 }
 let generatorMatrix = [
     [ "egg"             , "square"                , "triangle"                  , "pentagon"                  , "betaPentagon"               , "alphaPentagon"                 , "sphere"            ],
-    [ "shinyEgg"        , "shinySquare"           , "shinyTriangle"             , "shinyPentagon"             , "shinyBetaPentagon"          , "shinyAlphaPentagon"            , "cube"              ],
-    [ "legendaryEgg"    , "legendarySquare"       , "legendaryTriangle"         , "legendaryPentagon"         , "legendaryBetaPentagon"      , "legendaryAlphaPentagon"        , "tetrahedron"       ],
-    [ "shadowEgg"       , "shadowSquare"          , "shadowTriangle"            , "shadowPentagon"            , "shadowBetaPentagon"         , "shadowAlphaPentagon"           , "octahedron"        ],
-    [ "rainbowEgg"      , "rainbowSquare"         , "rainbowTriangle"           , "rainbowPentagon"           , "rainbowBetaPentagon"        , "rainbowAlphaPentagon"          , "dodecahedron"      ],
-    [ "transEgg"        , "transSquare"           , "transTriangle"             , "transPentagon"             , "transBetaPentagon"          , "transAlphaPentagon"            , "icosahedron"       ],
-    [ "albinoEgg"       , "albinoSquare"          , "albinoTriangle"            , "albinoPentagon"            , "albinoBetaPentagon"         , "albinoAlphaPentagon"           , "tesseract"         ],
-    [ "epilepsyEgg"     , "epilepsySquare"        , "epilepsyTriangle"          , "epilepsyPentagon"          , "epilepsyBetaPentagon"       , "epilepsyAlphaPentagon"         , "auto3"             ],
-    [ "EggRelic"        , "SquareRelic"           , "TriangleRelic"             , "PentagonRelic"             , "BetaPentagonRelic"          , "AlphaPentagonRelic"            , "basic"             ]  
+    [ "gem"             , "shinySquare"           , "shinyTriangle"             , "shinyPentagon"             , "shinyBetaPentagon"          , "shinyAlphaPentagon"            , "cube"              ],
+    [ "jewel"           , "legendarySquare"       , "legendaryTriangle"         , "legendaryPentagon"         , "legendaryBetaPentagon"      , "legendaryAlphaPentagon"        , "tetrahedron"       ],
+    [ "crasher"         , "shadowSquare"          , "shadowTriangle"            , "shadowPentagon"            , "shadowBetaPentagon"         , "shadowAlphaPentagon"           , "octahedron"        ],
+    [ "sentry"          , "rainbowSquare"         , "rainbowTriangle"           , "rainbowPentagon"           , "rainbowBetaPentagon"        , "rainbowAlphaPentagon"          , "dodecahedron"      ],
+    [ "shinySentry"     , "transSquare"           , "transTriangle"             , "transPentagon"             , "transBetaPentagon"          , "transAlphaPentagon"            , "icosahedron"       ],
+    [ "EggRelic"        , "albinoSquare"          , "albinoTriangle"            , "albinoPentagon"            , "albinoBetaPentagon"         , "albinoAlphaPentagon"           , "tesseract"         ],
+    [ "albinoEgg"       , "epilepsySquare"        , "epilepsyTriangle"          , "epilepsyPentagon"          , "epilepsyBetaPentagon"       , "epilepsyAlphaPentagon"         , "auto3"             ],
+    [ "epilepsyEgg"     , "SquareRelic"           , "TriangleRelic"             , "PentagonRelic"             , "BetaPentagonRelic"          , "AlphaPentagonRelic"            , "basic"             ]  
 ],
 
 gemRelicMatrix = [];
@@ -322,7 +327,9 @@ for (let tier = 0; tier < 6; tier++) {
             column.push(exports[code] = {
                 PARENT: "sextator",
                 LABEL,
-                SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
+                SKILL_CAP: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+                SKILL: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+               
                 TURRETS: [{
                     POSITION: [5 + tier * 2, 0, 0, 0, 0, 1],
                     TYPE: str,
@@ -1326,4 +1333,8 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
             "basic"         , "rockGenerator"    , "gravelGenerator",
             "spectator"     , "wallGenerator"    , "moonGenerator"
         ];
+            exports.stoneGenerator.UPGRADES_TIER_0 = exports.rockGenerator.UPGRADES_TIER_0;
+            exports.wallGenerator.UPGRADES_TIER_0 = exports.rockGenerator.UPGRADES_TIER_0;
+            exports.moonGenerator.UPGRADES_TIER_0 = exports.rockGenerator.UPGRADES_TIER_0;
+            exports.gravelGenerator.UPGRADES_TIER_0 = exports.rockGenerator.UPGRADES_TIER_0;
 
