@@ -398,7 +398,7 @@ var gameDraw = {
                 return "#267524";
             case 42:
             case "albino":
-                return "#C0C0C0";
+                return "#DBDBDB";
             case 43:
             case "epilepsy":
                 return gameDraw.animatedColor.blue_red;

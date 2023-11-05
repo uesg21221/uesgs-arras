@@ -93,7 +93,7 @@ makeRare = (type, level) => ({
     BODY: {
         DAMAGE: type.BODY.DAMAGE + level,
         DENSITY: type.BODY.DENSITY + level,
-        HEALTH: [10, 20, 40, 80, 100, 5, 140][level] * type.BODY.HEALTH,
+        HEALTH: level == 5 ? 5 : [10, 20, 40, 80, 100, 5, 140][level] * type.BODY.HEALTH,
         PENETRATION: type.BODY.PENETRATION + level,
         ACCELERATION: type.BODY.ACCELERATION
     },

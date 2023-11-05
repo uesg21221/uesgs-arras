@@ -75,6 +75,7 @@ exports.spectator = {
     HITS_OWN_TYPE: "never",
     ARENA_CLOSER: true,
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    SKILL: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
         SPEED: 25,
         FOV: 10,
@@ -236,8 +237,8 @@ function compileMatrix(matrix, matrix2Entrance) {
         exports[code] = matrix[y][x] = {
             PARENT: "sextator",
             LABEL,
-            SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
-            SKILL: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
+            SKILL_CAP: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+            SKILL: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
             TURRETS: [{
                 POSITION: [5 + y * 2, 0, 0, 0, 0, 1],
                 TYPE: str,
