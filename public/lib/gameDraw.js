@@ -185,7 +185,8 @@ var gameDraw = {
             //six_gradient = Math.floor((now / 200) % 6),
             five_bars = Math.floor((now % 2000) / 400),
             three_bars = Math.floor((now % 2000) * 3 / 2000),
-            blinker = 150 > now % 300,
+            blinker = 75 > now % 150,
+            fastblinker = 150 > now % 300,
 
             lesbian_magenta  = "#a50062",
             lesbian_oredange = "#d62900",
@@ -208,6 +209,7 @@ var gameDraw = {
         gameDraw.animatedColor.trans = [trans_blue, trans_pink, trans_white, trans_pink, trans_blue][five_bars];
 
         gameDraw.animatedColor.blue_red = blinker ? gameDraw.color.blue : gameDraw.color.red;
+        gameDraw.animatedColor.epilepsy = blinker ? gameDraw.color.blue : gameDraw.color.red;
         gameDraw.animatedColor.blue_grey = blinker ? gameDraw.color.blue : gameDraw.color.grey;
         gameDraw.animatedColor.grey_blue = blinker ? gameDraw.color.grey : gameDraw.color.blue;
         gameDraw.animatedColor.red_grey = blinker ? gameDraw.color.red : gameDraw.color.grey;
@@ -394,6 +396,12 @@ var gameDraw = {
             case 41:
             case "tree":
                 return "#267524";
+            case 42:
+            case "albino":
+                return "#C0C0C0";
+            case 43:
+            case "epilepsy":
+                return gameDraw.animatedColor.blue_red;
         }
     },
     getColorDark: (givenColor) => {

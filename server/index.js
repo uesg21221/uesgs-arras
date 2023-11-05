@@ -375,12 +375,10 @@ if (c.REPL_WINDOW) {
     util.log('Starting REPL Terminal.');
     //TODO: figure out how to spawn a seperate window and put the REPL stdio in there instead
     //let { stdin, stdout, stderr } = (require('child_process').spawn("cmd.exe", ["/c", "node", "blank.js"], { detached: true }));
+    let hello = "xde";
     require('repl').start({/* stdin, stdout, stderr,*/ useGlobal: true });
 }
-// closeArena could be used but eh
-function closeServer() {
-    setTimeout(process.exit, 1);
-}
+
 
 // Bring it to life
 let counter = 0;

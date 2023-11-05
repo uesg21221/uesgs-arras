@@ -84,16 +84,16 @@ makeRelic = (type, scale = 1, gem, SIZE) => {
 
 makeRare = (type, level) => ({
     PARENT: ["food"],
-    LABEL: ["Shiny", "Legendary", "Shadow", "Rainbow", "Transgender"][level] + " " + type.LABEL,
-    VALUE: [100, 500, 2000, 4000, 5000][level] * type.VALUE,
+    LABEL: ["Shiny", "Legendary", "Shadow", "Rainbow", "Transgender", "Albino", "Epilepsy"][level] + " " + type.LABEL,
+    VALUE: [100, 500, 2000, 4000, 5000, 950000, 9500000][level] * type.VALUE,
     SHAPE: type.SHAPE,
     SIZE: type.SIZE + level,
-    COLOR: [1, 0, 19, 36, 37][level],
+    COLOR: [1, 0, 19, 36, 37, 42, 20][level],
     ALPHA: level == 2 ? 0.25 : 1,
     BODY: {
         DAMAGE: type.BODY.DAMAGE + level,
         DENSITY: type.BODY.DENSITY + level,
-        HEALTH: [10, 20, 40, 80, 100][level] * type.BODY.HEALTH,
+        HEALTH: [10, 20, 40, 80, 100, 5, 140][level] * type.BODY.HEALTH,
         PENETRATION: type.BODY.PENETRATION + level,
         ACCELERATION: type.BODY.ACCELERATION
     },
@@ -196,6 +196,8 @@ exports.legendaryEgg = makeRare(exports.egg, 1);
 exports.shadowEgg = makeRare(exports.egg, 2);
 exports.rainbowEgg = makeRare(exports.egg, 3);
 exports.transEgg = makeRare(exports.egg, 4); //ironic
+exports.albinoEgg = makeRare(exports.egg, 5);
+exports.epilepsyEgg = makeRare(exports.egg, 6);
 
 // SQUARES
 exports.square = {
@@ -220,6 +222,8 @@ exports.legendarySquare = makeRare(exports.square, 1);
 exports.shadowSquare = makeRare(exports.square, 2);
 exports.rainbowSquare = makeRare(exports.square, 3);
 exports.transSquare = makeRare(exports.square, 4);
+exports.albinoSquare = makeRare(exports.square, 5);
+exports.epilepsySquare = makeRare(exports.square, 6);
 
 // TRIANGLES
 exports.triangle = {
@@ -244,6 +248,8 @@ exports.legendaryTriangle = makeRare(exports.triangle, 1);
 exports.shadowTriangle = makeRare(exports.triangle, 2);
 exports.rainbowTriangle = makeRare(exports.triangle, 3);
 exports.transTriangle = makeRare(exports.triangle, 4);
+exports.albinoTriangle = makeRare(exports.triangle, 5);
+exports.epilepsyTriangle = makeRare(exports.triangle, 6);
 
 // PENTAGONS
 exports.pentagon = {
@@ -268,6 +274,8 @@ exports.legendaryPentagon = makeRare(exports.pentagon, 1);
 exports.shadowPentagon = makeRare(exports.pentagon, 2);
 exports.rainbowPentagon = makeRare(exports.pentagon, 3);
 exports.transPentagon = makeRare(exports.pentagon, 4);
+exports.albinoPentagon = makeRare(exports.pentagon, 5);
+exports.epilepsyPentagon = makeRare(exports.pentagon, 6);
 
 // BETA PENTAGONS
 exports.betaPentagon = {
@@ -294,13 +302,15 @@ exports.legendaryBetaPentagon = makeRare(exports.betaPentagon, 1);
 exports.shadowBetaPentagon = makeRare(exports.betaPentagon, 2);
 exports.rainbowBetaPentagon = makeRare(exports.betaPentagon, 3);
 exports.transBetaPentagon = makeRare(exports.betaPentagon, 4);
+exports.albinoBetaPentagon = makeRare(exports.betaPentagon, 5);
+exports.epilepsyBetaPentagon = makeRare(exports.betaPentagon, 6);
 
 // ALPHA PENTAGONS
 exports.alphaPentagon = {
     PARENT: ["food"],
     LABEL: "Alpha Pentagon",
     VALUE: 15e3,
-    SHAPE: 5,
+    SHAPE: -5,
     SIZE: 58,
     COLOR: 14,
     BODY: {
@@ -320,6 +330,8 @@ exports.legendaryAlphaPentagon = makeRare(exports.alphaPentagon, 1);
 exports.shadowAlphaPentagon = makeRare(exports.alphaPentagon, 2);
 exports.rainbowAlphaPentagon = makeRare(exports.alphaPentagon, 3);
 exports.transAlphaPentagon = makeRare(exports.alphaPentagon, 4);
+exports.albinoAlphaPentagon = makeRare(exports.alphaPentagon, 5);
+exports.epilepsyAlphaPentagon = makeRare(exports.alphaPentagon, 6);
 
 // HEXAGONS
 exports.hexagon = {

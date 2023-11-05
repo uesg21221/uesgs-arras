@@ -4075,6 +4075,7 @@ exports.destroyer = {
         },
     ],
 };
+
 exports.artillery = {
     PARENT: ["genericTank"],
     DANGER: 6,
@@ -4222,6 +4223,56 @@ exports.annihilator = {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni]),
                 TYPE: "bullet",
             },
+        },
+    ],
+};
+
+exports.wubdub = {
+    PARENT: ["genericTank"],
+    LABEL: "Wubdub",
+    DANGER: 7,
+    GUNS: [
+        {
+            POSITION: [16, 14, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.halfreload]),
+                TYPE: "bullet",
+		},
+        },
+        {
+            POSITION: [16, 14, 1, 0, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.halfreload]),
+                TYPE: "bullet",
+		},
+        },
+        {
+            POSITION: [16, 14, 1, 0, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.halfreload]),
+                TYPE: "bullet",
+		},
+        },
+        {
+            POSITION: [16, 14, 1, 0, 0, 60, 0.05],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.halfreload]),
+                TYPE: "bullet",
+		},
+        },
+        {
+            POSITION: [16, 14, 1, 0, 0, 180, 0.05],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.halfreload]),
+                TYPE: "bullet",
+		},
+        },
+        {
+            POSITION: [16, 14, 1, 0, 0, 300, 0.05],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.halfreload]),
+                TYPE: "bullet",
+		},
         },
     ],
 };
@@ -5395,7 +5446,7 @@ exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "
 
     exports.pounder.UPGRADES_TIER_2 = ["destroyer", "builder", "artillery", "launcher"];
         exports.pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"];
-        exports.destroyer.UPGRADES_TIER_3 = ["conqueror", "annihilator", "hybrid", "construct"];
+        exports.destroyer.UPGRADES_TIER_3 = ["conqueror", "annihilator", "hybrid", "construct", "wubdub"];
         exports.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun"];
         exports.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "sidewinder", "fieldGun"];
 

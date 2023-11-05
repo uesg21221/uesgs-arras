@@ -64,6 +64,7 @@ exports.developer = {
         },
     ],
 };
+
 exports.spectator = {
     PARENT: ["menu"],
     LABEL: "Spectator",
@@ -77,6 +78,26 @@ exports.spectator = {
     BODY: {
         SPEED: 25,
         FOV: 10,
+        DAMAGE: 0,
+        HEALTH: 1e100,
+        SHIELD: 1e100,
+        REGEN: 1e100,
+    },
+    GUNS: [],
+};
+exports.sextator = {
+    PARENT: ["menu"],
+    LABEL: "sextator",
+    ALPHA: 0,
+    CAN_BE_ON_LEADERBOARD: false,
+    ACCEPTS_SCORE: false,
+    DRAW_HEALTH: false,
+    HITS_OWN_TYPE: "never",
+    ARENA_CLOSER: true,
+    SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    BODY: {
+        SPEED: 25,
+        FOV: 2,
         DAMAGE: 0,
         HEALTH: 1e100,
         SHIELD: 1e100,
@@ -213,9 +234,10 @@ function compileMatrix(matrix, matrix2Entrance) {
             LABEL = str[0].toUpperCase() + str.slice(1).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
             code = str + 'Generator';
         exports[code] = matrix[y][x] = {
-            PARENT: "spectator",
+            PARENT: "sextator",
             LABEL,
             SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
+            SKILL: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
             TURRETS: [{
                 POSITION: [5 + y * 2, 0, 0, 0, 0, 1],
                 TYPE: str,
@@ -261,13 +283,15 @@ function connectMatrix(matrix, matrix2Entrance) {
     }
 }
 let generatorMatrix = [
-    [ "egg"           , "gem"                , "jewel"                  , "crasher"             , "sentry"               , "shinySentry"        , "EggRelic"           ],
-    [ "square"        , "shinySquare"        , "legendarySquare"        , "shadowSquare"        , "rainbowSquare"        , "transSquare"        , "SquareRelic"        ],
-    [ "triangle"      , "shinyTriangle"      , "legendaryTriangle"      , "shadowTriangle"      , "rainbowTriangle"      , "transTriangle"      , "TriangleRelic"      ],
-    [ "pentagon"      , "shinyPentagon"      , "legendaryPentagon"      , "shadowPentagon"      , "rainbowPentagon"      , "transPentagon"      , "PentagonRelic"      ],
-    [ "betaPentagon"  , "shinyBetaPentagon"  , "legendaryBetaPentagon"  , "shadowBetaPentagon"  , "rainbowBetaPentagon"  , "transBetaPentagon"  , "BetaPentagonRelic"  ],
-    [ "alphaPentagon" , "shinyAlphaPentagon" , "legendaryAlphaPentagon" , "shadowAlphaPentagon" , "rainbowAlphaPentagon" , "transAlphaPentagon" , "AlphaPentagonRelic" ],
-    [ "sphere"        , "cube"               , "tetrahedron"            , "octahedron"          , "dodecahedron"         , "icosahedron"        , "tesseract"          ],
+    [ "egg"             , "square"                , "triangle"                  , "pentagon"                  , "betaPentagon"               , "alphaPentagon"                 , "sphere"            ],
+    [ "shinyEgg"        , "shinySquare"           , "shinyTriangle"             , "shinyPentagon"             , "shinyBetaPentagon"          , "shinyAlphaPentagon"            , "cube"              ],
+    [ "legendaryEgg"    , "legendarySquare"       , "legendaryTriangle"         , "legendaryPentagon"         , "legendaryBetaPentagon"      , "legendaryAlphaPentagon"        , "tetrahedron"       ],
+    [ "shadowEgg"       , "shadowSquare"          , "shadowTriangle"            , "shadowPentagon"            , "shadowBetaPentagon"         , "shadowAlphaPentagon"           , "octahedron"        ],
+    [ "rainbowEgg"      , "rainbowSquare"         , "rainbowTriangle"           , "rainbowPentagon"           , "rainbowBetaPentagon"        , "rainbowAlphaPentagon"          , "dodecahedron"      ],
+    [ "transEgg"        , "transSquare"           , "transTriangle"             , "transPentagon"             , "transBetaPentagon"          , "transAlphaPentagon"            , "icosahedron"       ],
+    [ "albinoEgg"       , "albinoSquare"          , "albinoTriangle"            , "albinoPentagon"            , "albinoBetaPentagon"         , "albinoAlphaPentagon"           , "tesseract"         ],
+    [ "epilepsyEgg"     , "epilepsySquare"        , "epilepsyTriangle"          , "epilepsyPentagon"          , "epilepsyBetaPentagon"       , "epilepsyAlphaPentagon"         , "auto3"             ],
+    [ "EggRelic"        , "SquareRelic"           , "TriangleRelic"             , "PentagonRelic"             , "BetaPentagonRelic"          , "AlphaPentagonRelic"            , "basic"             ]  
 ],
 
 gemRelicMatrix = [];
@@ -293,7 +317,7 @@ for (let tier = 0; tier < 6; tier++) {
                 LABEL = str[0].toUpperCase() + str.slice(1).replace(/\d/, d => ["", "Beta", "Alpha", "Omega", "Gamma", "Delta"][d]).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
                 code = str + 'Generator';
             column.push(exports[code] = {
-                PARENT: "spectator",
+                PARENT: "sextator",
                 LABEL,
                 SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
                 TURRETS: [{
@@ -686,6 +710,7 @@ exports.auraBasic = {
         }
     ],
 };
+exports.aura = addAura({LABEL: "Aura"})
 exports.auraHealerGen = addAura(-1);
 exports.auraHealer = {
     PARENT: ["genericTank"],
@@ -1159,7 +1184,7 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
             exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
         exports.legacyTanks.UPGRADES_TIER_0 = ["weirdSpike", "oldBentBoomer", "quadBuilder", "master", "blunderbuss", "oldRimfire", "oldSpreadshot", "oldCommander", "autoTrapper", "prodigy", "mender", "tetraGunner", "corvette", "whirlwind", "flail"];
         exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", "splitTanks"];
-            exports.splitTanks.UPGRADES_TIER_0 = [["developer", "basic"], ["developer", "developer"]];
+            exports.splitTanks.UPGRADES_TIER_0 = [["developer", "basic"], ["developer", "developer"], ["aura", "basic"], ["aura", "basic"]];
         exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", ["assassin", "dreadOfficialV1"], "vulnturrettest", "onTest", "alphaGunTest"];
 
     exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "terrestrials", "celestials", "eternals", "devBosses"];

@@ -20,7 +20,7 @@ module.exports = {
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['tdm', 'domination'],
+    GAME_MODES: ['ffa'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
@@ -146,31 +146,41 @@ module.exports = {
         [2000, [
             [1024, 'egg'], [256, 'square'], [64, 'triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
         ]],
-        [1, [
+        [200, [
             [3125, 'gem'], [625, 'shinySquare'], [125, 'shinyTriangle'], [25, 'shinyPentagon'], [5, 'shinyBetaPentagon'], [1, 'shinyAlphaPentagon']
         ]],
-        [0.1, [
+        [100, [
             [6836, 'jewel'], [1296, 'legendarySquare'], [216, 'legendaryTriangle'], [36, 'legendaryPentagon'], [6, 'legendaryBetaPentagon'], [1, 'legendaryAlphaPentagon']
         ]],
-        [0.005, [
+        [50, [
             /*[16807, 'egg'], */[2401, 'shadowSquare'], [343, 'shadowTriangle'], [49, 'shadowPentagon'], [7, 'shadowBetaPentagon'], [1, 'shadowAlphaPentagon']
         ]],
-        [0.001, [
+        [25, [
             /*[65536, 'egg'], */[8192, 'rainbowSquare'], [1024, 'rainbowTriangle'], [64, 'rainbowPentagon'], [8, 'rainbowBetaPentagon'], [1, 'rainbowAlphaPentagon']
         ]],
-        [0.0005, [
+        [1, [
             [59549, 'egg'], [6561, 'transSquare'], [729, 'transTriangle'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
         ]],
-        [0.0001, [
+        [0.1, [
             [100000, 'sphere'], [10000, 'cube'], [1000, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
-        ]]
+        ]],
+        [0.05, [
+            [5000000, 'albinoEgg'], [50000, 'albinoSquare'], [1000, 'albinoTriangle'], [100, 'albinoPentagon'], [100, 'albinoBetaPentagon'], [1, 'albinoAlphaPentagon']
+        ]],
+        [0.01, [
+            [1000000000, 'epilepsyEgg'], [100000000, 'epilepsySquare'], [500000, 'epilepsyTriangle'], [10000, 'epilepsyPentagon'], [100, 'epilepsyBetaPentagon'], [1, 'epilepsyAlphaPentagon']
+        ]],
     ],
 
     // The possible nest food types that can spawn.
     FOOD_TYPES_NEST: [
         [1, [
             [16, 'pentagon'], [ 4, 'betaPentagon'], [ 1, 'alphaPentagon']
-        ]]
+        ]],
+        [0.25, [
+            [32, 'shinyPentagon'], [16, 'shinyBetaPentagon'], [1, 'shinyAlphaPentagon']
+        ]],
+        
     ],
 
     // The possible nest enemy types that can spawn.

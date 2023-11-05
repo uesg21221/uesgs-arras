@@ -56,7 +56,7 @@ class BossRush {
         this.bigFodderChoices = ["sentryGun", "sentrySwarm", "sentryTrap", "shinySentryGun"];
         this.smallFodderChoices = ["crasher"];
         this.waves = this.generateWaves();
-        this.waveId = 96;
+        this.waveId = -1;
         this.gameActive = true;
         this.timer = 0;
         this.remainingEnemies = 0;;
@@ -91,16 +91,16 @@ class BossRush {
     }
 
     spawnDominator(tile, team, type = false) {
-        type = type ? type : Class.destroyerDominator;
+        type = type ? type : Class.sanctuaryTier6;
         let o = new Entity(tile.loc);
         o.define(type);
         o.team = team;
         o.color = getTeamColor(team);
         o.skill.score = 111069;
-        o.name = 'Dominator';
+        o.name = 'Sanctuary';
         o.SIZE = room.tileWidth / 10;
-        o.isDominator = true;
-        o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: true })];
+        o.isDominator = false;
+        o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: false })];
         o.on('dead', () => {
             let isAC;
             for (let instance of o.collisionArray) {
