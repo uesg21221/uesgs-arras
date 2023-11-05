@@ -43,6 +43,7 @@ exports.developer = {
         FOV: 2,
     },
     RESET_CHILDREN: true,
+    INVISIBLE: [0, 0],
     SHAPE: [
         [-1, -0.8],
         [-0.8, -1],
