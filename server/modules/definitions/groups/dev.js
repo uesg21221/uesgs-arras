@@ -42,6 +42,7 @@ exports.developer = {
         DENSITY: 20,
         FOV: 2,
     },
+    RESET_CHILDREN: true,
     SHAPE: [
         [-1, -0.8],
         [-0.8, -1],
