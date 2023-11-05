@@ -673,7 +673,7 @@ exports.auraBasic = {
     ],
     TURRETS: [
         {
-            POSITION: [120, 0, 0, 0, 0, 0],
+            POSITION: [18, 0, 0, 0, 0, 0],
             TYPE: "auraBasicGen",
             VULNERABLE: true,
         }
