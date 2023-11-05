@@ -89,7 +89,7 @@ makeRare = (type, level) => ({
     SHAPE: type.SHAPE,
     SIZE: type.SIZE + level,
     COLOR: [1, 0, 19, 36, 37, 42, 20][level],
-    ALPHA: level == 2 ? 0.25 : 1,
+    ALPHA: level == 2 ? 0.05 : 1,
     BODY: {
         DAMAGE: type.BODY.DAMAGE + level,
         DENSITY: type.BODY.DENSITY + level,
@@ -297,13 +297,14 @@ exports.betaPentagon = {
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
-exports.shinyBetaPentagon = makeRare(exports.betaPentagon, 0);
+exports.shinyBetaPentagon = makeRare(exports.betaPentagon, 0); 
 exports.legendaryBetaPentagon = makeRare(exports.betaPentagon, 1);
 exports.shadowBetaPentagon = makeRare(exports.betaPentagon, 2);
 exports.rainbowBetaPentagon = makeRare(exports.betaPentagon, 3);
 exports.transBetaPentagon = makeRare(exports.betaPentagon, 4);
 exports.albinoBetaPentagon = makeRare(exports.betaPentagon, 5);
 exports.epilepsyBetaPentagon = makeRare(exports.betaPentagon, 6);
+
 
 // ALPHA PENTAGONS
 exports.alphaPentagon = {

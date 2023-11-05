@@ -376,6 +376,119 @@ for (let x = 0; x < tensorWidth; x++) for (let y = 0; y < tensorHeight; y++) for
     ];
 }
 
+exports.rockGenerator = {
+    PARENT: ["sextator"],
+    LABEL: "Rock Generator",
+    SKILL_CAP: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    SKILL: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    TURRETS: [{
+        POSITION: [5, 0, 0, 0, 0, 1],
+        TYPE: "rock",
+    }],
+    GUNS: [{
+        POSITION: [14, 12, 1, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+            TYPE: "bullet"
+        }
+    }, {
+        POSITION: [12, 12, 1.4, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+            INDEPENDENT_CHILDREN: true,
+            TYPE: "rock"
+        },
+    }],  
+};
+exports.stoneGenerator = {
+    PARENT: ["rockGenerator"],
+    LABEL: "Stone Generator",
+    TURRETS: [{
+        POSITION: [5, 0, 0, 0, 0, 1],
+        TYPE: "stone",
+    }],
+    GUNS: [{
+        POSITION: [14, 12, 1, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+            TYPE: "bullet"
+        }
+    }, {
+        POSITION: [12, 12, 1.4, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+            INDEPENDENT_CHILDREN: true,
+            TYPE: "stone"
+        },
+    }],  
+};
+exports.gravelGenerator = {
+    PARENT: ["rockGenerator"],
+    LABEL: "Gravel Generator",
+    TURRETS: [{
+        POSITION: [5, 0, 0, 0, 0, 1],
+        TYPE: "gravel",
+    }],
+    GUNS: [{
+        POSITION: [14, 12, 1, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+            TYPE: "bullet"
+        }
+    }, {
+        POSITION: [12, 12, 1.4, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+            INDEPENDENT_CHILDREN: true,
+            TYPE: "gravel"
+        },
+    }],  
+};
+exports.wallGenerator = {
+    PARENT: ["rockGenerator"],
+    LABEL: "Wall Generator",
+    TURRETS: [{
+        POSITION: [5, 0, 0, 0, 0, 1],
+        TYPE: "wall",
+    }],
+    GUNS: [{
+        POSITION: [14, 12, 1, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+            TYPE: "bullet"
+        }
+    }, {
+        POSITION: [12, 12, 1.4, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+            INDEPENDENT_CHILDREN: true,
+            TYPE: "wall"
+        },
+    }],  
+};
+exports.moonGenerator = {
+    PARENT: ["rockGenerator"],
+    LABEL: "Moon Generator",
+    TURRETS: [{
+        POSITION: [5, 0, 0, 0, 0, 1],
+        TYPE: "moon",
+    }],
+    GUNS: [{
+        POSITION: [14, 12, 1, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+            TYPE: "bullet"
+        }
+    }, {
+        POSITION: [12, 12, 1.4, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+            INDEPENDENT_CHILDREN: true,
+            TYPE: "moon"
+        },
+    }],  
+};
+
 exports.diamondShape = {
     PARENT: ["basic"],
     LABEL: "Diamond Test Shape",
@@ -1205,5 +1318,10 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
         exports.eternals.UPGRADES_TIER_0 = ["ragnarok", "kronos"];
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
-    exports.tools.UPGRADES_TIER_0 = ["spectator", "levels", "teams", "eggGenerator"];
+    exports.tools.UPGRADES_TIER_0 = ["spectator", "levels", "teams", "eggGenerator", "rockGenerator"];
+        exports.rockGenerator.UPGRADES_TIER_0 = [
+            "developer"     , "stoneGenerator"   , "tools",
+            "basic"         , "rockGenerator"    , "gravelGenerator",
+            "spectator"     , "wallGenerator"    , "moonGenerator"
+        ];
 

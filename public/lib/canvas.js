@@ -93,7 +93,13 @@ class Canvas {
                 this.socket.talk('L');
                 break;
             case global.KEY_FUCK_YOU:
-                this.socket.talk('0');
+                this.socket.talk('0', 0);
+                break;
+            case global.KEY_KILL_YOURSELF:
+                this.socket.talk('0', 1);
+                break;
+            case global.KEY_JUMP_OFF_A_CLIFF:
+                this.socket.talk('0', 2);
                 break;
             case global.KEY_BECOME:
                 this.socket.talk('H');
