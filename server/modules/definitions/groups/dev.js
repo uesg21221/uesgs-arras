@@ -42,6 +42,8 @@ exports.developer = {
         DENSITY: 20,
         FOV: 2,
     },
+    RESET_CHILDREN: true,
+    INVISIBLE: [0, 0],
     SHAPE: [
         [-1, -0.8],
         [-0.8, -1],
@@ -577,8 +579,8 @@ exports.alphaGunTest = {
     PARENT: "basic",
     LABEL: "Alpha Gun Test",
     ON: [{
-        action: "fire",
-        execute: ({ gun }) => console.log(gun.alpha)
+        event: "fire",
+        handler: ({ gun }) => console.log(gun.alpha)
     }],
     GUNS: [{
         POSITION: {},
@@ -598,8 +600,8 @@ exports.onTest = {
         'On collide is a bit buggy right now, please use other methods until its fixed'
     ],
     ON: [{
-        action: "fire",
-        execute: ({ body, gun }) => {
+        event: "fire",
+        handler: ({ body, gun }) => {
             switch (gun.identifier) {
                 case 'mainGun':
                     body.sendMessage('fired main gun')
@@ -610,19 +612,25 @@ exports.onTest = {
             }
         }
     }, {
-        action: "altFire",
-        execute: ({ body, gun }) => {
+        event: "altFire",
+        handler: ({ body, gun }) => {
             body.sendMessage('fired alt gun')
         }
     }, {
-        action: "death",
-        execute: ({ body, killers, killTools }) => {
+        event: "death",
+        handler: ({ body, killers, killTools }) => {
             body.sendMessage('you died')
         }
     }, {
-        action: "tick",
-        execute: ({ body }) => {
-            body.color = Math.floor(Math.random() * 39) + " 0 1 0 false"
+        event: "collide",
+        handler: ({ instance, other }) => {
+            instance.sendMessage('collide!')
+        }
+    }, {
+        event: "damage",
+        handler: ({ body, damageInflictor, damageTool }) => {
+            body.SIZE += damageInflictor[0].SIZE / 2
+            damageInflictor[0].kill()
         }
     }],
     GUNS: [{
@@ -721,8 +729,8 @@ exports.ghoster = {
     },
     ON: [
         {
-            action: 'fire',
-            execute: ({ body }) => {
+            event: 'fire',
+            handler: ({ body }) => {
                 body.define(Class.ghoster_ghostForm)
                 setTimeout(() => {
                     body.SPEED = 1e-99
@@ -754,8 +762,8 @@ exports.switcheroo = {
     RESET_UPGRADE_MENU: true,
     ON: [
         {
-            action: "fire",
-            execute: ({ body, globalMasterStore: store, gun }) => {
+            event: "fire",
+            handler: ({ body, globalMasterStore: store, gun }) => {
                 if (gun.identifier != 'switcherooGun') return
                 store.switcheroo_i ??= 0;
                 store.switcheroo_i++;

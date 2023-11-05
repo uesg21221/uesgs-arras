@@ -643,7 +643,7 @@ const convert = {
         if (indices.upgrades) {
             gui.upgrades = [];
             for (let i = 0, len = get.next(); i < len; i++) {
-                gui.upgrades.push(get.next().split("_"));
+                gui.upgrades.push(get.next().split("\\\\//"));
             }
         }
         if (indices.statsdata) {
