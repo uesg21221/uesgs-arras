@@ -59,6 +59,13 @@ exports.dominationBody = {
     SHAPE: 6,
     INDEPENDENT: true,
 };
+exports.tankBody = {
+    LABEL: "",
+    CONTROLLERS: [["spin", { independent: true }]],
+    COLOR: 9,
+    SHAPE: 6,
+    INDEPENDENT: true,
+};
 exports.dominator = {
     PARENT: ["genericTank"],
     LABEL: "Dominator",
@@ -94,6 +101,39 @@ exports.dominator = {
     CAN_BE_ON_LEADERBOARD: false,
     GIVE_KILL_MESSAGE: false,
     ACCEPTS_SCORE: false,
+    HITS_OWN_TYPE: "pushOnlyTeam",
+};
+exports.tank = {
+    PARENT: ["genericTank"],
+    LABEL: "Tank",
+    DANGER: 7,
+    SKILL_CAP: [255, 255, 0, 0, 0, 0, 0, 0, 255, 255],
+    SKILL: [255, 255, 0, 0, 0, 0, 0, 0, 255, 255],
+    LEVEL: 150,
+    SIZE: 50,
+    BODY: {
+        RESIST: 100,
+        SPEED: 0.5,
+        ACCELERATION: 0.8,
+        HEALTH: 500,
+        DAMAGE: 100,
+        PENETRATION: 0.25,
+        FOV: 1.5,
+        PUSHABILITY: 0,
+        HETERO: 0,
+        SHIELD: 500,
+    },
+    CONTROLLERS: ["nearestDifferentMaster"],
+    DISPLAY_NAME: true,
+    TURRETS: [
+        {
+            POSITION: [22, 0, 0, 0, 360, 0],
+            TYPE: "tankBody",
+        },
+    ],
+    CAN_BE_ON_LEADERBOARD: true,
+    GIVE_KILL_MESSAGE: false,
+    ACCEPTS_SCORE: true,
     HITS_OWN_TYPE: "pushOnlyTeam",
 };
 exports.destroyerDominator = {

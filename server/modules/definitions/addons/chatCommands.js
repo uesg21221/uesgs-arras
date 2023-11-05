@@ -166,7 +166,7 @@ module.exports = ({ Events, Class }) => {
 				closeArena();
 				break;
 			case 'wall': {
-				// /wall [grid] | [X Y SIZE]
+				// /wall [grid/r] | [X Y SIZE]
 				if (args.length < 1 || args.length > 3) return fail();
 				const { x, y } = socket.player.body;
 				let pos = {};
@@ -174,6 +174,8 @@ module.exports = ({ Events, Class }) => {
 					const at = room.isAt({ x, y });
 					if (at == false) return fail();
 					pos = { x: at.x, y: at.y };
+				} else if (args[0] == "r") {
+					pos = { x: socket.player.body.x, y: socket.player.body.y }
 				} else {
 					pos = { x: x + Number(args[0]), y, y: y + Number(args[1]) }
 				}
