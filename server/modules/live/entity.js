@@ -1206,6 +1206,7 @@ class Entity extends EventEmitter {
             this.guns = newGuns;
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
+        if (set.RESET_CHILDREN) this.destroyAllChildren();
         if ("function" === typeof set.LEVEL_SKILL_POINT_FUNCTION) {
             this.skill.LSPF = set.LEVEL_SKILL_POINT_FUNCTION;
         }
@@ -1665,17 +1666,20 @@ class Entity extends EventEmitter {
                     for (let i = tooltips.length; i--;) this.sendMessage(tooltips[i]);
                 }
             }
-            for (let instance of entities) {
-                if (
-                    instance.settings.clearOnMasterUpgrade &&
-                    instance.master.id === this.id
-                ) {
-                    instance.kill();
-                }
-            }
+            this.destroyAllChildren();
             this.skill.update();
             this.syncTurrets();
             this.refreshBodyAttributes();
+        }
+    }
+    destroyAllChildren() {
+        for (let instance of entities) {
+            if (
+                instance.settings.clearOnMasterUpgrade &&
+                instance.master.id === this.id
+            ) {
+                instance.kill();
+            }
         }
     }
     damageMultiplier() {
