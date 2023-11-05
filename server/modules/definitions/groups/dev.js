@@ -649,18 +649,7 @@ exports.onTest = {
     }]
 }
 
-exports.auraBasicGen = {
-    PARENT: 'genericTank',
-    TYPE: 'aura',
-    COLOR: 'teal',
-    LABEL: 'Aura',
-    HITS_OWN_TYPE: 'never',
-    BODY: {
-        HEALTH: 1e99
-    },
-    INTANGIBLE: true,
-    ALPHA: 0.35
-};
+exports.auraBasicGen = addAura();
 exports.auraBasic = {
     PARENT: ["genericTank"],
     LABEL: "Aura Basic",
