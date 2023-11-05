@@ -1421,7 +1421,7 @@ class Entity extends EventEmitter {
     ON(on = this.onDef, eventName, value) {
         if (on == null) return
         for (let onPairs of on) {
-            switch (onPairs.action) {
+            switch (onPairs.event) {
                 case 'fire':
                     if (eventName == 'fire') onPairs.handler({
                         body: this,
@@ -1450,7 +1450,7 @@ class Entity extends EventEmitter {
                     if (eventName == 'collide') onPairs.handler({ instance: value.instance, other: value.other })
                     break;
                 case 'damage':
-                    if (eventName == 'damage') onPairs.handler({ body: this })
+                    if (eventName == 'damage') onPairs.handler({ body: this, damageInflictor: value.damageInflictor, damageTool: value.damageTool })
                     break;
                 case 'upgrade':
                     if (eventName == 'upgrade') onPairs.handler({ body: this, oldEntity: value.oldEntity })
@@ -1977,7 +1977,16 @@ class Entity extends EventEmitter {
             return 0;
         }
         if (this.damageRecieved > 0) {
-            this.onDef != null ? this.ON(undefined, 'damage') : null
+            let damageInflictor = []
+            let damageTool = []
+
+            for (let i = 0; i < this.collisionArray.length; i++) {
+                let instance = this.collisionArray[i];
+                if (instance.type === 'wall' || !instance.damage) continue;
+                damageInflictor.push(instance.master)
+                damageTool.push(instance)
+            }
+            this.onDef != null ? this.ON(undefined, 'damage', { damageInflictor, damageTool }) : null
             // TODO: find out how to fix 'collide' and 'damage'
         }
         // Life-limiting effects
