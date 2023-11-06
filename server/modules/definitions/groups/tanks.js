@@ -1381,6 +1381,29 @@ exports.single = {
         },
     ],
 };
+exports.lancer = {
+    PARENT: ["genericTank"],
+    LABEL: "Lancer",
+    BODY: {
+      SPEED: base.SPEED * 1.2,
+      DAMAGE: base.DAMAGE * 0.9,
+    },
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.lancer,
+    GUNS: [
+      {
+        POSITION: [20, 15, 0.001, 0, 0, 0, 0],
+        PROPERTIES: {
+          SHOOT_SETTINGS: combineStats([g.basic, g.lancer]),
+          TYPE: ["bullet", { ALPHA: 0 }],
+          AUTOFIRE: true,
+        },
+      },
+      {
+        POSITION: [25, 15, 0.001, 0, 0, 0, 0],
+      },
+    ],
+  };
 
 // TWIN UPGRADES
 exports.doubleTwin = {
@@ -5414,7 +5437,8 @@ exports.paramedic = {
 exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper"/* "desmos"*/];
     exports.basic.UPGRADES_TIER_2 = ["smasher"];
         exports.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "autoSmasher", "landmine"];
-        exports.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
+        exports.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"];
+    exports.basic.UPGRADES_TIER_3 = ["lancer"];
 
     exports.twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "hexaTank"/*, "helix"*/];
         exports.twin.UPGRADES_TIER_3 = ["dual", "bulwark", "musket"];

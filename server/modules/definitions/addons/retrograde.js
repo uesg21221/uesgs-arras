@@ -5,7 +5,7 @@ const g = require('../gunvals.js');
 module.exports = ({ Class }) => {
 // This addon has been repurposed to hold removed/scrapped arras.io tanks.
 // Anything that was added to Arms Race (like the Quad Twin and Blower) has been removed.
-
+return console.log("Retrograde addon is disabled.");
     // SNIPER UPGRADES
     Class.rifle_retrograde = {
         PARENT: ["genericTank"],

@@ -65,6 +65,13 @@ module.exports = {
 			BULLET_DAMAGE: 'Ball Damage',
 			RELOAD: 'Ball Density',
 		},
+		lancer: {
+			BULLET_SPEED: 'Lance Range',
+			BULLET_HEALTH: 'Lance Longevity',
+			BULLET_PEN: 'Lance Sharpness',
+			BULLET_DAMAGE: 'Lance Damage',
+			RELOAD: 'Lance Density',
+		},
 	},
 	gunCalcNames: {
 	    default: 0,

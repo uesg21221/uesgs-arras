@@ -20,7 +20,7 @@ module.exports = {
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['tdm'],
+    GAME_MODES: ['ffa'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
@@ -38,7 +38,7 @@ module.exports = {
 
     // How long a entity chat message lasts in milliseconds.
     // Includes the fade-out period.
-    CHAT_MESSAGE_DURATION: 3000,
+    CHAT_MESSAGE_DURATION: 5000,
 
     // If you don't want your players to color their messages.
     // They get sanitized after addons interpret them, but before they're added to the chat message dictionary.

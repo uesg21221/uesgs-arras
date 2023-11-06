@@ -57,4 +57,9 @@ function closeArena() {
     }, 500);
 }
 
-module.exports = { closeArena };
+function updateClosing(time = 15) {
+    time == 1 ? sockets.broadcast("The server is updating! The arena will close in 1 second.") : sockets.broadcast("The server is updating! The arena will close in " + time + " seconds." );
+    setTimeout(closeArena, time * 1000);
+}
+
+module.exports = { closeArena, updateClosing };
