@@ -37,6 +37,7 @@ exports.moon = {
     LABEL: "Moon",
     SIZE: 60,
     SHAPE: 0,
+    VARIES_IN_SIZE: false,
 };
 exports.gravel = {
     PARENT: ["rock"],
