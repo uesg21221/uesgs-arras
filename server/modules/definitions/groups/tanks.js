@@ -5172,6 +5172,7 @@ exports.megaSmasher = {
         {
             POSITION: [25, 0, 0, 0, 360, 0],
             TYPE: "smasherBody",
+            SHAPE: -6,
         },
     ],
 };
