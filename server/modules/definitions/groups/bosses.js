@@ -897,6 +897,7 @@ exports.sprayerLegion = {
 // STRANGE BOSSES
 exports.waferbread = {
     PARENT: ["sunchip"],
+    NECRO: [0],
     SHAPE: 0
 };
 exports.sorcerer = {
@@ -957,6 +958,7 @@ exports.summoner = {
 };
 exports.dorito = {
     PARENT: ["sunchip"],
+    NECRO: [3],
     SHAPE: 3
 };
 exports.enchantress = {
@@ -989,6 +991,7 @@ exports.enchantress = {
 };
 exports.demonchip = {
     PARENT: ["sunchip"],
+    NECRO: [5],
     SHAPE: 5
 };
 exports.exorcistor = {
