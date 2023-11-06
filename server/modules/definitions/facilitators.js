@@ -96,6 +96,11 @@ exports.dereference = type => {
             output.TURRETS[i].TYPE = type.TURRETS[i].TYPE;
         }
     }
+    for (let key in output) {
+        if (key.startsWith('UPGRADES_TIER_')) {
+            delete output[key];
+        }
+    }
     return output;
 }
 
