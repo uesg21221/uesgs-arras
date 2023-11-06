@@ -10,7 +10,7 @@ module.exports = ({ Class }) => {
 	// This addon is disabled by default.
 	// You can also disable addons by not making them end with '.js'
 	// If you want to enable, simply make the line below just not run.
-	return console.log('[exampleAddon.js] Addon disabled by default');
+	//return console.log('[exampleAddon.js] Addon disabled by default');
 
 	let MAX_CHILDREN = 0,
 		GUNS = [],
