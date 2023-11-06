@@ -1,6 +1,6 @@
 function generateMaze(size) {
     let maze = JSON.parse(JSON.stringify(Array(size).fill(Array(size).fill(true))));
-    let activeLocsThatWeCantPlaceIn;
+    //let activeLocsThatWeCantPlaceIn;
     maze[0] = Array(size).fill(false);
     maze[size - 1] = Array(size).fill(false);
     maze[Math.floor(size * 0.15)] = [true, true, true, true, true, true, ...Array(size - 12).fill(false), true, true, true, true, true, true];
