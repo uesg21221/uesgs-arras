@@ -26,7 +26,7 @@ function close(socket) {
                 player.body.invuln = false;
                 player.body.kill();
             } else {
-                /*let timeout = setTimeout(function () {
+                let timeout = setTimeout(function () {
                     if (player.body != null) {
                         player.body.kill();
                     }
@@ -37,7 +37,7 @@ function close(socket) {
                     ip: socket.ip,
                     timeout: timeout,
                 };
-                disconnections.push(disconnection);*/
+                disconnections.push(disconnection);
             }
         }
         // Disconnect everything
