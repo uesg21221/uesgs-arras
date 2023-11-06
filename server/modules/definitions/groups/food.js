@@ -90,7 +90,6 @@ makeRare = (type, level) => ({
     SIZE: type.SIZE + level,
     COLOR: [1, 0, 19, 36, 37, 42, 20][level],
     ALPHA: level == 2 ? 0.05 : 1,
-    
     BODY: {
         DAMAGE: type.BODY.DAMAGE + level,
         DENSITY: type.BODY.DENSITY + level,

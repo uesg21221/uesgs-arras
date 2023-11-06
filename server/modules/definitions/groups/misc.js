@@ -49,6 +49,7 @@ exports.wall = {
     LABEL: "Wall",
     SIZE: 25,
     SHAPE: 4,
+    VARIES_IN_SIZE: false,
 };
 
 // DOMINATORS
