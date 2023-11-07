@@ -282,6 +282,7 @@ exports.betaPentagon = {
         DENSITY: 30,
         HEALTH: 50 * basePolygonHealth,
         RESIST: Math.pow(1.25, 2),
+        PENETRATION: 1.1,
         SHIELD: 20 * basePolygonHealth,
         REGEN: 0.2,
         ACCELERATION: 0.003
@@ -294,6 +295,7 @@ exports.legendaryBetaPentagon = makeRare(exports.betaPentagon, 1);
 exports.shadowBetaPentagon = makeRare(exports.betaPentagon, 2);
 exports.rainbowBetaPentagon = makeRare(exports.betaPentagon, 3);
 exports.transBetaPentagon = makeRare(exports.betaPentagon, 4);
+console.log(exports.shinyBetaPentagon);
 
 // ALPHA PENTAGONS
 exports.alphaPentagon = {
@@ -308,6 +310,7 @@ exports.alphaPentagon = {
         DENSITY: 80,
         HEALTH: 300 * basePolygonHealth,
         RESIST: Math.pow(1.25, 3),
+        PENETRATION: 1.1,
         SHIELD: 40 * basePolygonHealth,
         REGEN: 0.6,
         ACCELERATION: 0.0025
