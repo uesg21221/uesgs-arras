@@ -10,7 +10,7 @@ module.exports = {
     closer: { reload: 1.25, recoil: 0.25, health: 1000, damage: 1000, pen: 1000, speed: 2.5, maxSpeed: 2.25, range: 1.4, density: 4, spray: 0.25 },
 
     // Bases
-    basic: { reload: 18, recoil: 1.4, shudder: 0.1, damage: 0.75, speed: 9, spray: 15 },
+    basic: { reload: 18, recoil: 1.4, shudder: 0.1, damage: 0.75, speed: 6, spray: 15 },
     drone: { reload: 50, recoil: 0.25, shudder: 0.1, size: 0.6, speed: 2, spray: 0.1 },
     trap: { reload: 36, shudder: 0.25, size: 0.6, damage: 0.75, speed: 5, spray: 15, resist: 3 },
     swarm: { reload: 18, recoil: 0.25, shudder: 0.05, size: 0.4, damage: 0.75, speed: 4, spray: 5 },
