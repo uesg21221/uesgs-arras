@@ -788,7 +788,7 @@ const socketInit = port => {
     // This is for when the socket first opens
     socket.onopen = function socketOpen() {
         socket.open = true;
-        global.message = 'That token is invalid, expired, or already in use on this server. Please try another one!';
+        global.message = 'Waiting for server to respond...';
         socket.talk('k', global.playerKey);
         console.log('Token submitted to the server for validation.');
         // define a pinging function
