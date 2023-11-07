@@ -101,6 +101,7 @@ const global = {
     KEY_CHOOSE_4: 72,
     KEY_CHOOSE_5: 74,
     KEY_CHOOSE_6: 75,
+    KEY_SHOW_DEBUG: 76,
 
     showTree: false,
     scrollX: 0,
@@ -152,6 +153,7 @@ const global = {
     fps: 60,
     screenSize: Math.min(1920, Math.max(window.innerWidth, 1280)),
     ratio: window.devicePixelRatio,
-    chats: {}
+    chats: {},
+    showDebug: false
 };
 export { global }

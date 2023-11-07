@@ -110,6 +110,9 @@ class Canvas {
             case global.KEY_SUICIDE:
                 this.socket.talk('1');
                 break;
+            case global.KEY_SHOW_DEBUG:
+                global.showDebug = true;
+                break;
         }
         if (!event.repeat) {
             switch (event.keyCode) {
