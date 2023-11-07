@@ -1447,12 +1447,12 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
     ctx.strokeStyle = color.black;
     ctx.fillStyle = color.black;
     drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 1, y + (global.player.cy / global.gameHeight) * height - 1, 2, false);
-    if (global.showDebug) {
+    /*if (global.showDebug) {
         drawGuiRect(x, y - 40, len, 30);
         lagGraph(lag.get(), x, y - 40, len, 30, color.teal);
         gapGraph(global.metrics.rendergap, x, y - 40, len, 30, color.pink);
         timingGraph(GRAPHDATA, x, y - 40, len, 30, color.yellow);
-    }
+    }*/
     //minimap stuff ends here
     //debug stuff
     if (!global.showDebug) y += 14 * 3;
