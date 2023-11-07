@@ -198,7 +198,7 @@ module.exports = {
         bosses: ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner"],
         amount: [5, 5, 4, 2, 1], chance: 2, nameType: "a",
     },{
-        bosses: ["roguePalisade"],
+        bosses: ["roguePalisade", "rogueArmada"],
         amount: [4, 1], chance: 1, nameType: "castle",
         message: "A strange trembling...",
     },{

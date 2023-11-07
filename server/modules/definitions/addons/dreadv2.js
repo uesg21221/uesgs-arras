@@ -57,10 +57,10 @@ const hexnoughtBody = {
 };
 
 module.exports = ({ Class }) => {
-	// Comment out the line below to enable this addon, uncomment it to disable this addon (WARNING: Increases load time by approximately 3x).
+	// Comment out the line below to enable this addon, uncomment it to disable this addon.
 	// return console.log('--- Dreadnoughts v2 addon [dreadv2.js] is disabled. See lines 60-61 to enable it. ---');
 
-	// Set the below variable to true to enable hex dreadnought building (WARNING: increases load time by approximately 10x)
+	// Set the below variable to true to enable hex dreadnought building.
 	const buildHexnoughts = true;
 	
 	// For hexnought merging
@@ -120,7 +120,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [22, 10, 1, 0, 0, 0, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.auto]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.auto, {recoil: 0.2}]),
 					TYPE: "bullet",
 				},
 			},

@@ -273,7 +273,7 @@ spawnBosses = minibossCount => {
             amount = ran.chooseChance(...selection.amount) + 1;
         sockets.broadcast(amount > 1 ? "Visitors are coming..." : "A visitor is coming...");
         if (selection.message) {
-            setSyncedTimeout(sockets.broadcast, c.BOSS_SPAWN_DURATION * 15, selection.message);
+            sockets.broadcast(selection.message);
         }
         setSyncedTimeout(() => {
             let names = [];
