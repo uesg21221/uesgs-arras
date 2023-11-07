@@ -807,6 +807,24 @@ exports.autoTankGun = {
         },
     ],
 };
+exports.autoSniperTankGun = {
+    PARENT: ["genericTank"],
+    LABEL: "",
+    BODY: {
+        FOV: 3,
+    },
+    CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"],
+    COLOR: 16,
+    GUNS: [
+        {
+            POSITION: [24, 8.5, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.sniper, g.auto]),
+                TYPE: "bullet",
+            },
+        },
+    ],
+};
 exports.bansheegun = {
     PARENT: ["genericTank"],
     LABEL: "",
@@ -1164,6 +1182,7 @@ exports.basic = {
         },
     ],
 };
+exports.autoBasic = makeAuto(exports.basic);
 exports.twin = {
     PARENT: ["genericTank"],
     LABEL: "Twin",
@@ -1963,6 +1982,7 @@ exports.rifle = {
         },
     ],
 };
+exports.autoRifle = makeAuto(exports.rifle);
 
 // ASSASSIN UPGRADES
 exports.ranger = {
@@ -2864,6 +2884,26 @@ exports.auto3 = {
         {
             POSITION: [11, 8, 0, 240, 190, 0],
             TYPE: "autoTankGun",
+        },
+    ],
+};
+exports.sniper3 = {
+    PARENT: ["genericTank"],
+    LABEL: "Sniper-3",
+    DANGER: 6,
+    FACING_TYPE: "autospin",
+    TURRETS: [
+        {
+            POSITION: [11, 8, 0, 0, 190, 0],
+            TYPE: "autoSniperTankGun",
+        },
+        {
+            POSITION: [11, 8, 0, 120, 190, 0],
+            TYPE: "autoSniperTankGun",
+        },
+        {
+            POSITION: [11, 8, 0, 240, 190, 0],
+            TYPE: "autoSniperTankGun",
         },
     ],
 };
@@ -5434,11 +5474,13 @@ exports.paramedic = {
 };
 
 // TANK UPGRADE PATHS
-exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper"/* "desmos"*/];
+exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "autoBasic"/* "desmos"*/];
     exports.basic.UPGRADES_TIER_2 = ["smasher"];
         exports.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "autoSmasher", "landmine"];
         exports.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"];
-    exports.basic.UPGRADES_TIER_3 = ["lancer"];
+        exports.basic.UPGRADES_TIER_3 = ["lancer"];
+
+exports.autoBasic.UPGRADES_TIER_3 = ["autoDouble", "autoRifle", "autoAssassin", "autoGunner", "autoTriAngle", "autoOverseer", "autoSpawner", "autoBuilder", "hexaTrapper"];
 
     exports.twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "hexaTank"/*, "helix"*/];
         exports.twin.UPGRADES_TIER_3 = ["dual", "bulwark", "musket"];
@@ -5449,7 +5491,7 @@ exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "
         exports.sniper.UPGRADES_TIER_3 = ["bushwhacker"];
         exports.assassin.UPGRADES_TIER_3 = ["ranger", "falcon", "stalker", "autoAssassin", "single"];
         exports.hunter.UPGRADES_TIER_3 = ["predator", "xHunter", "poacher", "ordnance", "dual"];
-        exports.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman"];
+        exports.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman", "autoRifle"];
 
     exports.machineGun.UPGRADES_TIER_2 = ["artillery", "minigun", "gunner", "sprayer"];
         exports.minigun.UPGRADES_TIER_3 = ["streamliner", "nailgun", "cropDuster", "barricade", "vulture"];
@@ -5460,7 +5502,7 @@ exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "
         exports.flankGuard.UPGRADES_TIER_3 = ["tripleTwin"/*, "quadruplex"*/];
         exports.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper"];
         exports.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "surfer", "eagle", "phoenix", "vulture"];
-        exports.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee"];
+        exports.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "sniper3", "auto4", "banshee"];
 
     exports.director.UPGRADES_TIER_2 = ["overseer", "cruiser", "underseer", "spawner"];
         exports.director.UPGRADES_TIER_3 = ["manager", "bigCheese"];
