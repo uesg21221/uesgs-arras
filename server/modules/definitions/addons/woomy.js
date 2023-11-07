@@ -11,9 +11,9 @@ g.lance = {
   range: 0.05,
   spray: 180
 }
-return;
-module.exports = ({ Class }) => {
 
+module.exports = ({ Class }) => {
+  return console.log("Addon is disabled.");
 // POLYGONS
 Class.woomyAlphaPentagon = {
   PARENT: ["alphaPentagon"],
