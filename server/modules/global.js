@@ -91,20 +91,10 @@ global.Tile = class Tile {
     }
 }
 
-global.clockTick = 0;
-global.tickQueue = [];
-global.syncedDelaysLoop = () => {
-    while (tickQueue[0] && tickQueue[0][0] <= clockTick) {
-        let current = tickQueue.shift();
-        current[1](...current[2]);
-    }
-    clockTick += 1 / c.runSpeed;
-};
-global.setSyncedTimeout = (callback, ticks = 0, ...args) => {
-    let goal = clockTick + ticks, insertHere = 0;
-    while (tickQueue.length < insertHere && tickQueue[insertHere][0] <= goal) insertHere++;
-    tickQueue.splice(insertHere, 0, callback, args);
-};
+global.tickIndex = 0;
+global.tickEvents = new EventEmitter();
+global.syncedDelaysLoop = () => tickEvents.emit(tickIndex++);
+global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.once(tickIndex + Math.round(ticks), () => callback(...args));
 
 global.c = require("./setup/config.js");
 global.c.port = process.env.PORT || c.port;

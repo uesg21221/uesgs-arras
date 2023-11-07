@@ -79,12 +79,8 @@ exports.machineTripleTurret = {
     BODY: {
         FOV: 2,
     },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    CONTROLLERS: [ ["spin", {speed: 0.04}] ],
+    INDEPENDENT: true,
     COLOR: 5,
     GUNS: [
         {
@@ -279,7 +275,7 @@ for(let i = 0; i < 3; i++) {
 exports.eliteSpinnerCyclone = {
     PARENT: ["genericTank"],
     COLOR: 5,
-    CONTROLLERS: [["spin", { independent: true }]],
+    CONTROLLERS: [["spin", { speed: 0.1, independent: true }]],
     GUNS: [],
 };
 for (let i = 0; i < 12; i++) {
@@ -302,12 +298,7 @@ for (let i = 0; i < 12; i++) {
         {
             POSITION: [15, 3.5, 1, 0, 0, 30 * i, delay],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.twin,
-                    g.puregunner,
-                    g.hurricane,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.morespeed]),
                 TYPE: "bullet",
             },
         },
@@ -593,7 +584,7 @@ exports.eliteSpawner = {
             POSITION: [2, 18, 1, 11, 0, 60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.celeslower]),
-                TYPE: "sentrySwarm",
+                TYPE: ["sentrySwarm", {GIVE_KILL_MESSAGE: false}],
                 SYNCS_SKILLS: true,
                 AUTOFIRE: true,
                 STAT_CALCULATOR: gunCalcNames.drone,
@@ -604,7 +595,7 @@ exports.eliteSpawner = {
             POSITION: [2, 18, 1, 11, 0, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.celeslower]),
-                TYPE: "sentryTrap",
+                TYPE: ["sentryTrap", {GIVE_KILL_MESSAGE: false}],
                 SYNCS_SKILLS: true,
                 AUTOFIRE: true,
                 STAT_CALCULATOR: gunCalcNames.drone,
@@ -615,7 +606,7 @@ exports.eliteSpawner = {
             POSITION: [2, 18, 1, 11, 0, 300, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.celeslower]),
-                TYPE: "sentryGun",
+                TYPE: ["sentryGun", {GIVE_KILL_MESSAGE: false}],
                 SYNCS_SKILLS: true,
                 AUTOFIRE: true,
                 STAT_CALCULATOR: gunCalcNames.drone,
@@ -670,7 +661,7 @@ exports.eliteSpinner = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Spinner",
     AI: { STRAFE: false },
-    FACING_TYPE: "spin",
+    FACING_TYPE: "fastspin",
     GUNS: [],
     TURRETS: [
         {
@@ -684,21 +675,21 @@ for (let i = 0; i < 3; i++) {
         {
             POSITION: [9.5, 2, 1, -1.5, 11.5, 120*i+10, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.hurricane]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.morespeed]),
                 TYPE: "bullet",
             },
         },
         {
             POSITION: [9.5, 2, 1, 3.5, 6.5, 120*i+10, 1/3],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.hurricane]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.morespeed]),
                 TYPE: "bullet",
             },
         },
         {
             POSITION: [9.5, 2, 1, 8.5, 1.5, 120*i+10, 2/3],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.hurricane]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.morespeed]),
                 TYPE: "bullet",
             },
         },
@@ -1349,8 +1340,8 @@ exports.rogueArmada = (() => {
         BODY: {
             FOV: 1.3,
             SPEED: base.SPEED * 0.1,
-            HEALTH: base.HEALTH * 2,
-            SHIELD: base.SHIELD * 2,
+            HEALTH: base.HEALTH * 16,
+            SHIELD: base.SHIELD * 3,
             REGEN: base.REGEN,
             DAMAGE: base.DAMAGE * 3,
         },
@@ -2775,7 +2766,7 @@ exports.theiaTwisterTurret = {
 exports.theiaLowerBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: 35,
+    COLOR: 13,
     SIZE: 100,
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
     SHAPE: 7,
@@ -2860,7 +2851,7 @@ exports.theiaUpperBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
     AUTOSPIN: true,
-    COLOR: 35,
+    COLOR: 13,
     SIZE: 100,
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
     MAX_CHILDREN: 28,
@@ -2894,7 +2885,7 @@ exports.theia = {
     PARENT: ["celestial"],
     NAME: "Theia",
     UPGRADE_LABEL: "Theia",
-    COLOR: 3,
+    COLOR: 13,
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
