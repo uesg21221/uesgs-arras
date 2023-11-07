@@ -62,6 +62,7 @@ exports.genericEntity = {
     BORDERLESS: false,
     DRAW_FILL: true,
     REROOT_UPGRADE_TREE: null,
+    DISPLAY_NAME: true,
     ON: [],
     BODY: {
         ACCELERATION: 1,

@@ -1021,6 +1021,7 @@ class Entity extends EventEmitter {
         if (set.NAME != null) this.name = set.NAME;
         if (set.LABEL != null) this.label = set.LABEL;
         if (set.UPGRADE_LABEL != null) this.upgradeLabel = set.UPGRADE_LABEL;
+        if (set.DISPLAY_NAME != null) this.displayName = set.DISPLAY_NAME;
         if (set.TYPE != null) this.type = set.TYPE;
         if (set.SHAPE != null) {
             this.shape = typeof set.SHAPE === "number" ? set.SHAPE : 0;
@@ -1583,7 +1584,7 @@ class Entity extends EventEmitter {
     }
     camera(tur = false) {
         return {
-            type: 0 + tur * 0x01 + this.settings.drawHealth * 0x02 + (this.type === "tank") * 0x04,
+            type: 0 + tur * 0x01 + this.settings.drawHealth * 0x02 + (this.type === "tank" && this.displayName) * 0x04,
             invuln: this.invuln,
             id: this.id,
             index: this.index,
