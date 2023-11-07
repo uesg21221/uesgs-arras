@@ -745,7 +745,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
             drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - (g.aspect === 1 ? position * 2 : position)), (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill, alpha);
         }
     }
-    // Draw turrets above us
+    // Draw turrets above usa
     for (let i = 0; i < source.turrets.length; i++) {
         let t = source.turrets[i];
         if (t.layer) {
