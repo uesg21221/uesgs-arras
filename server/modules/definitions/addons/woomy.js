@@ -11,7 +11,7 @@ g.lance = {
   range: 0.05,
   spray: 180
 }
-
+return;
 module.exports = ({ Class }) => {
 
 // POLYGONS
