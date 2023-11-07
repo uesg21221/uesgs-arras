@@ -1,6 +1,7 @@
 // TODO:
 const newCommands = false; // enables beta commands (DISABLES OLD COMMANDS)
 const commands = Array();
+const { closeArena } = require("../../gamemodes/closeArena.js");
 
 class Command {
 	constructor(name, { description, aliases, args, developer }, callback) {
@@ -162,7 +163,7 @@ module.exports = ({ Events, Class }) => {
 				if (args.length == 0) return fail();
 				sockets.broadcast(args.join(' '));
 				break;
-			case 'closeArena':
+			case 'closearena':
 				closeArena();
 				break;
 			case 'wall': {
