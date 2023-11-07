@@ -67,6 +67,7 @@ exports.developer = {
             },
         },
     ],
+    REROOT_UPGRADE_PATH: "developer",
 };
 
 exports.spectator = {
@@ -494,6 +495,31 @@ exports.moonGenerator = {
             SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
             INDEPENDENT_CHILDREN: true,
             TYPE: "moon"
+        },
+    }],  
+};
+
+exports.sentryGunGenerator = {
+    PARENT: ["sextator"],
+    LABEL: "Gun Sentry Generator",
+    SKILL_CAP: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    SKILL: [255, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    TURRETS: [{
+        POSITION: [5, 0, 0, 0, 0, 1],
+        TYPE: "fakeSentryGun",
+    }],
+    GUNS: [{
+        POSITION: [14, 12, 1, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+            TYPE: "bullet"
+        }
+    }, {
+        POSITION: [12, 12, 1.4, 4, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+            INDEPENDENT_CHILDREN: true,
+            TYPE: "sentryGun"
         },
     }],  
 };
@@ -1219,6 +1245,42 @@ exports.maximumOverdrive = {
     SKILL_CAP: Array(10).fill(255),
     SKILL: Array(10).fill(255),
 };
+exports.meonwaymytodoyourmom = {
+    PARENT: ["genericTank"],
+    LABEL: "Me on way my to do your mom",
+    DANGER: 7,
+    GUNS: [
+        {
+            POSITION: [20.5, 19.5, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni, g.ohgod]),
+                TYPE: "bullet",
+            },
+        },
+    ],
+};
+exports.medoingyourmom = {
+    PARENT: ["genericTank"],
+    LABEL: "Me doing your mom",
+    DANGER: 7,
+    BODY: {
+        SPEED: 0.8 * base.SPEED,
+        FOV: 2 * base.FOV,
+    },
+    GUNS: [
+        {
+            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [128, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.ohgod, g.norecoil, g.halfspeed, g.halfspeed,g.halfspeed,g.halfspeed]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [5, 8, -1.4, 8, 0, 0, 0],
+        },
+    ],
+};
 exports.weirdAutoBasic = {
     PARENT: "genericTank",
     LABEL: "Weirdly defined Auto-Basic",
@@ -1302,7 +1364,7 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
             exports.dominators.UPGRADES_TIER_0 = ["dominator", "destroyerDominator", "gunnerDominator", "trapperDominator"];
             exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
         exports.legacyTanks.UPGRADES_TIER_0 = ["weirdSpike", "oldBentBoomer", "quadBuilder", "master", "blunderbuss", "oldRimfire", "oldSpreadshot", "oldCommander", "autoTrapper", "prodigy", "mender", "tetraGunner", "corvette", "whirlwind", "flail"];
-        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", "splitTanks", "tank", "spamOctoTank"];
+        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "meonwaymytodoyourmom", "medoingyourmom", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", "splitTanks", "tank", "spamOctoTank"];
             exports.splitTanks.UPGRADES_TIER_0 = [["developer", "basic"], ["developer", "developer"], ["aura", "basic"], ["aura", "basic"]];
         exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", ["assassin", "dreadOfficialV1"], "vulnturrettest", "onTest", "alphaGunTest"];
 
@@ -1317,7 +1379,7 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
         exports.eternals.UPGRADES_TIER_0 = ["ragnarok", "kronos"];
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
-    exports.tools.UPGRADES_TIER_0 = ["spectator", "levels", "teams", "eggGenerator", "rockGenerator"];
+    exports.tools.UPGRADES_TIER_0 = ["spectator", "levels", "teams", "eggGenerator", "rockGenerator", "sentryGunGenerator"];
         exports.rockGenerator.UPGRADES_TIER_0 = [
             "developer"     , "stoneGenerator"   , "tools",
             "basic"         , "rockGenerator"    , "gravelGenerator",

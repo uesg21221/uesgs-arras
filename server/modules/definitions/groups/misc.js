@@ -605,10 +605,33 @@ exports.sentrySwarm = {
         },
     ],
 };
-exports.sentryGun = makeAuto(exports.sentry, "Sentry", {
-    type: exports.megaAutoTankgun,
-    size: 12,
-});
+exports.sentryGun = {
+    PARENT: ["sentry"],
+    TURRETS: [{
+        POSITION: {
+            ANGLE: 180,
+            LAYER: 1
+        },
+        TYPE: ["megaAutoTankgun", {
+            CONTROLLERS: ["nearestDifferentMaster"],
+            INDEPENDENT: true,
+            SHOOT_SETTINGS: combineStats([g.basic, g.slow])
+        }]
+    }]
+};
+exports.fakeSentryGun = {
+    PARENT: ["sentry"],
+    TURRETS: [{
+        POSITION: {
+            ANGLE: 180,
+            LAYER: 1
+        },
+        TYPE: ["megaAutoTankgun", {
+            INDEPENDENT: true,
+            SHOOT_SETTINGS: combineStats([g.basic, g.slow])
+        }]
+    }]
+};
 exports.sentryGun.UPGRADE_LABEL = "Gun Sentry";
 exports.sentryTrap = makeAuto(exports.sentry, "Sentry", {
     type: exports.trapTurret,

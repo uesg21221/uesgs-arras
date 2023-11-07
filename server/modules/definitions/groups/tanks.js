@@ -3163,7 +3163,7 @@ exports.booster = {
         {
             POSITION: [13, 8, 1, 0, -1, 140, 0.6],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster, g.doublereload]),
                 TYPE: "bullet",
                 LABEL: gunCalcNames.thruster,
             },
@@ -3171,7 +3171,7 @@ exports.booster = {
         {
             POSITION: [13, 8, 1, 0, 1, 220, 0.6],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster, g.doublereload]),
                 TYPE: "bullet",
                 LABEL: gunCalcNames.thruster,
             },
@@ -3179,7 +3179,7 @@ exports.booster = {
         {
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster, g.doublereload]),
                 TYPE: "bullet",
                 LABEL: gunCalcNames.thruster,
             },
@@ -3187,7 +3187,7 @@ exports.booster = {
         {
             POSITION: [16, 8, 1, 0, 0, 210, 0.1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster, g.doublereload]),
                 TYPE: "bullet",
                 LABEL: gunCalcNames.thruster,
             },

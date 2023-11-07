@@ -147,6 +147,7 @@ exports.egg = {
         DAMAGE: 0,
         DENSITY: 2,
         HEALTH: 0.0011,
+        PENETRATION: 0.0011,
         PUSHABILITY: 0,
         ACCELERATION: 0.015
     },

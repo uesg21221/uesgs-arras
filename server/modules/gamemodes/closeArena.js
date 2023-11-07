@@ -10,11 +10,11 @@ function closeArena() {
     sockets.broadcast("Arena closed: No players may join!");
     util.log('Arena Closing initiated');
     global.arenaClosed = true;
-    for (let i = 0; i < entities.length; i++) {
+    /*for (let i = 0; i < entities.length; i++) {
         if (entities[i].isBot) {
             entities[i].kill();
         }
-    }
+    }*/
     for (let i = 0; i < 15; i++) {
         let angle = ((Math.PI * 2) / 15) * i;
         let o = new Entity({
