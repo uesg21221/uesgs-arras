@@ -62,7 +62,7 @@ exports.dominationBody = {
 exports.dominator = {
     PARENT: ["genericTank"],
     LABEL: "Dominator",
-    UPGRADE_LABEL: 'Blank',
+    UPGRADE_LABEL: 'Unknown',
     DANGER: 7,
     SKILL: skillSet({
         rld: 1,
@@ -861,7 +861,8 @@ exports.antiTankMachineGunArm = {
 }
 exports.antiTankMachineGun = {
     PARENT: ["dominator"],
-    LABEL: "Anti Tank Machine Gun",
+    LABEL: "Anti-Tank Machine Gun",
+    UPGRADE_LABEL: "A.T. Machine Gun",
     CONTROLLERS: [['spin', {onlyWhenIdle: true}], 'nearestDifferentMaster'],
     LEVEL: 45,
     BODY: {
