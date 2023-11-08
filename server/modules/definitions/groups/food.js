@@ -295,7 +295,6 @@ exports.legendaryBetaPentagon = makeRare(exports.betaPentagon, 1);
 exports.shadowBetaPentagon = makeRare(exports.betaPentagon, 2);
 exports.rainbowBetaPentagon = makeRare(exports.betaPentagon, 3);
 exports.transBetaPentagon = makeRare(exports.betaPentagon, 4);
-console.log(exports.shinyBetaPentagon);
 
 // ALPHA PENTAGONS
 exports.alphaPentagon = {

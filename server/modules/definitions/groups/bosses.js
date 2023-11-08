@@ -1304,28 +1304,28 @@ exports.rogueArmada = (() => {
         GUNS = [],
         TURRETS = [];
     for (let i = 0; i < SHAPE; i++) {
-        for (let j = 0; j < 12; j++) {
+        for (let j = 0; j < 8; j++) {
             GUNS.push({
-                POSITION: [ 4, 0.3 * Math.floor(j / 4), 1, 0, (j + 3) % SHAPE - 3, (i + 0.5) * (360 / SHAPE), 0 ],
+                POSITION: [8, 3 + Math.floor(j / 4), 1, 0, j / 2 - 2, (i + 0.5) * (360 / SHAPE), 0],
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]),
+                    SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {damage: 3}]),
                     TYPE: j % SHAPE < 2 ? "bullet" : "casing"
                 }
             });
         }
         GUNS.push({
-            POSITION: [ 9, 6  ,  1  , 4,  0, (i + 0.5) * (360 / SHAPE), 0 ],
+            POSITION: [8.5, 6, 1, 4, 0, (i + 0.5) * (360 / SHAPE), 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.fake]),
                 TYPE: "casing"
             }
         }, {
-            POSITION: [ 8, 6  , -1.1, 4,  0, (i + 0.5) * (360 / SHAPE), 0 ]
+            POSITION: [7, 6, -1.6, 4, 0, (i + 0.5) * (360 / SHAPE), 0]
         });
     }
     for (let i = 0; i < SHAPE; i++) {
         TURRETS.push({
-            POSITION: [ 5, 10, 0, i * 360 / SHAPE, 110, 0],
+            POSITION: [5, 10, 0, i * 360 / SHAPE, 160, 0],
             TYPE: "shottrapTurret"
         });
     }
@@ -1336,7 +1336,6 @@ exports.rogueArmada = (() => {
         SHAPE,
         SIZE: 28,
         VALUE: 500000,
-        CONTROLLERS: ['nearestDifferentMaster', 'onlyAcceptInArc'],
         BODY: {
             FOV: 1.3,
             SPEED: base.SPEED * 0.1,
@@ -1345,7 +1344,6 @@ exports.rogueArmada = (() => {
             REGEN: base.REGEN,
             DAMAGE: base.DAMAGE * 3,
         },
-        FACING_TYPE: 'autospin',
         GUNS, TURRETS
     };
 })();
@@ -1452,7 +1450,7 @@ exports.terrestrial = {
         SHIELD: 2,
         REGEN: base.REGEN * 0.1,
         SPEED: 0.75,
-        DAMAGE: 5,
+        DAMAGE: 9,
     },
 };
 exports.celestial = {
@@ -1468,7 +1466,7 @@ exports.celestial = {
         SHIELD: 2,
         REGEN: base.REGEN * 0.1,
         SPEED: 0.75,
-        DAMAGE: 5,
+        DAMAGE: 12,
     },
 };
 exports.rogueCelestial = {
@@ -1489,7 +1487,7 @@ exports.eternal = {
         SHIELD: 2,
         REGEN: base.REGEN * 0.1,
         SPEED: 0.75,
-        DAMAGE: 5,
+        DAMAGE: 18,
     },
 };
 
@@ -3662,6 +3660,7 @@ exports.kronos = {
     NAME: "Kronos",
     UPGRADE_LABEL: "Kronos",
     COLOR: 6,
+    BODY: { REGEN: base.REGEN * 0.3 },
     TURRETS: [
         {
             POSITION: [15.5, 0, 0, 0, 360, 1],
