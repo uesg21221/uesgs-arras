@@ -126,6 +126,8 @@ room.getAt = location => {
     return room.setup[a][b];
 };
 
+room.sendColorsToClient = false;
+
 class TileEntity {
     constructor (tile, loc) {
         if (!(tile instanceof Tile)) {
@@ -138,11 +140,39 @@ class TileEntity {
             x: room.tileWidth * (parseFloat(loc.x) + 0.5),
             y: room.tileHeight * (parseFloat(loc.y) + 0.5)
         };
-        this.color = tile.color;
+        this.color = tile.color ?? 8;
         this.init = tile.init;
         this.tick = tile.tick;
         this.entities = [];
         this.data = JSON.parse(JSON.stringify(tile.data));
+    }
+
+    get color () {
+        return this._color;
+    }
+    set color (color) {
+        if (typeof color === "number" || typeof color === 'string') {
+            this.colorUnboxed = {
+                base: color,
+                hueShift: 0,
+                saturationShift: 1,
+                brightnessShift: 0,
+                allowBrightnessInvert: false,
+            };
+        } else if (typeof color === "object") {
+            this.colorUnboxed = {
+                base: color.BASE ?? 16,
+                hueShift: color.HUE_SHIFT ?? 0,
+                saturationShift: color.SATURATION_SHIFT ?? 1,
+                brightnessShift: color.BRIGHTNESS_SHIFT ?? 0,
+                allowBrightnessInvert: color.ALLOW_BRIGHTNESS_INVERT ?? false,
+            };
+        }
+        let oldColor = this._color;
+        this._color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+        if (this._color != oldColor) {
+            room.sendColorsToClient = true;
+        }
     }
 
     randomInside() {
@@ -173,6 +203,11 @@ function roomLoop() {
             tile.tick(tile);
             tile.entities = [];
         }
+    }
+
+    if (room.sendColorsToClient) {
+        room.sendColorsToClient = false;
+        sockets.broadcastRoom();
     }
 }
 
