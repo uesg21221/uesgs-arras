@@ -18,7 +18,8 @@ if (c.host === 'localhost') {
 if (c.host.match(/localhost:(\d)/) && c.host !== 'localhost:' + c.port) {
     util.warn('config.host is a localhost domain but its port is different to config.port!');
 }
-
+let host = c.host;
+if (process.env.BETA === "yes") host = "localhost:3000"
 server = require('http').createServer((req, res) => {
     let resStr = "";
     switch (req.url) {
