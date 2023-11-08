@@ -6,6 +6,9 @@ Error.stackTraceLimit = Infinity;
 for (let key in enviroment) {
     process.env[key] = enviroment[key];
 }*/
+
+
+
 const GLOBAL = require("./modules/global.js");
 
 console.log(`[${GLOBAL.creationDate}]: Server initialized.\nRoom Info:\n Dimensions: ${room.width} x ${room.height}`);
@@ -23,6 +26,14 @@ Array.prototype.remove = function (index) {
 process.stdout.write(String.fromCharCode(27) + "]0;" + c.WINDOW_NAME + String.fromCharCode(7));
 
 util.log(room.width + " x " + room.height + " room initalized.");
+
+// set host
+/*if (process.env.BETA === "yes") {
+    c.host = "localhost:3000";
+} else {
+    c.host = "stupid-arras-io.onrender.com";
+}*/
+
 
 // Collision stuff
 function collide(collision) {

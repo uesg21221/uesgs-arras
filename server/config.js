@@ -3,7 +3,10 @@ module.exports = {
 
     // Game server domain.
     // If 'localhost:NUMBER', the port must equal the port setting.
-    host: "stupid-arras-io.onrender.com",
+
+        host: "stupid-arras-io.onrender.com",
+    
+    
 
     // Which port to run the web server on.
     port: 3000,
