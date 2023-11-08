@@ -27,6 +27,7 @@ class BossRush {
             [  2, "summoner"],
             [  2, "enchantress"],
             [  2, "exorcistor"],
+            [  2, "shaman"],
 
             //nesters
             [  3, "nestKeeper"],
