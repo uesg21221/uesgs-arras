@@ -789,7 +789,7 @@ for (let i = 0; i < 3; i++) {
         {
             POSITION: [4, 9.5, 0.7, 7, 5, 120*i+60, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.pound, g.morespeed, g.morespeed, g.mini, {range: 1.5}]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.pound, g.morespeed, g.morespeed, {size: 0.7, speed: 5, maxSpeed: 2, shudder: 5, range: 1.5}]),
                 TYPE: [ "swarm", { INDEPENDENT: true } ],
                 STAT_CALCULATOR: gunCalcNames.swarm,
                 AUTOFIRE: true,
@@ -799,7 +799,7 @@ for (let i = 0; i < 3; i++) {
         {
             POSITION: [4, 9.5, 0.7, 7, -5, 120*i+60, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.pound, g.morespeed, g.morespeed, g.mini, {range: 1.5}]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.pound, g.morespeed, g.morespeed, {size: 0.7, speed: 5, maxSpeed: 2, shudder: 5, range: 1.5}]),
                 TYPE: [ "swarm", { INDEPENDENT: true } ],
                 STAT_CALCULATOR: gunCalcNames.swarm,
                 AUTOFIRE: true,
@@ -826,7 +826,38 @@ exports.legionaryCrasher = {
         HEALTH: 2000,
         DAMAGE: 5 * base.DAMAGE,
     },
-    GUNS: [],
+    GUNS: [
+        {
+            POSITION: [30, 4.5, 1, 0, 0, 60, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{health: 1.2}]),
+                TYPE: ['sprayerLegion', {LABEL: "Elite Legion"}],
+                BORDERLESS: true,
+                DRAW_FILL: false,
+                MAX_CHILDREN: 1,
+            }
+        },
+        {
+            POSITION: [30, 4.5, 1, 0, 0, -60, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{health: 1.2}]),
+                TYPE: ['eliteGunner', {LABEL: "Elite Legion"}],
+                BORDERLESS: true,
+                DRAW_FILL: false,
+                MAX_CHILDREN: 1,
+            }
+        },
+        {
+            POSITION: [30, 4.5, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{health: 1.2}]),
+                TYPE: ['eliteSpawner', {LABEL: "Elite Legion"}],
+                BORDERLESS: true,
+                DRAW_FILL: false,
+                MAX_CHILDREN: 1,
+            }
+        },
+    ],
     TURRETS: [
         {
             POSITION: [12, 0, 0, 0, 360, 1],
@@ -842,7 +873,7 @@ for (let i = 0; i < 3; i++) {
         {
             POSITION: [3, 13, 1.7, 14.5, 0, 120*i, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.destroy, g.veryfast, g.mini, {maxSpeed: 3}]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.destroy, g.veryfast, {size: 0.6, maxSpeed: 3}]),
                 TYPE: "legionaryPillbox",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
