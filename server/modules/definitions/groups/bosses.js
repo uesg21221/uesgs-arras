@@ -1044,6 +1044,39 @@ exports.exorcistor = {
         },
     }))
 };
+exports.realchip = {
+    PARENT: ["sunchip"],
+    NECRO: [6],
+    SHAPE: 6
+};
+exports.shaman = {
+    PARENT: ["miniboss"],
+    LABEL: "Shaman",
+    DANGER: 8,
+    SHAPE: 6,
+    COLOR: 0,
+    SIZE: 26,
+    MAX_CHILDREN: 20,
+    FACING_TYPE: "autospin",
+    VALUE: 6e5,
+    BODY: {
+        FOV: 0.5,
+        SPEED: 0.07 * base.SPEED,
+        HEALTH: 20 * base.HEALTH,
+        DAMAGE: 5 * base.DAMAGE,
+    },
+    GUNS: Array(6).fill().map((_, i) => ({
+        POSITION: [3.5, 8.65, 1.2, 8, 0, i * 60, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, { size: 1.1 }]),
+            TYPE: "realchip",
+            AUTOFIRE: true,
+            SYNCS_SKILLS: true,
+            STAT_CALCULATOR: gunCalcNames.necro,
+            WAIT_TO_CYCLE: true,
+        },
+    }))
+};
 exports.eliteSkimmer = {
     PARENT: ["elite"],
     LABEL: "Elite Skimmer",
