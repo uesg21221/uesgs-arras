@@ -458,7 +458,7 @@ exports.shotTrapBox = {
     MOTION_TYPE: "glide",
 }
 let makeshottrapTurretProps = () => ({
-    SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, {speed: 0.9, maxSpeed: 0.9, damage: 1.3}]),
+    SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, {speed: 0.7, maxSpeed: 0.2, damage: 1.5}]),
     AUTOFIRE: true,
     TYPE: "shotTrapBox"
 });
@@ -476,35 +476,39 @@ exports.shottrapTurret = {
         FULL_VIEW: true,
     },
     GUNS: [ {
-            POSITION: [ 4, 2, 1, 11, -3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 4, 1.5, 1, 11, -3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 4, 2, 1, 11,  3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 4, 2,   1, 11,  3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 4, 2, 1, 13,  0, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 4, 1.5, 1, 13,  0, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 12, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 12, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 1.5, 1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 13, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 13, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 13,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,5, 1, 13,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2.5, 1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2.5, 1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 2, 1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 16, 14,    1,  0, 0, 0, 0 ]
+            POSITION: [ 16, 14, -1.4,  0, 0, 0, 0 ], 
     }, {
-            POSITION: [  4, 14,  1.6, 16, 0, 0, 0 ],
+            POSITION: [  6, 14,  1.6, 16, 0, 0, 0 ], PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, g.fake]),
+                AUTOFIRE: true,
+                TYPE: "bullet"
+            }
     } ]
 };
 exports.barricadeTurret = {

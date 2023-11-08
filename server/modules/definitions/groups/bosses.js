@@ -1306,7 +1306,7 @@ exports.rogueArmada = (() => {
     for (let i = 0; i < SHAPE; i++) {
         for (let j = 0; j < 8; j++) {
             GUNS.push({
-                POSITION: [8, 3 + Math.floor(j / 4), 1, 0, j / 2 - 2, (i + 0.5) * (360 / SHAPE), 0],
+                POSITION: [8, 2 + Math.floor(j / 3), 1, 0, j / 2 - 2, (i + 0.5) * (360 / SHAPE), 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {damage: 3}]),
                     TYPE: j % SHAPE < 2 ? "bullet" : "casing"
