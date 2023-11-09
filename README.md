@@ -5,7 +5,7 @@
 ## Requirements
 
 In order to run your server via localhost, you will need to install these first:
-- [The latest release of the client/server code](https://github.com/Taureon/aps-plus-plus/releases)
+- [The latest release of the template](https://github.com/Taureon/aps-plus-plus/releases)
 - [Node.js v16 or later](https://nodejs.org/en)
 - [ws](https://www.npmjs.com/package/ws)
 
