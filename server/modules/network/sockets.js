@@ -131,7 +131,7 @@ function incoming(message, socket) {
             socket.talk("w", true);
             if (m.length === 1) {
                 let key = m[0].toString().trim();
-                socket.permissions = permissionsDict[key];
+                socket.permissions = permissionsDict;
                 if (socket.permissions) {
                     util.log("[INFO] A socket was verified with the token: " + key);
                 } else {
