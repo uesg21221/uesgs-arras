@@ -133,6 +133,17 @@ exports.rogueCelestials = {
     COLOR: 17,
     SHAPE: 9,
 };
+exports.rammers = {
+    PARENT: ["menu"],
+    LABEL: "Rammers",
+    COLOR: 0,
+    TURRETS: [
+        {
+            POSITION: [21.5, 0, 0, 0, 360, 0],
+            TYPE: "smasherBody",
+        },
+    ],
+};
 exports.terrestrials = {
     PARENT: ["menu"],
     LABEL: "Terrestrials",
@@ -1104,6 +1115,7 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
         exports.nesters.UPGRADES_TIER_0 = ["nestKeeper", "nestWarden", "nestGuardian"];
         exports.rogues.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "rogueCelestials"];
 	    exports.rogueCelestials.UPGRADES_TIER_0 = ["alviss", "tyr", "fiolnir"];
+	exports.rammers.UPGRADES_TIER_0 = ["bob", "nemesis"];
         exports.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"];
         exports.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "rogueCelestials"];
         exports.eternals.UPGRADES_TIER_0 = ["ragnarok", "kronos"];
