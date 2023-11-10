@@ -3133,8 +3133,8 @@ exports.alvissUpperBody = {
 };
 exports.alviss = {
     PARENT: ["rogueCelestial"],
-    NAME: "Alviss",
-    UPGRADE_LABEL: "Alviss",
+    NAME: "Julius",
+    UPGRADE_LABEL: "Julius",
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
@@ -3276,8 +3276,8 @@ exports.tyrUpperBody = {
 };
 exports.tyr = {
     PARENT: ["rogueCelestial"],
-    NAME: "Tyr",
-    UPGRADE_LABEL: "Tyr",
+    NAME: "Genghis",
+    UPGRADE_LABEL: "Genghis",
     TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
         POSITION: [6.5, 9, 0, 260, 180, 0],
         TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
@@ -3436,8 +3436,8 @@ exports.fiolnirUpperBody = {
 };
 exports.fiolnir = {
     PARENT: ["rogueCelestial"],
-    NAME: "Fiolnir",
-    UPGRADE_LABEL: "Fiolnir",
+    NAME: "Napoleon",
+    UPGRADE_LABEL: "Napoleon",
     TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
         POSITION: [6.5, 9, 0, 260, 180, 0],
         TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
