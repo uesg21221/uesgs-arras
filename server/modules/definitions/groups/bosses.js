@@ -1412,6 +1412,51 @@ exports.rogueArmada = (() => {
     };
 })();
 
+// Bob.
+exports.bob = {
+    PARENT: ["miniboss"],
+    LABEL: "Bob",
+    SHAPE: 0,
+    COLOR: 0,
+    SIZE: 18,
+    BODY: {
+        FOV: 2,
+        SPEED: 2 * base.SPEED,
+        HEALTH: 5 * base.HEALTH,
+        DAMAGE: 5 * base.DAMAGE,
+        REGEN: 8 * base.REGEN,
+        FOV: 0.5 * base.FOV,
+        DENSITY: 6 * base.DENSITY,
+    },
+    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal"],
+    TURRETS: [
+        {
+            POSITION: [21.5, 0, 0, 0, 360, 0],
+            TYPE: "smasherBody",
+        },
+        {
+            POSITION: [21.5, 0, 0, 30, 360, 0],
+            TYPE: "landmineBody",
+        },
+        {
+            POSITION: [23.75, 0, 0, 0, 360, 0],
+            TYPE: "weirdSpikeBody1",
+        },
+    ],
+};
+exports.nemesis = {
+    PARENT: ["bob"],
+    LABEL: "Nemesis",
+    COLOR: 12,
+    BODY: {
+        REGEN: 1e5,
+        HEALTH: 1e6,
+        DENSITY: 30,
+        DAMAGE: 1e5,
+        FOV: 5,
+    },
+};
+
 // WINTER MAYHEM STRANGE BOSSES
 exports.pumpkinEmperor = {
     PARENT: ["nestKeeper"],
