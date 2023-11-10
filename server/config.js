@@ -188,7 +188,7 @@ module.exports = {
         bosses: ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner"],
         amount: [5, 5, 4, 2, 1], chance: 2, nameType: "a",
     },{
-        bosses: ["roguePalisade", "rogueArmada"],
+        bosses: ["roguePalisade"],
         amount: [4, 1], chance: 1, nameType: "castle",
         message: "A strange trembling...",
     },{
@@ -196,27 +196,11 @@ module.exports = {
         amount: [2, 2, 1], chance: 1, nameType: "a",
         message: "A strange trembling...",
     },{
-        bosses: ["paladin"],
+        bosses: ["paladin", "freyja", "zaphkiel", "nyx", "theia"],
         amount: [1], chance: 0.1,
         message: "The world tremors as the celestials are reborn anew!",
     },{
-        bosses: ["freyja"],
-        amount: [1], chance: 0.1,
-        message: "The world tremors as the celestials are reborn anew!",
-    },{
-        bosses: ["zaphkiel"],
-        amount: [1], chance: 0.1,
-        message: "The world tremors as the celestials are reborn anew!",
-    },{
-        bosses: ["nyx"],
-        amount: [1], chance: 0.1,
-        message: "The world tremors as the celestials are reborn anew!",
-    },{
-        bosses: ["theia"],
-        amount: [1], chance: 0.1,
-        message: "The world tremors as the celestials are reborn anew!",
-    },{
-        bosses: ["alviss"],
+        bosses: ["alviss", "tyr", "fiolnir"],
         amount: [1], chance: 0.1,
         message: "The darkness arrives as the realms are torn apart!",
     }],
