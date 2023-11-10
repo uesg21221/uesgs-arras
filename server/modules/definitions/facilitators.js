@@ -193,7 +193,7 @@ exports.makeMulti = (type, count, name = -1, startRotation = 0) => {
     }
     output.LABEL = name == -1 ? (greekNumbers[count - 1] || (count + ' ')) + type.LABEL : name;
     return output;
-},
+}
 exports.makeBird = (type, name = -1, color) => {
     let output = exports.dereference(type),
         shootyBois = [{
@@ -212,7 +212,7 @@ exports.makeBird = (type, name = -1, color) => {
     output.GUNS = type.GUNS == null ? [...shootyBois] : [...output.GUNS, ...shootyBois];
     output.LABEL = name == -1 ? "Bird " + type.LABEL : name;
     return output;
-};
+}
 
 // SPAWNER FUNCTIONS
 exports.makeHybrid = (type, name = -1) => {
@@ -692,7 +692,6 @@ exports.makeCeption = (type, name = -1, options = {}) => {
     output.DANGER = type.DANGER + 1;
     return output;
 }
-
 exports.makeDeco = (shape = 0, color = 16) => {
     return {
         PARENT: ["genericTank"],
@@ -700,7 +699,6 @@ exports.makeDeco = (shape = 0, color = 16) => {
         COLOR: color,
     };
 }
-
 exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) => {
     let isHeal = damageFactor < 0;
     let auraType = isHeal ? "healAura" : "aura";
