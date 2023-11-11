@@ -11,7 +11,7 @@ let fs = require('fs'),
         "png": "image/png",
         "ico": "image/x-icon"
     },
-    otherServers = fs.readFileSync('../otherServers.txt').toString().split('\n'),
+    otherServers = fs.readFileSync('server/modules/network/otherServers.txt').toString().split('\n'),
 
 wsServer = new (require('ws').WebSocketServer)({ noServer: true }),
 
