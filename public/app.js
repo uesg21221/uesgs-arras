@@ -486,7 +486,7 @@ function isImageURL(url) {
 }
 // Sub-drawing functions
 const drawPolyImgs = []
-function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill) {
+function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation) {
     // Start drawing
     context.beginPath();
     if (sides instanceof Array) {
@@ -543,7 +543,9 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 }
                 context.translate(centerX, centerY);
                 context.rotate(angle);
+                context.imageSmoothingEnabled = imageInterpolation
                 context.drawImage(img, -radius, -radius, radius*2, radius*2);
+                context.imageSmoothingEnabled = true;
                 context.rotate(-angle);
                 context.translate(-centerX, -centerY);
                 return;
@@ -728,7 +730,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
 
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless, m.drawFill);
+    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless, m.drawFill, m.imageInterpolation);
     
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {
