@@ -479,7 +479,7 @@ function isImageURL(url) {
         // List of common image file extensions
         const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
 
-        return imageExtensions.includes(ext);
+        return imageExtensions.includes(ext) || parsedUrl.protocol == 'data:';
     } catch (error) {
         return false; // URL parsing failed, or it's not an image URL.
     }
