@@ -3286,6 +3286,7 @@ exports.crowbarTurret = {
                 "autoTankGun",
                 {
                     INDEPENDENT: true,
+                    HAS_NO_RECOIL: true,
                 },
             ],
         },
@@ -3295,6 +3296,7 @@ exports.crowbarTurret = {
                 "autoTankGun",
                 {
                     INDEPENDENT: true,
+                    HAS_NO_RECOIL: true,
                 },
             ],
         },
@@ -3304,6 +3306,7 @@ exports.crowbarTurret = {
                 "autoTankGun",
                 {
                     INDEPENDENT: true,
+                    HAS_NO_RECOIL: true,
                 },
             ],
         },
@@ -3336,6 +3339,7 @@ exports.wrenchTurret = {
                 "autoTankGun",
                 {
                     INDEPENDENT: true,
+                    HAS_NO_RECOIL: true,
                 },
             ],
         },
@@ -3345,6 +3349,7 @@ exports.wrenchTurret = {
                 "autoTankGun",
                 {
                     INDEPENDENT: true,
+                    HAS_NO_RECOIL: true,
                 },
             ],
         },
@@ -3354,6 +3359,7 @@ exports.wrenchTurret = {
                 "autoTankGun",
                 {
                     INDEPENDENT: true,
+                    HAS_NO_RECOIL: true,
                 },
             ],
         },
