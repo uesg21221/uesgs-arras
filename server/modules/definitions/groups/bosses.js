@@ -821,38 +821,7 @@ exports.legionaryCrasher = {
         HEALTH: 2000,
         DAMAGE: 5 * base.DAMAGE,
     },
-    GUNS: [
-        {
-            POSITION: [30, 4.5, 1, 0, 0, 60, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{health: 1.2}]),
-                TYPE: ['sprayerLegion', {LABEL: "Elite Legion"}],
-                BORDERLESS: true,
-                DRAW_FILL: false,
-                MAX_CHILDREN: 1,
-            }
-        },
-        {
-            POSITION: [30, 4.5, 1, 0, 0, -60, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{health: 1.2}]),
-                TYPE: ['eliteGunner', {LABEL: "Elite Legion"}],
-                BORDERLESS: true,
-                DRAW_FILL: false,
-                MAX_CHILDREN: 1,
-            }
-        },
-        {
-            POSITION: [30, 4.5, 1, 0, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{health: 1.2}]),
-                TYPE: ['eliteSpawner', {LABEL: "Elite Legion"}],
-                BORDERLESS: true,
-                DRAW_FILL: false,
-                MAX_CHILDREN: 1,
-            }
-        },
-    ],
+    GUNS: [],
     TURRETS: [
         {
             POSITION: [12, 0, 0, 0, 360, 1],
