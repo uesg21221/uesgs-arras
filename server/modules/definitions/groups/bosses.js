@@ -387,12 +387,7 @@ exports.eliteGunner = {
             POSITION: [4, 16, 1.5, 14, 0, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap]),
-                TYPE: [
-                    "pillbox",
-                    {
-                        INDEPENDENT: true,
-                    },
-                ],
+                TYPE:  ["unsetPillbox", {MOTION_TYPE: "glide"}],
             },
         },
         {
