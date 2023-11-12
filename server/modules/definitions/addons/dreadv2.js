@@ -1025,7 +1025,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [3.5, 10, 1.6, 13, 0, 120*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {health: 2}]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.2, health: 2}]),
 					TYPE: "unsetTrap",
 				},
 			},
@@ -1763,7 +1763,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [3.5, 10, 1.6, 13, 0, 72*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {health: 2}]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.3, health: 2}]),
 					TYPE: "unsetTrap",
 				},
 			},
