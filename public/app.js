@@ -1158,7 +1158,7 @@ function drawUpgradeTree(spacing, alcoveSize) {
 
     let tileSize = alcoveSize / 2,
         size = tileSize - 4,
-        spaceBetween = 8,
+        spaceBetween = 15,
         padding = 0.5 + spaceBetween / tileSize;
 
     if (global.died) {
@@ -1194,13 +1194,13 @@ function drawUpgradeTree(spacing, alcoveSize) {
         if (ax < -size || ax > global.screenWidth + size || ay < -size || ay > global.screenHeight + size) continue;
         let angle = -Math.PI / 4,
             position = global.mockups[index].position,
-            scale = (0.8 * size) / position.axis,
+            scale = (0.625 * size) / position.axis,
             xx = ax + 0.5 * size - scale * position.middle.x * Math.cos(angle),
             yy = ay + 0.5 * size - scale * position.middle.x * Math.sin(angle),
             picture = util.getEntityImageFromMockup(index.toString(), gui.color),
             baseColor = picture.color;
 
-        ctx.globalAlpha = 0.75;
+        ctx.globalAlpha = 1;
         ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
         drawGuiRect(ax, ay, size, size);
         ctx.globalAlpha = 0.15;
