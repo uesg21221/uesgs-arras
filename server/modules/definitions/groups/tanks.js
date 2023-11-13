@@ -5304,35 +5304,35 @@ exports.quadruplex = {
         },
         {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.625, 10, 2.125, 1.375, -6.25, 135, 0],
+            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 135, 0],
         },
         {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.625, 10, 2.125, 1.375, 6.25, -135, 0],
+            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -135, 0],
         },
         {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.625, 10, 2.125, 1.375, -6.25, 225, 0],
+            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 225, 0],
         },
         {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.625, 10, 2.125, 1.375, 6.25, -225, 0],
+            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -225, 0],
         },
         {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.625, 10, 2.125, 1.375, -6.25, 315, 0],
+            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 315, 0],
         },
         {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.625, 10, 2.125, 1.375, 6.25, -315, 0],
+            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -315, 0],
         },
         {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.625, 10, 2.125, 1.375, -6.25, 45, 0],
+            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 45, 0],
         },
         {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.625, 10, 2.125, 1.375, 6.25, -45, 0],
+            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -45, 0],
         },
     ],
 };
