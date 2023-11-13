@@ -678,7 +678,6 @@ exports.auraBasicGen = addAura();
 exports.auraBasic = {
     PARENT: ["genericTank"],
     LABEL: "Aura Basic",
-    SIZE: 40,
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
