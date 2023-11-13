@@ -1952,6 +1952,7 @@ exports.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.05 }
 exports.whirlwind = {
     PARENT: ["genericTank"],
     LABEL: "Whirlwind",
+    TOOLTIP: "[DEV NOTE] The Whirlwind is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -1965,6 +1966,7 @@ exports.tornado = {
     PARENT: ["genericTank"],
     LABEL: "Tornado",
     DANGER: 6,
+    TOOLTIP: "[DEV NOTE] The Tornado is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [11, 0, 0, 0, 360, 1],
@@ -1978,6 +1980,7 @@ exports.megaTornado = {
     PARENT: ["genericTank"],
     LABEL: "Mega Tornado",
     DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Mega Tornado is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [16, 0, 0, 0, 360, 1],
@@ -1993,6 +1996,7 @@ exports.tempest = {
     PARENT: ["genericTank"],
     LABEL: "Tempest",
     DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Tempest is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -2004,14 +2008,17 @@ exports.tempest = {
         },
     ],
 };
+exports.thunderboltDeco = makeDeco(4);
+exports.thunderboltDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.1 }]];
 exports.thunderbolt = {
     PARENT: ["genericTank"],
     LABEL: "Thunderbolt",
     DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Thunderbolt is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [11, 0, 0, 0, 360, 1],
-            TYPE: "tornadoDeco",
+            TYPE: "thunderboltDeco",
         },
     ],
 };
@@ -2021,6 +2028,7 @@ exports.hurricane = {
     PARENT: ["genericTank"],
     LABEL: "Hurricane",
     DANGER: 6,
+    TOOLTIP: "[DEV NOTE] The Hurricane is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -2034,6 +2042,7 @@ exports.typhoon = {
     PARENT: ["genericTank"],
     LABEL: "Typhoon",
     DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Typhoon is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -2049,6 +2058,7 @@ exports.blizzard = {
     PARENT: ["genericTank"],
     LABEL: "Blizzard",
     DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Blizzard is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -2064,6 +2074,7 @@ exports.hexaWhirl = {
     PARENT: ["genericTank"],
     LABEL: "Hexa Whirl",
     DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Hexa Whirl is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -2125,6 +2136,7 @@ exports.munition = {
             TYPE: "tornadoDeco",
         },
     ],
+    TOOLTIP: "[DEV NOTE] The Munition is not finished yet. This tank is currently just a mockup.",
     GUNS: [
         {
             POSITION: [17, 3, 1, 0, -6, -7, 0.25],
@@ -2157,6 +2169,7 @@ exports.whirl3 = {
     LABEL: "Whirl-3",
     DANGER: 7,
     FACING_TYPE: "autospin",
+    TOOLTIP: "[DEV NOTE] The Whirl-3 is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -2181,6 +2194,7 @@ exports.whirlGuard = {
     LABEL: "Whirl Guard",
     STAT_NAMES: statnames.mixed,
     DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Whirl Guard is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -2218,6 +2232,7 @@ exports.prohpet = {
     },
     SHAPE: 4,
     MAX_CHILDREN: 14,
+    TOOLTIP: "[DEV NOTE] The Phophet is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -2254,6 +2269,7 @@ exports.vortex = {
         FOV: base.FOV * 1.1,
     },
     DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Vortex is not finished yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -2343,6 +2359,7 @@ exports.flail = {
     PARENT: ["genericTank"],
     LABEL: "Flail",
     STAT_NAMES: statnames.flail,
+    TOOLTIP: "[DEV NOTE] The Flail is not finished yet. This tank is currently just a mockup.",
     TURRETS: [{
         POSITION: [6, 10, 0, 0, 190, 0],
         TYPE: ["flailBolt3", {
@@ -2374,6 +2391,7 @@ exports.tripleFlail = {
     LABEL: "Triple Flail",
     DANGER: 7,
     STAT_NAMES: statnames.flail,
+    TOOLTIP: "[DEV NOTE] The Triple Flail is not finished yet. This tank is currently just a mockup.",
     TURRETS: [{
         POSITION: [6, 10, 0, 0, 190, 0],
         TYPE: ["flailBolt3", {
@@ -2454,6 +2472,7 @@ exports.mace = {
     LABEL: "Mace",
     DANGER: 6,
     STAT_NAMES: statnames.flail,
+    TOOLTIP: "[DEV NOTE] The Mace is not finished yet. This tank is currently just a mockup.",
     TURRETS: [{
         POSITION: [6, 10, 0, 0, 190, 0],
         TYPE: ["maceBolt3", {
@@ -2509,6 +2528,7 @@ exports.bigMama = {
     LABEL: "BIG MAMA",
     DANGER: 7,
     STAT_NAMES: statnames.flail,
+    TOOLTIP: "[DEV NOTE] The BIG MAMA is not finished yet. This tank is currently just a mockup.",
     TURRETS: [{
         POSITION: [6, 10, 0, 0, 190, 0],
         TYPE: ["mamaBolt3", {
@@ -2577,6 +2597,7 @@ exports.itHurtsDontTouchIt = {
     LABEL: "It hurts dont touch it",
     DANGER: 7,
     STAT_NAMES: statnames.flail,
+    TOOLTIP: "[DEV NOTE] The It hurts dont touch it is not finished yet. This tank is currently just a mockup.",
     TURRETS: [{
         POSITION: [6, 10, 0, 0, 190, 0],
         TYPE: ["ihdtiBolt3", {
@@ -2590,6 +2611,7 @@ exports.flangle = {
     LABEL: "Flangle",
     DANGER: 6,
     STAT_NAMES: statnames.mixed,
+    TOOLTIP: "[DEV NOTE] The Flangle is not finished yet. This tank is currently just a mockup.",
     GUNS: [
         {
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
@@ -2621,6 +2643,7 @@ exports.flooster = {
     LABEL: "Flooster",
     DANGER: 7,
     STAT_NAMES: statnames.mixed,
+    TOOLTIP: "[DEV NOTE] The Flooster is not finished yet. This tank is currently just a mockup.",
     GUNS: [
         {
             POSITION: [13, 8, 1, 0, -1, 140, 0.6],
@@ -2668,6 +2691,7 @@ exports.flace = {
     LABEL: "Flace",
     DANGER: 7,
     STAT_NAMES: statnames.mixed,
+    TOOLTIP: "[DEV NOTE] The Flace is not finished yet. This tank is currently just a mockup.",
     GUNS: [
         {
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
