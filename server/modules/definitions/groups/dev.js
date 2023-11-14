@@ -173,10 +173,6 @@ exports.tanks = {
     PARENT: ["menu"],
     LABEL: "Tanks",
 };
-exports.legacyTanks = {
-    PARENT: ["menu"],
-    LABEL: "Legacy Tanks",
-};
 exports.specialTanks = {
     PARENT: ["menu"],
     LABEL: "Special Tanks",
@@ -269,9 +265,9 @@ function connectMatrix(matrix, matrix2Entrance) {
         right  = matrix[y     ][right];
 
         matrix[y][x].UPGRADES_TIER_0 = [
-            "basic"     ,  top    , "developer",
+            "developer" ,  top    , "spectator",
              left       ,  center ,  right      ,
-            "spectator" ,  bottom ,  matrix2Entrance
+            "basic"     ,  bottom ,  matrix2Entrance
         ];
     }
 }
@@ -359,9 +355,9 @@ for (let x = 0; x < tensorWidth; x++) for (let y = 0; y < tensorHeight; y++) for
     back   = labyTensor[y     ][x    ][back ];
 
     labyTensor[y][x][z].UPGRADES_TIER_0 = [
-        "basic"     ,  top                , "developer",
+        "developer" ,  top                , "spectator",
          left       ,  center             ,  right     ,
-        "spectator" ,  bottom             , "eggGenerator",
+        "basic"     ,  bottom             , "eggGenerator",
          front      , "PowerGemGenerator" ,  back
     ];
 }
@@ -1052,7 +1048,7 @@ exports.levels = {
     LABEL: "Level Switcher",
     UPGRADES_TIER_0: []
 };
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < 16; i++) {
     let LEVEL = i * c.TIER_MULTIPLIER;
     exports["level" + LEVEL] = {
         PARENT: ["levels"],
@@ -1091,21 +1087,21 @@ exports['Team' + TEAM_ENEMIES] = {
 };
 exports.teams.UPGRADES_TIER_0.push('Team' + TEAM_ROOM, 'Team' + TEAM_ENEMIES);
 
+exports.testing = {
+    PARENT: ["menu"],
+    LABEL: "Testing"
+};
+
 exports.addons = {
     PARENT: "menu",
     LABEL: "Addon Entities",
     UPGRADES_TIER_0: []
 };
 
-// DEV "UPGRADE PATHS"
-exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
-    exports.tanks.UPGRADES_TIER_0 = ["basic", "healer", "specialTanks", "legacyTanks", "funTanks", "testingTanks"];
-	exports.specialTanks.UPGRADES_TIER_0 = ["baseProtector", "dominators", "sanctuaries", "arenaCloser", "mothership", "antiTankMachineGun"];
-            exports.dominators.UPGRADES_TIER_0 = ["dominator", "destroyerDominator", "gunnerDominator", "trapperDominator"];
-            exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
-        exports.legacyTanks.UPGRADES_TIER_0 = ["weirdSpike", "oldBentBoomer", "quadBuilder", "master", "blunderbuss", "oldRimfire", "oldSpreadshot", "oldCommander", "autoTrapper", "prodigy", "mender", "tetraGunner", "corvette", "whirlwind", "flail"];
-        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
-        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", ["assassin", "dreadOfficialV1"], "vulnturrettest", "onTest", "alphaGunTest"];
+exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
+    exports.tanks.UPGRADES_TIER_0 = ["basic", "healer", "spectator", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"];
+        exports.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
+        exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
 
     exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses"];
         exports.sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap", "sentinelMinigun", "sentinelLauncher", "sentinelCrossbow"];
@@ -1114,11 +1110,12 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "tools", "addons"];
         exports.nesters.UPGRADES_TIER_0 = ["nestKeeper", "nestWarden", "nestGuardian"];
         exports.rogues.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "rogueCelestials"];
 	    exports.rogueCelestials.UPGRADES_TIER_0 = ["alviss", "tyr", "fiolnir"];
-	exports.rammers.UPGRADES_TIER_0 = ["bob", "nemesis"];
+	    exports.rammers.UPGRADES_TIER_0 = ["bob", "nemesis"];
         exports.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"];
         exports.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "rogueCelestials"];
         exports.eternals.UPGRADES_TIER_0 = ["ragnarok", "kronos"];
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
-    exports.tools.UPGRADES_TIER_0 = ["spectator", "levels", "teams", "eggGenerator"];
-
+    exports.testing.UPGRADES_TIER_0 = ["funTanks", "testingTanks"];
+        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
+        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest"];

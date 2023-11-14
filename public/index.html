@@ -25,7 +25,7 @@
         <div id="startMenuWrapper">
             <div id="startMenu">
                 <div class="startMenuHolder">
-                  <center>This Arras.io Private Server runs on Open Source Arras.<br>For more info, visit <a href="https://github.com/Taureon/aps-plus-plus">the APS++ GitHub Repository by Taureon</a></center>
+                  <center>This Arras.io Private Server runs on Open Source Arras.<br>For more info, visit <a href="https://github.com/Taureon/aps-plus-plus">the GitHub Repository</a></center>
                 </div>
                 <div class="startMenuHolder">
                     <div class="sliderHolder">
@@ -36,11 +36,11 @@
                                 <h4 class="nopadding">Connecting...</h4>
                             </div>
                             <table id="serverSelector" style="display:none;"></table>
-                            <input type="text" autofocus tabindex="1" spellcheck="false" placeholder="This is the tale of" id="playerNameInput" maxlength="24" />
+                            <input type="text" autofocus tabindex="1" spellcheck="false" placeholder="This is the tale of" id="playerNameInput" maxlength="24"/>
                             <input type="text" class="conceal" tabindex="3" placeholder="Insert token here" id="playerKeyInput" maxlength="64" />
                         </div>
                         <div class="slider" id="startMenuSlidingTrigger">
-                            <h3 class="nopadding">view options/help 🡲</h3>
+                            <h3 class="nopadding">view options/help ▸</h3>
                         </div>
                         <div class="slider">
                             <br>
@@ -131,10 +131,10 @@
         $("#startMenuSlidingTrigger").on('click', function() {
             clicked = !clicked;
             if (clicked) {
-                $(this).html('<h3 class="nopadding">close options/help 🡶</h3>');
+                $(this).html('<h3 class="nopadding">close options/help ▾</h3>');
                 $(".slider").css({ "top": "-265px" })
             } else {
-                $(this).html('<h3 class="nopadding">view options/help 🡲</h3>');
+                $(this).html('<h3 class="nopadding">view options/help ▸</h3>');
                 $(".slider").css({ "top": 0 });
             }
         });

@@ -700,94 +700,6 @@ exports.boomerang = {
         RANGE: 120,
     },
 };
-exports.masterBullet = {
-    PARENT: ["trap"],
-    SHAPE: 0,
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [18, 8, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.flank,
-                    g.tri,
-                    g.trifront,
-                    g.tonsmorrecoil,
-                    g.minion,
-                    g.weak,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Front",
-                AUTOFIRE: true,
-            },
-        },
-        {
-            POSITION: [13, 8, 1, 0, -1, 140, 0.6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.flank,
-                    g.tri,
-                    g.thruster,
-                    g.minion,
-                    g.weak,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Thruster",
-                AUTOFIRE: true,
-            },
-        },
-        {
-            POSITION: [13, 8, 1, 0, 1, 220, 0.6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.flank,
-                    g.tri,
-                    g.thruster,
-                    g.minion,
-                    g.weak,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Thruster",
-                AUTOFIRE: true,
-            },
-        },
-        {
-            POSITION: [16, 8, 1, 0, 0, 150, 0.1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.flank,
-                    g.tri,
-                    g.thruster,
-                    g.minion,
-                    g.weak,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Thruster",
-                AUTOFIRE: true,
-            },
-        },
-        {
-            POSITION: [16, 8, 1, 0, 0, 210, 0.1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.flank,
-                    g.tri,
-                    g.thruster,
-                    g.minion,
-                    g.weak,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Thruster",
-                AUTOFIRE: true,
-            },
-        },
-    ],
-};
 
 exports.autoTankGun = {
     PARENT: ["genericTank"],
@@ -5277,28 +5189,28 @@ exports.quadruplex = {
         {
             POSITION: [20, 10, 0.8, 0, 0, 45, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
                 TYPE: "bullet",
             },
         },
         {
             POSITION: [20, 10, 0.8, 0, 0, 135, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
                 TYPE: "bullet",
             },
         },
         {
             POSITION: [20, 10, 0.8, 0, 0, 225, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
                 TYPE: "bullet",
             },
         },
         {
             POSITION: [20, 10, 0.8, 0, 0, 315, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
                 TYPE: "bullet",
             },
         },

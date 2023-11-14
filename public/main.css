@@ -126,6 +126,7 @@ ul {
 
 input {
     text-align: center;
+    font-family: Ubuntu;
     width: 100%;
     padding: 10px;
     border: solid 1px #dcdcdc;
@@ -344,6 +345,7 @@ update {
 }
 
 #startButton {
+    font-family: Ubuntu;
     position: relative;
     margin: auto;
     width: 100%;
@@ -353,7 +355,7 @@ update {
     color: white;
     text-align: center;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-    background: #B9E87E;
+    background: #A9D86D;
     border: 0;
     border-bottom: 2px solid #8ABC3F;
     cursor: pointer;
