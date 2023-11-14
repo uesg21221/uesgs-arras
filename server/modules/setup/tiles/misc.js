@@ -1,4 +1,9 @@
-let pickFromChanceSet = set => set[ran.chooseChance(...set.map(e => e[0]))][1],
+let pickFromChanceSet = set => {
+    while (Array.isArray(set)) {
+        set = set[ran.chooseChance(...set.map(e => e[0]))][1];
+    }
+    return set;
+},
 
 spawnNatural = (tile, layeredSet, kind) => {
     let o = new Entity(tile.randomInside());
