@@ -1048,7 +1048,7 @@ exports.levels = {
     LABEL: "Level Switcher",
     UPGRADES_TIER_0: []
 };
-for (let i = 0; i < 16; i++) {
+for (let i = 0; i < 12; i++) {
     let LEVEL = i * c.TIER_MULTIPLIER;
     exports["level" + LEVEL] = {
         PARENT: ["levels"],
