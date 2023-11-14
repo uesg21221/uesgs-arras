@@ -1002,16 +1002,15 @@ let tiles,
 function generateTankTree(indexes) {
     tiles = [];
     branches = [];
-    let initialX = 0;
-    let maxHeight = 0;
+    tankTree = { width: 0, height: 0 };
     if (!Array.isArray(indexes)) indexes = [indexes];
     for (let index of indexes) {
-        tankTree = measureSize(initialX, 0, 10, { index });
-        tankTree.width += initialX;
-        maxHeight = Math.max(maxHeight, tankTree.height);
-        initialX = tankTree.width + 3;
+        measureSize(0, 0, 10, { index });
     }
-    tankTree.height = maxHeight;
+    for (let { x, y } of tiles) {
+        tankTree.width = Math.max(tankTree.width, x);
+        tankTree.height = Math.max(tankTree.height, y);
+    }
 }
 
 function drawFloor(px, py, ratio) {
@@ -1137,6 +1136,12 @@ global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1
 global.shouldScrollY = global.shouldScrollX = 0;
 let lastGuiType = null;
 function drawUpgradeTree(spacing, alcoveSize) {
+    if (global.died) {
+        global.showTree = false;
+        global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = global.shouldScrollY = global.shouldScrollX = 0;
+        return;
+    }
+
     if (lastGuiType != gui.type) {
         let m = util.getEntityImageFromMockup(gui.type), // The mockup that corresponds to the player's tank
             rootName = m.rerootUpgradeTree, // The upgrade tree root of the player's tank
@@ -1158,16 +1163,12 @@ function drawUpgradeTree(spacing, alcoveSize) {
 
     let tileSize = alcoveSize / 2,
         size = tileSize - 4,
-        spaceBetween = 15,
-        padding = 0.5 + spaceBetween / tileSize;
+        spaceBetween = 10,
+        padding = 0.5 + spaceBetween / tileSize,
+        screenDivisor = spaceBetween + tileSize;
 
-    if (global.died) {
-        global.showTree = false;
-        global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1;
-        global.shouldScrollY = global.shouldScrollX = 0;
-    }
-    global.fixedScrollX = Math.max(-padding, Math.min(tankTree.width + padding, global.fixedScrollX + global.shouldScrollX));
-    global.fixedScrollY = Math.max(-padding, Math.min(tankTree.height + padding, global.fixedScrollY + global.shouldScrollY));
+    global.fixedScrollX = Math.max(-padding, Math.min(tankTree.width * (1 + spaceBetween / tileSize) + padding - global.screenWidth / screenDivisor, global.fixedScrollX + global.shouldScrollX));
+    global.fixedScrollY = Math.max(-padding, Math.min(tankTree.height * (1 + spaceBetween / tileSize) + padding - global.screenHeight / screenDivisor, global.fixedScrollY + global.shouldScrollY));
     global.scrollX = util.lerp(global.scrollX, global.fixedScrollX, 0.1);
     global.scrollY = util.lerp(global.scrollY, global.fixedScrollY, 0.1);
 
@@ -1201,10 +1202,10 @@ function drawUpgradeTree(spacing, alcoveSize) {
             baseColor = picture.color;
 
         ctx.globalAlpha = 1;
-        ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+        ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
         drawGuiRect(ax, ay, size, size);
         ctx.globalAlpha = 0.15;
-        ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
+        ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
         drawGuiRect(ax, ay, size, size * 0.6);
         ctx.fillStyle = color.black;
         drawGuiRect(ax, ay + size * 0.6, size, size * 0.4);
