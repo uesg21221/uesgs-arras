@@ -57,25 +57,7 @@ global.Tile = class Tile {
             throw new Error("First argument has to be an object!");
         }
 
-        let COLOR = args.color ?? 8;
-        if (typeof COLOR === "number" || typeof COLOR === 'string') {
-            this.colorUnboxed = {
-                base: COLOR,
-                hueShift: 0,
-                saturationShift: 1,
-                brightnessShift: 0,
-                allowBrightnessInvert: false,
-            };
-        } else if (typeof set.COLOR === "object") {
-            this.colorUnboxed = {
-                base: COLOR.BASE ?? 16,
-                hueShift: COLOR.HUE_SHIFT ?? 0,
-                saturationShift: COLOR.SATURATION_SHIFT ?? 1,
-                brightnessShift: COLOR.BRIGHTNESS_SHIFT ?? 0,
-                allowBrightnessInvert: COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
-            };
-        }
-        this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+        this.color = args.color;
         this.data = args.data || {};
         if ("object" !== typeof this.data) {
             throw new Error("'data' property must be an object!");
