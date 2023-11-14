@@ -1003,9 +1003,10 @@ function generateTankTree(indexes) {
     tiles = [];
     branches = [];
     tankTree = { width: 0, height: 0 };
+    let rightestSoFar = 0;
     if (!Array.isArray(indexes)) indexes = [indexes];
     for (let index of indexes) {
-        measureSize(0, 0, 10, { index });
+        rightestSoFar += 3 + measureSize(rightestSoFar, 0, 10, { index }).width;
     }
     for (let { x, y } of tiles) {
         tankTree.width = Math.max(tankTree.width, x);
