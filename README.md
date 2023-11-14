@@ -11,6 +11,8 @@ In order to run your server via localhost, you will need to install these first:
 
 Once `Node.js` and `ws` are installed, open either `run.bat` (if you're on Windows) or `run.sh` (if you're not). If there aren't any errors, your server will start up. Go to `localhost:26301` in your favourite web browser (keep the terminal window open, closing it will shut down the server) to play.
 
+[If you need a more detailed guide, click here for a step by step list.](https://github.com/Taureon/aps-plus-plus/wiki/Frequently-Asked-Questions#how-do-i-set-up-my-server)
+
 If you want to stay up to date, fork this template, download a git client, and sync the fork whenever there's a major update.
 
 ## Useful Tools
