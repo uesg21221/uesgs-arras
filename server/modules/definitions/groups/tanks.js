@@ -5026,10 +5026,10 @@ exports.bulwark = {
         },
         {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [13, 8, 1, 0, 5.5, 185, 0],
+            POSITION: [14, 8, 1, 0, 5.5, 185, 0],
         },
         {
-            POSITION: [3, 9, 1.5, 13, 5.5, 185, 0],
+            POSITION: [3, 9, 1.5, 14, 5.5, 185, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.twin]),
                 TYPE: "trap",
@@ -5038,10 +5038,10 @@ exports.bulwark = {
         },
         {
             /* LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [13, 8, 1, 0, -5.5, 175, 0],
+            POSITION: [14, 8, 1, 0, -5.5, 175, 0],
         },
         {
-            POSITION: [3, 9, 1.5, 13, -5.5, 175, 0.5],
+            POSITION: [3, 9, 1.5, 14, -5.5, 175, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.twin]),
                 TYPE: "trap",
@@ -5180,74 +5180,7 @@ exports.triplex = {
         },
     ],
 };
-exports.quadruplex = {
-    PARENT: ["genericTank"],
-    LABEL: "Quadruplex",
-    DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Quadruplex is not finished yet. This tank is currently just a mockup.",
-    GUNS: [
-        {
-            POSITION: [20, 10, 0.8, 0, 0, 45, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [20, 10, 0.8, 0, 0, 135, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [20, 10, 0.8, 0, 0, 225, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [20, 10, 0.8, 0, 0, 315, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 135, 0],
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -135, 0],
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 225, 0],
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -225, 0],
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 315, 0],
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -315, 0],
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 45, 0],
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -45, 0],
-        },
-    ],
-};
+exports.quadruplex = makeMulti(exports.desmos, 4, "Quadruplex", 45);
 
 // SMASHER UPGRADES
 exports.megaSmasher = {
