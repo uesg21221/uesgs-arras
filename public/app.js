@@ -655,7 +655,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
         xx = x,
         yy = y,
         source = turretInfo === false ? instance : turretInfo,
-        blend = turretsObeyRot ? 0 : render.status.getBlend();
+        blend = render.status.getBlend();
     source.guns.update();
     if (fade === 0 || alpha === 0) return;
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
