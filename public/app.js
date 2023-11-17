@@ -826,6 +826,40 @@ function drawHealth(x, y, instance, ratio, alpha) {
     }
 }
 
+function drawEntityIcon(model, x, y, len, height, angle, alpha, colorIndex, upgradeKey) {
+    let picture = util.getEntityImageFromMockup(model, gui.color),
+        position = picture.position,
+        scale = (0.6 * len) / position.axis,
+        entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(angle),
+        entityY = y + 0.5 * height - scale * position.middle.x * Math.sin(angle),
+        baseColor = picture.color;
+
+    // Draw box
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+    drawGuiRect(x, y, len, height);
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex - 9);
+    drawGuiRect(x, y, len, height * 0.6);
+    ctx.fillStyle = color.black;
+    drawGuiRect(x, y + height * 0.6, len, height * 0.4);
+    ctx.globalAlpha = 1;
+
+    // Draw Tank
+    drawEntity(baseColor, entityX, entityY, picture, 1, 1, scale / picture.size, angle, true);
+
+    // Tank name
+    drawText(picture.upgradeName ?? picture.name, x + (upgradeKey ? 0.9 * len : len) / 2, y + height - 6, height / 8 - 3, color.guiwhite, "center");
+
+    // Upgrade key
+    if (upgradeKey) {
+        drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 3, color.guiwhite, "right");
+    }
+    ctx.strokeStyle = color.black;
+    ctx.lineWidth = 3;
+    drawGuiRect(x, y, len, height, true); // Border
+}
+
 // Start animation
 window.requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
 window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
@@ -1174,10 +1208,10 @@ function drawUpgradeTree(spacing, alcoveSize) {
     global.scrollY = util.lerp(global.scrollY, global.fixedScrollY, 0.1);
 
     for (let [start, end] of branches) {
-        let sx = start.x * spaceBetween + (start.x - global.scrollX) * tileSize + 1 + 0.5 * size,
-            sy = start.y * spaceBetween + (start.y - global.scrollY) * tileSize + 1 + 0.5 * size,
-            ex = end.x * spaceBetween + (end.x - global.scrollX) * tileSize + 1 + 0.5 * size,
-            ey = end.y * spaceBetween + (end.y - global.scrollY) * tileSize + 1 + 0.5 * size;
+        let sx = (start.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size,
+            sy = (start.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size,
+            ex = (end.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size,
+            ey = (end.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size;
         if (ex < 0 || sx > global.screenWidth || ey < 0 || sy > global.screenHeight) continue;
         ctx.strokeStyle = color.black;
         ctx.lineWidth = 2;
@@ -1189,35 +1223,12 @@ function drawUpgradeTree(spacing, alcoveSize) {
     ctx.globalAlpha = 1;
 
     //draw the various tank icons
+    let angle = -Math.PI / 4;
     for (let { x, y, colorIndex, index } of tiles) {
-        let ax = x * spaceBetween + (x - global.scrollX) * tileSize,
-            ay = y * spaceBetween + (y - global.scrollY) * tileSize,
-            size = tileSize;
-        if (ax < -size || ax > global.screenWidth + size || ay < -size || ay > global.screenHeight + size) continue;
-        let angle = -Math.PI / 4,
-            position = global.mockups[index].position,
-            scale = (0.625 * size) / position.axis,
-            xx = ax + 0.5 * size - scale * position.middle.x * Math.cos(angle),
-            yy = ay + 0.5 * size - scale * position.middle.x * Math.sin(angle),
-            picture = util.getEntityImageFromMockup(index.toString(), gui.color),
-            baseColor = picture.color;
-
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
-        drawGuiRect(ax, ay, size, size);
-        ctx.globalAlpha = 0.15;
-        ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
-        drawGuiRect(ax, ay, size, size * 0.6);
-        ctx.fillStyle = color.black;
-        drawGuiRect(ax, ay + size * 0.6, size, size * 0.4);
-        ctx.globalAlpha = 1;
-
-        drawEntity(baseColor, xx, yy, picture, 1, 1, scale / picture.size, angle, true);
-
-        drawText(picture.upgradeName ?? picture.name, ax + size / 2, ay + size - 5, size / 8 - 3, color.guiwhite, "center");
-
-        ctx.lineWidth = 3;
-        drawGuiRect(ax, ay, size, size, true);
+        let ax = (x - global.scrollX) * (tileSize + spaceBetween),
+            ay = (y - global.scrollY) * (tileSize + spaceBetween);
+        if (ax < -tileSize || ax > global.screenWidth + tileSize || ay < -tileSize || ay > global.screenHeight + tileSize) continue;
+        drawEntityIcon(index.toString(), ax, ay, tileSize, tileSize, angle, 1, colorIndex);
     }
 
     let text = "Use the arrow keys to navigate the class tree. Press T again to close it.";
@@ -1556,40 +1567,10 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             rowWidth = x;
 
             global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
-
-            let picture = util.getEntityImageFromMockup(model, gui.color),
-                position = picture.position,
-                scale = (0.6 * len) / position.axis,
-                entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(upgradeSpin),
-                entityY = y + 0.5 * height - scale * position.middle.x * Math.sin(upgradeSpin),
-                baseColor = picture.color;
-
-            // Draw box
-            ctx.globalAlpha = 0.5;
-            ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
-            drawGuiRect(x, y, len, height);
-            ctx.globalAlpha = 0.1;
-            ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
-            drawGuiRect(x, y, len, height * 0.6);
-            ctx.fillStyle = color.black;
-            drawGuiRect(x, y + height * 0.6, len, height * 0.4);
-            ctx.globalAlpha = 1;
-
-            // Draw Tank
-            drawEntity(baseColor, entityX, entityY, picture, 1, 1, scale / picture.size, upgradeSpin, true);
             let upgradeKey = getClassUpgradeKey(upgradeNum);
 
-            // Tank name
-            drawText(picture.upgradeName ?? picture.name, x + ((upgradeKey ? 0.9 : 1) * len) / 2, y + height - 6, height / 8 - 3, color.guiwhite, "center");
+            drawEntityIcon(model, x, y, len, height, upgradeSpin, 0.5, colorIndex++, upgradeKey);
 
-            // Upgrade key
-            if (upgradeKey) {
-                drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 3, color.guiwhite, "right");
-            }
-            ctx.strokeStyle = color.black;
-            ctx.globalAlpha = 1;
-            ctx.lineWidth = 3;
-            drawGuiRect(x, y, len, height, true); // Border
             ticker++;
             upgradeNum++;
         }
