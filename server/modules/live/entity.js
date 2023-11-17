@@ -302,13 +302,17 @@ class Gun {
         this.lastShot.power = 3 * Math.log(Math.sqrt(sk.spd) + this.trueRecoil + 1) + 1;
         this.motion += this.lastShot.power;
         // Find inaccuracy
-        let shudder, spread;
-        do {
-            shudder = ran.gauss(0, Math.sqrt(this.settings.shudder));
-        } while (Math.abs(shudder) >= this.settings.shudder * 2);
-        do {
-            spread = ran.gauss(0, this.settings.spray * this.settings.shudder);
-        } while (Math.abs(spread) >= this.settings.spray / 2);
+        let shudder = 0, spread = 0;
+        if (this.settings.shudder) {
+            do {
+                shudder = ran.gauss(0, Math.sqrt(this.settings.shudder));
+            } while (Math.abs(shudder) >= this.settings.shudder * 2);
+        }
+        if (this.settings.spray) {
+            do {
+                spread = ran.gauss(0, this.settings.spray * this.settings.shudder);
+            } while (Math.abs(spread) >= this.settings.spray / 2);
+        }
         spread *= Math.PI / 180;
         // Find speed
         let vecLength = (this.negRecoil ? -1 : 1) * this.settings.speed * c.runSpeed * sk.spd * (1 + shudder),
