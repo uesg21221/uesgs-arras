@@ -31,6 +31,34 @@ exports.miniboss = {
         PUSHABILITY: 0.05
     }
 };
+exports.ramMiniboss = {
+    PARENT: ["genericTank"],
+    TYPE: "miniboss",
+    DANGER: 6,
+    SKILL: skillSet({
+        rld: 0.7,
+        dam: 0.5,
+        pen: 0.8,
+        str: 0.8,
+        spd: 0.2,
+        atk: 0.3,
+        hlt: 1,
+        shi: 0.7,
+        rgn: 0.7,
+        mob: 0,
+    }),
+    LEVEL: 45,
+    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal", "canRepel"],
+    AI: {
+        NO_LEAD: true,
+    },
+    FACING_TYPE: "autospin",
+    HITS_OWN_TYPE: "hardOnlyBosses",
+    BROADCAST_MESSAGE: "A visitor has left!",
+    BODY: {
+        PUSHABILITY: 0.05
+    }
+};
 
 // GUNS
 exports.baseTrapTurret = {
@@ -1378,7 +1406,7 @@ exports.rogueArmada = (() => {
 
 // Bob.
 exports.bob = {
-    PARENT: ["miniboss"],
+    PARENT: ["ramMiniboss"],
     LABEL: "Bob",
     SHAPE: 0,
     COLOR: 0,
