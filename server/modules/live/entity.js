@@ -1619,8 +1619,6 @@ class Entity extends EventEmitter {
             score: this.skill.score,
             guns: this.guns.map((gun) => gun.getPhotoInfo()),
             turrets: this.turrets.map((turret) => turret.camera(true)),
-
-            upgradeColor: this.upgradeColor,
             glow: this.glow,
         };
     }
