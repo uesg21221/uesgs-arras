@@ -266,6 +266,7 @@ function calculateTarget() {
     }
     global.target.x *= global.screenWidth / window.canvas.width;
     global.target.y *= global.screenHeight / window.canvas.height;
+    if (settings.graphical.screenshotMode && Math.abs(Math.atan2(global.target.y, global.target.x) + Math.PI/2) < 0.035) global.target.x = 0; 
     return global.target;
 }
 // This starts the game and sets up the websocket
