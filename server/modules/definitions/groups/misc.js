@@ -581,14 +581,13 @@ exports.sentryTrap = makeAuto(exports.sentry, "Sentry", {
     size: 12,
 });
 exports.sentryTrap.UPGRADE_LABEL = "Trap Sentry";
-
 exports.shinySentry = {
     PARENT: ["sentry"],
     COLOR: 1,
-    SHAPE: 0,
     DANGER: 4,
     SIZE: 12,
     VALUE: 50000,
+    SHAPE: 0,
     BODY: {
         HEALTH: 0.6 * base.HEALTH
     },
@@ -600,9 +599,48 @@ exports.shinySentrySwarm = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.morerecoil]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.morerecoil, g.mach, { reload: 0.25 }]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
+            },
+        },
+    ],
+};
+exports.artilleryAutoTankgun = {
+    PARENT: ["genericTank"],
+    LABEL: "Artillery",
+    BODY: {
+        FOV: 2,
+    },
+    CONTROLLERS: [
+        "canRepel",
+        "onlyAcceptInArc",
+        "mapAltToFire",
+        "nearestDifferentMaster",
+    ],
+    COLOR: 16,
+    GUNS: [{
+        POSITION: [17, 3, 1, 0, -6, -7, 0.25],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, { reload: 0.25 }]),
+            TYPE: "bullet",
+            LABEL: "Secondary",
+        },
+    },
+        {
+            POSITION: [17, 3, 1, 0, 6, 7, 0.75],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, { reload: 0.25 }]),
+                TYPE: "bullet",
+                LABEL: "Secondary",
+            },
+        },
+        {
+            POSITION: [19, 12, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, { reload: 0.25 }]),
+                TYPE: "bullet",
+                LABEL: "Heavy",
             },
         },
     ],
@@ -612,8 +650,51 @@ exports.shinySentryGun = makeAuto(exports.shinySentry, "Sentry", {
     size: 12,
 });
 exports.shinySentryGun.UPGRADE_LABEL = "Shiny Gun Sentry";
+exports.barricadeAutoTankGun = {
+    PARENT: ["genericTank"],
+    LABEL: "Turret",
+    BODY: {
+        FOV: 0.5,
+    },
+    INDEPENDENT: true,
+    CONTROLLERS: ["nearestDifferentMaster"],
+    COLOR: 16,
+    AI: {
+        SKYNET: true,
+        FULL_VIEW: true,
+    },
+    GUNS: [
+        {
+            POSITION: [24, 8, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [4, 8, 1.3, 22, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange, { reload: 0.25 }]),
+                TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange, { reload: 0.25 }]),
+                TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange, { reload: 0.25 }]),
+                TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
 exports.shinySentryTrap = makeAuto(exports.shinySentry, "Sentry", {
-    type: exports.barricadeTurret,
+    type: exports.barricadeAutoTankGun,
     size: 12,
 });
 exports.shinySentryTrap.UPGRADE_LABEL = "Shiny Trap Sentry";
