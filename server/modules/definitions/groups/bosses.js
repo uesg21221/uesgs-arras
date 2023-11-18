@@ -49,9 +49,6 @@ exports.ramMiniboss = {
     }),
     LEVEL: 45,
     CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal", "canRepel"],
-    AI: {
-        NO_LEAD: true,
-    },
     FACING_TYPE: "autospin",
     HITS_OWN_TYPE: "hardOnlyBosses",
     BROADCAST_MESSAGE: "A visitor has left!",
