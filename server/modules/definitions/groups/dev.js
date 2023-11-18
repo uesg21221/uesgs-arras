@@ -173,9 +173,9 @@ exports.tanks = {
     PARENT: ["menu"],
     LABEL: "Tanks",
 };
-exports.specialTanks = {
+exports.unavailable = {
     PARENT: ["menu"],
-    LABEL: "Special Tanks",
+    LABEL: "Unavailable",
 };
 exports.dominators = {
     PARENT: ["menu"],
@@ -208,11 +208,6 @@ exports.funTanks = {
 exports.testingTanks = {
     PARENT: ["menu"],
     LABEL: "Testing Tanks",
-};
-
-exports.tools = {
-    PARENT: ["menu"],
-    LABEL: "Tools",
 };
 
 // GENERATORS
@@ -1099,7 +1094,8 @@ exports.addons = {
 };
 
 exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
-    exports.tanks.UPGRADES_TIER_0 = ["basic", "healer", "spectator", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"];
+    exports.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "spectator", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"];
+        exports.unavailable.UPGRADES_TIER_0 = ["healer"];
         exports.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
         exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
 

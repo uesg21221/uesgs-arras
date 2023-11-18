@@ -90,7 +90,7 @@ class BossRush {
     }
 
     spawnSanctuary(tile, team, type = false) {
-        type = type ? type : Class.sanctuaryTier1;
+        type = type ? type : Class.sanctuaryTier3;
         let o = new Entity(tile.loc);
         o.define(type);
         o.team = team;
@@ -110,7 +110,7 @@ class BossRush {
             if (isAC) {
                 tile.color = 'white';
             } else */if (o.team === TEAM_ENEMIES) {
-                this.spawnSanctuary(tile, TEAM_BLUE, Class.sanctuaryTier1);
+                this.spawnSanctuary(tile, TEAM_BLUE, Class.sanctuaryTier3);
                 tile.color = getTeamColor(TEAM_BLUE);
                 sockets.broadcast('A sanctuary has been repaired!');
             } else {
@@ -186,6 +186,7 @@ class BossRush {
         Class.basic.UPGRADES_TIER_2.splice(0, 1);
         Class.director.UPGRADES_TIER_2.splice(2, 1);
         Class.basic.UPGRADES_TIER_2.push("healer");
+        Class.unavailable.UPGRADES_TIER_0 = ["underseer", "smasher"];
         //TODO: filter out tiles that are not of sanctuary type
         for (let tile of room.spawnable[TEAM_BLUE]) {
             this.spawnSanctuary(tile, TEAM_BLUE);
