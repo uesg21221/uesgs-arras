@@ -422,7 +422,7 @@ function incoming(message, socket) {
             break;
         case "1":
             //suicide squad
-            if (player.body != null) {
+            if (player.body != null && !player.body.underControl) {
                 for (let i = 0; i < entities.length; i++) {
                     let instance = entities[i];
                     if (instance.settings.clearOnMasterUpgrade && instance.master.id === player.body.id) {
