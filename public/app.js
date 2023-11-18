@@ -93,6 +93,9 @@ global.player = {
     cy: 0,
     renderx: global.screenWidth / 2,
     rendery: global.screenHeight / 2,
+    isScoping: false,
+    screenx: 0,
+    screeny: 0,
     renderv: 1,
     slip: 0,
     view: 1,
@@ -248,12 +251,23 @@ global.player = {
     lasty: global.player.y,
     cx: 0,
     cy: 0,
-    target: window.canvas.target,
+    target: calculateTarget(),
     name: "",
     lastUpdate: 0,
     time: 0,
     nameColor: "#ffffff",
 };
+function calculateTarget() {
+    global.target.x = global.mouse.x * global.ratio - (global.player.screenx / global.screenWidth * window.canvas.width + window.canvas.width / 2);
+    global.target.y = global.mouse.y * global.ratio - (global.player.screeny / global.screenHeight * window.canvas.height + window.canvas.height / 2);
+    if (window.canvas.reverseDirection) {
+        global.target.x *= -1;
+        global.target.y *= -1;
+    }
+    global.target.x *= global.screenWidth / window.canvas.width;
+    global.target.y *= global.screenHeight / window.canvas.height;
+    return global.target;
+}
 // This starts the game and sets up the websocket
 function startGame() {
     // Get options
@@ -1114,9 +1128,16 @@ function drawEntities(px, py, ratio) {
         instance.render.x = util.lerp(instance.render.x, Math.round(instance.x + instance.vx), 0.1, true);
         instance.render.y = util.lerp(instance.render.y, Math.round(instance.y + instance.vy), 0.1, true);
         instance.render.f = instance.id === gui.playerid && !global.autoSpin && !instance.twiggle && !global.died ? Math.atan2(global.target.y, global.target.x) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
-        let x = instance.id === gui.playerid && settings.graphical.centerTank ? 0 : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid && settings.graphical.centerTank ? 0 : ratio * instance.render.y - py,
+        let x = ratio * instance.render.x - px,
+            y = ratio * instance.render.y - py,
             baseColor = instance.color;
+        
+        if (instance.id === gui.playerid) {
+            x = settings.graphical.centerTank && !global.player.isScoping ? 0 : x;
+            y = settings.graphical.centerTank && !global.player.isScoping ? 0 : y;
+            global.player.screenx = x;
+            global.player.screeny = y;
+        }
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
         drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, instance.render.f);
@@ -1127,8 +1148,8 @@ function drawEntities(px, py, ratio) {
 
     //draw health bars above entities
     for (let instance of global.entities) {
-        let x = instance.id === gui.playerid ? 0 : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid ? 0 : ratio * instance.render.y - py;
+        let x = instance.id === gui.playerid ? global.player.screenx : ratio * instance.render.x - px,
+            y = instance.id === gui.playerid ? global.player.screeny : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
         drawHealth(x, y, instance, ratio, instance.alpha);
@@ -1606,6 +1627,9 @@ const gameDrawAlive = (ratio, drawRatio) => {
     global.player.rendery = util.lerp(global.player.rendery, global.player.cy, 0.1, true);
     let px = ratio * global.player.renderx,
         py = ratio * global.player.rendery;
+
+    // Get the player's target
+    calculateTarget();
 
     //draw the in game stuff
     drawFloor(px, py, ratio);

@@ -1081,6 +1081,7 @@ const eyes = (socket) => {
                     camera.y = player.body.cameraOverrideY === null ? player.body.photo.y : player.body.cameraOverrideY;
                     camera.vx = player.body.photo.vx;
                     camera.vy = player.body.photo.vy;
+                    camera.scoping = player.body.cameraOverrideX !== null;
                     // Get what we should be able to see
                     setFov = player.body.fov;
                     // Get our body id
@@ -1151,6 +1152,7 @@ const eyes = (socket) => {
                 setFov,
                 camera.vx,
                 camera.vy,
+                camera.scoping,
                 ...player.gui.publish(),
                 visible.length,
                 ...view

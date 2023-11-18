@@ -769,7 +769,7 @@ const socketInit = port => {
                 if (commands[i]) o += Math.pow(2, i);
             }
             let ratio = util.getRatio();
-            socket.talk('C', Math.round(window.canvas.target.x / ratio), Math.round(window.canvas.target.y / ratio), o);
+            socket.talk('C', Math.round(global.target.x / ratio), Math.round(global.target.y / ratio), o);
         },
         check: () => flag,
         getMotion: () => ({
@@ -890,8 +890,9 @@ const socketInit = port => {
                     camfov = m[3],
                     camvx = m[4],
                     camvy = m[5],
+                    camscoping = m[6],
                     // We'll have to do protocol decoding on the remaining data
-                    theshit = m.slice(6);
+                    theshit = m.slice(7);
                 // Process the data
                 if (camtime > global.player.lastUpdate) { // Don't accept out-of-date information.
                     // Time shenanigans
@@ -916,6 +917,8 @@ const socketInit = port => {
                     global.player.cy = camy;
                     global.player.vx = global.died ? 0 : camvx;
                     global.player.vy = global.died ? 0 : camvy;
+                    // For centered camera
+                    global.player.isScoping = camscoping;
                     // Figure out where we're rendering if we don't yet know
                     if (isNaN(global.player.renderx)) {
                         global.player.renderx = global.player.cx;
@@ -969,7 +972,6 @@ const socketInit = port => {
                 window.onbeforeunload = () => false;
                 break;
             case 'z': // name color
-                console.log(m[0]);
                 global.nameColor = m[0];
                 break;
             case 'CHAT_MESSAGE_ENTITY':
