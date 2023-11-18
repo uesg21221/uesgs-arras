@@ -275,7 +275,8 @@ exports.sanctuary = {
     LABEL: "Sanctuary",
     LEVEL: 45,
     SIZE: 20,
-    CONTROLLERS: [["spin", { independent: true, speed: 0.04 }]],
+    FACING_TYPE: "autospin",
+    CONTROLLERS: ["alwaysFire"],
     SKILL: skillSet({
         rld: 1.25,
         dam: 1.25,
@@ -581,9 +582,10 @@ exports.sentryTrap = makeAuto(exports.sentry, "Sentry", {
 });
 exports.sentryTrap.UPGRADE_LABEL = "Trap Sentry";
 
-exports.shinySentry = { // if youre gonna mald about the shape not being 0 save yourself time by changing it yourself in your own private servers ok
+exports.shinySentry = {
     PARENT: ["sentry"],
     COLOR: 1,
+    SHAPE: 0,
     DANGER: 4,
     SIZE: 12,
     VALUE: 50000,
