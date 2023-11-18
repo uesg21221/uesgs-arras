@@ -895,10 +895,10 @@ const spawn = (socket, name) => {
     body.socket = socket;
     switch (c.MODE) {
         case "tdm":
-            body.color = getTeamColor(body.team);
+            if (body.color == "16 0 1 0 false") body.color = getTeamColor(body.team);
             break;
         default: 
-            body.color = (c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12) + ' 0 1 0 false';
+            if (body.color == "16 0 1 0 false") body.color = (c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12) + ' 0 1 0 false';
     }
     // Decide what to do about colors when sending updates and stuff
     player.teamColor = !c.RANDOM_COLORS && c.MODE === "ffa" ? 10 : body.color; // blue
