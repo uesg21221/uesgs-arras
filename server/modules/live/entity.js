@@ -1132,6 +1132,7 @@ class Entity extends EventEmitter {
                     }
                 }
             }
+            for (let child of this.children) child.team = set.TEAM
         }
         if (set.VARIES_IN_SIZE != null) {
             this.settings.variesInSize = set.VARIES_IN_SIZE;
