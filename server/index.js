@@ -267,7 +267,8 @@ setTimeout(closeArena, 60000 * 120); // Restart every 2 hours
 
 global.naturallySpawnedBosses = [];
 global.bots = [];
-// A less important loop. Runs at an actual 5Hz regardless of game speed.
+let bossTimer = 0;
+// A less important loop.
 let maintainloop = () => {
     // Regen health and update the grid
     for (let i = 0; i < entities.length; i++) {
@@ -372,7 +373,7 @@ setInterval(() => {
     gamemodeLoop();
     roomLoop();
 
-    if (counter += 1 / c.gameSpeed > 30) {
+    if (counter++ / c.runSpeed > 30) {
         chatLoop();
         maintainloop();
         speedcheckloop();

@@ -796,7 +796,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
     if (instance.drawsHealth) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
-        if (health < 1 - 1e-4 || shield < 1 - 1e-4) {
+        if (health < 0.99 || shield < 0.99) {
             let instanceColor = null;
             let getColor = true;
             if (typeof instance.color == 'string') {
