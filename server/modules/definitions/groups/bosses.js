@@ -4029,6 +4029,40 @@ exports.kronosMissile = {
     PARENT: ["missile"],
     GUNS: [
         {
+            POSITION: [4, 8, 1.5, 14, 0, 90, 0.5],
+            PROPERTIES: {
+                AUTOFIRE: true,
+                SHOOT_SETTINGS: combineStats([
+                    g.trap,
+                    g.halfrange,
+                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                ]),
+                TYPE: [
+                    "trap",
+                    {
+                        PERSISTS_AFTER_DEATH: true,
+                    },
+                ],
+            },
+        },
+        {
+            POSITION: [4, 8, 1.5, 14, 0, -90, 0.5],
+            PROPERTIES: {
+                AUTOFIRE: true,
+                SHOOT_SETTINGS: combineStats([
+                    g.trap,
+                    g.halfrange,
+                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                ]),
+                TYPE: [
+                    "trap",
+                    {
+                        PERSISTS_AFTER_DEATH: true,
+                    },
+                ],
+            },
+        },
+        {
             POSITION: [14, 6, 1, 0, -2, 150, 0],
             PROPERTIES: {
                 AUTOFIRE: true,
@@ -4063,44 +4097,10 @@ exports.kronosMissile = {
             },
         },
         {
-            POSITION: [3, 7, 1, 11, -2, 90, 0],
-            PROPERTIES: {
-                AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([
-                    g.trap,
-                    g.halfrange,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                ]),
-                TYPE: [
-                    "trap",
-                    {
-                        PERSISTS_AFTER_DEATH: true,
-                    },
-                ],
-            },
+            POSITION: [14, 8, 1, 0, 0, 90, 0],
         },
         {
-            POSITION: [11, 6, 1, 0, -2, 90, 0.5],
-        },
-        {
-            POSITION: [3, 7, 1, 11, 2, -90, 0],
-            PROPERTIES: {
-                AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([
-                    g.trap,
-                    g.halfrange,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                ]),
-                TYPE: [
-                    "trap",
-                    {
-                        PERSISTS_AFTER_DEATH: true,
-                    },
-                ],
-            },
-        },
-        {
-            POSITION: [11, 6, 1, 0, 2, -90, 0.5],
+            POSITION: [14, 8, 1, 0, 0, -90, 0],
         },
     ],
 };
