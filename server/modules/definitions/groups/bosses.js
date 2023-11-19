@@ -1466,6 +1466,18 @@ exports.guardian = {
         NO_LEAD: false,
     },
 };
+exports.defenderAutoTankGun = {
+    PARENT: ["autoTankGun"],
+    GUNS: [
+        {
+            POSITION: [22, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.auto]),
+                TYPE: ["bullet", {COLOR: "yellow"}],
+            },
+        },
+    ],
+};
 exports.defender = {
     PARENT: ["elite"],
     LABEL: "Defender",
@@ -1478,7 +1490,7 @@ exports.defender = {
             POSITION: [3, 7, 1.7, 12, 0, 60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.flank]),
-                TYPE: "trap",
+                TYPE: ["trap", {COLOR: "yellow"}],
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
         },
@@ -1489,7 +1501,7 @@ exports.defender = {
             POSITION: [3, 7, 1.7, 12, 0, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.flank]),
-                TYPE: "trap",
+                TYPE: ["trap", {COLOR: "yellow"}],
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
         },
@@ -1500,7 +1512,7 @@ exports.defender = {
             POSITION: [3, 7, 1.7, 12, 0, 300, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.flank]),
-                TYPE: "trap",
+                TYPE: ["trap", {COLOR: "yellow"}],
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
         },
@@ -1508,15 +1520,15 @@ exports.defender = {
     TURRETS: [
         {
             POSITION: [5, 7, 0, 0, 190, 1],
-            TYPE: "autoTankGun",
+            TYPE: "defenderAutoTankGun",
         },
         {
             POSITION: [5, 7, 0, 120, 190, 1],
-            TYPE: "autoTankGun",
+            TYPE: "defenderAutoTankGun",
         },
         {
             POSITION: [5, 7, 0, 240, 190, 1],
-            TYPE: "autoTankGun",
+            TYPE: "defenderAutoTankGun",
         },
     ],
     AI: {
