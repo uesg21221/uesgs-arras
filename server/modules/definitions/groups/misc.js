@@ -587,7 +587,7 @@ exports.shinySentry = {
     DANGER: 4,
     SIZE: 12,
     VALUE: 50000,
-    SHAPE: 0,
+    SHAPE: 3,
     BODY: {
         HEALTH: 0.6 * base.HEALTH
     },
