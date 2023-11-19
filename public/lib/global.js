@@ -52,7 +52,7 @@ const global = {
     KEY_ESC: 27,
     KEY_ENTER: 13,
     KEY_SHIFT: 16,
-    KEY_BECOME: 72,
+    KEY_BECOME: 70,
     KEY_CHAT: 13,
     KEY_FIREFOOD: 119,
     KEY_SPLIT: 32,
@@ -68,7 +68,7 @@ const global = {
 
     KEY_AUTO_SPIN: 67,
     KEY_AUTO_FIRE: 69,
-    KEY_AUTO_ALT: 70,
+    KEY_AUTO_ALT: 71,
     KEY_OVER_RIDE: 82,
     KEY_REVERSE_TANK: 86,
     KEY_REVERSE_MOUSE: 66,

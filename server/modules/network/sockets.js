@@ -458,11 +458,11 @@ function incoming(message, socket) {
             if (body.underControl) {
                 if (c.DOMINATOR_LOOP) {
                 body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You have relinquished control of the Dominator.");
+                socket.talk("m", "You have relinquished control of the dominator.");
                 return 1;
                 } else if (c.MOTHERSHIP_LOOP) {
                 body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You have relinquished control of the Mothership.");
+                socket.talk("m", "You have relinquished control of the mothership.");
                 return 1;
                 } else {
                 body.giveUp(player, body.isDominator ? "" : undefined);
@@ -482,7 +482,7 @@ function incoming(message, socket) {
                     })
                     .filter((instance) => instance);
                 if (!motherships.length) {
-                    socket.talk("m", "There are no motherships available that are on your team!");
+                    socket.talk("m", "There are no motherships available that are on your team.");
                     return 1;
                 }
                 let mothership = motherships.shift();
@@ -494,8 +494,8 @@ function incoming(message, socket) {
                 player.body.FOV += 0.5;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
-                player.body.sendMessage("You are now controlling the mothership!");
-                player.body.sendMessage("Press H to relinquish control of the mothership!");
+                player.body.sendMessage("You are now controlling the mothership.");
+                player.body.sendMessage("Press F to relinquish control of the mothership.");
             } else if (c.DOMINATOR_LOOP) {
                 let dominators = entities.map((entry) => {
                     if (entry.isDominator && entry.team === player.body.team && !entry.underControl) return entry;
@@ -513,10 +513,10 @@ function incoming(message, socket) {
                 player.body.FOV += 0.5;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
-                player.body.sendMessage("You are now controlling the dominator!");
-                player.body.sendMessage("Press H to relinquish control of the dominator!");
+                player.body.sendMessage("You are now controlling the dominator.");
+                player.body.sendMessage("Press F to relinquish control of the dominator.");
             } else {
-                socket.talk("m", "You cannot use this.");
+                socket.talk("m", "There are no special tanks in this mode that you can control.");
             }
             break;
 
