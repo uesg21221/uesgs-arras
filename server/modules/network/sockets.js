@@ -456,9 +456,19 @@ function incoming(message, socket) {
             if (player.body == null) return 1;
             let body = player.body;
             if (body.underControl) {
+                if (c.DOMINATOR_LOOP) {
                 body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You are no longer controlling the mothership.");
+                socket.talk("m", "You have relinquished control of the Dominator.");
                 return 1;
+                } else if (c.MOTHERSHIP_LOOP) {
+                body.giveUp(player, body.isDominator ? "" : undefined);
+                socket.talk("m", "You have relinquished control of the Mothership.");
+                return 1;
+                } else {
+                body.giveUp(player, body.isDominator ? "" : undefined);
+                socket.talk("m", "You have relinquished control of the special tank.");
+                return 1;
+                }
             }
             if (c.MOTHERSHIP_LOOP) {
                 let motherships = entities
