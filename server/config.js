@@ -56,7 +56,7 @@ module.exports = {
     // Welcome message once a player spawns.
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
-                    +"Please join the Open Source Arras discord server to report any bugs you encounter!",
+                    +"Please report any bugs you encounter!",
 
 
 
