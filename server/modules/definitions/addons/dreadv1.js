@@ -149,7 +149,7 @@ module.exports = ({ Class }) => {
 	Class.dreadOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Dreadnought",
-	    UPGRADE_LABEL: "Dreadnought (V1)",
+	    UPGRADE_LABEL: "Dreads V1",
 		LEVEL: 150,
 		EXTRA_SKILL: 48,
 	}
