@@ -94,7 +94,7 @@ exports.bosses = {
 exports.sentries = {
     PARENT: ["menu"],
     LABEL: "Sentries",
-    COLOR: 5,
+    COLOR: "pink",
     SHAPE: 3.5,
     TURRETS: [
         {
@@ -106,37 +106,37 @@ exports.sentries = {
 exports.elites = {
     PARENT: ["menu"],
     LABEL: "Elites",
-    COLOR: 5,
+    COLOR: "pink",
     SHAPE: 3.5,
 };
 exports.mysticals = {
     PARENT: ["menu"],
     LABEL: "Mysticals",
-    COLOR: 13,
+    COLOR: "gold",
     SHAPE: 4,
 };
 exports.nesters = {
     PARENT: ["menu"],
     LABEL: "Nesters",
-    COLOR: 14,
+    COLOR: "purple",
     SHAPE: 5.5,
 };
 exports.rogues = {
     PARENT: ["menu"],
     LABEL: "Rogues",
-    COLOR: 17,
+    COLOR: "darkGrey",
     SHAPE: 6,
 };
 exports.rogueCelestials = {
     PARENT: ["menu"],
     LABEL: "Rogue Celestials",
-    COLOR: 17,
+    COLOR: "darkGrey",
     SHAPE: 9,
 };
 exports.rammers = {
     PARENT: ["menu"],
     LABEL: "Rammers",
-    COLOR: 0,
+    COLOR: "teal",
     TURRETS: [
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
@@ -147,25 +147,25 @@ exports.rammers = {
 exports.terrestrials = {
     PARENT: ["menu"],
     LABEL: "Terrestrials",
-    COLOR: 2,
+    COLOR: "orange",
     SHAPE: 7,
 };
 exports.celestials = {
     PARENT: ["menu"],
     LABEL: "Celestials",
-    COLOR: 1,
+    COLOR: "lightGreen",
     SHAPE: 9,
 };
 exports.eternals = {
     PARENT: ["menu"],
     LABEL: "Eternals",
-    COLOR: 0,
+    COLOR: "teal",
     SHAPE: 11,
 };
 exports.devBosses = {
     PARENT: ["menu"],
     LABEL: "Developers",
-    COLOR: 1,
+    COLOR: "lightGreen",
     SHAPE: 4,
 };
 
@@ -371,7 +371,7 @@ exports.rotatedTrap = {
 
 exports.mummyHat = {
     SHAPE: 4.5,
-    COLOR: 10
+    COLOR: -1
 };
 exports.mummy = {
     PARENT: ["drone"],
@@ -420,31 +420,31 @@ exports.colorMan = {
     PARENT: ["genericTank"],
     LABEL: "Testing Animated Colors",
     SHAPE: 4,
-    COLOR: 36,
+    COLOR: "rainbow",
     TURRETS: [{
         POSITION: [20, -20, -20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: 20 }
+        TYPE: { SHAPE: 4, COLOR: "animatedBlueRed" }
     },{
         POSITION: [20,  0 , -20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: 21 }
+        TYPE: { SHAPE: 4, COLOR: "animatedBlueGrey" }
     },{
         POSITION: [20,  20, -20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: 22 }
+        TYPE: { SHAPE: 4, COLOR: "animatedGreyBlue" }
     },{
         POSITION: [20, -20,  0 , 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: 23 }
+        TYPE: { SHAPE: 4, COLOR: "animatedRedGrey" }
     },{
         POSITION: [20,  20,  0 , 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: 29 }
+        TYPE: { SHAPE: 4, COLOR: "animatedGreyRed" }
     },{
         POSITION: [20,  20,  20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: 24 }
+        TYPE: { SHAPE: 4, COLOR: "animatedLesbian" }
     },{
         POSITION: [20,  0 ,  20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: 37 }
+        TYPE: { SHAPE: 4, COLOR: "animatedTrans" }
     },{
         POSITION: [20,  20,  20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: 38 }
+        TYPE: { SHAPE: 4, COLOR: "animatedBi" }
     }]
 };
 
@@ -492,7 +492,7 @@ exports.miscTestHelper = {
 exports.miscTest = {
     PARENT: ["genericTank"],
     LABEL: "Turret Reload Test",
-    COLOR: 1,
+    COLOR: "teal",
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
@@ -994,7 +994,7 @@ exports.godbasic = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic]),
                 TYPE: "bullet",
-                COLOR: 16,
+                COLOR: "grey",
                 LABEL: "",
                 STAT_CALCULATOR: 0,
                 WAIT_TO_CYCLE: false,
@@ -1071,13 +1071,13 @@ for (let i = 1; i <= 8; i++) {
 exports['Team' + TEAM_ROOM] = {
     PARENT: ["teams"],
     TEAM: TEAM_ROOM,
-    COLOR: 3,
+    COLOR: "yellow",
     LABEL: "Room Team"
 };
 exports['Team' + TEAM_ENEMIES] = {
     PARENT: ["teams"],
     TEAM: TEAM_ENEMIES,
-    COLOR: 3,
+    COLOR: "yellow",
     LABEL: "Enemies Team"
 };
 exports.teams.UPGRADES_TIER_0.push('Team' + TEAM_ROOM, 'Team' + TEAM_ENEMIES);
@@ -1099,7 +1099,7 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
         exports.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
         exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
 
-    exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses"];
+    exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses", "guardian", "defender"];
         exports.sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap", "sentinelMinigun", "sentinelLauncher", "sentinelCrossbow"];
         exports.elites.UPGRADES_TIER_0 = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "legionaryCrasher", "sprayerLegion"];
         exports.mysticals.UPGRADES_TIER_0 = ["sorcerer", "summoner", "enchantress", "exorcistor", "shaman"];
