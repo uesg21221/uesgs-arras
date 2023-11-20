@@ -95,6 +95,7 @@ exports.sentries = {
     PARENT: ["menu"],
     LABEL: "Sentries",
     COLOR: "pink",
+    UPGRADE_COLOR: "pink",
     SHAPE: 3.5,
     TURRETS: [
         {
@@ -107,36 +108,35 @@ exports.elites = {
     PARENT: ["menu"],
     LABEL: "Elites",
     COLOR: "pink",
+    UPGRADE_COLOR: "pink",
     SHAPE: 3.5,
 };
 exports.mysticals = {
     PARENT: ["menu"],
     LABEL: "Mysticals",
     COLOR: "gold",
+    UPGRADE_COLOR: "gold",
     SHAPE: 4,
 };
 exports.nesters = {
     PARENT: ["menu"],
     LABEL: "Nesters",
     COLOR: "purple",
+    UPGRADE_COLOR: "purple",
     SHAPE: 5.5,
 };
 exports.rogues = {
     PARENT: ["menu"],
     LABEL: "Rogues",
     COLOR: "darkGrey",
+    UPGRADE_COLOR: "darkGrey",
     SHAPE: 6,
-};
-exports.rogueCelestials = {
-    PARENT: ["menu"],
-    LABEL: "Rogue Celestials",
-    COLOR: "darkGrey",
-    SHAPE: 9,
 };
 exports.rammers = {
     PARENT: ["menu"],
     LABEL: "Rammers",
     COLOR: "teal",
+    UPGRADE_COLOR: "teal",
     TURRETS: [
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
@@ -148,24 +148,28 @@ exports.terrestrials = {
     PARENT: ["menu"],
     LABEL: "Terrestrials",
     COLOR: "orange",
+    UPGRADE_COLOR: "orange",
     SHAPE: 7,
 };
 exports.celestials = {
     PARENT: ["menu"],
     LABEL: "Celestials",
     COLOR: "lightGreen",
+    UPGRADE_COLOR: "lightGreen",
     SHAPE: 9,
 };
 exports.eternals = {
     PARENT: ["menu"],
     LABEL: "Eternals",
     COLOR: "teal",
+    UPGRADE_COLOR: "teal",
     SHAPE: 11,
 };
 exports.devBosses = {
     PARENT: ["menu"],
     LABEL: "Developers",
     COLOR: "lightGreen",
+    UPGRADE_COLOR: "rainbow",
     SHAPE: 4,
 };
 
@@ -1099,16 +1103,15 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
         exports.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
         exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
 
-    exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses", "guardian", "defender"];
+    exports.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses"];
         exports.sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap", "sentinelMinigun", "sentinelLauncher", "sentinelCrossbow"];
-        exports.elites.UPGRADES_TIER_0 = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "legionaryCrasher", "sprayerLegion"];
+        exports.elites.UPGRADES_TIER_0 = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "legionaryCrasher", "guardian", "defender", "sprayerLegion"];
         exports.mysticals.UPGRADES_TIER_0 = ["sorcerer", "summoner", "enchantress", "exorcistor", "shaman"];
         exports.nesters.UPGRADES_TIER_0 = ["nestKeeper", "nestWarden", "nestGuardian"];
-        exports.rogues.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "rogueCelestials"];
-	    exports.rogueCelestials.UPGRADES_TIER_0 = ["alviss", "tyr", "fiolnir"];
+        exports.rogues.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "alviss", "tyr", "fiolnir"];
 	    exports.rammers.UPGRADES_TIER_0 = ["bob", "nemesis"];
         exports.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"];
-        exports.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "rogueCelestials"];
+        exports.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "alviss", "tyr", "fiolnir"];
         exports.eternals.UPGRADES_TIER_0 = ["ragnarok", "kronos"];
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
