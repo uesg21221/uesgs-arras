@@ -146,18 +146,11 @@ function collide(collision) {
                     target1.HEALTH = better('HEALTH') * 1.2;
                     target1.health.amount = target1.health.max;
                     target1.DAMAGE = better('DAMAGE') * 1.1;
-
                     target2.kill();
-                    setTimeout(() => {
-                        if (target2) {
-                            target2.destroy(); // walls glitch
-                        }
-                    }, 1000);
 
                     for (let i = 0; i < 10; ++i) {
-                        const { x, y } = target1;
-                        const o = new Entity({ x, y }, target1);
-                        o.define(Class.assemblerEffect);
+                        const o = new Entity(target1, target1);
+                        o.define('assemblerEffect');
                         o.team = target1.team;
                         o.color = target1.color;
                         o.SIZE = target1.SIZE / 3;
@@ -304,14 +297,12 @@ let maintainloop = () => {
 
                 names.push(boss.name);
                 naturallySpawnedBosses.push(boss);
+                boss.on('dead', () => util.remove(naturallySpawnedBosses, naturallySpawnedBosses.indexOf(boss)));
             }
 
             sockets.broadcast(`${util.listify(names)} ${names.length == 1 ? 'has' : 'have'} arrived!`);
         }, c.BOSS_SPAWN_DURATION * 30);
     }
-
-    // remove dead bots
-    bots = bots.filter(e => !e.isDead());
 
     // upgrade existing ones
     for (let i = 0; i < bots.length; i++) {
@@ -344,19 +335,9 @@ let maintainloop = () => {
         o.color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
         if (team) o.team = team;
         bots.push(o);
+        o.on('dead', () => util.remove(bots, bots.indexOf(o)));
     }
 };
-
-if (c.SPACE_MODE) {
-    console.log("Spawned moon.");
-    let o = new Entity(room.center);
-    o.define('moon');
-    o.team = TEAM_ROOM;
-    o.SIZE = room.width / 10;
-    o.protect();
-    o.life();
-    room.blackHoles.push(o);
-}
 
 //evaluating js with a seperate console window if enabled
 if (c.REPL_WINDOW) {

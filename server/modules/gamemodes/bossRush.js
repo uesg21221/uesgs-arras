@@ -188,7 +188,6 @@ class BossRush {
         for (let tile of room.spawnable[TEAM_BLUE]) {
             this.spawnSanctuary(tile, TEAM_BLUE);
         }
-        console.log("Siege initialized.");
     }
 
     //runs every second
