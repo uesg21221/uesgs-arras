@@ -2084,10 +2084,21 @@ class Entity extends EventEmitter {
 
             for (let i = 0; i < killers.length; i++) {
                 let instance = killers[i];
-
-                if (this.type === "tank") killers.length > 1 ? instance.killCount.assists++ : instance.killCount.solo++;
-                if (this.type === "food" || this.type === "crasher") instance.killCount.polygons++;
-                if (this.type === "miniboss") instance.killCount.bosses++;
+                
+                switch (this.type) {
+                    case "tank":
+                        killers.length > 1 ? instance.killCount.assists++ : instance.killCount.solo++;
+                        break;
+                    
+                    case "food":
+                    case "crasher":
+                        instance.killCount.polygons++;
+                        break
+                    
+                    case "miniboss": 
+                        instance.killCount.bosses++;
+                        break;
+                }
 
                 this.killCount.killers.push(instance.index);
             };
