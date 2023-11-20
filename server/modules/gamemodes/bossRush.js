@@ -183,10 +183,7 @@ class BossRush {
 
     //runs once when the server starts
     init() {
-        Class.basic.UPGRADES_TIER_2.splice(0, 1);
-        Class.director.UPGRADES_TIER_2.splice(2, 1);
         Class.basic.UPGRADES_TIER_2.push("healer");
-        Class.unavailable.UPGRADES_TIER_0 = ["underseer", "smasher"];
         //TODO: filter out tiles that are not of sanctuary type
         for (let tile of room.spawnable[TEAM_BLUE]) {
             this.spawnSanctuary(tile, TEAM_BLUE);
