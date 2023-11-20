@@ -302,13 +302,17 @@ class Gun {
         this.lastShot.power = 3 * Math.log(Math.sqrt(sk.spd) + this.trueRecoil + 1) + 1;
         this.motion += this.lastShot.power;
         // Find inaccuracy
-        let shudder, spread;
-        do {
-            shudder = ran.gauss(0, Math.sqrt(this.settings.shudder));
-        } while (Math.abs(shudder) >= this.settings.shudder * 2);
-        do {
-            spread = ran.gauss(0, this.settings.spray * this.settings.shudder);
-        } while (Math.abs(spread) >= this.settings.spray / 2);
+        let shudder = 0, spread = 0;
+        if (this.settings.shudder) {
+            do {
+                shudder = ran.gauss(0, Math.sqrt(this.settings.shudder));
+            } while (Math.abs(shudder) >= this.settings.shudder * 2);
+        }
+        if (this.settings.spray) {
+            do {
+                spread = ran.gauss(0, this.settings.spray * this.settings.shudder);
+            } while (Math.abs(spread) >= this.settings.spray / 2);
+        }
         spread *= Math.PI / 180;
         // Find speed
         let vecLength = (this.negRecoil ? -1 : 1) * this.settings.speed * c.runSpeed * sk.spd * (1 + shudder),
@@ -1044,11 +1048,13 @@ class Entity extends EventEmitter {
         if (set.NAME != null) this.name = set.NAME;
         if (set.LABEL != null) this.label = set.LABEL;
         if (set.UPGRADE_LABEL != null) this.upgradeLabel = set.UPGRADE_LABEL;
+        if (set.DISPLAY_NAME != null) this.displayName = set.DISPLAY_NAME;
         if (set.TYPE != null) this.type = set.TYPE;
         if (set.SHAPE != null) {
             this.shape = typeof set.SHAPE === "number" ? set.SHAPE : 0;
             this.shapeData = set.SHAPE;
         }
+        this.imageInterpolation = set.IMAGE_INTERPOLATION != null ? set.IMAGE_INTERPOLATION : 'bilinear'
         if (set.COLOR != null) {
             if (typeof set.COLOR === "number" || typeof set.COLOR === 'string')
                 this.colorUnboxed.base = set.COLOR;
@@ -1149,6 +1155,7 @@ class Entity extends EventEmitter {
                     }
                 }
             }
+            for (let child of this.children) child.team = set.TEAM
         }
         if (set.VARIES_IN_SIZE != null) {
             this.settings.variesInSize = set.VARIES_IN_SIZE;
@@ -1229,6 +1236,7 @@ class Entity extends EventEmitter {
             this.guns = newGuns;
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
+        if (set.RESET_CHILDREN) this.destroyAllChildren();
         if ("function" === typeof set.LEVEL_SKILL_POINT_FUNCTION) {
             this.skill.LSPF = set.LEVEL_SKILL_POINT_FUNCTION;
         }
@@ -1605,7 +1613,7 @@ class Entity extends EventEmitter {
     }
     camera(tur = false) {
         return {
-            type: 0 + tur * 0x01 + this.settings.drawHealth * 0x02 + (this.type === "tank") * 0x04,
+            type: 0 + tur * 0x01 + this.settings.drawHealth * 0x02 + (this.type === "tank" && this.displayName) * 0x04,
             invuln: this.invuln,
             id: this.id,
             index: this.index,
@@ -1628,15 +1636,13 @@ class Entity extends EventEmitter {
             mirrorMasterAngle: this.settings.mirrorMasterAngle ?? false,
             perceptionAngleIndependence: this.perceptionAngleIndependence, //vfacing: this.vfacing,
             defaultAngle: this.firingArc[0],
-            twiggle: this.facingType === "autospin" || (this.facingType === "locksFacing" && this.control.alt),
+            twiggle: this.facingType === "autospin" || this.facingType === "spin" || this.facingType === "fastspin" || (this.facingType === "locksFacing" && this.control.alt),
             layer: this.layerID ? this.layerID : this.bond != null ? this.bound.layer : this.type === "wall" ? 11 : this.type === "food" ? 10 : this.type === "tank" ? 5 : this.type === "crasher" ? 1 : 0,
             color: this.color,
             name: (this.nameColor || "#FFFFFF") + this.name,
             score: this.skill.score,
             guns: this.guns.map((gun) => gun.getPhotoInfo()),
             turrets: this.turrets.map((turret) => turret.camera(true)),
-
-            upgradeColor: this.upgradeColor,
             glow: this.glow,
         };
     }
@@ -1688,17 +1694,20 @@ class Entity extends EventEmitter {
                     for (let i = tooltips.length; i--;) this.sendMessage(tooltips[i]);
                 }
             }
-            for (let instance of entities) {
-                if (
-                    instance.settings.clearOnMasterUpgrade &&
-                    instance.master.id === this.id
-                ) {
-                    instance.kill();
-                }
-            }
+            this.destroyAllChildren();
             this.skill.update();
             this.syncTurrets();
             this.refreshBodyAttributes();
+        }
+    }
+    destroyAllChildren() {
+        for (let instance of entities) {
+            if (
+                instance.settings.clearOnMasterUpgrade &&
+                instance.master.id === this.id
+            ) {
+                instance.kill();
+            }
         }
     }
     damageMultiplier() {

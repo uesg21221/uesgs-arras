@@ -57,9 +57,7 @@ class Animation {
         return this.value;
     }
     get() {
-        return settings.graphical.fancyAnimations
-            ? this.getLerp()
-            : this.getNoLerp();
+        return settings.graphical.fancyAnimations ? this.getLerp() : this.getNoLerp();
     }
     flip() {
         const start = this.to;
@@ -95,6 +93,9 @@ global.player = {
     cy: 0,
     renderx: global.screenWidth / 2,
     rendery: global.screenHeight / 2,
+    isScoping: false,
+    screenx: 0,
+    screeny: 0,
     renderv: 1,
     slip: 0,
     view: 1,
@@ -199,10 +200,8 @@ window.onload = async () => {
         }
     };
     window.addEventListener("resize", resizeEvent);
-    // Resizing stuff
     resizeEvent();
 };
-// Prepare canvas stuff
 function resizeEvent() {
     let scale = window.devicePixelRatio;
     if (!settings.graphical.fancyAnimations) {
@@ -252,12 +251,24 @@ global.player = {
     lasty: global.player.y,
     cx: 0,
     cy: 0,
-    target: window.canvas.target,
+    target: calculateTarget(),
     name: "",
     lastUpdate: 0,
     time: 0,
     nameColor: "#ffffff",
 };
+function calculateTarget() {
+    global.target.x = global.mouse.x * global.ratio - (global.player.screenx / global.screenWidth * window.canvas.width + window.canvas.width / 2);
+    global.target.y = global.mouse.y * global.ratio - (global.player.screeny / global.screenHeight * window.canvas.height + window.canvas.height / 2);
+    if (window.canvas.reverseDirection) {
+        global.target.x *= -1;
+        global.target.y *= -1;
+    }
+    global.target.x *= global.screenWidth / window.canvas.width;
+    global.target.y *= global.screenHeight / window.canvas.height;
+    if (settings.graphical.screenshotMode && Math.abs(Math.atan2(global.target.y, global.target.x) + Math.PI/2) < 0.035) global.target.x = 0; 
+    return global.target;
+}
 // This starts the game and sets up the websocket
 function startGame() {
     // Get options
@@ -313,7 +324,7 @@ function startGame() {
     document.getElementById("gameAreaWrapper").style.opacity = 1;
     // Set up the socket
     if (!global.socket) {
-        global.socket = socketInit(3000);
+        global.socket = socketInit(26301);
     }
     if (!global.animLoopHandle) {
         animloop();
@@ -483,14 +494,14 @@ function isImageURL(url) {
         // List of common image file extensions
         const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
 
-        return imageExtensions.includes(ext);
+        return imageExtensions.includes(ext) || parsedUrl.protocol == 'data:';
     } catch (error) {
         return false; // URL parsing failed, or it's not an image URL.
     }
 }
 // Sub-drawing functions
 const drawPolyImgs = []
-function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill) {
+function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation) {
     // Start drawing
     context.beginPath();
     if (sides instanceof Array) {
@@ -547,7 +558,9 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 }
                 context.translate(centerX, centerY);
                 context.rotate(angle);
+                context.imageSmoothingEnabled = imageInterpolation
                 context.drawImage(img, -radius, -radius, radius*2, radius*2);
+                context.imageSmoothingEnabled = true;
                 context.rotate(-angle);
                 context.translate(-centerX, -centerY);
                 return;
@@ -657,7 +670,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
         xx = x,
         yy = y,
         source = turretInfo === false ? instance : turretInfo,
-        blend = turretsObeyRot ? 0 : render.status.getBlend();
+        blend = render.status.getBlend();
     source.guns.update();
     if (fade === 0 || alpha === 0) return;
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
@@ -732,7 +745,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
 
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless, m.drawFill);
+    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless, m.drawFill, m.imageInterpolation);
     
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {
@@ -784,7 +797,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
     if (instance.drawsHealth) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
-        if (health < 1 - 1e-4 || shield < 1 - 1e-4) {
+        if (health < 0.99 || shield < 0.99) {
             let instanceColor = null;
             let getColor = true;
             if (typeof instance.color == 'string') {
@@ -826,6 +839,40 @@ function drawHealth(x, y, instance, ratio, alpha) {
         drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor, "center");
         ctx.globalAlpha = 1;
     }
+}
+
+function drawEntityIcon(model, x, y, len, height, angle, alpha, colorIndex, upgradeKey) {
+    let picture = util.getEntityImageFromMockup(model, gui.color),
+        position = picture.position,
+        scale = (0.6 * len) / position.axis,
+        entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(angle),
+        entityY = y + 0.5 * height - scale * position.middle.x * Math.sin(angle),
+        baseColor = picture.color;
+
+    // Draw box
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+    drawGuiRect(x, y, len, height);
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex - 9);
+    drawGuiRect(x, y, len, height * 0.6);
+    ctx.fillStyle = color.black;
+    drawGuiRect(x, y + height * 0.6, len, height * 0.4);
+    ctx.globalAlpha = 1;
+
+    // Draw Tank
+    drawEntity(baseColor, entityX, entityY, picture, 1, 1, scale / picture.size, angle, true);
+
+    // Tank name
+    drawText(picture.upgradeName ?? picture.name, x + (upgradeKey ? 0.9 * len : len) / 2, y + height - 6, height / 8 - 3, color.guiwhite, "center");
+
+    // Upgrade key
+    if (upgradeKey) {
+        drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 3, color.guiwhite, "right");
+    }
+    ctx.strokeStyle = color.black;
+    ctx.lineWidth = 3;
+    drawGuiRect(x, y, len, height, true); // Border
 }
 
 // Start animation
@@ -975,7 +1022,7 @@ let tiles,
         for (let i = 0; i < hasUpgrades.length; i++) {
             let upgrade = hasUpgrades[i],
                 spacing = 2 * Math.max(1, upgrade.tier - tier),
-                measure = measureSize(x, y + spacing, 10 + i, upgrade);
+                measure = measureSize(x, y + spacing, upgrade.upgradeColor ?? 10 + i, upgrade);
             branches.push([{ x, y: y + Math.sign(i) }, { x, y: y + spacing + 1 }]);
             if (i === hasUpgrades.length - 1 && !noUpgrades.length) {
                 branches.push([{ x: xStart, y: y + 1 }, { x, y: y + 1 }]);
@@ -988,7 +1035,7 @@ let tiles,
         for (let i = 0; i < noUpgrades.length; i++) {
             let upgrade = noUpgrades[i],
                 height = 2 + upgrades.length;
-            measureSize(x, y + 1 + i + Math.sign(hasUpgrades.length) * 2, 10 + i, upgrade);
+            measureSize(x, y + 1 + i + Math.sign(hasUpgrades.length) * 2, upgrade.upgradeColor ?? 10 + i, upgrade);
             if (i === noUpgrades.length - 1) {
                 if (hasUpgrades.length > 1) cumulativeWidth++;
                 branches.push([{ x: xStart, y }, { x, y }]);
@@ -1004,16 +1051,16 @@ let tiles,
 function generateTankTree(indexes) {
     tiles = [];
     branches = [];
-    let initialX = 0;
-    let maxHeight = 0;
+    tankTree = { width: 0, height: 0 };
+    let rightestSoFar = 0;
     if (!Array.isArray(indexes)) indexes = [indexes];
     for (let index of indexes) {
-        tankTree = measureSize(initialX, 0, 10, { index });
-        tankTree.width += initialX;
-        maxHeight = Math.max(maxHeight, tankTree.height);
-        initialX = tankTree.width + 3;
+        rightestSoFar += 3 + measureSize(rightestSoFar, 0, 10, { index }).width;
     }
-    tankTree.height = maxHeight;
+    for (let { x, y } of tiles) {
+        tankTree.width = Math.max(tankTree.width, x);
+        tankTree.height = Math.max(tankTree.height, y);
+    }
 }
 
 function drawFloor(px, py, ratio) {
@@ -1082,9 +1129,16 @@ function drawEntities(px, py, ratio) {
         instance.render.x = util.lerp(instance.render.x, Math.round(instance.x + instance.vx), 0.1, true);
         instance.render.y = util.lerp(instance.render.y, Math.round(instance.y + instance.vy), 0.1, true);
         instance.render.f = instance.id === gui.playerid && !global.autoSpin && !instance.twiggle && !global.died ? Math.atan2(global.target.y, global.target.x) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
-        let x = instance.id === gui.playerid && settings.graphical.centerTank ? 0 : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid && settings.graphical.centerTank ? 0 : ratio * instance.render.y - py,
+        let x = ratio * instance.render.x - px,
+            y = ratio * instance.render.y - py,
             baseColor = instance.color;
+        
+        if (instance.id === gui.playerid) {
+            x = settings.graphical.centerTank && !global.player.isScoping ? 0 : x;
+            y = settings.graphical.centerTank && !global.player.isScoping ? 0 : y;
+            global.player.screenx = x;
+            global.player.screeny = y;
+        }
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
         drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, instance.render.f);
@@ -1095,8 +1149,8 @@ function drawEntities(px, py, ratio) {
 
     //draw health bars above entities
     for (let instance of global.entities) {
-        let x = instance.id === gui.playerid ? 0 : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid ? 0 : ratio * instance.render.y - py;
+        let x = instance.id === gui.playerid ? global.player.screenx : ratio * instance.render.x - px,
+            y = instance.id === gui.playerid ? global.player.screeny : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
         drawHealth(x, y, instance, ratio, instance.alpha);
@@ -1139,6 +1193,12 @@ global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1
 global.shouldScrollY = global.shouldScrollX = 0;
 let lastGuiType = null;
 function drawUpgradeTree(spacing, alcoveSize) {
+    if (global.died) {
+        global.showTree = false;
+        global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = global.shouldScrollY = global.shouldScrollX = 0;
+        return;
+    }
+
     if (lastGuiType != gui.type) {
         let m = util.getEntityImageFromMockup(gui.type), // The mockup that corresponds to the player's tank
             rootName = m.rerootUpgradeTree, // The upgrade tree root of the player's tank
@@ -1160,24 +1220,20 @@ function drawUpgradeTree(spacing, alcoveSize) {
 
     let tileSize = alcoveSize / 2,
         size = tileSize - 4,
-        spaceBetween = 8,
-        padding = 0.5 + spaceBetween / tileSize;
+        spaceBetween = 10,
+        padding = 0.5 + spaceBetween / tileSize,
+        screenDivisor = spaceBetween + tileSize;
 
-    if (global.died) {
-        global.showTree = false;
-        global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1;
-        global.shouldScrollY = global.shouldScrollX = 0;
-    }
-    global.fixedScrollX = Math.max(-padding, Math.min(tankTree.width + padding, global.fixedScrollX + global.shouldScrollX));
-    global.fixedScrollY = Math.max(-padding, Math.min(tankTree.height + padding, global.fixedScrollY + global.shouldScrollY));
+    global.fixedScrollX = Math.max(-padding, Math.min(tankTree.width * (1 + spaceBetween / tileSize) + padding - global.screenWidth / screenDivisor, global.fixedScrollX + global.shouldScrollX));
+    global.fixedScrollY = Math.max(-padding, Math.min(tankTree.height * (1 + spaceBetween / tileSize) + padding - global.screenHeight / screenDivisor, global.fixedScrollY + global.shouldScrollY));
     global.scrollX = util.lerp(global.scrollX, global.fixedScrollX, 0.1);
     global.scrollY = util.lerp(global.scrollY, global.fixedScrollY, 0.1);
 
     for (let [start, end] of branches) {
-        let sx = start.x * spaceBetween + (start.x - global.scrollX) * tileSize + 1 + 0.5 * size,
-            sy = start.y * spaceBetween + (start.y - global.scrollY) * tileSize + 1 + 0.5 * size,
-            ex = end.x * spaceBetween + (end.x - global.scrollX) * tileSize + 1 + 0.5 * size,
-            ey = end.y * spaceBetween + (end.y - global.scrollY) * tileSize + 1 + 0.5 * size;
+        let sx = (start.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size,
+            sy = (start.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size,
+            ex = (end.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size,
+            ey = (end.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size;
         if (ex < 0 || sx > global.screenWidth || ey < 0 || sy > global.screenHeight) continue;
         ctx.strokeStyle = color.black;
         ctx.lineWidth = 2;
@@ -1189,35 +1245,12 @@ function drawUpgradeTree(spacing, alcoveSize) {
     ctx.globalAlpha = 1;
 
     //draw the various tank icons
+    let angle = -Math.PI / 4;
     for (let { x, y, colorIndex, index } of tiles) {
-        let ax = x * spaceBetween + (x - global.scrollX) * tileSize,
-            ay = y * spaceBetween + (y - global.scrollY) * tileSize,
-            size = tileSize;
-        if (ax < -size || ax > global.screenWidth + size || ay < -size || ay > global.screenHeight + size) continue;
-        let angle = -Math.PI / 4,
-            position = global.mockups[index].position,
-            scale = (0.8 * size) / position.axis,
-            xx = ax + 0.5 * size - scale * position.middle.x * Math.cos(angle),
-            yy = ay + 0.5 * size - scale * position.middle.x * Math.sin(angle),
-            picture = util.getEntityImageFromMockup(index.toString(), gui.color),
-            baseColor = picture.color;
-
-        ctx.globalAlpha = 0.75;
-        ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
-        drawGuiRect(ax, ay, size, size);
-        ctx.globalAlpha = 0.15;
-        ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
-        drawGuiRect(ax, ay, size, size * 0.6);
-        ctx.fillStyle = color.black;
-        drawGuiRect(ax, ay + size * 0.6, size, size * 0.4);
-        ctx.globalAlpha = 1;
-
-        drawEntity(baseColor, xx, yy, picture, 1, 1, scale / picture.size, angle, true);
-
-        drawText(picture.upgradeName ?? picture.name, ax + size / 2, ay + size - 5, size / 8 - 3, color.guiwhite, "center");
-
-        ctx.lineWidth = 3;
-        drawGuiRect(ax, ay, size, size, true);
+        let ax = (x - global.scrollX) * (tileSize + spaceBetween),
+            ay = (y - global.scrollY) * (tileSize + spaceBetween);
+        if (ax < -tileSize || ax > global.screenWidth + tileSize || ay < -tileSize || ay > global.screenHeight + tileSize) continue;
+        drawEntityIcon(index.toString(), ax, ay, tileSize, tileSize, angle, 1, colorIndex);
     }
 
     let text = "Use the arrow keys to navigate the class tree. Press T again to close it.";
@@ -1556,40 +1589,10 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             rowWidth = x;
 
             global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
-
-            let picture = util.getEntityImageFromMockup(model, gui.color),
-                position = picture.position,
-                scale = (0.6 * len) / position.axis,
-                entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(upgradeSpin),
-                entityY = y + 0.5 * height - scale * position.middle.x * Math.sin(upgradeSpin),
-                baseColor = picture.color;
-
-            // Draw box
-            ctx.globalAlpha = 0.5;
-            ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
-            drawGuiRect(x, y, len, height);
-            ctx.globalAlpha = 0.1;
-            ctx.fillStyle = picture.upgradeColor!=null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(-10 + colorIndex++);
-            drawGuiRect(x, y, len, height * 0.6);
-            ctx.fillStyle = color.black;
-            drawGuiRect(x, y + height * 0.6, len, height * 0.4);
-            ctx.globalAlpha = 1;
-
-            // Draw Tank
-            drawEntity(baseColor, entityX, entityY, picture, 1, 1, scale / picture.size, upgradeSpin, true);
             let upgradeKey = getClassUpgradeKey(upgradeNum);
 
-            // Tank name
-            drawText(picture.upgradeName ?? picture.name, x + ((upgradeKey ? 0.9 : 1) * len) / 2, y + height - 6, height / 8 - 3, color.guiwhite, "center");
+            drawEntityIcon(model, x, y, len, height, upgradeSpin, 0.5, colorIndex++, upgradeKey);
 
-            // Upgrade key
-            if (upgradeKey) {
-                drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 3, color.guiwhite, "right");
-            }
-            ctx.strokeStyle = color.black;
-            ctx.globalAlpha = 1;
-            ctx.lineWidth = 3;
-            drawGuiRect(x, y, len, height, true); // Border
             ticker++;
             upgradeNum++;
         }
@@ -1625,6 +1628,9 @@ const gameDrawAlive = (ratio, drawRatio) => {
     global.player.rendery = util.lerp(global.player.rendery, global.player.cy, 0.1, true);
     let px = ratio * global.player.renderx,
         py = ratio * global.player.rendery;
+
+    // Get the player's target
+    calculateTarget();
 
     //draw the in game stuff
     drawFloor(px, py, ratio);
@@ -1713,7 +1719,7 @@ const gameDrawDead = () => {
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, -Math.PI / 4, true);
-    drawText("Game over man, game over.", x, y - 80, 8, color.guiwhite, "center");
+    drawText("That pond it seems me many multiplied of fishes. Let us amuse rather to the fishing.", x, y - 80, 8, color.guiwhite, "center");
     drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);

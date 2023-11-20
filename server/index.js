@@ -265,15 +265,28 @@ const gameloop = () => {
 
 setTimeout(closeArena, 60000 * 120); // Restart every 2 hours
 
-let bossTimer = 0,
-spawnBosses = minibossCount => {
-    if (!minibossCount && bossTimer++ > c.BOSS_SPAWN_COOLDOWN) {
+global.naturallySpawnedBosses = [];
+global.bots = [];
+let bossTimer = 0;
+// A less important loop.
+let maintainloop = () => {
+    // Regen health and update the grid
+    for (let i = 0; i < entities.length; i++) {
+        let instance = entities[i];
+        if (instance.shield.max) {
+            instance.shield.regenerate();
+        }
+        if (instance.health.amount) {
+            instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
+        }
+    }
+    if (!naturallySpawnedBosses.length && bossTimer++ > c.BOSS_SPAWN_COOLDOWN) {
         bossTimer = -c.BOSS_SPAWN_DURATION;
         let selection = c.BOSS_TYPES[ran.chooseChance(...c.BOSS_TYPES.map((selection) => selection.chance))],
             amount = ran.chooseChance(...selection.amount) + 1;
         sockets.broadcast(amount > 1 ? "Visitors are coming..." : "A visitor is coming...");
         if (selection.message) {
-            setSyncedTimeout(sockets.broadcast, c.BOSS_SPAWN_DURATION * 15, selection.message);
+            sockets.broadcast(selection.message);
         }
         setSyncedTimeout(() => {
             let names = [];
@@ -290,15 +303,13 @@ spawnBosses = minibossCount => {
                 }
 
                 names.push(boss.name);
+                naturallySpawnedBosses.push(boss);
             }
 
             sockets.broadcast(`${util.listify(names)} ${names.length == 1 ? 'has' : 'have'} arrived!`);
         }, c.BOSS_SPAWN_DURATION * 30);
     }
-};
 
-let bots = [],
-spawnBots = () => {
     // remove dead bots
     bots = bots.filter(e => !e.isDead());
 
@@ -336,13 +347,6 @@ spawnBots = () => {
     }
 };
 
-let makenpcs = () => {
-    let minibosses = 0;
-    for (let i = 0; i < entities.length; i++) if (entities[i].type == "miniboss") minibosses++;
-    spawnBosses(minibosses);
-    spawnBots();
-};
-
 if (c.SPACE_MODE) {
     console.log("Spawned moon.");
     let o = new Entity(room.center);
@@ -353,22 +357,6 @@ if (c.SPACE_MODE) {
     o.life();
     room.blackHoles.push(o);
 }
-
-// A less important loop. Runs at an actual 5Hz regardless of game speed.
-const maintainloop = () => {
-    // Do stuff
-    makenpcs();
-    // Regen health and update the grid
-    for (let i = 0; i < entities.length; i++) {
-        let instance = entities[i];
-        if (instance.shield.max) {
-            instance.shield.regenerate();
-        }
-        if (instance.health.amount) {
-            instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
-        }
-    }
-};
 
 //evaluating js with a seperate console window if enabled
 if (c.REPL_WINDOW) {
@@ -385,7 +373,7 @@ setInterval(() => {
     gamemodeLoop();
     roomLoop();
 
-    if (++counter > 30) {
+    if (counter++ / c.runSpeed > 30) {
         chatLoop();
         maintainloop();
         speedcheckloop();

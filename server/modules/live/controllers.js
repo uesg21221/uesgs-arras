@@ -121,6 +121,7 @@ class io_listenToPlayer extends IO {
             };
         }
         this.body.autoOverride = this.player.command.override;
+        if (this.body.invuln && (fire || alt)) this.body.invuln = false;
         return {
             target,
             fire,
@@ -350,6 +351,7 @@ class io_nearestDifferentMaster extends IO {
         (!isNaN(e.dangerValue)) &&
         (!e.invuln && !e.master.master.passive && !this.body.master.master.passive) &&
         (this.body.aiSettings.seeInvisible || this.body.isArenaCloser || e.alpha > 0.5) &&
+        (!e.bond) &&
         (e.type === "miniboss" || e.type === "tank" || e.type === "crasher" || (!this.body.aiSettings.IGNORE_SHAPES && e.type === 'food')) &&
         (this.body.aiSettings.BLIND || ((e.x - m.x) * (e.x - m.x) < sqrRange && (e.y - m.y) * (e.y - m.y) < sqrRange)) &&
         (this.body.aiSettings.SKYNET || ((e.x - mm.x) * (e.x - mm.x) < sqrRangeMaster && (e.y - mm.y) * (e.y - mm.y) < sqrRangeMaster));

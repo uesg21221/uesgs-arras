@@ -3,10 +3,10 @@ module.exports = {
 
     // Game server domain.
     // If 'localhost:NUMBER', the port must equal the port setting.
-    host: "localhost:3000",
+    host: "localhost:26301",
 
     // Which port to run the web server on.
-    port: 3000,
+    port: 26301,
 
     // How often to update the list of the entities that players can see.
     // Has effects of when entities are activated.
@@ -48,7 +48,7 @@ module.exports = {
     DEFAULT_FILE: 'index.html',
 
     // Window name of the server terminal.
-    WINDOW_NAME: 'APS++ Game Server Instance',
+    WINDOW_NAME: 'OSA Game Server Instance',
 
     // Allows you to type and run javascript code in the terminal.
     REPL_WINDOW: false,
@@ -56,7 +56,7 @@ module.exports = {
     // Welcome message once a player spawns.
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
-                    +"This is a beta release of APS++. Please join the official discord server to report any bugs you encounter!",
+                    +"Please report any bugs you encounter!",
 
 
 
@@ -196,27 +196,11 @@ module.exports = {
         amount: [2, 2, 1], chance: 1, nameType: "a",
         message: "A strange trembling...",
     },{
-        bosses: ["paladin"],
+        bosses: ["paladin", "freyja", "zaphkiel", "nyx", "theia"],
         amount: [1], chance: 0.1,
         message: "The world tremors as the celestials are reborn anew!",
     },{
-        bosses: ["freyja"],
-        amount: [1], chance: 0.1,
-        message: "The world tremors as the celestials are reborn anew!",
-    },{
-        bosses: ["zaphkiel"],
-        amount: [1], chance: 0.1,
-        message: "The world tremors as the celestials are reborn anew!",
-    },{
-        bosses: ["nyx"],
-        amount: [1], chance: 0.1,
-        message: "The world tremors as the celestials are reborn anew!",
-    },{
-        bosses: ["theia"],
-        amount: [1], chance: 0.1,
-        message: "The world tremors as the celestials are reborn anew!",
-    },{
-        bosses: ["alviss"],
+        bosses: ["alviss", "tyr", "fiolnir"],
         amount: [1], chance: 0.1,
         message: "The darkness arrives as the realms are torn apart!",
     }],

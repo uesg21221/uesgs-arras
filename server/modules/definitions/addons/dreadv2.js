@@ -16,7 +16,7 @@ const eggnoughtBody = {
 	SHIELD: base.SHIELD * 1.5,
 	REGEN: base.REGEN * 1.5,
     FOV: base.FOV,
-	RESIST: base.RESIST * 1.5,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 1.5,
 };
 const squarenoughtBody = {
@@ -25,7 +25,7 @@ const squarenoughtBody = {
 	SHIELD: base.SHIELD * 2,
 	REGEN: base.REGEN * 2,
     FOV: base.FOV * 0.95,
-	RESIST: base.RESIST * 2,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 2,
 };
 const trinoughtBody = {
@@ -34,7 +34,7 @@ const trinoughtBody = {
 	SHIELD: base.SHIELD * 2.5,
 	REGEN: base.REGEN * 2.5,
     FOV: base.FOV * 0.95,
-	RESIST: base.RESIST * 2.5,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 2.5,
 };
 const pentanoughtBody = {
@@ -43,7 +43,7 @@ const pentanoughtBody = {
 	SHIELD: base.SHIELD * 3,
 	REGEN: base.REGEN * 3,
     FOV: base.FOV * 0.95,
-	RESIST: base.RESIST * 3,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 3,
 };
 const hexnoughtBody = {
@@ -52,15 +52,15 @@ const hexnoughtBody = {
 	SHIELD: base.SHIELD * 3.5,
 	REGEN: base.REGEN * 3.5,
     FOV: base.FOV * 0.95,
-	RESIST: base.RESIST * 3.5,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 3.5,
 };
 
 module.exports = ({ Class }) => {
-	// Comment out the line below to enable this addon, uncomment it to disable this addon (WARNING: Increases load time by approximately 3x).
+	// Comment out the line below to enable this addon, uncomment it to disable this addon.
 	// return console.log('--- Dreadnoughts v2 addon [dreadv2.js] is disabled. See lines 60-61 to enable it. ---');
 
-	// Set the below variable to true to enable hex dreadnought building (WARNING: increases load time by approximately 10x)
+	// Set the below variable to true to enable hex dreadnought building.
 	const buildHexnoughts = true;
 	
 	// For hexnought merging
@@ -120,7 +120,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [22, 10, 1, 0, 0, 0, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.auto]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.auto, {recoil: 0.2}]),
 					TYPE: "bullet",
 				},
 			},
@@ -176,7 +176,7 @@ module.exports = ({ Class }) => {
 	Class.dreadOfficialV2 = {
 		PARENT: ["genericEggnought"],
 	    	LABEL: "Dreadnought",
-	    	UPGRADE_LABEL: "Dreadnought (V2)",
+	    	UPGRADE_LABEL: "Dreads V2",
 		LEVEL: 90,
 		EXTRA_SKILL: 18,
 	}
@@ -1025,7 +1025,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [3.5, 10, 1.6, 13, 0, 120*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {health: 2}]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.2, health: 2}]),
 					TYPE: "unsetTrap",
 				},
 			},
@@ -1763,7 +1763,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [3.5, 10, 1.6, 13, 0, 72*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {health: 2}]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.3, health: 2}]),
 					TYPE: "unsetTrap",
 				},
 			},

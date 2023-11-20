@@ -17,12 +17,12 @@ exports.clamp = (value, min, max) => Math.min(Math.max(value, min), max)
 exports.listify = list => {
   if (list.length === 0) return ''
   if (list.length === 1) return list[0]
-  if (list.length === 2) return `${list[0]} and ${list[1]}.`
+  if (list.length === 2) return `${list[0]} and ${list[1]}`
   
   let output = ''
   for (let [i, item] of list.entries()) {
     if (typeof item !== 'string') throw Error(`Item #${i + 1} (${item} of list is not a string.`)
-    output += i !== list.length - 1 ? `${item}, ` : ` and ${item}.`
+    output += i !== list.length - 1 ? `${item}, ` : `and ${item}`
   }
   return output
 }

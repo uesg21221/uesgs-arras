@@ -57,25 +57,7 @@ global.Tile = class Tile {
             throw new Error("First argument has to be an object!");
         }
 
-        let COLOR = args.color ?? 8;
-        if (typeof COLOR === "number" || typeof COLOR === 'string') {
-            this.colorUnboxed = {
-                base: COLOR,
-                hueShift: 0,
-                saturationShift: 1,
-                brightnessShift: 0,
-                allowBrightnessInvert: false,
-            };
-        } else if (typeof set.COLOR === "object") {
-            this.colorUnboxed = {
-                base: COLOR.BASE ?? 16,
-                hueShift: COLOR.HUE_SHIFT ?? 0,
-                saturationShift: COLOR.SATURATION_SHIFT ?? 1,
-                brightnessShift: COLOR.BRIGHTNESS_SHIFT ?? 0,
-                allowBrightnessInvert: COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
-            };
-        }
-        this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+        this.color = args.color;
         this.data = args.data || {};
         if ("object" !== typeof this.data) {
             throw new Error("'data' property must be an object!");
@@ -91,20 +73,10 @@ global.Tile = class Tile {
     }
 }
 
-global.clockTick = 0;
-global.tickQueue = [];
-global.syncedDelaysLoop = () => {
-    while (tickQueue[0] && tickQueue[0][0] <= clockTick) {
-        let current = tickQueue.shift();
-        current[1](...current[2]);
-    }
-    clockTick += 1 / c.runSpeed;
-};
-global.setSyncedTimeout = (callback, ticks = 0, ...args) => {
-    let goal = clockTick + ticks, insertHere = 0;
-    while (tickQueue.length < insertHere && tickQueue[insertHere][0] <= goal) insertHere++;
-    tickQueue.splice(insertHere, 0, callback, args);
-};
+global.tickIndex = 0;
+global.tickEvents = new EventEmitter();
+global.syncedDelaysLoop = () => tickEvents.emit(tickIndex++);
+global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.once(tickIndex + Math.round(ticks), () => callback(...args));
 
 global.c = require("./setup/config.js");
 global.c.port = process.env.PORT || c.port;

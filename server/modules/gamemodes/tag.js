@@ -30,7 +30,7 @@ function checkWin() {
 function init(g) {
     g.events.on('spawn', entity => {
         entity.on('dead', () => {
-            if (!entity.isPlayer && !entity.isBot) return;
+            if (!c.TAG || !entity.isPlayer && !entity.isBot) return;
             let killers = [];
             for (let entry of entity.collisionArray) {
                 if (isPlayerTeam(entry.team) && entity.team !== entry.team) {
