@@ -393,6 +393,7 @@ exports.sentry = {
     LABEL: "Sentry",
     DANGER: 3,
     COLOR: "pink",
+    UPGRADE_COLOR: "pink",
     SHAPE: 3,
     SIZE: 10,
     SKILL: skillSet({
@@ -560,6 +561,7 @@ exports.barricadeTurret = {
 exports.sentrySwarm = {
     PARENT: ["sentry"],
     UPGRADE_LABEL: "Swarm Sentry",
+    UPGRADE_COLOR: "pink",
     GUNS: [
         {
             POSITION: [7, 14, 0.6, 7, 0, 180, 0],
@@ -584,6 +586,7 @@ exports.sentryTrap.UPGRADE_LABEL = "Trap Sentry";
 exports.shinySentry = {
     PARENT: ["sentry"],
     COLOR: "lightGreen",
+    UPGRADE_COLOR: "lightGreen",
     DANGER: 4,
     SIZE: 12,
     VALUE: 50000,
@@ -595,6 +598,7 @@ exports.shinySentry = {
 exports.shinySentrySwarm = {
     PARENT: ["shinySentry"],
     UPGRADE_LABEL: "Shiny Swarm Sentry",
+    UPGRADE_COLOR: "lightGreen",
     GUNS: [
         {
             POSITION: [6, 11, 1.3, 7, 0, 180, 0],
@@ -790,6 +794,7 @@ exports.sentinelMissile = {
 exports.sentinelLauncher = {
   PARENT: ["sentinel"],
   UPGRADE_LABEL: "Missile Sentinel",
+  UPGRADE_COLOR: "purple",
   GUNS: [
     {
       POSITION: [3, 12.45, -1.35, 17.2, 0, 0, 0],
@@ -816,6 +821,7 @@ exports.sentinelLauncher = {
 exports.sentinelCrossbow = {
   PARENT: ["sentinel"],
   UPGRADE_LABEL: "Crossbow Sentinel",
+  UPGRADE_COLOR: "purple",
     GUNS: [
         {
             POSITION: [15, 2.5, 1, 0, 3.5, 35/2, 2/3],
@@ -892,6 +898,7 @@ exports.sentinelCrossbow = {
 exports.sentinelMinigun = {
   PARENT: ["sentinel"],
   UPGRADE_LABEL: "Minigun Sentinel",
+  UPGRADE_COLOR: "purple",
   GUNS: [
   {
       POSITION: [16, 7.5, 1, 0, 4.5, 0, 0.2],
@@ -1164,6 +1171,7 @@ exports.arenaCloser = {
     DANGER: 10,
     SIZE: 34,
     COLOR: "yellow",
+    UPGRADE_COLOR: "yellow",
     LAYER: 13,
     BODY: {
         REGEN: 1e5,

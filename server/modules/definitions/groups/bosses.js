@@ -349,6 +349,7 @@ exports.elite = {
 exports.eliteDestroyer = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Destroyer",
+    UPGRADE_COLOR: "pink",
     GUNS: [
         {
             POSITION: [5, 16, 1, 6, 0, 180, 0],
@@ -403,6 +404,7 @@ exports.eliteDestroyer = {
 exports.eliteGunner = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Gunner",
+    UPGRADE_COLOR: "pink",
     FACING_TYPE: "toTarget",
     GUNS: [
         {
@@ -439,6 +441,7 @@ exports.eliteGunner = {
 exports.eliteSprayer = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Sprayer",
+    UPGRADE_COLOR: "pink",
     SKILL: [0, 9, 3, 9, 2, 9, 9, 9, 9, 0],
     AI: { NO_LEAD: false },
     HAS_NO_RECOIL: true,
@@ -477,6 +480,7 @@ exports.eliteSprayer = {
 exports.eliteBattleship = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Battleship",
+    UPGRADE_COLOR: "pink",
     GUNS: [
         {
             POSITION: [4, 6, 0.6, 7, -8, 60, 0],
@@ -587,6 +591,7 @@ exports.eliteBattleship = {
 exports.eliteSpawner = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Spawner",
+    UPGRADE_COLOR: "pink",
     MAX_CHILDREN: 9,
     AI: { STRAFE: false },
     GUNS: [
@@ -643,6 +648,7 @@ exports.eliteSpawner = {
 exports.eliteTrapGuard = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Trap Guard",
+    UPGRADE_COLOR: "pink",
     AI: { STRAFE: false },
     GUNS: [],
     TURRETS: [
@@ -680,6 +686,7 @@ for (let i = 0; i < 3; i++) {
 exports.eliteSpinner = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Spinner",
+    UPGRADE_COLOR: "pink",
     AI: { STRAFE: false },
     FACING_TYPE: "fastspin",
     GUNS: [],
@@ -723,6 +730,7 @@ for (let i = 0; i < 3; i++) {
 exports.oldEliteSprayer = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Sprayer (Old)",
+    UPGRADE_COLOR: "pink",
     AI: {
         NO_LEAD: false,
     },
@@ -836,6 +844,7 @@ for (let i = 0; i < 3; i++) {
 exports.legionaryCrasher = {
     PARENT: ["elite"],
     LABEL: "Legionary Crasher",
+    UPGRADE_COLOR: "pink",
     AI: { STRAFE: false, NO_LEAD: false },
     HAS_NO_RECOIL: true,
     VALUE: 5e6,
@@ -886,6 +895,7 @@ for (let i = 0; i < 3; i++) {
 exports.sprayerLegion = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Sprayer Legion",
+    UPGRADE_COLOR: "pink",
     AI: {
         NO_LEAD: false,
     },
@@ -917,6 +927,7 @@ exports.sorcerer = {
     DANGER: 7,
     SHAPE: 0,
     COLOR: "veryLightGrey",
+    UPGRADE_COLOR: "veryLightGrey",
     SIZE: 26,
     MAX_CHILDREN: 50,
     FACING_TYPE: "autospin",
@@ -945,6 +956,7 @@ exports.summoner = {
     DANGER: 8,
     SHAPE: 4,
     COLOR: "gold",
+    UPGRADE_COLOR: "gold",
     SIZE: 26,
     MAX_CHILDREN: 28,
     FACING_TYPE: "autospin",
@@ -978,6 +990,7 @@ exports.enchantress = {
     DANGER: 8,
     SHAPE: 3.5,
     COLOR: "orange",
+    UPGRADE_COLOR: "orange",
     SIZE: 26,
     MAX_CHILDREN: 28,
     FACING_TYPE: "autospin",
@@ -1011,6 +1024,7 @@ exports.exorcistor = {
     DANGER: 8,
     SHAPE: 5.5,
     COLOR: "purple",
+    UPGRADE_COLOR: "purple",
     SIZE: 26,
     MAX_CHILDREN: 20,
     FACING_TYPE: "autospin",
@@ -1044,6 +1058,7 @@ exports.shaman = {
     DANGER: 8,
     SHAPE: 6,
     COLOR: "teal",
+    UPGRADE_COLOR: "teal",
     SIZE: 26,
     MAX_CHILDREN: 20,
     FACING_TYPE: "autospin",
@@ -1070,6 +1085,7 @@ exports.eliteSkimmer = {
     PARENT: ["elite"],
     LABEL: "Elite Skimmer",
     COLOR: "orange",
+    UPGRADE_COLOR: "orange",
     TURRETS: [
         {
             POSITION: [15, 5, 0, 60, 170, 0],
@@ -1091,6 +1107,7 @@ exports.nestKeeper = {
     PARENT: ["miniboss"],
     LABEL: "Nest Keeper",
     COLOR: "purple",
+    UPGRADE_COLOR: "purple",
     SHAPE: 5,
     SIZE: 50,
     BODY: {
@@ -1216,6 +1233,7 @@ exports.nestWarden = {
     PARENT: ["miniboss"],
     LABEL: "Nest Warden",
     COLOR: "purple",
+    UPGRADE_COLOR: "purple",
     SHAPE: 5,
     SIZE: 50,
     BODY: {
@@ -1270,6 +1288,7 @@ exports.nestGuardian = {
     PARENT: ["miniboss"],
     LABEL: "Nest Guardian",
     COLOR: "purple",
+    UPGRADE_COLOR: "purple",
     SHAPE: 5,
     SIZE: 50,
     BODY: {
@@ -1324,6 +1343,7 @@ exports.roguePalisade = {
     PARENT: ["miniboss"],
     LABEL: "Rogue Palisade",
     COLOR: "darkGrey",
+    UPGRADE_COLOR: "darkGrey",
     SHAPE: 6,
     SIZE: 30,
     VALUE: 5e5,
@@ -1386,6 +1406,7 @@ exports.rogueArmada = (() => {
         PARENT: ["miniboss"],
         LABEL: 'Rogue Armada',
         COLOR: "darkGrey",
+        UPGRADE_COLOR: "darkGrey",
         SHAPE,
         SIZE: 28,
         VALUE: 500000,
@@ -1407,6 +1428,7 @@ exports.bob = {
     LABEL: "Bob",
     SHAPE: 0,
     COLOR: "teal",
+    UPGRADE_COLOR: "teal",
     SIZE: 18,
     BODY: {
         FOV: 2,
@@ -1437,6 +1459,7 @@ exports.nemesis = {
     PARENT: ["bob"],
     LABEL: "Nemesis",
     COLOR: "red",
+    UPGRADE_COLOR: "red",
     BODY: {
         REGEN: 1e5,
         HEALTH: 1e6,
@@ -1451,6 +1474,7 @@ exports.guardian = {
     PARENT: ["elite"],
     LABEL: "Guardian of the Pentagons",
     UPGRADE_LABEL: "Guardian",
+    UPGRADE_COLOR: "pink",
     FACING_TYPE: "toTarget",
     GUNS: [
         {
@@ -1482,6 +1506,7 @@ exports.defender = {
     PARENT: ["elite"],
     LABEL: "Defender",
     COLOR: "orange",
+    UPGRADE_COLOR: "orange",
     GUNS: [
         {
             POSITION: [15, 7, 1, -3, 0, 60, 0],
@@ -1713,6 +1738,7 @@ exports.ares = {
     NAME: "Ares",
     UPGRADE_LABEL: "Ares",
     COLOR: "purple",
+    UPGRADE_COLOR: "purple",
     TURRETS: [
         {
             POSITION: [14.5, 0, 0, 0, 360, 1],
@@ -1784,6 +1810,7 @@ exports.gersemiLowerBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
     COLOR: "lightGreen",
+    UPGRADE_COLOR: "lightGreen",
     SIZE: 100,
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
     SHAPE: 5,
@@ -1903,6 +1930,7 @@ exports.ezekiel = {
     NAME: "Ezekiel",
     UPGRADE_LABEL: "Ezekiel",
     COLOR: "orange",
+    UPGRADE_COLOR: "orange",
     TURRETS: [
         {
             POSITION: [14.5, 0, 0, 0, 360, 1],
@@ -1978,6 +2006,7 @@ exports.eris = {
     NAME: "Eris",
     UPGRADE_LABEL: "Eris",
     COLOR: "pink",
+    UPGRADE_COLOR: "pink",
     TURRETS: [
         {
             POSITION: [14.5, 0, 0, 0, 360, 1],
@@ -2053,6 +2082,7 @@ exports.selene = {
     NAME: "Selene",
     UPGRADE_LABEL: "Selene",
     COLOR: "gold",
+    UPGRADE_COLOR: "gold",
     TURRETS: [
         {
             POSITION: [14.5, 0, 0, 0, 360, 1],
@@ -2230,6 +2260,7 @@ exports.paladin = {
     NAME: "Paladin",
     UPGRADE_LABEL: "Paladin",
     COLOR: "purple",
+    UPGRADE_COLOR: "purple",
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
@@ -2392,6 +2423,7 @@ exports.freyja = {
     NAME: "Freyja",
     UPGRADE_LABEL: "Freyja",
     COLOR: "lightGreen",
+    UPGRADE_COLOR: "lightGreen",
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
@@ -2564,6 +2596,7 @@ exports.zaphkiel = {
     NAME: "Zaphkiel",
     UPGRADE_LABEL: "Zaphkiel",
     COLOR: "orange",
+    UPGRADE_COLOR: "orange",
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
@@ -2762,6 +2795,7 @@ exports.nyx = {
     NAME: "Nyx",
     UPGRADE_LABEL: "Nyx",
     COLOR: "pink",
+    UPGRADE_COLOR: "pink",
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
@@ -2984,6 +3018,7 @@ exports.theia = {
     NAME: "Theia",
     UPGRADE_LABEL: "Theia",
     COLOR: "gold",
+    UPGRADE_COLOR: "gold",
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
@@ -3219,6 +3254,7 @@ exports.atlas = {
     NAME: "Atlas",
     UPGRADE_LABEL: "Atlas",
     COLOR: "lavender",
+    UPGRADE_COLOR: "lavender",
     TURRETS: [{
             /*********  SIZE     X       Y     ANGLE    ARC */
             POSITION: [6.5, 9, 0, 260, 180, 0],
@@ -3480,6 +3516,7 @@ exports.rhea = {
     NAME: "Rhea",
     UPGRADE_LABEL: "Rhea",
     COLOR: "darkGrey",
+    UPGRADE_COLOR: "darkGrey",
     TURRETS: [{
             /*********  SIZE     X       Y     ANGLE    ARC */
             POSITION: [6.5, 9, 0, 260, 180, 0],
@@ -3684,6 +3721,7 @@ exports.alviss = {
     PARENT: ["rogueCelestial"],
     NAME: "Julius",
     UPGRADE_LABEL: "Julius",
+    UPGRADE_COLOR: "darkGrey",
     TURRETS: [
         {
             /*********    SIZE         X             Y         ANGLE        ARC */
@@ -3827,6 +3865,7 @@ exports.tyr = {
     PARENT: ["rogueCelestial"],
     NAME: "Genghis",
     UPGRADE_LABEL: "Genghis",
+    UPGRADE_COLOR: "darkGrey",
     TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
         POSITION: [6.5, 9, 0, 260, 180, 0],
         TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
@@ -3987,6 +4026,7 @@ exports.fiolnir = {
     PARENT: ["rogueCelestial"],
     NAME: "Napoleon",
     UPGRADE_LABEL: "Napoleon",
+    UPGRADE_COLOR: "darkGrey",
     TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
         POSITION: [6.5, 9, 0, 260, 180, 0],
         TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
@@ -4273,6 +4313,7 @@ exports.kronos = {
     NAME: "Kronos",
     UPGRADE_LABEL: "Kronos",
     COLOR: "veryLightGrey",
+    UPGRADE_COLOR: "veryLightGrey",
     BODY: { REGEN: base.REGEN * 0.3 },
     TURRETS: [
         {
@@ -4501,6 +4542,7 @@ exports.ragnarok = {
     NAME: "Ragnarok",
     UPGRADE_LABEL: "Ragnarok",
     COLOR: "teal",
+    UPGRADE_COLOR: "teal",
     TURRETS: [
         {
             POSITION: [15.5, 0, 0, 0, 360, 1],
@@ -4643,6 +4685,7 @@ exports.taureonBoss = {
     LABEL: "Diamond Marauder",
     NAME: "Taureon",
     COLOR: '#2B339B',
+    UPGRADE_COLOR: "spaceGem",
     DANGER: 10,
     SHAPE: 4.5,
     SIZE: 50,
@@ -4760,6 +4803,7 @@ exports.zenphiaBoss = {
     DANGER: 10,
     SHAPE: 4,
     COLOR: "lightGreen",
+    UPGRADE_COLOR: "lightGreen",
     SIZE: 50,
     FACING_TYPE: "autospin",
     VALUE: 5e6,
@@ -4950,6 +4994,7 @@ exports.dogeiscutBoss = {
     FACING_TYPE: "smoothToTarget",
     SHAPE: [[1,0],[-0.7,0.7],[-0.35,0],[-0.7,-0.7]],
     COLOR: "yellow",
+    UPGRADE_COLOR: "yellow",
     SIZE: 50,
     VALUE: 5e6,
     BODY: {
@@ -5149,6 +5194,7 @@ exports.trplnrBossAuraBullet = {
 }
 const trplnrBossDecor = {
     COLOR: '#F49EFF',
+    UPGRADE_COLOR: "lavender",
     LABEL: 'Lavender',
     NAME: 'Trioplane',
     SHAPE: 3,
