@@ -10,6 +10,13 @@ class BossRush {
         this.bossChoices = [
             // [ cost , definition reference ],
 
+            //mysticals
+            [  1, "sorcerer"],
+            [  2, "summoner"],
+            [  2, "enchantress"],
+            [  2, "exorcistor"],
+            [  2, "shaman"],
+
             //elites
             [  2, "eliteDestroyer"],
             [  2, "eliteGunner"],
@@ -19,13 +26,6 @@ class BossRush {
             [  2, "eliteTrapGuard"],
             [  2, "eliteSpinner"],
             [  2, "eliteSkimmer"],
-
-            //mysticals
-            [  1, "sorcerer"],
-            [  2, "summoner"],
-            [  2, "enchantress"],
-            [  2, "exorcistor"],
-            [  2, "shaman"],
 
             //nesters
             [  3, "nestKeeper"],
