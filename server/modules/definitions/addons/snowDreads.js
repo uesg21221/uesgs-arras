@@ -11,48 +11,48 @@ const ensureIsClass = (Class, str) => {
     throw Error(`Definition ${str} is attempted to be gotten but does not exist!`);
 };
 const eggnoughtBody = {
-	SPEED: base.SPEED * 0.8,
-	HEALTH: base.HEALTH * 1.75,
+    SPEED: base.SPEED * 0.8,
+    HEALTH: base.HEALTH * 1.75,
 	SHIELD: base.SHIELD * 1.5,
 	REGEN: base.REGEN * 1.5,
-	FOV: base.FOV * 1.1,
-	RESIST: base.RESIST * 1.5,
+    FOV: base.FOV,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 1.5,
 };
 const squarenoughtBody = {
-	SPEED: base.SPEED * 0.675,
-	HEALTH: base.HEALTH * 2.5,
+    SPEED: base.SPEED * 0.675,
+    HEALTH: base.HEALTH * 2.5,
 	SHIELD: base.SHIELD * 2,
 	REGEN: base.REGEN * 2,
-	FOV: base.FOV * 1.15,
-	RESIST: base.RESIST * 2,
+    FOV: base.FOV * 0.95,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 2,
 };
 const trinoughtBody = {
-	SPEED: base.SPEED * 0.55,
-	HEALTH: base.HEALTH * 3.5,
+    SPEED: base.SPEED * 0.55,
+    HEALTH: base.HEALTH * 3.5,
 	SHIELD: base.SHIELD * 2.5,
 	REGEN: base.REGEN * 2.5,
-	FOV: base.FOV * 1.15,
-	RESIST: base.RESIST * 2.5,
+    FOV: base.FOV * 0.95,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 2.5,
 };
 const pentanoughtBody = {
-	SPEED: base.SPEED * 0.425,
-	HEALTH: base.HEALTH * 4.25,
+    SPEED: base.SPEED * 0.425,
+    HEALTH: base.HEALTH * 4.25,
 	SHIELD: base.SHIELD * 3,
 	REGEN: base.REGEN * 3,
-	FOV: base.FOV * 1.2,
-	RESIST: base.RESIST * 3,
+    FOV: base.FOV * 0.95,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 3,
 };
 const hexnoughtBody = {
-	SPEED: base.SPEED * 0.3,
-	HEALTH: base.HEALTH * 5,
+    SPEED: base.SPEED * 0.3,
+    HEALTH: base.HEALTH * 5,
 	SHIELD: base.SHIELD * 3.5,
 	REGEN: base.REGEN * 3.5,
-	FOV: base.FOV * 1.2,
-	RESIST: base.RESIST * 3.5,
+    FOV: base.FOV * 0.95,
+	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 3.5,
 };
 
@@ -63,18 +63,28 @@ module.exports = ({ Class }) => {
 	// Set the below variable to true to enable hex dreadnought building (WARNING: increases load time by approximately 10x)
 	const buildHexnoughts = true;
 	
-	// Comment out lines from the arrays below to disable that branch of the tree from being generated.
-	const eggnoughtWeapons = [
-		// "swordSnowdread",
-		// "pacifierSnowdread",
-		"peacekeeperSnowdread",
-		// "invaderSnowdread",
-		// "centaurSnowdread",
+	// For hexnought merging
+	const hexnoughtScaleFactor = 0.9;
+
+	// Missing stats
+	g.flame = {reload: 0.5, recoil: 0.1, shudder: 1.5, range: 0.5, spray: 7, damage: 2, health: 1/3, speed: 0.6, maxSpeed: 0.3};
+	g.honcho = {size: 2, damage: 2.5, health: 1.2, reload: 2, speed: 0.7};
+
+	// Body helpers
+	const hpBuffBodyStats = [
+		{ HEALTH: 2.4, SHIELD: 2.4, REGEN: 2,   SPEED: 0.65 },
+		{ HEALTH: 3.2, SHIELD: 3.2, REGEN: 2.5, SPEED: 0.5  },
+		{ HEALTH: 4,   SHIELD: 4,   REGEN: 2.5, SPEED: 0.4  },
 	];
-	const eggnoughtBodies = [
-		"byteSnowdread", 
-		"atmosphereSnowdread", 
-		"juggernautSnowdread",
+	const speedBuffBodyStats = [
+		{ SPEED: 1.75, HEALTH: 0.65 },
+		{ SPEED: 2.15, HEALTH: 0.5  },
+		{ SPEED: 2.35, HEALTH: 0.35 },
+	];
+	const sizeBuffBodyStats = [
+		{ SPEED: 0.9,  HEALTH: 2.4 },
+		{ SPEED: 0.85, HEALTH: 3.2 },
+		{ SPEED: 0.8,  HEALTH: 3.7 },
 	];
 
 	// Snowdread Building Functions --------------
@@ -382,48 +392,37 @@ module.exports = ({ Class }) => {
 			},
 		)
 	}
-	function addBaseEgg(type = 2) {
-		switch (type) {
-			case 2: // Normal
-				return [
-					{
-						POSITION: [15, 0, 0, 0, 0, 1],
-						TYPE: "baseEggCross2",
-					},
-					{
-						POSITION: [20, 0, 0, 0, 0, 1],
-						TYPE: "baseEggOuter2",
-					},
-					{
-						POSITION: [20, 0, 0, 112.5, 0, 1],
-						TYPE: "baseEggOuter2",
-					},
-					{
-						POSITION: [20, 0, 0, 180, 0, 1],
-						TYPE: "baseEggOuter2",
-					},
-					{
-						POSITION: [20, 0, 0, 180+112.5, 0, 1],
-						TYPE: "baseEggOuter2",
-					},
-					{
-						POSITION: [20, 0, 0, 0, 0, 1],
-						TYPE: "baseEggOuter1",
-					},
-					{
-						POSITION: [20, 0, 0, 180, 0, 1],
-						TYPE: "baseEggOuter1",
-					},
-				];
-			case 1: // Thruster
-				return [
-					
-				];
-			case 0: // Smasher
-				return [
-					
-				];
-		}
+	function addBaseEgg() {
+		return [
+			{
+				POSITION: [15, 0, 0, 0, 0, 1],
+				TYPE: "baseEggCross2",
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "baseEggOuter2",
+			},
+			{
+				POSITION: [20, 0, 0, 112.5, 0, 1],
+				TYPE: "baseEggOuter2",
+			},
+			{
+				POSITION: [20, 0, 0, 180, 0, 1],
+				TYPE: "baseEggOuter2",
+			},
+			{
+				POSITION: [20, 0, 0, 180+112.5, 0, 1],
+				TYPE: "baseEggOuter2",
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "baseEggOuter1",
+			},
+			{
+				POSITION: [20, 0, 0, 180, 0, 1],
+				TYPE: "baseEggOuter1",
+			},
+		];
 	}
 
 	// Auras
@@ -434,7 +433,7 @@ module.exports = ({ Class }) => {
 		LABEL: "Aura",
 		COLOR: 0,
 		BODY: {
-			DAMAGE: 0.25,
+			DAMAGE: 0.5,
 		},
 		BORDER_FIRST: true,
 		SHAPE: "M 1 0 L 0.715 0.519 L 0.309 0.951 L -0.273 0.84 L -0.809 0.588 L -0.883 0 L -0.809 -0.588 L -0.273 -0.84 L 0.309 -0.951 L 0.715 -0.519 L 1 0" + 
@@ -447,7 +446,7 @@ module.exports = ({ Class }) => {
 		HEALER: true,
 		COLOR: 12,
 		BODY: {
-			DAMAGE: 0.25/3,
+			DAMAGE: 0.5/3,
 		},
 	}
 	Class.auraMedium = {
@@ -457,7 +456,7 @@ module.exports = ({ Class }) => {
 		LABEL: "Aura",
 		COLOR: 0,
 		BODY: {
-			DAMAGE: 0.25,
+			DAMAGE: 0.5,
 		},
 		BORDER_FIRST: true,
 		SHAPE: "M 1 0 L 0.809 0.588 L 1 0 L 0.809 0.588 L 0.309 0.951 L -0.309 0.951 L -0.809 0.588 L -1 0 L -0.809 -0.588 L -0.309 -0.951 L 0.309 -0.951 L 0.809 -0.588 L 1 0" + 
@@ -472,7 +471,7 @@ module.exports = ({ Class }) => {
 		HEALER: true,
 		COLOR: 12,
 		BODY: {
-			DAMAGE: 0.25/3,
+			DAMAGE: 0.5/3,
 		},
 	}
 	Class.auraLarge = {
@@ -482,7 +481,7 @@ module.exports = ({ Class }) => {
 		LABEL: "Aura",
 		COLOR: 0,
 		BODY: {
-			DAMAGE: 0.25,
+			DAMAGE: 0.5,
 		},
 		BORDER_FIRST: true,
 		SHAPE: "M 1 0 L 0.988 0.156 L 0.951 0.309 L 0.891 0.454 L 0.809 0.588 L 0.707 0.707 L 0.588 0.809 L 0.454 0.891 L 0.309 0.951 L 0.156 0.988 L 0 1 L -0.156 0.988 L -0.309 0.951 L -0.454 0.891 L -0.588 0.809 L -0.707 0.707 L -0.809 0.588 L -0.891 0.454 L -0.951 0.309 L -0.988 0.156 L -1 0 L -0.988 -0.156 L -0.951 -0.309 L -0.891 -0.454 L -0.809 -0.588 L -0.707 -0.707 L -0.588 -0.809 L -0.454 -0.891 L -0.309 -0.951 L -0.156 -0.988 L 0 -1 L 0.156 -0.988 L 0.309 -0.951 L 0.454 -0.891 L 0.588 -0.809 L 0.707 -0.707 L 0.809 -0.588 L 0.891 -0.454 L 0.951 -0.309 L 0.988 -0.156 L 1 0" + 
@@ -503,7 +502,7 @@ module.exports = ({ Class }) => {
 		HEALER: true,
 		COLOR: 12,
 		BODY: {
-			DAMAGE: 0.25/3,
+			DAMAGE: 0.5/3,
 		},
 	}
 	Class.auraSymbolSnowdreads = {
@@ -554,18 +553,69 @@ module.exports = ({ Class }) => {
 		};
 	}
 
+	function addTrinoughtAuraRing(heal = false) {
+		let output = [],
+			TYPE = heal ? "trinoughtSmallHealAura" : "trinoughtSmallAura";
+		for (let i = 0; i < 3; i++) {
+			output.push(
+				{
+					POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
+					TYPE,
+				},
+			);
+		}
+		return output;
+	}
+	function addTrinoughtTurretRing() {
+		let output = [];
+		for (let i = 0; i < 3; i++) {
+			output.push(
+				{
+					POSITION: [3.5, 10.5, 0, 120*i+60, 180, 1],
+					TYPE: "spamAutoTurret",
+				},
+			);
+		}
+		return output;
+	}
+	function addPentanoughtAuraRing(heal = false) {
+		let output = [],
+			TYPE = heal ? "pentanoughtSmallHealAura" : "pentanoughtSmallAura";
+		for (let i = 0; i < 5; i++) {
+			output.push(
+				{
+					POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
+					TYPE,
+				},
+			)
+		}
+		return output;
+	}
+	function addPentanoughtTurretRing() {
+		let output = [];
+		for (let i = 0; i < 5; i++) {
+			output.push(
+				{
+					POSITION: [3.25, 9, 0, 72*i+36, 180, 1],
+					TYPE: "spamAutoTurret",
+				},
+			)
+		}
+		return output;
+	}
+
 	// Misc
 	Class.genericDreadnoughtSnowdread = {
 		PARENT: ["genericTank"],
 		SKILL_CAP: Array(10).fill(smshskl),
-		REROOT_UPGRADE_TREE: "dreadSnowdread",
+		REROOT_UPGRADE_TREE: ["dreadWeaponSnowdread", "dreadBodySnowdread"],
 	}
 	Class.genericEggnought = {
 		PARENT: ["genericDreadnoughtSnowdread"],
 		BODY: eggnoughtBody,
 	    SHAPE: 0,
 	    COLOR: 6,
-	    SIZE: 13.75,
+	    SIZE: 14,
 		DANGER: 8,
 	}
 	Class.genericSquarenought = {
@@ -573,7 +623,7 @@ module.exports = ({ Class }) => {
 		BODY: squarenoughtBody,
 	    SHAPE: 4,
 	    COLOR: 13,
-	    SIZE: 15,
+	    SIZE: 18,
 		DANGER: 9,
 	}
 	Class.genericTrinought = {
@@ -581,7 +631,7 @@ module.exports = ({ Class }) => {
 		BODY: trinoughtBody,
 	    SHAPE: 3.5,
 	    COLOR: 2,
-	    SIZE: 20,
+	    SIZE: 21,
 		DANGER: 10,
 	}
 	Class.genericPentanought = {
@@ -589,7 +639,7 @@ module.exports = ({ Class }) => {
 		BODY: pentanoughtBody,
 	    SHAPE: 5.5,
 	    COLOR: 14,
-	    SIZE: 25,
+	    SIZE: 23,
 		DANGER: 11,
 	}
 	Class.genericHexnought = {
@@ -597,7 +647,7 @@ module.exports = ({ Class }) => {
 		BODY: hexnoughtBody,
 	    SHAPE: 6,
 	    COLOR: 0,
-	    SIZE: 30,
+	    SIZE: 24,
 		DANGER: 12,
 	}
 
@@ -606,16 +656,182 @@ module.exports = ({ Class }) => {
 		INDEPENDENT: true,
 		GUNS: [
 			{
-				POSITION: [21, 10, 1, 0, 0, 0, 0],
+				POSITION: [22, 10, 1, 0, 0, 0, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.auto]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.auto, {recoil: 0.2}]),
 					TYPE: "bullet",
 				},
 			},
 		],
 	}
-	Class.mediumAutoSnowdread = {
-		PARENT: ["autoTankGun"],
+	Class.supermissile = {
+		PARENT: ["bullet"],
+		LABEL: "Missile",
+		INDEPENDENT: true,
+		BODY: {
+			RANGE: 120,
+		},
+		GUNS: [
+			{
+				POSITION: [14, 6, 1, 0, -2, 130, 0],
+				PROPERTIES: {
+					AUTOFIRE: true,
+					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
+					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
+					STAT_CALCULATOR: gunCalcNames.thruster,
+				},
+			},
+			{
+				POSITION: [14, 6, 1, 0, 2, 230, 0],
+				PROPERTIES: {
+					AUTOFIRE: true,
+					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
+					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
+					STAT_CALCULATOR: gunCalcNames.thruster,
+				},
+			},
+			{
+				POSITION: [14, 6, 1, 0, 0, 0, 0.2],
+				PROPERTIES: {
+					AUTOFIRE: true,
+					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.morespeed, g.morespeed]),
+					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
+				},
+			},
+		],
+	};
+	Class.betadrone = {
+		PARENT: ["drone"],
+		TURRETS: [
+			{
+				POSITION: [10, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {COLOR: -1}],
+			},
+		]
+	}
+
+	// T0
+	Class.dreadSnowdread = {
+		PARENT: ["genericEggnought"],
+		LABEL: "Dreadnought",
+		UPGRADE_LABEL: "Snowdreads",
+		LEVEL: 90,
+		EXTRA_SKILL: 18,
+	}
+	Class.dreadWeaponSnowdread = {
+		LABEL: "",
+		COLOR: 6,
+		REROOT_UPGRADE_TREE: "dreadWeaponSnowdread",
+	}
+	Class.dreadBodySnowdread = {
+		LABEL: "",
+		COLOR: 6,
+		REROOT_UPGRADE_TREE: "dreadBodySnowdread",
+	}
+
+	// T1 Weapons
+	Class.swordSnowdread = {
+	    PARENT: ["genericEggnought"],
+	    LABEL: "Sword",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 2; i++) {
+		Class.swordSnowdread.GUNS.push(
+			...addSniper({length: 20, width: 7, angle: 180 * i}, 6, [g.basic, g.sniper, g.assass, {reload: 0.85}])
+		)
+	}
+	Class.sword2Snowdread = {
+		PARENT: "swordSnowdread",
+		BATCH_UPGRADES: true,
+	}
+	Class.pacifierSnowdread = {
+	    PARENT: ["genericEggnought"],
+	    LABEL: "Pacifier",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 2; i++) {
+		Class.pacifierSnowdread.GUNS.push(
+			...addNormal({length: 15, width: 7.5, angle: 180 * i}, 6, [g.basic, {reload: 0.8}])
+		)
+	}
+	Class.pacifier2Snowdread = {
+		PARENT: "pacifierSnowdread",
+		BATCH_UPGRADES: true,
+	}
+	Class.peacekeeperSnowdread = {
+	    PARENT: ["genericEggnought"],
+	    LABEL: "Peacekeeper",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 2; i++) {
+		Class.peacekeeperSnowdread.GUNS.push(
+			{
+				POSITION: [17, 9, 1, 0, 0, 180*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, {reload: 1.2, damage: 1.5}]),
+					TYPE: "bullet",
+				},
+			},
+		)
+	}
+	Class.peacekeeper2Snowdread = {
+		PARENT: "peacekeeperSnowdread",
+		BATCH_UPGRADES: true,
+	}
+	Class.invaderSnowdread = {
+	    PARENT: ["genericEggnought"],
+	    LABEL: "Invader",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 2; i++) {
+		Class.invaderSnowdread.GUNS.push(
+			{
+				POSITION: [5, 9, 1.2, 8, 0, 180*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.drone, g.over, {reload: 0.85}]),
+					TYPE: "drone",
+					MAX_CHILDREN: 4,
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+				},
+			},
+		)
+	}
+	Class.invader2Snowdread = {
+		PARENT: "invaderSnowdread",
+		BATCH_UPGRADES: true,
+	}
+	Class.centaurSnowdread = {
+	    PARENT: ["genericEggnought"],
+	    LABEL: "Centaur",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 2; i++) {
+		Class.centaurSnowdread.GUNS.push(
+			{
+				POSITION: [13, 7, 1, 0, 0, 180*i, 0],
+			},
+			{
+				POSITION: [3, 7, 1.5, 13, 0, 180*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, {health: 2}]),
+					TYPE: "trap",
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+		)
+	}
+	Class.centaur2Snowdread = {
+		PARENT: "centaurSnowdread",
+		BATCH_UPGRADES: true,
+	}
+
+	// T1 Bodies
+	Class.byteTurretSnowdread = {
+		PARENT: ["genericTank"],
+		CONTROLLERS: ["nearestDifferentMaster"],
 		INDEPENDENT: true,
 		COLOR: {
 			BASE: 6,
@@ -677,7 +893,7 @@ module.exports = ({ Class }) => {
 		]
 	}
 	for(let i = 0; i < 4; i++) {
-		Class.mediumAutoSnowdread.GUNS.push(
+		Class.byteTurretSnowdread.GUNS.push(
 			{
 				POSITION: [10, 6, 0.5, 0, 0, 90*i+45, 0],
 				PROPERTIES: { 
@@ -687,154 +903,62 @@ module.exports = ({ Class }) => {
 			}
 		)
 	}
-	Class.supermissile = {
-		PARENT: ["bullet"],
-		LABEL: "Missile",
-		INDEPENDENT: true,
-		BODY: {
-			RANGE: 120,
-		},
-		GUNS: [
-			{
-				POSITION: [14, 6, 1, 0, -2, 130, 0],
-				PROPERTIES: {
-					AUTOFIRE: true,
-					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
-					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
-					STAT_CALCULATOR: gunCalcNames.thruster,
-				},
-			},
-			{
-				POSITION: [14, 6, 1, 0, 2, 230, 0],
-				PROPERTIES: {
-					AUTOFIRE: true,
-					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
-					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
-					STAT_CALCULATOR: gunCalcNames.thruster,
-				},
-			},
-			{
-				POSITION: [14, 6, 1, 0, 0, 0, 0.2],
-				PROPERTIES: {
-					AUTOFIRE: true,
-					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.morespeed, g.morespeed]),
-					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
-				},
-			},
-		],
-	};
-	Class.betadrone = {
-		PARENT: ["drone"],
-		TURRETS: [
-			{
-				POSITION: [10, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {COLOR: -1}],
-			},
-		]
-	}
-
-	// T0
-	Class.dreadSnowdread = {
-		PARENT: ["genericEggnought"],
-	    LABEL: "Dreadnought",
-		LEVEL: 90,
-		EXTRA_SKILL: 18,
-	}
-
-	// T1 Weapons
-	Class.swordSnowdread = {
-	    PARENT: ["genericEggnought"],
-	    LABEL: "Sword",
-	    GUNS: [],
-		TURRETS: [...addBaseEgg()],
-	}
-	for (let i = 0; i < 2; i++) {
-		Class.swordSnowdread.GUNS.push(
-			...addSniper({length: 20, width: 7, angle: 180 * i}, 6, [g.basic, g.sniper, g.assass, {reload: 0.85}])
-		)
-	}
-	Class.pacifierSnowdread = {
-	    PARENT: ["genericEggnought"],
-	    LABEL: "Pacifier",
-	    GUNS: [],
-		TURRETS: [...addBaseEgg()],
-	}
-	for (let i = 0; i < 2; i++) {
-		Class.pacifierSnowdread.GUNS.push(
-			...addNormal({length: 15, width: 7.5, angle: 180 * i}, 6, [g.basic, {reload: 0.8}])
-		)
-	}
-	Class.peacekeeperSnowdread = {
-	    PARENT: ["genericEggnought"],
-	    LABEL: "Peacekeeper",
-	    GUNS: [],
-	}
-	for (let i = 0; i < 2; i++) {
-		Class.peacekeeperSnowdread.GUNS.push(
-			{
-				POSITION: [17, 9, 1, 0, 0, 180*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, {reload: 1.2, damage: 1.5}]),
-					TYPE: "bullet",
-				},
-			},
-		)
-	}
-	Class.invaderSnowdread = {
-	    PARENT: ["genericEggnought"],
-	    LABEL: "Invader",
-	    GUNS: [],
-	}
-	for (let i = 0; i < 2; i++) {
-		Class.invaderSnowdread.GUNS.push(
-			{
-				POSITION: [5, 9.5, 1.2, 8, 0, 180*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, g.over, {reload: 0.85}]),
-					TYPE: "drone",
-					MAX_CHILDREN: 4,
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-				},
-			},
-		)
-	}
-	Class.centaurSnowdread = {
-	    PARENT: ["genericEggnought"],
-	    LABEL: "Centaur",
-	    GUNS: [],
-	}
-	for (let i = 0; i < 2; i++) {
-		Class.centaurSnowdread.GUNS.push(
-			{
-				POSITION: [13, 7.5, 1, 0, 0, 180*i, 0],
-			},
-			{
-				POSITION: [3, 7.5, 1.4, 13, 0, 180*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, {health: 2}]),
-					TYPE: "trap",
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
-		)
-	}
-
-	// T1 Bodies
 	Class.byteSnowdread = {
 	    PARENT: ["genericEggnought"],
 		LABEL: "Byte",
 	    TURRETS: [
 			{
-				POSITION: [15.5, 0, 0, 0, 0, 1],
+				POSITION: [15, 0, 0, 0, 0, 1],
 				TYPE: 'egg',
 			},
+			...addBaseEgg(),
+			{
+				POSITION: [9, 0, 0, 0, 360, 1],
+				TYPE: 'byteTurretSnowdread',
+			},
+		],
+	}
+	Class.showerTurretSnowdread = {
+		PARENT: "genericTank",
+		LABEL: "",
+		BODY: {
+		  	FOV: 1.5,
+		},
+		CONTROLLERS: [[ 'spin', {speed: 0.03}]],
+		COLOR: 16,
+		INDEPENDENT: true,
+		MAX_CHILDREN: 4,
+		GUNS: [
+			{
+				POSITION: [6, 12, 1.2, 8, 0, 0, 0],
+				PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.drone, {size: 1.3}]),
+				TYPE: ['drone', {INDEPENDENT: true}],
+				AUTOFIRE: true,
+				SYNCS_SKILLS: true,
+				STAT_CALCULATOR: gunCalcNames.drone,
+				WAIT_TO_CYCLE: true,
+				},
+			},
+		],
+	}
+	Class.showerSnowdread = { // Drones
+	    PARENT: ["genericEggnought"],
+	    LABEL: "Shower",
+	    BODY: {
+			SPEED: 0.93,
+			FOV: 1.1,
+		},
+		TURRETS: [
+			{
+				POSITION: [15, 0, 0, 0, 0, 1],
+				TYPE: 'egg',
+			},
+			...addBaseEgg(),
 			{
 				POSITION: [10, 0, 0, 0, 360, 1],
-				TYPE: 'mediumAutoSnowdread',
-			}
+				TYPE: "showerTurretSnowdread",
+			},
 		],
 	}
 	Class.atmosphereAuraSnowdread = addAura();
@@ -846,6 +970,7 @@ module.exports = ({ Class }) => {
 				POSITION: [14, 0, 0, 0, 0, 1],
 				TYPE: 'egg',
 			},
+			...addBaseEgg(),
 			{
 				POSITION: [11, 0, 0, 0, 360, 1],
 				TYPE: 'atmosphereAuraSnowdread',
@@ -866,9 +991,123 @@ module.exports = ({ Class }) => {
 				POSITION: [15, 0, 0, 0, 0, 1],
 				TYPE: 'egg',
 			},
+			...addBaseEgg(),
 			{
 				POSITION: [24, 0, 0, 0, 0, 0],
 				TYPE: ['egg', {COLOR: 9}]
+			},
+		],
+	}
+	Class.stomperTurretSnowdread = {
+		PARENT: 'genericTank',
+		MIRROR_MASTER_ANGLE: true,
+		LABEL: "",
+		COLOR: -1,
+		GUNS: [],
+	}
+	for(let i = 0; i < 2; i++) {
+		Class.stomperTurretSnowdread.GUNS.push(
+			{
+				POSITION: [17, 17, -0.2, 0, 0, 180*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [15, 12.5, -0.2, 0, 0, 180*i, 0],
+				PROPERTIES: {
+					COLOR: {
+						BASE: 9,
+						BRIGHTNESS_SHIFT: 7.5,
+					},
+					BORDERLESS: true,
+				},
+			},
+		)
+	}
+	Class.stomperSnowdread = { // Size increase
+	    PARENT: ["genericEggnought"],
+		LABEL: "Stomper",
+		SIZE: 1.2,
+		BODY: {
+			SPEED: 0.9,
+			HEALTH: 1.6,
+		},
+		TURRETS: [
+			...addBaseEgg(),
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: 'stomperTurretSnowdread',
+			},
+		],
+	}
+	Class.dropperTurretSnowdread = {
+		PARENT: 'genericTank',
+		CONTROLLERS: [["spin", {speed: -0.035}]],
+		INDEPENDENT: true,
+		LABEL: "",
+		COLOR: 16,
+		GUNS: [
+			{ 
+				POSITION: [8, 32, 1, -4, 0, 0, 0],
+			},
+		],
+	}
+    Class.dropperSnowdread = { // Minelayer
+	    PARENT: ["genericEggnought"],
+	    LABEL: "Dropper",
+		GUNS: [
+			{
+				POSITION: [0, 7, 1, 3, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, {maxSpeed: 1e-3, speed: 1e-3}]),
+					TYPE: 'trap',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			}
+		],
+		TURRETS: [
+			{
+				POSITION: [14, 0, 0, 0, 0, 1],
+				TYPE: 'egg',
+			},
+			...addBaseEgg(),
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: 'dropperTurretSnowdread',
+			}
+		],
+	}
+	Class.spotterRadarSnowdread = {
+		PARENT: 'genericTank',
+		CONTROLLERS: [['spin', {speed: 0.02}]],
+		INDEPENDENT: true,
+		SHAPE: [[0.225, 1], [0.225, -1], [-0.225, -1], [-0.225, 1]],
+		COLOR: 17,
+		GUNS: [
+		  {
+			POSITION: [4.5, 26, 1, -2.25, 0, 0, 0],
+			PROPERTIES: {COLOR: -1}
+		  }
+		]
+	};
+    Class.spotterSnowdread = { // FOV
+	    PARENT: ["genericEggnought"],
+	    LABEL: "Spotter",
+		BODY: {
+			FOV: 1.1,
+		},
+	    TURRETS: [
+			{
+				POSITION: [15, 0, 0, 0, 0, 1],
+				TYPE: 'egg',
+			},
+			...addBaseEgg(),
+			{
+				POSITION: [9, 0, 0, 0, 0, 1],
+				TYPE: 'egg',
+			},
+			{
+				POSITION: [13, 0, 0, 0, 360, 1],
+				TYPE: 'spotterRadarSnowdread',
 			},
 		],
 	}
@@ -900,6 +1139,76 @@ module.exports = ({ Class }) => {
 					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, {health: 1.3}]),
 					TYPE: "bullet",
 				},
+			},
+		)
+	}
+	Class.slingSnowdread = { // hunter
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Sling",
+		CONTROLLERS: [["zoom", { distance: 300 }]],
+    	TOOLTIP: "Hold right click to zoom.",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 4; i++) {
+		Class.slingSnowdread.GUNS.push(
+			{
+				POSITION: [20, 6, 1, 0, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunter2, {health: 1.1, speed: 1.05}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [17, 9, 1, 0, 0, 90*i, 0.25],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, {health: 1.1, speed: 1.05}]),
+					TYPE: "bullet",
+				},
+			},
+		)
+	}
+	Class.catapultSnowdread = { // mega-sniper
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Catapult",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 4; i++) {
+		Class.catapultSnowdread.GUNS.push(
+			{
+				POSITION: [22, 9, 1, 0, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.bitlessspeed, g.one_third_reload, {size: 2}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [4, 11, 1, 15, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.one_third_reload, g.fake]),
+					TYPE: "bullet",
+				},
+			},
+		)
+	}
+	Class.dartSnowdread = { // railgun
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Dart",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 4; i++) {
+		Class.dartSnowdread.GUNS.push(
+			{
+				POSITION: [21.5, 7, 1, 0, 0, 90*i, 0],
+			},
+			{
+				POSITION: [25, 4, 1, 0, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.sniper, g.sniper, g.pound, g.lessreload]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [5, 7, -1.7, 7, 0, 90*i, 0],
 			},
 		)
 	}
@@ -942,6 +1251,100 @@ module.exports = ({ Class }) => {
 			},
 		)
 	}
+	Class.melderAutoSnowdread = {
+		PARENT: 'autoTankGun',
+		GUNS: [
+			{
+				POSITION: [22, 10, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.auto, {reload: 1.1}]),
+					TYPE: "bullet",
+				},
+			},
+		],
+	}
+	Class.melderSnowdread = { // all auto
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Melder",
+		TURRETS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.melderSnowdread.TURRETS.push(
+			{
+				POSITION: [10, 9, 0, 90*i, 195, 0],
+				TYPE: 'autoTankGun',
+			},
+		)
+	  }
+	Class.crackerSnowdread = { // ultra bullet spam
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Cracker",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.crackerSnowdread.GUNS.push(
+			{
+				POSITION: [19, 8, 1, 0, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mini, {reload: 0.85}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [17, 8, 1, 0, 0, 90*i, 1 / 3],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mini, {reload: 0.85}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [15, 8, 1, 0, 0, 90*i, 2 / 3],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mini, {reload: 0.85}]),
+					TYPE: 'bullet',
+				},
+			},
+		)
+	}
+	Class.grabberTurretSnowdread = {
+		PARENT: ["autoTankGun"],
+		INDEPENDENT: true,
+		GUNS: [
+			{
+				POSITION: [22, 10, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.flank, g.auto, {reload: 0.9, recoil: 0.25}]),
+					TYPE: "bullet",
+				},
+			},
+		],
+	};
+	Class.grabberSnowdread = { // crowbar
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Grabber",
+	    GUNS: [],
+		TURRETS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.grabberSnowdread.GUNS.push(
+			{
+				POSITION: [38, 6.5, 1, 0, 0, 90*i, 0],
+			},
+			{
+				POSITION: [5, 8.5, -1.5, 8, 0, 90*i, 0],
+			},
+		)
+		Class.grabberSnowdread.TURRETS.push(
+			{
+				POSITION: [6.5, 38, 0, 90*i, 200, 1],
+				TYPE: 'grabberTurretSnowdread',
+			},
+			{
+				POSITION: [6.5, 28, 0, 90*i, 200, 1],
+				TYPE: 'grabberTurretSnowdread',
+			},
+		)
+	}
 	Class.enforcerSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Enforcer",
@@ -968,13 +1371,143 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [11, 6, 1, 8, 0, 90*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.halfspeed, {reload: 0.8}]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.halfspeed, {maxSpeed: 0.8, reload: 0.8}]),
 					TYPE: "missile",
 					STAT_CALCULATOR: gunCalcNames.sustained,
 				},
 			},
 			{
 				POSITION: [17, 9, 1, 0, 0, 90*i, 0],	
+			},
+		)
+	}
+	Class.doserSnowdread = { // shotgun
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Doser",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.doserSnowdread.GUNS.push(
+			{
+				POSITION: [4, 3, 1, 11, -3, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [4, 3, 1, 11, 3, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [4, 4, 1, 13, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [1, 4, 1, 12, -1, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [1, 4, 1, 11, 1, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [15, 12, 1, 6, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.fake]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [6, 12, -1.3, 6, 0, 90*i, 0],
+			},
+		)
+	}
+	Class.swirlMissileSnowdread = {
+		PARENT: 'spinmissile',
+		GUNS: [
+			{
+				POSITION: [14, 8, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					AUTOFIRE: !0,
+					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.morespeed]),
+					TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
+					STAT_CALCULATOR: gunCalcNames.thruster,
+				},
+			},
+			{
+				POSITION: [14, 8, 1, 0, 0, 180, 0],
+				PROPERTIES: {
+					AUTOFIRE: !0,
+					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.morespeed]),
+					TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
+					STAT_CALCULATOR: gunCalcNames.thruster,
+				},
+			},
+		],
+	}
+	Class.swirlSnowdread = { // twister
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Swirl",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.swirlSnowdread.GUNS.push(
+			{
+				POSITION: [10, 9, -0.5, 9, 0, 90*i, 0],
+			},
+			{
+				POSITION: [17, 10, -1.4, 0, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim, g.morespeed, g.one_third_reload]),
+					TYPE: "swirlMissileSnowdread",
+					STAT_CALCULATOR: gunCalcNames.sustained,
+				},
+			},
+		)
+	}
+	Class.pelterSnowdread = { // artillery
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Pelter",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.pelterSnowdread.GUNS.push(
+			{
+				POSITION: [15, 3, 1, 0, -3.5, 90*i-7, 0.25],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, {health: 1.1}]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [15, 3, 1, 0, 3.5, 90*i+7, 0.75],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, {health: 1.1}]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [17, 8, 1, 0, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, {health: 1.1}]),
+					TYPE: "bullet",
+					LABEL: "Heavy",
+				},
 			},
 		)
 	}
@@ -1028,10 +1561,10 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 4; i++) {
 		Class.assailantSnowdread.GUNS.push(
 			{
-				POSITION: [5, 11, 1, 10.5, 0, 90*i, 0],
+				POSITION: [5, 10, 1, 10.5, 0, 90*i, 0],
 			},
 			{
-				POSITION: [1.5, 12, 1, 15.5, 0, 90*i, 0],
+				POSITION: [1.5, 11, 1, 15, 0, 90*i, 0],
 				PROPERTIES: {
 					MAX_CHILDREN: 4,
 					SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 0.5}]),
@@ -1043,10 +1576,80 @@ module.exports = ({ Class }) => {
 				},
 			},
 			{
-				POSITION: [12.2, 12, 1, 0, 0, 90*i, 0],
+				POSITION: [12, 11, 1, 0, 0, 90*i, 0],
 			},
 		)
 	}
+	Class.radiationSnowdread = { // auto-drones
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Radiation",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.radiationSnowdread.GUNS.push(
+			{
+				POSITION: [6, 10, 1.2, 8, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.drone, g.over, {reload: 0.8}]),
+					TYPE: "turretedDrone",
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					MAX_CHILDREN: 2,
+				},
+			},
+			{
+				POSITION: [12, 5, 1, 0, 0, 90*i, 0],
+			},
+		)
+	};
+	Class.boxerSnowdread = { // honcho
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Boxer",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.boxerSnowdread.GUNS.push(
+			{
+				POSITION: [5, 11, 1.5, 8, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.honcho]),
+					TYPE: "drone",
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					MAX_CHILDREN: i % 2 + 1,
+				},
+			},
+		)
+	};
+	Class.disablerSnowdread = { // swarms
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Disabler",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.disablerSnowdread.GUNS.push(
+			{
+				POSITION: [7, 7, 0.6, 6, 3.5, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, g.lessreload]),
+					TYPE: "swarm",
+					STAT_CALCULATOR: gunCalcNames.swarm,
+				},
+			},
+			{
+				POSITION: [7, 7, 0.6, 6, -3.5, 90*i, 0.5],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, g.lessreload]),
+					TYPE: "swarm",
+					STAT_CALCULATOR: gunCalcNames.swarm,
+				},
+			},
+		)
+	};
 	Class.daemonSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Daemon",
@@ -1058,7 +1661,7 @@ module.exports = ({ Class }) => {
 				POSITION: [11.5, 4.5, 1, 0, 4.5, 90*i, 0],
 			},
 			{
-				POSITION: [2, 4.5, 1.6, 11.5, 4.5, 90*i, 0],
+				POSITION: [2, 4.5, 1.7, 11, 4.5, 90*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.twin, {health: 2}]),
 					TYPE: "trap",
@@ -1069,7 +1672,7 @@ module.exports = ({ Class }) => {
 				POSITION: [11.5, 4.5, 1, 0, -4.5, 90*i, 0],
 			},
 			{
-				POSITION: [2, 4.5, 1.6, 11.5, -4.5, 90*i, 0],
+				POSITION: [2, 4.5, 1.7, 11, -4.5, 90*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.twin, {health: 2}]),
 					TYPE: "trap",
@@ -1089,10 +1692,101 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 7, 1, 0, 0, 90*i, 0],
 			},
 			{
-				POSITION: [4, 7, 1.6, 13, 0, 90*i, 0],
+				POSITION: [3.75, 7, 1.75, 13, 0, 90*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.block, {health: 2}]),
 					TYPE: "unsetTrap",
+				},
+			},
+		)
+	}
+	Class.autoTrap = {
+		PARENT: 'trap',
+		TURRETS: [
+			{
+				POSITION: [11, 0, 0, 0, 360, 1],
+				TYPE: "pillboxTurret",
+			},
+		],
+	}
+	Class.cleanerSnowdread = { // auto-traps
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Cleaner",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.cleanerSnowdread.GUNS.push(
+			{
+				POSITION: [15, 6, 1, 0, 0, 90*i, 0],
+			},
+			{
+				POSITION: [12, 9, 1, 0, 0, 90*i, 0],
+			},
+			{
+				POSITION: [3, 6, 1.7, 15, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, {health: 1.2, reload: 1.15}]),
+					TYPE: 'autoTrap',
+					STAT_CALCULATOR: gunCalcNames.trap,
+					INDEPENDENT: true,
+				},
+			},
+		)
+	}
+	Class.auraTrapAura = addAura(1/3, 2, 0.15, 0, "Small");
+	Class.auraTrap = makeAuto(Class.trap, "", {type: 'auraTrapAura'});
+	Class.shadeSnowdread = { // aura-traps
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Shade",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.shadeSnowdread.GUNS.push(
+			{
+				POSITION: [14, 7, 1, 0, 0, 90*i, 0],
+			},
+			{
+				POSITION: [3, 7, 1.6, 14, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap, {range: 0.8, health: 1.2}]),
+					TYPE: 'auraTrap',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+			{
+				POSITION: [2, 5, 1.6, 15, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap, g.fake]),
+					TYPE: 'bullet',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+		)
+	}
+	Class.screwdriverSnowdread = { // trap + gun
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Screwdriver",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.screwdriverSnowdread.GUNS.push(
+			{
+				POSITION: [19, 7, 1, 0, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
+					TYPE: 'bullet',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+			{
+				POSITION: [13.5, 8, 1, 0, 0, 90*i, 0],
+			},
+			{
+				POSITION: [3, 8, 1.6, 13.5, 0, 90*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap]),
+					TYPE: 'trap',
+					STAT_CALCULATOR: gunCalcNames.trap,
 				},
 			},
 		)
@@ -1113,7 +1807,7 @@ module.exports = ({ Class }) => {
 		Class.automationSnowdread.TURRETS.push(
 			{
 				POSITION: [4, 9, 0, 90*i+45, 180, 1],
-				TYPE: ["mediumAutoSnowdread", { COLOR: 13 }],
+				TYPE: "spamAutoTurret",
 			},
 		)
 	}
@@ -1144,7 +1838,102 @@ module.exports = ({ Class }) => {
 			},
 		],
 	}
-	Class.coronaAuraSnowdread = addAura(1.5);
+	Class.lighterTurretSnowdread = {
+		PARENT: 'genericTank',
+		COLOR: 16,
+		CONTROLLERS: ['nearestDifferentMaster'],
+		INDEPENDENT: true,
+		GUNS: [
+			{
+				POSITION: [15, 11, 1, 0, 0, 180, 0],
+				PROPERTIES: {COLOR: 13},
+			},
+			{
+				POSITION: [16.5, 7, 1, 0, 0, 180, 0],
+			},
+			{
+				POSITION: [14, 2, 1, 0, 7, 0, 0],
+			},
+			{
+				POSITION: [14, 2, 1, 0, -7, 0, 0],
+			},
+			{
+				POSITION: [22, 7, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.flame]),
+					TYPE: 'growBullet',
+				}
+			},
+		],
+	};
+	Class.lighterSnowdread = { // Flamethrower
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Lighter",
+	    TURRETS: [
+			{
+				POSITION: [13, 0, 0, 0, 0, 1],
+				TYPE: ["square", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [9, 0, 0, 0, 360, 1],
+				TYPE: 'lighterTurretSnowdread',
+			}
+		],
+	}
+	Class.stormTurretSnowdread = {
+		PARENT: 'genericTank',
+		LABEL: "",
+		BODY: {
+		  	FOV: 1.5,
+		},
+		CONTROLLERS: [[ 'spin', {speed: 0.03}]],
+		COLOR: 16,
+		INDEPENDENT: true,
+		MAX_CHILDREN: 6,
+		GUNS: [
+			{
+				POSITION: [6, 12, 1.2, 8, 0, 90, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.drone, {size: 1.2}]),
+					TYPE: ['drone', {INDEPENDENT: true}],
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+				},
+			},
+			{
+				POSITION: [6, 12, 1.2, 8, 0, 270, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.drone, {size: 1.3}]),
+					TYPE: ['drone', {INDEPENDENT: true}],
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+				},
+			},
+		],
+	};
+	Class.stormSnowdread = { // Drones
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Storm",
+		BODY: {
+			SPEED: 0.93,
+			FOV: 1.1,
+		},
+	    TURRETS: [
+			{
+				POSITION: [14, 0, 0, 0, 0, 1],
+				TYPE: ["square", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: 'stormTurretSnowdread',
+			}
+		],
+	}
+	Class.coronaAuraSnowdread = addAura(1.5, 0.8);
 	Class.coronaSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Corona",
@@ -1165,11 +1954,11 @@ module.exports = ({ Class }) => {
 	    LABEL: "Thermosphere",
 	    TURRETS: [
 			{
-				POSITION: [15, 0, 0, 0, 0, 1],
+				POSITION: [14, 0, 0, 0, 0, 1],
 				TYPE: ["square", {MIRROR_MASTER_ANGLE: true}],
 			},
 			{
-				POSITION: [12, 0, 0, 0, 360, 1],
+				POSITION: [11, 0, 0, 0, 360, 1],
 				TYPE: "thermosphereAuraSnowdread",
 			},
 		],
@@ -1177,12 +1966,7 @@ module.exports = ({ Class }) => {
 	Class.jumboSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Jumbo",
-	    BODY: {
-			HEALTH: 2.4,
-			SHIELD: 2.4,
-			REGEN: 2,
-			SPEED: 0.65,
-		},
+	    BODY: hpBuffBodyStats[0],
 	    TURRETS: [
 			{
 				POSITION: [15, 0, 0, 0, 0, 1],
@@ -1201,6 +1985,26 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 4; i++) {
 		Class.colossalTopSnowdread.GUNS.push(
 			{
+				POSITION: [3.5, 17.5, 0.001, 9, 0, 90*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+	}
+	Class.colossalBottomSnowdread = {
+	    PARENT: ["genericSquarenought"],
+	    GUNS: [],
+	}
+	for (let i = 0; i < 4; i++) {
+		Class.colossalTopSnowdread.GUNS.push(
+			{
+				POSITION: [3.5, 17.5, 0.001, 9, 0, 90*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+	}
+	for (let i = 0; i < 4; i++) {
+		Class.colossalBottomSnowdread.GUNS.push(
+			{
 				POSITION: [4, 17.5, 0.001, 9, 0, 90*i, 0],
 				PROPERTIES: {COLOR: 9},
 			},
@@ -1209,25 +2013,229 @@ module.exports = ({ Class }) => {
 	Class.colossalSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Colossal",
-		BODY: {
-			SPEED: 1.75,
-			HEALTH: 0.65,
-		},
+		BODY: speedBuffBodyStats[0],
 		GUNS: [],
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 0, 0, 1],
 				TYPE: ['colossalTopSnowdread', {MIRROR_MASTER_ANGLE: true}]
 			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ['colossalBottomSnowdread', {MIRROR_MASTER_ANGLE: true}]
+			},
 		],
 	}
-	for (let i = 0; i < 4; i++) {
-		Class.colossalSnowdread.GUNS.push(
+	Class.cottonTurretSnowdread = {
+		PARENT: ["genericSquarenought"],
+		MIRROR_MASTER_ANGLE: true,
+		SHAPE: [[1, 0], [0, 1], [-1, 0], [0, -1]],
+		GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.cottonTurretSnowdread.GUNS.push(
 			{
-				POSITION: [4, 17.5, 0.001, 9, 0, 90*i, 0],
+				POSITION: [25, 16, 0.001, 0, 0, 90*i+45, 0],
+				PROPERTIES: {COLOR: 9}
+			},
+		)
+	}
+	Class.cottonSnowdread = { // Drifter
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Cotton",
+		BODY: {
+			SPEED: 1.9,
+			ACCELERATION: 0.25,
+		},
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: 'cottonTurretSnowdread',
+			}
+		],
+	}
+	Class.ironTopSnowdread = {
+		PARENT: ["genericSquarenought"],
+		SHAPE: 0,
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 8; i++) {
+		Class.ironTopSnowdread.GUNS.push(
+			{
+				POSITION: [8, 6, 0.001, 20, 0, 45*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [8, 6, 0.001, -20, 0, 45*i, 0],
 				PROPERTIES: {COLOR: 9},
 			},
 		)
+	}
+	Class.ironBottomSnowdread = {
+		PARENT: ["genericSquarenought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.ironBottomSnowdread.GUNS.push(
+			{
+				POSITION: [6, 6, 0.001, 9.5, 5, 90*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [6, 6, 0.001, 9.5, -5, 90*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+	}
+	Class.ironSnowdread = { // Body damage increase
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Iron",
+		BODY: {
+			DAMAGE: 2,
+			PENETRATION: 1.6,
+		},
+		GUNS: [],
+	    TURRETS: [
+			{
+				POSITION: [5.5, 0, 0, 0, 0, 1],
+				TYPE: 'ironTopSnowdread',
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: 'ironBottomSnowdread',
+			},
+		],
+	}
+	Class.rollerTurretSnowdread = {
+		PARENT: ["genericSquarenought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 4; i++) {
+		Class.rollerTurretSnowdread.GUNS.push(
+			{
+				POSITION: [20, 20, 0, 0, 0, 90*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+	}
+	Class.rollerSnowdread = { // Size increase
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Roller",
+		SIZE: 1.3,
+		BODY: sizeBuffBodyStats[0],
+	    TURRETS: [
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: 'rollerTurretSnowdread',
+			}
+		],
+	}
+	Class.owlSnowdread = { // Size decrease
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Owl",
+		SIZE: 0.85,
+		BODY: {
+			HEALTH: 0.8,
+			SPEED: 1.1,
+			ACCELERATION: 1.25,
+		},
+	    TURRETS: [
+			{
+				POSITION: [11, 0, 0, 0, 0, 1],
+				TYPE: ['square', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
+			},
+			{
+				POSITION: [11 / Math.SQRT2, 0, 0, 45, 0, 1],
+				TYPE: ['square', {MIRROR_MASTER_ANGLE: true}]
+			},
+		],
+	}
+	Class.baiterTurretSnowdread = {
+		PARENT: 'genericTank',
+		CONTROLLERS: [["spin", {speed: -0.035}]],
+		INDEPENDENT: true,
+		LABEL: "",
+		COLOR: 16,
+		GUNS: [
+			{ 
+			  	POSITION: [8, 28, 1, -4, 0, 0, 0],
+			},
+			{
+				POSITION: [8, 28, 1, -4, 0, 90, 0],
+			},
+		],
+		TURRETS: [
+			{
+			  	POSITION: [16, 0, 0, 0, 0, 1],
+			  	TYPE: ['egg', {COLOR: 13}]
+			},
+		]
+	}
+    Class.baiterSnowdread = { // Minelayer
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Baiter",
+		GUNS: [
+			{
+				POSITION: [0, 12, 1, 8, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, {health: 1.3, maxSpeed: 1e-3, speed: 1e-3}]),
+					TYPE: 'trap',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			}
+		],
+	    TURRETS: [
+			{
+				POSITION: [14, 0, 0, 0, 0, 1],
+				TYPE: ['square', {MIRROR_MASTER_ANGLE: true}]
+			},
+			{
+				POSITION: [11, 0, 0, 0, 360, 1],
+				TYPE: 'baiterTurretSnowdread'
+			},
+		],
+	}
+	Class.spyRadarSnowdread = {
+		PARENT: 'genericTank',
+		CONTROLLERS: [['spin', {speed: 0.02}]],
+		INDEPENDENT: true,
+		SHAPE: [[0.2, 1], [0.2, -1], [-0.2, -1], [-0.2, 1]],
+		COLOR: 17,
+		GUNS: [
+			{
+				POSITION: [4, 26, 1, -2, 0, 0, 0],
+				PROPERTIES: {COLOR: 13}
+			}
+		]
+	}
+    Class.spySnowdread = { // FOV
+	    PARENT: ["genericSquarenought"],
+	    LABEL: "Spy",
+		BODY: {
+			FOV: 1.2,
+			SPEED: 0.95,
+		},
+	    TURRETS: [
+			{
+				POSITION: [14, 0, 0, 0, 0, 1],
+				TYPE: ['square', {MIRROR_MASTER_ANGLE: true}]
+			},
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
+			},
+			{
+				POSITION: [6, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: 13, MIRROR_MASTER_ANGLE: true}]
+			},
+			{
+				POSITION: [15, 0, 0, 0, 360, 1],
+				TYPE: 'spyRadarSnowdread',
+			}
+		],
 	}
 
 	// T3 Weapons
@@ -1241,7 +2249,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [28, 7, 1, 0, 0, 120*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.assass, g.assass, {reload: 0.8}]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.assass, g.assass, {reload: 0.8, density: 2/5}]),
 					TYPE: "bullet",
 				},
 			},
@@ -1279,6 +2287,79 @@ module.exports = ({ Class }) => {
 			},
 		)
 	}
+	Class.atlatlSnowdread = { // hunter
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Atlatl",
+	    CONTROLLERS: [["zoom", { distance: 500 }]],
+    	TOOLTIP: "Hold right click to zoom.",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 3; i++) {
+		Class.atlatlSnowdread.GUNS.push(
+			{
+				POSITION: [21, 6, 1, 0, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.hunter, g.hunter2, {health: 1.1}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [18, 9, 1, 0, 0, 120*i, 0.25],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.hunter, {health: 1.1}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [5, 9, -1.6, 6, 0, 120*i, 0],
+			},
+		)
+	}
+	Class.ballistaSnowdread = { // mega-sniper
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Ballista",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 3; i++) {
+		Class.ballistaSnowdread.GUNS.push(
+			{
+				POSITION: [22, 11, 1, 0, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.bitlessspeed, g.lessreload, {health: 1.2, size: 2}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [4, 13, 1, 15, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.lessreload, g.fake]),
+					TYPE: "bullet",
+				},
+			},
+		)
+	}
+	Class.barbSnowdread = { // railgun
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Barb",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 3; i++) {
+		Class.barbSnowdread.GUNS.push(
+			{
+				POSITION: [23, 7, 1, 0, 0, 120*i, 0],
+			},
+			{
+				POSITION: [26.5, 4, 1, 0, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.sniper, g.sniper, g.pound, g.lessreload, {damage: 1.2}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [5, 7, -1.7, 7, 0, 120*i, 0],
+			},
+		)
+	}
 	Class.mitigatorSnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Mitigator",
@@ -1287,14 +2368,14 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 3; i++) {
 		Class.mitigatorSnowdread.GUNS.push(
 			{
-				POSITION: [13.5, 8, 1, 0, 5, 120*i, 0],
+				POSITION: [13, 8, 1, 0, 5, 120*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, {reload: 0.85}]),
 					TYPE: "bullet",
 				},
 			},
 			{
-				POSITION: [13.5, 8, 1, 0, -5, 120*i, 0.5],
+				POSITION: [13, 8, 1, 0, -5, 120*i, 0.5],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, {reload: 0.85}]),
 					TYPE: "bullet",
@@ -1310,18 +2391,142 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 3; i++) {
 		Class.appeaserSnowdread.GUNS.push(
 			{
-				POSITION: [7, 10, 1.4, 6, 0, 120*i, 0],
+				POSITION: [7, 11, 1.35, 6, 0, 120*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.mach, {size: 0.8}]),
 					TYPE: "bullet",
 				},
 			},
 			{
-				POSITION: [7, 9.5, 1.3, 8, 0, 120*i, 0],
+				POSITION: [7, 10, 1.3, 8, 0, 120*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, {size: 0.8, reload: 0.95}]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, {size: 0.8, reload: 0.9}]),
 					TYPE: "bullet",
 				},
+			},
+		)
+	}
+	Class.amalgamAutoSnowdread = {
+		PARENT: 'autoTankGun',
+		BODY: {FOV: 2},
+		GUNS: [
+			{
+				POSITION: [16, 4, 1, 0, -3.5, 0, 0.5],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.power, g.twin, g.bent, {recoil: 0.5}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [16, 4, 1, 0, 3.5, 0, 0.5],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.power, g.twin, g.bent, {recoil: 0.5}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [18, 4, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.power, g.twin, g.bent, {recoil: 0.5}]),
+					TYPE: "bullet",
+				},
+			},
+		],
+	}
+	Class.amalgamSnowdread = { // all auto
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Amalgam",
+		TOOLTIP: "Reverse tank to focus more fire.",
+		TURRETS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.amalgamSnowdread.TURRETS.push(
+			{
+				POSITION: [11, 7, 0, 120*i, 190, 0],
+				TYPE: 'amalgamAutoSnowdread',
+			},
+		)
+	};
+	Class.breakerSnowdread = { // ultra bullet spam
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Breaker",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.breakerSnowdread.GUNS.push(
+			{
+				POSITION: [19, 2.75, 1, 0, -3, 120*i, 1/3],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.nail, {speed: 1.05, maxSpeed: 1.05}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [19, 2.75, 1, 0, 3, 120*i, 2/3],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.nail, {speed: 1.05, maxSpeed: 1.05}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [21.5, 2.75, 1, 0, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.nail, {speed: 1.05, maxSpeed: 1.05}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [5.5, 9, -1.8, 6.5, 0, 120*i, 0],
+			},
+		)
+	}
+	Class.clasperTurretSnowdread = {
+		PARENT: ["auto4gun"],
+		INDEPENDENT: true,
+		GUNS: [
+			{
+				POSITION: [16, 4, 1, 0, -3.5, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.twin, g.power, g.flank, g.flank, g.slow, {recoil: 0.25}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [16, 4, 1, 0, 3.5, 0, 0.5],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.twin, g.power, g.flank, g.flank, g.slow, {recoil: 0.25}]),
+					TYPE: "bullet",
+				},
+			},
+		],
+	};
+	Class.clasperSnowdread = { // crowbar
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Clasper",
+	    GUNS: [],
+		TURRETS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.clasperSnowdread.GUNS.push(
+			{
+				POSITION: [38, 6.5, 1, 0, 0, 120*i, 0],
+			},
+			{
+				POSITION: [5, 8.5, -1.5, 8, 0, 120*i, 0],
+			},
+		)
+		Class.clasperSnowdread.TURRETS.push(
+			{
+				POSITION: [6.5, 38, 0, 120*i, 200, 1],
+				TYPE: 'clasperTurretSnowdread'
+			},
+			{
+				POSITION: [6.5, 28, 0, 120*i, 200, 1],
+				TYPE: 'clasperTurretSnowdread'
+			},
+			{
+				POSITION: [6.5, 18, 0, 120*i, 200, 1],
+				TYPE: 'clasperTurretSnowdread'
 			},
 		)
 	}
@@ -1333,7 +2538,7 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 3; i++) {
 		Class.suppressorSnowdread.GUNS.push(
 			{
-				POSITION: [17, 11, 1, 0, 0, 120*i, 0],
+				POSITION: [16.5, 11.5, 1, 0, 0, 120*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, {reload: 0.85}]),
 					TYPE: "bullet",
@@ -1349,14 +2554,167 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 3; i++) {
 		Class.inhibitorSnowdread.GUNS.push(
 			{
-				POSITION: [10, 14, -0.5, 7, 0, 120*i, 0],
+				POSITION: [10, 14, -0.75, 7, 0, 120*i, 0],
 			},
 			{
 				POSITION: [15, 15, 1, 0, 0, 120*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.skim, g.halfspeed, {reload: 0.8}]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.skim, g.halfspeed, {reload: 1.5}]),
 					TYPE: "supermissile",
 					STAT_CALCULATOR: gunCalcNames.sustained,
+				},
+			},
+		)
+	}
+	Class.tranquilizerSnowdread = { // shotgun
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Tranquilizer",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.tranquilizerSnowdread.GUNS.push(
+			{
+				POSITION: [4, 3, 1, 11, -3, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [4, 3, 1, 11, 3, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [4, 4, 1, 13, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [1, 4, 1, 12, -1, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [1, 5, 1, 11, 1, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [1, 5, 1, 11, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [15, 14, 1, 6, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.fake]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [8, 14, -1.3, 4, 0, 120*i, 0],
+			},
+		)
+	}
+	Class.spiralMissileSnowdread = {
+		PARENT: 'spinmissile',
+		GUNS: [
+			{
+				POSITION: [14, 8, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					AUTOFIRE: !0,
+					SHOOT_SETTINGS: combineStats([g.basic, g.rocketeer, g.morespeed]),
+					TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
+					STAT_CALCULATOR: gunCalcNames.thruster,
+				},
+			},
+			{
+				POSITION: [14, 8, 1, 0, 0, 180, 0],
+				PROPERTIES: {
+					AUTOFIRE: !0,
+					SHOOT_SETTINGS: combineStats([g.basic, g.rocketeer, g.morespeed]),
+					TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
+					STAT_CALCULATOR: gunCalcNames.thruster,
+				},
+			},
+		],
+	}
+	Class.spiralSnowdread = { // twister
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Spiral",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.spiralSnowdread.GUNS.push(
+			{
+				POSITION: [10, 10, -0.5, 9, 0, 120*i, 0],
+			},
+			{
+				POSITION: [17, 11, -1.4, 0, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim, g.morespeed, g.fast, g.one_third_reload]),
+					TYPE: "spiralMissileSnowdread",
+					STAT_CALCULATOR: gunCalcNames.sustained,
+				},
+			},
+		)
+	}
+	Class.shellerSnowdread = { // artillery
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Sheller",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.shellerSnowdread.GUNS.push(
+			{
+				POSITION: [12.5, 3, 1, 0, -6.5, 120*i-7, 0.6],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [12.5, 3, 1, 0, 6.5, 120*i+7, 0.8],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [15.5, 3, 1, 0, -4.5, 120*i-7, 0.2],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, g.twin]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [15.5, 3, 1, 0, 4.5, 120*i+7, 0.4],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, g.twin]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [17.5, 10, 1, 0, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.destroy, g.arty]),
+					TYPE: "bullet",
+					LABEL: "Heavy",
 				},
 			},
 		)
@@ -1418,7 +2776,7 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 3; i++) {
 		Class.aggressorMinionSnowdread.GUNS.push(
 			{
-				POSITION: [15, 8.5, 1, 0, 0, 120*i, 0],
+				POSITION: [16, 8.5, 1, 0, 0, 120*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.bitlessspeed, g.minion]),
 					WAIT_TO_CYCLE: true,
@@ -1435,10 +2793,10 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 3; i++) {
 		Class.aggressorSnowdread.GUNS.push(
 			{
-				POSITION: [5, 12, 1, 10.5, 0, 120*i, 0],
+				POSITION: [5, 12, 1, 10, 0, 120*i, 0],
 			},
 			{
-				POSITION: [1.5, 13, 1, 15.5, 0, 120*i, 0],
+				POSITION: [1.5, 13, 1, 15, 0, 120*i, 0],
 				PROPERTIES: {
 					MAX_CHILDREN: 4,
 					SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 0.5}]),
@@ -1450,10 +2808,80 @@ module.exports = ({ Class }) => {
 				},
 			},
 			{
-				POSITION: [12.2, 13, 1, 0, 0, 120*i, 0],
+				POSITION: [12, 13, 1, 0, 0, 120*i, 0],
 			},
 		)
 	}
+	Class.haloSnowdread = { // auto-drones
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Halo",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.haloSnowdread.GUNS.push(
+			{
+				POSITION: [5, 14.5, 1.2, 8, 0, 120*i, 0],
+				PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.drone, g.over, {reload: 1.2, size: 0.8, speed: 1.15, maxSpeed: 1.15}]),
+					TYPE: 'turretedDrone',
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					MAX_CHILDREN: 4,
+				},
+			},
+			{
+				POSITION: [3, 7, 1, 8, 0, 120*i, 0],
+			},
+		)
+	}
+	Class.sluggerSnowdread = { // honcho
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Slugger",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.sluggerSnowdread.GUNS.push(
+			{
+				POSITION: [5, 13, 1.5, 8, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.honcho, {maxSpeed: 0.9, size: 0.75}]),
+					TYPE: "drone",
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					MAX_CHILDREN: 2,
+				},
+			},
+		)
+	};
+	Class.debilitatorSnowdread = { // swarms
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Debilitator",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.debilitatorSnowdread.GUNS.push(
+			{
+				POSITION: [6, 9, 0.6, 6, 5, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, {reload: 1.1}]),
+					TYPE: "swarm",
+					STAT_CALCULATOR: gunCalcNames.swarm,
+				},
+			},
+			{
+				POSITION: [6, 9, 0.6, 6, -5, 120*i, 0.5],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, {reload: 1.1}]),
+					TYPE: "swarm",
+					STAT_CALCULATOR: gunCalcNames.swarm,
+				},
+			},
+		)
+	};
 	Class.hydraSnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Hydra",
@@ -1462,10 +2890,10 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 3; i++) {
 		Class.hydraSnowdread.GUNS.push(
 			{
-				POSITION: [6, 3.5, 1, 4, 8, 120*i, 0],
+				POSITION: [6, 3.5, 1, 4, 8.5, 120*i, 0],
 			},
 			{
-				POSITION: [2, 3.5, 1.8, 10, 8, 120*i, 0],
+				POSITION: [2, 3.5, 1.8, 10, 8.5, 120*i, 2/3],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
 					TYPE: "trap",
@@ -1473,10 +2901,10 @@ module.exports = ({ Class }) => {
 				},
 			},
 			{
-				POSITION: [6, 3.5, 1, 4, -8, 120*i, 0],
+				POSITION: [6, 3.5, 1, 4, -8.5, 120*i, 0],
 			},
 			{
-				POSITION: [2, 3.5, 1.8, 10, -8, 120*i, 0],
+				POSITION: [2, 3.5, 1.8, 10, -8.5, 120*i, 1/3],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
 					TYPE: "trap",
@@ -1487,9 +2915,9 @@ module.exports = ({ Class }) => {
 				POSITION: [12, 5, 1, 0, 0, 120*i, 0],
 			},
 			{
-				POSITION: [2, 5, 1.6, 12, 0, 120*i, 0],
+				POSITION: [2.5, 5, 1.7, 12, 0, 120*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.twin, g.pound, g.fast]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.twin, g.pound, g.fast, {reload: 1/1.1}]),
 					TYPE: "unsetTrap",
 				},
 			},
@@ -1506,10 +2934,100 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 10, 1, 0, 0, 120*i, 0],
 			},
 			{
-				POSITION: [4, 10, 1.6, 13, 0, 120*i, 0],
+				POSITION: [3.5, 10, 1.6, 13, 0, 120*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {health: 2}]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.2, health: 2}]),
 					TYPE: "unsetTrap",
+				},
+			},
+		)
+	}
+	Class.sweeperSnowdread = { // auto-traps
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Sweeper",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.sweeperSnowdread.GUNS.push(
+			{
+				POSITION: [5, 12, 1, 7.5, 0, 120*i, 0],
+			},
+			{
+				POSITION: [3, 15, 1, 13, 0, 120*i, 0],
+			},
+			{
+				POSITION: [2, 15, 1.3, 15.5, 0, 120*i, 0],
+				PROPERTIES: {
+					MAX_CHILDREN: 5,
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.halfreload, {reload: 1.25}]),
+					TYPE: 'unsetPillbox',
+					SYNCS_SKILLS: true,
+					DESTROY_OLDEST_CHILD: true,
+					INDEPENDENT: true,
+				},
+			},
+			{
+				POSITION: [5, 15, 1, 5, 0, 120*i, 0],
+			},
+		)
+	}
+	Class.auraBlockAura = addAura(1/3, 1.6, 0.15, 0, "Small");
+	Class.auraBlock = makeAuto(Class.unsetTrap, "", {type: 'auraBlockAura'});
+	Class.aegisSnowdread = { // aura-traps
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Aegis",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.aegisSnowdread.GUNS.push(
+			{
+				POSITION: [14, 8.5, 1, 0, 0, 120*i, 0],
+			},
+			{
+				POSITION: [3, 10, 1, 11, 0, 120*i, 0],
+			},
+			{
+				POSITION: [3, 10, 1.6, 14, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.hexatrap, {reload: 2, range: 0.8, health: 2.4}]),
+					TYPE: 'auraBlock',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+			{
+				POSITION: [2, 8, 1.6, 15, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.hexatrap, g.fake]),
+					TYPE: 'bullet',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+		)
+	}
+	Class.drillSnowdread = { // trap + gun
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Drill",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.drillSnowdread.GUNS.push(
+			{
+				POSITION: [20, 9, 1, 0, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
+					TYPE: 'bullet',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+			{
+				POSITION: [13.5, 11, 1, 0, 0, 120*i, 0],
+			},
+			{
+				POSITION: [3, 11, 1.4, 13.5, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.hexatrap]),
+					TYPE: 'unsetTrap',
+					STAT_CALCULATOR: gunCalcNames.trap,
 				},
 			},
 		)
@@ -1521,7 +3039,7 @@ module.exports = ({ Class }) => {
 	    LABEL: "Mechanism",
 	    TURRETS: [
 			{
-				POSITION: [11, 0, 0, 180, 0, 1],
+				POSITION: [10, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
 		],
@@ -1529,11 +3047,11 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 3; i++) {
 		Class.mechanismSnowdread.TURRETS.push(
 			{
-				POSITION: [3.5, 6.2, 0, 120*i, 180, 1],
+				POSITION: [3.5, 6, 0, 120*i, 180, 1],
 				TYPE: "spamAutoTurret",
 			},
 			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 180, 1],
+				POSITION: [3.5, 10, 0, 120*i+60, 180, 1],
 				TYPE: "spamAutoTurret",
 			},
 		)
@@ -1547,19 +3065,12 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addTrinoughtTurretRing(),
 			{
 				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: "trinoughtBigAura",
 			},
 		],
-	}
-	for (let i = 0; i < 3; i++) {
-		Class.fusionSnowdread.TURRETS.push(
-			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 180, 1],
-				TYPE: "spamAutoTurret",
-			},
-		)
 	}
 	Class.binarySnowdread = {
 	    PARENT: ["genericTrinought"],
@@ -1569,22 +3080,13 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addTrinoughtTurretRing(),
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: "kilobyteTurretSnowdread",
+			},
 		],
 	}
-	for (let i = 0; i < 3; i++) {
-		Class.binarySnowdread.TURRETS.push(
-			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 180, 1],
-				TYPE: "spamAutoTurret",
-			},
-		)
-	}
-	Class.binarySnowdread.TURRETS.push(
-		{
-			POSITION: [10, 0, 0, 0, 360, 1],
-			TYPE: "kilobyteTurretSnowdread",
-		},
-	)
 	Class.trinoughtBigHealAura = addAura(-1.5, 1.5);
 	Class.exosphereSnowdread = {
 	    PARENT: ["genericTrinought"],
@@ -1594,26 +3096,19 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addTrinoughtTurretRing(),
 			{
 				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: "trinoughtBigHealAura",
 			},
 		],
 	}
-	for (let i = 0; i < 3; i++) {
-		Class.exosphereSnowdread.TURRETS.push(
-			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 180, 1],
-				TYPE: "spamAutoTurret",
-			},
-		)
-	}
 	Class.megabyteTurretSnowdread = {
 		PARENT: ["autoTankGun"],
 		INDEPENDENT: true,
 		GUNS: [
 			{
-				POSITION: [24, 13, 1, 0, 0, 0, 0],
+				POSITION: [26, 13, 1, 0, 0, 0, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.pound, g.auto, {health: 1.2, speed: 0.8}]),
 					TYPE: "bullet",
@@ -1630,7 +3125,7 @@ module.exports = ({ Class }) => {
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
 			{
-				POSITION: [11, 0, 0, 0, 360, 1],
+				POSITION: [12, 0, 0, 0, 360, 1],
 				TYPE: "megabyteTurretSnowdread",
 			},
 		],
@@ -1644,23 +3139,14 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addTrinoughtAuraRing(),
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: "kilobyteTurretSnowdread",
+			},
 		],
 	}
-	for (let i = 0; i < 3; i++) {
-		Class.trojanSnowdread.TURRETS.push(
-			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
-				TYPE: "trinoughtSmallAura",
-			},
-		)
-	}
-	Class.trojanSnowdread.TURRETS.push(
-		{
-			POSITION: [10, 0, 0, 0, 360, 1],
-			TYPE: "kilobyteTurretSnowdread",
-		},
-	)
-	Class.trinoughtSmallHealAura = addAura(-2/3, 2.1, 0.15);
+	Class.trinoughtSmallHealAura = addAura(-2/3, 2.1, 0.15, "red", "Small");
 	Class.hardwareSnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Hardware",
@@ -1669,22 +3155,113 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addTrinoughtAuraRing(true),
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: "kilobyteTurretSnowdread",
+			},
 		],
 	}
-	for (let i = 0; i < 3; i++) {
-		Class.hardwareSnowdread.TURRETS.push(
+	Class.burnerTurretSnowdread = {
+		PARENT: 'genericTank',
+		COLOR: 16,
+		CONTROLLERS: ['nearestDifferentMaster'],
+		INDEPENDENT: true,
+		GUNS: [
 			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
-				TYPE: "trinoughtSmallHealAura",
+				POSITION: [15, 11, 1, 0, 0, 140, 0],
+				PROPERTIES: {COLOR: 2},
+			},
+			{
+				POSITION: [16.5, 7, 1, 0, 0, 140, 0],
+			},
+			{
+				POSITION: [15, 11, 1, 0, 0, -140, 0],
+				PROPERTIES: {COLOR: 2},
+			},
+			{
+				POSITION: [16.5, 7, 1, 0, 0, -140, 0],
+			},
+			{
+				POSITION: [16, 2, 1, 0, 7.5, 0, 0],
+			},
+			{
+				POSITION: [16, 2, 1, 0, -7.5, 0, 0],
+			},
+			{
+				POSITION: [24, 8, 1.25, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.flame, g.morespeed]),
+					TYPE: 'growBullet',
+				}
+			},
+		],
+		TURRETS: [
+			{
+				POSITION: [11, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: 2}]
+			}
+		]
+	};
+	Class.burnerSnowdread = { // Flamethrower
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Burner",
+	    TURRETS: [
+			{
+				POSITION: [14, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [9, 0, 0, 0, 360, 1],
+				TYPE: 'burnerTurretSnowdread',
+			}
+		],
+	}
+	Class.tempestTurretSnowdread = {
+		PARENT: 'genericTank',
+		LABEL: "",
+		BODY: {
+		  	FOV: 1.5,
+		},
+		CONTROLLERS: [[ 'spin', {speed: 0.03}]],
+		COLOR: 16,
+		INDEPENDENT: true,
+		MAX_CHILDREN: 9,
+		GUNS: [],
+	};
+	for (let i = 0; i < 3; i++) {
+		Class.tempestTurretSnowdread.GUNS.push(
+			{
+				POSITION: [6, 12, 1.2, 8, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.drone, g.over, {size: 1.4}]),
+					TYPE: ['drone', {INDEPENDENT: true}],
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+				},
 			},
 		)
 	}
-	Class.hardwareSnowdread.TURRETS.push(
-		{
-			POSITION: [10, 0, 0, 0, 360, 1],
-			TYPE: "kilobyteTurretSnowdread",
+	Class.tempestSnowdread = { // Drones
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Tempest",
+	    BODY: {
+			SPEED: 0.93,
+			FOV: 1.1,
 		},
-	)
+		TURRETS: [
+			{
+				POSITION: [12, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: 'tempestTurretSnowdread',
+			},
+		]
+	}
 	Class.chromosphereSnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Chromosphere",
@@ -1693,19 +3270,12 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addTrinoughtAuraRing(),
 			{
 				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: "trinoughtBigAura",
 			},
 		],
-	}
-	for (let i = 0; i < 3; i++) {
-		Class.chromosphereSnowdread.TURRETS.push(
-			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
-				TYPE: "trinoughtSmallAura",
-			},
-		)
 	}
 	Class.mesosphereSnowdread = {
 	    PARENT: ["genericTrinought"],
@@ -1715,29 +3285,17 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addTrinoughtAuraRing(true),
 			{
 				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: "trinoughtBigHealAura",
 			},
 		],
 	}
-	for (let i = 0; i < 3; i++) {
-		Class.mesosphereSnowdread.TURRETS.push(
-			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
-				TYPE: "trinoughtSmallHealAura",
-			},
-		)
-	}
 	Class.goliathSnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Goliath",
-	    BODY: {
-			HEALTH: 3.2,
-			SHIELD: 3.2,
-			REGEN: 2.5,
-			SPEED: 0.5,
-		},
+	    BODY: hpBuffBodyStats[1],
 	    TURRETS: [
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
@@ -1752,12 +3310,7 @@ module.exports = ({ Class }) => {
 	Class.planetSnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Planet",
-		BODY: {
-			HEALTH: 2.4,
-			SHIELD: 2.4,
-			REGEN: 2,
-			SPEED: 0.65,
-		},
+		BODY: hpBuffBodyStats[0],
 	    TURRETS: [
 			{
 				POSITION: [24, 0, 0, 180, 0, 0],
@@ -1766,26 +3319,14 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			}
-		],
-	}
-	for (let i = 0; i < 3; i++) {
-		Class.planetSnowdread.TURRETS.push(
-			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
-				TYPE: "trinoughtSmallAura",
 			},
-		)
+			...addTrinoughtAuraRing(),
+		],
 	}
 	Class.moonSnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Moon",
-		BODY: {
-			HEALTH: 2.4,
-			SHIELD: 2.4,
-			REGEN: 2,
-			SPEED: 0.65,
-		},
+		BODY: hpBuffBodyStats[0],
 	    TURRETS: [
 			{
 				POSITION: [24, 0, 0, 180, 0, 0],
@@ -1794,16 +3335,44 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			}
+			},
+			...addTrinoughtAuraRing(true),
 		],
 	}
-	for (let i = 0; i < 3; i++) {
-		Class.moonSnowdread.TURRETS.push(
+	Class.burgSnowdread = { // HP + auto spam
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Burg",
+		BODY: hpBuffBodyStats[0],
+	    TURRETS: [
 			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
-				TYPE: "trinoughtSmallHealAura",
+				POSITION: [24, 0, 0, 180, 0, 0],
+				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			},
-		)
+			{
+				POSITION: [12, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			},
+			...addTrinoughtTurretRing(),
+		],
+	}
+	Class.siloSnowdread = { // HP + big auto
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Silo",
+		BODY: hpBuffBodyStats[0],
+	    TURRETS: [
+			{
+				POSITION: [24, 0, 0, 180, 0, 0],
+				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
+			},
+			{
+				POSITION: [13, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: "kilobyteTurretSnowdread",
+			},
+		],
 	}
 	Class.titanTopSnowdread = {
 	    PARENT: ["genericTrinought"],
@@ -1820,83 +3389,412 @@ module.exports = ({ Class }) => {
 	Class.titanSnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Titan",
-		BODY: {
-			SPEED: 2.15,
-			HEALTH: 0.5,
-		},
+		BODY: speedBuffBodyStats[1],
 		GUNS: [],
 	    TURRETS: [
 			{
 				POSITION: [11, 0, 0, 0, 0, 1],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
-			}
-		],
-	}
-	for (let i = 0; i < 3; i++) {
-		Class.titanSnowdread.GUNS.push(
-			{
-				POSITION: [5, 26, 0.001, 8, 0, 120*i, 0],
-				PROPERTIES: {COLOR: 9},
 			},
-		)
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+		],
 	}
 	Class.sirenSnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Siren",
-		BODY: {
-			SPEED: 1.75,
-			HEALTH: 0.65,
-		},
+		BODY: speedBuffBodyStats[0],
 		GUNS: [],
 	    TURRETS: [
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			}
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+			...addTrinoughtAuraRing(),
 		],
-	}
-	for (let i = 0; i < 3; i++) {
-		Class.sirenSnowdread.GUNS.push(
-			{
-				POSITION: [5, 26, 0.001, 8, 0, 120*i, 0],
-				PROPERTIES: {COLOR: 9},
-			},
-		)
-		Class.sirenSnowdread.TURRETS.push(
-			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
-				TYPE: "trinoughtSmallAura",
-			},
-		)
 	}
 	Class.harpySnowdread = {
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Harpy",
-		BODY: {
-			SPEED: 1.75,
-			HEALTH: 0.65,
-		},
+		BODY: speedBuffBodyStats[0],
 		GUNS: [],
 	    TURRETS: [
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+			...addTrinoughtAuraRing(true),
+		],
+	}
+	Class.batonSnowdread = { // Speed + auto spam
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Baton",
+		BODY: speedBuffBodyStats[0],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+			...addTrinoughtTurretRing(),
+		],
+	}
+	Class.fireworkSnowdread = { // Speed + big auto
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Firework",
+		BODY: speedBuffBodyStats[0],
+	    TURRETS: [
+			{
+				POSITION: [13, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: "kilobyteTurretSnowdread",
+			},
+		],
+	}
+	Class.armadaSnowdread = { // Speed + HP
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Armada",
+		BODY: {
+			HEALTH: 1.8, 
+			SHIELD: 1.8, 
+			REGEN: 1.4, 
+			SPEED: 1.75,
+		},
+	    TURRETS: [
+			{
+				POSITION: [14, 0, 0, 180, 0, 1],
+				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+		],
+	}
+	Class.featherTurretSnowdread = {
+		PARENT: ["genericTrinought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.featherTurretSnowdread.GUNS.push(
+			{
+				POSITION: [29, 19, 0.001, 3, 0, 120*i+60, 0],
+				PROPERTIES: {COLOR: 9}
+			},
+		)
+	}
+	Class.featherSnowdread = { // Drifter
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Feather",
+		BODY: {
+			SPEED: 2.05,
+			ACCELERATION: 0.21,
+		},
+	    TURRETS: [
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: 'featherTurretSnowdread',
 			}
 		],
 	}
-	for (let i = 0; i < 3; i++) {
-		Class.harpySnowdread.GUNS.push(
+	Class.steelTopSnowdread = {
+		PARENT: ["genericTrinought"],
+		SHAPE: 0,
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 9; i++) {
+		Class.steelTopSnowdread.GUNS.push(
 			{
-				POSITION: [5, 26, 0.001, 8, 0, 120*i, 0],
+				POSITION: [8, 6, 0.001, 20, 0, 40*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [8, 6, 0.001, -20, 0, 40*i+20, 0],
 				PROPERTIES: {COLOR: 9},
 			},
 		)
-		Class.harpySnowdread.TURRETS.push(
+	}
+	Class.steelBottomSnowdread = {
+		PARENT: ["genericTrinought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.steelBottomSnowdread.GUNS.push(
 			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
-				TYPE: "trinoughtSmallHealAura",
+				POSITION: [3, 5, 0.001, 8, 7.5, 120*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [3, 5, 0.001, 8, 0, 120*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [3, 5, 0.001, 8, -7.5, 120*i, 0],
+				PROPERTIES: {COLOR: 9},
 			},
 		)
+	}
+	Class.steelSnowdread = { // Body damage increase
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Steel",
+		BODY: {
+			DAMAGE: 3,
+			PENETRATION: 2.2,
+		},
+		GUNS: [],
+	    TURRETS: [
+			{
+				POSITION: [6, 0, 0, 0, 360, 1],
+				TYPE: 'steelTopSnowdread'
+			},
+			{
+				POSITION: [20, 0, 0, 0, 360, 0],
+				TYPE: 'steelBottomSnowdread'
+			},
+		],
+	}
+	Class.flattenerTurretSnowdread = {
+		PARENT: ["genericTrinought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	Class.flattenerTurret2Snowdread = {
+		PARENT: ["genericTrinought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.flattenerTurretSnowdread.GUNS.push(
+			{
+				POSITION: [18, 25, 0, 0, 0, 120*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+		Class.flattenerTurret2Snowdread.GUNS.push(
+			{
+				POSITION: [17, 20, 0, 0, 0, 120*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+	}
+	Class.flattenerSnowdread = { // Size increase
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Flattener",
+		SIZE: 1.4,
+		BODY: sizeBuffBodyStats[1],
+	    TURRETS: [
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: 'flattenerTurretSnowdread'
+			}
+		],
+	}
+	Class.towerSnowdread = { // Size increase + auras
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Tower",
+		SIZE: 1.3,
+		BODY: sizeBuffBodyStats[0],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: 'flattenerTurret2Snowdread'
+			},
+			...addTrinoughtAuraRing(),
+		],
+	}
+	Class.creatureSnowdread = { // Size increase + heal auras
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Creature",
+	    SIZE: 1.3,
+		BODY: sizeBuffBodyStats[0],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: 'flattenerTurret2Snowdread'
+			},
+			...addTrinoughtAuraRing(true),
+		],
+	}
+	Class.spotlightSnowdread = { // Size increase + big aura
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Spotlight",
+	    SIZE: 1.3,
+		BODY: sizeBuffBodyStats[0],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: 'flattenerTurretSnowdread'
+			},
+			{
+				POSITION: [9.5, 0, 0, 0, 360, 1],
+				TYPE: "trinoughtBigAura",
+			},
+		],
+	}
+	Class.furnaceSnowdread = { // Size increase + big heal aura
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Furnace",
+	    SIZE: 1.3,
+		BODY: sizeBuffBodyStats[0],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: 'flattenerTurretSnowdread'
+			},
+			{
+				POSITION: [9.5, 0, 0, 0, 360, 1],
+				TYPE: "trinoughtBigHealAura",
+			},
+		],
+	}
+	Class.asteroidSnowdread = { // Size increase + big auto
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Asteroid",
+	    SIZE: 1.3,
+		BODY: sizeBuffBodyStats[0],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: 'flattenerTurretSnowdread'
+			},
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: "kilobyteTurretSnowdread",
+			},
+		],
+	}
+	Class.cardinalSnowdread = { // Size decrease
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Cardinal",
+		SIZE: 0.75,
+		BODY: {
+			HEALTH: 0.65,
+			SPEED: 1.2,
+			ACCELERATION: 1.4,
+		},
+	    TURRETS: [
+			{
+				POSITION: [10, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [5, 0, 0, 0, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			},
+		],
+	}
+	Class.cagerTurretSnowdread = {
+		PARENT: 'genericTank',
+		CONTROLLERS: [["spin", {speed: -0.035}]],
+		INDEPENDENT: true,
+		LABEL: "",
+		COLOR: 16,
+		GUNS: [
+			{ 
+				POSITION: [8, 30, 1, -4, 1.5, 0, 0],
+			},
+			{
+				POSITION: [8, 30, 1, -4, 1.5, 120, 0],
+			},
+			{
+				POSITION: [8, 30, 1, -4, 1.5, 240, 0],
+			},
+		],
+		TURRETS: [
+			{
+				POSITION: [16, 0, 0, 30, 0, 1],
+				TYPE: ['hexagon', {COLOR: 2}]
+			},
+		]
+	};
+    Class.cagerSnowdread = { // Minelayer
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Cager",
+		GUNS: [
+			{
+				POSITION: [0, 9, 1, 8, 0, 0, 0],
+				PROPERTIES: {
+					MAX_CHILDREN: 5,
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, {maxSpeed: 1e-3, speed: 1e-3}]),
+					TYPE: 'unsetPillbox',
+					INDEPENDENT: true,
+					SYNCS_SKILLS: true,
+					DESTROY_OLDEST_CHILD: true,
+				}
+			},
+		],
+	    TURRETS: [
+			{
+				POSITION: [14, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [11, 0, 0, 0, 360, 1],
+				TYPE: 'cagerTurretSnowdread',
+			}
+		],
+	}
+	Class.monitorRadarSnowdread = {
+		PARENT: 'genericTank',
+		CONTROLLERS: [['spin', {speed: 0.02}]],
+		INDEPENDENT: true,
+		SHAPE: [[0.175, 1], [0.175, -1], [-0.175, -1], [-0.175, 1]],
+		COLOR: 17,
+		GUNS: [
+			{
+				POSITION: [3.5, 26, 1, -1.75, 0, 0, 0],
+				PROPERTIES: {COLOR: 2}
+			}
+		]
+	};
+    Class.monitorSnowdread = { // FOV
+	    PARENT: ["genericTrinought"],
+	    LABEL: "Monitor",
+	    BODY: {
+			FOV: 1.3,
+			SPEED: 0.9,
+		  },
+		  TURRETS: [
+			{
+				POSITION: [14, 0, 0, 180, 0, 1],
+				TYPE: ['triangle', {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [9, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: 16}]
+			},
+			{
+				POSITION: [6, 0, 0, 0, 0, 1],
+				TYPE:['egg', {COLOR: 2}]
+			},
+			{
+				POSITION: [19, 0, 0, 0, 360, 1],
+				TYPE: 'monitorRadarSnowdread'
+			}
+		]
 	}
 
 	// T4 Weapons
@@ -1910,7 +3808,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [28, 7, 1, 0, 0, 72*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.assass, g.assass, g.assass, {reload: 0.8}]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.assass, g.assass, g.assass, {reload: 0.8, density: 2/9}]),
 					TYPE: "bullet",
 				},
 			},
@@ -1948,6 +3846,85 @@ module.exports = ({ Class }) => {
 			},
 		)
 	}
+	Class.woomeraSnowdread = { // hunter
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Woomera",
+		CONTROLLERS: [["zoom", { distance: 450 }]],
+	    GUNS: [],
+	}
+	for (let i = 0; i < 5; i++) {
+		Class.woomeraSnowdread.GUNS.push(
+			{
+				POSITION: [25, 5.5, 1, 0, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.hunter, g.hunter2, g.hunter2, g.preda, {health: 1.1}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [22.5, 8, 1, 0, 0, 72*i, 0.15],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.hunter, g.hunter2, g.preda, {health: 1.1}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [20, 10.5, 1, 0, 0, 72*i, 0.3],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.hunter, g.preda, {health: 1.1}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [2.7, 10.5, -1.3, 10, 0, 72*i, 0],
+			},
+		)
+	}
+	Class.trebuchetSnowdread = { // mega-sniper
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Trebuchet",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 5; i++) {
+		Class.trebuchetSnowdread.GUNS.push(
+			{
+				POSITION: [24, 9.5, 1, 0, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.preda, g.bitlessspeed, g.lessreload, {health: 1.4, size: 2}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [4, 11.5, 1, 17, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.preda, g.lessreload, g.fake]),
+					TYPE: "bullet",
+				},
+			},
+		)
+	}
+	Class.boltSnowdread = { // railgun
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Bolt",
+	    GUNS: [],
+	}
+	for (let i = 0; i < 5; i++) {
+		Class.boltSnowdread.GUNS.push(
+			{
+				POSITION: [25, 7, 1, 0, 0, 72*i, 0],
+			},
+			{
+				POSITION: [28.5, 4, 1, 0, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.sniper, g.sniper, g.pound, g.lessreload, {damage: 1.2, speed: 1.2, maxSpeed: 1.2}]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [5, 7, -1.7, 8, 0, 72*i, 0],
+			},
+		)
+	}
 	Class.diplomatSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Diplomat",
@@ -1956,14 +3933,14 @@ module.exports = ({ Class }) => {
   	for (let i = 0; i < 5; i++) {
 		Class.diplomatSnowdread.GUNS.push(
 			{
-				POSITION: [13, 7, 1, 0, 3, 72*i, 0.5],
+				POSITION: [13, 7, 1, 0, 3.25, 72*i, 0.5],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.spam, g.spam, {size: 0.85}]),
 					TYPE: "bullet",
 				},
 			},
 			{
-				POSITION: [13, 7, 1, 0, -3, 72*i, 0.5],
+				POSITION: [13, 7, 1, 0, -3.25, 72*i, 0.5],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.spam, g.spam, {size: 0.85}]),
 					TYPE: "bullet",
@@ -1986,25 +3963,154 @@ module.exports = ({ Class }) => {
   	for (let i = 0; i < 5; i++) {
 		Class.arbitratorSnowdread.GUNS.push(
 			{
-				POSITION: [8, 10, 1.4, 5.5, 0, 72*i, 0],
+				POSITION: [7.5, 10.75, 1.33, 5.5, 0, 72*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.spam, g.spam, {size: 0.7, reload: 1.2}]),
 					TYPE: "bullet",
 				},
 			},
 			{
-				POSITION: [8, 9.5, 1.33, 7.5, 0, 72*i, 0],
+				POSITION: [7.5, 9.5, 1.33, 7.5, 0, 72*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.spam, g.spam, {size: 0.7, reload: 1.125}]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.spam, g.spam, {size: 0.7, reload: 1.1}]),
 					TYPE: "bullet",
 				},
 			},
       		{
-				POSITION: [8, 7.5, 1.2, 9.5, 0, 72*i, 0],
+				POSITION: [7.5, 7.25, 1.25, 9.5, 0, 72*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.spam, g.spam, {size: 0.7, reload: 1.05}]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.spam, g.spam, {size: 0.7, reload: 1}]),
 					TYPE: "bullet",
 				},
+			},
+		)
+	}
+	Class.dissolverAutoSnowdread = {
+		PARENT: 'autoTankGun',
+		BODY: {FOV: 5},
+		GUNS: [
+			{
+				POSITION: [25.5, 5, 1, 0, -3.5, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.flank, g.flank, g.auto]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [25.5, 5, 1, 0, 3.5, 0, 0.5],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.flank, g.flank, g.auto]),
+					TYPE: "bullet",
+				},
+			},
+			{
+				POSITION: [7, 13, -1.3, 6, 0, 0, 0],
+			},
+		]
+	}
+	Class.dissolverSnowdread = { // all auto
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Dissolver",
+		TURRETS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.dissolverSnowdread.TURRETS.push(
+			{
+				POSITION: [9, 10, 0, 72*i, 200, 0],
+				TYPE: 'dissolverAutoSnowdread',
+			},
+		)
+	}
+	Class.eroderSnowdread = { // ultra bullet spam
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Eroder",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.eroderSnowdread.GUNS.push(
+			{
+				POSITION: [13, 4, 1, 0, 4.5, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mini, {health: 1.1}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [11, 4, 1, 0, 4.5, 72*i, 0.5],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mini, {health: 1.1}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [13, 4, 1, 0, -4.5, 72*i, 0.25],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mini, {health: 1.1}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [11, 4, 1, 0, -4.5, 72*i, 0.75],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mini, {health: 1.1}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [18, 1.6, 1, 0, -2, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.twin, g.power, g.slow]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [18, 1.6, 1, 0, 2, 72*i, 0.5],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.twin, g.power, g.slow]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [13, 7.5, 1, 0, 0, 72*i, 0],
+			},
+		)
+	}
+	Class.gripperTurretSnowdread = {
+		PARENT: ["autoTankGun"],
+		INDEPENDENT: true,
+		GUNS: [
+			{
+				POSITION: [23, 13, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.flank, g.flank, g.auto, {reload: 0.9, recoil: 0.25}]),
+					TYPE: "bullet",
+				},
+			},
+		],
+	};
+	Class.gripperSnowdread = { // crowbar
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Gripper",
+	    GUNS: [],
+		TURRETS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.gripperSnowdread.GUNS.push(
+			{
+				POSITION: [38, 7.5, 1, 0, 0, 72*i, 0],
+			},
+			{
+				POSITION: [5, 9.5, -1.5, 8, 0, 72*i, 0],
+			},
+		)
+		Class.gripperSnowdread.TURRETS.push(
+			{
+				POSITION: [7.5, 38, 0, 72*i, 200, 1],
+				TYPE: 'gripperTurretSnowdread',
+			},
+			{
+				POSITION: [7.5, 28, 0, 72*i, 200, 1],
+				TYPE: 'gripperTurretSnowdread',
 			},
 		)
 	}
@@ -2013,28 +4119,14 @@ module.exports = ({ Class }) => {
 	    LABEL: "Retardant",
 	    GUNS: [],
 	}
-  	// for (let i = 0; i < 5; i++) {
-	// 	Class.retardantSnowdread.GUNS.push(
-	// 		{
-	// 			POSITION: [17, 11, 1, 0, 0, 72*i, 0],
-	// 			PROPERTIES: {
-	// 				SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni, {reload: 0.9, health: 1.1}]),
-	// 				TYPE: "bullet",
-	// 			},
-	// 		},
-	// 	)
-	// }
-	for(let i = 0; i < 5; i++) {
+  	for (let i = 0; i < 5; i++) {
 		Class.retardantSnowdread.GUNS.push(
-			...addSpam({length: 16, width: 4, y: 4.5, angle: 72*i}, 0, [g.basic, g.mini, g.pound, g.morereload]),
-			...addSpam({length: 13, width: 4, y: 4.5, angle: 72*i, delay: 0.5}, 0, [g.basic, g.mini, g.pound, g.morereload]),
-			...addSpam({length: 16, width: 4, y: -4.5, angle: 72*i}, 0, [g.basic, g.mini, g.pound, g.morereload]),
-			...addSpam({length: 13, width: 4, y: -4.5, angle: 72*i, delay: 0.5}, 0, [g.basic, g.mini, g.pound, g.morereload]),
-			...addGunner({length: 8, width: 2, x: 10, y: 2.25, angle: 72*i}, 0, [g.basic, g.gunner, g.power, g.twin]),
-			...addGunner({length: 8, width: 2, x: 10, y: -2.25, angle: 72*i, delay: 0.5}, 0, [g.basic, g.gunner, g.power, g.twin]),
 			{
-				POSITION: [12.5, 9, 1, 0, 0, 72*i, 0],
-				PROPERTIES: { COLOR: 0 }
+				POSITION: [17, 12, 1, 0, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni, {reload: 0.9, health: 1.1}]),
+					TYPE: "bullet",
+				},
 			},
 		)
 	}
@@ -2046,14 +4138,158 @@ module.exports = ({ Class }) => {
   	for (let i = 0; i < 5; i++) {
 		Class.tyrantSnowdread.GUNS.push(
 			{
-				POSITION: [10, 10, -0.5, 6, 0, 72*i, 0],
+				POSITION: [10, 11, -0.75, 7, 0, 72*i, 0],
 			},
 			{
-				POSITION: [14.5, 11, 1, 0, 0, 72*i, 0],
+				POSITION: [15, 12, 1, 0, 0, 72*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.destroy, g.arty, g.skim, g.halfspeed, {reload: 0.8}]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.destroy, g.arty, g.skim, g.halfspeed, {reload: 1.5}]),
 					TYPE: "supermissile",
 					STAT_CALCULATOR: gunCalcNames.sustained,
+				},
+			},
+		)
+	}
+	Class.anesthesiologistSnowdread = { // shotgun
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Anesthesiologist",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.anesthesiologistSnowdread.GUNS.push(
+			{
+				POSITION: [4, 4, 1, 11, -3, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {reload: 1.2, health: 1.4, damage: 1.4}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [4, 4, 1, 11, 3, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {reload: 1.2, health: 1.4, damage: 1.4}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [4, 5, 1, 13, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {reload: 1.2, health: 1.4, damage: 1.4}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [1, 5, 1, 12, -2, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {reload: 1.2, health: 1.4, damage: 1.4}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [1, 1.5, 1, 11, -1, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.morespeed, g.fast, {reload: 1.2}]),
+					TYPE: 'bullet',
+				},
+			},
+			{
+				POSITION: [1, 2, 1, 11, 1, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.morespeed, g.fast, {reload: 1.2}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [1, 2, 1, 11, 2, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.morespeed, g.fast, {reload: 1.2}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [17, 7.5, 1, 6, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.fake, {reload: 1.2}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [14.5, 11, 1, 6, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.fake, {reload: 1.2}]),
+					TYPE: 'casing',
+				},
+			},
+			{
+				POSITION: [8, 11, -1.3, 5.5, 0, 72*i, 0],
+			},
+		)
+	}
+	Class.helixSnowdread = { // twister
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Helix",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.helixSnowdread.GUNS.push(
+			{
+				POSITION: [10, 8.5, -0.5, 9, 0, 72*i, 0],
+			},
+			{
+				POSITION: [17, 9.5, -1.4, 0, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim, g.morespeed, g.fast, g.fast, g.one_third_reload]),
+					TYPE: "spiralMissileSnowdread",
+					STAT_CALCULATOR: gunCalcNames.sustained,
+				},
+			},
+		)
+	}
+	Class.bombardmentSnowdread = { // artillery
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Bombardment",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.bombardmentSnowdread.GUNS.push(
+			{
+				POSITION: [12.5, 2, 1, 0, -4.25, 72*i-7, 0.6],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, {speed: 1.1, maxSpeed: 1.1}]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [12.5, 2, 1, 0, 4.25, 72*i+7, 0.8],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, {speed: 1.1, maxSpeed: 1.1}]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [15.5, 2.5, 1, 0, -2.5, 72*i-7, 0.2],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [15.5, 2.5, 1, 0, 2.5, 72*i+7, 0.4],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
+					TYPE: "bullet",
+					LABEL: "Secondary",
+				},
+			},
+			{
+				POSITION: [17.5, 8, 1, 0, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.destroy, g.arty, {speed: 1.1, maxSpeed: 1.1}]),
+					TYPE: "bullet",
+					LABEL: "Heavy",
 				},
 			},
 		)
@@ -2066,7 +4302,7 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 5; i++) {
 		Class.raiderSnowdread.GUNS.push(
 			{
-				POSITION: [4, 5, 2.1, 7.5, 3, 72*i, 0],
+				POSITION: [4, 5, 2.1, 8, 3.25, 72*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.over, {size: 1.5, reload: 0.6}]),
 					TYPE: ["drone", {COLOR: 5}],
@@ -2078,7 +4314,7 @@ module.exports = ({ Class }) => {
 				},
 			},
 			{
-				POSITION: [4, 5, 2.1, 7.5, -3, 72*i, 0],
+				POSITION: [4, 5, 2.1, 8, -3.25, 72*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.over, {size: 1.5, reload: 0.6}]),
 					TYPE: ["drone", {COLOR: 5}],
@@ -2090,7 +4326,7 @@ module.exports = ({ Class }) => {
 				},
 			},
 			{
-				POSITION: [5, 6, 1.4, 8.5, 0, 72*i, 0],
+				POSITION: [6, 6.5, 1.4, 8, 0, 72*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.over, g.pound, {size: 2, reload: 0.4}]),
 					TYPE: ["betadrone", {COLOR: 5}],
@@ -2190,10 +4426,10 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 5; i++) {
 		Class.gladiatorSnowdread.GUNS.push(
 			{
-				POSITION: [4.5, 12, 1, 10, 0, 72*i, 0],
+				POSITION: [4.75, 12, 1, 10, 0, 72*i, 0],
 			},
 			{
-				POSITION: [1.5, 13, 1, 14.5, 0, 72*i, 0],
+				POSITION: [1.5, 13, 1, 14.75, 0, 72*i, 0],
 				PROPERTIES: {
 					MAX_CHILDREN: 4,
 					SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 0.5}]),
@@ -2205,7 +4441,7 @@ module.exports = ({ Class }) => {
 				},
 			},
 			{
-				POSITION: [11.75, 13, 1, 0, 0, 72*i, 0],
+				POSITION: [12, 13, 1, 0, 0, 72*i, 0],
 			},
 		)
 	}
@@ -2214,6 +4450,76 @@ module.exports = ({ Class }) => {
 	Class.gladiatorSnowdread.GUNS[7].PROPERTIES.TYPE = "gladiatorTriswarmMinionSnowdread";
 	Class.gladiatorSnowdread.GUNS[10].PROPERTIES.TYPE = "gladiatorAutoMinionSnowdread";
 	Class.gladiatorSnowdread.GUNS[13].PROPERTIES.TYPE = "gladiatorAuraMinionSnowdread";
+	Class.starlightSnowdread = { // auto-drones
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Starlight",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.starlightSnowdread.GUNS.push(
+			{
+				POSITION: [5, 10, 1.2, 8, 0, 72*i, 0],
+				PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.drone, g.over, {reload: 1.5, speed: 1.15, maxSpeed: 1.15}]),
+					TYPE: 'turretedDrone',
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					MAX_CHILDREN: 3,
+				},
+			},
+			{
+				POSITION: [3, 5, 1, 8, 0, 72*i, 0],
+			},
+		)
+	}
+	Class.bruiserSnowdread = { // honcho
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Bruiser",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.bruiserSnowdread.GUNS.push(
+			{
+				POSITION: [5, 10, 1.5, 9, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.honcho, {maxSpeed: 0.85}]),
+					TYPE: "drone",
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					MAX_CHILDREN: 2,
+				},
+			},
+		)
+	};
+	Class.incapacitatorSnowdread = { // swarms
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Incapacitator",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.incapacitatorSnowdread.GUNS.push(
+			{
+				POSITION: [6, 6, 0.6, 6.5, 3.25, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, g.over, {reload: 1.15}]),
+					TYPE: "swarm",
+					STAT_CALCULATOR: gunCalcNames.swarm,
+				},
+			},
+			{
+				POSITION: [6, 6, 0.6, 6.5, -3.25, 72*i, 0.5],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, g.over, {reload: 1.15}]),
+					TYPE: "swarm",
+					STAT_CALCULATOR: gunCalcNames.swarm,
+				},
+			},
+		)
+	};
 	Class.cerberusSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Cerberus",
@@ -2222,34 +4528,34 @@ module.exports = ({ Class }) => {
 	for (let i = 0; i < 5; i++) {
 		Class.cerberusSnowdread.GUNS.push(
 			{
-				POSITION: [11.5, 3.5, 1, 0, 2.5, 72*i+10, 0],
+				POSITION: [12, 4, 1, 0, 2.5, 72*i+10, 0.5],
 			},
 			{
-				POSITION: [2, 3.5, 1.8, 11.5, 2.5, 72*i+10, 0],
+				POSITION: [1.5, 4, 1.6, 12, 2.5, 72*i+10, 0.5],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.pound, g.fast, {reload: 1.09}]),
 					TYPE: "trap",
 					STAT_CALCULATOR: gunCalcNames.trap,
 				},
 			},
 			{
-				POSITION: [11.5, 3.5, 1, 0, -2.5, 72*i-10, 0],
+				POSITION: [12, 4, 1, 0, -2.5, 72*i-10, 0.5],
 			},
 			{
-				POSITION: [2, 3.5, 1.8, 11.5, -2.5, 72*i-10, 0],
+				POSITION: [1.5, 4, 1.6, 12, -2.5, 72*i-10, 0.5],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.pound, g.fast, {reload: 1.09}]),
 					TYPE: "trap",
 					STAT_CALCULATOR: gunCalcNames.trap,
 				},
 			},
 			{
-				POSITION: [14, 5, 1, 0, 0, 72*i, 0],
+				POSITION: [14, 5.5, 1, 0, 0, 72*i, 0],
 			},
 			{
-				POSITION: [2, 5, 1.75, 14, 0, 72*i, 0],
+				POSITION: [2, 5.5, 1.7, 14, 0, 72*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.twin, g.pound, g.fast]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.fast, {reload: 1.09}]),
 					TYPE: "unsetTrap",
 				},
 			},
@@ -2266,10 +4572,98 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 10, 1, 0, 0, 72*i, 0],
 			},
 			{
-				POSITION: [3.5, 10, 1.55, 13, 0, 72*i, 0],
+				POSITION: [3.5, 10, 1.6, 13, 0, 72*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {health: 2}]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.3, health: 2}]),
 					TYPE: "unsetTrap",
+				},
+			},
+		)
+	}
+	Class.sterilizerSnowdread = { // auto-traps
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Sterilizer",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.sterilizerSnowdread.GUNS.push(
+			{
+				POSITION: [5, 10, 1, 8.5, 0, 72*i, 0],
+			},
+			{
+				POSITION: [3, 13, 1, 14, 0, 72*i, 0],
+			},
+			{
+				POSITION: [2, 13, 1.3, 16.5, 0, 72*i, 0],
+				PROPERTIES: {
+					MAX_CHILDREN: 5,
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.halfreload, g.one_third_reload]),
+					TYPE: 'unsetPillbox',
+					SYNCS_SKILLS: true,
+					DESTROY_OLDEST_CHILD: true,
+					INDEPENDENT: true,
+				},
+			},
+			{
+				POSITION: [5, 13, 1, 6, 0, 72*i, 0],
+			},
+		)
+	}
+	Class.hielamanSnowdread = { // aura-traps
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Hielaman",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.hielamanSnowdread.GUNS.push(
+			{
+				POSITION: [13, 7.5, 1, 0, 0, 72*i, 0],
+			},
+			{
+				POSITION: [3, 9, 1, 13, 0, 72*i, 0],
+			},
+			{
+				POSITION: [3, 9, 1.6, 15, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.hexatrap, {reload: 2.4, range: 0.8, health: 2.4}]),
+					TYPE: 'auraBlock',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+			{
+				POSITION: [2, 7, 1.6, 16, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.hexatrap, g.fake, {reload: 1.2}]),
+					TYPE: 'bullet',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+		)
+	}
+	Class.jackhammerSnowdread = { // trap + gun
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Jackhammer",
+	    GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.jackhammerSnowdread.GUNS.push(
+			{
+				POSITION: [21, 8, 1, 0, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic]),
+					TYPE: 'bullet',
+					STAT_CALCULATOR: gunCalcNames.trap,
+				},
+			},
+			{
+				POSITION: [14.5, 10, 1, 0, 0, 72*i, 0],
+			},
+			{
+				POSITION: [3, 10, 1.4, 14.5, 0, 72*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.hexatrap]),
+					TYPE: 'unsetTrap',
+					STAT_CALCULATOR: gunCalcNames.trap,
 				},
 			},
 		)
@@ -2311,19 +4705,12 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addPentanoughtTurretRing(),
 			{
 				POSITION: [9, 0, 0, 0, 360, 1],
 				TYPE: "pentanoughtBigAura",
 			},
 		],
-	}
-	for (let i = 0; i < 5; i++) {
-		Class.supernovaSnowdread.TURRETS.push(
-			{
-				POSITION: [3.25, 9, 0, 72*i+36, 180, 1],
-				TYPE: "spamAutoTurret",
-			},
-		)
 	}
 	Class.cipherSnowdread = {
 	    PARENT: ["genericPentanought"],
@@ -2333,23 +4720,14 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addPentanoughtTurretRing(),
+			{
+				POSITION: [11.5, 0, 0, 0, 360, 1],
+				TYPE: "megabyteTurretSnowdread",
+			},
 		],
 	}
-	for (let i = 0; i < 5; i++) {
-		Class.cipherSnowdread.TURRETS.push(
-			{
-				POSITION: [3.25, 9, 0, 72*i+36, 180, 1],
-				TYPE: "spamAutoTurret",
-			},
-		)
-	}
-	Class.cipherSnowdread.TURRETS.push(
-		{
-			POSITION: [11.5, 0, 0, 0, 360, 1],
-			TYPE: "megabyteTurretSnowdread",
-		},
-	)
-	Class.pentanoughtBigHealAura = addAura(-2, 1.5);
+	Class.pentanoughtBigHealAura = addAura(-2, 1.45, 0.3, "red", "Large");
 	Class.interstellarSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Interstellar",
@@ -2362,22 +4740,15 @@ module.exports = ({ Class }) => {
 				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: "pentanoughtBigHealAura",
 			},
+			...addPentanoughtTurretRing(),
 		],
-	}
-	for (let i = 0; i < 5; i++) {
-		Class.interstellarSnowdread.TURRETS.push(
-			{
-				POSITION: [3.25, 9, 0, 72*i+36, 180, 1],
-				TYPE: "spamAutoTurret",
-			},
-		)
 	}
 	Class.gigabyteTurretSnowdread = {
 		PARENT: ["autoTankGun"],
 		INDEPENDENT: true,
 		GUNS: [
 			{
-				POSITION: [24, 13, 1, 0, 0, 0, 0],
+				POSITION: [26, 16, 1, 0, 0, 0, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.pound, g.destroy, g.auto, {speed: 1.1, health: 0.8}]),
 					TYPE: "bullet",
@@ -2390,64 +4761,148 @@ module.exports = ({ Class }) => {
 	    LABEL: "Gigabyte",
 	    TURRETS: [
 			{
-				POSITION: [15, 0, 0, 180, 0, 1],
+				POSITION: [14.5, 0, 0, 180, 0, 1],
 				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
 			},
 			{
-				POSITION: [13.5, 0, 0, 0, 360, 1],
+				POSITION: [13, 0, 0, 0, 360, 1],
 				TYPE: "gigabyteTurretSnowdread",
 			},
 		],
 	}
+	Class.pentanoughtSmallAura = addAura(1, 1.6, 0.15, 0, "Small");
 	Class.malwareSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Malware",
 	    TURRETS: [
 			{
-				POSITION: [14, 0, 0, 180, 0, 1],
+				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			},
+			...addPentanoughtAuraRing(),
+			{
+				POSITION: [11.5, 0, 0, 0, 360, 1],
+				TYPE: "megabyteTurretSnowdread",
 			},
 		],
 	}
-	for (let i = 0; i < 5; i++) {
-		Class.malwareSnowdread.TURRETS.push(
-			{
-				POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
-				TYPE: "trinoughtSmallAura",
-			},
-		)
-	}
-	Class.malwareSnowdread.TURRETS.push(
-		{
-			POSITION: [12, 0, 0, 0, 360, 1],
-			TYPE: "megabyteTurretSnowdread",
-		},
-	)
+	Class.pentanoughtSmallHealAura = addAura(-2/3, 1.6, 0.15, "red", "Small");
 	Class.softwareSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Software",
 	    TURRETS: [
 			{
-				POSITION: [14, 0, 0, 180, 0, 1],
+				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			},
+			...addPentanoughtAuraRing(true),
+			{
+				POSITION: [11.5, 0, 0, 0, 360, 1],
+				TYPE: "megabyteTurretSnowdread",
 			},
 		],
 	}
-	for (let i = 0; i < 5; i++) {
-		Class.softwareSnowdread.TURRETS.push(
+	Class.roasterTurretSnowdread = {
+		PARENT: 'genericTank',
+		COLOR: 16,
+		CONTROLLERS: ['nearestDifferentMaster'],
+		INDEPENDENT: true,
+		GUNS: [
 			{
-				POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
-				TYPE: "trinoughtSmallHealAura",
+				POSITION: [15, 12, 1.6, 0, 0, 180, 0],
+				PROPERTIES: {COLOR: -1},
+			},
+			{
+			  	POSITION: [16.5, 7, 1.5, 0, 0, 180, 0],
+			},
+			{
+			  	POSITION: [13, 2, 1, 0, -8, -10, 0],
+			},
+			{
+			  	POSITION: [19, 7, 1, 0, -2, -10, 0],
+			  	PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.auto, g.flame]),
+					TYPE: 'growBullet',
+			  	}
+			},
+			{
+			  POSITION: [13, 2, 1, 0, 8, 10, 0],
+			},
+			{
+				POSITION: [19, 7, 1, 0, 2, 10, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.auto, g.flame]),
+					TYPE: 'growBullet',
+				}
+			},
+		],
+		TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
+			}
+		]
+	};
+	Class.roasterSnowdread = { // Flamethrower
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Roaster",
+	    TURRETS: [
+			{
+				POSITION: [15, 0, 0, 180, 0, 1],
+				TYPE: ['pentagon', {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [11, 0, 0, 0, 360, 1],
+				TYPE: 'roasterTurretSnowdread'
+			},
+		],
+	}
+	Class.monsoonTurretSnowdread = {
+		PARENT: 'genericTank',
+		LABEL: "",
+		BODY: {
+			FOV: 1.5,
+		},
+		CONTROLLERS: [[ 'spin', {speed: 0.03}]],
+		COLOR: 16,
+		INDEPENDENT: true,
+		MAX_CHILDREN: 9,
+		GUNS: [],
+	}
+	for (let i = 0; i < 3; i++) {
+		Class.monsoonTurretSnowdread.GUNS.push(
+			{
+				POSITION: [6, 13, 1.2, 8, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.drone, {size: 1.5, health: 1.1}]),
+					TYPE: ["drone", { INDEPENDENT: true }],
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+				},
 			},
 		)
 	}
-	Class.softwareSnowdread.TURRETS.push(
-		{
-			POSITION: [12, 0, 0, 0, 360, 1],
-			TYPE: "megabyteTurretSnowdread",
+	Class.monsoonSnowdread = { // Drones
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Monsoon",
+		BODY: {
+			SPEED: 0.93,
+			FOV: 1.1,
 		},
-	)
-	Class.photosphereSmallAuraSnowdread = addAura(1, 1.75, 0.15);
+	    TURRETS: [
+			{
+				POSITION: [15, 0, 0, 180, 0, 1],
+				TYPE: ['pentagon', {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: 'monsoonTurretSnowdread'
+			},
+		],
+	}
+	Class.photosphereSmallAuraSnowdread = addAura(1, 1.85, 0.15);
 	Class.photosphereBigAuraSnowdread = addAura(1.5, 4);
 	Class.photosphereSnowdread = {
 	    PARENT: ["genericPentanought"],
@@ -2483,29 +4938,17 @@ module.exports = ({ Class }) => {
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
 			},
+			...addPentanoughtAuraRing(true),
 			{
 				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: "pentanoughtBigHealAura",
 			},
 		],
 	}
-	for (let i = 0; i < 5; i++) {
-		Class.stratosphereSnowdread.TURRETS.push(
-			{
-				POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
-				TYPE: "trinoughtSmallHealAura",
-			},
-		)
-	}
 	Class.behemothSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Behemoth",
-		BODY: {
-			HEALTH: 4,
-			SHIELD: 4,
-			REGEN: 2.5,
-			SPEED: 0.4,
-		},
+		BODY: hpBuffBodyStats[2],
 	    TURRETS: [
 			{
 				POSITION: [15, 0, 0, 180, 0, 1],
@@ -2520,12 +4963,7 @@ module.exports = ({ Class }) => {
 	Class.astronomicSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Astronomic",
-		BODY: {
-			HEALTH: 3.2,
-			SHIELD: 3.2,
-			REGEN: 2.5,
-			SPEED: 0.5,
-		},
+		BODY: hpBuffBodyStats[1],
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
@@ -2535,25 +4973,13 @@ module.exports = ({ Class }) => {
 				POSITION: [24, 0, 0, 180, 0, 0],
 				TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
 			},
+			...addPentanoughtAuraRing(),
 		],
-	}
-	for (let i = 0; i < 5; i++) {
-		Class.astronomicSnowdread.TURRETS.push(
-			{
-				POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
-				TYPE: "trinoughtSmallAura",
-			},
-		)
 	}
 	Class.grandioseSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Grandiose",
-		BODY: {
-			HEALTH: 3.2,
-			SHIELD: 3.2,
-			REGEN: 2.5,
-			SPEED: 0.5,
-		},
+		BODY: hpBuffBodyStats[1],
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
@@ -2563,17 +4989,51 @@ module.exports = ({ Class }) => {
 				POSITION: [24, 0, 0, 180, 0, 0],
 				TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
 			},
+			...addPentanoughtAuraRing(true),
 		],
 	}
-	for (let i = 0; i < 5; i++) {
-		Class.grandioseSnowdread.TURRETS.push(
+	Class.bunkerSnowdread = { // HP + auto spam
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Bunker",
+		BODY: hpBuffBodyStats[1],
+	    TURRETS: [
 			{
-				POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
-				TYPE: "trinoughtSmallHealAura",
+				POSITION: [13, 0, 0, 180, 0, 1],
+				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
 			},
-		)
+			{
+				POSITION: [24, 0, 0, 180, 0, 0],
+				TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
+			},
+			...addPentanoughtTurretRing(),
+		],
+	}
+	Class.arsenalSnowdread = { // HP + big auto
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Arsenal",
+		BODY: hpBuffBodyStats[1],
+	    TURRETS: [
+			{
+				POSITION: [13, 0, 0, 180, 0, 1],
+				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [24, 0, 0, 180, 0, 0],
+				TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [11.5, 0, 0, 0, 360, 1],
+				TYPE: "megabyteTurretSnowdread",
+			},
+		],
 	}
 	Class.pentagonLeviathanTopSnowdread = {
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Leviathan",
+		MIRROR_MASTER_ANGLE: true,
+	    GUNS: [],
+	}
+	Class.pentagonLeviathanBottomSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Leviathan",
 		MIRROR_MASTER_ANGLE: true,
@@ -2585,9 +5045,21 @@ module.exports = ({ Class }) => {
 				POSITION: [6, 13.5, 0.001, 9, 0, 72*i, 0],
 				PROPERTIES: {COLOR: 9},
 			},
-		)
+		);
+		Class.pentagonLeviathanBottomSnowdread.GUNS.push(
+			{
+				POSITION: [7, 17, 0.001, 9, 0, 72*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		);
 	}
 	Class.hexagonLeviathanTopSnowdread = {
+	    PARENT: ["genericHexnought"],
+	    LABEL: "Leviathan",
+		MIRROR_MASTER_ANGLE: true,
+	    GUNS: [],
+	}
+	Class.hexagonLeviathanBottomSnowdread = {
 	    PARENT: ["genericHexnought"],
 	    LABEL: "Leviathan",
 		MIRROR_MASTER_ANGLE: true,
@@ -2600,233 +5072,1179 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {COLOR: 9},
 			},
 		)
+		Class.hexagonLeviathanBottomSnowdread.GUNS.push(
+			{
+				POSITION: [7, 13.5, 0.001, 9.5, 0, 60*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
 	}
 	Class.leviathanSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Leviathan",
-		GUNS: [],
+		BODY: speedBuffBodyStats[2],
 	    TURRETS: [
 			{
 				POSITION: [12, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonLeviathanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
-			}
-		],
-	}
-	for (let i = 0; i < 5; i++) {
-		Class.leviathanSnowdread.GUNS.push(
-			{
-				POSITION: [6.5, 16, 0.001, 9, 0, 72*i, 0],
-				PROPERTIES: {COLOR: 9},
 			},
-		)
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+		],
 	}
 	Class.valrayvnSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Valrayvn",
-		GUNS: [],
-	    TURRETS: [
-			{
-				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
-			},
-		],
-	}
-	for (let i = 0; i < 5; i++) {
-		Class.valrayvnSnowdread.GUNS.push(
-			{
-				POSITION: [6.5, 16, 0.001, 9, 0, 72*i, 0],
-				PROPERTIES: {COLOR: 9},
-			},
-		)
-		Class.valrayvnSnowdread.TURRETS.push(
-			{
-				POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
-				TYPE: "trinoughtSmallAura",
-			},
-		)
-	}
-	Class.pegasusSnowdread = {
-	    PARENT: ["genericPentanought"],
-	    LABEL: "Pegasus",
-		GUNS: [],
+		BODY: speedBuffBodyStats[1],
 	    TURRETS: [
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
 			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+			...addPentanoughtAuraRing(),
 		],
 	}
-	for (let i = 0; i < 5; i++) {
-		Class.pegasusSnowdread.GUNS.push(
+	Class.pegasusSnowdread = {
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Pegasus",
+		BODY: speedBuffBodyStats[1],
+	    TURRETS: [
 			{
-				POSITION: [7, 17, 0.001, 9, 0, 72*i, 0],
+				POSITION: [12, 0, 0, 180, 0, 1],
+				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+			...addPentanoughtAuraRing(true),
+		],
+	}
+	Class.maceSnowdread = { // Speed + auto spam
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Mace",
+		BODY: speedBuffBodyStats[1],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 180, 0, 1],
+				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+			...addPentanoughtTurretRing(),
+		],
+	}
+	Class.missileSnowdread = { // Speed + big auto
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Missile",
+		BODY: speedBuffBodyStats[1],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 180, 0, 1],
+				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+			{
+				POSITION: [11.5, 0, 0, 0, 360, 1],
+				TYPE: "megabyteTurretSnowdread",
+			},
+		],
+	}
+	Class.battalionSnowdread = { // Speed + HP
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Battalion",
+		BODY: {
+			HEALTH: 2.8, 
+			SHIELD: 2.8, 
+			REGEN: 1.8, 
+			SPEED: 2.15,
+		},
+	    TURRETS: [
+			{
+				POSITION: [15, 0, 0, 180, 0, 1],
+				TYPE: ["pentagon", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [20, 0, 0, 0, 0, 0],
+				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
+			},
+		],
+	}
+	Class.pentagonWispTurretSnowdread = {
+		PARENT: ["genericPentanought"],
+		SHAPE: 5,
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.pentagonWispTurretSnowdread.GUNS.push(
+			{
+				POSITION: [26, 13, 0.001, 3, 0, 72*i+36, 0],
+				PROPERTIES: {COLOR: 9}
+			},
+		)
+	}
+	Class.hexagonWispTurretSnowdread = {
+		PARENT: ["genericHexnought"],
+		SHAPE: 6,
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 6; i++) {
+		Class.hexagonWispTurretSnowdread.GUNS.push(
+			{
+				POSITION: [26, 13, 0.001, 3, 0, 60*i+30, 0],
+				PROPERTIES: {COLOR: 9}
+			},
+		)
+	}
+	Class.wispSnowdread = { // Drifter
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Wisp",
+		BODY: {
+			SPEED: 2.2,
+			ACCELERATION: 0.18,
+		},
+	    TURRETS: [
+			{
+				POSITION: [11, 0, 0, 0, 0, 1],
+				TYPE: ['pentagonWispTurretSnowdread', {}]
+			}
+		],
+	}
+	Class.pentagonTitaniumTopSnowdread = {
+		PARENT: ["genericPentanought"],
+		SHAPE: 0,
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 10; i++) {
+		Class.pentagonTitaniumTopSnowdread.GUNS.push(
+			{
+				POSITION: [8, 6, 0.001, 20, 0, 36*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [8, 6, 0.001, -20, 0, 36*i, 0],
 				PROPERTIES: {COLOR: 9},
 			},
 		)
-		Class.pegasusSnowdread.TURRETS.push(
+	}
+	Class.pentagonTitaniumBottomSnowdread = {
+		PARENT: ["genericPentanought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.pentagonTitaniumBottomSnowdread.GUNS.push(
 			{
-				POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
-				TYPE: "trinoughtSmallHealAura",
+				POSITION: [5, 6, 0.001, 9.5, 3.5, 72*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [5, 6, 0.001, 9.5, -3.5, 72*i, 0],
+				PROPERTIES: {COLOR: 9},
 			},
 		)
 	}
+	Class.hexagonTitaniumTopSnowdread = {
+		PARENT: ["genericHexnought"],
+		SHAPE: 0,
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 12; i++) {
+		Class.hexagonTitaniumTopSnowdread.GUNS.push(
+			{
+				POSITION: [8, 6, 0.001, 20, 0, 30*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [8, 6, 0.001, -20, 0, 30*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+	}
+	Class.hexagonTitaniumBottomSnowdread = {
+		PARENT: ["genericHexnought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 6; i++) {
+		Class.hexagonTitaniumBottomSnowdread.GUNS.push(
+			{
+				POSITION: [5, 5.5, 0.001, 9.5, 3.5, 60*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+			{
+				POSITION: [5, 5.5, 0.001, 9.5, -3.5, 60*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+	}
+	Class.titaniumSnowdread = { // Body damage increase
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Titanium",
+		BODY: {
+			DAMAGE: 3.7,
+			PENETRATION: 2.9,
+		},
+	    TURRETS: [
+			{
+				POSITION: [6, 0, 0, 0, 360, 1],
+				TYPE: ['pentagonTitaniumTopSnowdread', {}]
+			},
+			{
+				POSITION: [20, 0, 0, 0, 360, 0],
+				TYPE: ['pentagonTitaniumBottomSnowdread', {}]
+			},
+		],
+	}
+	Class.pentagonCrusherTurretSnowdread = {
+		PARENT: ["genericPentanought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	Class.pentagonCrusherTurret2Snowdread = {
+		PARENT: ["genericPentanought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	Class.pentagonCrusherTurret3Snowdread = {
+		PARENT: ["genericPentanought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 5; i++) {
+		Class.pentagonCrusherTurretSnowdread.GUNS.push(
+			{
+				POSITION: [20, 16, 0, 0, 0, 72*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+		Class.pentagonCrusherTurret2Snowdread.GUNS.push(
+			{
+				POSITION: [21, 11, 0, 0, 0, 72*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+		Class.pentagonCrusherTurret3Snowdread.GUNS.push(
+			{
+				POSITION: [17, 16, 0, 0, 0, 72*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+	}
+	Class.hexagonCrusherTurretSnowdread = {
+		PARENT: ["genericHexnought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	Class.hexagonCrusherTurret2Snowdread = {
+		PARENT: ["genericHexnought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	Class.hexagonCrusherTurret3Snowdread = {
+		PARENT: ["genericHexnought"],
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 6; i++) {
+		Class.hexagonCrusherTurretSnowdread.GUNS.push(
+			{
+				POSITION: [20, 13.5, 0, 0, 0, 60*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+		Class.hexagonCrusherTurret2Snowdread.GUNS.push(
+			{
+				POSITION: [21, 8.5, 0, 0, 0, 60*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+		Class.hexagonCrusherTurret3Snowdread.GUNS.push(
+			{
+				POSITION: [17, 13.5, 0, 0, 0, 60*i, 0],
+				PROPERTIES: {COLOR: 9},
+			},
+		)
+	}
+	Class.crusherSnowdread = { // Size increase
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Crusher",
+		SIZE: 1.5,
+		BODY: sizeBuffBodyStats[2],
+	    TURRETS: [
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: ['pentagonCrusherTurretSnowdread', {}]
+			}
+		],
+	}
+	Class.mountainSnowdread = { // Size increase + auras
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Mountain",
+		SIZE: 1.4,
+		BODY: sizeBuffBodyStats[1],
+	    TURRETS: [
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: ['pentagonCrusherTurret2Snowdread', {}]
+			},
+			...addPentanoughtAuraRing(),
+		],
+	}
+	Class.beastSnowdread = { // Size increase + heal auras
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Beast",
+		SIZE: 1.4,
+		BODY: sizeBuffBodyStats[1],
+	    TURRETS: [
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: ['pentagonCrusherTurret2Snowdread', {}]
+			},
+			...addPentanoughtAuraRing(true),
+		],
+	}
+	Class.luminanceSnowdread = { // Size increase + big aura
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Luminance",
+		SIZE: 1.4,
+		BODY: sizeBuffBodyStats[1],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: ['pentagonCrusherTurret3Snowdread', {}]
+			},
+			{
+				POSITION: [9, 0, 0, 0, 360, 1],
+				TYPE: "pentanoughtBigAura",
+			},
+		],
+	}
+	Class.foundrySnowdread = { // Size increase + big heal aura
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Foundry",
+		SIZE: 1.4,
+		BODY: sizeBuffBodyStats[1],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: ['pentagonCrusherTurret3Snowdread', {}]
+			},
+			{
+				POSITION: [9.5, 0, 0, 0, 360, 1],
+				TYPE: "pentanoughtBigHealAura",
+			},
+		],
+	}
+	Class.planetoidSnowdread = { // Size increase + big auto
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Planetoid",
+		SIZE: 1.4,
+		BODY: sizeBuffBodyStats[1],
+	    TURRETS: [
+			{
+				POSITION: [12, 0, 0, 0, 0, 1],
+				TYPE: ['pentagonCrusherTurret3Snowdread', {}]
+			},
+			{
+				POSITION: [11.5, 0, 0, 0, 360, 1],
+				TYPE: "megabyteTurretSnowdread",
+			},
+		],
+	}
+	Class.pentagonFinchTurretSnowdread = {
+		PARENT: ["genericPentanought"],
+		MIRROR_MASTER_ANGLE: true,
+		COLOR: 9,
+		TURRETS: [
+			{
+				POSITION: [15.5, 0, 0, 0, 0, 1],
+				TYPE: ['pentagon', {MIRROR_MASTER_ANGLE: true}]
+			}
+		]
+	}
+	Class.hexagonFinchTurretSnowdread = {
+		PARENT: ["genericHexnought"],
+		MIRROR_MASTER_ANGLE: true,
+		COLOR: 9,
+		TURRETS: [
+			{
+				POSITION: [16.5, 0, 0, 30, 0, 1],
+				TYPE: ['hexagon', {MIRROR_MASTER_ANGLE: true}]
+			}
+		]
+	}
+	Class.finchSnowdread = { // Size decrease
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Finch",
+		SIZE: 0.65,
+		BODY: {
+			HEALTH: 0.5,
+			SPEED: 1.3,
+			ACCELERATION: 1.6,
+		},
+	    TURRETS: [
+			{
+				POSITION: [13, 0, 0, 0, 0, 1],
+				TYPE: ['pentagonFinchTurretSnowdread', {}]
+			}
+		],
+	}
+	Class.pentagonHoarderTurretSnowdread = {
+		PARENT: 'genericTank',
+		CONTROLLERS: [["spin", {speed: -0.035}]],
+		INDEPENDENT: true,
+		LABEL: "",
+		COLOR: 16,
+		GUNS: [],
+		TURRETS: [
+			{
+				POSITION: [17, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: -1}]
+			},
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: 16}]
+			},
+		]
+	};
+	Class.hexagonHoarderTurretSnowdread = {
+		PARENT: 'genericTank',
+		CONTROLLERS: [["spin", {speed: -0.035}]],
+		INDEPENDENT: true,
+		LABEL: "",
+		COLOR: 16,
+		GUNS: [],
+		TURRETS: [
+			{
+				POSITION: [17, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: -1}]
+			},
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: 16}]
+			},
+		]
+	};
+	for(let i = 0; i < 5; i++) {
+		Class.pentagonHoarderTurretSnowdread.GUNS.push(
+			{ 
+				POSITION: [15, 5.5, -2.5, 0, 0, 72*i, 0],
+			},
+		)
+	}
+	for(let i = 0; i < 6; i++) {
+		Class.hexagonHoarderTurretSnowdread.GUNS.push(
+			{ 
+				POSITION: [16, 5, -2.5, 0, 0, 60*i, 0],
+			},
+		)
+	}
+    Class.hoarderSnowdread = { // Minelayer
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Hoarder",
+	    GUNS: [
+			{
+				POSITION: [0, 14, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					MAX_CHILDREN: 5,
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.construct, {maxSpeed: 1e-3, speed: 1e-3}]),
+					TYPE: 'unsetPillbox',
+					INDEPENDENT: true,
+					SYNCS_SKILLS: true,
+					DESTROY_OLDEST_CHILD: true,
+				}
+			},
+		],
+	    TURRETS: [
+			{
+				POSITION: [14, 0, 0, 180, 0, 1],
+				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: ['pentagonHoarderTurretSnowdread', {}]
+			}
+		],
+	}
+	Class.trackerRadarSnowdread = {
+		PARENT: 'genericTank',
+		CONTROLLERS: [['spin', {speed: 0.02}]],
+		INDEPENDENT: true,
+		SHAPE: [
+			[-1,0],[-0.94,0.34],[-0.77,0.64],[-0.5,0.87], 
+			[-0.4,0.69],[-0.61,0.51],[-0.75,0.27], 
+			[-0.8,0],[-0.75,-0.27],[-0.61,-0.51],[-0.4,-0.69], 
+			[-0.5,-0.87],[-0.77,-0.64],[-0.94,-0.34],
+		],
+    	COLOR: 17,
+		GUNS: [
+			{
+				POSITION: [1.75, 17, 1, 2, 0, -75, 0],
+			},
+			{
+				POSITION: [1.75, 17, 1, 2, 0, 75, 0],
+			},
+		],
+		TURRETS: [
+			{
+				POSITION: [6, 8.2, 0, 0, 0, 1],
+				TYPE: ["egg", {COLOR: -1}],
+			},
+			{
+				POSITION: [3, 8.2, 0, 0, 0, 1],
+				TYPE: ["egg", {COLOR: 17}],
+			},
+		]
+	};
+    Class.trackerSnowdread = { // FOV
+	    PARENT: ["genericPentanought"],
+	    LABEL: "Tracker",
+		BODY: {
+			FOV: 1.4,
+			SPEED: 0.85
+		},
+	    TURRETS: [
+			{
+				POSITION: [14, 0, 0, 180, 0, 1],
+				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [9, 0, 0, 180, 0, 1],
+				TYPE: ["egg", {COLOR: 16, MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [4.5, 0, 0, 180, 0, 1],
+				TYPE: ["egg", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
+			},
+			{
+				POSITION: [15, 0, 0, 0, 360, 1],
+				TYPE: 'trackerRadarSnowdread'
+			},
+		],
+	}
 
 	Class.addons.UPGRADES_TIER_0.push("dreadSnowdread");
-		Class.dreadSnowdread.UPGRADES_TIER_1 = ["swordSnowdread", "pacifierSnowdread", "peacekeeperSnowdread", "invaderSnowdread", "centaurSnowdread"];
+		Class.dreadSnowdread.UPGRADES_TIER_0 = [
+			["sword2Snowdread", "dreadBodySnowdread",],
+			["pacifier2Snowdread", "dreadBodySnowdread"],
+			["peacekeeper2Snowdread", "dreadBodySnowdread"],
+			["invader2Snowdread", "dreadBodySnowdread"],
+			["centaur2Snowdread", "dreadBodySnowdread"],
+		];
 
-			Class.swordSnowdread.UPGRADES_TIER_M1 = ["gladiusSnowdread", "sabreSnowdread"];
-				Class.gladiusSnowdread.UPGRADES_TIER_M1 = ["bladeSnowdread"];
-					Class.bladeSnowdread.UPGRADES_TIER_M1 = ["rapierSnowdread"];
-				Class.sabreSnowdread.UPGRADES_TIER_M1 = ["bayonetSnowdread"];
-					Class.bayonetSnowdread.UPGRADES_TIER_M1 = ["javelinSnowdread"];
+		Class.sword2Snowdread.UPGRADES_TIER_0 = ["swordSnowdread"];
+		Class.pacifier2Snowdread.UPGRADES_TIER_0 = ["pacifierSnowdread"];
+		Class.peacekeeper2Snowdread.UPGRADES_TIER_0 = ["peacekeeperSnowdread"];
+		Class.invader2Snowdread.UPGRADES_TIER_0 = ["invaderSnowdread"];
+		Class.centaur2Snowdread.UPGRADES_TIER_0 = ["centaurSnowdread"];
 
-			Class.pacifierSnowdread.UPGRADES_TIER_M1 = ["mediatorSnowdread", "negotiatorSnowdread"];
-				Class.mediatorSnowdread.UPGRADES_TIER_M1 = ["mitigatorSnowdread"];
-					Class.mitigatorSnowdread.UPGRADES_TIER_M1 = ["diplomatSnowdread"];
-				Class.negotiatorSnowdread.UPGRADES_TIER_M1 = ["appeaserSnowdread"];
-					Class.appeaserSnowdread.UPGRADES_TIER_M1 = ["arbitratorSnowdread"];
+		Class.dreadWeaponSnowdread.UPGRADES_TIER_0 = ["swordSnowdread", "pacifierSnowdread", "peacekeeperSnowdread", "invaderSnowdread", "centaurSnowdread"];
 
-			Class.peacekeeperSnowdread.UPGRADES_TIER_M1 = ["enforcerSnowdread", "executorSnowdread"];
-				Class.enforcerSnowdread.UPGRADES_TIER_M1 = ["suppressorSnowdread"];
-					Class.suppressorSnowdread.UPGRADES_TIER_M1 = ["retardantSnowdread"];
-				Class.executorSnowdread.UPGRADES_TIER_M1 = ["inhibitorSnowdread"];
-					Class.inhibitorSnowdread.UPGRADES_TIER_M1 = ["tyrantSnowdread"];
+			Class.swordSnowdread.UPGRADES_TIER_0 = ["gladiusSnowdread", "sabreSnowdread", "slingSnowdread", "catapultSnowdread", "dartSnowdread"];
+				Class.gladiusSnowdread.UPGRADES_TIER_0 = ["bladeSnowdread"];
+					Class.bladeSnowdread.UPGRADES_TIER_0 = ["rapierSnowdread"];
+						Class.rapierSnowdread.UPGRADES_TIER_0 = [];
+				Class.sabreSnowdread.UPGRADES_TIER_0 = ["bayonetSnowdread"];
+					Class.bayonetSnowdread.UPGRADES_TIER_0 = ["javelinSnowdread"];
+						Class.javelinSnowdread.UPGRADES_TIER_0 = [];
+				Class.slingSnowdread.UPGRADES_TIER_0 = ["atlatlSnowdread"];
+					Class.atlatlSnowdread.UPGRADES_TIER_0 = ["woomeraSnowdread"];
+						Class.woomeraSnowdread.UPGRADES_TIER_0 = [];
+				Class.catapultSnowdread.UPGRADES_TIER_0 = ["ballistaSnowdread"];
+					Class.ballistaSnowdread.UPGRADES_TIER_0 = ["trebuchetSnowdread"];
+						Class.trebuchetSnowdread.UPGRADES_TIER_0 = [];
+				Class.dartSnowdread.UPGRADES_TIER_0 = ["barbSnowdread"];
+					Class.barbSnowdread.UPGRADES_TIER_0 = ["boltSnowdread"];
+						Class.boltSnowdread.UPGRADES_TIER_0 = [];
 
-			Class.invaderSnowdread.UPGRADES_TIER_M1 = ["inquisitorSnowdread", "assailantSnowdread"];
-				Class.inquisitorSnowdread.UPGRADES_TIER_M1 = ["infiltratorSnowdread"];
-					Class.infiltratorSnowdread.UPGRADES_TIER_M1 = ["raiderSnowdread"];
-				Class.assailantSnowdread.UPGRADES_TIER_M1 = ["aggressorSnowdread"];
-					Class.aggressorSnowdread.UPGRADES_TIER_M1 = ["gladiatorSnowdread"];
+			Class.pacifierSnowdread.UPGRADES_TIER_0 = ["mediatorSnowdread", "negotiatorSnowdread", "melderSnowdread", "crackerSnowdread", "grabberSnowdread"];
+				Class.mediatorSnowdread.UPGRADES_TIER_0 = ["mitigatorSnowdread"];
+					Class.mitigatorSnowdread.UPGRADES_TIER_0 = ["diplomatSnowdread"];
+						Class.diplomatSnowdread.UPGRADES_TIER_0 = [];
+				Class.negotiatorSnowdread.UPGRADES_TIER_0 = ["appeaserSnowdread"];
+					Class.appeaserSnowdread.UPGRADES_TIER_0 = ["arbitratorSnowdread"];
+						Class.arbitratorSnowdread.UPGRADES_TIER_0 = [];
+				Class.melderSnowdread.UPGRADES_TIER_0 = ["amalgamSnowdread"];
+					Class.amalgamSnowdread.UPGRADES_TIER_0 = ["dissolverSnowdread"];
+						Class.dissolverSnowdread.UPGRADES_TIER_0 = [];
+				Class.crackerSnowdread.UPGRADES_TIER_0 = ["breakerSnowdread"];
+					Class.breakerSnowdread.UPGRADES_TIER_0 = ["eroderSnowdread"];
+						Class.eroderSnowdread.UPGRADES_TIER_0 = [];
+				Class.grabberSnowdread.UPGRADES_TIER_0 = ["clasperSnowdread"];
+					Class.clasperSnowdread.UPGRADES_TIER_0 = ["gripperSnowdread"];
+						Class.gripperSnowdread.UPGRADES_TIER_0 = [];
 
-			Class.centaurSnowdread.UPGRADES_TIER_M1 = ["daemonSnowdread", "minotaurSnowdread"];
-				Class.daemonSnowdread.UPGRADES_TIER_M1 = ["hydraSnowdread"];
-					Class.hydraSnowdread.UPGRADES_TIER_M1 = ["cerberusSnowdread"];
-				Class.minotaurSnowdread.UPGRADES_TIER_M1 = ["beelzebubSnowdread"];
-					Class.beelzebubSnowdread.UPGRADES_TIER_M1 = ["luciferSnowdread"];
+			Class.peacekeeperSnowdread.UPGRADES_TIER_0 = ["enforcerSnowdread", "executorSnowdread", "doserSnowdread", "swirlSnowdread", "pelterSnowdread"];
+				Class.enforcerSnowdread.UPGRADES_TIER_0 = ["suppressorSnowdread"];
+					Class.suppressorSnowdread.UPGRADES_TIER_0 = ["retardantSnowdread"];
+						Class.retardantSnowdread.UPGRADES_TIER_0 = [];
+				Class.executorSnowdread.UPGRADES_TIER_0 = ["inhibitorSnowdread"];
+					Class.inhibitorSnowdread.UPGRADES_TIER_0 = ["tyrantSnowdread"];
+						Class.tyrantSnowdread.UPGRADES_TIER_0 = [];
+				Class.doserSnowdread.UPGRADES_TIER_0 = ["tranquilizerSnowdread"];
+					Class.tranquilizerSnowdread.UPGRADES_TIER_0 = ["anesthesiologistSnowdread"];
+						Class.anesthesiologistSnowdread.UPGRADES_TIER_0 = [];
+				Class.swirlSnowdread.UPGRADES_TIER_0 = ["spiralSnowdread"];
+					Class.spiralSnowdread.UPGRADES_TIER_0 = ["helixSnowdread"];
+						Class.helixSnowdread.UPGRADES_TIER_0 = [];
+				Class.pelterSnowdread.UPGRADES_TIER_0 = ["shellerSnowdread"];
+					Class.shellerSnowdread.UPGRADES_TIER_0 = ["bombardmentSnowdread"];
+						Class.bombardmentSnowdread.UPGRADES_TIER_0 = [];
 
-			Class.byteSnowdread.UPGRADES_TIER_M1 = ["automationSnowdread", "kilobyteSnowdread"];
+			Class.invaderSnowdread.UPGRADES_TIER_0 = ["inquisitorSnowdread", "assailantSnowdread", "radiationSnowdread", "boxerSnowdread", "disablerSnowdread"];
+				Class.inquisitorSnowdread.UPGRADES_TIER_0 = ["infiltratorSnowdread"];
+					Class.infiltratorSnowdread.UPGRADES_TIER_0 = ["raiderSnowdread"];
+						Class.raiderSnowdread.UPGRADES_TIER_0 = [];
+				Class.assailantSnowdread.UPGRADES_TIER_0 = ["aggressorSnowdread"];
+					Class.aggressorSnowdread.UPGRADES_TIER_0 = ["gladiatorSnowdread"];
+						Class.gladiatorSnowdread.UPGRADES_TIER_0 = [];
+				Class.radiationSnowdread.UPGRADES_TIER_0 = ["haloSnowdread"];
+					Class.haloSnowdread.UPGRADES_TIER_0 = ["starlightSnowdread"];
+						Class.starlightSnowdread.UPGRADES_TIER_0 = [];
+				Class.boxerSnowdread.UPGRADES_TIER_0 = ["sluggerSnowdread"];
+					Class.sluggerSnowdread.UPGRADES_TIER_0 = ["bruiserSnowdread"];
+						Class.bruiserSnowdread.UPGRADES_TIER_0 = [];
+				Class.disablerSnowdread.UPGRADES_TIER_0 = ["debilitatorSnowdread"];
+					Class.debilitatorSnowdread.UPGRADES_TIER_0 = ["incapacitatorSnowdread"];
+						Class.incapacitatorSnowdread.UPGRADES_TIER_0 = [];
 
-				Class.automationSnowdread.UPGRADES_TIER_M1 = ["mechanismSnowdread", "fusionSnowdread", "binarySnowdread", "exosphereSnowdread"];
-					Class.mechanismSnowdread.UPGRADES_TIER_M1 = ["skynetSnowdread"];
-					Class.fusionSnowdread.UPGRADES_TIER_M1 = ["supernovaSnowdread"];
-					Class.binarySnowdread.UPGRADES_TIER_M1 = ["cipherSnowdread"];
-					Class.exosphereSnowdread.UPGRADES_TIER_M1 = ["interstellarSnowdread"];
+			Class.centaurSnowdread.UPGRADES_TIER_0 = ["daemonSnowdread", "minotaurSnowdread", "cleanerSnowdread", "shadeSnowdread", "screwdriverSnowdread"];
+				Class.daemonSnowdread.UPGRADES_TIER_0 = ["hydraSnowdread"];
+					Class.hydraSnowdread.UPGRADES_TIER_0 = ["cerberusSnowdread"];
+						Class.cerberusSnowdread.UPGRADES_TIER_0 = [];
+				Class.minotaurSnowdread.UPGRADES_TIER_0 = ["beelzebubSnowdread"];
+					Class.beelzebubSnowdread.UPGRADES_TIER_0 = ["luciferSnowdread"];
+						Class.luciferSnowdread.UPGRADES_TIER_0 = [];
+				Class.cleanerSnowdread.UPGRADES_TIER_0 = ["sweeperSnowdread"];
+					Class.sweeperSnowdread.UPGRADES_TIER_0 = ["sterilizerSnowdread"];
+						Class.sterilizerSnowdread.UPGRADES_TIER_0 = [];
+				Class.shadeSnowdread.UPGRADES_TIER_0 = ["aegisSnowdread"];
+					Class.aegisSnowdread.UPGRADES_TIER_0 = ["hielamanSnowdread"];
+						Class.hielamanSnowdread.UPGRADES_TIER_0 = [];
+				Class.screwdriverSnowdread.UPGRADES_TIER_0 = ["drillSnowdread"];
+					Class.drillSnowdread.UPGRADES_TIER_0 = ["jackhammerSnowdread"];
+						Class.jackhammerSnowdread.UPGRADES_TIER_0 = [];
 
-				Class.kilobyteSnowdread.UPGRADES_TIER_M1 = ["megabyteSnowdread", "binarySnowdread", "trojanSnowdread", "hardwareSnowdread"];
-					Class.megabyteSnowdread.UPGRADES_TIER_M1 = ["gigabyteSnowdread"];
-					// Class.binarySnowdread.UPGRADES_TIER_M1 = ["cipherSnowdread"];
-					Class.trojanSnowdread.UPGRADES_TIER_M1 = ["malwareSnowdread"];
-					Class.hardwareSnowdread.UPGRADES_TIER_M1 = ["softwareSnowdread"];
+		Class.dreadBodySnowdread.UPGRADES_TIER_0 = ["byteSnowdread", "showerSnowdread", "atmosphereSnowdread", "juggernautSnowdread", "stomperSnowdread", "dropperSnowdread", "spotterSnowdread"];
 
-			Class.atmosphereSnowdread.UPGRADES_TIER_M1 = ["coronaSnowdread", "thermosphereSnowdread"];
+			Class.byteSnowdread.UPGRADES_TIER_0 = ["automationSnowdread", "kilobyteSnowdread", "lighterSnowdread"];
 
-				Class.coronaSnowdread.UPGRADES_TIER_M1 = ["chromosphereSnowdread", "fusionSnowdread", "trojanSnowdread", "planetSnowdread"];
-					Class.chromosphereSnowdread.UPGRADES_TIER_M1 = ["photosphereSnowdread"];
-					// Class.fusionSnowdread.UPGRADES_TIER_M1 = ["supernovaSnowdread"];
-					// Class.trojanSnowdread.UPGRADES_TIER_M1 = ["malwareSnowdread"];
-					Class.planetSnowdread.UPGRADES_TIER_M1 = ["astronomicSnowdread"];
+				Class.automationSnowdread.UPGRADES_TIER_0 = ["mechanismSnowdread", "fusionSnowdread", "binarySnowdread", "exosphereSnowdread", "burgSnowdread", "batonSnowdread"];
+					Class.mechanismSnowdread.UPGRADES_TIER_0 = ["skynetSnowdread"];
+						Class.skynetSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("skynetSnowdread")];
+					Class.fusionSnowdread.UPGRADES_TIER_0 = ["supernovaSnowdread"];
+						Class.supernovaSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("supernovaSnowdread")];
+					Class.binarySnowdread.UPGRADES_TIER_0 = ["cipherSnowdread"];
+						Class.cipherSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("cipherSnowdread")];
+					Class.exosphereSnowdread.UPGRADES_TIER_0 = ["interstellarSnowdread"];
+						Class.interstellarSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("interstellarSnowdread")];
+					Class.burgSnowdread.UPGRADES_TIER_0 = ["bunkerSnowdread"];
+						Class.bunkerSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("bunkerSnowdread")];
+					Class.batonSnowdread.UPGRADES_TIER_0 = ["maceSnowdread"];
+						Class.maceSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("maceSnowdread")];
 
-				Class.thermosphereSnowdread.UPGRADES_TIER_M1 = ["mesosphereSnowdread", "exosphereSnowdread", "hardwareSnowdread", "moonSnowdread"];
-					Class.mesosphereSnowdread.UPGRADES_TIER_M1 = ["stratosphereSnowdread"];
-					// Class.exosphereSnowdread.UPGRADES_TIER_M1 = ["interstellarSnowdread"];
-					// Class.hardwareSnowdread.UPGRADES_TIER_M1 = ["softwareSnowdread"];
-					Class.moonSnowdread.UPGRADES_TIER_M1 = ["grandioseSnowdread"];
+				Class.kilobyteSnowdread.UPGRADES_TIER_0 = ["megabyteSnowdread", "binarySnowdread", "trojanSnowdread", "hardwareSnowdread", "siloSnowdread", "fireworkSnowdread"];
+					Class.megabyteSnowdread.UPGRADES_TIER_0 = ["gigabyteSnowdread"];
+						Class.gigabyteSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("gigabyteSnowdread")];
+					// Class.binarySnowdread.UPGRADES_TIER_0 = ["cipherSnowdread"];
+					Class.trojanSnowdread.UPGRADES_TIER_0 = ["malwareSnowdread"];
+						Class.malwareSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("malwareSnowdread")];
+					Class.hardwareSnowdread.UPGRADES_TIER_0 = ["softwareSnowdread"];
+						Class.softwareSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("softwareSnowdread")];
+					Class.siloSnowdread.UPGRADES_TIER_0 = ["arsenalSnowdread"];
+						Class.arsenalSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("arsenalSnowdread")];
+					Class.fireworkSnowdread.UPGRADES_TIER_0 = ["missileSnowdread"];
+						Class.missileSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("missileSnowdread")];
+					
+				Class.lighterSnowdread.UPGRADES_TIER_0 = ["burnerSnowdread"];
+					Class.burnerSnowdread.UPGRADES_TIER_0 = ["roasterSnowdread"];
+						Class.roasterSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("roasterSnowdread")];
 
-			Class.juggernautSnowdread.UPGRADES_TIER_M1 = ["jumboSnowdread", "colossalSnowdread"];
+			Class.showerSnowdread.UPGRADES_TIER_0 = ["stormSnowdread"];
+				Class.stormSnowdread.UPGRADES_TIER_0 = ["tempestSnowdread"];
+					Class.tempestSnowdread.UPGRADES_TIER_0 = ["monsoonSnowdread"];
+						Class.monsoonSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("monsoonSnowdread")];
 
-				Class.jumboSnowdread.UPGRADES_TIER_M1 = ["goliathSnowdread", "planetSnowdread", "moonSnowdread"];
-					Class.goliathSnowdread.UPGRADES_TIER_M1 = ["behemothSnowdread"];
-					// Class.planetSnowdread.UPGRADES_TIER_M1 = ["astronomicSnowdread"];
-					// Class.moonSnowdread.UPGRADES_TIER_M1 = ["grandioseSnowdread"];
+			Class.atmosphereSnowdread.UPGRADES_TIER_0 = ["coronaSnowdread", "thermosphereSnowdread"];
 
-				Class.colossalSnowdread.UPGRADES_TIER_M1 = ["titanSnowdread", "sirenSnowdread", "harpySnowdread"];
-					Class.titanSnowdread.UPGRADES_TIER_M1 = ["leviathanSnowdread"];
-					Class.sirenSnowdread.UPGRADES_TIER_M1 = ["valrayvnSnowdread"];
-					Class.harpySnowdread.UPGRADES_TIER_M1 = ["pegasusSnowdread"];
+				Class.coronaSnowdread.UPGRADES_TIER_0 = ["chromosphereSnowdread", "fusionSnowdread", "trojanSnowdread", "planetSnowdread", "sirenSnowdread", "towerSnowdread"];
+					Class.chromosphereSnowdread.UPGRADES_TIER_0 = ["photosphereSnowdread"];
+						Class.photosphereSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("photosphereSnowdread")];
+					// Class.fusionSnowdread.UPGRADES_TIER_0 = ["supernovaSnowdread"];
+					// Class.trojanSnowdread.UPGRADES_TIER_0 = ["malwareSnowdread"];
+					Class.planetSnowdread.UPGRADES_TIER_0 = ["astronomicSnowdread"];
+						Class.astronomicSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("astronomicSnowdread")];
+					Class.sirenSnowdread.UPGRADES_TIER_0 = ["valrayvnSnowdread"];
+						Class.valrayvnSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("valrayvnSnowdread")];
+					Class.towerSnowdread.UPGRADES_TIER_0 = ["mountainSnowdread"];
+						Class.mountainSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("mountainSnowdread")];
+
+				Class.thermosphereSnowdread.UPGRADES_TIER_0 = ["mesosphereSnowdread", "exosphereSnowdread", "hardwareSnowdread", "moonSnowdread", "harpySnowdread", "creatureSnowdread"];
+					Class.mesosphereSnowdread.UPGRADES_TIER_0 = ["stratosphereSnowdread"];
+						Class.stratosphereSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("stratosphereSnowdread")];
+					// Class.exosphereSnowdread.UPGRADES_TIER_0 = ["interstellarSnowdread"];
+					// Class.hardwareSnowdread.UPGRADES_TIER_0 = ["softwareSnowdread"];
+					Class.moonSnowdread.UPGRADES_TIER_0 = ["grandioseSnowdread"];
+						Class.grandioseSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("grandioseSnowdread")];
+					Class.harpySnowdread.UPGRADES_TIER_0 = ["pegasusSnowdread"];
+						Class.pegasusSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("pegasusSnowdread")];
+					Class.creatureSnowdread.UPGRADES_TIER_0 = ["beastSnowdread"];
+						Class.beastSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("beastSnowdread")];
+
+			Class.juggernautSnowdread.UPGRADES_TIER_0 = ["jumboSnowdread", "colossalSnowdread", "cottonSnowdread", "ironSnowdread"];
+
+				Class.jumboSnowdread.UPGRADES_TIER_0 = ["goliathSnowdread", "planetSnowdread", "moonSnowdread", "burgSnowdread", "siloSnowdread", "armadaSnowdread"];
+					Class.goliathSnowdread.UPGRADES_TIER_0 = ["behemothSnowdread"];
+						Class.behemothSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("behemothSnowdread")];
+					// Class.planetSnowdread.UPGRADES_TIER_0 = ["astronomicSnowdread"];
+					// Class.moonSnowdread.UPGRADES_TIER_0 = ["grandioseSnowdread"];
+					// Class.burgSnowdread.UPGRADES_TIER_0 = ["bunkerSnowdread"];
+					// Class.siloSnowdread.UPGRADES_TIER_0 = ["arsenalSnowdread"];
+					Class.armadaSnowdread.UPGRADES_TIER_0 = ["battalionSnowdread"];
+						Class.battalionSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("battalionSnowdread")];
+
+				Class.colossalSnowdread.UPGRADES_TIER_0 = ["titanSnowdread", "sirenSnowdread", "harpySnowdread", "batonSnowdread", "fireworkSnowdread", "armadaSnowdread"];
+					Class.titanSnowdread.UPGRADES_TIER_0 = ["leviathanSnowdread"];
+						Class.leviathanSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("leviathanSnowdread")];
+					// Class.sirenSnowdread.UPGRADES_TIER_0 = ["valrayvnSnowdread"];
+					// Class.harpySnowdread.UPGRADES_TIER_0 = ["pegasusSnowdread"];
+					// Class.batonSnowdread.UPGRADES_TIER_0 = ["maceSnowdread"];
+					// Class.fireworkSnowdread.UPGRADES_TIER_0 = ["missileSnowdread"];
+					// Class.armadaSnowdread.UPGRADES_TIER_0 = ["battalionSnowdread"];
+
+				Class.cottonSnowdread.UPGRADES_TIER_0 = ["featherSnowdread"];
+					Class.featherSnowdread.UPGRADES_TIER_0 = ["wispSnowdread"];
+						Class.wispSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("wispSnowdread")];
+
+				Class.ironSnowdread.UPGRADES_TIER_0 = ["steelSnowdread"];
+					Class.steelSnowdread.UPGRADES_TIER_0 = ["titaniumSnowdread"];
+						Class.titaniumSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("titaniumSnowdread")];
+			
+			Class.stomperSnowdread.UPGRADES_TIER_0 = ["rollerSnowdread", "owlSnowdread"];
+
+				Class.rollerSnowdread.UPGRADES_TIER_0 = ["flattenerSnowdread", "towerSnowdread", "creatureSnowdread", "spotlightSnowdread", "furnaceSnowdread", "asteroidSnowdread"];
+					Class.flattenerSnowdread.UPGRADES_TIER_0 = ["crusherSnowdread"];
+						Class.crusherSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("crusherSnowdread")];
+					// Class.towerSnowdread.UPGRADES_TIER_0 = ["mountainSnowdread"];
+					// Class.creatureSnowdread.UPGRADES_TIER_0 = ["beastSnowdread"];
+					Class.spotlightSnowdread.UPGRADES_TIER_0 = ["luminanceSnowdread"];
+						Class.luminanceSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("luminanceSnowdread")];
+					Class.furnaceSnowdread.UPGRADES_TIER_0 = ["foundrySnowdread"];
+						Class.foundrySnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("foundrySnowdread")];
+					Class.asteroidSnowdread.UPGRADES_TIER_0 = ["planetoidSnowdread"];
+						Class.planetoidSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("planetoidSnowdread")];
+
+				Class.owlSnowdread.UPGRADES_TIER_0 = ["cardinalSnowdread"];
+					Class.cardinalSnowdread.UPGRADES_TIER_0 = ["finchSnowdread"];
+						Class.finchSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("finchSnowdread")];
+
+			Class.dropperSnowdread.UPGRADES_TIER_0 = ["baiterSnowdread"];
+				Class.baiterSnowdread.UPGRADES_TIER_0 = ["cagerSnowdread"];
+					Class.cagerSnowdread.UPGRADES_TIER_0 = ["hoarderSnowdread"];
+						Class.hoarderSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("hoarderSnowdread")];
+
+			Class.spotterSnowdread.UPGRADES_TIER_0 = ["spySnowdread"];
+				Class.spySnowdread.UPGRADES_TIER_0 = ["monitorSnowdread"];
+					Class.monitorSnowdread.UPGRADES_TIER_0 = ["trackerSnowdread"];
+						Class.trackerSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("trackerSnowdread")];
 
 	const hexDreadNames = {
 		Javelin: {
 			Javelin: 'Javelin',
 			Rapier: 'Lance',
+			Woomera: 'Shikari',
+			Trebuchet: 'Ballista',
+			Bolt: 'Tomahawk',
 			Diplomat: 'Envoy',
 			Arbitrator: 'Cutlass',
+			Dissolver: 'Hellfire',
+			Eroder: 'Partisan',
+			Gripper: 'Encircler',
 			Retardant: 'Rebel',
 			Tyrant: 'Autocrat',
+			Anesthesiologist: 'Patriot',
+			Helix: 'Stinger',
+			Bombardment: 'Downpour',
 			Raider: 'Pirate',
 			Gladiator: 'Pillager',
+			Starlight: 'Hornet',
+			Bruiser: 'Felon',
+			Incapacitator: 'Stretcher',
 			Cerberus: 'Argonaut',
 			Lucifer: 'Kitsune',
+			Sterilizer: 'Mastermind',
+			Hielaman: 'Swordsman', 
+			Jackhammer: 'Fissure',
 		},
 		Rapier: {
 			Rapier: 'Rapier',
+			Woomera: 'Cavalier',
+			Trebuchet: 'Katana',
+			Bolt: 'Claymore',
 			Diplomat: 'Emissary',
 			Arbitrator: 'Umpire',
+			Dissolver: 'Relocator',
+			Eroder: 'Debris',
+			Gripper: 'Interrogator',
 			Retardant: 'Impeder',
 			Tyrant: 'Oppressor',
+			Anesthesiologist: 'Slumberer',
+			Helix: 'Vortex',
+			Bombardment: 'Butcher',
 			Raider: 'Bandit',
-			Gladiator: 'Bruiser',
+			Gladiator: 'Injurer',
+			Starlight: 'Radiance',
+			Bruiser: 'Ringster',
+			Incapacitator: 'Swamper',
 			Cerberus: 'Cyclops',
 			Lucifer: 'Damocles',
+			Sterilizer: 'Sanitizer',
+			Hielaman: 'Escutcheon', 
+			Jackhammer: 'Borer',
+		},
+		Woomera: {
+			Woomera: 'Woomera',
+			Trebuchet: 'Cannonball',
+			Bolt: 'Piercer', // Soap
+			Diplomat: 'Contractor',
+			Arbitrator: 'Spirit',
+			Dissolver: 'Venom',
+			Eroder: 'Decomposer',
+			Gripper: 'Crucifier',
+			Retardant: 'Overrunner',
+			Tyrant: 'Revolutionary',
+			Anesthesiologist: 'Guerilla',
+			Helix: 'Cultivator',
+			Bombardment: 'Incendiary',
+			Raider: 'Dispatcher', // Soap
+			Gladiator: 'Pugilist',
+			Starlight: 'Starborne',
+			Bruiser: 'Soldier',
+			Incapacitator: 'Scavenger', // Soap
+			Cerberus: 'Poltergeist',
+			Lucifer: 'Hunkerer',
+			Sterilizer: 'Janitor',
+			Hielaman: 'Reinforcer', 
+			Jackhammer: 'Pyroclastic',
+		},
+		Trebuchet: {
+			Trebuchet: 'Trebuchet',
+			Bolt: 'Archer',
+			Diplomat: 'Sherman',
+			Arbitrator: 'Ultimatum',
+			Dissolver: 'Grapeshot',
+			Eroder: 'Shrapnel',
+			Gripper: 'Razer',
+			Retardant: 'Mangonel',
+			Tyrant: 'Incarcerator', // Zenphia
+			Anesthesiologist: 'Evacuator',
+			Helix: 'Hurricane',
+			Bombardment: 'Surrenderer',
+			Raider: 'Capitulator',
+			Gladiator: 'Uprising',
+			Starlight: 'Magnetar',
+			Bruiser: 'Crumpler',
+			Incapacitator: 'Pinner',
+			Cerberus: 'Phantom', // Umbra
+			Lucifer: 'Sisyphus',
+			Sterilizer: 'Operation',
+			Hielaman: 'Entrencher', 
+			Jackhammer: 'Demolitionist',
+		},
+		Bolt: {
+			Bolt: 'Bolt',
+			Diplomat: 'Informant',
+			Arbitrator: 'Assaulter',
+			Dissolver: 'Sprinter',
+			Eroder: 'Discharger', // Soap
+			Gripper: 'Lightning',
+			Retardant: 'Evicter',
+			Tyrant: 'Minister',
+			Anesthesiologist: 'Ambusher',
+			Helix: 'Ultraviolet',
+			Bombardment: 'Dynamo',
+			Raider: 'Infector',
+			Gladiator: 'Blinder',
+			Starlight: 'Neutrino',
+			Bruiser: 'Impactor',
+			Incapacitator: 'Volt',
+			Cerberus: 'Collapse',
+			Lucifer: 'Barycenter',
+			Sterilizer: 'Greenhouse',
+			Hielaman: 'Nebula', 
+			Jackhammer: 'Archaeologist',
 		},
 		Diplomat: {
 			Diplomat: 'Diplomat',
 			Arbitrator: 'Moderator',
+			Dissolver: 'Impaler', // Soap
+			Eroder: 'Vulcan',
+			Gripper: 'Politician',
 			Retardant: 'Insurgent',
 			Tyrant: 'Dictator',
+			Anesthesiologist: 'Transporter',
+			Helix: 'Signature',
+			Bombardment: 'Berserker', // Soap
 			Raider: 'Marauder',
 			Gladiator: 'Champion',
+			Starlight: 'Comet',
+			Bruiser: 'Ambassador',
+			Incapacitator: 'Erebus', // Yharon
 			Cerberus: 'Orion',
 			Lucifer: 'Manticore',
+			Sterilizer: 'Officer',
+			Hielaman: 'Investigator', 
+			Jackhammer: 'Devourer', // Soap
 		},
 		Arbitrator: {
 			Arbitrator: 'Arbitrator',
+			Dissolver: 'Bargainer',
+			Eroder: 'Stipulator',
+			Gripper: 'Adjudicator',
 			Retardant: 'Extinguisher',
 			Tyrant: 'Shogun',
+			Anesthesiologist: 'Brute',
+			Helix: 'Referee',
+			Bombardment: 'Jury',
 			Raider: 'Buccaneer',
 			Gladiator: 'Warrior',
+			Starlight: 'Genesis', // Siece
+			Bruiser: 'Terminator', // Soap
+			Incapacitator: 'Debater',
 			Cerberus: 'Gorgon',
 			Lucifer: 'Keres',
+			Sterilizer: 'Warden',
+			Hielaman: 'Crusader', 
+			Jackhammer: 'Excavator',
+		},
+		Dissolver: {
+			Dissolver: 'Dissolver',
+			Eroder: 'Current',
+			Gripper: 'Patronizer',
+			Retardant: 'Corroder',
+			Tyrant: 'Throne',
+			Anesthesiologist: 'Neurotoxin',
+			Helix: 'Solution',
+			Bombardment: 'Chlorine',
+			Raider: 'Traitor',
+			Gladiator: 'Abolitionist',
+			Starlight: 'Accretion',
+			Bruiser: 'Piranha',
+			Incapacitator: 'Sandstorm',
+			Cerberus: 'Appalachian',
+			Lucifer: 'Styx',
+			Sterilizer: 'Peroxide',
+			Hielaman: 'Frontier', 
+			Jackhammer: 'Fracker',
+		},
+		Eroder: {
+			Eroder: 'Eroder',
+			Gripper: 'Psychologist',
+			Retardant: 'Shatterer',
+			Tyrant: 'Crackdown',
+			Anesthesiologist: 'Torrent',
+			Helix: 'Tornado',
+			Bombardment: 'Backstabber',
+			Raider: 'Militant', // Umbra
+			Gladiator: 'Vitrifier',
+			Starlight: 'Stardust',
+			Bruiser: 'Gasher', // Soap
+			Incapacitator: 'Lacerator', // Soap
+			Cerberus: 'Inevitability',
+			Lucifer: 'Fragment',
+			Sterilizer: 'Cynic',
+			Hielaman: 'Polisher', 
+			Jackhammer: 'Hoser',
+		},
+		Gripper: {
+			Gripper: 'Gripper',
+			Retardant: 'Arrestor',
+			Tyrant: 'Tormentor', // Soap
+			Anesthesiologist: 'Experimenter',
+			Helix: 'Blockader',
+			Bombardment: 'Striker',
+			Raider: 'Warmongerer', // Umbra
+			Gladiator: 'Throwdown',
+			Starlight: 'Cryogen',
+			Bruiser: 'Knockout',
+			Incapacitator: 'Restrainer',
+			Cerberus: 'Prometheus',
+			Lucifer: 'Mortician',
+			Sterilizer: 'Cleanser',
+			Hielaman: 'Periscope', 
+			Jackhammer: 'Vice',
 		},
 		Retardant: {
 			Retardant: 'Retardant',
 			Tyrant: 'Anarchist',
+			Anesthesiologist: 'Buckshot', // Soap
+			Helix: 'Magnetron',
+			Bombardment: 'Sergeant',
 			Raider: 'Freebooter',
 			Gladiator: 'Combatant',
+			Starlight: 'Apparition',
+			Bruiser: 'Executioner', // Soap
+			Incapacitator: 'Smotherer',
 			Cerberus: 'Gigantes',
 			Lucifer: 'Demogorgon',
+			Sterilizer: 'Fumigator',
+			Hielaman: 'Avalanche', 
+			Jackhammer: 'Propagator',
 		},
 		Tyrant: {
 			Tyrant: 'Tyrant',
+			Anesthesiologist: 'Barbarian',
+			Helix: 'Nautilus',
+			Bombardment: 'Admiral',
 			Raider: 'Corsair',
 			Gladiator: 'Amazon',
+			Starlight: 'Theocrat',
+			Bruiser: 'Authoritarian',
+			Incapacitator: 'Jailkeeper',
 			Cerberus: 'Ouroboros',
 			Lucifer: 'Raiju',
+			Sterilizer: 'Purifier',
+			Hielaman: 'Protectorate', 
+			Jackhammer: 'Detailer',
+		},
+		Anesthesiologist: {
+			Anesthesiologist: 'Anesthesiologist',
+			Helix: 'Blizzard',
+			Bombardment: 'Nightmare',
+			Raider: 'Vaccinator',
+			Gladiator: 'Harbinger', // Siece
+			Starlight: 'Hypnotizer',
+			Bruiser: 'Tactician',
+			Incapacitator: 'Psychic', // Soap
+			Cerberus: 'Revenant',
+			Lucifer: 'Rehabilitator',
+			Sterilizer: 'Pestilence',
+			Hielaman: 'Heater', 
+			Jackhammer: 'Sledgehammer',
+		},
+		Helix: {
+			Helix: 'Helix',
+			Bombardment: 'Derecho',
+			Raider: 'Deliverer',
+			Gladiator: 'Constrictor',
+			Starlight: 'Orbit',
+			Bruiser: 'Cobra',
+			Incapacitator: 'Windfall',
+			Cerberus: 'Viper',
+			Lucifer: 'Taipan',
+			Sterilizer: 'Networker',
+			Hielaman: 'Turbine', 
+			Jackhammer: 'Spindler',
+		},
+		Bombardment: {
+			Bombardment: 'Bombardment',
+			Raider: 'Specialist',
+			Gladiator: 'Leonidas',
+			Starlight: 'Meteor',
+			Bruiser: 'Grenadier',
+			Incapacitator: 'Shellshocker',
+			Cerberus: 'Deluge',
+			Lucifer: 'Containment',
+			Sterilizer: 'Haven',
+			Hielaman: 'Ballistic', 
+			Jackhammer: 'Mallet', // Soap
 		},
 		Raider: {
 			Raider: 'Raider',
 			Gladiator: 'Filibuster',
+			Starlight: 'Colonizer',
+			Bruiser: 'Plunderer', // Umbra
+			Incapacitator: 'Blitzkrieg',
 			Cerberus: 'Wyvern',
 			Lucifer: 'Kraken',
+			Sterilizer: 'Splatterer',
+			Hielaman: 'Strategist', 
+			Jackhammer: 'Extractor',
 		},
 		Gladiator: {
 			Gladiator: 'Gladiator',
+			Starlight: 'Enveloper',
+			Bruiser: 'Fistfighter',
+			Incapacitator: 'Overloader', // Umbra
 			Cerberus: 'Ogre',
 			Lucifer: 'Wendigo',
+			Sterilizer: 'Garrison', // Umbra
+			Hielaman: 'Uziel', // Zenphia
+			Jackhammer: 'Warlord',
+		},
+		Starlight: {
+			Starlight: 'Starlight',
+			Bruiser: 'Wanderer',
+			Incapacitator: 'Starstruck',
+			Cerberus: 'Constellation',
+			Lucifer: 'Galaxy',
+			Sterilizer: 'Evaporator',
+			Hielaman: 'Protostar', 
+			Jackhammer: 'Luminance',
+		},
+		Bruiser: {
+			Bruiser: 'Bruiser',
+			Incapacitator: 'Mauler',
+			Cerberus: 'Serpent',
+			Lucifer: 'Trident',
+			Sterilizer: 'Suture',
+			Hielaman: 'Heavyweight', 
+			Jackhammer: 'Stapler',
+		},
+		Incapacitator: {
+			Incapacitator: 'Incapacitator',
+			Cerberus: 'Opportunist',
+			Lucifer: 'Condemner',
+			Sterilizer: 'Poisoner',
+			Hielaman: 'Eyrie', 
+			Jackhammer: 'Thrasher', // Soap
 		},
 		Cerberus: {
 			Cerberus: 'Cerberus',
 			Lucifer: 'Oni',
+			Sterilizer: 'Antibody',
+			Hielaman: 'Typhon', 
+			Jackhammer: 'Paver',
 		},
 		Lucifer: {
 			Lucifer: 'Lucifer',
+			Sterilizer: 'Lipid',
+			Hielaman: 'Insulator', 
+			Jackhammer: 'Earthquaker',
+		},
+		Sterilizer: {
+			Sterilizer: 'Sterilizer',
+			Hielaman: 'Homeland', 
+			Jackhammer: 'Bulldozer',
+		},
+		Hielaman: {
+			Hielaman: 'Hielaman', 
+			Jackhammer: 'Compactor',
+		},
+		Jackhammer: {
+			Jackhammer: 'Jackhammer',
 		},
 	};
 
-	const hexnoughtScaleFactor = 0.9;
-	function mergeHexnoughtV2(weapon1, weapon2, body) {
+	function mergeHexnoughtWeaponV2(weapon1, weapon2) {
 		weapon1 = ensureIsClass(Class, weapon1);
 		weapon2 = ensureIsClass(Class, weapon2);
-		body = ensureIsClass(Class, body);
 
 		let PARENT = Class.genericHexnought,
 			BODY = JSON.parse(JSON.stringify(PARENT.BODY)),
@@ -2834,33 +6252,37 @@ module.exports = ({ Class }) => {
 			gunsOnOneSide = [],
 			weapon2GunsOnOneSide = [],
 			TURRETS = [],
-			bodyLabel = body.LABEL;
+			turretsOnOneSide = [],
+			weapon2TurretsOnOneSide = [],
+			CONTROLLERS = weapon2.CONTROLLERS;
 
 		// Label
 		let name1 = hexDreadNames[weapon1.LABEL][weapon2.LABEL],
 			name2 = hexDreadNames[weapon2.LABEL][weapon1.LABEL],
-			weaponName = "",
+			weaponName = weapon1.LABEL + weapon2.LABEL,
 			orientationId = 0;
-		if(name1) {
+		if (name1) {
 			weaponName = name1;
-		} else {
+		} else if (name2) {
 			weaponName = name2,
 			orientationId = 1;
 		}
-		let LABEL = weaponName + "-" + bodyLabel,
-			className = weaponName.toLowerCase() + orientationId + bodyLabel.toLowerCase() + "Snowdread";
+		let LABEL = weaponName,
+			className = weapon1.LABEL.toLowerCase() + weapon2.LABEL + orientationId + "Snowdread";
 		
 		// Guns ----------------------
-		if (body.GUNS) gunsOnOneSide.push(...JSON.parse(JSON.stringify(body.GUNS.slice(0, body.GUNS.length / 5 * 2))));
-		for (let g in gunsOnOneSide) {
-			gunsOnOneSide[g].POSITION[5] *= 5 / 6;
-			gunsOnOneSide[g].POSITION[1] *= hexnoughtScaleFactor;
-		}
 		if (weapon1.GUNS) gunsOnOneSide.push(...JSON.parse(JSON.stringify(weapon1.GUNS.slice(0, weapon1.GUNS.length / 5))));
 		if (weapon2.GUNS) weapon2GunsOnOneSide = JSON.parse(JSON.stringify(weapon2.GUNS.slice(0, weapon2.GUNS.length / 5)));
 
 		for (let g in weapon2GunsOnOneSide) weapon2GunsOnOneSide[g].POSITION[5] += 60;
 		gunsOnOneSide.push(...weapon2GunsOnOneSide)
+
+		// Turrets -------------------
+		if (weapon1.TURRETS) turretsOnOneSide.push(...JSON.parse(JSON.stringify(weapon1.TURRETS.slice(0, weapon1.TURRETS.length / 5))));
+		if (weapon2.TURRETS) weapon2TurretsOnOneSide = JSON.parse(JSON.stringify(weapon2.TURRETS.slice(0, weapon2.TURRETS.length / 5)));
+
+		for (let t in weapon2TurretsOnOneSide) weapon2TurretsOnOneSide[t].POSITION[3] += 60;
+		turretsOnOneSide.push(...weapon2TurretsOnOneSide)
 
 		// Scale to fit size constraints
 		for (let g in gunsOnOneSide) {
@@ -2868,11 +6290,20 @@ module.exports = ({ Class }) => {
 			gunsOnOneSide[g].POSITION[4] *= hexnoughtScaleFactor ** 2;
 		}
 
+		for (let t in turretsOnOneSide) {
+			turretsOnOneSide[t].POSITION[0] *= hexnoughtScaleFactor ** 2;
+		}
+
 		for (let i = 0; i < 3; i++) {
 			for (let g in gunsOnOneSide) {
 				let gun = JSON.parse(JSON.stringify(gunsOnOneSide[g]));
 				gun.POSITION[5] += 120 * i;
 				GUNS.push(gun);
+			}
+			for (let t in turretsOnOneSide) {
+				let turret = JSON.parse(JSON.stringify(turretsOnOneSide[t]));
+				turret.POSITION[3] += 120 * i;
+				TURRETS.push(turret);
 			}
 		};
 
@@ -2904,6 +6335,32 @@ module.exports = ({ Class }) => {
 			}
 		}
 		
+		// Body stat modification
+		if (weapon1.BODY) for (let m in weapon1.BODY) BODY[m] *= weapon1.BODY[m];
+		if (weapon2.BODY) for (let m in weapon2.BODY) BODY[m] *= weapon2.BODY[m];
+
+		// Smash it together
+		Class[className] = {
+			PARENT, BODY, LABEL, GUNS, TURRETS, CONTROLLERS
+		};
+		return className;
+	}
+
+	function makeHexnoughtBodyV2(body) {
+		if (!buildHexnoughts) return;
+		
+		body = ensureIsClass(Class, body);
+
+		let PARENT = Class.genericHexnought,
+			SIZE = body.SIZE ?? 1,
+			BODY = {},
+			GUNS = body.GUNS ?? [],
+			TURRETS = [],
+			LABEL = body.LABEL;
+
+		// Label
+		let className = LABEL.toLowerCase() + "HexSnowdread";
+		
 		// Turrets --------------------
 		let turretRingLoopLength = Math.floor(body.TURRETS.length / 5);
   
@@ -2913,7 +6370,7 @@ module.exports = ({ Class }) => {
 			if (turret.TYPE[0].indexOf('pentagon') >= 0) { // Replace pentagons with hexagons
 				TURRETS.push(
 					{
-						POSITION: [turret.POSITION[0], 0, 0, 0, 0, turret.POSITION[5]],
+						POSITION: [turret.POSITION[0], 0, 0, turret.POSITION[3], turret.POSITION[4], turret.POSITION[5]],
 						TYPE: ['hexagon' + turret.TYPE[0].substring(8), turret.TYPE[1]],
 					}
 				);
@@ -2941,81 +6398,28 @@ module.exports = ({ Class }) => {
 		}
 		
 		// Body stat modification
-		if (weapon1.BODY) for (let m in weapon1.BODY) BODY[m] *= weapon1.BODY[m];
-		if (weapon2.BODY) for (let m in weapon2.BODY) BODY[m] *= weapon2.BODY[m];
-		if (body.BODY) for (let m in body.BODY) BODY[m] *= body.BODY[m];
+		if (body.BODY) for (let m in body.BODY) BODY[m] = body.BODY[m];
 
 		// Smash it together
 		Class[className] = {
-			PARENT, BODY, LABEL, GUNS, TURRETS,
+			PARENT, SIZE, BODY, LABEL, GUNS, TURRETS,
 		};
 		return className;
 	}
 
-	// Merge function
-	let mergedDreads = [];
-	const pentanoughtWeapons = ["rapierSnowdread", "javelinSnowdread", "diplomatSnowdread", "arbitratorSnowdread", "retardantSnowdread", "tyrantSnowdread", "raiderSnowdread", "gladiatorSnowdread", "cerberusSnowdread", "luciferSnowdread"];
-
-	function mergeDreadv2(weapon, body) {
-		let className = weapon.split("_")[0] + body;
-
-		weapon = ensureIsClass(Class, weapon);
-		body = ensureIsClass(Class, body);
-
-		let PARENT = ensureIsClass(Class, weapon.PARENT[0]),
-			BODY = JSON.parse(JSON.stringify(PARENT.BODY)),
-			GUNS = [],
-			TURRETS = [],
-			LABEL = weapon.LABEL + "-" + body.LABEL,
-			UPGRADES_TIER_0 = [];
-		
-		// Guns
-		if (body.GUNS) GUNS.push(...body.GUNS);
-		if (weapon.GUNS) GUNS.push(...weapon.GUNS);
-		
-		// Turrets
-		if (weapon.TURRETS) TURRETS.push(...weapon.TURRETS);
-		TURRETS.splice(0, 0, body.TURRETS[0]);
-		TURRETS.push(...body.TURRETS.slice(1));
-		
-		// Body stat modification
-		if (weapon.BODY) for (let m in weapon.BODY) BODY[m] *= weapon.BODY[m];
-		if (body.BODY) for (let m in body.BODY) BODY[m] *= body.BODY[m];
-
-		// Upgrades
-		for (let w in weapon.UPGRADES_TIER_M1) {
-			for (let b in body.UPGRADES_TIER_M1) {
-				let weaponName = weapon.UPGRADES_TIER_M1[w],
-					bodyName = body.UPGRADES_TIER_M1[b];
-
-				if (!mergedDreads.includes(weaponName + bodyName))
-					mergeDreadv2(weaponName, bodyName);
-				
-				UPGRADES_TIER_0.push(weaponName.split("_")[0] + bodyName);
+	// Merge hexdreads
+	const pentanoughtWeapons = [
+								"rapierSnowdread",     "javelinSnowdread",     "woomeraSnowdread",           "trebuchetSnowdread",  "boltSnowdread",
+								"diplomatSnowdread",   "arbitratorSnowdread",  "dissolverSnowdread",         "eroderSnowdread",     "gripperSnowdread",
+								"retardantSnowdread",  "tyrantSnowdread",      "anesthesiologistSnowdread",  "helixSnowdread",      "bombardmentSnowdread",
+								"raiderSnowdread",     "gladiatorSnowdread",   "starlightSnowdread",         "bruiserSnowdread",    "incapacitatorSnowdread",
+								"cerberusSnowdread",   "luciferSnowdread",     "sterilizerSnowdread",        "hielamanSnowdread",   "jackhammerSnowdread",
+								];
+	if(buildHexnoughts) {
+		for (let i of pentanoughtWeapons) {
+			for (let j of pentanoughtWeapons) {
+				Class[i].UPGRADES_TIER_0.push(mergeHexnoughtWeaponV2(i, j));
 			}
-		}
-
-		// Hexnought building
-		if (weapon.PARENT[0] == "genericPentanought" && buildHexnoughts) {
-			for (let i in pentanoughtWeapons) {
-				UPGRADES_TIER_0.push(mergeHexnoughtV2(weapon, ensureIsClass(Class, pentanoughtWeapons[i]), body));
-			}
-		}
-
-		// Can he build it? Yes he can!
-		Class[className] = {
-			PARENT, BODY, LABEL, GUNS, TURRETS, UPGRADES_TIER_0,
-		};
-	}
-
-	// Initiate build for all dread paths and do upgrades for all eggnoughts
-	for (let w in eggnoughtWeapons) {
-		let weaponName = eggnoughtWeapons[w];
-		Class[weaponName].UPGRADES_TIER_1 = [];
-		for (let b in eggnoughtBodies) {
-			let bodyName = eggnoughtBodies[b];
-			mergeDreadv2(weaponName, bodyName);
-			Class[weaponName].UPGRADES_TIER_1.push(weaponName.split("_")[0] + bodyName);
 		}
 	}
 };
