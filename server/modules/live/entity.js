@@ -1121,6 +1121,7 @@ class Entity extends EventEmitter {
         if (set.DANGER != null) this.dangerValue = set.DANGER;
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
+        if (set.BORDER_FIRST != null) this.borderFirst = set.BORDER_FIRST;
         if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
         if (set.TEAM != null) {
             this.team = set.TEAM;
@@ -1841,6 +1842,9 @@ class Entity extends EventEmitter {
         switch (this.facingType) {
             case "autospin":
                 this.facing += 0.02 / c.runSpeed;
+                break;
+            case "auraspin":
+                this.facing -= 0.04 / c.runSpeed;
                 break;
             case "turnWithSpeed":
                 this.facing += ((this.velocity.length / 90) * Math.PI) / c.runSpeed;

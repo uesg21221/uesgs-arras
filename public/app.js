@@ -501,7 +501,7 @@ function isImageURL(url) {
 }
 // Sub-drawing functions
 const drawPolyImgs = []
-function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation) {
+function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation, borderFirst = false) {
     // Start drawing
     context.beginPath();
     if (sides instanceof Array) {
@@ -571,9 +571,10 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 context.scale(radius, radius);
                 context.lineWidth /= radius;
                 context.rotate(angle);
-                context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-                if (!borderless) context.stroke(path);
+                context.lineWidth *= fill && !borderFirst ? 1 : 0.5; // Maintain constant border width
+                if (!borderless && !borderFirst) context.stroke(path);
                 if (fill) context.fill(path);
+                if (!borderless && borderFirst) context.stroke(path);
                 context.restore();
                 return;
             }
@@ -745,7 +746,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
 
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless, m.drawFill, m.imageInterpolation);
+    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless, m.drawFill, m.imageInterpolation, m.borderFirst);
     
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {

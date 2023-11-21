@@ -16,6 +16,7 @@ function getMockup(e, positionInfo) {
         upgradeColor: e.upgradeColor,
         glow: e.glow,
         borderless: e.borderless,
+        borderFirst: e.borderFirst,
         drawFill: e.drawFill,
         shape: e.shapeData,
         imageInterpolation: e.imageInterpolation,
