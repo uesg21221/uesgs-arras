@@ -304,34 +304,78 @@ module.exports = ({ Class }) => {
 			
 		];
 	}
-	function addDrone({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.basic]) {
+	function addDrone({length = 18, width = 8, aspect = 1.2, x = 8, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.drone], MAX_CHILDREN = 4) {
+		let output = [
+			{
+				POSITION: [length - 2, width + 3, 1, x, y, angle, 0],
+				PROPERTIES: { COLOR: 17 },
+			}, {
+				POSITION: [length, width, aspect, x, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: "drone",
+					MAX_CHILDREN,
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10}
+				},
+			}, {
+				POSITION: [length - 2.5, width * 0.8, -1.2, x, y, angle, 0],
+				PROPERTIES: { COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 15} },
+			},
+		];
+		if (MAX_CHILDREN > 2) {
+			output.splice(2, 0,
+				{
+					POSITION: [length - 1, width, 0.8, x, y, angle, 0],
+					PROPERTIES: { COLOR: -1, BORDERLESS: true },
+				}
+			)
+		}
+		return output;
+	}
+	function addMinion({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.basic], MAX_CHILDREN = 4) {
 		return [
 
 		];
 	}
-	function addMinion({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.basic]) {
+	function addAutoDrone({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.factory], MAX_CHILDREN = 4) {
 		return [
 
 		];
 	}
-	function addAutoDrone({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.basic]) {
-		return [
-
-		];
-	}
-	function addHoncho({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic]) {
+	function addHoncho({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.drone], MAX_CHILDREN = 4) {
 		return [
 			
 		];
 	}
-	function addSwarm({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.basic]) {
+	function addSwarm({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.swarm]) {
 		return [
 
 		];
 	}
-	function addTrap({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.basic], isBox = false) {
+	function addTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.basic], isBox = false) {
 		return [
-
+			{
+				POSITION: [length, width * 1.25, 1, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10}}
+			}, {
+				POSITION: [length, width, 1, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.6}}
+			}, {
+				POSITION: [length2, width, 1.5, x + length, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: isBox ? "unsetTrap" : "trap",
+					STAT_CALCULATOR: gunCalcNames.trap,
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.6}
+				},
+			}, {
+				POSITION: [length + length2 / 3, width * 0.8, 0.7, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 20,  SATURATION_SHIFT: 0.8}}
+			},
 		];
 	}
 	function addAuraTrap({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.basic], isBox = false) {
@@ -422,14 +466,14 @@ module.exports = ({ Class }) => {
 	for(let i = 0; i < 2; i++) {
 		Class.baseEggCross2.GUNS.push(
 			{
-				POSITION: [10, 9, 0.6, 0, 0, 180*i+55, 0],
+				POSITION: [11, 9, 0.6, 0, 0, 180*i+55, 0],
 				PROPERTIES: {
 					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.85 },
 					DRAW_ABOVE: true,
 					BORDERLESS: true,
 				}
 			}, {
-				POSITION: [10, 9, 0.6, 0, 0, 180*i+125, 0],
+				POSITION: [11, 9, 0.6, 0, 0, 180*i+125, 0],
 				PROPERTIES: {
 					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.85 },
 					DRAW_ABOVE: true,
@@ -834,18 +878,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 2; i++) {
 		Class.invaderSnowdread.GUNS.push(
-			{
-				POSITION: [5, 9, 1.2, 8, 0, 180*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, g.over, {reload: 0.85}]),
-					TYPE: "drone",
-					MAX_CHILDREN: 4,
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-				},
-			},
+			...addDrone({length: 5, width: 9, angle: 180*i}, 0, [g.drone, g.over, {reload: 0.85}])
 		)
 	}
 	Class.invader2Snowdread = {
@@ -859,17 +892,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 2; i++) {
 		Class.centaurSnowdread.GUNS.push(
-			{
-				POSITION: [13, 7, 1, 0, 0, 180*i, 0],
-			},
-			{
-				POSITION: [3, 7, 1.5, 13, 0, 180*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, {health: 2}]),
-					TYPE: "trap",
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
+			...addTrap({length: 13, length2: 3, width: 7, angle: 180*i}, 0, [g.trap, {health: 2}])
 		)
 	}
 	Class.centaur2Snowdread = {
@@ -1031,12 +1054,14 @@ module.exports = ({ Class }) => {
 			SPEED: 0.8,
 		},
 	    TURRETS: [
-			{
-				POSITION: [15, 0, 0, 0, 0, 1],
-				TYPE: 'egg',
-			},
 			...addBaseEgg(),
 			{
+				POSITION: [13, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 5}, BORDERLESS: true}],
+			}, {
+				POSITION: [6.5, 0, 0, 0, 0, 1],
+				TYPE: ['hexagon', {COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 15}, BORDERLESS: true, MIRROR_MASTER_ANGLE: true}],
+			}, {
 				POSITION: [24, 0, 0, 0, 0, 0],
 				TYPE: ['egg', {COLOR: 9}]
 			},
