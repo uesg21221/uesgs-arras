@@ -426,6 +426,8 @@ const process = (z = {}) => {
         z.layer = get.next();
         z.index = get.next();
         z.color = get.next();
+        z.borderless = get.next();
+        z.drawFill = get.next();
         z.size = get.next();
         z.realSize = get.next();
         z.sizeFactor = get.next();
@@ -467,6 +469,8 @@ const process = (z = {}) => {
         z.twiggle = get.next();
         z.layer = get.next();
         z.color = get.next();
+        z.borderless = get.next();
+        z.drawFill = get.next();
         let invuln = get.next();
         // Update health, flagging as injured if needed
         if (isNew) {
