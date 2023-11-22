@@ -988,26 +988,44 @@ module.exports = ({ Class }) => {
 	Class.showerTurretSnowdread = {
 		PARENT: "genericTank",
 		LABEL: "",
-		BODY: {
-		  	FOV: 1.5,
-		},
+		BODY: { FOV: 1.5 },
 		CONTROLLERS: [[ 'spin', {speed: 0.03}]],
-		COLOR: 16,
+		COLOR: {
+			BASE: 6,
+			BRIGHTNESS_SHIFT: -20,
+			SATURATION_SHIFT: 0.5,
+		},
 		INDEPENDENT: true,
 		MAX_CHILDREN: 4,
 		GUNS: [
 			{
+				POSITION: [6, 13, -1.2, 7, 0, 0, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 } },
+			}, {
 				POSITION: [6, 12, 1.2, 8, 0, 0, 0],
 				PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, {size: 1.3}]),
-				TYPE: ['drone', {INDEPENDENT: true}],
-				AUTOFIRE: true,
-				SYNCS_SKILLS: true,
-				STAT_CALCULATOR: gunCalcNames.drone,
-				WAIT_TO_CYCLE: true,
+					SHOOT_SETTINGS: combineStats([g.drone, {size: 1.3}]),
+					TYPE: ['drone', {INDEPENDENT: true}],
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -20, SATURATION_SHIFT: 0.5 },
 				},
+			}, {
+				POSITION: [4, 8, 1, 7, 0, 0, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 }, DRAW_ABOVE: true },
 			},
 		],
+		TURRETS: [
+			{
+				POSITION: [14.5, 0, 0, 0, 0, 1],
+				TYPE: ["egg", { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -20, SATURATION_SHIFT: 0.5 } }],
+			}, {
+				POSITION: [8, 0, 0, 0, 0, 1],
+				TYPE: ["egg", { COLOR: { BASE: -1 } }]
+			},
+		]
 	}
 	Class.showerSnowdread = { // Drones
 	    PARENT: ["genericEggnought"],
@@ -1118,12 +1136,25 @@ module.exports = ({ Class }) => {
 		CONTROLLERS: [["spin", {speed: -0.035}]],
 		INDEPENDENT: true,
 		LABEL: "",
-		COLOR: 16,
+		COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 15 },
 		GUNS: [
 			{ 
+				POSITION: [13, 25, 1, -6.5, 0, 0, 0],
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -20 } },
+			}, { 
 				POSITION: [8, 32, 1, -4, 0, 0, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 5 } },
 			},
 		],
+		TURRETS: [
+			{
+				POSITION: [14, 0, 0, 0, 0, 1],
+				TYPE: ["egg", { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -20, SATURATION_SHIFT: 0.5 } }],
+			}, {
+				POSITION: [6.5, 0, 0, 0, 0, 1],
+				TYPE: ["egg", { COLOR: { BASE: -1 } }]
+			},
+		]
 	}
     Class.dropperSnowdread = { // Minelayer
 	    PARENT: ["genericEggnought"],
@@ -1160,7 +1191,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [4.5, 26, 1, -2.25, 0, 0, 0],
 				PROPERTIES: {COLOR: -1}
-			}
+			}, {
+				POSITION: [7, 17, 1, -3.5, 0, 0, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -20}}
+			},
 		]
 	};
     Class.spotterSnowdread = { // FOV
