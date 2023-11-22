@@ -545,11 +545,19 @@ module.exports = ({ Class }) => {
 			"M -1 0 L -0.797 0.46 L -0.52 0.3 L -0.52, -0.3 L -0.797, -0.46 L -1 0 " + 
 			"M -0.797 -0.46 L -0.5 -0.866 L 0 -0.92 L 0 -0.6 L -0.52 -0.3 L -0.797 -0.46 " + 
 			"M 0.797 -0.46 L 0.5 -0.866 L 0 -0.92 L 0 -0.6 L 0.52 -0.3 L 0.797 -0.46 L 1 0",
+	}
+	Class.healAuraSymbolSnowdreads = {
+		PARENT: ["genericTank"],
+		CONTROLLERS: [["spin", { speed: -0.04 }]],
+		INDEPENDENT: true,
+		COLOR: "red",
+		BORDER_FIRST: true,
+		SHAPE: "M 1 0 L 0.5 0.866 L -0.5 0.866 L -1 0 L -0.5 -0.866 L 0.5 -0.866 L 1 0 Z M 0.7 0 L 1 0 L 0.5 0.866 L 0.7 0 L -0.35 0.606 L 0.5 0.866 L -0.5 0.866 L -0.35 0.606 M -0.5 0.866 L -1 0 L -0.35 0.606 L -0.35 -0.606 L -1 0 L -0.5 -0.866 L -0.35 -0.606 L -0.5 -0.866 L 0.5 -0.866 L -0.35 -0.606 L 0.7 0 L 0.5 -0.866 L 1 0",
 	};
 	function addAura(damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor, auraSize = "Medium") {
 		let isHeal = damageFactor < 0;
 		let auraType = isHeal ? "healAura" + auraSize : "aura" + auraSize;
-		let symbolType = isHeal ? "healerSymbol" : "auraSymbolSnowdreads";
+		let symbolType = isHeal ? "healAuraSymbolSnowdreads" : "auraSymbolSnowdreads";
 		auraColor = auraColor ?? (isHeal ? 12 : 0);
 		return {
 			PARENT: ["genericTank"],
@@ -573,7 +581,7 @@ module.exports = ({ Class }) => {
 					POSITION: [10 * !isHeal, 0, 0, 0, 0, 1],
 					TYPE: ["egg", {COLOR: auraColor}],
 				}, {
-					POSITION: [20 - 5 * isHeal, 0, 0, 0, 360, 1],
+					POSITION: [20 - isHeal, 0, 0, 0, 360, 1],
 					TYPE: [symbolType, {COLOR: auraColor, INDEPENDENT: true}],
 				},
 			]
@@ -709,7 +717,7 @@ module.exports = ({ Class }) => {
 		TURRETS: [
 			{
 				POSITION: [13, 0, 0, 0, 0, 1],
-				TYPE: ["sphereGlow", {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.7}}],
+				TYPE: ["egg", {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.7}, BORDERLESS: true}],
 			},
 		],
 	}
@@ -1040,6 +1048,12 @@ module.exports = ({ Class }) => {
 		LABEL: "",
 		COLOR: -1,
 		GUNS: [],
+		TURRETS: [
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: ["egg", {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -15}}]
+			}
+		]
 	}
 	for(let i = 0; i < 2; i++) {
 		Class.stomperTurretSnowdread.GUNS.push(
