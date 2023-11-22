@@ -657,9 +657,11 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
         context.lineTo(newX, newY);
     }
     context.closePath();
+    context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
     if (!borderless) context.stroke();
     if (fill) context.fill();
     context.globalAlpha = 1
+    context.lineWidth /= fill ? 1 : 0.5; // Maintain constant border width
 }
 // Entity drawing (this is a function that makes a function)
 const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
