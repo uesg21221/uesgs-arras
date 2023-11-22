@@ -501,7 +501,7 @@ function isImageURL(url) {
 }
 // Sub-drawing functions
 const drawPolyImgs = []
-function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation, borderFirst = false) {
+function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation) {
     // Start drawing
     context.beginPath();
     if (sides instanceof Array) {
@@ -571,10 +571,9 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 context.scale(radius, radius);
                 context.lineWidth /= radius;
                 context.rotate(angle);
-                context.lineWidth *= fill && !borderFirst ? 1 : 0.5; // Maintain constant border width
-                if (!borderless && !borderFirst) context.stroke(path);
+                context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+                if (!borderless) context.stroke(path);
                 if (fill) context.fill(path);
-                if (!borderless && borderFirst) context.stroke(path);
                 context.restore();
                 return;
             }
@@ -659,9 +658,9 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     context.closePath();
     context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
     if (!borderless) context.stroke();
+    context.lineWidth /= fill ? 1 : 0.5; // Maintain constant border width
     if (fill) context.fill();
     context.globalAlpha = 1
-    context.lineWidth /= fill ? 1 : 0.5; // Maintain constant border width
 }
 // Entity drawing (this is a function that makes a function)
 const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
@@ -713,7 +712,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     for (let i = 0; i < source.guns.length; i++) {
         let g = gunConfig[i];
         if (!g.drawAbove) {
-            let position = (turretsObeyRot ? 0 : positions[i]) / (g.aspect === 1 ? 2 : 1),
+            let position = positions[i] / (g.aspect === 1 ? 2 : 1),
                 gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
@@ -726,7 +725,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     }
     // Draw body
     context.globalAlpha = 1;
-    gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), turretsObeyRot ? 0 : blend));
+    gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), blend));
     
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
     context.shadowColor = m.glow.color!=null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
@@ -748,13 +747,13 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
 
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, m.borderless, m.drawFill, m.imageInterpolation, m.borderFirst);
+    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, instance.borderless, instance.drawFill, m.imageInterpolation);
     
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {
         let g = gunConfig[i];
         if (g.drawAbove) {
-            let position = (turretsObeyRot ? 0 : positions[i]) / (g.aspect === 1 ? 2 : 1),
+            let position = turretsObeyRot / (g.aspect === 1 ? 2 : 1),
                 gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),

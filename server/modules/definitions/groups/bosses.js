@@ -1810,7 +1810,6 @@ exports.gersemiLowerBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
     COLOR: "lightGreen",
-    UPGRADE_COLOR: "lightGreen",
     SIZE: 100,
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
     SHAPE: 5,
@@ -1855,6 +1854,7 @@ exports.gersemi = {
     NAME: "Gersemi",
     UPGRADE_LABEL: "Gersemi",
     COLOR: "lightGreen",
+    UPGRADE_COLOR: "lightGreen",
     TURRETS: [
         {
             POSITION: [14.5, 0, 0, 0, 360, 1],

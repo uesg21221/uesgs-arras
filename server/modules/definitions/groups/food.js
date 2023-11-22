@@ -348,7 +348,6 @@ exports.rainbowHexagon = makeRare(exports.hexagon, 3);
 exports.transHexagon = makeRare(exports.hexagon, 4);
 
 // 3D POLYGONS
-exports.sphereGlow = { BORDERLESS: true }
 exports.sphere = {
     PARENT: ["food"],
     LABEL: "The Sphere",
@@ -371,22 +370,22 @@ exports.sphere = {
     GIVE_KILL_MESSAGE: true,
     TURRETS: [{
         POSITION: [17, 0, 0, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -14 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -14 }, BORDERLESS: true }]
     }, {
         POSITION: [15, 1, -1, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -9 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -9 }, BORDERLESS: true }]
     }, {
         POSITION: [13, 2, -2, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -8 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -8 }, BORDERLESS: true }]
     }, {
         POSITION: [11, 3, -3, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -3 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -3 }, BORDERLESS: true }]
     }, {
         POSITION: [8, 3.25, -3.25, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: 3 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: 3 }, BORDERLESS: true }]
     }, {
         POSITION: [6, 3, -3, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: 9 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: 9 }, BORDERLESS: true }]
     }]
 };
 exports.cube = {

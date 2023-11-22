@@ -1617,6 +1617,8 @@ class Entity extends EventEmitter {
             twiggle: this.facingType === "autospin" || this.facingType === "spin" || this.facingType === "fastspin" || (this.facingType === "locksFacing" && this.control.alt),
             layer: this.layerID ? this.layerID : this.bond != null ? this.bound.layer : this.type === "wall" ? 11 : this.type === "food" ? 10 : this.type === "tank" ? 5 : this.type === "crasher" ? 1 : 0,
             color: this.color,
+            borderless: this.borderless,
+            drawFill: this.drawFill,
             name: (this.nameColor || "#FFFFFF") + this.name,
             score: this.skill.score,
             guns: this.guns.map((gun) => gun.getPhotoInfo()),
