@@ -390,123 +390,72 @@ module.exports = ({ Class }) => {
 	}
 
 	// Deco bodies
-	Class.baseEggOuter1 = {
-		SHAPE: [
-			[0.71, 0.71], [0.64, 0.77], [0.57, 0.82], [0.49, 0.87], [0.4, 0.91], [0.32, 0.95], 
-			[0.23, 0.97], [0.14, 0.99], [0.05, 1], [-0.05, 1], [-0.14, 0.99], [-0.23, 0.97], 
-			[-0.32, 0.95], [-0.4, 0.91], [-0.49, 0.87], [-0.57, 0.82], [-0.64, 0.77], [-0.71, 0.71], 
-			[-0.6, 0.6], [-0.54, 0.65], [-0.48, 0.7], [-0.41, 0.74], [-0.34, 0.78], [-0.27, 0.81], 
-			[-0.19, 0.83], [-0.12, 0.84], [-0.04, 0.85], [0.04, 0.85], [0.12, 0.84], [0.19, 0.83], 
-			[0.27, 0.81], [0.34, 0.78], [0.41, 0.74], [0.48, 0.7], [0.54, 0.65], [0.6, 0.6]
-		],
+	Class.baseEggDeco = {
+		SHAPE: "M 0.71 0.71 A 1 0.98 0 0 1 -0.71 0.71 L -0.6 0.6 A 1 1.25 0 0 0 0.6 0.6 L 0.71 0.71" + 
+				"M -0.71 -0.71 A 1 0.98 180 0 1 0.71 -0.71 L 0.6 -0.6 A 1 1.25 180 0 0 -0.6 -0.6 L -0.71 -0.71" + 
+				"M 0.79 0.33 A 1 0.95 45 0 1 0.6 0.6 L 0.54 0.54 A 1.88 1 45 0 0 0.71 0.29 L 0.79 0.33" + 
+				"M -0.79 0.33 A 1 0.95 157.5 0 0 -0.6 0.6 L -0.54 0.54 A 1.88 1 157.5 0 1 -0.71 0.29 L -0.79 0.33" + 
+				"M 0.79 -0.33 A 1 0.95 -45 0 0 0.6 -0.6 L 0.54 -0.54 A 1.88 1 -45 0 1 0.71 -0.29 L 0.79 -0.33" + 
+				"M -0.79 -0.33 A 1 0.95 -157.5 0 1 -0.6 -0.6 L -0.54 -0.54 A 1.88 1 -157.5 0 0 -0.71 -0.29 L -0.79 -0.33",
 		COLOR: {
 			BASE: 17,
 			BRIGHTNESS_SHIFT: 10,
 		},
 		MIRROR_MASTER_ANGLE: true,
-		GUNS: [ 
+		GUNS: [],
+	}
+	for(let i = 0; i < 2; i++) {
+		Class.baseEggDeco.GUNS.push(
 			{
-				POSITION: [4, 1.3, 0.001, 9, 0, 50, 0],
+				POSITION: [8.25, 6.75, 0.6, 0, 0, 180*i+55, 0],
+				PROPERTIES: {
+					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.85 },
+					BORDERLESS: true,
+				}
+			}, {
+				POSITION: [8.25, 6.75, 0.6, 0, 0, 180*i+125, 0],
+				PROPERTIES: {
+					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.85 },
+					BORDERLESS: true,
+				}
+			}, {
+				POSITION: [4, 1.3, 0.001, 9, 0, 48 + 180 * i, 0],
 				PROPERTIES: {
 					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -20 },
 					DRAW_ABOVE: true,
 				},
 			}, {
-				POSITION: [3.5, 1.7, 0.001, 9, 0, 90, 0],
+				POSITION: [3.5, 1.7, 0.001, 9, 0, 90 + 180 * i, 0],
 				PROPERTIES: {
 					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -20 },
 					DRAW_ABOVE: true,
 				},
 			}, {
-				POSITION: [4, 1.3, 0.001, 9, 0, 130, 0],
+				POSITION: [4, 1.3, 0.001, 9, 0, 132 + 180 * i, 0],
 				PROPERTIES: {
 					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -20 },
 					DRAW_ABOVE: true,
 				},
 			}, {
-				POSITION: [1.5, 1.3, 0, 7.5, 0, 50, 0],
+				POSITION: [1.5, 1.3, 0, 7.5, 0, 48 + 180 * i, 0],
 				PROPERTIES: {
 					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -20 },
 					DRAW_ABOVE: true,
 				},
 			}, {
-				POSITION: [1, 1.7, 0, 8, 0, 90, 0],
+				POSITION: [1, 1.7, 0, 8, 0, 90 + 180 * i, 0],
 				PROPERTIES: {
 					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -20 },
 					DRAW_ABOVE: true,
 				},
 			}, {
-				POSITION: [1.5, 1.3, 0, 7.5, 0, 130, 0],
+				POSITION: [1.5, 1.3, 0, 7.5, 0, 132 + 180 * i, 0],
 				PROPERTIES: {
 					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -20 },
 					DRAW_ABOVE: true,
 				},
 			}, 
-		]
-	}
-	Class.baseEggOuter2 = {
-		SHAPE: [
-			[0.79, 0.33], [0.77, 0.35], [0.76, 0.38], [0.75, 0.41], [0.73, 0.43], [0.72, 0.46], 
-			[0.7, 0.48], [0.68, 0.51], [0.66, 0.53], [0.64, 0.56], [0.62, 0.58], [0.6, 0.6], 
-			[0.54, 0.54], [0.56, 0.52], [0.58, 0.5], [0.6, 0.48], [0.62, 0.46], [0.63, 0.44], 
-			[0.65, 0.42], [0.66, 0.39], [0.68, 0.37], [0.69, 0.34], [0.7, 0.32], [0.71, 0.29]
-		],
-		COLOR: {
-			BASE: 17,
-			BRIGHTNESS_SHIFT: 10,
-		},
-		MIRROR_MASTER_ANGLE: true,
-	}
-	Class.baseEggCross2 = {
-		COLOR: 6,
-		MIRROR_MASTER_ANGLE: true,
-		SHAPE: [[0, 0]],
-		GUNS: [],
-	}
-	for(let i = 0; i < 2; i++) {
-		Class.baseEggCross2.GUNS.push(
-			{
-				POSITION: [11, 9, 0.6, 0, 0, 180*i+55, 0],
-				PROPERTIES: {
-					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.85 },
-					DRAW_ABOVE: true,
-					BORDERLESS: true,
-				}
-			}, {
-				POSITION: [11, 9, 0.6, 0, 0, 180*i+125, 0],
-				PROPERTIES: {
-					COLOR: { BASE: 6, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.85 },
-					DRAW_ABOVE: true,
-					BORDERLESS: true,
-				}
-			},
 		)
-	}
-	function addBaseEgg() {
-		return [
-			{
-				POSITION: [15, 0, 0, 0, 0, 1],
-				TYPE: "baseEggCross2",
-			}, {
-				POSITION: [20, 0, 0, 0, 0, 1],
-				TYPE: "baseEggOuter2",
-			}, {
-				POSITION: [20, 0, 0, 112.5, 0, 1],
-				TYPE: "baseEggOuter2",
-			}, {
-				POSITION: [20, 0, 0, 180, 0, 1],
-				TYPE: "baseEggOuter2",
-			}, {
-				POSITION: [20, 0, 0, 180+112.5, 0, 1],
-				TYPE: "baseEggOuter2",
-			}, {
-				POSITION: [20, 0, 0, 0, 0, 1],
-				TYPE: "baseEggOuter1",
-			}, {
-				POSITION: [20, 0, 0, 180, 0, 1],
-				TYPE: "baseEggOuter1",
-			},
-		];
 	}
 
 	// Auras
@@ -977,9 +926,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [15, 0, 0, 0, 0, 1],
 				TYPE: 'egg',
-			},
-			...addBaseEgg(),
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "baseEggDeco",
+			}, {
 				POSITION: [9, 0, 0, 0, 360, 1],
 				TYPE: 'byteTurretSnowdread',
 			},
@@ -1038,9 +988,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [15, 0, 0, 0, 0, 1],
 				TYPE: 'egg',
-			},
-			...addBaseEgg(),
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "baseEggDeco",
+			}, {
 				POSITION: [10, 0, 0, 0, 360, 1],
 				TYPE: "showerTurretSnowdread",
 			},
@@ -1054,9 +1005,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [14, 0, 0, 0, 0, 1],
 				TYPE: 'egg',
-			},
-			...addBaseEgg(),
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "baseEggDeco",
+			}, {
 				POSITION: [11, 0, 0, 0, 360, 1],
 				TYPE: 'atmosphereAuraSnowdread',
 			},
@@ -1072,8 +1024,10 @@ module.exports = ({ Class }) => {
 			SPEED: 0.8,
 		},
 	    TURRETS: [
-			...addBaseEgg(),
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "baseEggDeco",
+			}, {
 				POSITION: [13, 0, 0, 0, 0, 1],
 				TYPE: ['egg', {COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 5}, BORDERLESS: true}],
 			}, {
@@ -1124,8 +1078,10 @@ module.exports = ({ Class }) => {
 			HEALTH: 1.6,
 		},
 		TURRETS: [
-			...addBaseEgg(),
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "baseEggDeco",
+			}, {
 				POSITION: [10, 0, 0, 0, 0, 1],
 				TYPE: 'stomperTurretSnowdread',
 			},
@@ -1173,9 +1129,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [14, 0, 0, 0, 0, 1],
 				TYPE: 'egg',
-			},
-			...addBaseEgg(),
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "baseEggDeco",
+			}, {
 				POSITION: [10, 0, 0, 0, 360, 1],
 				TYPE: 'dropperTurretSnowdread',
 			}
@@ -1207,9 +1164,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [15, 0, 0, 0, 0, 1],
 				TYPE: 'egg',
-			},
-			...addBaseEgg(),
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "baseEggDeco",
+			}, {
 				POSITION: [9, 0, 0, 0, 0, 1],
 				TYPE: 'egg',
 			}, {
@@ -5003,8 +4961,8 @@ module.exports = ({ Class }) => {
 			},
 		],
 	}
-	Class.photosphereSmallAuraSnowdread = addAura(1, 1.85, 0.15);
-	Class.photosphereBigAuraSnowdread = addAura(1.5, 4);
+	Class.photosphereSmallAuraSnowdread = addAura(1, 1.85, 0.1, 0, "Small");
+	Class.photosphereBigAuraSnowdread = addAura(1.5, 4, 0.15);
 	Class.photosphereSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Photosphere",
