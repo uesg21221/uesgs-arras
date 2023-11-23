@@ -64,16 +64,13 @@ let server = require('http').createServer((req, res) => {
 
             // We can't send a file that does not exist, so let's check if it does!
             } else {
-                console.log('\n', 0, fileToGet)
 
                 // 'https://domain.com/app' looks nicer than 'https://domain.com/app.html'
                 if (fileToGet.lastIndexOf('.') < fileToGet.lastIndexOf('\\')) {
                     fileToGet += '.html';
                 }
 
-                console.log('', 1, fileToGet)
                 fileToGet = toDefaultIfFileDoesNotExist(fileToGet);
-                console.log('', 2, fileToGet)
                 
 
                 // Just in case we are suddenly very stupid!!!!
