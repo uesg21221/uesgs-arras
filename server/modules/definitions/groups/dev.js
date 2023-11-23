@@ -590,16 +590,12 @@ exports.vulnturrettest = {
 exports.alphaGunTest = {
     PARENT: "basic",
     LABEL: "Alpha Gun Test",
-    ON: [{
-        event: "fire",
-        handler: ({ gun }) => console.log(gun.alpha)
-    }],
     GUNS: [{
         POSITION: {},
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic]),
             TYPE: 'bullet',
-            ALPHA: 0
+            ALPHA: 0.5
         }
     }]
 }
