@@ -32,95 +32,113 @@ let getNode = id => document.getElementById(id),
     selected = 0;
 
 //client wants its src to be renamed
-window.onmessage = ({ data: { ip, key, autojoin }}) => {
+window.onmessage = ({ data: { secure, ip, key, autojoin }}) => {
     console.log('changing iframe src\nip:', ip, '\nkey:', key, '\nautojoin:', autojoin);
-    iframe.src = `https://${ip}/app` + (key || autojoin ? '?' : '') + (key ? 'key=' + key : '') + (key && autojoin ? '&' : '') + (autojoin ? 'autojoin=' + autojoin : '');
+    iframe.src = `${secure ? 'https' : 'http'}://${ip}/app` + (key || autojoin ? '?' : '') + (key ? 'key=' + key : '') + (key && autojoin ? '&' : '') + (autojoin ? 'autojoin=' + autojoin : '');
 };
 
 window.onresize = () => {
     iframe.width = window.innerWidth;
-    irfame.height = window.innerHeight;
+    iframe.height = window.innerHeight;
 };
 
 join.onclick = () => {
     for (let { motdSocket } of servers) motdSocket.close();
     console.log('setting iframe src\nip:', ip);
-    iframe.src = `https://${servers[selected]}/app`;
+    iframe.src = `${servers[selected].secure ? 'https' : 'http'}://${servers[selected].ip}/app`;
     iframe.style.display = 'block';
 };
 
 list.onclick = () => {
     for (let { motdSocket } of servers) motdSocket.close();
     console.log('redirecting to browser\nip:', ip);
-    location.href = `https://${servers[selected]}/browser`;
+    location.href = `${servers[selected].secure ? 'https' : 'http'}://${servers[selected].ip}/browser`;
 };
 
 class DOMServerListItem {
-    constructor (ip, index) {
-
-        //actual properties of this entry
-        this.loading = true;
-        this.loadFail = false;
+    constructor (secure, ip, index) {
+        this.ip = ip;
+        this.errors = [];
 
         //DOM stuff
         this.mainContainer = makeNode('mainContainer');
         this.textContainer = makeNode('textContainer');
         this.statsContainer= makeNode('statsContainer');
+        this.notLoaded = makeNode('notLoaded');
         this.icon = makeNode('icon', 'img');
         this.name = makeNode('name');
         this.description = makeNode('description');
         this.ping = makeNode('ping');
         this.players = makeNode('players');
-        this.icon.src = `https://${ip}/iconBrowser.png`;
+        this.icon.hidden = true;
+        this.notLoaded.innerHTML = this.ip + '<br><br>Loading...';
+        this.icon.src = `${secure ? 'https' : 'http'}://${ip}/iconBrowser.png`;
+        this.icon.onerror = () => this.error("Server Icon didn't load successfully");
         this.textContainer.append(this.name);
         this.textContainer.append(this.description);
-        this.statsContainer.append(this.ping);
         this.statsContainer.append(this.players);
+        this.statsContainer.append(this.ping);
+        this.mainContainer.append(this.notLoaded);
         this.mainContainer.append(this.icon);
         this.mainContainer.append(this.textContainer);
         this.mainContainer.append(this.statsContainer);
         browser.append(this.mainContainer);
 
         this.mainContainer.addEventListener('click', () => {
-            this.mainContainer.classList.add('selected');
             servers[selected].element.mainContainer.classList.remove('selected');
+            this.mainContainer.classList.add('selected');
             selected = index;
 
             //TODO: update info panel on right side
         });
     }
-    setMOTD (motd) {}
+    setMOTD (motd) {
+        this.notLoaded.hidden = true;
+        this.icon.hidden = false;
+        this.name.innerHTML = toColored(motd.name);
+        this.description.innerHTML = toColored(motd.description);
+        this.ping.innerText = motd.ping + 'ms Ping';
+        this.players.innerText = motd.players + '/' + motd.maxPlayers + ' Players';
+    }
     socketClosed () {}
+    error (msg) {
+        this.errors.push('Error: ' + msg);
+        this.icon.hidden = true;
+        this.notLoaded.hidden = false;
+        this.notLoaded.style.color = '#f00';
+        this.notLoaded.innerHTML = this.ip + '<br><br>' + this.errors.join('<br>');
+    }
 }
 
-fetch(`https://${location.host}/servers.txt`).then(x => x.text()).then(fetchedServers => {
-    for (let ip of fetchedServers.split('\n')) {
-        let element = new DOMServerListItem(ip, servers.length),
-            motdSocket = new WebSocket(`wss://${ip}/motd`),
+fetch(`${location.protocol}//${location.host}/servers.json`).then(x => x.json()).then(fetchedServers => {
+    browser.innerHTML = '';
+    for (let { secure, ip } of fetchedServers) {
+        let element = new DOMServerListItem(secure, ip, servers.length),
+            motdSocket = new WebSocket(`${secure ? 'wss' : 'ws'}://${ip}/motd`),
 
-            listEntry = { ip, motdSocket, element, loading: true };
+            listEntry = { ip, motdSocket, element };
 
         motdSocket.pings = [];
-        motdSocket.onmessage = ({ data }) => {
-            let splitIndex = data.indexOf(' '),
-                motd = JSON.parse(data.slice(splitIndex)),
-                now = Date.now();
-            motd.ping = now - parseInt(data.slice(0, splitIndex));
-            motdSocket.send(now.toString());
-            element.setMOTD(motd);
+        motdSocket.onmessage = ({ data: str }) => {
+            try {
+                let data = str.split(' '),
+                    reqSent = parseInt(data[0], 16),
+                    askAgainInMS = parseInt(data[1]),
+                    motd = JSON.parse(data.slice(2).join(' '));
+                motd.ping = (Date.now() - reqSent) >> 1;
+                element.setMOTD(motd);
+                setTimeout(() => motdSocket.send(Date.now().toString(16)), askAgainInMS);
+            } catch (err) {
+                element.error('received motdSocket message made no sense');
+            }
         };
+        motdSocket.onopen = () => motdSocket.send(Date.now().toString(16));
         motdSocket.onclose = () => element.socketClosed();
-        motdSocket.onopen = () => motdSocket.send(Date.now().toString());
+        motdSocket.onerror = () => element.error('motdSocket initiation failed');
 
         servers.push(listEntry);
-
     }
 });
-
-browser.innerHTML = '';
-
-
-
 
 //most of this is drawText from the game client but modified
 function toColored(rawText) {
@@ -141,28 +159,25 @@ function toColored(rawText) {
         }
     }
 
+    let color = 'reset',
+        final = '';
     while (textArray.length) {
-        let color = textArray.shift(),
-            text = textArray.shift();
+        let str = textArray.shift();
 
         // odd index = this is a color to set the fill style to
-        if (i & 1) {
+        if (textArray.length & 1) {
+            color = str;
 
-            //reset color to default
-            if (str === "reset") {
-                context.fillStyle = defaultFillStyle;
-            } else {
-                // try your best to get a valid color out of it
-                if (!isNaN(str)) {
-                    str = parseInt(str);
-                }
-                str = gameDraw.getColor(str) ?? str;
-            }
-            context.fillStyle = str;
-
+        //completely horrid
         } else {
-            _add_color_to_(str);
-            add_text_(str);
+            let textSegment = document.createElement('span')
+            textSegment.innerText = str;
+            if (color && color != 'reset') {
+                textSegment.style.color = color;
+            }
+            final += textSegment.outerHTML;
         }
     }
+
+    return final;
 }

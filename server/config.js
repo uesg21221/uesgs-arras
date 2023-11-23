@@ -32,6 +32,12 @@ module.exports = {
     TILE_WIDTH: 400,
     TILE_HEIGHT: 400,
 
+    // Maximum amount of players the game server can handle.
+    maxPlayers: 32,
+
+    // If we should start refusing connections if the player limit is reached.
+    enforceMaxPlayers: false,
+
 
 
     // Miscellaneous
@@ -242,12 +248,18 @@ module.exports = {
     // Allows server browser clients to connect to the game server with the purpose of checking ping.
     MOTD_SOCKET: true,
 
+    // Delay between the server sending a MOTD update and the client asking for another one.
+    MOTD_SOCKET_REFRESH_DELAY: 1000,
+
+    // How long the motd socket is allowed to be alive for.
+    MOTD_SOCKET_TIMEOUT: 60_000,
+
     // Specifies what shows up in server browsers for this server.
-    MOTD_DATA: JSON.stringify({
-        name: "A Public OSA Server",
-        description: "Play Open-Source Arras with us!",
+    MOTD_DATA: {
+        name: "A Public §#44f§OSA§reset§ Server",
+        description: "Come play §#44f§Open-Source Arras§reset§ with us!",
         tags: [ "vanilla", "dreadsv1" ]
-    }),
+    },
 
     // Window name of the server terminal.
     WINDOW_NAME: 'APS++ Game Server Instance',

@@ -11,7 +11,7 @@ let fs = require('fs'),
         "png": "image/png",
         "ico": "image/x-icon"
     },
-    otherServers = fs.readFileSync('./modules/network/otherServers.txt').toString().split('\n'),
+    otherServers = require('./otherServers.json'),
 
 wsServer = new (require('ws').WebSocketServer)({ noServer: true }),
 
@@ -40,7 +40,7 @@ let server = require('http').createServer((req, res) => {
 
     switch (req.url) {
         case "/servers.json":
-            resStr = [ c.host, ...otherServers ].join('\n');
+            resStr = JSON.stringify([ { secure: !c.host.match(/localhost:(\d)/), ip: c.host }, ...otherServers ]);
             break;
 
         case "/lib/json/mockups.json":
@@ -107,15 +107,17 @@ getIP = req => {
     }
 
     return ips[0];
-}
+},
 
-motdSocket = ws => {
+motdSocket = socket => {
     socket.on("message", message => {
         if (socket.readyState !== socket.OPEN) return;
         if (message.length > 32) return socket.close();
-        socket.send(message + ' ' + c.MOTD_DATA);
+        c.MOTD_DATA.players = sockets.players.length;
+        c.MOTD_DATA.maxPlayers = c.maxPlayers;
+        socket.send(message.toString() + ' ' + c.MOTD_SOCKET_REFRESH_DELAY + ' ' + JSON.stringify(c.MOTD_DATA));
     });
-    setTimeout(() => socket.readyState === socket.OPEN && socket.close(), 60_000);
+    setTimeout(() => socket.readyState === socket.OPEN && socket.close(), c.MOTD_SOCKET_TIMEOUT);
 };
 
 server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, head, ws => {
