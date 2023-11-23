@@ -51,7 +51,8 @@ const global = {
     // Keys and other mathematical constants
     KEY_ESC: 27,
     KEY_ENTER: 13,
-    KEY_BECOME: 72,
+    KEY_SHIFT: 16,
+    KEY_BECOME: 70,
     KEY_CHAT: 13,
     KEY_FIREFOOD: 119,
     KEY_SPLIT: 32,
@@ -67,7 +68,7 @@ const global = {
 
     KEY_AUTO_SPIN: 67,
     KEY_AUTO_FIRE: 69,
-    KEY_AUTO_ALT: 70,
+    KEY_AUTO_ALT: 71,
     KEY_OVER_RIDE: 82,
     KEY_REVERSE_TANK: 86,
     KEY_REVERSE_MOUSE: 66,
@@ -99,8 +100,6 @@ const global = {
     KEY_CHOOSE_5: 74,
     KEY_CHOOSE_6: 75,
 
-    KEY_ENTER: 13,
-
     showTree: false,
     scrollX: 0,
     realScrollX: 0,
@@ -130,7 +129,7 @@ const global = {
     updateTimes: 0,
     clickables: {
         stat: Region(10),
-        upgrade: Region(32),
+        upgrade: Region(100),
         hover: Region(1),
         skipUpgrades: Region(1),
     },
@@ -147,6 +146,7 @@ const global = {
         rendergap: 0,
         lastuplink: 0,
     },
+    mouse: { x: 0, y: 0},
     target: { x: 0, y: 0 },
     fps: 60,
     screenSize: Math.min(1920, Math.max(window.innerWidth, 1280)),

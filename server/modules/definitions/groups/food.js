@@ -7,11 +7,13 @@ makeRelic = (type, scale = 1, gem, SIZE) => {
         PARENT: ['genericEntity'],
         LABEL: 'Relic Casing',
         COLOR: type.COLOR,
+        MIRROR_MASTER_ANGLE: true,
         SHAPE: [[-0.4,-1],[0.4,-0.25],[0.4,0.25],[-0.4,1]].map(r => r.map(s => s * scale))
     }, relicBody = {
         PARENT: ['genericEntity'],
         LABEL: 'Relic Mantle',
         COLOR: type.COLOR,
+        MIRROR_MASTER_ANGLE: true,
         SHAPE: type.SHAPE
     };
     exports[Math.random().toString(36)] = relicCasing;
@@ -62,14 +64,14 @@ makeRelic = (type, scale = 1, gem, SIZE) => {
     if (gem) {
         TURRETS.push({
             POSITION: [8, 0, 0, 0, 0, 1],
-            TYPE: gem
+            TYPE: [gem, { MIRROR_MASTER_ANGLE: true }]
         });
     }
 
     return {
         PARENT,
         LABEL: type.LABEL + ' Relic',
-        COLOR: 18, // This is the color of the floor, this makes it look hollow.
+        COLOR: "white", // This is the color of the floor, this makes it look hollow.
         BODY: {
             ACCELERATION: 0.001
         },
@@ -85,8 +87,8 @@ makeRare = (type, level) => ({
     LABEL: ["Shiny", "Legendary", "Shadow", "Rainbow", "Transgender"][level] + " " + type.LABEL,
     VALUE: [100, 500, 2000, 4000, 5000][level] * type.VALUE,
     SHAPE: type.SHAPE,
-    SIZE: type.SHAPE + level,
-    COLOR: [1, 0, 19, 36, 37][level],
+    SIZE: type.SIZE + level,
+    COLOR: ["lightGreen", "teal", "pureBlack", "rainbow", "animatedTrans"][level],
     ALPHA: level == 2 ? 0.25 : 1,
     BODY: {
         DAMAGE: type.BODY.DAMAGE + level,
@@ -100,16 +102,18 @@ makeRare = (type, level) => ({
     GIVE_KILL_MESSAGE: true,
 }),
 
+lerp = (a, b, t) => a + (b - a) * t,
+
 makeLaby = (type, level) => {
     let usableSHAPE = Math.max(type.SHAPE, 3),
         downscale = Math.cos(Math.PI / usableSHAPE), // https://www.calculatorsoup.com/calculators/geometry-plane/polygon.php
         strenghtMultiplier = 5 ** (level - 1);
     return {
-        PARENT: ["food"],
+        PARENT: "food",
         LABEL: ["", "Beta ", "Alpha ", "Omega ", "Gamma ", "Delta "][level] + type.LABEL,
         VALUE: type.VALUE * strenghtMultiplier,
         SHAPE: type.SHAPE,
-        SIZE: type.SIZE / downscale ** (level - 1),
+        SIZE: level > 3 ? Math.max(40, type.SIZE * 2) * (1 + (level - 3) / 6) : type.SIZE * lerp(2 ** level, 1 + level / 3, Math.min(1, (type.SIZE - 5) / 17)),
         COLOR: type.COLOR,
         ALPHA: type.ALPHA,
         BODY: {
@@ -119,12 +123,13 @@ makeLaby = (type, level) => {
             PENETRATION: type.BODY.PENETRATION,
             ACCELERATION: type.BODY.ACCELERATION
         },
+        VARIES_IN_SIZE: false,
         DRAW_HEALTH: type.DRAW_HEALTH,
         GIVE_KILL_MESSAGE: type.GIVE_KILL_MESSAGE || level > 2,
         GUNS: type.GUNS,
         TURRETS: [...(type.TURRETS ? type.TURRETS : []), ...Array(level).fill().map((_, i) => ({
             POSITION: [20 * downscale ** (i + 1), 0, 0, !(i & 1) ? 180 / usableSHAPE : 0, 0, 1],
-            TYPE: type
+            TYPE: [type, { MIRROR_MASTER_ANGLE: true }]
         }))]
     };
 };
@@ -136,7 +141,7 @@ exports.egg = {
     VALUE: 10,
     SHAPE: 0,
     SIZE: 5,
-    COLOR: 6,
+    COLOR: "veryLightGrey",
     INTANGIBLE: true,
     BODY: {
         DAMAGE: 0,
@@ -153,7 +158,7 @@ exports.gem = {
     VALUE: 2e3,
     SHAPE: 6,
     SIZE: 5,
-    COLOR: 0,
+    COLOR: "teal",
     BODY: {
         DAMAGE: basePolygonDamage / 4,
         DENSITY: 4,
@@ -172,7 +177,7 @@ exports.jewel = {
     VALUE: 1e5,
     SHAPE: 6,
     SIZE: 12,
-    COLOR: 3,
+    COLOR: "yellow",
     BODY: {
         DAMAGE: basePolygonDamage / 4,
         DENSITY: 4,
@@ -199,7 +204,7 @@ exports.square = {
     VALUE: 30,
     SHAPE: 4,
     SIZE: 10,
-    COLOR: 13,
+    COLOR: "gold",
     BODY: {
         DAMAGE: basePolygonDamage,
         DENSITY: 4,
@@ -222,8 +227,8 @@ exports.triangle = {
     LABEL: "Triangle",
     VALUE: 120,
     SHAPE: 3,
-    SIZE: 9,
-    COLOR: 2,
+    SIZE: 10,
+    COLOR: "orange",
     BODY: {
         DAMAGE: basePolygonDamage,
         DENSITY: 6,
@@ -246,8 +251,8 @@ exports.pentagon = {
     LABEL: "Pentagon",
     VALUE: 400,
     SHAPE: 5,
-    SIZE: 16,
-    COLOR: 14,
+    SIZE: 20,
+    COLOR: "purple",
     BODY: {
         DAMAGE: 1.5 * basePolygonDamage,
         DENSITY: 8,
@@ -271,12 +276,13 @@ exports.betaPentagon = {
     VALUE: 2500,
     SHAPE: 5,
     SIZE: 30,
-    COLOR: 14,
+    COLOR: "purple",
     BODY: {
         DAMAGE: 2 * basePolygonDamage,
         DENSITY: 30,
         HEALTH: 50 * basePolygonHealth,
         RESIST: Math.pow(1.25, 2),
+        PENETRATION: 1.1,
         SHIELD: 20 * basePolygonHealth,
         REGEN: 0.2,
         ACCELERATION: 0.003
@@ -297,12 +303,13 @@ exports.alphaPentagon = {
     VALUE: 15e3,
     SHAPE: 5,
     SIZE: 58,
-    COLOR: 14,
+    COLOR: "purple",
     BODY: {
         DAMAGE: 2 * basePolygonDamage,
         DENSITY: 80,
         HEALTH: 300 * basePolygonHealth,
         RESIST: Math.pow(1.25, 3),
+        PENETRATION: 1.1,
         SHIELD: 40 * basePolygonHealth,
         REGEN: 0.6,
         ACCELERATION: 0.0025
@@ -322,8 +329,8 @@ exports.hexagon = {
     LABEL: "Hexagon",
     VALUE: 500,
     SHAPE: 6,
-    SIZE: 18,
-    COLOR: 0,
+    SIZE: 22,
+    COLOR: "teal",
     BODY: {
         DAMAGE: 1.7 * basePolygonDamage,
         DENSITY: 8,
@@ -341,7 +348,6 @@ exports.rainbowHexagon = makeRare(exports.hexagon, 3);
 exports.transHexagon = makeRare(exports.hexagon, 4);
 
 // 3D POLYGONS
-exports.sphereGlow = { BORDERLESS: true }
 exports.sphere = {
     PARENT: ["food"],
     LABEL: "The Sphere",
@@ -350,7 +356,7 @@ exports.sphere = {
     SHAPE: 0,
     SIZE: 9,
     COLOR: {
-        BASE: 18,
+        BASE: "white",
         BRIGHTNESS_SHIFT: -15,
     },
     BODY: {
@@ -364,22 +370,22 @@ exports.sphere = {
     GIVE_KILL_MESSAGE: true,
     TURRETS: [{
         POSITION: [17, 0, 0, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: -14 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -14 }, BORDERLESS: true }]
     }, {
         POSITION: [15, 1, -1, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: -9 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -9 }, BORDERLESS: true }]
     }, {
         POSITION: [13, 2, -2, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: -8 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -8 }, BORDERLESS: true }]
     }, {
         POSITION: [11, 3, -3, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: -3 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: -3 }, BORDERLESS: true }]
     }, {
         POSITION: [8, 3.25, -3.25, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: 3 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: 3 }, BORDERLESS: true }]
     }, {
         POSITION: [6, 3, -3, 0, 0, 1],
-        TYPE: ["sphereGlow", { COLOR: { BASE: 18, BRIGHTNESS_SHIFT: 9 } }]
+        TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: 9 }, BORDERLESS: true }]
     }]
 };
 exports.cube = {
@@ -387,7 +393,7 @@ exports.cube = {
     LABEL: "The Cube",
     VALUE: 2e7,
     SIZE: 10,
-    COLOR: 18,
+    COLOR: "white",
     SHAPE: "M 0.0575 0.0437 V 0.9921 L 0.8869 0.5167 V -0.4306 L 0.0575 0.0437 Z M -0.0583 0.0437 V 0.9921 L -0.8869 0.5159 V -0.4306 L -0.0583 0.0437 Z M 0 -0.0556 L 0.829 -0.5266 L 0 -1 L -0.8254 -0.527 L 0 -0.0556",
     BODY: {
         DAMAGE: 12,
@@ -405,7 +411,7 @@ exports.tetrahedron = {
     LABEL: "The Tetrahedron",
     VALUE: 3e7,
     SIZE: 12,
-    COLOR: 18,
+    COLOR: "white",
     SHAPE: "M 0.058 0.044 V 1 L 0.894 -0.434 L 0.058 0.044 Z M -0.0588 0.044 V 1 L -0.894 -0.434 L -0.0588 0.044 Z M 0 -0.056 L 0.8356 -0.5308 L -0.832 -0.5312 L 0 -0.056",
     BODY: {
         DAMAGE: 15,
@@ -422,7 +428,7 @@ exports.octahedron = {
     LABEL: "The Octahedron",
     VALUE: 4e7,
     SIZE: 13,
-    COLOR: 18,
+    COLOR: "white",
     SHAPE: "M 0.06 -0.06 L 0.95 -0.06 L 0.06 -0.95 L 0.06 -0.06 M -0.06 0.06 L -0.06 0.95 L -0.95 0.06 L -0.06 0.06 M -0.06 -0.06 L -0.95 -0.06 L -0.06 -0.95 L -0.06 -0.06 M 0.06 0.06 L 0.06 0.95 L 0.95 0.06 L 0.06 0.06",
     BODY: {
         DAMAGE: 18,
@@ -439,7 +445,7 @@ exports.dodecahedron = {
     LABEL: "The Dodecahedron",
     VALUE: 5e7,
     SIZE: 18,
-    COLOR: 18,
+    COLOR: "white",
     SHAPE: "M -0.3273 -0.4318 H 0.3045 L 0.5068 0.1727 L -0.0091 0.5455 L -0.5227 0.1727 L -0.3273 -0.4318 Z M -0.6068 0.2682 L -0.0773 0.6545 V 0.9591 L -0.5955 0.7977 L -0.9136 0.3545 L -0.6068 0.2682 Z M 0.5909 0.2682 L 0.0523 0.6591 V 0.9636 L 0.5773 0.7955 L 0.8955 0.3545 L 0.5909 0.2682 Z M -0.65 0.1455 L -0.4477 -0.4818 L -0.6318 -0.7505 L -0.9545 -0.3182 V 0.2318 L -0.65 0.1455 Z M 0.4273 -0.4841 L 0.6318 0.1455 L 0.9341 0.2341 V -0.3136 L 0.6145 -0.7591 L 0.4273 -0.4841 Z M -0.0091 -1 L -0.5318 -0.8341 L -0.3455 -0.5609 H 0.3227 L 0.5159 -0.8314 L -0.0091 -1",
     BODY: {
         DAMAGE: 22.5,
@@ -457,7 +463,7 @@ exports.icosahedron = {
     LABEL: "The Icosahedron",
     VALUE: 1e8,
     SIZE: 20,
-    COLOR: 18,
+    COLOR: "white",
     SHAPE: "M -0.39 -0.245 L 0.392 -0.245 L 0 0.47 L -0.39 -0.245 Z M -0.465 -0.2 L -0.893 0.475 L -0.073 0.51 L -0.465 -0.2 Z M 0.4636 -0.2 L 0.073 0.509 L 0.891 0.4736 L 0.4636 -0.2 Z M 0 -1 L -0.39 -0.33 L 0.389 -0.328 L 0 -1 Z M -0.142 -0.925 L -0.875 -0.506 L -0.48 -0.339 L -0.142 -0.925 Z M -0.925 0.366 L -0.925 -0.431 L -0.525 -0.266 L -0.925 0.366 Z M -0.042 0.595 L -0.808 0.562 L -0.042 1 L -0.042 0.595 Z M 0.042 0.595 L 0.808 0.562 L 0.042 1 L 0.042 0.595 Z M 0.142 -0.925 L 0.858 -0.516 L 0.48 -0.339 L 0.142 -0.925 Z M 0.925 0.366 L 0.925 -0.452 L 0.523 -0.269 L 0.925 0.366 Z",
     BODY: {
         DAMAGE: 17.5,
@@ -474,12 +480,12 @@ exports.icosahedron = {
 // RELICS
 for (let [gemColor, name] of [
     [undefined, ""],
-    [30, "Power"],
-    [31, "Space"],
-    [32, "Reality"],
-    [33, "Soul"],
-    [34, "Time"],
-    [35, "Mind"]
+    ["powerGem", "Power"],
+    ["spaceGem", "Space"],
+    ["realityGem", "Reality"],
+    ["soulGem", "Soul"],
+    ["timeGem", "Time"],
+    ["mindGem", "Mind"]
 ]) {
     let gem;
     if (gemColor) {
@@ -505,7 +511,7 @@ exports.tesseract = {
     LABEL: "The Tesseract",
     VALUE: 42e7,
     SIZE: 25,
-    COLOR: 18,
+    COLOR: "white",
     SHAPE: "M -0.43 0.35 L -0.71 0.63 L -0.71 -0.63 L -0.43 -0.35 L -0.43 0.35 M -0.35 0.43 L -0.63 0.71 L 0.63 0.71 L 0.35 0.43 L -0.35 0.43 M 0.35 -0.43 L 0.63 -0.71 L -0.63 -0.71 L -0.35 -0.43 L 0.35 -0.43 M 0.43 -0.35 L 0.71 -0.63 L 0.71 0.63 L 0.43 0.35 L 0.43 -0.35 M 0.32 0.32 L 0.32 -0.32 L -0.32 -0.32 L -0.32 0.32 L 0.32 0.32",
     BODY: {
         DAMAGE: 25,

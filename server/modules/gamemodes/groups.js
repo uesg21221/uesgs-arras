@@ -39,14 +39,8 @@ class Group {
     getSpawn() {
         let validMembers = this.members.map(entry => entry).filter(a => !!a.player).filter(b => !!b.player.body);
         if (!validMembers.length) return room.random();
-        let {
-            x,
-            y
-        } = ran.choose(validMembers).player.body;
-        return {
-            x,
-            y
-        };
+        let { x, y } = ran.choose(validMembers).player.body;
+        return { x, y };
     }
 }
 

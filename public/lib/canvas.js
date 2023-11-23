@@ -1,5 +1,5 @@
 import { global } from "./global.js";
-import { config } from "./config.js";
+import { settings } from "./settings.js";
 
 class Canvas {
     constructor() {
@@ -7,15 +7,18 @@ class Canvas {
         this.target = global.target;
         this.socket = global.socket;
         this.directions = [];
+
         this.chatInput = document.getElementById('chatInput');
-        this.chatInput.addEventListener('change', event => {
+        this.chatInput.addEventListener('keydown', event => {
+            if (![global.KEY_ENTER, global.KEY_ESC].includes(event.keyCode)) return;
             this.chatInput.blur();
             this.cv.focus();
             this.chatInput.hidden = true;
             if (!this.chatInput.value) return;
-            this.socket.talk('M', this.chatInput.value);
+            if (event.keyCode === global.KEY_ENTER) this.socket.talk('M', this.chatInput.value);
             this.chatInput.value = "";
         });
+
         this.cv = document.getElementById('gameCanvas');
         this.cv.addEventListener('mousemove', event => this.mouseMove(event), false);
         this.cv.addEventListener("mousedown", event => this.mouseDown(event), false);
@@ -31,14 +34,20 @@ class Canvas {
         this.inverseMouse = false;
         this.spinLock = true;
         this.treeScrollSpeed = 0.5;
+        this.treeScrollSpeedMultiplier = 1;
         global.canvas = this;
     }
     keyDown(event) {
         switch (event.keyCode) {
+            case global.KEY_SHIFT:
+                if (global.showTree) this.treeScrollSpeedMultiplier = 5;
+                else this.socket.cmd.set(6, true);
+                break;
+
             case global.KEY_ENTER:
                 // Enter to respawn
                 if (global.died) {
-                    this.socket.talk('s', global.playerName, 0, 1 * config.game.autoLevelUp);
+                    this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp);
                     global.died = false;
                     break;
                 }
@@ -52,22 +61,22 @@ class Canvas {
                 break;
 
             case global.KEY_UP_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollY = -this.treeScrollSpeed;
+                if (!global.died && global.showTree) return global.shouldScrollY = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_UP:
                 this.socket.cmd.set(0, true);
                 break;
             case global.KEY_DOWN_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollY = +this.treeScrollSpeed;
+                if (!global.died && global.showTree) return global.shouldScrollY = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_DOWN:
                 this.socket.cmd.set(1, true);
                 break;
             case global.KEY_LEFT_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollX = -this.treeScrollSpeed;
+                if (!global.died && global.showTree) return global.shouldScrollX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_LEFT:
                 this.socket.cmd.set(2, true);
                 break;
             case global.KEY_RIGHT_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollX = +this.treeScrollSpeed;
+                if (!global.died && global.showTree) return global.shouldScrollX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_RIGHT:
                 this.socket.cmd.set(3, true);
                 break;
@@ -164,6 +173,10 @@ class Canvas {
     }
     keyUp(event) {
         switch (event.keyCode) {
+            case global.KEY_SHIFT:
+                if (global.showTree) this.treeScrollSpeedMultiplier = 1;
+                else this.socket.cmd.set(6, false);
+                break;
             case global.KEY_UP_ARROW:
                 global.shouldScrollY = 0;
             case global.KEY_UP:
@@ -249,14 +262,8 @@ class Canvas {
             y: mouse.clientY * global.ratio,
         }) === 0;
         if (!this.spinLock) return;
-        this.target.x = mouse.clientX * global.ratio - this.width / 2;
-        this.target.y = mouse.clientY * global.ratio - this.height / 2;
-        if (this.reverseDirection) {
-            this.target.x *= -1;
-            this.target.y *= -1;
-        }
-        this.target.x *= global.screenWidth / this.width;
-        this.target.y *= global.screenHeight / this.height;
+        global.mouse.x = mouse.clientX;
+        global.mouse.y = mouse.clientY;
     }
 }
 export { Canvas }

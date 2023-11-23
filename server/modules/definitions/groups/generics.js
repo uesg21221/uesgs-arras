@@ -9,7 +9,7 @@ exports.genericEntity = {
     VALUE: 0,
     SHAPE: 0,
     COLOR: {
-        BASE: 16, // ID
+        BASE: "grey", // ID
         HUE_SHIFT: 0, // Additive, degrees
         SATURATION_SHIFT: 1, // Multiplicative
         BRIGHTNESS_SHIFT: 0, // Additive, ranges from -100 to 100
@@ -54,14 +54,14 @@ exports.genericEntity = {
     UPGRADES_TIER_9: [],
     SKILL: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     LEVEL: 0,
-    BORDERLESS: false,
-    DRAW_FILL: true,
     SKILL_CAP: Array(10).fill(dfltskl),
     GUNS: [],
     MAX_CHILDREN: 0,
     BORDERLESS: false,
     DRAW_FILL: true,
-    REROOT_UPGRADE_TREE: false,
+    REROOT_UPGRADE_TREE: null,
+    DISPLAY_NAME: true,
+    ON: [],
     BODY: {
         ACCELERATION: 1,
         SPEED: 0,
@@ -95,6 +95,7 @@ exports.genericTank = {
     MAX_CHILDREN: 0,
     DAMAGE_EFFECTS: false,
     IGNORED_BY_AI: false,
+    REROOT_UPGRADE_TREE: "basic",
     BODY: {
         ACCELERATION: base.ACCEL,
         SPEED: base.SPEED,
@@ -110,6 +111,7 @@ exports.genericTank = {
     },
     GUNS: [],
     TURRETS: [],
+    ON: [],
     GIVE_KILL_MESSAGE: true,
     DRAW_HEALTH: true,
     HITS_OWN_TYPE: "hardOnlyTanks",
@@ -230,7 +232,7 @@ exports.trap = {
 
 exports.mendersymbol = {
     PARENT: ["genericTank"],
-    COLOR: 16,
+    COLOR: "grey",
     LABEL: "",
     SHAPE: 3,
 };
@@ -243,7 +245,7 @@ exports.healerSymbol = {
     PARENT: ["genericEntity"],
     SHAPE: [[0.3, -0.3],[1,-0.3],[1,0.3],[0.3,0.3],[0.3,1],[-0.3,1],[-0.3,0.3],[-1,0.3],[-1,-0.3],[-0.3,-0.3],[-0.3,-1],[0.3,-1]],
     SIZE: 13,
-    COLOR: 12,
+    COLOR: "red",
 };
 
 exports.auraBase = {
@@ -270,24 +272,24 @@ exports.auraBase = {
 exports.aura = {
     PARENT: ["auraBase"],
     LABEL: "Aura",
-    COLOR: 0,
+    COLOR: "teal",
     BODY: {
-        DAMAGE: 0.25,
+        DAMAGE: 0.5,
     },
 };
 exports.healAura = {
     PARENT: ["auraBase"],
     LABEL: "Heal Aura",
     HEALER: true,
-    COLOR: 12,
+    COLOR: "red",
     BODY: {
-        DAMAGE: 0.25/3,
+        DAMAGE: 0.5/3,
     },
 };
 exports.auraSymbol = {
     PARENT: ["genericTank"],
     CONTROLLERS: [["spin", {speed: -0.04}]],
     INDEPENDENT: true,
-    COLOR: 0,
+    COLOR: "teal",
     SHAPE: [[-0.598,-0.7796],[-0.3817,-0.9053],[0.9688,-0.1275],[0.97,0.125],[-0.3732,0.9116],[-0.593,0.785]]
 };

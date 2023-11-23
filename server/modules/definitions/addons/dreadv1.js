@@ -20,7 +20,7 @@ const dreadnoughtBody = {
     SPEED: 1.4,
     HEALTH: 400,
     DAMAGE: 10,
-    RESIST: 3,
+    RESIST: 1,
     PENETRATION: 2,
     SHIELD: 40,
     REGEN: 0.025,
@@ -38,8 +38,9 @@ module.exports = ({ Class }) => {
 	    BODY: dreadnoughtBody,
 	    SHAPE: 6,
 	    COLOR: 9,
-	    SIZE: 50,
+	    SIZE: 30,
 	    SKILL_CAP: Array(10).fill(smshskl+3),
+		REROOT_UPGRADE_TREE: "dreadOfficialV1",
 	};
 	Class.mechanismMainTurret = {
 	    PARENT: ["genericTank"],
@@ -92,25 +93,75 @@ module.exports = ({ Class }) => {
 	        }
 	    }]
 	};
+	Class.medicareTurret = {
+		PARENT: ["genericTank"],
+	    LABEL: "Turret",
+	    CONTROLLERS: [ ["spin", {speed: 0.04}] ],
+	    INDEPENDENT: true,
+	    COLOR: 16,
+	    GUNS: [],
+		TURRETS: [{
+			POSITION: [13, 0, 0, 0, 360, 1],
+            TYPE: "healerSymbol",
+		}],
+	};
+	for(let i = 0; i < 3; i++) {
+		Class.medicareTurret.GUNS.push({
+            POSITION: [8, 9, -0.5, 12.5, 0, 120*i, 0],
+        },
+        {
+            POSITION: [18, 10, 1, 0, 0, 120*i, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.pound, g.halfspeed, g.healer]),
+                TYPE: "healerBullet",
+				AUTOFIRE: true,
+            },
+        })
+	}
+	Class.medicaidTurret = {
+		PARENT: ["genericTank"],
+	    LABEL: "Turret",
+	    CONTROLLERS: [ ["spin", {speed: 0.04}] ],
+	    INDEPENDENT: true,
+	    COLOR: 16,
+	    GUNS: [],
+		TURRETS: [{
+			POSITION: [13, 0, 0, 0, 360, 1],
+            TYPE: "healerSymbol",
+		}],
+	};
+	for(let i = 0; i < 5; i++) {
+		Class.medicaidTurret.GUNS.push({
+            POSITION: [8, 9, -0.5, 12.5, 0, 72*i, 0],
+        },
+        {
+            POSITION: [18, 10, 1, 0, 0, 72*i, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.flank, g.pound, g.halfspeed, g.healer]),
+                TYPE: "healerBullet",
+				AUTOFIRE: true,
+            },
+        })
+	}
 	Class.turretedTrap = makeAuto(Class.trap);
 
 	// T0
-	Class.dread_APSofficialdreadv1 = {
+	Class.dreadOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Dreadnought",
-		REROOT_UPGRADE_TREE: true,
+	    UPGRADE_LABEL: "Dreads V1",
 		LEVEL: 150,
 		EXTRA_SKILL: 48,
 	}
 
 	// T1
-	Class.sword_APSofficialdreadv1 = {
+	Class.swordOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Sword",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.sword_APSofficialdreadv1.GUNS.push({
+	    Class.swordOfficialV1.GUNS.push({
 	        POSITION: [18, 7, 1, 0, 0, 120*i, 0],
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.sniper, g.morereload]),
@@ -119,13 +170,13 @@ module.exports = ({ Class }) => {
 	    });
 	}
 
-	Class.pacifier_APSofficialdreadv1 = {
+	Class.pacifierOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Pacifier",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.pacifier_APSofficialdreadv1.GUNS.push({
+	    Class.pacifierOfficialV1.GUNS.push({
 	        POSITION: [15, 7, 1, 0, 0, 120*i, 0],
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.morereload]),
@@ -134,13 +185,13 @@ module.exports = ({ Class }) => {
 	    });
 	}
 
-	Class.invader_APSofficialdreadv1 = {
+	Class.invaderOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Invader",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.invader_APSofficialdreadv1.GUNS.push({
+	    Class.invaderOfficialV1.GUNS.push({
 	        POSITION: [5.5, 7.5, 1.3, 7.5, 0, 120*i, 0],
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.drone, g.over, g.morespeed]),
@@ -154,13 +205,13 @@ module.exports = ({ Class }) => {
 	    });
 	}
 
-	Class.centaur_APSofficialdreadv1 = {
+	Class.centaurOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Centaur",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.centaur_APSofficialdreadv1.GUNS.push({
+	    Class.centaurOfficialV1.GUNS.push({
 	        POSITION: [12, 7, 1, 0, 0, 120*i, 0],
 	    }, {
 	        POSITION: [2.5, 7, 1.6, 12, 0, 120*i, 0],
@@ -172,23 +223,23 @@ module.exports = ({ Class }) => {
 	    });
 	}
 
-	Class.automation_APSofficialdreadv1 = {
+	Class.automationOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Automation",
 	    TURRETS: [],
 	}
 	for (let i = 0; i < 6; i++) {
-	    Class.automation_APSofficialdreadv1.TURRETS.push({
+	    Class.automationOfficialV1.TURRETS.push({
 	        POSITION: [4, 8.7, 0, 60*i+30, 180, 1],
 	        TYPE: "automationSecondaryTurret",
 	    });
 	}
-	Class.automation_APSofficialdreadv1.TURRETS.push({
+	Class.automationOfficialV1.TURRETS.push({
 	    POSITION: [7, 0, 0, 0, 360, 1],
 	    TYPE: "automationMainTurret",
 	});
 
-	Class.juggernaut_APSofficialdreadv1 = {
+	Class.juggernautOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Juggernaut",
 	    BODY: {
@@ -202,15 +253,23 @@ module.exports = ({ Class }) => {
 	        TYPE: ["smasherBody", {INDEPENDENT: false} ]
 	    }]
 	}
+	Class.medicareOfficialV1 = {
+		PARENT: ["genericDreadnought1"],
+	    LABEL: "Medicare",
+	    TURRETS: [{
+			POSITION: [8, 0, 0, 0, 360, 1],
+			TYPE: "medicareTurret",
+		}],
+	}
 
 	// T2
-	Class.sabre_APSofficialdreadv1 = {
+	Class.sabreOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Sabre",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.sabre_APSofficialdreadv1.GUNS.push({
+	    Class.sabreOfficialV1.GUNS.push({
 	        POSITION: [25, 7, 1, 0, 0, 120*i, 0],
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.sniper, g.assass, g.morespeed, g.morereload]),
@@ -220,13 +279,13 @@ module.exports = ({ Class }) => {
 	        POSITION: [5, 7, -1.4, 9, 0, 120*i, 0]
 	    });
 	}
-	Class.gladius_APSofficialdreadv1 = {
+	Class.gladiusOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Gladius",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.gladius_APSofficialdreadv1.GUNS.push({
+	    Class.gladiusOfficialV1.GUNS.push({
 	        POSITION: [16, 8, 1, 0, 0, 120*i, 0]
 	    }, {
 	        POSITION: [20, 6, 1, 0, 0, 120*i, 0],
@@ -237,13 +296,13 @@ module.exports = ({ Class }) => {
 	    });
 	}
 
-	Class.appeaser_APSofficialdreadv1 = {
+	Class.appeaserOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Appeaser",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.appeaser_APSofficialdreadv1.GUNS.push({
+	    Class.appeaserOfficialV1.GUNS.push({
 	        POSITION: [6, 8, 1.3, 7, 0, 120*i, 0],
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.pound, g.morereload, g.slow, {size: 0.55}]),
@@ -257,13 +316,13 @@ module.exports = ({ Class }) => {
 	        }
 	    });
 	}
-	Class.peacekeeper_APSofficialdreadv1 = {
+	Class.peacekeeperOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Peacekeeper",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.peacekeeper_APSofficialdreadv1.GUNS.push({
+	    Class.peacekeeperOfficialV1.GUNS.push({
 	        POSITION: [17, 10, 1, 0, 0, 120*i, 0],
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.destroy, g.morereload]),
@@ -271,13 +330,13 @@ module.exports = ({ Class }) => {
 	        }
 	    });
 	}
-	Class.diplomat_APSofficialdreadv1 = {
+	Class.diplomatOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Diplomat",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.diplomat_APSofficialdreadv1.GUNS.push({
+	    Class.diplomatOfficialV1.GUNS.push({
 	        POSITION: [13.5, 6, 1, 0, 2.2, 120*i, 0.5],
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple, g.slow, g.pound, g.morereload]),
@@ -298,13 +357,13 @@ module.exports = ({ Class }) => {
 	    });
 	}
 
-	Class.inquisitor_APSofficialdreadv1 = {
+	Class.inquisitorOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Inquisitor",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.inquisitor_APSofficialdreadv1.GUNS.push({
+	    Class.inquisitorOfficialV1.GUNS.push({
 	        POSITION: [7, 8.5, 1.3, 7.5, 0, 120*i, 0],
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.drone, g.over, g.morespeed, g.battle, {SIZE: 1.25}]),
@@ -317,19 +376,19 @@ module.exports = ({ Class }) => {
 	        }
 	    });
 	}
-	Class.assailant_APSofficialdreadv1 = {
+	Class.assailantOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Assailant",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.assailant_APSofficialdreadv1.GUNS.push({
+	    Class.assailantOfficialV1.GUNS.push({
 	        POSITION: [13.5, 8, 1, 0, 0, 120*i, 0],
 	    }, {
 	        POSITION: [1.5, 10, 1, 13.5, 0, 120*i, 0],
 	        PROPERTIES: {
 	            MAX_CHILDREN: 4,
-	            SHOOT_SETTINGS: combineStats([g.factory, g.babyfactory]),
+	            SHOOT_SETTINGS: combineStats([g.factory, g.weak, g.weak, g.weak, g.morespeed, g.morespeed, g.morespeed, g.morespeed, g.doublereload, g.doublereload]),
 	            TYPE: "minion",
 	            STAT_CALCULATOR: gunCalcNames.drone,
 	            AUTOFIRE: true,
@@ -339,13 +398,13 @@ module.exports = ({ Class }) => {
 	        POSITION: [11.5, 10, 1, 0, 0, 120*i, 0]
 	    });
 	}
-	Class.infiltrator_APSofficialdreadv1 = {
+	Class.infiltratorOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Infiltrator",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.infiltrator_APSofficialdreadv1.GUNS.push({
+	    Class.infiltratorOfficialV1.GUNS.push({
 	        POSITION: [7, 6, 0.6, 5.5, 2.8, 120*i, 0.5],
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound]),
@@ -369,13 +428,13 @@ module.exports = ({ Class }) => {
 	    });
 	}
 
-	Class.cerberus_APSofficialdreadv1 = {
+	Class.cerberusOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Cerberus",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.cerberus_APSofficialdreadv1.GUNS.push({
+	    Class.cerberusOfficialV1.GUNS.push({
 	        POSITION: [11.5, 2.5, 1, 0, 4, 120*i, 0]
 	    }, {
 	        POSITION: [1.75, 2.5, 1.7, 11.5, 4, 120*i, 0],
@@ -404,13 +463,13 @@ module.exports = ({ Class }) => {
 	        }
 	    });
 	}
-	Class.minotaur_APSofficialdreadv1 = {
+	Class.minotaurOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Minotaur",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.minotaur_APSofficialdreadv1.GUNS.push({
+	    Class.minotaurOfficialV1.GUNS.push({
 	        POSITION: [13, 9, 1, 0, 0, 120*i, 0],
 	    }, {
 	        POSITION: [3, 9, 1.6, 13, 0, 120*i, 0],
@@ -421,13 +480,13 @@ module.exports = ({ Class }) => {
 	        }
 	    });
 	}
-	Class.siren_APSofficialdreadv1 = {
+	Class.sirenOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Siren",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 3; i++) {
-	    Class.siren_APSofficialdreadv1.GUNS.push({
+	    Class.sirenOfficialV1.GUNS.push({
 	        POSITION: [13, 7, -1.4, 0, 0, 120*i, 0],
 	    }, {
 	        POSITION: [2.5, 7, 1.6, 13, 0, 120*i, 0],
@@ -439,23 +498,23 @@ module.exports = ({ Class }) => {
 	    });
 	}
 
-	Class.mechanism_APSofficialdreadv1 = {
+	Class.mechanismOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Mechanism",
 	    TURRETS: [],
 	}
 	for (let i = 0; i < 6; i++) {
-	    Class.mechanism_APSofficialdreadv1.TURRETS.push({
+	    Class.mechanismOfficialV1.TURRETS.push({
 	        POSITION: [4, 8.75, 0, 60*i+30, 180, 1],
 	        TYPE: "automationMainTurret",
 	    })
 	}
-	Class.mechanism_APSofficialdreadv1.TURRETS.push({
+	Class.mechanismOfficialV1.TURRETS.push({
 	    POSITION: [9, 0, 0, 0, 360, 1],
 	    TYPE: "mechanismMainTurret",
 	})
 
-	Class.behemoth_APSofficialdreadv1 = {
+	Class.behemothOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Behemoth",
 	    BODY: {
@@ -469,22 +528,31 @@ module.exports = ({ Class }) => {
 	        TYPE: ["smasherBody", {INDEPENDENT: false} ]
 	    }],
 	}
+	Class.medicaidOfficialV1 = {
+		PARENT: ["genericDreadnought1"],
+	    LABEL: "Medicaid",
+	    TURRETS: [{
+			POSITION: [8, 0, 0, 0, 360, 1],
+			TYPE: "medicaidTurret",
+		}],
+	}
 
-	Class.developer.UPGRADES_TIER_0.push("dread_APSofficialdreadv1");
-		Class.dread_APSofficialdreadv1.UPGRADES_TIER_1 = ["sword_APSofficialdreadv1", "pacifier_APSofficialdreadv1", "invader_APSofficialdreadv1", "centaur_APSofficialdreadv1"];
-			Class.sword_APSofficialdreadv1.UPGRADES_TIER_M1 = ["sabre_APSofficialdreadv1", "gladius_APSofficialdreadv1"];
-			Class.pacifier_APSofficialdreadv1.UPGRADES_TIER_M1 = ["appeaser_APSofficialdreadv1", "peacekeeper_APSofficialdreadv1", "diplomat_APSofficialdreadv1"];
-			Class.invader_APSofficialdreadv1.UPGRADES_TIER_M1 = ["inquisitor_APSofficialdreadv1", "assailant_APSofficialdreadv1", "infiltrator_APSofficialdreadv1"];
-			Class.centaur_APSofficialdreadv1.UPGRADES_TIER_M1 = ["cerberus_APSofficialdreadv1", "minotaur_APSofficialdreadv1", "siren_APSofficialdreadv1"];
-			Class.automation_APSofficialdreadv1.UPGRADES_TIER_M1 = ["mechanism_APSofficialdreadv1"];
-			Class.juggernaut_APSofficialdreadv1.UPGRADES_TIER_M1 = ["behemoth_APSofficialdreadv1"];
+	Class.addons.UPGRADES_TIER_0.push("dreadOfficialV1");
+		Class.dreadOfficialV1.UPGRADES_TIER_1 = ["swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1"];
+			Class.swordOfficialV1.UPGRADES_TIER_M1 = ["sabreOfficialV1", "gladiusOfficialV1"];
+			Class.pacifierOfficialV1.UPGRADES_TIER_M1 = ["appeaserOfficialV1", "peacekeeperOfficialV1", "diplomatOfficialV1"];
+			Class.invaderOfficialV1.UPGRADES_TIER_M1 = ["inquisitorOfficialV1", "assailantOfficialV1", "infiltratorOfficialV1"];
+			Class.centaurOfficialV1.UPGRADES_TIER_M1 = ["cerberusOfficialV1", "minotaurOfficialV1", "sirenOfficialV1"];
+			Class.automationOfficialV1.UPGRADES_TIER_M1 = ["mechanismOfficialV1"];
+			Class.juggernautOfficialV1.UPGRADES_TIER_M1 = ["behemothOfficialV1"];
+			Class.medicareOfficialV1.UPGRADES_TIER_M1 = ["medicaidOfficialV1"];
 
-	for (let primary of Class.dread_APSofficialdreadv1.UPGRADES_TIER_1) {
+	for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_1) {
 		let primaryName = primary;
 		primary = ensureIsClass(Class, primary);
 		primary.UPGRADES_TIER_1 = [];
 
-		for (let secondary of [ "sword_APSofficialdreadv1", "pacifier_APSofficialdreadv1", "invader_APSofficialdreadv1", "centaur_APSofficialdreadv1", "automation_APSofficialdreadv1", "juggernaut_APSofficialdreadv1" ]) {
+		for (let secondary of [ "swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1", "automationOfficialV1", "juggernautOfficialV1", "medicareOfficialV1" ]) {
 			let secondaryName = secondary;
 	        secondary = ensureIsClass(Class, secondary);
 

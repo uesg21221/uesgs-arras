@@ -1,16 +1,3 @@
-let locsToAvoid = ["nest", "port"];
-for (let i = 1; i < c.TEAMS + 1; i++) {
-    locsToAvoid.push("bas" + i);
-    locsToAvoid.push("bap" + i);
-}
-if (c.DOMINATOR_LOOP) locsToAvoid.push("dom0");
-let activeLocsThatWeCantPlaceIn = 0;
-for (let loc of locsToAvoid) {
-    if (room[loc].length) {
-        activeLocsThatWeCantPlaceIn += room[loc].length;
-    }
-}
-
 function generateMaze(size) {
     let maze = JSON.parse(JSON.stringify(Array(size).fill(Array(size).fill(true))));
     maze[0] = Array(size).fill(false);
@@ -118,7 +105,7 @@ function generateMaze(size) {
                     sS: 1
                 };
                 else spawnWall = false;
-                if (spawnWall) {
+                if (spawnWall && room.getAt(loc).data.allowMazeWallSpawn) {
                     let o = new Entity({
                         x: d.x,
                         y: d.y
@@ -128,13 +115,6 @@ function generateMaze(size) {
                     o.team = TEAM_ENEMIES;
                     o.protect();
                     o.life();
-                    let validSpawn = true;
-                    for (let loc of locsToAvoid)
-                        if (room.isIn(loc, {
-                                x: d.x,
-                                y: d.y
-                            }, true)) validSpawn = false;
-                    if (!validSpawn) o.kill();
                 }
             }
         }

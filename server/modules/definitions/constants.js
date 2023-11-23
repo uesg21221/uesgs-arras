@@ -20,6 +20,12 @@ module.exports = {
 			SHIELD_REGEN: 'Shield Regeneration',
 			SHIELD_CAP: 'Shield Capacity',
 		},
+		mixed: {
+			BULLET_SPEED: 'Weapon Speed',
+			BULLET_HEALTH: 'Weapon Health',
+			BULLET_PEN: 'Weapon Penetration',
+			BULLET_DAMAGE: 'Weapon Damage',
+		},
 		drone: {
 			BULLET_SPEED: 'Drone Speed',
 			BULLET_HEALTH: 'Drone Health',
@@ -53,6 +59,12 @@ module.exports = {
 		smasher: {
 			RELOAD: 'Engine Acceleration',	
 		},
+		flail: {
+			BULLET_HEALTH: 'Ball Longevity',
+			BULLET_PEN: 'Ball Sharpness',
+			BULLET_DAMAGE: 'Ball Damage',
+			RELOAD: 'Ball Density',
+		},
 	},
 	gunCalcNames: {
 	    default: 0,
@@ -74,7 +86,7 @@ module.exports = {
 	    PENETRATION: 1.05,
 	    SHIELD: 8,
 	    REGEN: 0.025,
-	    FOV: 1.04,
+	    FOV: 1.075,
 	    DENSITY: 0.5,
 	}
 };

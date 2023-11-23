@@ -141,9 +141,6 @@ class Skill {
         return this.LSPF ? this.LSPF(this.level) : c.LEVEL_SKILL_POINT_FUNCTION(this.level);
     }
     cap(skill, real = false) {
-        if (!real && this.level < c.LEVEL_SOFT_CAP) {
-            return Math.round(this.caps[skcnv[skill]] * c.SOFT_MAX_SKILL);
-        }
         return this.caps[skcnv[skill]];
     }
     upgrade(stat) {
@@ -182,13 +179,17 @@ class HealthType {
         return this.amount / this.max;
     }
     getDamage(amount, capped = true) {
+        let damageToMax = this.amount - this.max;
         switch (this.type) {
             case "dynamic":
-                return capped
+                return Math.max(capped
                     ? Math.min(amount * this.permeability, this.amount)
-                    : amount * this.permeability;
+                    : amount * this.permeability,
+                    damageToMax);
             case "static":
-                return capped ? Math.min(amount, this.amount) : amount;
+                return Math.max(
+                    capped ? Math.min(amount, this.amount) : amount,
+                    damageToMax);
         }
     }
     regenerate(boost = false) {
