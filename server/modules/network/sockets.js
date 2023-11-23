@@ -1425,7 +1425,8 @@ const sockets = {
         }
     },
     connect: (socket, req) => {
-        // This function initalizes the socket upon connection
+        if (c.enforceMaxPlayers && players.length >= c.maxPlayers) return socket.terminate();
+
         if (Date.now() - lastTime < 250) return socket.terminate();
         lastTime = Date.now();
 
