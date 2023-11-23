@@ -121,15 +121,28 @@ fetch(`${location.protocol}//${location.host}/servers.json`).then(x => x.json())
         motdSocket.pings = [];
         motdSocket.onmessage = ({ data: str }) => {
             try {
-                let data = str.split(' '),
-                    reqSent = parseInt(data[0], 16),
+                let data = str.split(' ');
+                if (data.length < 3) throw 0;
+
+                let reqSent = parseInt(data[0], 16),
                     askAgainInMS = parseInt(data[1]),
                     motd = JSON.parse(data.slice(2).join(' '));
+                if (isNaN(reqSent)) throw 1;
+                if (isNaN(askAgainInMS)) throw 2;
+
                 motd.ping = (Date.now() - reqSent) >> 1;
+                if (motd.ping < 0) throw 3;
+
                 element.setMOTD(motd);
                 setTimeout(() => motdSocket.send(Date.now().toString(16)), askAgainInMS);
             } catch (err) {
-                element.error('received motdSocket message made no sense');
+                switch (err) {
+                    case 0: return element.error('received motdSocket message made no sense');
+                    case 1: return element.error('received motdSocket message had an invalid reqSent in it');
+                    case 2: return element.error('received motdSocket message had an invalid askAgainInMS in it');
+                    case 2: return element.error('received motdSocket message was from the future?');
+                    default: return element.error('received motdSocket message had invalid JSON in it');
+                }
             }
         };
         motdSocket.onopen = () => motdSocket.send(Date.now().toString(16));
