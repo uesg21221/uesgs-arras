@@ -9,6 +9,8 @@ let getNode = id => document.getElementById(id),
     //game window
     iframe = getNode('client'),
 
+    container = getNode('container'),
+
     //server list
     browser = getNode('browser'),
 
@@ -33,7 +35,7 @@ let getNode = id => document.getElementById(id),
 
 //client wants its src to be renamed
 window.onmessage = ({ data: { secure, ip, key, autojoin }}) => {
-    console.log('changing iframe src\nip:', ip, '\nkey:', key, '\nautojoin:', autojoin);
+    console.log('changing iframe src\nip:', ip, '\nsecure:', secure, '\nkey:', key, '\nautojoin:', autojoin);
     iframe.src = `${secure ? 'https' : 'http'}://${ip}/app` + (key || autojoin ? '?' : '') + (key ? 'key=' + key : '') + (key && autojoin ? '&' : '') + (autojoin ? 'autojoin=' + autojoin : '');
 };
 
@@ -43,21 +45,34 @@ window.onresize = () => {
 };
 
 join.onclick = () => {
-    for (let { motdSocket } of servers) motdSocket.close();
-    console.log('setting iframe src\nip:', ip);
-    iframe.src = `${servers[selected].secure ? 'https' : 'http'}://${servers[selected].ip}/app`;
+    for (let { motdSocket } of servers) {
+        if (motdSocket.readyState === motdSocket.OPEN) {
+            motdSocket.close();
+        }
+    }
+    let { secure, ip } = servers[selected];
+    console.log('setting iframe src\nip:', ip, '\nsecure:', secure);
+    iframe.src = `${secure ? 'https' : 'http'}://${ip}/app`;
     iframe.style.display = 'block';
+    container.style.display = 'none';
 };
 
 list.onclick = () => {
-    for (let { motdSocket } of servers) motdSocket.close();
-    console.log('redirecting to browser\nip:', ip);
-    location.href = `${servers[selected].secure ? 'https' : 'http'}://${servers[selected].ip}/browser`;
+    for (let { motdSocket } of servers) {
+        if (motdSocket.readyState === motdSocket.OPEN) {
+            motdSocket.close();
+        }
+    }
+    let { secure, ip } = servers[selected];
+    console.log('redirecting to browser\nip:', ip, '\nsecure:', secure);
+    location.href = `${secure ? 'https' : 'http'}://${ip}/browser`;
 };
 
 class DOMServerListItem {
     constructor (secure, ip, index) {
         this.ip = ip;
+        this.secure = secure;
+        this.index = index;
         this.errors = [];
 
         //DOM stuff
@@ -84,13 +99,15 @@ class DOMServerListItem {
         this.mainContainer.append(this.statsContainer);
         browser.append(this.mainContainer);
 
-        this.mainContainer.addEventListener('click', () => {
-            servers[selected].element.mainContainer.classList.remove('selected');
-            this.mainContainer.classList.add('selected');
-            selected = index;
+        this.mainContainer.addEventListener('click', () => this.select());
+    }
+    select () {
+        servers[selected].element.mainContainer.classList.remove('selected');
+        this.mainContainer.classList.add('selected');
+        selected = this.index;
 
-            //TODO: update info panel on right side
-        });
+        name.innerHTML = this.name.innerHTML;
+        description.innerHTML = this.description.innerHTML;
     }
     setMOTD (motd) {
         this.notLoaded.hidden = true;
@@ -116,7 +133,7 @@ fetch(`${location.protocol}//${location.host}/servers.json`).then(x => x.json())
         let element = new DOMServerListItem(secure, ip, servers.length),
             motdSocket = new WebSocket(`${secure ? 'wss' : 'ws'}://${ip}/motd`),
 
-            listEntry = { ip, motdSocket, element };
+            listEntry = { secure, ip, motdSocket, element };
 
         motdSocket.pings = [];
         motdSocket.onmessage = ({ data: str }) => {
@@ -134,7 +151,7 @@ fetch(`${location.protocol}//${location.host}/servers.json`).then(x => x.json())
                 if (motd.ping < 0) throw 3;
 
                 element.setMOTD(motd);
-                setTimeout(() => motdSocket.send(Date.now().toString(16)), askAgainInMS);
+                setTimeout(() => motdSocket.readyState === motdSocket.OPEN && motdSocket.send(Date.now().toString(16)), askAgainInMS);
             } catch (err) {
                 switch (err) {
                     case 0: return element.error('received motdSocket message made no sense');
@@ -151,6 +168,8 @@ fetch(`${location.protocol}//${location.host}/servers.json`).then(x => x.json())
 
         servers.push(listEntry);
     }
+
+    servers[selected].motdSocket.addEventListener('message', () => servers[selected].element.select(), { once: true });
 });
 
 //most of this is drawText from the game client but modified

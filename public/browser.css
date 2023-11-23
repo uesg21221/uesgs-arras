@@ -27,6 +27,7 @@
 
 html, body {
 	width: 100%;
+	height: 100%;
 	/* ugly as shit but it solves a scroll bar appearing out of nowhere */
 	height: calc(100% - 10px);
     background-color: #484848;
@@ -36,8 +37,24 @@ html, body {
 
 iframe {
     border-radius: 0px;
-	width: 100px;
-	height: 100px;
+	display: none;
+
+	/* try real damn hard to make it full screen */
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	border: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+span {
+	font-size: inherit;
 }
 
 #container {
@@ -155,6 +172,7 @@ iframe {
 	opacity: 50%;
 	margin-left: auto; 
 	margin-right: 0;
+	text-align: right;
 }
 .icon {
 	width: 96px;

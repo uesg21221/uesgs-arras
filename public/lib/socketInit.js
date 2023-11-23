@@ -1008,7 +1008,7 @@ const socketInit = port => {
                 if (isInIFrame) {
                     window.top.postMessage({ secure, ip, key, autojoin });
                 } else {
-                    console.log('redirecting\nip: ', ip, 'secure: ', secure, '\nkey: ', key, '\nautojoin: ', autojoin);
+                    console.log('redirecting\nip:', ip, 'secure:', secure, '\nkey:', key, '\nautojoin:', autojoin);
                     location.href = `${secure ? 'https' : 'http'}://${ip}/app` + (key || autojoin ? '?' : '') + (key ? 'key=' + key : '') + (key && autojoin ? '&' : '') + (autojoin ? 'autojoin=' + autojoin : '');
                 }
             default:
