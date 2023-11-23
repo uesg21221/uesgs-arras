@@ -1408,7 +1408,6 @@ const broadcast = {
         if (i !== -1) util.remove(subscribers, i);
     },
 };
-let lastTime = 0;
 
 const sockets = {
     players: players,
@@ -1426,9 +1425,6 @@ const sockets = {
     },
     connect: (socket, req) => {
         if (c.enforceMaxPlayers && players.length >= c.maxPlayers) return socket.terminate();
-
-        if (Date.now() - lastTime < 250) return socket.terminate();
-        lastTime = Date.now();
 
         // Get information about the new connection and verify it
         util.log("A client is trying to connect...");
