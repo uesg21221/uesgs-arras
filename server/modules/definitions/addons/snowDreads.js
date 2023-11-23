@@ -242,16 +242,75 @@ module.exports = ({ Class }) => {
 		)
 		return output;
 	}
-	function addRailgun({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.sniper]) {
-		return [
-
-		];
-	}
 	function addHeavySniper({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.sniper]) {
 		return [
-
+			{
+				POSITION: [length, width, 1, x, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: "bullet",
+					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.6 },
+				},
+			}, {
+				POSITION: [length - 1.5, width * 0.7, -1.3, x, y, angle, 0],
+				PROPERTIES: { 
+					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+					TYPE: "bullet",
+					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.6}, 
+					BORDERLESS: true
+				},
+			}, {
+				POSITION: [length - 7, width * 0.4, -1.4, x, y, angle, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5 } },
+			}, {
+				POSITION: [4, width + 2, 1, x + length - 7, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+					TYPE: "bullet",
+					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.6 },
+				},
+			}, {
+				POSITION: [2, width + 2.5, 1, x + length - 6, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+					TYPE: "bullet",
+					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5 },
+				},
+			},
 		];
 	}
+	function addRailgun({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.sniper]) {
+		let output = [
+			{
+				POSITION: [length - x - 3.5, width + 3, 1, x, y, angle, 0],
+				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.7 }}
+			}, {
+				POSITION: [length - x, width, 1, x, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: "bullet",
+					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10 },
+				},
+			}, {
+				POSITION: [5, width + 3, -1.7, x, y, angle, 0],
+				PROPERTIES: {COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 15 },}
+			},
+		];
+		for (let i = 0; i < 3; i++) {
+			output.splice(1, 0,
+				{
+					POSITION: [0.6, width + 4, 1, length - 4 - 2.5 * i, y, angle, delay],
+					PROPERTIES: {
+						SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+						TYPE: "bullet",
+						COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.85 },
+					},
+				}
+			)
+		}
+		return output;
+	}
+	
 	function addNormal({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic]) {
 		return [
 			{ // Main barrel
@@ -1323,7 +1382,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 4; i++) {
 		Class.slingSnowdread.GUNS.push(
-			...addHunter({length: 17, width: 9, angle: 90*i}, -10, [g.basic, g.sniper, g.hunter, g.hunter2, {health: 1.1, speed: 1.05}])
+			...addHunter({length: 17, width: 9, angle: 90*i}, -10, [g.basic, g.sniper, g.hunter, {health: 1.1, speed: 1.05}])
 		)
 	}
 	Class.catapultSnowdread = { // mega-sniper
@@ -1333,19 +1392,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 4; i++) {
 		Class.catapultSnowdread.GUNS.push(
-			{
-				POSITION: [22, 9, 1, 0, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.bitlessspeed, g.one_third_reload, {size: 2}]),
-					TYPE: "bullet",
-				},
-			}, {
-				POSITION: [4, 11, 1, 15, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.one_third_reload, g.fake]),
-					TYPE: "bullet",
-				},
-			},
+			...addHeavySniper({length: 22, width: 9, angle: 90*i}, -2.5, [g.basic, g.sniper, g.preda, g.preda, g.preda, g.bitlessspeed, g.one_third_reload, {size: 2}])
 		)
 	}
 	Class.dartSnowdread = { // railgun
@@ -1355,17 +1402,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 4; i++) {
 		Class.dartSnowdread.GUNS.push(
-			{
-				POSITION: [21.5, 7, 1, 0, 0, 90*i, 0],
-			}, {
-				POSITION: [25, 4, 1, 0, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.sniper, g.sniper, g.pound, g.lessreload]),
-					TYPE: "bullet",
-				},
-			}, {
-				POSITION: [5, 7, -1.7, 7, 0, 90*i, 0],
-			},
+			...addRailgun({length: 25, width: 4, x: 7, angle: 90*i}, -2.5, [g.basic, g.sniper, g.sniper, g.sniper, g.pound, g.lessreload])
 		)
 	}
 	Class.mediatorSnowdread = {
@@ -2159,6 +2196,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [3.5, 17.5, 0.001, 9, 0, 90*i, 0],
 				PROPERTIES: {COLOR: 9},
+			}, {
+				POSITION: [2.5, 9, 0, 7, 0, 90*i, 0],
+				PROPERTIES: {COLOR: 9, DRAW_ABOVE: true},
 			},
 		)
 	}
