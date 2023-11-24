@@ -88,7 +88,7 @@ class DOMServerListItem {
         this.version = makeNode('version');
         this.icon.hidden = true;
         this.notLoaded.innerHTML = this.ip + '<br><br>Loading...';
-        this.icon.src = `${secure ? 'https' : 'http'}://${ip}/iconBrowser.png`;
+        this.icon.src = `${this.secure ? 'https' : 'http'}://${ip}/iconBrowser.png`;
         this.icon.onerror = () => this.error("Server Icon didn't load successfully");
         this.textContainer.append(this.name);
         this.textContainer.append(this.description);

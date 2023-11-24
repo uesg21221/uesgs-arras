@@ -258,7 +258,7 @@ module.exports = {
     MOTD_DATA: {
         name: "A Public §#44f§OSA§reset§ Server",
         description: "Come play §#44f§Open-Source Arras§reset§ with us!",
-        version: "Beta 0.9.11 (Browser Branch)",
+        version: "Beta 0.11 (Browser Branch)",
         tags: [ "vanilla", "dreadsv1" ]
     },
 
