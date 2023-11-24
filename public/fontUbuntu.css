@@ -13,12 +13,15 @@
     font-weight: bold;
 }
 
-/* These font files straight up don't exist because they are not used.
+/* These font files straight up don't exist because they are not used,
+   so I have removed them to save almost 2 megabytes of space.
+
    If you need "Italic", "BoldItalic", "Light", "LightItalic", "Medium"
    or "MediumItalic" versions of the Ubuntu font, then you should
    download them from Google Fonts (which this template used to use)
    or you can get them from https://design.ubuntu.com/font,
    which I have not used but they are not google which is enough for me.
+
    Keep in mind that the total download from Google Fonts used
    to take up 2.4 Megabytes.
 
