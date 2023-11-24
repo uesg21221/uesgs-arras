@@ -1749,4 +1749,20 @@ function animloop() {
     ctx.translate(-0.5, -0.5);
 }
 
+let clicked = false,
+    cachedQSstartMenuSlidingTrigger = document.querySelector("#startMenuSlidingTrigger"),
+    cachedQSslider = document.querySelectorAll(".slider");
+
+cachedQSstartMenuSlidingTrigger.onclick = () => {
+    clicked = !clicked;
+    if (clicked) {
+        cachedQSstartMenuSlidingTrigger.innerHTML = '<h3 class="nopadding">close options ▾</h3>';
+        cachedQSslider.forEach(element => element.style.top = "-265px");
+    } else {
+        cachedQSstartMenuSlidingTrigger.innerHTML = '<h3 class="nopadding">view options ▸</h3>';
+        cachedQSslider.forEach(element => element.style.top = 0);
+    }
+};
+if (navigator.serviceWorker) navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then(registration => console.log('Service Worker Registered'));
+
 })(util, global, settings, Canvas, color, gameDraw, socketStuff);
