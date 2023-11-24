@@ -130,6 +130,7 @@ server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, 
             util.log('motd socket refused: ' + msg);
             return socket.close();
         }
+        ws.onclose = () => util.log('motd websocket disconnection from ' + getIP(req));
         if (c.MOTD_SOCKET) {
             motdSocket(ws);
         } else {

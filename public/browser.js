@@ -118,8 +118,7 @@ class DOMServerListItem {
         this.players.innerText = motd.players + '/' + motd.maxPlayers + ' Players';
     }
     socketClosed () {
-        if (this.errors.length) return;
-        this.icon.hidden = true;
+        if (this.errors.length || this.notLoaded.hidden) return;
         this.notLoaded.hidden = false;
         this.notLoaded.style.color = '#000';
         this.notLoaded.innerHTML = this.ip + '<br><br>This server has MOTD disabled.';
