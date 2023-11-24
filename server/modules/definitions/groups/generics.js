@@ -283,7 +283,7 @@ exports.healAura = {
     HEALER: true,
     COLOR: "red",
     BODY: {
-        DAMAGE: 0.5/3,
+        DAMAGE: 0.1,
     },
 };
 exports.auraSymbol = {
