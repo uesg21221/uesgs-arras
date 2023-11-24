@@ -117,7 +117,13 @@ class DOMServerListItem {
         this.ping.innerText = motd.ping + 'ms Ping';
         this.players.innerText = motd.players + '/' + motd.maxPlayers + ' Players';
     }
-    socketClosed () {}
+    socketClosed () {
+        if (this.errors.length) return;
+        this.icon.hidden = true;
+        this.notLoaded.hidden = false;
+        this.notLoaded.style.color = '#000';
+        this.notLoaded.innerHTML = this.ip + '<br><br>This server has MOTD disabled.';
+    }
     error (msg) {
         this.errors.push('Error: ' + msg);
         this.icon.hidden = true;
