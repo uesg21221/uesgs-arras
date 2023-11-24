@@ -9,7 +9,8 @@ let fs = require('fs'),
         "html": "text/html",
         "md": "text/markdown",
         "png": "image/png",
-        "ico": "image/x-icon"
+        "ico": "image/x-icon",
+        "ttf": "font/ttf"
     },
     otherServers = require('./otherServers.json'),
 
