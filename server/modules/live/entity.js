@@ -189,6 +189,7 @@ class Gun {
         return {
             ...this.lastShot, 
             color: this.color,
+            alpha: this.alpha,
             borderless: this.borderless, 
             drawFill: this.drawFill, 
             drawAbove: this.drawAbove,
