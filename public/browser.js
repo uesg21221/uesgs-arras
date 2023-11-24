@@ -85,12 +85,14 @@ class DOMServerListItem {
         this.description = makeNode('description');
         this.ping = makeNode('ping');
         this.players = makeNode('players');
+        this.version = makeNode('version');
         this.icon.hidden = true;
         this.notLoaded.innerHTML = this.ip + '<br><br>Loading...';
         this.icon.src = `${secure ? 'https' : 'http'}://${ip}/iconBrowser.png`;
         this.icon.onerror = () => this.error("Server Icon didn't load successfully");
         this.textContainer.append(this.name);
         this.textContainer.append(this.description);
+        this.statsContainer.append(this.version);
         this.statsContainer.append(this.players);
         this.statsContainer.append(this.ping);
         this.mainContainer.append(this.notLoaded);
@@ -107,6 +109,7 @@ class DOMServerListItem {
         selected = this.index;
 
         name.innerHTML = this.name.innerHTML;
+        metadata.innerHTML = this.version.innerHTML;
         description.innerHTML = this.description.innerHTML;
     }
     setMOTD (motd) {
@@ -115,6 +118,7 @@ class DOMServerListItem {
         this.name.innerHTML = toColored(motd.name);
         this.description.innerHTML = toColored(motd.description);
         this.ping.innerText = motd.ping + 'ms Ping';
+        this.version.innerText = motd.version;
         this.players.innerText = motd.players + '/' + motd.maxPlayers + ' Players';
     }
     socketClosed () {

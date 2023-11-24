@@ -99,6 +99,7 @@ span {
 
 .button {
 	display: flex;
+    cursor: pointer;
     flex-wrap: wrap;
     align-content: center;
     justify-content: center;
@@ -187,6 +188,7 @@ span {
 }
 .ping {}
 .players {}
+.version {}
 
 /* [google.com screenshot]
 	# What order do CSS classes apply?
