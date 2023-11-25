@@ -28,9 +28,6 @@ let getNode = id => document.getElementById(id),
     join = getNode('join'),
     list = getNode('list'),
 
-    //darkmode button
-    darkMode = getNode('darkMode'),
-
     //list of server ips
     servers = [],
 
@@ -70,19 +67,6 @@ list.onclick = () => {
     console.log('redirecting to browser\nip:', ip, '\nsecure:', secure);
     location.href = `${secure ? 'https' : 'http'}://${ip}/browser`;
 };
-
-darkMode.onclick = () => {
-    switch (true) {
-        case document.body.classList.contains('light'):
-            document.body.classList.remove('light')
-            document.body.classList.add('dark')
-            break
-        case document.body.classList.contains('dark'):
-            document.body.classList.remove('dark')
-            document.body.classList.add('light')
-            break
-    }
-}
 
 class DOMServerListItem {
     constructor (secure, ip, index) {
