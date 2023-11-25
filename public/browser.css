@@ -1,137 +1,45 @@
 * {
-	box-sizing: border-box;
+    border-radius: 10px;
+    font-family: Ubuntu;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 ::-webkit-scrollbar {
-    width: 15px;
+    width: 20px;
+    border-left: 4px solid #555;
     border-radius: 10px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--background-dark);
-	border: var(--border-width) solid var(--background-light);
-	border-radius: 10px;
+    background: #888;
+    border-left: 4px solid #888;
+    border-radius: 10px;
+    margin-right: 10px;
 }
 ::-webkit-scrollbar-thumb {
-    background: var(--background-light);
-	border: var(--border-width) solid var(--background-dark);
-	border-radius: 10px;
+    background: #444;
+    border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in hsl shorter hue, var(--background-light) 80%, var(--background-dark) 20%);
+    background: #555;
 }
 
 
 html, body {
-	width: 100vw;
-	height: 100vh;
-	overflow: hidden;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-    background-image: url('./osa_background_tile.png');
+	width: 100%;
+	height: 100%;
+	/* ugly as shit but it solves a scroll bar appearing out of nowhere */
+	height: calc(100% - 10px);
+    background-color: #484848;
     padding: 0px;
 	margin: 0px;
 }
 
-body.light {
-	--background-dark: #070817;
-	--background-light: #DCE5EA;
-	--primary-clr: #AAD86E;
-	--accent-clr: #8087E5;
-	--border-width: 5px;
-	--border-width-thin: 1px;
-}
-
-body.dark {
-	--background-dark: #E8E9F8;
-	--background-light: #151E23;
-	--primary-clr: #639127;
-	--accent-clr: #1A217F;
-	--border-width: 5.5px;
-	--border-width-thin: 1.5px;
-}
-
-.title-1 {
-	color: var(--background-dark);
-	leading-trim: both;
-	text-edge: cap;
-	font-family: Ubuntu;
-	font-size: 64px;
-	font-style: normal;
-	font-weight: 700;
-	line-height: normal;
-}
-
-.title-2 {
-	color: var(--background-dark);
-	leading-trim: both;
-	text-edge: cap;
-	font-family: Ubuntu;
-	font-size: 48px;
-	font-style: normal;
-	font-weight: 500;
-	line-height: normal;
-}
-
-.heading-1 {
-	color: var(--background-dark);
-	leading-trim: both;
-	text-edge: cap;
-	font-family: Ubuntu;
-	font-size: 24px;
-	font-style: normal;
-	font-weight: 700;
-	line-height: normal;
-}
-
-.heading-2 {
-	color: var(--background-dark);
-	leading-trim: both;
-	text-edge: cap;
-	font-family: Ubuntu;
-	font-size: 24px;
-	font-style: normal;
-	font-weight: 400;
-	line-height: normal;
-}
-
-.normal-bold {
-	color: var(--background-dark);
-	leading-trim: both;
-	text-edge: cap;
-	font-family: Ubuntu;
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 700;
-	line-height: normal;
-}
-
-.normal-regular {
-	color: var(--background-dark);
-	leading-trim: both;
-	text-edge: cap;
-	font-family: Ubuntu;
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 400;
-	line-height: normal;
-}
-
-.normal-hidden {
-	color: #0708179f;
-	leading-trim: both;
-	text-edge: cap;
-	font-family: Ubuntu;
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 600;
-	line-height: normal;
-}
-
 iframe {
-	all: unset;
     border-radius: 0px;
 	display: none;
+
+	/* try real damn hard to make it full screen */
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -139,6 +47,7 @@ iframe {
 	right: 0;
 	width: 100%;
 	height: 100%;
+	border: none;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
@@ -149,43 +58,43 @@ span {
 }
 
 #container {
+	width: calc(100% - 40px);
+	height: calc(100% - 40px);
 	display: flex;
-	width: 100vw;
-	height: 86.5vh;
-    background: var(--background-light);
-	margin: 25px;
-    border-radius: 10px;
-    border: var(--border-width) solid var(--background-dark);
+    background: #454b7f;
+	margin: 20px;
+    border-radius: 20px;
+    border-bottom: 10px solid #313454;
 }
 
 #browser {
-	height: 94.8%;
-	width: 100%;
-	flex-basis: 235%;
-	margin: 10px;
+	height: calc(100% - 45px);
+	width: calc(100% - 360px);
+	padding: 20px;
 	display: block;
-    background: var(--background-light);
-    border: var(--border-width) solid var(--background-dark);
-	border-radius: 10px;
+	margin: 20px;
+    background: #666666;
+    border-top: 5px solid #313454;
     overflow-y: scroll;
+	padding-bottom: 0px;
+	padding-top: 0px;
 }
 
 #controls {
-	display: flex;
-	gap: 20px;
-	flex-direction: column;
-	height: 94.8%;
-	width: 100%;
-    background: var(--background-light);
-	margin: 10px;
+	display: block;
+	width: 300px;
+    background: #666666;
+    border-top: 5px solid #313454;
+	margin: 20px;
+	margin-left: 0px;
 }
 
 #manage {
-	height: 100%;
-	flex-basis: 7.5%;
+	margin-top: 5px;
+	width: 100%;
 	display: flex;
-	border: var(--border-width) solid var(--background-dark);
-	border-radius: 10px;
+	height: 30px;
+	margin-bottom: 7px;
 }
 
 .button {
@@ -197,32 +106,35 @@ span {
 }
 
 .listButton {
-	width: 100%;
-	margin: 5px;
-	background-color: var(--background-light);
-    border: var(--border-width-thin) solid var(--background-dark);
-	border-radius: 5px;
+	width: calc(calc(100% / 3) - 10px);
+	background-color: #aaaaaa;
+    border-bottom: 5px solid #999999;
+	margin-left: 5px;
+	margin-right: 5px;
 }
 
 #selected {
 	padding: 10px;
-	height: 100%;
-	position: relative;
-	background-color: var(--background-light);
-	border: var(--border-width) solid var(--background-dark);
-	display: flex;
-	flex-direction: column;
-	border-radius: 10px;
+	height: calc(100% - 70px);
+	margin-left: 5px;
+	margin-right: 5px;
+	background-color: #888;
+    border-bottom: 2px solid #777;
 }
 
 #metadata {
-	height: 20px;
-	align-self: stretch;
+	height: 15px;
+	color: #444444;
+    font-size: 14px;
+}
+#name {
+	height: 30px;
+	padding-top: 10px;
+    font-size: 18px;
 }
 
 #description {
-	align-self: stretch;
-	height: 100%;
+	height: calc(100% - 90px);
 }
 
 #buttons {
@@ -230,12 +142,12 @@ span {
 }
 
 .serverButton {
-	width: 100%;
-	background-color: var(--primary-clr);
-	box-shadow: 0px 4px 0px 0px #82B63E;
+	width: calc(calc(100% / 2) - 5px);
+	background-color: #4e57a3;
+    border-bottom: 5px solid #3e4685;
 	height: 30px;
-	border-radius: 10px;
-	color: var(--background-light)
+	border-radius: 15px;
+    font-size: 16px;
 }
 
 #join {
@@ -247,41 +159,37 @@ span {
 }
 
 .mainContainer {
-	height: 7em;
-	display: grid;
-	place-content: center;
-	grid-template-columns: calc(0.5fr / 2) repeat(2, 1.5fr);
-	grid-template-rows: 0.5fr;
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
-	border-top: var(--border-width) solid #ECF6FB;
-	border-bottom: var(--border-width) solid #C3CCD0;
+	height: 96px;
+	display: flex;
+	border: 5px solid #444;
+	border-radius: 15px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	padding: 10px;
 }
-
-.iconContainer {
-	grid-area: 1 / 1 / 2 / 2;
-	position: relative;
-	background-color: red;
-}
-
-.icon {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 100%;
-	width: auto;
-	aspect-ratio: 1/1;
-}
-
 .textContainer {
-	grid-area: 1 / 2 / 2 / 3;
 }
 .statsContainer {
-	grid-area: 1 / 3 / 2 / 4
+	opacity: 50%;
+	margin-left: auto; 
+	margin-right: 0;
+	text-align: right;
+}
+.icon {
+	width: 96px;
+	height: 96px;
+	margin-right: 15px;
+}
+.name {
+	font-size: 20px;
+}
+.description {
+	font-size: 16px;
 }
 .ping {}
 .players {}
 .version {}
+
 /* [google.com screenshot]
 	# What order do CSS classes apply?
 	## CSS Order Matters
@@ -294,3 +202,7 @@ WHAT??????????
 
 context: this used to be defined above .mainContainer so border-color didnt work while background-color did
 */
+.selected {
+	background-color: #888;
+    border-color: #333;
+}
