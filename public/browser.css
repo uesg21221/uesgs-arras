@@ -83,6 +83,7 @@ span {
 	overflow-y: auto;
 	padding-left: 10px;
 	padding-right: 10px;
+	border-radius: 15px;
 }
 
 #controls {
@@ -93,6 +94,7 @@ span {
 	margin: 20px;
 	margin-left: 0px;
 	padding: 5px;
+	border-radius: 15px;
 }
 
 #manage {
