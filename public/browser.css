@@ -202,6 +202,23 @@ span {
 	background-color: var(--background-light);
     border: var(--border-width-thin) solid var(--background-dark);
 	border-radius: 5px;
+	> svg {
+		height: 20px;
+	}
+}
+
+.listButton.darkmode {
+	flex-basis: 10%;
+	border: none;
+	fill: none;
+	stroke-width: 10px;
+	stroke: var(--background-dark);
+}
+
+.listButton.darkmode[toggled] {
+	flex-basis: 10%;
+	border: none;
+	fill: var(--background-dark);
 }
 
 #selected {
