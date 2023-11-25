@@ -41,7 +41,7 @@ let server = require('http').createServer((req, res) => {
 
     switch (req.url) {
         case "/servers.json":
-            resStr = JSON.stringify([ { secure: !c.host.match(/localhost:(\d)/), ip: c.host }, ...otherServers ]);
+            resStr = JSON.stringify([ { hasApp: true, secure: !c.host.match(/localhost:(\d)/), ip: c.host }, ...otherServers ]);
             break;
 
         case "/lib/json/mockups.json":

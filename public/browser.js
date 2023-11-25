@@ -70,12 +70,14 @@ list.onclick = () => {
 };
 
 class DOMServerListItem {
-    constructor (secure, ip, index) {
+    constructor (hasApp, hasBrowser, secure, ip, index) {
         this.ip = ip;
         this.secure = secure;
         this.index = index;
         this.tags = [];
         this.errors = [];
+        this.hasApp = hasApp;
+        this.hasBrowser = hasBrowser;
 
         //DOM stuff
         this.mainContainer = makeNode('mainContainer');
@@ -114,6 +116,8 @@ class DOMServerListItem {
         version.innerHTML = this.version.innerHTML;
         description.innerHTML = this.description.innerHTML;
         tags.innerText = this.tags.join(', ');
+        join.style.visibility = this.hasApp ? 'visible' : 'hidden';
+        list.style.visibility = this.hasBrowser ? 'visible' : 'hidden';
     }
     setMOTD (motd) {
         this.notLoaded.hidden = true;
@@ -128,25 +132,25 @@ class DOMServerListItem {
     socketClosed () {
         if (this.errors.length || this.notLoaded.hidden) return;
         this.notLoaded.hidden = false;
-        this.notLoaded.style.color = '#000';
         this.notLoaded.innerHTML = this.ip + '<br><br>This server has MOTD disabled.';
     }
     error (msg) {
         this.errors.push('Error: ' + msg);
         this.icon.hidden = true;
         this.notLoaded.hidden = false;
-        this.notLoaded.style.color = '#f00';
         this.notLoaded.innerHTML = this.ip + '<br><br>' + this.errors.join('<br>');
     }
 }
 
 fetch(`${location.protocol}//${location.host}/servers.json`).then(x => x.json()).then(fetchedServers => {
     browser.innerHTML = '';
-    for (let { secure, ip } of fetchedServers) {
-        let element = new DOMServerListItem(secure, ip, servers.length),
+    for (let { hasApp, hasBrowser, secure, ip } of fetchedServers) {
+        hasApp = !!hasApp;
+        hasBrowser = !!hasBrowser;
+        let element = new DOMServerListItem(hasApp, hasBrowser, secure, ip, servers.length),
             motdSocket = new WebSocket(`${secure ? 'wss' : 'ws'}://${ip}/motd`),
 
-            listEntry = { secure, ip, motdSocket, element };
+            listEntry = { hasApp, hasBrowser, secure, ip, motdSocket, element };
 
         motdSocket.pings = [];
         motdSocket.onmessage = ({ data: str }) => {
