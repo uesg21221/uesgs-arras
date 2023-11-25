@@ -1,50 +1,52 @@
 * {
-    border-radius: 10px;
-    font-family: Ubuntu;
-    font-weight: bold;
-    font-size: 14px;
+	border-radius: 10px;
+	font-family: Ubuntu;
+	font-weight: bold;
+	font-size: 14px;
 }
 
 ::-webkit-scrollbar {
-    width: 20px;
-    border-left: 4px solid #555;
-    border-radius: 10px;
+	width: 20px;
 }
 ::-webkit-scrollbar-track {
-    background: #888;
-    border-left: 4px solid #888;
-    border-radius: 10px;
-    margin-right: 10px;
+	margin: 20px;
+	border: 2px solid #666;
+	border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 10px;
+	border-radius: 10px;
+	background-color: #adb5ba;
+	border: 2px solid #666;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+	background: #949ca1;
+	border-color: #444;
 }
 
 
 html, body {
+	overflow: hidden;
 	width: 100%;
 	height: 100%;
-	/* ugly as shit but it solves a scroll bar appearing out of nowhere */
-	height: calc(100% - 10px);
-    background-color: #484848;
-    padding: 0px;
 	margin: 0px;
+	padding: 0px;
+}
+
+html {
+	background-color: #484848;
+	background-image: url('./osa_background_tile.png');
+	background-repeat: repeat;
+	background-color: gray;
 }
 
 iframe {
-    border-radius: 0px;
+	border-radius: 0px;
 	display: none;
 
 	/* try real damn hard to make it full screen */
 	position: fixed;
 	top: 0;
 	left: 0;
-	bottom: 0;
-	right: 0;
 	width: 100%;
 	height: 100%;
 	border: none;
@@ -58,35 +60,39 @@ span {
 }
 
 #container {
-	width: calc(100% - 40px);
-	height: calc(100% - 40px);
+	box-sizing: border-box;
+	/* "auto" in css is unreliable bullshit so this is forced*/
+	width: calc(100% - 80px);
+	height: calc(100% - 160px);
+	margin-left: 40px;
+	margin-top: 80px;
 	display: flex;
-    background: #454b7f;
-	margin: 20px;
-    border-radius: 20px;
-    border-bottom: 10px solid #313454;
+	background: #dde6eb;
+	border: 2px solid #c7d1d6;
+	border-radius: 20px;
 }
 
 #browser {
-	height: calc(100% - 45px);
-	width: calc(100% - 360px);
-	padding: 20px;
+	border: 2px solid #adb5ba;
+	box-sizing: border-box;
+	width: calc(100% - 340px);
 	display: block;
+	padding: 10px;
 	margin: 20px;
-    background: #666666;
-    border-top: 5px solid #313454;
-    overflow-y: scroll;
-	padding-bottom: 0px;
-	padding-top: 0px;
+	background: #c2cacf;
+	overflow-y: auto;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 
 #controls {
+	border: 2px solid #adb5ba;
 	display: block;
 	width: 300px;
-    background: #666666;
-    border-top: 5px solid #313454;
+	background: #c2cacf;
 	margin: 20px;
 	margin-left: 0px;
+	padding: 5px;
 }
 
 #manage {
@@ -94,43 +100,42 @@ span {
 	width: 100%;
 	display: flex;
 	height: 30px;
-	margin-bottom: 7px;
 }
 
 .button {
 	display: flex;
-    cursor: pointer;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
+	cursor: pointer;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
 }
 
 .listButton {
 	width: calc(calc(100% / 3) - 10px);
 	background-color: #aaaaaa;
-    border-bottom: 5px solid #999999;
 	margin-left: 5px;
 	margin-right: 5px;
 }
 
 #selected {
 	padding: 10px;
-	height: calc(100% - 70px);
+	box-sizing: border-box;
+	height: calc(100% - 50px);
 	margin-left: 5px;
 	margin-right: 5px;
+	margin-top: 10px;
 	background-color: #888;
-    border-bottom: 2px solid #777;
 }
 
 #metadata {
 	height: 15px;
 	color: #444444;
-    font-size: 14px;
+	font-size: 14px;
 }
 #name {
 	height: 30px;
 	padding-top: 10px;
-    font-size: 18px;
+	font-size: 18px;
 }
 
 #description {
@@ -143,11 +148,11 @@ span {
 
 .serverButton {
 	width: calc(calc(100% / 2) - 5px);
-	background-color: #4e57a3;
-    border-bottom: 5px solid #3e4685;
+	background-color: #6976e0;
 	height: 30px;
+	border: 2px solid #5b67c7;
 	border-radius: 15px;
-    font-size: 16px;
+	font-size: 16px;
 }
 
 #join {
@@ -161,10 +166,10 @@ span {
 .mainContainer {
 	height: 96px;
 	display: flex;
-	border: 5px solid #444;
+	border: 2px solid #666;
 	border-radius: 15px;
-	margin-bottom: 20px;
-	margin-top: 20px;
+	margin-bottom: 10px;
+	margin-top: 10px;
 	padding: 10px;
 }
 .textContainer {
@@ -203,6 +208,6 @@ WHAT??????????
 context: this used to be defined above .mainContainer so border-color didnt work while background-color did
 */
 .selected {
-	background-color: #888;
-    border-color: #333;
+	background-color: #dde6eb;
+	border-color: #444;
 }
