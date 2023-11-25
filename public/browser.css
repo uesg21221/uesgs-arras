@@ -112,34 +112,46 @@ span {
 
 .listButton {
 	width: calc(calc(100% / 3) - 10px);
-	background-color: #aaaaaa;
+	background-color: #9199d9;
+	border: 2px solid #777eb5;
 	margin-left: 5px;
 	margin-right: 5px;
 }
 
 #selected {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 	padding: 10px;
 	box-sizing: border-box;
 	height: calc(100% - 50px);
 	margin-left: 5px;
 	margin-right: 5px;
 	margin-top: 10px;
-	background-color: #888;
+	background-color: #c7c8d1;
+	border: 2px solid #aeafb8;
 }
 
-#metadata {
+#version {
+	display: flex;
 	height: 15px;
-	color: #444444;
+	opacity: 0.5;
 	font-size: 14px;
 }
+
 #name {
 	height: 30px;
 	padding-top: 10px;
 	font-size: 18px;
 }
 
-#description {
-	height: calc(100% - 90px);
+#description {}
+
+#tags {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	opacity: 0.5;
+	font-size: 14px;
 }
 
 #buttons {

@@ -20,9 +20,10 @@ let getNode = id => document.getElementById(id),
     favorites = getNode('favorites'),
 
     //info about current selected server
-    metadata = getNode('metadata'),
+    version = getNode('version'),
     name = getNode('name'),
     description = getNode('description'),
+    tags = getNode('tags'),
 
     //join selected server
     join = getNode('join'),
@@ -73,6 +74,7 @@ class DOMServerListItem {
         this.ip = ip;
         this.secure = secure;
         this.index = index;
+        this.tags = [];
         this.errors = [];
 
         //DOM stuff
@@ -109,8 +111,9 @@ class DOMServerListItem {
         selected = this.index;
 
         name.innerHTML = this.name.innerHTML;
-        metadata.innerHTML = this.version.innerHTML;
+        version.innerHTML = this.version.innerHTML;
         description.innerHTML = this.description.innerHTML;
+        tags.innerText = this.tags.join(', ');
     }
     setMOTD (motd) {
         this.notLoaded.hidden = true;
@@ -120,6 +123,7 @@ class DOMServerListItem {
         this.ping.innerText = motd.ping + 'ms Ping';
         this.version.innerText = motd.version;
         this.players.innerText = motd.players + '/' + motd.maxPlayers + ' Players';
+        this.tags = motd.tags;
     }
     socketClosed () {
         if (this.errors.length || this.notLoaded.hidden) return;
