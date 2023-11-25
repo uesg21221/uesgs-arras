@@ -123,7 +123,7 @@ class DOMServerListItem {
         this.ping.innerText = motd.ping + 'ms Ping';
         this.version.innerText = motd.version;
         this.players.innerText = motd.players + '/' + motd.maxPlayers + ' Players';
-        this.tags = motd.tags;
+        this.tags = motd.tags.map(tag => tag.toLowerCase().replace(/[^a-z0-1]/g, ''));
     }
     socketClosed () {
         if (this.errors.length || this.notLoaded.hidden) return;
