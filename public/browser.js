@@ -80,7 +80,9 @@ class DOMServerListItem {
         this.textContainer = makeNode('textContainer');
         this.statsContainer= makeNode('statsContainer');
         this.notLoaded = makeNode('notLoaded');
+        this.iconContainer = makeNode('iconContainer')
         this.icon = makeNode('icon', 'img');
+        this.iconContainer.append(this.icon)
         this.name = makeNode('name');
         this.description = makeNode('description');
         this.ping = makeNode('ping');
@@ -91,12 +93,15 @@ class DOMServerListItem {
         this.icon.src = `${this.secure ? 'https' : 'http'}://${ip}/iconBrowser.png`;
         this.icon.onerror = () => this.error("Server Icon didn't load successfully");
         this.textContainer.append(this.name);
+        this.name.classList.add('heading-1')
         this.textContainer.append(this.description);
+        this.description.classList.add('normal-regular')
         this.statsContainer.append(this.version);
         this.statsContainer.append(this.players);
         this.statsContainer.append(this.ping);
+        this.statsContainer.classList.add('normal-hidden')
         this.mainContainer.append(this.notLoaded);
-        this.mainContainer.append(this.icon);
+        this.mainContainer.append(this.iconContainer);
         this.mainContainer.append(this.textContainer);
         this.mainContainer.append(this.statsContainer);
         browser.append(this.mainContainer);
@@ -131,7 +136,8 @@ class DOMServerListItem {
         this.errors.push('Error: ' + msg);
         this.icon.hidden = true;
         this.notLoaded.hidden = false;
-        this.notLoaded.style.color = '#f00';
+        this.notLoaded.classList.add('normal-hidden')
+        this.notLoaded.style.color = 'tomato';
         this.notLoaded.innerHTML = this.ip + '<br><br>' + this.errors.join('<br>');
     }
 }
