@@ -2418,7 +2418,6 @@ exports.barricade = {
 };
 exports.vulture = makeBird({
     PARENT: ["genericTank"],
-    LABEL: "Minigun",
     DANGER: 7,
     GUNS: [
         {
