@@ -48,7 +48,7 @@ if (c.flattenDefintions) {
         }
 
         if (definition.PARENT) {
-            if (Array.isArray(definition.PARENT) || "string" == typeof definition.PARENT) {
+            if (!Array.isArray(definition.PARENT)) {
                 flatten(output, definition.PARENT);
             } else for (let parent in definition.PARENT) {
                 flatten(output, definition.PARENT[parent]);

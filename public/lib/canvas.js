@@ -21,10 +21,12 @@ class Canvas {
 
         this.cv = document.getElementById('gameCanvas');
         this.cv.addEventListener('mousemove', event => this.mouseMove(event), false);
-        this.cv.addEventListener("mousedown", event => this.mouseDown(event), false);
-        this.cv.addEventListener("mouseup", event => this.mouseUp(event), false);
+        this.cv.addEventListener('mousedown', event => this.mouseDown(event), false);
+        this.cv.addEventListener('mouseup', event => this.mouseUp(event), false);
+        this.cv.addEventListener('keypress', event => this.keyPress(event), false);
         this.cv.addEventListener('keydown', event => this.keyDown(event), false);
         this.cv.addEventListener('keyup', event => this.keyUp(event), false);
+        this.cv.addEventListener('wheel', event => this.wheel(event), false);
         this.cv.resize = (width, height) => {
             this.cv.width = this.width = width;
             this.cv.height = this.height = height;
@@ -36,6 +38,26 @@ class Canvas {
         this.treeScrollSpeed = 0.5;
         this.treeScrollSpeedMultiplier = 1;
         global.canvas = this;
+    }
+    wheel(event) {
+        if (!global.died && global.showTree) {
+            if (event.deltaY > 1) {
+                global.treeScale /= 1.1;
+            } else {
+                global.treeScale *= 1.1;
+            }
+        }
+    }
+    keyPress(event) {
+        console.log(event);
+        switch (event.keyCode) {
+            case global.KEY_ZOOM_OUT:
+                if (!global.died && global.showTree) global.treeScale /= 1.1;
+                break;
+            case global.KEY_ZOOM_IN:
+                if (!global.died && global.showTree) global.treeScale *= 1.1;
+                break;
+        }
     }
     keyDown(event) {
         switch (event.keyCode) {
@@ -135,6 +157,7 @@ class Canvas {
                     this.socket.talk('t', 6);
                     break;
                 case global.KEY_CLASS_TREE:
+                    global.treeScale = 1;
                     global.showTree = !global.showTree;
                     break;
             }

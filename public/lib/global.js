@@ -79,6 +79,8 @@ const global = {
     KEY_CLASS_TREE: 84,
     KEY_MAX_STAT: 77,
     KEY_SUICIDE: 79,
+    KEY_ZOOM_OUT: 45,
+    KEY_ZOOM_IN: 43,
 
     KEY_UPGRADE_ATK: 49,
     KEY_UPGRADE_HTL: 50,
@@ -152,6 +154,7 @@ const global = {
     screenSize: Math.min(1920, Math.max(window.innerWidth, 1280)),
     ratio: window.devicePixelRatio,
     mockupLoading: { then: cb => cb() },
+    treeScale: 1,
     chats: {}
 };
 export { global }
