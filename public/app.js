@@ -1231,8 +1231,10 @@ function drawUpgradeTree(spacing, alcoveSize) {
     let tileSize = alcoveSize / 2,
         size = tileSize - 4,
         spaceBetween = 10,
-        padding = (0.5 + spaceBetween / tileSize) * global.treeScale,
-        screenDivisor = spaceBetween + tileSize;
+        screenDivisor = spaceBetween + tileSize,
+        padding = 0.5 * tileSize / screenDivisor;
+
+    //TODO: switch global.scrollXY to define the center of the class tree camera instead of the top left corner of the class tree camera
 
     global.fixedScrollX = Math.max(-padding, Math.min(tankTree.width * (1 + spaceBetween / tileSize) + padding - global.screenWidth / screenDivisor, global.fixedScrollX + global.shouldScrollX));
     global.fixedScrollY = Math.max(-padding, Math.min(tankTree.height * (1 + spaceBetween / tileSize) + padding - global.screenHeight / screenDivisor, global.fixedScrollY + global.shouldScrollY));
@@ -1263,7 +1265,7 @@ function drawUpgradeTree(spacing, alcoveSize) {
         drawEntityIcon(index.toString(), ax, ay, tileSize * global.treeScale, tileSize * global.treeScale, global.treeScale, angle, 1, colorIndex);
     }
 
-    let text = "Use the arrow keys to navigate the class tree. Use the scroll wheel to zoom in/out.";
+    let text = "Arrow keys to navigate the class tree. Shift to navigate faster. Scroll wheel (or +/- keys) to zoom in/out.";
     let w = measureText(text, 18);
     ctx.globalAlpha = 1;
     ctx.lineWidth = 1;
