@@ -2494,6 +2494,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [4, 26, 1, -2, 0, 0, 0],
 				PROPERTIES: {COLOR: 13}
+			}, {
+				POSITION: [7, 17, 1, -3.5, 0, 0, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -17.5}}
 			}
 		]
 	}
@@ -2507,15 +2510,15 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [14, 0, 0, 0, 0, 1],
-				TYPE: ['square', {MIRROR_MASTER_ANGLE: true}]
+				TYPE: ['square', {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}]
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseSquareDeco"],
 			}, {
-				POSITION: [10, 0, 0, 0, 0, 1],
-				TYPE: ['egg', {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
+				POSITION: [10.5, 0, 0, 0, 0, 1],
+				TYPE: ['egg', {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 15}, MIRROR_MASTER_ANGLE: true}]
 			}, {
-				POSITION: [6, 0, 0, 0, 0, 1],
+				POSITION: [7.5, 0, 0, 0, 0, 1],
 				TYPE: ['egg', {COLOR: 13, MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [15, 0, 0, 0, 360, 1],
