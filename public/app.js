@@ -1199,12 +1199,12 @@ function drawEntities(px, py, ratio) {
 
 global.showTree = false;
 global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1;
-global.shouldScrollY = global.shouldScrollX = 0;
+global.scrollVelocityY = global.scrollVelocityX = 0;
 let lastGuiType = null;
 function drawUpgradeTree(spacing, alcoveSize) {
     if (global.died) {
         global.showTree = false;
-        global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = global.shouldScrollY = global.shouldScrollX = 0;
+        global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = global.scrollVelocityY = global.scrollVelocityX = 0;
         global.treeScale = 1;
         return;
     }
@@ -1229,23 +1229,36 @@ function drawUpgradeTree(spacing, alcoveSize) {
     }
 
     let tileSize = alcoveSize / 2,
-        size = tileSize - 4,
+        size = tileSize - 4, // TODO: figure out where this 4 comes from
         spaceBetween = 10,
-        screenDivisor = spaceBetween + tileSize,
-        padding = 0.5 * tileSize / screenDivisor;
+        screenDivisor = (spaceBetween + tileSize) * 2 * global.treeScale,
+        padding = tileSize / screenDivisor,
+        dividedWidth = global.screenWidth / screenDivisor,
+        dividedHeight = global.screenHeight / screenDivisor,
+        treeFactor = 1 + spaceBetween / tileSize;
 
-    //TODO: switch global.scrollXY to define the center of the class tree camera instead of the top left corner of the class tree camera
-
-    global.fixedScrollX = Math.max(-padding, Math.min(tankTree.width * (1 + spaceBetween / tileSize) + padding - global.screenWidth / screenDivisor, global.fixedScrollX + global.shouldScrollX));
-    global.fixedScrollY = Math.max(-padding, Math.min(tankTree.height * (1 + spaceBetween / tileSize) + padding - global.screenHeight / screenDivisor, global.fixedScrollY + global.shouldScrollY));
+    global.fixedScrollX = Math.max(
+        dividedWidth - padding,
+        Math.min(
+            tankTree.width * treeFactor + padding - dividedWidth,
+            global.fixedScrollX + global.scrollVelocityX
+        )
+    );
+    global.fixedScrollY = Math.max(
+        dividedHeight - padding,
+        Math.min(
+            tankTree.height * treeFactor + padding - dividedHeight,
+            global.fixedScrollY + global.scrollVelocityY
+        )
+    );
     global.scrollX = util.lerp(global.scrollX, global.fixedScrollX, 0.1);
     global.scrollY = util.lerp(global.scrollY, global.fixedScrollY, 0.1);
 
     for (let [start, end] of branches) {
-        let sx = ((start.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size - global.screenWidth / 2) * global.treeScale + global.screenWidth / 2,
-            sy = ((start.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size - global.screenHeight / 2) * global.treeScale + global.screenHeight / 2,
-            ex = ((end.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size - global.screenWidth / 2) * global.treeScale + global.screenWidth / 2,
-            ey = ((end.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size - global.screenHeight / 2) * global.treeScale + global.screenHeight / 2;
+        let sx = ((start.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size) * global.treeScale + global.screenWidth / 2,
+            sy = ((start.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size) * global.treeScale + global.screenHeight / 2,
+            ex = ((end.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size) * global.treeScale + global.screenWidth / 2,
+            ey = ((end.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size) * global.treeScale + global.screenHeight / 2;
         if (ex < 0 || sx > global.screenWidth || ey < 0 || sy > global.screenHeight) continue;
         ctx.strokeStyle = color.black;
         ctx.lineWidth = 2 * global.treeScale;
@@ -1259,8 +1272,8 @@ function drawUpgradeTree(spacing, alcoveSize) {
     //draw the various tank icons
     let angle = -Math.PI / 4;
     for (let { x, y, colorIndex, index } of tiles) {
-        let ax = ((x - global.scrollX) * (tileSize + spaceBetween) - global.screenWidth / 2) * global.treeScale + global.screenWidth / 2,
-            ay = ((y - global.scrollY) * (tileSize + spaceBetween) - global.screenHeight / 2) * global.treeScale + global.screenHeight / 2;
+        let ax = (x - global.scrollX) * (tileSize + spaceBetween) * global.treeScale + global.screenWidth / 2,
+            ay = (y - global.scrollY) * (tileSize + spaceBetween) * global.treeScale + global.screenHeight / 2;
         if (ax < -tileSize || ax > global.screenWidth + tileSize || ay < -tileSize || ay > global.screenHeight + tileSize) continue;
         drawEntityIcon(index.toString(), ax, ay, tileSize * global.treeScale, tileSize * global.treeScale, global.treeScale, angle, 1, colorIndex);
     }
