@@ -1263,11 +1263,11 @@ function drawUpgradeTree(spacing, alcoveSize) {
         drawEntityIcon(index.toString(), ax, ay, tileSize * global.treeScale, tileSize * global.treeScale, global.treeScale, angle, 1, colorIndex);
     }
 
-    let text = "Use the arrow keys to navigate the class tree. Press T again to close it.";
-    let w = measureText(text, 16);
+    let text = "Use the arrow keys to navigate the class tree. Use the scroll wheel to zoom in/out.";
+    let w = measureText(text, 18);
     ctx.globalAlpha = 1;
     ctx.lineWidth = 1;
-    ctx.fillStyle = color.red;
+    ctx.fillStyle = color.dgrey;
     ctx.strokeStyle = color.black;
     ctx.fillText(text, innerWidth / 2 - w / 2, innerHeight * 0.04);
     ctx.strokeText(text, innerWidth / 2 - w / 2, innerHeight * 0.04);
