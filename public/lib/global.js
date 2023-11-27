@@ -80,7 +80,7 @@ const global = {
     KEY_MAX_STAT: 77,
     KEY_SUICIDE: 79,
     KEY_ZOOM_OUT: 45,
-    KEY_ZOOM_IN: 43,
+    KEY_ZOOM_IN: 61,
 
     KEY_UPGRADE_ATK: 49,
     KEY_UPGRADE_HTL: 50,
