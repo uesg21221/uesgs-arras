@@ -1701,12 +1701,12 @@ exports.single = {
 
 // Hunter upgrades
 exports.predator = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Predator",
     DANGER: 7,
     BODY: {
         SPEED: base.SPEED * 0.9,
-        FOV: base.FOV * 1.25,
+        FOV: base.FOV * 1.25
     },
     CONTROLLERS: ["zoom"],
     TOOLTIP: "Hold right click to zoom.",
@@ -1720,10 +1720,10 @@ exports.predator = {
                     g.hunter,
                     g.hunter2,
                     g.hunter2,
-                    g.preda,
+                    g.preda
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [21, 12, 1, 0, 0, 0, 0.15],
@@ -1733,27 +1733,27 @@ exports.predator = {
                     g.sniper,
                     g.hunter,
                     g.hunter2,
-                    g.preda,
+                    g.preda
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [18, 16, 1, 0, 0, 0, 0.3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.preda]),
-                TYPE: "bullet",
-            },
-        },
-    ],
+                TYPE: "bullet"
+            }
+        }
+    ]
 }
 exports.xHunter = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "X-Hunter",
     DANGER: 7,
     BODY: {
         SPEED: base.SPEED * 0.9,
-        FOV: base.FOV * 1.25,
+        FOV: base.FOV * 1.25
     },
     CONTROLLERS: [["zoom", { distance: 550 }]],
     TOOLTIP: "Hold right click to zoom.",
@@ -1765,10 +1765,10 @@ exports.xHunter = {
                     g.basic,
                     g.sniper,
                     g.hunter,
-                    g.hunter2,
+                    g.hunter2
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [21, 12, 1, 0, 0, 0, 0.25],
@@ -1776,23 +1776,23 @@ exports.xHunter = {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     g.sniper,
-                    g.hunter,
+                    g.hunter
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
-            POSITION: [5, 11.5, -1.25, 7, 0, 0, 0],
-        },
-    ],
+            POSITION: [5, 11.5, -1.25, 7, 0, 0, 0]
+        }
+    ]
 }
 exports.poacher = makeHybrid(exports.hunter, "Poacher")
 exports.dual = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Dual",
     DANGER: 7,
     BODY: {
-        FOV: 1.1 * base.FOV,
+        FOV: 1.1 * base.FOV
     },
     CONTROLLERS: ["zoom"],
     TOOLTIP: "Hold right click to zoom.",
@@ -1802,85 +1802,82 @@ exports.dual = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.dual, g.lowpower]),
                 TYPE: "bullet",
-                LABEL: "Small",
-            },
+                LABEL: "Small"
+            }
         },
         {
             POSITION: [18, 7, 1, 0, -5.5, 0, .5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.dual, g.lowpower]),
                 TYPE: "bullet",
-                LABEL: "Small",
-            },
+                LABEL: "Small"
+            }
         },
         {
             POSITION: [16, 8.5, 1, 0, 5.5, 0, 0.25],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.dual]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [16, 8.5, 1, 0, -5.5, 0, .75],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.dual]),
-                TYPE: "bullet",
-            },
-        },
-    ],
+                TYPE: "bullet"
+            }
+        }
+    ]
 }
 
 // Rifle upgrades
 exports.musket = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Musket",
     DANGER: 7,
     BODY: {
-        FOV: base.FOV * 1.225,
+        FOV: base.FOV * 1.225
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [16, 19, 1, 0, 0, 0, 0],
         },
         {
             POSITION: [18, 7, 1, 0, 4, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [18, 7, 1, 0, -4, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin]),
-                TYPE: "bullet",
-            },
-        },
-    ],
+                TYPE: "bullet"
+            }
+        }
+    ]
 }
 exports.crossbow = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Crossbow",
     DANGER: 7,
     BODY: {
-        FOV: base.FOV * 1.225,
+        FOV: base.FOV * 1.225
     },
     GUNS: [
         {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [12.5, 2.5, 1, 0, 3.5, 35, 1],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    g.halfrecoil
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [12.5, 2.5, 1, 0, -3.5, -35, 1],
@@ -1889,12 +1886,11 @@ exports.crossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    g.halfrecoil
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [15, 2.5, 1, 0, 3.5, 35/2, 2/3],
@@ -1903,12 +1899,11 @@ exports.crossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    g.halfrecoil
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [15, 2.5, 1, 0, -3.5, -35/2, 2/3],
@@ -1919,10 +1914,10 @@ exports.crossbow = {
                     g.rifle,
                     g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    g.halfrecoil
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [20, 3.5, 1, 0, 4, 0, 1/3],
@@ -1933,10 +1928,10 @@ exports.crossbow = {
                     g.rifle,
                     g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    g.halfrecoil
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [20, 3.5, 1, 0, -4, 0, 1/3],
@@ -1947,10 +1942,10 @@ exports.crossbow = {
                     g.rifle,
                     g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    g.halfrecoil
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [24, 7, 1, 0, 0, 0, 0],
@@ -1961,22 +1956,22 @@ exports.crossbow = {
                     g.rifle,
                     g.slow,
                     g.halfreload,
-                    g.halfrecoil,
+                    g.halfrecoil
                 ]),
-                TYPE: "bullet",
-            },
-        },
-    ],
+                TYPE: "bullet"
+            }
+        }
+    ]
 }
 exports.armsman = makeHybrid(exports.rifle, "Armsman")
 
 // Machine Gun upgrades
 exports.minigun = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Minigun",
     DANGER: 6,
     BODY: {
-        FOV: base.FOV * 1.2,
+        FOV: base.FOV * 1.2
     },
     GUNS: [
         {
@@ -1984,27 +1979,27 @@ exports.minigun = {
             POSITION: [21, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.mini]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [19, 8, 1, 0, 0, 0, 1 / 3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.mini]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [17, 8, 1, 0, 0, 0, 2 / 3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.mini]),
-                TYPE: "bullet",
-            },
-        },
-    ],
+                TYPE: "bullet"
+            }
+        }
+    ]
 }
 exports.gunner = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Gunner",
     DANGER: 6,
     GUNS: [
@@ -2012,34 +2007,34 @@ exports.gunner = {
             POSITION: [12, 3.5, 1, 0, 7.25, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [12, 3.5, 1, 0, -7.25, 0, 0.75],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [16, 3.5, 1, 0, 3.75, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [16, 3.5, 1, 0, -3.75, 0, 0.25],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.fast]),
-                TYPE: "bullet",
-            },
-        },
-    ],
+                TYPE: "bullet"
+            }
+        }
+    ]
 }
 exports.sprayer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Sprayer",
     DANGER: 6,
     GUNS: [
@@ -2051,19 +2046,19 @@ exports.sprayer = {
                     g.gunner,
                     g.lowpower,
                     g.mach,
-                    g.morerecoil,
+                    g.morerecoil
                 ]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [12, 10, 1.4, 8, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.mach]),
-                TYPE: "bullet",
-            },
-        },
-    ],
+                TYPE: "bullet"
+            }
+        }
+    ]
 }
 
 // Minigun upgrades
