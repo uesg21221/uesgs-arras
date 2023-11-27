@@ -3,13 +3,13 @@ const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constant
 const generics = require('./generics.js');
 const g = require('../gunvals.js');
 
-// Whatever the hell is needed
+// Missiles
 exports.missile = {
-    PARENT: ["bullet"],
+    PARENT: "bullet",
     LABEL: "Missile",
     INDEPENDENT: true,
     BODY: {
-        RANGE: 120,
+        RANGE: 120
     },
     GUNS: [
         {
@@ -23,16 +23,16 @@ exports.missile = {
                     g.lowpower,
                     g.muchmorerecoil,
                     g.morespeed,
-                    g.morespeed,
+                    g.morespeed
                 ]),
                 TYPE: [
                     "bullet",
                     {
-                        PERSISTS_AFTER_DEATH: true,
-                    },
+                        PERSISTS_AFTER_DEATH: true
+                    }
                 ],
-                STAT_CALCULATOR: gunCalcNames.thruster,
-            },
+                STAT_CALCULATOR: gunCalcNames.thruster
+            }
         },
         {
             POSITION: [14, 6, 1, 0, 2, 230, 0],
@@ -45,21 +45,21 @@ exports.missile = {
                     g.lowpower,
                     g.muchmorerecoil,
                     g.morespeed,
-                    g.morespeed,
+                    g.morespeed
                 ]),
                 TYPE: [
                     "bullet",
                     {
-                        PERSISTS_AFTER_DEATH: true,
-                    },
+                        PERSISTS_AFTER_DEATH: true
+                    }
                 ],
-                STAT_CALCULATOR: gunCalcNames.thruster,
-            },
-        },
-    ],
-};
+                STAT_CALCULATOR: gunCalcNames.thruster
+            }
+        }
+    ]
+}
 exports.hypermissile = {
-    PARENT: ["missile"],
+    PARENT: "missile",
     GUNS: [
         {
             POSITION: [14, 6, 1, 0, -2, 150, 0],
@@ -128,9 +128,9 @@ exports.hypermissile = {
             },
         },
     ],
-};
+}
 exports.minimissile = {
-    PARENT: ["missile"],
+    PARENT: "missile",
     GUNS: [
         {
             /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
@@ -150,14 +150,9 @@ exports.minimissile = {
             },
         },
     ],
-};
+}
 exports.spinmissile = {
-    PARENT: ["bullet"],
-    LABEL: "Missile",
-    INDEPENDENT: !0,
-    BODY: {
-        RANGE: 120,
-    },
+    PARENT: "missile",
     FACING_TYPE: "fastspin",
     GUNS: [
         {
@@ -203,15 +198,9 @@ exports.spinmissile = {
             },
         },
     ],
-};
+}
 exports.hyperspinmissile = {
-    PARENT: ["bullet"],
-    LABEL: "Missile",
-    INDEPENDENT: !0,
-    BODY: {
-        RANGE: 120,
-    },
-    FACING_TYPE: "fastspin",
+    PARENT: "spinmissile",
     GUNS: [
         {
             POSITION: [14, 8, 1, 0, 0, 0, 0],
@@ -298,10 +287,9 @@ exports.hyperspinmissile = {
             },
         },
     ],
-};
-
+}
 exports.hive = {
-    PARENT: ["bullet"],
+    PARENT: "bullet",
     LABEL: "Hive",
     BODY: {
         RANGE: 90,
@@ -355,14 +343,10 @@ exports.hive = {
             },
         },
     ],
-};
+}
 exports.snake = {
-    PARENT: ["bullet"],
+    PARENT: "missile",
     LABEL: "Snake",
-    INDEPENDENT: true,
-    BODY: {
-        RANGE: 120,
-    },
     GUNS: [
         {
             POSITION: [6, 12, 1.4, 8, 0, 180, 0],
@@ -407,13 +391,9 @@ exports.snake = {
             },
         },
     ],
-};
+}
 exports.rocketeerMissile = {
-    PARENT: ["bullet"],
-    LABEL: "Missile",
-    BODY: {
-        RANGE: 120,
-    },
+    PARENT: "missile",
     GUNS: [
         {
             POSITION: [16.5, 10, 1.5, 0, 0, 180, 7.5],
@@ -434,10 +414,11 @@ exports.rocketeerMissile = {
             },
         },
     ],
-};
+}
 
+// Healer Projectiles
 exports.surgeonPillboxTurret = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "",
     COLOR: "grey",
     BODY: {
@@ -485,10 +466,10 @@ exports.surgeonPillboxTurret = {
             },
         },
     ],
-};
+}
 exports.surgeonPillbox = {
+    PARENT: "trap",
     LABEL: "Pillbox",
-    PARENT: ["trap"],
     SHAPE: -6,
     MOTION_TYPE: "motor",
     CONTROLLERS: ["goToMasterTarget", "nearestDifferentMaster"],
@@ -505,20 +486,11 @@ exports.surgeonPillbox = {
             TYPE: "surgeonPillboxTurret",
         },
     ],
-};
-exports.doctorDrone = {
-    PARENT: ["drone"],
-    HITS_OWN_TYPE: "normal",
-    TURRETS: [
-        {
-            POSITION: [13, 0, 0, 0, 360, 1],
-            TYPE: "healerSymbol",
-        },
-    ],
-};
+}
 
+// Sunchips
 exports.sunchip = {
-    PARENT: ["drone"],
+    PARENT: "drone",
     SHAPE: 4,
     NECRO: true,
     HITS_OWN_TYPE: "hard",
@@ -530,53 +502,42 @@ exports.sunchip = {
         FARMER: true,
     },
     DRAW_HEALTH: false,
-};
+}
 exports.eggchip = {
-    PARENT: ["sunchip"],
+    PARENT: "sunchip",
+    NECRO: [0],
+    SHAPE: 0
+}
+exports.autosunchip = {
+    PARENT: "sunchip",
+    AI: {
+        BLIND: true,
+        FARMER: true,
+    },
+    INDEPENDENT: true,
+}
+exports.autoeggchip = {
+    PARENT: "autosunchip",
     NECRO: [0],
     SHAPE: 0,
-};
-exports.autosunchip = {
-    PARENT: ["sunchip"],
-    AI: {
-        BLIND: true,
-        FARMER: true,
-    },
-    INDEPENDENT: true,
-};
-exports.autoeggchip = {
-    PARENT: ["eggchip"],
-    AI: {
-        BLIND: true,
-        FARMER: true,
-    },
-    INDEPENDENT: true,
-};
+}
 exports.pentachip = {
-    PARENT: ["sunchip"],
-    SHAPE: 5,
-};
+    PARENT: "sunchip",
+    SHAPE: 5
+}
 exports.summonerDrone = {
-    PARENT: ["sunchip"],
-    NECRO: false,
-};
+    PARENT: "sunchip",
+    NECRO: false
+}
 exports.gunchip = {
-    PARENT: ["drone"],
-    SHAPE: -2,
-    NECRO: true,
-    HITS_OWN_TYPE: "hard",
-    BODY: {
-        FOV: 0.5,
-    },
-    AI: {
-        BLIND: true,
-        FARMER: true,
-    },
-    DRAW_HEALTH: false,
-};
+    PARENT: "sunchip",
+    NECRO: [-2],
+    SHAPE: -2
+}
 
+// Minions
 exports.minion = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Minion",
     TYPE: "minion",
     DAMAGE_CLASS: 0,
@@ -616,60 +577,12 @@ exports.minion = {
             },
         },
     ],
-};
-exports.megaMinion = {
-    PARENT: ["minion"],
-    LABEL: "Mega Minion",
-    BODY: {
-        ACCELERATION: base.ACCEL * 0.8,
-    },
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [19.5, 13, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.minion]),
-                TYPE: "bullet",
-            },
-        },
-    ],
-};
-exports.tinyMinion = {
-    PARENT: ["minion"],
-    LABEL: "Tiny Minion",
-    ACCEPTS_SCORE: false,
-    SHAPE: 0,
-    MOTION_TYPE: 'swarm',
-    CRAVES_ATTENTION: true,
-    BODY: {
-        ACCELERATION: 3,
-        PENETRATION: 1.5,
-        HEALTH: 0.35 * 0.5,
-        DAMAGE: 2.25,
-        RESIST: 1.6,
-        RANGE: 300,
-        DENSITY: 12,
-        PUSHABILITY: 0.5,
-        FOV: 1.5,
-    },
-    AI: {
-        BLIND: true,
-    },
-    GUNS: [ { /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-        POSITION: [    17,         9,            1,            0,            0,            0,            0,     ],
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.lowpower]),
-            WAIT_TO_CYCLE: true,
-            TYPE: "bullet",
-        }, },
-    ],
-    DIE_AT_RANGE: true,
-    BUFF_VS_FOOD: true,
-};
+}
 
+// Traps
 exports.setTrap = {
+    PARENT: "trap",
     LABEL: "Set Trap",
-    PARENT: ["trap"],
     SHAPE: -4,
     MOTION_TYPE: "motor",
     CONTROLLERS: ["goToMasterTarget"],
@@ -677,20 +590,14 @@ exports.setTrap = {
         SPEED: 1,
         DENSITY: 5,
     },
-};
+}
 exports.unsetTrap = {
-    LABEL: "Set Trap",
-    PARENT: ["trap"],
-    SHAPE: -4,
-    MOTION_TYPE: "motor",
-    BODY: {
-        SPEED: 1,
-        DENSITY: 5,
-    },
-};
+    PARENT: "setTrap",
+    CONTROLLERS: [],
+}
 exports.boomerang = {
+    PARENT: "trap",
     LABEL: "Boomerang",
-    PARENT: ["trap"],
     CONTROLLERS: ["boomerang"],
     MOTION_TYPE: "motor",
     HITS_OWN_TYPE: "never",
@@ -699,10 +606,11 @@ exports.boomerang = {
         SPEED: 1.25,
         RANGE: 120,
     },
-};
+}
 
+// Auto Guns
 exports.autoTankGun = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "",
     BODY: {
         FOV: 3,
@@ -718,12 +626,12 @@ exports.autoTankGun = {
             },
         },
     ],
-};
+}
 exports.bansheegun = {
-    PARENT: ["genericTank"],
-    LABEL: "",
-    CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"],
-    COLOR: "grey",
+    PARENT: "autoTankGun",
+    BODY: {
+        FOV: 2,
+    },
     INDEPENDENT: true,
     GUNS: [
         {
@@ -734,15 +642,12 @@ exports.bansheegun = {
             },
         },
     ],
-};
+}
 exports.auto4gun = {
-    PARENT: ["genericTank"],
-    LABEL: "",
+    PARENT: "autoTankGun",
     BODY: {
         FOV: 2,
     },
-    CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"],
-    COLOR: "grey",
     GUNS: [
         {
             POSITION: [16, 4, 1, 0, -3.5, 0, 0],
@@ -759,17 +664,9 @@ exports.auto4gun = {
             },
         },
     ],
-};
+}
 exports.bigauto4gun = {
-    PARENT: ["genericTank"],
-    LABEL: "",
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
-    COLOR: "grey",
+    PARENT: "auto4gun",
     GUNS: [
         {
             POSITION: [14, 5, 1, 0, -4.5, 0, 0],
@@ -817,16 +714,12 @@ exports.bigauto4gun = {
             },
         },
     ],
-};
+}
 exports.megaAutoTankgun = {
-    PARENT: ["genericTank"],
-    LABEL: "",
+    PARENT: "autoTankGun",
     BODY: {
         FOV: 2,
-        SPEED: 0.9,
     },
-    CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"],
-    COLOR: "grey",
     GUNS: [
         {
             POSITION: [22, 14, 1, 0, 0, 0, 0],
@@ -836,10 +729,11 @@ exports.megaAutoTankgun = {
             },
         },
     ],
-};
+}
 
+// Mounted Turrets
 exports.autoTurret = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Turret",
     BODY: {
         FOV: 0.8,
@@ -854,14 +748,9 @@ exports.autoTurret = {
             },
         },
     ],
-};
+}
 exports.droneAutoTurret = {
-    PARENT: ["genericTank"],
-    LABEL: "Turret",
-    BODY: {
-        FOV: 0.8,
-    },
-    COLOR: "grey",
+    PARENT: "autoTurret",
     GUNS: [
         {
             POSITION: [22, 10, 1, 0, 0, 0, 0],
@@ -871,11 +760,9 @@ exports.droneAutoTurret = {
             },
         },
     ],
-};
+}
 exports.autoSmasherTurret = {
-    PARENT: ["genericTank"],
-    LABEL: "Turret",
-    COLOR: "grey",
+    PARENT: "autoTurret",
     GUNS: [
         {
             POSITION: [20, 6, 1, 0, 5, 0, 0],
@@ -894,11 +781,10 @@ exports.autoSmasherTurret = {
             },
         },
     ],
-};
+}
 exports.architectGun = {
-    PARENT: ["genericTank"],
+    PARENT: "autoTurret",
     LABEL: "",
-    COLOR: "grey",
     GUNS: [
         {
             POSITION: [20, 16, 1, 0, 0, 0, 0],
@@ -911,12 +797,10 @@ exports.architectGun = {
             },
         },
     ],
-};
-
+}
 exports.pillboxTurret = {
-    PARENT: ["genericTank"],
+    PARENT: "autoTurret",
     LABEL: "",
-    COLOR: "grey",
     BODY: {
         FOV: 2,
     },
@@ -930,18 +814,14 @@ exports.pillboxTurret = {
             },
         },
     ],
-};
+}
+
+// Pillbox
 exports.pillbox = {
+    PARENT: "setTrap",
     LABEL: "Pillbox",
-    PARENT: ["trap"],
-    SHAPE: -4,
-    MOTION_TYPE: "motor",
     CONTROLLERS: ["goToMasterTarget", "nearestDifferentMaster"],
     INDEPENDENT: true,
-    BODY: {
-        SPEED: 1,
-        DENSITY: 5,
-    },
     DIE_AT_RANGE: true,
     TURRETS: [
         {
@@ -960,6 +840,7 @@ exports.unsetPillbox = {
     ],
 }
 
+// Swarms
 exports.swarm = {
     LABEL: "Swarm Drone",
     TYPE: "swarm",
@@ -983,23 +864,23 @@ exports.swarm = {
     },
     DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
-};
+}
 exports.autoswarm = {
-    PARENT: ["swarm"],
+    PARENT: "swarm",
     AI: {
-        FARMER: true,
+        FARMER: true
     },
-    INDEPENDENT: true,
-};
+    INDEPENDENT: true
+}
 exports.bee = {
-    PARENT: ["swarm"],
+    PARENT: "swarm",
     PERSISTS_AFTER_DEATH: true,
     SHAPE: 4,
     LABEL: "Drone",
-    HITS_OWN_TYPE: "hardWithBuffer",
-};
+    HITS_OWN_TYPE: "hardWithBuffer"
+}
 exports.homingBullet = {
-    PARENT: ["autoswarm"],
+    PARENT: "autoswarm",
     SHAPE: 0,
     BODY: {
         PENETRATION: 1,
@@ -1010,40 +891,27 @@ exports.homingBullet = {
         DAMAGE: 6,
         PUSHABILITY: 0.3,
     },
-    CAN_GO_OUTSIDE_ROOM: true,
-};
+    CAN_GO_OUTSIDE_ROOM: true
+}
 
+// Bodies
 exports.smasherBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { independent: true }]],
     COLOR: "black",
     SHAPE: 6,
-    INDEPENDENT: true,
-};
+    INDEPENDENT: true
+}
 exports.landmineBody = {
     PARENT: ["smasherBody"],
-    CONTROLLERS: [["spin", { independent: true, speed: 0.08 }]],
-};
+    CONTROLLERS: [["spin", { independent: true, speed: 0.08 }]]
+}
 exports.spikeBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true }]],
-    COLOR: "black",
-    SHAPE: 3,
-    INDEPENDENT: true,
-};
-exports.weirdSpikeBody1 = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.08 }]],
-    COLOR: "black",
-    SHAPE: 3,
-    INDEPENDENT: true,
-};
-exports.weirdSpikeBody2 = {
-    PARENT: ["weirdSpikeBody1"],
-    CONTROLLERS: [["spin", { independent: true, speed: -0.05 }]],
-};
+    PARENT: ["smasherBody"],
+    SHAPE: 3
+}
 
-// BASIC TANK AND STARTING UPGRADES
+// Basic & starting upgrades
 exports.basic = {
     PARENT: ["genericTank"],
     LABEL: "Basic",
@@ -1079,7 +947,7 @@ exports.basic = {
             },
         },
     ],
-};
+}
 exports.twin = {
     PARENT: ["genericTank"],
     LABEL: "Twin",
@@ -1100,7 +968,7 @@ exports.twin = {
             },
         },
     ],
-};
+}
 exports.sniper = {
     PARENT: ["genericTank"],
     LABEL: "Sniper",
@@ -1117,7 +985,7 @@ exports.sniper = {
             },
         },
     ],
-};
+}
 exports.machineGun = {
     PARENT: ["genericTank"],
     LABEL: "Machine Gun",
@@ -1131,7 +999,7 @@ exports.machineGun = {
             },
         },
     ],
-};
+}
 exports.flankGuard = {
     PARENT: ["genericTank"],
     LABEL: "Flank Guard",
@@ -1162,7 +1030,7 @@ exports.flankGuard = {
             },
         },
     ],
-};
+}
 exports.director = {
     PARENT: ["genericTank"],
     LABEL: "Director",
@@ -1185,7 +1053,7 @@ exports.director = {
             },
         },
     ],
-};
+}
 exports.pounder = {
     PARENT: ["genericTank"],
     LABEL: "Pounder",
@@ -1200,7 +1068,7 @@ exports.pounder = {
             },
         },
     ],
-};
+}
 exports.trapper = {
     PARENT: ["genericTank"],
     LABEL: "Trapper",
@@ -1219,32 +1087,7 @@ exports.trapper = {
             },
         },
     ],
-};
-exports.weirdTrapper = {
-    // For use with -trapper combos only.
-    PARENT: ["genericTank"],
-    LABEL: "Trapper",
-    DANGER: 6,
-    STAT_NAMES: statnames.mixed,
-    BODY: {
-        SPEED: base.SPEED * 0.8,
-        FOV: base.FOV * 1.2,
-    },
-    GUNS: [
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [14, 8, 1, 0, 0, 0, 0],
-        },
-        {
-            POSITION: [4, 8, 1.5, 14, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-    ],
-};
+}
 exports.desmos = {
     PARENT: ["genericTank"],
     LABEL: "Desmos",
@@ -1267,7 +1110,7 @@ exports.desmos = {
             POSITION: [3.75, 10, 2.125, 1.25, 6.25, -90, 0],
         },
     ],
-};
+}
 exports.smasher = {
     PARENT: ["genericTank"],
     LABEL: "Smasher",
@@ -1285,7 +1128,7 @@ exports.smasher = {
     IS_SMASHER: true,
     SKILL_CAP: [smshskl, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
     STAT_NAMES: statnames.smasher,
-};
+}
 exports.healer = {
     PARENT: ["genericTank"],
     LABEL: "Healer",
@@ -1310,26 +1153,9 @@ exports.healer = {
         },
     ],
     STAT_NAMES: statnames.heal,
-};
-exports.single = {
-    PARENT: ["genericTank"],
-    LABEL: "Single",
-    DANGER: 7,
-    GUNS: [
-        {
-            POSITION: [19, 8, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.single]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [5.5, 8, -1.8, 6.5, 0, 0, 0],
-        },
-    ],
-};
+}
 
-// TWIN UPGRADES
+// Twin upgrades
 exports.doubleTwin = {
     PARENT: ["genericTank"],
     LABEL: "Double Twin",
@@ -1364,7 +1190,7 @@ exports.doubleTwin = {
             },
         },
     ],
-};
+}
 exports.tripleShot = {
     PARENT: ["genericTank"],
     LABEL: "Triple Shot",
@@ -1396,9 +1222,9 @@ exports.tripleShot = {
             },
         },
     ],
-};
+}
 
-// DOUBLE TWIN UPGRADES
+// Double Twin upgrades
 exports.tripleTwin = {
     PARENT: ["genericTank"],
     LABEL: "Triple Twin",
@@ -1447,8 +1273,8 @@ exports.tripleTwin = {
             },
         },
     ],
-};
-exports.autoDouble = makeAuto(exports.doubleTwin, "Auto-Double");
+}
+exports.autoDouble = makeAuto(exports.doubleTwin, "Auto-Double")
 exports.hewnDouble = {
     PARENT: ["genericTank"],
     LABEL: "Hewn Double",
@@ -1524,9 +1350,9 @@ exports.hewnDouble = {
             },
         },
     ],
-};
+}
 
-// TRIPLE SHOT UPGRADES
+// Triple Shot upgrades
 exports.pentaShot = {
     PARENT: ["genericTank"],
     LABEL: "Penta Shot",
@@ -1571,7 +1397,7 @@ exports.pentaShot = {
             },
         },
     ],
-};
+}
 exports.spreadshot = {
     PARENT: ["genericTank"],
     LABEL: "Spreadshot",
@@ -1732,8 +1558,8 @@ exports.spreadshot = {
             },
         },
     ],
-};
-exports.bentHybrid = makeHybrid(exports.tripleShot, "Bent Hybrid");
+}
+exports.bentHybrid = makeHybrid(exports.tripleShot, "Bent Hybrid")
 exports.bentDouble = {
     PARENT: ["genericTank"],
     LABEL: "Bent Double",
@@ -1783,7 +1609,7 @@ exports.bentDouble = {
             },
         },
     ],
-};
+}
 exports.triplet = {
     PARENT: ["genericTank"],
     DANGER: 6,
@@ -1814,9 +1640,9 @@ exports.triplet = {
             },
         },
     ],
-};
+}
 
-// SNIPER UPGRADES
+// Sniper upgrades
 exports.assassin = {
     PARENT: ["genericTank"],
     DANGER: 6,
@@ -1838,7 +1664,7 @@ exports.assassin = {
             POSITION: [5, 8, -1.4, 8, 0, 0, 0],
         },
     ],
-};
+}
 exports.hunter = {
     PARENT: ["genericTank"],
     LABEL: "Hunter",
@@ -1866,7 +1692,7 @@ exports.hunter = {
             },
         },
     ],
-};
+}
 exports.rifle = {
     PARENT: ["genericTank"],
     LABEL: "Rifle",
@@ -1887,9 +1713,9 @@ exports.rifle = {
             },
         },
     ],
-};
+}
 
-// ASSASSIN UPGRADES
+// Assassin upgrades
 exports.ranger = {
     PARENT: ["genericTank"],
     LABEL: "Ranger",
@@ -1911,7 +1737,7 @@ exports.ranger = {
             POSITION: [5, 8, -1.4, 8, 0, 0, 0],
         },
     ],
-};
+}
 exports.falcon = makeBird({
     PARENT: "genericTank",
     DANGER: 7,
@@ -1932,7 +1758,7 @@ exports.falcon = makeBird({
             POSITION: [5, 8, -1.4, 8, 0, 0, 0],
         },
     ],
-}, "Falcon");
+}, "Falcon")
 exports.stalker = {
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -1952,10 +1778,27 @@ exports.stalker = {
             },
         },
     ],
-};
+}
 exports.autoAssassin = makeAuto(exports.assassin);
+exports.single = {
+    PARENT: ["genericTank"],
+    LABEL: "Single",
+    DANGER: 7,
+    GUNS: [
+        {
+            POSITION: [19, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.single]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [5.5, 8, -1.8, 6.5, 0, 0, 0],
+        },
+    ],
+}
 
-// HUNTER UPGRADES
+// Hunter upgrades
 exports.predator = {
     PARENT: ["genericTank"],
     LABEL: "Predator",
@@ -2002,7 +1845,7 @@ exports.predator = {
             },
         },
     ],
-};
+}
 exports.xHunter = {
     PARENT: ["genericTank"],
     LABEL: "X-Hunter",
@@ -2041,8 +1884,8 @@ exports.xHunter = {
             POSITION: [5, 11.5, -1.25, 7, 0, 0, 0],
         },
     ],
-};
-exports.poacher = makeHybrid(exports.hunter, "Poacher");
+}
+exports.poacher = makeHybrid(exports.hunter, "Poacher")
 exports.dual = {
     PARENT: ["genericTank"],
     LABEL: "Dual",
@@ -2084,9 +1927,9 @@ exports.dual = {
             },
         },
     ],
-};
+}
 
-// RIFLE UPGRADES
+// Rifle upgrades
 exports.musket = {
     PARENT: ["genericTank"],
     LABEL: "Musket",
@@ -2114,7 +1957,7 @@ exports.musket = {
             },
         },
     ],
-};
+}
 exports.crossbow = {
     PARENT: ["genericTank"],
     LABEL: "Crossbow",
@@ -2223,10 +2066,10 @@ exports.crossbow = {
             },
         },
     ],
-};
-exports.armsman = makeHybrid(exports.rifle, "Armsman");
+}
+exports.armsman = makeHybrid(exports.rifle, "Armsman")
 
-// MACHINE GUN UPGRADES
+// Machine Gun upgrades
 exports.minigun = {
     PARENT: ["genericTank"],
     LABEL: "Minigun",
@@ -2258,7 +2101,7 @@ exports.minigun = {
             },
         },
     ],
-};
+}
 exports.gunner = {
     PARENT: ["genericTank"],
     LABEL: "Gunner",
@@ -2293,48 +2136,7 @@ exports.gunner = {
             },
         },
     ],
-};
-exports.weirdGunner = {
-    // For use with -gunner combos only.
-    PARENT: ["genericTank"],
-    LABEL: "Gunner",
-    DANGER: 6,
-    GUNS: [
-        {
-            POSITION: [19, 2, 1, 0, -2.5, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.twin,
-                    g.slow,
-                    g.flank,
-                    g.lotsmorrecoil,
-                ]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [19, 2, 1, 0, 2.5, 0, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.twin,
-                    g.slow,
-                    g.flank,
-                    g.lotsmorrecoil,
-                ]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [12, 11, 1, 0, 0, 0, 0],
-        },
-    ],
-};
+}
 exports.sprayer = {
     PARENT: ["genericTank"],
     LABEL: "Sprayer",
@@ -2361,9 +2163,9 @@ exports.sprayer = {
             },
         },
     ],
-};
+}
 
-// MINIGUN UPGRADES
+// Minigun upgrades
 exports.streamliner = {
     PARENT: ["genericTank"],
     LABEL: "Streamliner",
@@ -2409,8 +2211,8 @@ exports.streamliner = {
             },
         },
     ],
-};
-exports.cropDuster = makeHybrid(exports.minigun, "Crop Duster");
+}
+exports.cropDuster = makeHybrid(exports.minigun, "Crop Duster")
 exports.barricade = {
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -2449,7 +2251,7 @@ exports.barricade = {
             },
         },
     ],
-};
+}
 exports.vulture = makeBird({
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -2480,9 +2282,9 @@ exports.vulture = makeBird({
             },
         },
     ],
-}, "Vulture");
+}, "Vulture")
 
-// GUNNER UPGRADES
+// Gunner upgrades
 exports.autoGunner = makeAuto(exports.gunner);
 exports.nailgun = {
     PARENT: ["genericTank"],
@@ -2537,7 +2339,7 @@ exports.nailgun = {
             POSITION: [5.5, 7, -1.8, 6.5, 0, 0, 0],
         },
     ],
-};
+}
 exports.machineGunner = {
     PARENT: ["genericTank"],
     LABEL: "Machine Gunner",
@@ -2607,10 +2409,49 @@ exports.machineGunner = {
             },
         },
     ],
-};
-exports.overgunner = makeOver(exports.weirdGunner);
+}
+exports.overgunner = makeOver({
+    PARENT: ["genericTank"],
+    LABEL: "Gunner",
+    DANGER: 6,
+    GUNS: [
+        {
+            POSITION: [19, 2, 1, 0, -2.5, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([
+                    g.basic,
+                    g.gunner,
+                    g.power,
+                    g.twin,
+                    g.slow,
+                    g.flank,
+                    g.lotsmorrecoil,
+                ]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [19, 2, 1, 0, 2.5, 0, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([
+                    g.basic,
+                    g.gunner,
+                    g.power,
+                    g.twin,
+                    g.slow,
+                    g.flank,
+                    g.lotsmorrecoil,
+                ]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [12, 11, 1, 0, 0, 0, 0],
+        },
+    ],
+});
 
-// SPRAYER UPGRADES
+// Sprayer upgrades
 exports.redistributor = {
     PARENT: ["genericTank"],
     LABEL: "Redistributor",
@@ -2650,7 +2491,7 @@ exports.redistributor = {
             },
         },
     ],
-};
+}
 exports.phoenix = makeBird({
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -2670,7 +2511,7 @@ exports.phoenix = makeBird({
             },
         },
     ],
-}, "Phoenix");
+}, "Phoenix")
 exports.atomizer = {
     PARENT: ["genericTank"],
     LABEL: "Atomizer",
@@ -2698,7 +2539,7 @@ exports.atomizer = {
             },
         },
     ],
-};
+}
 exports.focal = {
     PARENT: ["genericTank"],
     LABEL: "Focal",
@@ -2725,9 +2566,9 @@ exports.focal = {
             },
         },
     ],
-};
+}
 
-// FLANK GUARD UPGRADES
+// Flank Guard upgrades
 exports.hexaTank = {
     PARENT: ["genericTank"],
     LABEL: "Hexa Tank",
@@ -2776,7 +2617,7 @@ exports.hexaTank = {
             },
         },
     ],
-};
+}
 exports.triAngle = {
     PARENT: ["genericTank"],
     LABEL: "Tri-Angle",
@@ -2818,7 +2659,7 @@ exports.triAngle = {
             },
         },
     ],
-};
+}
 exports.auto3 = {
     PARENT: ["genericTank"],
     LABEL: "Auto-3",
@@ -2838,9 +2679,9 @@ exports.auto3 = {
             TYPE: "autoTankGun",
         },
     ],
-};
+}
 
-// HEXA TANK UPGRADES
+// Hexa Tank upgrades
 exports.octoTank = {
     PARENT: ["genericTank"],
     LABEL: "Octo Tank",
@@ -2903,7 +2744,7 @@ exports.octoTank = {
             },
         },
     ],
-};
+}
 exports.cyclone = {
     PARENT: ["genericTank"],
     LABEL: "Cyclone",
@@ -3054,9 +2895,9 @@ exports.cyclone = {
             },
         },
     ],
-};
+}
 
-// TRI-ANGLE UPGRADES
+// Tri-Angle upgrades
 exports.fighter = {
     PARENT: ["genericTank"],
     LABEL: "Fighter",
@@ -3106,7 +2947,7 @@ exports.fighter = {
             },
         },
     ],
-};
+}
 exports.booster = {
     PARENT: ["genericTank"],
     LABEL: "Booster",
@@ -3165,9 +3006,8 @@ exports.booster = {
             },
         },
     ],
-};
-exports.autoTriAngle = makeAuto(exports.triAngle);
-exports.autoTriAngle.BODY = { SPEED: base.SPEED };
+}
+exports.autoTriAngle = makeAuto(exports.triAngle)
 exports.surfer = {
     PARENT: ["genericTank"],
     LABEL: "Surfer",
@@ -3217,9 +3057,9 @@ exports.surfer = {
             },
         },
     ],
-};
+}
 
-// AUTO-3 UPGRADES
+// Auto-3 upgrades
 exports.auto5 = {
     PARENT: ["genericTank"],
     LABEL: "Auto-5",
@@ -3247,7 +3087,7 @@ exports.auto5 = {
             TYPE: "autoTankGun",
         },
     ],
-};
+}
 exports.mega3 = {
     PARENT: ["genericTank"],
     LABEL: "Mega-3",
@@ -3270,7 +3110,7 @@ exports.mega3 = {
             TYPE: "megaAutoTankgun",
         },
     ],
-};
+}
 exports.auto4 = {
     PARENT: ["genericTank"],
     LABEL: "Auto-4",
@@ -3294,7 +3134,7 @@ exports.auto4 = {
             TYPE: "auto4gun",
         },
     ],
-};
+}
 exports.banshee = {
     PARENT: ["genericTank"],
     LABEL: "Banshee",
@@ -3356,9 +3196,9 @@ exports.banshee = {
             },
         },
     ],
-};
+}
 
-// DIRECTOR UPGRADES
+// Director upgrades
 exports.overseer = {
     PARENT: ["genericTank"],
     LABEL: "Overseer",
@@ -3393,7 +3233,7 @@ exports.overseer = {
             },
         },
     ],
-};
+}
 exports.cruiser = {
     PARENT: ["genericTank"],
     LABEL: "Cruiser",
@@ -3421,7 +3261,7 @@ exports.cruiser = {
             },
         },
     ],
-};
+}
 exports.underseer = {
     PARENT: ["genericTank"],
     LABEL: "Underseer",
@@ -3454,7 +3294,7 @@ exports.underseer = {
             },
         },
     ],
-};
+}
 exports.spawner = {
     PARENT: ["genericTank"],
     LABEL: "Spawner",
@@ -3484,7 +3324,7 @@ exports.spawner = {
             POSITION: [11.5, 12, 1, 0, 0, 0, 0],
         },
     ],
-};
+}
 exports.manager = {
     PARENT: ["genericTank"],
     LABEL: "Manager",
@@ -3509,7 +3349,7 @@ exports.manager = {
             },
         },
     ],
-};
+}
 exports.bigCheese = {
     PARENT: ["genericTank"],
     LABEL: "Big Cheese",
@@ -3532,9 +3372,9 @@ exports.bigCheese = {
             },
         },
     ],
-};
+}
 
-// OVERSEER UPGRADES
+// Overseer upgrades
 exports.overlord = {
     PARENT: ["genericTank"],
     LABEL: "Overlord",
@@ -3591,10 +3431,10 @@ exports.overlord = {
             },
         },
     ],
-};
-exports.autoOverseer = makeAuto(exports.overseer);
-exports.turretedDrone = makeAuto(generics.drone);
-exports.overdriveDeco = makeDeco(4);
+}
+exports.autoOverseer = makeAuto(exports.overseer)
+exports.turretedDrone = makeAuto(generics.drone)
+exports.overdriveDeco = makeDeco(4)
 exports.overdrive = {
     PARENT: ["genericTank"],
     LABEL: "Overdrive",
@@ -3636,7 +3476,7 @@ exports.overdrive = {
             },
         },
     ],
-};
+}
 exports.commander = {
     PARENT: ["genericTank"],
     LABEL: "Commander",
@@ -3708,9 +3548,9 @@ exports.commander = {
             },
         },
     ],
-};
+}
 
-// CRUISER UPGRADES
+// Cruiser upgrades
 exports.carrier = {
     PARENT: ["genericTank"],
     LABEL: "Carrier",
@@ -3747,7 +3587,7 @@ exports.carrier = {
             },
         },
     ],
-};
+}
 exports.battleship = {
     PARENT: ["genericTank"],
     LABEL: "Battleship",
@@ -3795,7 +3635,7 @@ exports.battleship = {
             },
         },
     ],
-};
+}
 exports.fortress = {
     PARENT: ["genericTank"],
     LABEL: "Fortress",
@@ -3879,10 +3719,10 @@ exports.fortress = {
             },
         },
     ],
-};
-exports.autoCruiser = makeAuto(exports.cruiser);
+}
+exports.autoCruiser = makeAuto(exports.cruiser)
 
-// UNDERSEER UPGRADES
+// Underseer upgrades
 exports.necromancer = {
     PARENT: ["genericTank"],
     LABEL: "Necromancer",
@@ -3938,7 +3778,7 @@ exports.necromancer = {
             },
         },
     ],
-};
+}
 exports.maleficitor = {
     PARENT: ["genericTank"],
     LABEL: "Maleficitor",
@@ -3968,7 +3808,7 @@ exports.maleficitor = {
             },
         },
     ],
-};
+}
 exports.infestor = {
     PARENT: ["genericTank"],
     LABEL: "Infestor",
@@ -4021,9 +3861,9 @@ exports.infestor = {
             },
         },
     ],
-};
+}
 
-// SPAWNER UPGRADES
+// Spawner upgrades
 exports.factory = {
     PARENT: ["genericTank"],
     LABEL: "Factory",
@@ -4053,10 +3893,10 @@ exports.factory = {
             POSITION: [12, 14, 1, 0, 0, 0, 0],
         },
     ],
-};
-exports.autoSpawner = makeAuto(exports.spawner);
+}
+exports.autoSpawner = makeAuto(exports.spawner)
 
-// POUNDER UPGRADES
+// Pounder upgrades
 exports.destroyer = {
     PARENT: ["genericTank"],
     LABEL: "Destroyer",
@@ -4070,7 +3910,7 @@ exports.destroyer = {
             },
         },
     ],
-};
+}
 exports.artillery = {
     PARENT: ["genericTank"],
     DANGER: 6,
@@ -4101,7 +3941,7 @@ exports.artillery = {
             },
         },
     ],
-};
+}
 exports.launcher = {
     PARENT: ["genericTank"],
     LABEL: "Launcher",
@@ -4123,7 +3963,7 @@ exports.launcher = {
             },
         },
     ],
-};
+}
 exports.shotgun = {
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -4203,7 +4043,7 @@ exports.shotgun = {
             POSITION: [8, 14, -1.3, 4, 0, 0, 0],
         },
     ],
-};
+}
 exports.eagle = makeBird({
     PARENT: "genericTank",
     DANGER: 7,
@@ -4217,9 +4057,9 @@ exports.eagle = makeBird({
             },
         },
     ],
-}, "Eagle");
+}, "Eagle")
 
-// DESTROYER UPGRADES
+// Destroyer upgrades
 exports.annihilator = {
     PARENT: ["genericTank"],
     LABEL: "Annihilator",
@@ -4233,10 +4073,10 @@ exports.annihilator = {
             },
         },
     ],
-};
-exports.hybrid = makeHybrid(exports.destroyer, "Hybrid");
+}
+exports.hybrid = makeHybrid(exports.destroyer, "Hybrid")
 
-// ARTILLERY UPGRADES
+// Artillery upgrades
 exports.mortar = {
     PARENT: ["genericTank"],
     LABEL: "Mortar",
@@ -4283,7 +4123,7 @@ exports.mortar = {
             },
         },
     ],
-};
+}
 exports.ordnance = {
     PARENT: ["genericTank"],
     LABEL: "Ordnance",
@@ -4327,7 +4167,7 @@ exports.ordnance = {
             },
         },
     ],
-};
+}
 exports.beekeeper = {
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -4365,7 +4205,7 @@ exports.beekeeper = {
             },
         },
     ],
-};
+}
 exports.fieldGun = {
     PARENT: ["genericTank"],
     LABEL: "Field Gun",
@@ -4404,9 +4244,9 @@ exports.fieldGun = {
             },
         },
     ],
-};
+}
 
-// LAUNCHER UPGRADES
+// Launcher upgrades
 exports.skimmer = {
     PARENT: ["genericTank"],
     BODY: {
@@ -4433,7 +4273,7 @@ exports.skimmer = {
             },
         },
     ],
-};
+}
 exports.twister = {
     PARENT: ["genericTank"],
     BODY: {
@@ -4462,7 +4302,7 @@ exports.twister = {
             },
         },
     ],
-};
+}
 exports.swarmer = {
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -4479,7 +4319,7 @@ exports.swarmer = {
             POSITION: [15, 12, 1, 5, 0, 0, 0],
         },
     ],
-};
+}
 exports.rocketeer = {
     PARENT: ["genericTank"],
     LABEL: "Rocketeer",
@@ -4505,9 +4345,9 @@ exports.rocketeer = {
             POSITION: [17, 18, 0.65, 0, 0, 0, 0],
         },
     ],
-};
+}
 
-// TRAPPER UPGRADES
+// Trapper upgrades
 exports.builder = {
     PARENT: ["genericTank"],
     DANGER: 6,
@@ -4529,7 +4369,7 @@ exports.builder = {
             },
         },
     ],
-};
+}
 exports.triTrapper = {
     PARENT: ["genericTank"],
     LABEL: "Tri-Trapper",
@@ -4570,7 +4410,7 @@ exports.triTrapper = {
             },
         },
     ],
-};
+}
 exports.trapGuard = {
     PARENT: ["genericTank"],
     LABEL: "Trap Guard",
@@ -4596,10 +4436,33 @@ exports.trapGuard = {
             },
         },
     ],
-};
-exports.overtrapper = makeOver(exports.weirdTrapper);
+}
+exports.overtrapper = makeOver({
+    PARENT: ["genericTank"],
+    LABEL: "Trapper",
+    DANGER: 6,
+    STAT_NAMES: statnames.mixed,
+    BODY: {
+        SPEED: base.SPEED * 0.8,
+        FOV: base.FOV * 1.2,
+    },
+    GUNS: [
+        {
+            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [14, 8, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [4, 8, 1.5, 14, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap]),
+                TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+})
 
-// BUILDER UPGRADES
+// Builder upgrades
 exports.construct = {
     PARENT: ["genericTank"],
     LABEL: "Constructor",
@@ -4621,8 +4484,8 @@ exports.construct = {
             },
         },
     ],
-};
-exports.autoBuilder = makeAuto(exports.builder);
+}
+exports.autoBuilder = makeAuto(exports.builder)
 exports.engineer = {
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -4653,7 +4516,7 @@ exports.engineer = {
             POSITION: [4, 14, 1, 8, 0, 0, 0],
         },
     ],
-};
+}
 exports.boomer = {
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -4680,7 +4543,7 @@ exports.boomer = {
             },
         },
     ],
-};
+}
 exports.assemblerEffect = {
     PARENT: ['bullet'],
     MOTION_TYPE: 'assembler',
@@ -4690,12 +4553,12 @@ exports.assemblerEffect = {
         RANGE: 10
     },
     ALPHA: 0.8
-};
+}
 exports.assemblerDot = {
     LABEL: '',
     SHAPE: -4,
     COLOR: "darkGrey"
-};
+}
 exports.assemblerTrap = {
     PARENT: ['setTrap'],
     LABEL: "Assembler Trap",
@@ -4711,7 +4574,7 @@ exports.assemblerTrap = {
         }
     ],
     HITS_OWN_TYPE: 'assembler'
-};
+}
 exports.assembler = {
     PARENT: ['genericTank'],
     DANGER: 7,
@@ -4741,9 +4604,9 @@ exports.assembler = {
             TYPE: 'assemblerDot'
         }
     ]
-};
+}
 
-// TRI-TRAPPER UPGRADES
+// Tri-Trapper upgrades
 exports.hexaTrapper = makeAuto({
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -4820,7 +4683,7 @@ exports.hexaTrapper = makeAuto({
             },
         },
     ],
-}, "Hexa-Trapper");
+}, "Hexa-Trapper")
 exports.septaTrapper = (() => {
     let a = 360 / 7,
         d = 1 / 7;
@@ -4914,7 +4777,7 @@ exports.septaTrapper = (() => {
             },
         ],
     };
-})();
+})()
 exports.architect = {
     LABEL: "Architect",
     BODY: {
@@ -4937,10 +4800,10 @@ exports.architect = {
             TYPE: "architectGun",
         },
     ],
-};
+}
 
-// TRAP GUARD UPGRADES
-exports.bushwhacker = makeGuard(exports.sniper, "Bushwhacker");
+// Trap Guard upgrades
+exports.bushwhacker = makeGuard(exports.sniper, "Bushwhacker")
 exports.gunnerTrapper = {
     PARENT: ["genericTank"],
     LABEL: "Gunner Trapper",
@@ -4993,7 +4856,7 @@ exports.gunnerTrapper = {
             },
         },
     ],
-};
+}
 exports.bomber = {
     PARENT: ["genericTank"],
     LABEL: "Bomber",
@@ -5039,7 +4902,7 @@ exports.bomber = {
             },
         },
     ],
-};
+}
 exports.conqueror = {
     PARENT: ["genericTank"],
     DANGER: 7,
@@ -5067,7 +4930,7 @@ exports.conqueror = {
             },
         },
     ],
-};
+}
 exports.bulwark = {
     PARENT: ["genericTank"],
     LABEL: "Bulwark",
@@ -5115,9 +4978,9 @@ exports.bulwark = {
             },
         },
     ],
-};
+}
 
-// DESMOS UPGRADES
+// Desmos upgrades
 exports.volute = {
     PARENT: ["genericTank"],
     LABEL: "Volute",
@@ -5140,7 +5003,7 @@ exports.volute = {
             POSITION: [4.75, 10, 2.125, 1.25, 6.375, -90, 0],
         },
     ],
-};
+}
 exports.helix = {
     PARENT: ["genericTank"],
     LABEL: "Helix",
@@ -5174,9 +5037,9 @@ exports.helix = {
             POSITION: [6, 8, 0.25, 10.5, 0, 0, 0],
         },
     ],
-};
+}
 
-// VOLUTE UPGRADES
+// Volute upgrades
 exports.sidewinder = {
     PARENT: ["genericTank"],
     LABEL: "Sidewinder",
@@ -5198,9 +5061,9 @@ exports.sidewinder = {
             },
         },
     ],
-};
+}
 
-// HELIX UPGRADES
+// Helix upgrades
 exports.triplex = {
     PARENT: ["genericTank"],
     LABEL: "Triplex",
@@ -5245,10 +5108,10 @@ exports.triplex = {
             POSITION: [5, 6, 0.5, 10.5, 0, -22.5, 0],
         },
     ],
-};
-exports.quadruplex = makeMulti(exports.desmos, 4, "Quadruplex", 45);
+}
+exports.quadruplex = makeMulti(exports.desmos, 4, "Quadruplex", 45)
 
-// SMASHER UPGRADES
+// Smasher upgrades
 exports.megaSmasher = {
     PARENT: ["genericTank"],
     LABEL: "Mega-Smasher",
@@ -5267,7 +5130,7 @@ exports.megaSmasher = {
             TYPE: "smasherBody",
         },
     ],
-};
+}
 exports.spike = {
     PARENT: ["genericTank"],
     LABEL: "Spike",
@@ -5300,12 +5163,12 @@ exports.spike = {
             TYPE: "spikeBody",
         },
     ],
-};
+}
 exports.autoSmasher = makeAuto(exports.smasher, "Auto-Smasher", {
     type: "autoSmasherTurret",
     size: 11,
-});
-exports.autoSmasher.SKILL_CAP = [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl];
+})
+exports.autoSmasher.SKILL_CAP = [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl]
 exports.landmine = {
     PARENT: ["genericTank"],
     LABEL: "Landmine",
@@ -5330,9 +5193,9 @@ exports.landmine = {
     IS_SMASHER: true,
     SKILL_CAP: [smshskl, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
     STAT_NAMES: statnames.smasher,
-};
+}
 
-// HEALER UPGRADES
+// Healer upgrades
 exports.medic = {
     PARENT: ["genericTank"],
     LABEL: "Medic",
@@ -5360,7 +5223,7 @@ exports.medic = {
         },
     ],
     STAT_NAMES: statnames.heal,
-};
+}
 exports.ambulance = {
     PARENT: ["genericTank"],
     LABEL: "Ambulance",
@@ -5414,7 +5277,7 @@ exports.ambulance = {
         },
     ],
     STAT_NAMES: statnames.heal,
-};
+}
 exports.surgeon = {
     PARENT: ["genericTank"],
     LABEL: "Surgeon",
@@ -5452,7 +5315,7 @@ exports.surgeon = {
         },
     ],
     STAT_NAMES: statnames.heal,
-};
+}
 exports.paramedic = {
     PARENT: ["genericTank"],
     LABEL: "Paramedic",
@@ -5500,9 +5363,9 @@ exports.paramedic = {
         },
     ],
     STAT_NAMES: statnames.heal,
-};
+}
 
-// TANK UPGRADE PATHS
+// Upgrade paths
 exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "desmos"];
     exports.basic.UPGRADES_TIER_2 = ["smasher"];
         exports.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "autoSmasher", "landmine"];
