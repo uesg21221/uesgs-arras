@@ -277,10 +277,10 @@ let maintainloop = () => {
         bossTimer = -c.BOSS_SPAWN_DURATION;
         let selection = c.BOSS_TYPES[ran.chooseChance(...c.BOSS_TYPES.map((selection) => selection.chance))],
             amount = ran.chooseChance(...selection.amount) + 1;
-        sockets.broadcast(amount > 1 ? "Visitors are coming..." : "A visitor is coming...");
         if (selection.message) {
             sockets.broadcast(selection.message);
         }
+        sockets.broadcast(amount > 1 ? "Visitors are coming." : "A visitor is coming.");
         setSyncedTimeout(() => {
             let names = [];
 
