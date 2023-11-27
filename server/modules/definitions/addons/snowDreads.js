@@ -580,7 +580,7 @@ module.exports = ({ Class }) => {
 				},
 			}, {
 				POSITION: [length - 2.5, width * 0.8, -1.2, x, y, angle, 0],
-				PROPERTIES: { COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 15} },
+				PROPERTIES: { COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 15} },
 			},
 		];
 		if (MAX_CHILDREN > 2) {
@@ -593,9 +593,32 @@ module.exports = ({ Class }) => {
 		}
 		return output;
 	}
-	function addMinion({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.factory], MAX_CHILDREN = 4) {
+	function addMinion({length = 18, gap = 3, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.factory], TYPE = "assailantMinionSnowdread", MAX_CHILDREN = 2) {
 		return [
-
+			{
+				POSITION: [length + 1, width, -1.3, x, y, angle, 0],
+				PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 17.5, SATURATION_SHIFT: 0.5} },
+			}, {
+				POSITION: [gap, width - 1, 1, x + length, y, angle, 0],
+				PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.5} },
+			}, {
+				POSITION: [1.5, width, 1, x + length + gap, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					MAX_CHILDREN,
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.5},
+				},
+			}, {
+				POSITION: [length, width, 1, x, y, angle, 0],
+				PROPERTIES: { COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 7.5} },
+			}, {
+				POSITION: [length + gap - 1, width * 0.6, -1.4, x, y, angle, 0],
+				PROPERTIES: { COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 15} },
+			},
 		];
 	}
 	function addAutoDrone({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.drone], MAX_CHILDREN = 4) {
@@ -643,6 +666,28 @@ module.exports = ({ Class }) => {
 	function addAutoTrap({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.trap], isBox = false) {
 		return [
 			
+		];
+	}
+	function addDroneOnAuto({length = 6, width = 12, aspect = 1.2, x = 8, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.drone]) {
+		return [
+			{
+				POSITION: [length, width + 1, -1.2, x - 1, y, angle, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10 } },
+			}, {
+				POSITION: [length, width, 1.2, x, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: ['drone', {INDEPENDENT: true}],
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 20, SATURATION_SHIFT: 0.5 },
+				},
+			}, {
+				POSITION: [length - 2, width * 2/3, 1, x - 1, y, angle, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10 }, DRAW_ABOVE: true },
+			},
 		];
 	}
 
@@ -1235,24 +1280,7 @@ module.exports = ({ Class }) => {
 		INDEPENDENT: true,
 		MAX_CHILDREN: 4,
 		GUNS: [
-			{
-				POSITION: [6, 13, -1.2, 7, 0, 0, 0],
-				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 } },
-			}, {
-				POSITION: [6, 12, 1.2, 8, 0, 0, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, {size: 1.3}]),
-					TYPE: ['drone', {INDEPENDENT: true}],
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -20, SATURATION_SHIFT: 0.5 },
-				},
-			}, {
-				POSITION: [4, 8, 1, 7, 0, 0, 0],
-				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 }, DRAW_ABOVE: true },
-			},
+			...addDroneOnAuto({length: 6, width: 12, x: 8}, 0, [g.drone, {size: 1.3}])
 		],
 		TURRETS: [
 			{
@@ -1747,25 +1775,30 @@ module.exports = ({ Class }) => {
 			...addDrone({length: 5, width: 11, aspect: 1.1, x: 8, angle: 90*i}, -5, [g.drone, g.over, g.over, {size: 1.5, reload: 0.6}], 3)
 		)
 	}
+	Class.assailantMinionTopSnowdread = {
+		SHAPE: "M 0.5 0 L 1 1 L 0 0.5 L -1 1 L -0.5 0 L -1 -1 L 0 -0.5 L 1 -1 L 0.5 0",
+		COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -5, SATURATION_SHIFT: 0.75},
+		MIRROR_MASTER_ANGLE: true,
+	}
 	Class.assailantMinionSnowdread = {
 		PARENT: ["minion"],
-		BODY: {
-			SPEED: 0.5,
-		},
+		BODY: { SPEED: 0.5 },
 		SHAPE: 4,
 	    COLOR: 13,
-		GUNS: []
+		GUNS: [],
+		TURRETS: [
+			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["square", {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}, MIRROR_MASTER_ANGLE: true}]
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "assailantMinionTopSnowdread"
+			}
+		]
 	}
 	for (let i = 0; i < 4; i++) {
 		Class.assailantMinionSnowdread.GUNS.push(
-			{
-				POSITION: [15, 7.5, 1, 0, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.assass, g.minion]),
-					WAIT_TO_CYCLE: true,
-					TYPE: "bullet",
-				},
-			},
+			...addGunner({length: 15, width: 7.5, angle: 90*i}, -5, [g.basic, g.assass, g.minion])
 		)
 	}
 	Class.assailantSnowdread = {
@@ -1775,24 +1808,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 4; i++) {
 		Class.assailantSnowdread.GUNS.push(
-			{
-				POSITION: [5, 10, 1, 10.5, 0, 90*i, 0],
-			},
-			{
-				POSITION: [1.5, 11, 1, 15, 0, 90*i, 0],
-				PROPERTIES: {
-					MAX_CHILDREN: 4,
-					SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 0.5}]),
-					TYPE: "assailantMinionSnowdread",
-					STAT_CALCULATOR: gunCalcNames.drone,
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					MAX_CHILDREN: 2,
-				},
-			},
-			{
-				POSITION: [12, 11, 1, 0, 0, 90*i, 0],
-			},
+			...addMinion({length: 12, gap: 3, width: 11, angle: 90*i}, -5, [g.factory, {size: 0.9, reload: 0.5}])
 		)
 	}
 	Class.radiationSnowdread = { // auto-drones
@@ -1990,7 +2006,7 @@ module.exports = ({ Class }) => {
 		PARENT: ["genericTank"],
 		CONTROLLERS: ["nearestDifferentMaster"],
 		INDEPENDENT: true,
-		COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15 },
+		COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.65 },
 		GUNS: [
 			{
 				POSITION: [21, 12, -1.4, 0, 0, 0, 0],
@@ -2076,7 +2092,7 @@ module.exports = ({ Class }) => {
 	}
 	Class.lighterTurretSnowdread = {
 		PARENT: 'genericTank',
-		COLOR: 16,
+		COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -12.5},
 		BODY: {FOV: 5},
 		CONTROLLERS: ['nearestDifferentMaster'],
 		INDEPENDENT: true,
@@ -2086,18 +2102,34 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {COLOR: 13},
 			}, {
 				POSITION: [16.5, 7, 1, 0, 0, 180, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 5}},
 			}, {
 				POSITION: [14, 2, 1, 0, 7, 0, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 12.5}},
 			}, {
 				POSITION: [14, 2, 1, 0, -7, 0, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 12.5}},
 			}, {
 				POSITION: [22, 7, 1, 0, 0, 0, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.flame]),
 					TYPE: 'growBullet',
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -17.5},
 				}
+			}, {
+				POSITION: [13, 8, -1.3, 0, 0, 0, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}},
 			},
 		],
+		TURRETS: [
+			{
+				POSITION: [13.5, 0, 0, 0, 0, 1],
+				TYPE: ["egg", { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 7.5 } }],
+			}, {
+				POSITION: [9, 0, 0, 0, 0, 1],
+				TYPE: ["egg", { COLOR: { BASE: -1 } }]
+			},
+		]
 	};
 	Class.lighterSnowdread = { // Flamethrower
 	    PARENT: ["genericSquarenought"],
@@ -2118,36 +2150,24 @@ module.exports = ({ Class }) => {
 	Class.stormTurretSnowdread = {
 		PARENT: 'genericTank',
 		LABEL: "",
-		BODY: {
-		  	FOV: 1.5,
-		},
+		BODY: { FOV: 1.5 },
 		CONTROLLERS: [[ 'spin', {speed: 0.03}]],
-		COLOR: 16,
+		COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5},
 		INDEPENDENT: true,
 		MAX_CHILDREN: 6,
 		GUNS: [
-			{
-				POSITION: [6, 12, 1.2, 8, 0, 90, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, {size: 1.2}]),
-					TYPE: ['drone', {INDEPENDENT: true}],
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-				},
-			}, {
-				POSITION: [6, 12, 1.2, 8, 0, 270, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, {size: 1.3}]),
-					TYPE: ['drone', {INDEPENDENT: true}],
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-				},
-			},
+			...addDroneOnAuto({length: 6, width: 12, x: 8, angle: 90}, 5, [g.drone, {size: 1.2}]),
+			...addDroneOnAuto({length: 6, width: 12, x: 8, angle: -90}, 5, [g.drone, {size: 1.2}]),
 		],
+		TURRETS: [
+			{
+				POSITION: [14, 0, 0, 0, 0, 1],
+				TYPE: ["egg", { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.6 } }],
+			}, {
+				POSITION: [8.5, 0, 0, 0, 0, 1],
+				TYPE: ["egg", { COLOR: { BASE: -1 } }]
+			},
+		]
 	};
 	Class.stormSnowdread = { // Drones
 	    PARENT: ["genericSquarenought"],
@@ -4720,7 +4740,6 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [1.5, 13, 1, 14.75, 0, 72*i, 0],
 				PROPERTIES: {
-					MAX_CHILDREN: 4,
 					SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 0.5}]),
 					TYPE: "minion",
 					STAT_CALCULATOR: gunCalcNames.drone,
