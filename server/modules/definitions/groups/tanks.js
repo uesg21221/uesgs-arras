@@ -1085,22 +1085,15 @@ exports.desmos = {
     ]
 }
 exports.smasher = {
-    PARENT: "genericTank",
+    PARENT: "genericSmasher",
     LABEL: "Smasher",
     DANGER: 6,
-    BODY: {
-        FOV: 1.05 * base.FOV,
-        DENSITY: 2 * base.DENSITY
-    },
     TURRETS: [
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
             TYPE: "smasherBody"
         }
     ],
-    IS_SMASHER: true,
-    SKILL_CAP: [smshskl, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
-    STAT_NAMES: statnames.smasher
 }
 exports.healer = {
     PARENT: "genericTank",
@@ -5009,17 +5002,13 @@ exports.quadruplex = makeMulti(exports.desmos, 4, "Quadruplex", 45)
 
 // Smasher upgrades
 exports.megaSmasher = {
-    PARENT: ["genericTank"],
+    PARENT: "genericSmasher",
     LABEL: "Mega-Smasher",
-    DANGER: 7,
     BODY: {
         SPEED: 1.05 * base.SPEED,
         FOV: 1.1 * base.FOV,
         DENSITY: 4 * base.DENSITY,
     },
-    IS_SMASHER: true,
-    SKILL_CAP: [smshskl, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
-    STAT_NAMES: statnames.smasher,
     TURRETS: [
         {
             POSITION: [25, 0, 0, 0, 360, 0],
@@ -5028,18 +5017,12 @@ exports.megaSmasher = {
     ],
 }
 exports.spike = {
-    PARENT: ["genericTank"],
+    PARENT: "genericSmasher",
     LABEL: "Spike",
-    DANGER: 7,
     BODY: {
         SPEED: base.SPEED * 0.9,
         DAMAGE: base.DAMAGE * 1.1,
-        FOV: base.FOV * 1.05,
-        DENSITY: base.DENSITY * 2,
     },
-    IS_SMASHER: true,
-    SKILL_CAP: [smshskl, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
-    STAT_NAMES: statnames.smasher,
     TURRETS: [
         {
             /** SIZE     X       Y     ANGLE    ARC */
@@ -5066,29 +5049,23 @@ exports.autoSmasher = makeAuto(exports.smasher, "Auto-Smasher", {
 })
 exports.autoSmasher.SKILL_CAP = [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl]
 exports.landmine = {
-    PARENT: ["genericTank"],
+    PARENT: "genericSmasher",
     LABEL: "Landmine",
     INVISIBLE: [0.06, 0.01],
     TOOLTIP: "Stay still to turn invisible.",
-    DANGER: 7,
     BODY: {
-        SPEED: 1.1 * base.SPEED,
-        FOV: 1.05 * base.FOV,
-        DENSITY: 2 * base.DENSITY,
+        SPEED: 1.1 * base.SPEED
     },
     TURRETS: [
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
-            TYPE: "smasherBody",
+            TYPE: "smasherBody"
         },
         {
             POSITION: [21.5, 0, 0, 30, 360, 0],
-            TYPE: "landmineBody",
-        },
-    ],
-    IS_SMASHER: true,
-    SKILL_CAP: [smshskl, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
-    STAT_NAMES: statnames.smasher,
+            TYPE: "landmineBody"
+        }
+    ]
 }
 
 // Healer upgrades
