@@ -580,7 +580,7 @@ module.exports = ({ Class }) => {
 				},
 			}, {
 				POSITION: [length - 2.5, width * 0.8, -1.2, x, y, angle, 0],
-				PROPERTIES: { COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 15} },
+				PROPERTIES: { COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5} },
 			},
 		];
 		if (MAX_CHILDREN > 2) {
@@ -621,19 +621,80 @@ module.exports = ({ Class }) => {
 			},
 		];
 	}
-	function addAutoDrone({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.drone], MAX_CHILDREN = 4) {
+	function addAutoDrone({length = 18, width = 8, aspect = 1.2, x = 8, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.drone], MAX_CHILDREN = 4) {
 		return [
-
+			{
+				POSITION: [length, width, aspect, x, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: "turretedDrone",
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					MAX_CHILDREN,
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.55},
+				},
+			}, {
+				POSITION: [length - 3, width - 2, aspect * 0.95, x, y, angle, delay],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 7.5}},
+			}, {
+				POSITION: [length - 1, width - 3, aspect, x, y, angle, delay],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.55}},
+			}, {
+				POSITION: [length - 2, width / 2, 1, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5},}
+			},
 		];
 	}
 	function addHoncho({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.drone], MAX_CHILDREN = 4) {
 		return [
-			
+			{
+				POSITION: [length, width, aspect, x, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: "drone",
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+					STAT_CALCULATOR: gunCalcNames.drone,
+					WAIT_TO_CYCLE: true,
+					MAX_CHILDREN,
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.6},
+				},
+			}, {
+				POSITION: [1.5, width * 1.1, 0.5, x + length - 2.5, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.7}, BORDERLESS: true}
+			}, {
+				POSITION: [1.5, width * 1.1, 1, x + length - 4.5, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5}}
+			}, {
+				POSITION: [length + 3, 4, 0.001, x, y + width * 0.27, angle + 22.5, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5},}
+			}, {
+				POSITION: [length + 3, 4, 0.001, x, y - width * 0.27, angle - 22.5, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5},}
+			},
 		];
 	}
-	function addSwarm({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.swarm]) {
+	function addSwarm({length = 18, width = 8, aspect = 0.6, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.swarm]) {
 		return [
-
+			{
+				POSITION: [length, width, aspect, x, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: "swarm",
+					STAT_CALCULATOR: gunCalcNames.swarm,
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.7}
+				},
+			}, {
+				POSITION: [length * 1.5, width * 0.8, aspect, x - length * 0.65, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+					TYPE: "swarm",
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.7},
+					BORDERLESS: true
+				},
+			},
 		];
 	}
 	function addTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.trap], isBox = false) {
@@ -1818,21 +1879,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 4; i++) {
 		Class.radiationSnowdread.GUNS.push(
-			{
-				POSITION: [6, 10, 1.2, 8, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, g.over, {reload: 0.8}]),
-					TYPE: "turretedDrone",
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-					MAX_CHILDREN: 2,
-				},
-			},
-			{
-				POSITION: [12, 5, 1, 0, 0, 90*i, 0],
-			},
+			...addAutoDrone({length: 6, width: 10, angle: 90*i}, -5, [g.drone, g.over, {reload: 0.8}], 3)
 		)
 	};
 	Class.boxerSnowdread = { // honcho
@@ -1842,18 +1889,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 4; i++) {
 		Class.boxerSnowdread.GUNS.push(
-			{
-				POSITION: [5, 11, 1.5, 8, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.honcho]),
-					TYPE: "drone",
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-					MAX_CHILDREN: i % 2 + 1,
-				},
-			},
+			...addHoncho({length: 5, width: 11, aspect: 1.5, x: 8, angle: 90*i}, -5, [g.drone, g.over, g.over, g.honcho], i % 2 + 1)
 		)
 	};
 	Class.disablerSnowdread = { // swarms
@@ -1863,22 +1899,8 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 4; i++) {
 		Class.disablerSnowdread.GUNS.push(
-			{
-				POSITION: [7, 7, 0.6, 6, 3.5, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, g.lessreload]),
-					TYPE: "swarm",
-					STAT_CALCULATOR: gunCalcNames.swarm,
-				},
-			},
-			{
-				POSITION: [7, 7, 0.6, 6, -3.5, 90*i, 0.5],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, g.lessreload]),
-					TYPE: "swarm",
-					STAT_CALCULATOR: gunCalcNames.swarm,
-				},
-			},
+			...addSwarm({length: 7, width: 7, x: 6, y: 3.5, angle: 90*i}, -5, [g.swarm, g.over, g.over, g.lessreload]),
+			...addSwarm({length: 7, width: 7, x: 6, y: -3.5, angle: 90*i, delay: 0.5}, -5, [g.swarm, g.over, g.over, g.lessreload]),
 		)
 	};
 	Class.daemonSnowdread = {
