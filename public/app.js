@@ -1285,8 +1285,8 @@ function drawUpgradeTree(spacing, alcoveSize) {
     ctx.lineWidth = 1;
     ctx.fillStyle = color.dgrey;
     ctx.strokeStyle = color.black;
-    ctx.fillText(text, innerWidth / 2 - w / 2, innerHeight * 0.04);
-    ctx.strokeText(text, innerWidth / 2 - w / 2, innerHeight * 0.04);
+    ctx.fillText(text, global.screenWidth / 2 - w / 2, innerHeight * 0.04);
+    ctx.strokeText(text, global.screenWidth / 2 - w / 2, innerHeight * 0.04);
 }
 
 function drawMessages(spacing) {
