@@ -1,3 +1,5 @@
+/* jshint esversion: 11 */
+
 import { util } from "./lib/util.js";
 import { global } from "./lib/global.js";
 import { settings } from "./lib/settings.js";
@@ -468,7 +470,11 @@ function drawGuiRect(x, y, length, height, stroke = false) {
 function drawGuiCircle(x, y, radius, stroke = false) {
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
-    stroke ? ctx.stroke() : ctx.fill();
+    if (stroke) {
+        ctx.stroke();
+    } else {
+        ctx.fill();
+    }
 }
 
 function drawGuiLine(x1, y1, x2, y2) {
@@ -504,7 +510,7 @@ function isImageURL(url) {
     }
 }
 // Sub-drawing functions
-const drawPolyImgs = []
+const drawPolyImgs = [];
 function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation, borderFirst = false) {
     // Start drawing
     context.beginPath();
@@ -522,38 +528,38 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 //ideally we'd preload images when mockups are loaded but im too lazy for that atm
                 if (!drawPolyImgs[sides]) {
                     drawPolyImgs[sides] = new Image();
-                    drawPolyImgs[sides].src = sides
+                    drawPolyImgs[sides].src = sides;
                     drawPolyImgs[sides].isBroken = false;
                     drawPolyImgs[sides].onerror = function() {
                         console.log('Failed to load image!\nURL:', sides);
                         this.isBroken = true;
                     };
                 }
-                let img = drawPolyImgs[sides]
+                let img = drawPolyImgs[sides];
                 if (img.isBroken || !img.complete) { // check if img is broken and draw placeholder if so
                     //this is probably the worst way to draw a missing texture checkerboard but im too lazy to do a better one
                     context.translate(centerX, centerY);
                     context.rotate(angle);
                     context.beginPath();
-                    context.fillStyle = '#ff00ff'
-                    context.lineTo(-radius,-radius)
-                    context.lineTo(radius,-radius)
-                    context.lineTo(radius,radius)
-                    context.lineTo(-radius,radius)
-                    context.lineTo(-radius,-radius)
+                    context.fillStyle = '#ff00ff';
+                    context.lineTo(-radius,-radius);
+                    context.lineTo(radius,-radius);
+                    context.lineTo(radius,radius);
+                    context.lineTo(-radius,radius);
+                    context.lineTo(-radius,-radius);
                     context.fill();
                     context.closePath();
                     context.beginPath();
-                    context.fillStyle = '#000000'
-                    context.lineTo(-radius,-radius)
-                    context.lineTo(0,-radius)
-                    context.lineTo(0,0)
-                    context.lineTo(0, radius)
-                    context.lineTo(radius, radius)
-                    context.lineTo(radius, 0)
-                    context.lineTo(0, 0)
-                    context.lineTo(-radius, 0)
-                    context.lineTo(-radius,-radius)
+                    context.fillStyle = '#000000';
+                    context.lineTo(-radius,-radius);
+                    context.lineTo(0,-radius);
+                    context.lineTo(0,0);
+                    context.lineTo(0, radius);
+                    context.lineTo(radius, radius);
+                    context.lineTo(radius, 0);
+                    context.lineTo(0, 0);
+                    context.lineTo(-radius, 0);
+                    context.lineTo(-radius,-radius);
                     context.fill();
                     context.closePath();
                     context.rotate(-angle);
@@ -562,7 +568,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 }
                 context.translate(centerX, centerY);
                 context.rotate(angle);
-                context.imageSmoothingEnabled = imageInterpolation
+                context.imageSmoothingEnabled = imageInterpolation;
                 context.drawImage(img, -radius, -radius, radius*2, radius*2);
                 context.imageSmoothingEnabled = true;
                 context.rotate(-angle);
@@ -653,7 +659,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     points.push([0, -h[1]]);
 
     // Rotate it to the new angle via vector rotation
-    context.globalAlpha = alpha
+    context.globalAlpha = alpha;
     context.beginPath();
     for (let point of points) {
         let newX = point[0] * cosT - point[1] * sinT + x,
@@ -665,10 +671,9 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     if (!borderless) context.stroke();
     context.lineWidth /= fill ? 1 : 0.5; // Maintain constant border width
     if (fill) context.fill();
-    context.globalAlpha = 1
+    context.globalAlpha = 1;
 }
-// Entity drawing (this is a function that makes a function)
-const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
+const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, lineWidthMult = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
     let context = assignedContext ? assignedContext : ctx;
     let fade = turretInfo ? 1 : render.status.getFade(),
         drawSize = scale * ratio * instance.size,
@@ -692,6 +697,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
     }
     context.lineCap = "round";
     context.lineJoin = "round";
+    context.lineWidth = lineWidthMult * Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
     // Draw turrets beneath us
     for (let i = 0; i < source.turrets.length; i++) {
         let t = source.turrets[i];
@@ -707,11 +713,10 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
             } else {
                 facing = source.turrets[i].lerpedFacing;
             }
-            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, facing, turretsObeyRot, context, source.turrets[i], render);
+            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, source.turrets[i], render);
         }
     }
     // Draw guns below us
-    context.lineWidth = Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
     let positions = source.guns.getPositions(),
         gunConfig = source.guns.getConfig();
     for (let i = 0; i < source.guns.length; i++) {
@@ -747,7 +752,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
       }
       context.globalAlpha = 1;
     }
-    context.shadowBlur = 0
+    context.shadowBlur = 0;
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
 
@@ -779,7 +784,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, rot 
             } else {
                 facing = source.turrets[i].lerpedFacing;
             }
-            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, facing, turretsObeyRot, context, source.turrets[i], render);
+            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, source.turrets[i], render);
         }
     }
     if (assignedContext == false && context != ctx && context.canvas.width > 0 && context.canvas.height > 0) {
@@ -846,7 +851,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
     }
 }
 
-function drawEntityIcon(model, x, y, len, height, angle, alpha, colorIndex, upgradeKey) {
+function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, colorIndex, upgradeKey) {
     let picture = util.getEntityImageFromMockup(model, gui.color),
         position = picture.position,
         scale = (0.6 * len) / position.axis,
@@ -866,17 +871,17 @@ function drawEntityIcon(model, x, y, len, height, angle, alpha, colorIndex, upgr
     ctx.globalAlpha = 1;
 
     // Draw Tank
-    drawEntity(baseColor, entityX, entityY, picture, 1, 1, scale / picture.size, angle, true);
+    drawEntity(baseColor, entityX, entityY, picture, 1, 1, scale / picture.size, lineWidthMult, angle, true);
 
     // Tank name
-    drawText(picture.upgradeName ?? picture.name, x + (upgradeKey ? 0.9 * len : len) / 2, y + height - 6, height / 8 - 3, color.guiwhite, "center");
+    drawText(picture.upgradeName ?? picture.name, x + (upgradeKey ? 0.9 * len : len) / 2, y + height * 0.94, height / 10, color.guiwhite, "center");
 
     // Upgrade key
     if (upgradeKey) {
         drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 3, color.guiwhite, "right");
     }
     ctx.strokeStyle = color.black;
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 3 * lineWidthMult;
     drawGuiRect(x, y, len, height, true); // Border
 }
 
@@ -1146,7 +1151,7 @@ function drawEntities(px, py, ratio) {
         }
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
-        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, instance.render.f);
+        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, 1, instance.render.f);
     }
 
     //dont draw healthbars and chat messages in screenshot mode
@@ -1195,12 +1200,13 @@ function drawEntities(px, py, ratio) {
 
 global.showTree = false;
 global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1;
-global.shouldScrollY = global.shouldScrollX = 0;
+global.scrollVelocityY = global.scrollVelocityX = 0;
 let lastGuiType = null;
 function drawUpgradeTree(spacing, alcoveSize) {
     if (global.died) {
         global.showTree = false;
-        global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = global.shouldScrollY = global.shouldScrollX = 0;
+        global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = global.scrollVelocityY = global.scrollVelocityX = 0;
+        global.treeScale = 1;
         return;
     }
 
@@ -1224,24 +1230,39 @@ function drawUpgradeTree(spacing, alcoveSize) {
     }
 
     let tileSize = alcoveSize / 2,
-        size = tileSize - 4,
+        size = tileSize - 4, // TODO: figure out where this 4 comes from
         spaceBetween = 10,
-        padding = 0.5 + spaceBetween / tileSize,
-        screenDivisor = spaceBetween + tileSize;
+        screenDivisor = (spaceBetween + tileSize) * 2 * global.treeScale,
+        padding = tileSize / screenDivisor,
+        dividedWidth = global.screenWidth / screenDivisor,
+        dividedHeight = global.screenHeight / screenDivisor,
+        treeFactor = 1 + spaceBetween / tileSize;
 
-    global.fixedScrollX = Math.max(-padding, Math.min(tankTree.width * (1 + spaceBetween / tileSize) + padding - global.screenWidth / screenDivisor, global.fixedScrollX + global.shouldScrollX));
-    global.fixedScrollY = Math.max(-padding, Math.min(tankTree.height * (1 + spaceBetween / tileSize) + padding - global.screenHeight / screenDivisor, global.fixedScrollY + global.shouldScrollY));
+    global.fixedScrollX = Math.max(
+        dividedWidth - padding,
+        Math.min(
+            tankTree.width * treeFactor + padding - dividedWidth,
+            global.fixedScrollX + global.scrollVelocityX
+        )
+    );
+    global.fixedScrollY = Math.max(
+        dividedHeight - padding,
+        Math.min(
+            tankTree.height * treeFactor + padding - dividedHeight,
+            global.fixedScrollY + global.scrollVelocityY
+        )
+    );
     global.scrollX = util.lerp(global.scrollX, global.fixedScrollX, 0.1);
     global.scrollY = util.lerp(global.scrollY, global.fixedScrollY, 0.1);
 
     for (let [start, end] of branches) {
-        let sx = (start.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size,
-            sy = (start.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size,
-            ex = (end.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size,
-            ey = (end.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size;
+        let sx = ((start.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size) * global.treeScale + global.screenWidth / 2,
+            sy = ((start.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size) * global.treeScale + global.screenHeight / 2,
+            ex = ((end.x - global.scrollX) * (tileSize + spaceBetween) + 1 + 0.5 * size) * global.treeScale + global.screenWidth / 2,
+            ey = ((end.y - global.scrollY) * (tileSize + spaceBetween) + 1 + 0.5 * size) * global.treeScale + global.screenHeight / 2;
         if (ex < 0 || sx > global.screenWidth || ey < 0 || sy > global.screenHeight) continue;
         ctx.strokeStyle = color.black;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2 * global.treeScale;
         drawGuiLine(sx, sy, ex, ey);
     }
     ctx.globalAlpha = 0.5;
@@ -1252,17 +1273,17 @@ function drawUpgradeTree(spacing, alcoveSize) {
     //draw the various tank icons
     let angle = -Math.PI / 4;
     for (let { x, y, colorIndex, index } of tiles) {
-        let ax = (x - global.scrollX) * (tileSize + spaceBetween),
-            ay = (y - global.scrollY) * (tileSize + spaceBetween);
+        let ax = (x - global.scrollX) * (tileSize + spaceBetween) * global.treeScale + global.screenWidth / 2,
+            ay = (y - global.scrollY) * (tileSize + spaceBetween) * global.treeScale + global.screenHeight / 2;
         if (ax < -tileSize || ax > global.screenWidth + tileSize || ay < -tileSize || ay > global.screenHeight + tileSize) continue;
-        drawEntityIcon(index.toString(), ax, ay, tileSize, tileSize, angle, 1, colorIndex);
+        drawEntityIcon(index.toString(), ax, ay, tileSize * global.treeScale, tileSize * global.treeScale, global.treeScale, angle, 1, colorIndex);
     }
 
-    let text = "Use the arrow keys to navigate the class tree. Press T again to close it.";
-    let w = measureText(text, 16);
+    let text = "Arrow keys to navigate the class tree. Shift to navigate faster. Scroll wheel (or +/- keys) to zoom in/out.";
+    let w = measureText(text, 18);
     ctx.globalAlpha = 1;
     ctx.lineWidth = 1;
-    ctx.fillStyle = color.red;
+    ctx.fillStyle = color.dgrey;
     ctx.strokeStyle = color.black;
     ctx.fillText(text, innerWidth / 2 - w / 2, innerHeight * 0.04);
     ctx.strokeText(text, innerWidth / 2 - w / 2, innerHeight * 0.04);
@@ -1538,7 +1559,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
             xx = x - 1.5 * height - scale * entry.position.middle.x * 0.707,
             yy = y + 0.5 * height + scale * entry.position.middle.x * 0.707,
             baseColor = entry.image.color;
-        drawEntity(baseColor, xx, yy, entry.image, 1 / scale, 1, (scale * scale) / entry.image.size, -Math.PI / 4, true);
+        drawEntity(baseColor, xx, yy, entry.image, 1 / scale, 1, (scale * scale) / entry.image.size, 1, -Math.PI / 4, true);
         // Move down
         y += vspacing + height;
     }
@@ -1596,7 +1617,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
             let upgradeKey = getClassUpgradeKey(upgradeNum);
 
-            drawEntityIcon(model, x, y, len, height, upgradeSpin, 0.5, colorIndex++, upgradeKey);
+            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.5, colorIndex++, upgradeKey);
 
             ticker++;
             upgradeNum++;
@@ -1723,7 +1744,7 @@ const gameDrawDead = () => {
         yy = global.screenHeight / 2 - 35 + scale * position.middle.x * 0.707,
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
-    drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, -Math.PI / 4, true);
+    drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
     drawText("That pond it seems me many multiplied of fishes. Let us amuse rather to the fishing.", x, y - 80, 8, color.guiwhite, "center");
     drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);

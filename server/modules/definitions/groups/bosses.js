@@ -1451,7 +1451,7 @@ exports.bob = {
         },
         {
             POSITION: [23.75, 0, 0, 0, 360, 0],
-            TYPE: "weirdSpikeBody1",
+            TYPE: "spikeBody",
         },
     ],
 };
@@ -3772,6 +3772,38 @@ exports.alviss = {
 };
 
 // GENGHIS
+exports.tinyMinion = {
+    PARENT: ["minion"],
+    LABEL: "Tiny Minion",
+    ACCEPTS_SCORE: false,
+    SHAPE: 0,
+    MOTION_TYPE: 'swarm',
+    CRAVES_ATTENTION: true,
+    BODY: {
+        ACCELERATION: 3,
+        PENETRATION: 1.5,
+        HEALTH: 0.35 * 0.5,
+        DAMAGE: 2.25,
+        RESIST: 1.6,
+        RANGE: 300,
+        DENSITY: 12,
+        PUSHABILITY: 0.5,
+        FOV: 1.5,
+    },
+    AI: {
+        BLIND: true,
+    },
+    GUNS: [ { /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
+        POSITION: [    17,         9,            1,            0,            0,            0,            0,     ],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.lowpower]),
+            WAIT_TO_CYCLE: true,
+            TYPE: "bullet",
+        }, },
+    ],
+    DIE_AT_RANGE: true,
+    BUFF_VS_FOOD: true,
+}
 exports.tyrLowerTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
