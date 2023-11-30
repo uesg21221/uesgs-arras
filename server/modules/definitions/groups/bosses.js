@@ -4846,17 +4846,6 @@ exports.zenphiaBoss = {
         DAMAGE: 5 * base.DAMAGE,
     },
     GUNS: Array(4).fill().map((_, i) => ([{
-        POSITION: [3.5, 8.65, 1.2, 8, 0, i * 90, 0],
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.destroy, g.veryfast, { maxSpeed: 3 }]),
-            TYPE: "shinyomegasunchip",
-            MAX_CHILDREN: 4,
-            AUTOFIRE: true,
-            SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.necro,
-            WAIT_TO_CYCLE: true
-        }
-    },{
         POSITION: [2.5, 3, 1.2, 8, 5, i * 90, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.pound, g.veryfast, g.mach, { spray: 50, speed: 1.25, shudder: 1.25 }]),
@@ -4873,6 +4862,17 @@ exports.zenphiaBoss = {
             SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.pound, g.veryfast, g.mach, { spray: 150, speed: 1.25, shudder: 1.25 }]),
             TYPE: "shinybetawaferbread",
             MAX_CHILDREN: 8,
+            AUTOFIRE: true,
+            SYNCS_SKILLS: true,
+            STAT_CALCULATOR: gunCalcNames.necro,
+            WAIT_TO_CYCLE: true
+        }
+    },{
+        POSITION: [3.5, 8.65, 1.2, 8, 0, i * 90, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.destroy, g.veryfast, { maxSpeed: 3 }]),
+            TYPE: "shinyomegasunchip",
+            MAX_CHILDREN: 4,
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
             STAT_CALCULATOR: gunCalcNames.necro,
