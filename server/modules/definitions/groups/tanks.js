@@ -690,7 +690,7 @@ exports.bigauto4gun = {
             },
         },
         {
-            POSITION: [14, 5, 1, 0, 4.5, 0, 0.5],
+            POSITION: [14, 5, 1, 0, 4.5, 0, 0.33],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
@@ -705,7 +705,7 @@ exports.bigauto4gun = {
             },
         },
         {
-            POSITION: [16, 5, 1, 0, 0, 0, 0.5],
+            POSITION: [16, 5, 1, 0, 0, 0, 0.67],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([
                     g.basic,
