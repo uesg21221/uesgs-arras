@@ -592,9 +592,15 @@ exports.setTrap = {
     },
 }
 exports.unsetTrap = {
-    PARENT: "setTrap",
-    CONTROLLERS: [],
-}
+    PARENT: "trap",
+    LABEL: "Set Trap",
+    SHAPE: -4,
+    MOTION_TYPE: "motor",
+    BODY: {
+        SPEED: 1,
+        DENSITY: 5,
+    },
+};
 exports.boomerang = {
     PARENT: "trap",
     LABEL: "Boomerang",
