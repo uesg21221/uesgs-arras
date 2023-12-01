@@ -719,14 +719,70 @@ module.exports = ({ Class }) => {
 			},
 		];
 	}
-	function addAuraTrap({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.trap], isBox = false) {
-		return [
-
+	function addAutoTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.trap], isBox = false) {
+		let output = [
+			{
+				POSITION: [length, width, 1, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6}}
+			}, {
+				POSITION: [length - 3, width + 3, 1, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 7.5}}
+			}, {
+				POSITION: [length - 4, width + 1, 1, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 15}, BORDERLESS: true}
+			}, {
+				POSITION: [length2, width, aspect, x + length, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: isBox ? 'unsetPillbox' : 'autoTrap',
+					STAT_CALCULATOR: gunCalcNames.trap,
+					INDEPENDENT: true,
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6}
+				},
+			}, {
+				POSITION: [length + length2 / 2, width * 0.9, 0.6, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 7.5, SATURATION_SHIFT: 0.7}}
+			},
 		];
+		if (isBox) {
+			output.splice(1, 0, {
+				POSITION: [length - 1, width - 2, 1, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 7.5, SATURATION_SHIFT: 0.65}, BORDERLESS: true}
+			});
+			output.push({
+				POSITION: [length + length2 / 2 - 1.5, width * 0.75, 0.6, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift, SATURATION_SHIFT: 0.75}, BORDERLESS: true}
+			});
+		}
+		return output;
 	}
-	function addAutoTrap({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.trap], isBox = false) {
+	function addAuraTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.trap], isBox = false) {
 		return [
-			
+			{
+				POSITION: [length, width, 1, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6}}
+			}, {
+				POSITION: [length2 + 1, width - 1.5, -1.7, x + length - length2 - 3, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 7.5}}
+			}, {
+				POSITION: [length, width * 0.6, -0.1, x, y, angle, 0],
+				PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.75}}
+			}, {
+				POSITION: [length2, width, aspect, x + length, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: isBox ? 'auraBlock' : 'auraTrap',
+					STAT_CALCULATOR: gunCalcNames.trap,
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6}
+				},
+			}, {
+				POSITION: [length2 - 1, width - 2, aspect, x + length + 1, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+					TYPE: 'bullet',
+					COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 7.5}
+				},
+			},
 		];
 	}
 	function addDroneOnAuto({length = 6, width = 12, aspect = 1.2, x = 8, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.drone]) {
@@ -1940,21 +1996,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 4; i++) {
 		Class.cleanerSnowdread.GUNS.push(
-			{
-				POSITION: [15, 6, 1, 0, 0, 90*i, 0],
-			},
-			{
-				POSITION: [12, 9, 1, 0, 0, 90*i, 0],
-			},
-			{
-				POSITION: [3, 6, 1.7, 15, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, {health: 1.2, reload: 1.15}]),
-					TYPE: 'autoTrap',
-					STAT_CALCULATOR: gunCalcNames.trap,
-					INDEPENDENT: true,
-				},
-			},
+			...addAutoTrap({length: 15, width: 6, aspect: 1.7, angle: 90*i}, -5, [g.trap, {health: 1.2, reload: 1.15}])
 		)
 	}
 	Class.auraTrapAura = addAura(1/3, 2, 0.15, 0, "Small");
@@ -1966,25 +2008,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 4; i++) {
 		Class.shadeSnowdread.GUNS.push(
-			{
-				POSITION: [14, 7, 1, 0, 0, 90*i, 0],
-			},
-			{
-				POSITION: [3, 7, 1.6, 14, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap, {range: 0.8, health: 1.2}]),
-					TYPE: 'auraTrap',
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
-			{
-				POSITION: [2, 5, 1.6, 15, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap, g.fake]),
-					TYPE: 'bullet',
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
+			...addAuraTrap({length: 14, length2: 3, width: 7, aspect: 1.6, angle: 90*i}, -5, [g.trap, g.hexatrap, {range: 0.8, health: 1.2}])
 		)
 	}
 	Class.screwdriverSnowdread = { // trap + gun
@@ -3280,26 +3304,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.sweeperSnowdread.GUNS.push(
-			{
-				POSITION: [5, 12, 1, 7.5, 0, 120*i, 0],
-			},
-			{
-				POSITION: [3, 15, 1, 13, 0, 120*i, 0],
-			},
-			{
-				POSITION: [2, 15, 1.3, 15.5, 0, 120*i, 0],
-				PROPERTIES: {
-					MAX_CHILDREN: 5,
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.halfreload, {reload: 1.25}]),
-					TYPE: 'unsetPillbox',
-					SYNCS_SKILLS: true,
-					DESTROY_OLDEST_CHILD: true,
-					INDEPENDENT: true,
-				},
-			},
-			{
-				POSITION: [5, 15, 1, 5, 0, 120*i, 0],
-			},
+			...addAutoTrap({length: 15.5, length2: 2, width: 15, aspect: 1.3, angle: 120*i}, -2.5, [g.trap, g.block, g.halfreload, {reload: 1.25}], true)
 		)
 	}
 	Class.auraBlockAura = addAura(1/3, 1.6, 0.15, 0, "Small");
