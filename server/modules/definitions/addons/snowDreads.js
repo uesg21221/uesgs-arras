@@ -905,6 +905,32 @@ module.exports = ({ Class }) => {
 			},
 		)
 	}
+	Class.baseTriDeco = {
+		SHAPE: "M -1.546 -0.108 L -1.546 0.108 L -0.175 0.303 L 0.679 1.393 L 0.867 1.285 L 0.35 0 L 0.867 -1.285 L 0.679 -1.393 L -0.175 -0.303 L -1.546 -0.108",
+		COLOR: {
+			BASE: 17,
+			BRIGHTNESS_SHIFT: 5,
+		},
+		MIRROR_MASTER_ANGLE: true,
+		GUNS: [],
+	}
+	for(let i = 0; i < 3; i++) {
+		Class.baseTriDeco.GUNS.push(
+			{
+				POSITION: [7, 3, 0.001, 10, 0, 120 * i + 60, 0],
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.7 } },
+			}, {
+				POSITION: [5, 2.5, 0.001, 6.5, -2, 120 * i + 90, 0],
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.85 } },
+			}, {
+				POSITION: [5, 2.5, 0.001, 6.5, 2, 120 * i + 30, 0],
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.85 } },
+			}, {
+				POSITION: [9, 5, 0.25, 0, 0, 120 * i + 60, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 12.5 }, BORDERLESS: true, DRAW_ABOVE: true },
+			},
+		)
+	}
 
 	// Auras
 	Class.auraSmall = {
@@ -980,12 +1006,8 @@ module.exports = ({ Class }) => {
 		INDEPENDENT: true,
 		COLOR: 0,
 		BORDER_FIRST: true,
-		SHAPE: "M 1 0 L 0.797 0.46 L 0.52 0.3 L 0.52, -0.3 L 0.797, -0.46 " + 
-			"M 0.797 0.46 L 0.5 0.866 L 0 0.92 L 0 0.6 L 0.52 0.3 L 0.797 0.46 " + 
-			"M -0.797 0.46 L -0.5 0.866 L 0 0.92 L 0 0.6 L -0.52 0.3 L -0.797 0.46 " + 
-			"M -1 0 L -0.797 0.46 L -0.52 0.3 L -0.52, -0.3 L -0.797, -0.46 L -1 0 " + 
-			"M -0.797 -0.46 L -0.5 -0.866 L 0 -0.92 L 0 -0.6 L -0.52 -0.3 L -0.797 -0.46 " + 
-			"M 0.797 -0.46 L 0.5 -0.866 L 0 -0.92 L 0 -0.6 L 0.52 -0.3 L 0.797 -0.46 L 1 0",
+		SHAPE: "M 1 0 L 0.797 0.46 L 0.5 0.866 L 0 0.92 L -0.5 0.866 L -0.797 0.46 L -1 0 L -0.797 -0.46 L -0.5 -0.866 L 0 -0.92 L 0.5 -0.866 L 0.797 -0.46 L 1 0 Z" +
+		"M 0.52 0.3 L 0.52 -0.3 L 0.797 -0.46 M 0.52 -0.3 L 0 -0.6 L 0 -0.92 M 0 -0.6 L -0.52 -0.3 L -0.797 -0.46 M -0.52 -0.3 L -0.52 0.3 L -0.797 0.46 M -0.52 0.3 L 0 0.6 L 0 0.92 M 0 0.6 L 0.52 0.3 L 0.797 0.46"
 	}
 	Class.healAuraSymbolSnowdreads = {
 		PARENT: ["genericTank"],
@@ -1019,9 +1041,6 @@ module.exports = ({ Class }) => {
 			],
 			TURRETS: [
 				{
-					POSITION: [10 * !isHeal, 0, 0, 0, 0, 1],
-					TYPE: ["egg", {COLOR: auraColor}],
-				}, {
 					POSITION: [20 - isHeal, 0, 0, 0, 360, 1],
 					TYPE: [symbolType, {COLOR: auraColor, INDEPENDENT: true}],
 				},
@@ -3377,6 +3396,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [10, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 		],
 	}
@@ -3400,6 +3422,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtTurretRing(),
 			{
@@ -3415,6 +3440,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtTurretRing(),
 			{
@@ -3431,6 +3459,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtTurretRing(),
 			{
@@ -3459,8 +3490,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [15, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [12, 0, 0, 0, 360, 1],
 				TYPE: "megabyteTurretSnowdread",
 			},
@@ -3474,6 +3507,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtAuraRing(),
 			{
@@ -3490,6 +3526,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtAuraRing(true),
 			{
@@ -3507,24 +3546,18 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [15, 11, 1, 0, 0, 140, 0],
 				PROPERTIES: {COLOR: 2},
-			},
-			{
+			}, {
 				POSITION: [16.5, 7, 1, 0, 0, 140, 0],
-			},
-			{
+			}, {
 				POSITION: [15, 11, 1, 0, 0, -140, 0],
 				PROPERTIES: {COLOR: 2},
-			},
-			{
+			}, {
 				POSITION: [16.5, 7, 1, 0, 0, -140, 0],
-			},
-			{
+			}, {
 				POSITION: [16, 2, 1, 0, 7.5, 0, 0],
-			},
-			{
+			}, {
 				POSITION: [16, 2, 1, 0, -7.5, 0, 0],
-			},
-			{
+			}, {
 				POSITION: [24, 8, 1.25, 0, 0, 0, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.flame, g.morespeed]),
@@ -3546,8 +3579,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [9, 0, 0, 0, 360, 1],
 				TYPE: 'burnerTurretSnowdread',
 			}
@@ -3591,8 +3626,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [10, 0, 0, 0, 360, 1],
 				TYPE: 'tempestTurretSnowdread',
 			},
@@ -3605,6 +3642,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtAuraRing(),
 			{
@@ -3620,6 +3660,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtAuraRing(true),
 			{
@@ -3636,10 +3679,12 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
-			},
-			{
+			}, {
 				POSITION: [24, 0, 0, 180, 0, 0],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 		],
 	}
@@ -3651,10 +3696,12 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [24, 0, 0, 180, 0, 0],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
-			},
-			{
+			}, {
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtAuraRing(),
 		],
@@ -3667,10 +3714,12 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [24, 0, 0, 180, 0, 0],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
-			},
-			{
+			}, {
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtAuraRing(true),
 		],
@@ -3683,10 +3732,12 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [24, 0, 0, 180, 0, 0],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
-			},
-			{
+			}, {
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			},
 			...addTrinoughtTurretRing(),
 		],
@@ -3703,8 +3754,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [10, 0, 0, 0, 360, 1],
 				TYPE: "kilobyteTurretSnowdread",
 			},
@@ -3731,8 +3784,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [11, 0, 0, 0, 0, 1],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [20, 0, 0, 0, 0, 0],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
@@ -3747,8 +3802,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [20, 0, 0, 0, 0, 0],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
@@ -3764,8 +3821,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [20, 0, 0, 0, 0, 0],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
@@ -3780,8 +3839,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [20, 0, 0, 0, 0, 0],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
@@ -3796,12 +3857,13 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [20, 0, 0, 0, 0, 0],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
-			},
-			{
+			}, {
 				POSITION: [10, 0, 0, 0, 360, 1],
 				TYPE: "kilobyteTurretSnowdread",
 			},
@@ -3820,8 +3882,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [20, 0, 0, 0, 0, 0],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
@@ -3851,6 +3915,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [10, 0, 0, 0, 0, 1],
 				TYPE: 'featherTurretSnowdread',
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
 			}
 		],
 	}
@@ -3865,8 +3932,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [8, 6, 0.001, 20, 0, 40*i, 0],
 				PROPERTIES: {COLOR: 9},
-			},
-			{
+			}, {
 				POSITION: [8, 6, 0.001, -20, 0, 40*i+20, 0],
 				PROPERTIES: {COLOR: 9},
 			},
@@ -3882,12 +3948,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [3, 5, 0.001, 8, 7.5, 120*i, 0],
 				PROPERTIES: {COLOR: 9},
-			},
-			{
+			}, {
 				POSITION: [3, 5, 0.001, 8, 0, 120*i, 0],
 				PROPERTIES: {COLOR: 9},
-			},
-			{
+			}, {
 				POSITION: [3, 5, 0.001, 8, -7.5, 120*i, 0],
 				PROPERTIES: {COLOR: 9},
 			},
@@ -3903,10 +3967,12 @@ module.exports = ({ Class }) => {
 		GUNS: [],
 	    TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [6, 0, 0, 0, 360, 1],
 				TYPE: 'steelTopSnowdread'
-			},
-			{
+			}, {
 				POSITION: [20, 0, 0, 0, 360, 0],
 				TYPE: 'steelBottomSnowdread'
 			},
@@ -3943,6 +4009,9 @@ module.exports = ({ Class }) => {
 		BODY: sizeBuffBodyStats[1],
 	    TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [10, 0, 0, 0, 0, 1],
 				TYPE: 'flattenerTurretSnowdread'
 			}
@@ -3955,6 +4024,9 @@ module.exports = ({ Class }) => {
 		BODY: sizeBuffBodyStats[0],
 	    TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [12, 0, 0, 0, 0, 1],
 				TYPE: 'flattenerTurret2Snowdread'
 			},
@@ -3968,6 +4040,9 @@ module.exports = ({ Class }) => {
 		BODY: sizeBuffBodyStats[0],
 	    TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [12, 0, 0, 0, 0, 1],
 				TYPE: 'flattenerTurret2Snowdread'
 			},
@@ -3981,10 +4056,12 @@ module.exports = ({ Class }) => {
 		BODY: sizeBuffBodyStats[0],
 	    TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [12, 0, 0, 0, 0, 1],
 				TYPE: 'flattenerTurretSnowdread'
-			},
-			{
+			}, {
 				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: "trinoughtBigAura",
 			},
@@ -3997,10 +4074,12 @@ module.exports = ({ Class }) => {
 		BODY: sizeBuffBodyStats[0],
 	    TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [12, 0, 0, 0, 0, 1],
 				TYPE: 'flattenerTurretSnowdread'
-			},
-			{
+			}, {
 				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: "trinoughtBigHealAura",
 			},
@@ -4013,10 +4092,12 @@ module.exports = ({ Class }) => {
 		BODY: sizeBuffBodyStats[0],
 	    TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [12, 0, 0, 0, 0, 1],
 				TYPE: 'flattenerTurretSnowdread'
-			},
-			{
+			}, {
 				POSITION: [10, 0, 0, 0, 360, 1],
 				TYPE: "kilobyteTurretSnowdread",
 			},
@@ -4033,10 +4114,12 @@ module.exports = ({ Class }) => {
 		},
 	    TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [10, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
 				POSITION: [5, 0, 0, 0, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
 			},
@@ -4051,11 +4134,9 @@ module.exports = ({ Class }) => {
 		GUNS: [
 			{ 
 				POSITION: [8, 30, 1, -4, 1.5, 0, 0],
-			},
-			{
+			}, {
 				POSITION: [8, 30, 1, -4, 1.5, 120, 0],
-			},
-			{
+			}, {
 				POSITION: [8, 30, 1, -4, 1.5, 240, 0],
 			},
 		],
@@ -4086,8 +4167,10 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [11, 0, 0, 0, 360, 1],
 				TYPE: 'cagerTurretSnowdread',
 			}
@@ -4117,16 +4200,16 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ['triangle', {MIRROR_MASTER_ANGLE: true}],
-			},
-			{
+			}, {
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: ["baseTriDeco"],
+			}, {
 				POSITION: [9, 0, 0, 0, 0, 1],
 				TYPE: ['egg', {COLOR: 16}]
-			},
-			{
+			}, {
 				POSITION: [6, 0, 0, 0, 0, 1],
 				TYPE:['egg', {COLOR: 2}]
-			},
-			{
+			}, {
 				POSITION: [19, 0, 0, 0, 360, 1],
 				TYPE: 'monitorRadarSnowdread'
 			}
