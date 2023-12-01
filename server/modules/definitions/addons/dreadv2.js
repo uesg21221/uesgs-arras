@@ -175,8 +175,8 @@ module.exports = ({ Class }) => {
 	// T0
 	Class.dreadOfficialV2 = {
 		PARENT: ["genericEggnought"],
-		LABEL: "Dreadnought",
-		UPGRADE_LABEL: "Dreads V2",
+	    	LABEL: "Dreadnought",
+	    	UPGRADE_LABEL: "Dreads V2",
 		LEVEL: 90,
 		EXTRA_SKILL: 18,
 	}
@@ -299,34 +299,6 @@ module.exports = ({ Class }) => {
 	}
 	Class.centaur2OfficialV2 = {
 		PARENT: "centaurOfficialV2",
-		BATCH_UPGRADES: true,
-	}
-	Class.etcherOfficialV2 = {
-	    PARENT: ["genericEggnought"],
-	    LABEL: "Etcher",
-	    GUNS: [
-			{
-				POSITION: [16.5, 8, 1, 0, 0, 0, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.flank, {reload: 0.8}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [13, 7, 1, 0, 0, 180, 0],
-			},
-			{
-				POSITION: [3, 7, 1.5, 13, 0, 180, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, {health: 1.5}]),
-					TYPE: "trap",
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
-		],
-	}
-	Class.etcher2OfficialV2 = {
-		PARENT: "etcherOfficialV2",
 		BATCH_UPGRADES: true,
 	}
 
@@ -623,66 +595,6 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.block, {health: 2}]),
 					TYPE: "unsetTrap",
-				},
-			},
-		)
-	}
-	Class.engraverOfficialV2 = {
-	    PARENT: ["genericSquarenought"],
-	    LABEL: "Engraver",
-	    GUNS: [
-			{
-				POSITION: [16, 7.5, 1, 0, 0, 0, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, {reload: 0.85}]),
-					TYPE: "bullet",
-				},
-			},
-		],
-	}
-	for (let i = 1; i < 4; i++) {
-		Class.engraverOfficialV2.GUNS.push(
-			{
-				POSITION: [5, 9, 1.2, 8, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, g.weak, {maxSpeed: 1.25}]),
-					TYPE: "drone",
-					MAX_CHILDREN: 2,
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-				},
-			},
-		)
-	}
-	Class.enzymeOfficialV2 = {
-	    PARENT: ["genericSquarenought"],
-	    LABEL: "Enzyme",
-	    GUNS: [
-			{
-				POSITION: [23, 7, 1, 0, 0, 0, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, {reload: 0.95, density: 1/2}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [5, 7, -1.7, 7, 0, 0, 0],
-			},
-		],
-	}
-	for (let i = 1; i < 4; i++) {
-		Class.enzymeOfficialV2.GUNS.push(
-			{
-				POSITION: [12.5, 6.5, 1, 0, 0, 90*i, 0],
-			},
-			{
-				POSITION: [2.5, 6.5, 1.7, 12, 0, 90*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.twin, {health: 2}]),
-					TYPE: "trap",
-					STAT_CALCULATOR: gunCalcNames.trap,
 				},
 			},
 		)
@@ -2291,7 +2203,6 @@ module.exports = ({ Class }) => {
 			["peacekeeper2OfficialV2", "dreadBodyOfficialV2"],
 			["invader2OfficialV2", "dreadBodyOfficialV2"],
 			["centaur2OfficialV2", "dreadBodyOfficialV2"],
-			["etcher2OfficialV2", "dreadBodyOfficialV2"],
 		];
 
 		Class.sword2OfficialV2.UPGRADES_TIER_0 = ["swordOfficialV2"];
@@ -2299,9 +2210,8 @@ module.exports = ({ Class }) => {
 		Class.peacekeeper2OfficialV2.UPGRADES_TIER_0 = ["peacekeeperOfficialV2"];
 		Class.invader2OfficialV2.UPGRADES_TIER_0 = ["invaderOfficialV2"];
 		Class.centaur2OfficialV2.UPGRADES_TIER_0 = ["centaurOfficialV2"];
-		Class.etcher2OfficialV2.UPGRADES_TIER_0 = ["etcherOfficialV2"];
 
-		Class.dreadWeaponOfficialV2.UPGRADES_TIER_0 = ["swordOfficialV2", "pacifierOfficialV2", "peacekeeperOfficialV2", "invaderOfficialV2", "centaurOfficialV2", "etcher2OfficialV2"];
+		Class.dreadWeaponOfficialV2.UPGRADES_TIER_0 = ["swordOfficialV2", "pacifierOfficialV2", "peacekeeperOfficialV2", "invaderOfficialV2", "centaurOfficialV2"];
 
 			Class.swordOfficialV2.UPGRADES_TIER_0 = ["gladiusOfficialV2", "sabreOfficialV2"];
 				Class.gladiusOfficialV2.UPGRADES_TIER_0 = ["bladeOfficialV2"];
@@ -2342,8 +2252,6 @@ module.exports = ({ Class }) => {
 				Class.minotaurOfficialV2.UPGRADES_TIER_0 = ["beelzebubOfficialV2"];
 					Class.beelzebubOfficialV2.UPGRADES_TIER_0 = ["luciferOfficialV2"];
 						Class.luciferOfficialV2.UPGRADES_TIER_0 = [];
-			
-			Class.etcherOfficialV2.UPGRADES_TIER_0 = ["engraverOfficialV2", "enzymeOfficialV2"];
 
 		Class.dreadBodyOfficialV2.UPGRADES_TIER_0 = ["byteOfficialV2", "atmosphereOfficialV2", "juggernautOfficialV2"];
 
