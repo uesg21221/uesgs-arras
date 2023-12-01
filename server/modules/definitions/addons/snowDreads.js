@@ -308,40 +308,46 @@ module.exports = ({ Class }) => {
 		return output;
 	}
 	
-	function addNormal({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic]) {
-		return [
-			{ // Main barrel
+	function addNormal({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic], drawTop = true) {
+		let output = [
+			{
 				POSITION: [length, width, aspect, x, y, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats(stats),
 					TYPE: "bullet",
 					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 20, SATURATION_SHIFT: 0.5 }
 				},
-			}, {
-				POSITION: [length - 2, width * 0.85, aspect * 0.9, x, y, angle, delay],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
-					TYPE: "bullet",
-					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 27.5, SATURATION_SHIFT: 0.5 },
-					BORDERLESS: true,
-				},
-			}, {
-				POSITION: [length - 2, width * 0.5, aspect * -0.7, x, y, angle, delay],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
-					TYPE: "bullet",
-					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 32.5, SATURATION_SHIFT: 0.5 },
-					BORDERLESS: true,
-				},
-			}, {
-				POSITION: [1.5 * aspect, aspect * width * 0.7, -0.6, x + length - 1.5 - 1.5 * aspect, y, angle, delay],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
-					TYPE: "bullet",
-					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10 },
-				},
 			},
 		];
+		if (drawTop) {
+			output.push(
+				{
+					POSITION: [length - 2, width * 0.85, aspect * 0.9, x, y, angle, delay],
+					PROPERTIES: {
+						SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+						TYPE: "bullet",
+						COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 27.5, SATURATION_SHIFT: 0.5 },
+						BORDERLESS: true,
+					},
+				}, {
+					POSITION: [length - 2, width * 0.5, aspect * -0.7, x, y, angle, delay],
+					PROPERTIES: {
+						SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+						TYPE: "bullet",
+						COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 32.5, SATURATION_SHIFT: 0.5 },
+						BORDERLESS: true,
+					},
+				}, {
+					POSITION: [1.5 * aspect, aspect * width * 0.7, -0.6, x + length - 1.5 - 1.5 * aspect, y, angle, delay],
+					PROPERTIES: {
+						SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+						TYPE: "bullet",
+						COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10 },
+					},
+				},
+			);
+		}
+		return output;
 	}
 	function addSpam({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic]) {
 		return [
@@ -2764,20 +2770,8 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.appeaserSnowdread.GUNS.push(
-			{
-				POSITION: [7, 11, 1.35, 6, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, {size: 0.8}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [7, 10, 1.3, 8, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, {size: 0.8, reload: 0.9}]),
-					TYPE: "bullet",
-				},
-			},
+			...addNormal({length: 7, width: 11, aspect: 1.35, x: 6, angle: 120*i}, 5, [g.basic, g.mach, {size: 0.8}], false),
+			...addNormal({length: 7, width: 10, aspect: 1.3, x: 8, angle: 120*i}, 5, [g.basic, g.mach, {size: 0.8, reload: 0.9}]),
 		)
 	}
 	Class.amalgamAutoSnowdread = {
@@ -3394,8 +3388,8 @@ module.exports = ({ Class }) => {
 	    LABEL: "Mechanism",
 	    TURRETS: [
 			{
-				POSITION: [10, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				POSITION: [14, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3420,8 +3414,8 @@ module.exports = ({ Class }) => {
 	    LABEL: "Fusion",
 	    TURRETS: [
 			{
-				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				POSITION: [15, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3438,8 +3432,8 @@ module.exports = ({ Class }) => {
 	    LABEL: "Binary",
 	    TURRETS: [
 			{
-				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				POSITION: [15, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3457,8 +3451,8 @@ module.exports = ({ Class }) => {
 	    LABEL: "Exosphere",
 	    TURRETS: [
 			{
-				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				POSITION: [15, 0, 0, 180, 0, 1],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3489,7 +3483,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [15, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3506,7 +3500,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3525,7 +3519,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3578,7 +3572,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3625,7 +3619,7 @@ module.exports = ({ Class }) => {
 		TURRETS: [
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3641,7 +3635,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3659,7 +3653,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3698,7 +3692,7 @@ module.exports = ({ Class }) => {
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [12, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3716,7 +3710,7 @@ module.exports = ({ Class }) => {
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [12, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3734,7 +3728,7 @@ module.exports = ({ Class }) => {
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [12, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3753,7 +3747,7 @@ module.exports = ({ Class }) => {
 			},
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3801,7 +3795,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3820,7 +3814,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3838,7 +3832,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [12, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -3856,7 +3850,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -4166,7 +4160,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
@@ -4199,7 +4193,7 @@ module.exports = ({ Class }) => {
 		  TURRETS: [
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
-				TYPE: ['triangle', {MIRROR_MASTER_ANGLE: true}],
+				TYPE: ['triangle', {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
