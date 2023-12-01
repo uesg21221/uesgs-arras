@@ -588,33 +588,33 @@ module.exports = ({ Class }) => {
 			},
 		];
 	}
-	function addDrone({length = 18, width = 8, aspect = 1.2, x = 8, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.drone], MAX_CHILDREN = 4) {
+	function addDrone({length = 18, width = 8, aspect = 1.2, x = 8, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.drone], MAX_CHILDREN = 4, TYPE = "drone") {
 		let output = [
 			{
-				POSITION: [length - 2, width + 3, 1, x, y, angle, 0],
-				PROPERTIES: { COLOR: 17 },
-			}, {
 				POSITION: [length, width, aspect, x, y, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats(stats),
-					TYPE: "drone",
+					TYPE,
 					MAX_CHILDREN,
 					AUTOFIRE: true,
 					SYNCS_SKILLS: true,
 					STAT_CALCULATOR: gunCalcNames.drone,
 					WAIT_TO_CYCLE: true,
-					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10}
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.8}
 				},
+			}, {
+				POSITION: [length - 1, width, 0.8, x, y, angle, 0],
+				PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift, SATURATION_SHIFT: 0.8}, BORDERLESS: true },
 			}, {
 				POSITION: [length - 2.5, width * 0.8, -1.2, x, y, angle, 0],
 				PROPERTIES: { COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5} },
 			},
 		];
 		if (MAX_CHILDREN > 2) {
-			output.splice(2, 0,
+			output.splice(0, 0,
 				{
-					POSITION: [length - 1, width, 0.8, x, y, angle, 0],
-					PROPERTIES: { COLOR: -1, BORDERLESS: true },
+					POSITION: [length - 2, width + 3, 1, x, y, angle, 0],
+					PROPERTIES: { COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift} },
 				}
 			)
 		}
@@ -624,10 +624,10 @@ module.exports = ({ Class }) => {
 		return [
 			{
 				POSITION: [length + 1, width, -1.3, x, y, angle, 0],
-				PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 17.5, SATURATION_SHIFT: 0.5} },
+				PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 17.5, SATURATION_SHIFT: 0.6} },
 			}, {
 				POSITION: [gap, width - 1, 1, x + length, y, angle, 0],
-				PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.5} },
+				PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.6} },
 			}, {
 				POSITION: [1.5, width, 1, x + length + gap, y, angle, delay],
 				PROPERTIES: {
@@ -637,7 +637,7 @@ module.exports = ({ Class }) => {
 					AUTOFIRE: true,
 					SYNCS_SKILLS: true,
 					MAX_CHILDREN,
-					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.5},
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.6},
 				},
 			}, {
 				POSITION: [length, width, 1, x, y, angle, 0],
@@ -695,10 +695,10 @@ module.exports = ({ Class }) => {
 				POSITION: [1.5, width * 1.1, 1, x + length - 4.5, y, angle, 0],
 				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5}}
 			}, {
-				POSITION: [length + 3, 4, 0.001, x, y + width * 0.27, angle + 22.5, 0],
+				POSITION: [length + 3, 4, 0.001, x, y + width * 0.3, angle + 22.5, 0],
 				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5},}
 			}, {
-				POSITION: [length + 3, 4, 0.001, x, y - width * 0.27, angle - 22.5, 0],
+				POSITION: [length + 3, 4, 0.001, x, y - width * 0.3, angle - 22.5, 0],
 				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5},}
 			},
 		];
@@ -1935,7 +1935,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 4; i++) {
 		Class.inquisitorSnowdread.GUNS.push(
-			...addDrone({length: 5, width: 11, aspect: 1.1, x: 8, angle: 90*i}, -5, [g.drone, g.over, g.over, {size: 1.5, reload: 0.6}], 3)
+			...addDrone({length: 5, width: 11, aspect: 1.1, x: 8, angle: 90*i}, -7.5, [g.drone, g.over, g.over, {size: 1.5, reload: 0.6}], 3)
 		)
 	}
 	Class.assailantMinionTopSnowdread = {
@@ -1971,7 +1971,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 4; i++) {
 		Class.assailantSnowdread.GUNS.push(
-			...addMinion({length: 12, gap: 3, width: 11, angle: 90*i}, -5, [g.factory, {size: 0.9, reload: 0.5}])
+			...addMinion({length: 12, gap: 3, width: 11, angle: 90*i}, -2.5, [g.factory, {size: 0.9, reload: 0.5}])
 		)
 	}
 	Class.radiationSnowdread = { // auto-drones
@@ -2970,42 +2970,9 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.infiltratorSnowdread.GUNS.push(
-			{
-				POSITION: [5, 6, 1.4, 6, 5.5, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, {size: 1.5, reload: 0.6}]),
-					TYPE: "drone",
-					MAX_CHILDREN: 2,
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-				},
-			},
-			{
-				POSITION: [5, 6, 1.4, 6, -5.5, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, {size: 1.5, reload: 0.6}]),
-					TYPE: "drone",
-					MAX_CHILDREN: 2,
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-				},
-			},
-			{
-				POSITION: [5, 6, 1.4, 8, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.pound, {size: 2, reload: 0.4}]),
-					TYPE: "betadrone",
-					MAX_CHILDREN: 2,
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-				},
-			},
+			...addDrone({length: 5, width: 6, aspect: 1.4, x: 6, y: 5.5, angle: 120*i}, -2.5, [g.drone, g.over, g.over, {size: 1.5, reload: 0.6}], 2),
+			...addDrone({length: 5, width: 6, aspect: 1.4, x: 6, y: -5.5, angle: 120*i}, -2.5, [g.drone, g.over, g.over, {size: 1.5, reload: 0.6}], 2),
+			...addDrone({length: 5, width: 6, aspect: 1.4, x: 8, angle: 120*i}, -2.5, [g.drone, g.over, g.over, g.pound, {size: 2, reload: 0.4}], 2, "betadrone"),
 		)
 	}
 	Class.aggressorMinionSnowdread = {
@@ -3036,24 +3003,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.aggressorSnowdread.GUNS.push(
-			{
-				POSITION: [5, 12, 1, 10, 0, 120*i, 0],
-			},
-			{
-				POSITION: [1.5, 13, 1, 15, 0, 120*i, 0],
-				PROPERTIES: {
-					MAX_CHILDREN: 4,
-					SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 0.5}]),
-					TYPE: "aggressorMinionSnowdread",
-					STAT_CALCULATOR: gunCalcNames.drone,
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					MAX_CHILDREN: 2,
-				},
-			},
-			{
-				POSITION: [12, 13, 1, 0, 0, 120*i, 0],
-			},
+			...addMinion({length: 12, gap: 3, width: 13, angle: 120*i}, 0, [g.factory, {size: 0.9, reload: 0.5}], "aggressorMinionSnowdread", 2)
 		)
 	}
 	Class.haloSnowdread = { // auto-drones
@@ -3063,21 +3013,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.haloSnowdread.GUNS.push(
-			{
-				POSITION: [5, 14.5, 1.2, 8, 0, 120*i, 0],
-				PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.over, {reload: 1.2, size: 0.8, speed: 1.15, maxSpeed: 1.15}]),
-					TYPE: 'turretedDrone',
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-					MAX_CHILDREN: 4,
-				},
-			},
-			{
-				POSITION: [3, 7, 1, 8, 0, 120*i, 0],
-			},
+			...addAutoDrone({length: 5, width: 14.5, aspect: 1.2, x: 8, angle: 120*i}, 0, [g.drone, g.over, {reload: 1.2, size: 0.8, speed: 1.15, maxSpeed: 1.15}], 4)
 		)
 	}
 	Class.sluggerSnowdread = { // honcho
@@ -3087,18 +3023,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.sluggerSnowdread.GUNS.push(
-			{
-				POSITION: [5, 13, 1.5, 8, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.drone, g.over, g.honcho, {maxSpeed: 0.9, size: 0.75}]),
-					TYPE: "drone",
-					AUTOFIRE: true,
-					SYNCS_SKILLS: true,
-					STAT_CALCULATOR: gunCalcNames.drone,
-					WAIT_TO_CYCLE: true,
-					MAX_CHILDREN: 2,
-				},
-			},
+			...addHoncho({length: 5, width: 13, aspect: 1.5, x: 8, angle: 120*i}, 0, [g.drone, g.over, g.honcho, {maxSpeed: 0.9, size: 0.75}], 2)
 		)
 	};
 	Class.debilitatorSnowdread = { // swarms
@@ -3108,21 +3033,11 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.debilitatorSnowdread.GUNS.push(
+			...addSwarm({length: 6, width: 9, aspect: 0.6, x: 6, y: 5, angle: 120*i}, 0, [g.swarm, g.over, g.over, {reload: 1.1}]),
+			...addSwarm({length: 6, width: 9, aspect: 0.6, x: 6, y: -5, angle: 120*i, delay: 0.5}, 0, [g.swarm, g.over, g.over, {reload: 1.1}]),
 			{
-				POSITION: [6, 9, 0.6, 6, 5, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, {reload: 1.1}]),
-					TYPE: "swarm",
-					STAT_CALCULATOR: gunCalcNames.swarm,
-				},
-			},
-			{
-				POSITION: [6, 9, 0.6, 6, -5, 120*i, 0.5],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.swarm, g.over, g.over, {reload: 1.1}]),
-					TYPE: "swarm",
-					STAT_CALCULATOR: gunCalcNames.swarm,
-				},
+				POSITION: [2, 15, 0.85, 8, 0, 120*i, 0],
+				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}},
 			},
 		)
 	};
@@ -3133,38 +3048,9 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.hydraSnowdread.GUNS.push(
-			{
-				POSITION: [6, 3.5, 1, 4, 8.5, 120*i, 0],
-			},
-			{
-				POSITION: [2, 3.5, 1.8, 10, 8.5, 120*i, 2/3],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
-					TYPE: "trap",
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
-			{
-				POSITION: [6, 3.5, 1, 4, -8.5, 120*i, 0],
-			},
-			{
-				POSITION: [2, 3.5, 1.8, 10, -8.5, 120*i, 1/3],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
-					TYPE: "trap",
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
-			{
-				POSITION: [12, 5, 1, 0, 0, 120*i, 0],
-			},
-			{
-				POSITION: [2.5, 5, 1.7, 12, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.twin, g.pound, g.fast, {reload: 1/1.1}]),
-					TYPE: "unsetTrap",
-				},
-			},
+			...addTrap({length: 6, length2: 2, width: 3.5, aspect: 1.8, x: 4, y: 8.5, angle: 120*i, delay: 2/3}, 0, [g.trap, g.twin, g.pound, g.fast]),
+			...addTrap({length: 6, length2: 2, width: 3.5, aspect: 1.8, x: 4, y: -8.5, angle: 120*i, delay: 1/3}, 0, [g.trap, g.twin, g.pound, g.fast]),
+			...addTrap({length: 12, length2: 2.5, width: 5, aspect: 1.7, angle: 120*i}, 0, [g.trap, g.block, g.twin, g.pound, g.fast, {reload: 1/1.1}], true),
 		)
 	}
 	Class.beelzebubSnowdread = {
@@ -3174,16 +3060,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.beelzebubSnowdread.GUNS.push(
-			{
-				POSITION: [13, 10, 1, 0, 0, 120*i, 0],
-			},
-			{
-				POSITION: [3.5, 10, 1.6, 13, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.2, health: 2}]),
-					TYPE: "unsetTrap",
-				},
-			},
+			...addTrap({length: 13, length2: 3.5, width: 10, aspect: 1.6, angle: 120*i}, 0, [g.trap, g.block, g.pound, g.morespeed, {size: 1.2, health: 2}], true)
 		)
 	}
 	Class.sweeperSnowdread = { // auto-traps
@@ -3205,28 +3082,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.aegisSnowdread.GUNS.push(
-			{
-				POSITION: [14, 8.5, 1, 0, 0, 120*i, 0],
-			},
-			{
-				POSITION: [3, 10, 1, 11, 0, 120*i, 0],
-			},
-			{
-				POSITION: [3, 10, 1.6, 14, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.hexatrap, {reload: 2, range: 0.8, health: 2.4}]),
-					TYPE: 'auraBlock',
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
-			{
-				POSITION: [2, 8, 1.6, 15, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.hexatrap, g.fake]),
-					TYPE: 'bullet',
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
+			...addAuraTrap({length: 14, length2: 3, width: 10, aspect: 1.6, angle: 120*i}, 0, [g.trap, g.block, g.hexatrap, {reload: 2, range: 0.8, health: 2.4}], true)
 		)
 	}
 	Class.drillSnowdread = { // trap + gun
@@ -3236,25 +3092,8 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.drillSnowdread.GUNS.push(
-			{
-				POSITION: [20, 9, 1, 0, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.flank]),
-					TYPE: 'bullet',
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
-			{
-				POSITION: [13.5, 11, 1, 0, 0, 120*i, 0],
-			},
-			{
-				POSITION: [3, 11, 1.4, 13.5, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.hexatrap]),
-					TYPE: 'unsetTrap',
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
+			...addNormal({length: 20, width: 9, angle: 120*i}, 0, [g.basic, g.flank]),
+			...addTrap({length: 13.5, length2: 3, width: 11, aspect: 1.4, angle: 120*i}, 0, [g.trap, g.block, g.hexatrap], true)
 		)
 	}
 
