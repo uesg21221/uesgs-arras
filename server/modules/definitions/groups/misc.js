@@ -574,8 +574,23 @@ exports.sentrySwarm = {
         },
     ],
 };
+exports.megaAutoTurret = {
+  PARENT: ["autoTurret"],
+  BODY: {
+    FOV: 2,
+    SPEED: 0.9
+  },
+  CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"],
+  GUNS: [{
+    POSITION: [22, 14, 1, 0, 0, 0, 0],
+    PROPERTIES: {
+      SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.auto]),
+      TYPE: "bullet"
+    }
+  }]
+}
 exports.sentryGun = makeAuto(exports.sentry, "Sentry", {
-    type: exports.megaAutoTankgun,
+    type: exports.megaAutoTurret,
     size: 12,
 });
 exports.sentryGun.UPGRADE_LABEL = "Gun Sentry";

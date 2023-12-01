@@ -4846,17 +4846,6 @@ exports.zenphiaBoss = {
         DAMAGE: 5 * base.DAMAGE,
     },
     GUNS: Array(4).fill().map((_, i) => ([{
-        POSITION: [3.5, 8.65, 1.2, 8, 0, i * 90, 0],
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.destroy, g.veryfast, { maxSpeed: 3 }]),
-            TYPE: "shinyomegasunchip",
-            MAX_CHILDREN: 4,
-            AUTOFIRE: true,
-            SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.necro,
-            WAIT_TO_CYCLE: true
-        }
-    },{
         POSITION: [2.5, 3, 1.2, 8, 5, i * 90, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.pound, g.veryfast, g.mach, { spray: 50, speed: 1.25, shudder: 1.25 }]),
@@ -4873,6 +4862,17 @@ exports.zenphiaBoss = {
             SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.pound, g.veryfast, g.mach, { spray: 150, speed: 1.25, shudder: 1.25 }]),
             TYPE: "shinybetawaferbread",
             MAX_CHILDREN: 8,
+            AUTOFIRE: true,
+            SYNCS_SKILLS: true,
+            STAT_CALCULATOR: gunCalcNames.necro,
+            WAIT_TO_CYCLE: true
+        }
+    },{
+        POSITION: [3.5, 8.65, 1.2, 8, 0, i * 90, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.destroy, g.veryfast, { maxSpeed: 3 }]),
+            TYPE: "shinyomegasunchip",
+            MAX_CHILDREN: 4,
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
             STAT_CALCULATOR: gunCalcNames.necro,
@@ -5485,3 +5485,71 @@ exports.trplnrBossVulnerableForm = {
         }
     }]
 }
+
+class LayeredBoss {
+    constructor(identifier, NAME, PARENT = "celestial", SHAPE = 9, COLOR = 0, trapTurretType = "baseTrapTurret", trapTurretSize = 6.5, layerScale = 5, BODY, SIZE, VALUE) {
+        this.identifier = identifier ?? NAME.charAt(0).toLowerCase() + NAME.slice(1);
+        this.layerID = 0;
+        exports[this.identifier] = {
+            PARENT, SHAPE, NAME, COLOR, BODY, SIZE, VALUE,
+            TURRETS: Array(SHAPE).fill().map((_, i) => ({
+                POSITION: [trapTurretSize, 9, 0, 360 / SHAPE * (i + 0.5), 180, 0],
+                TYPE: trapTurretType,
+            })),
+        };
+        this.layerScale = layerScale;
+        this.shape = SHAPE;
+    }
+
+    addLayer({gun, turret}, decreaseSides = true, MAX_CHILDREN) {
+        this.layerID++;
+        this.shape -= decreaseSides ? 2 : 0;
+        let layer = {
+            PARENT: "genericTank",
+            SHAPE: this.shape,
+            COLOR: -1,
+            INDEPENDENT: true,
+            CONTROLLERS: [["spin", { independent: true, speed: 0.02 / c.runSpeed * (this.layerID % 2 ? -1 : 1) }]],
+            MAX_CHILDREN, 
+            GUNS: [],
+            TURRETS: [],
+        };
+        if (gun) {
+            for (let i = 0; i < this.shape; i++) {
+                layer.GUNS.push({
+                    POSITION: gun.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
+                    PROPERTIES: gun.PROPERTIES,
+                });
+            }
+        }
+        if (turret) {
+            for (let i = 0; i < this.shape; i++) {
+                layer.TURRETS.push({
+                    POSITION: turret.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
+                    TYPE: turret.TYPE,
+                });
+            }
+        }
+
+        exports[this.identifier + "Layer" + this.layerID] = layer;
+        exports[this.identifier].TURRETS.push({
+            POSITION: [20 - this.layerScale * this.layerID, 0, 0, 0, 360, 1],
+            TYPE: this.identifier + "Layer" + this.layerID,
+        });
+    }
+}
+
+let testLayeredBoss = new LayeredBoss("testLayeredBoss", "Test Layered Boss", "terrestrial", 7, 3, "terrestrialTrapTurret", 5, 7, {SPEED: 10});
+testLayeredBoss.addLayer({gun: {
+    POSITION: [3.6, 7, -1.4, 8, 0, null, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+        TYPE: ["minion", {INDEPENDENT: true}],
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+    },
+}}, true, 16);
+testLayeredBoss.addLayer({turret: {
+    POSITION: [10, 7.5, 0, null, 160, 0],
+    TYPE: "crowbarTurret",
+}}, true);
