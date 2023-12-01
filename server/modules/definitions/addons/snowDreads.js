@@ -143,9 +143,7 @@ module.exports = ({ Class }) => {
 			...addSniper({length, width, aspect, x: 0, y, angle, delay}, brightShift, stats),
 			{
 				POSITION: [5, width, -1.6, x, y, angle, 0],
-				PROPERTIES: {
-					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 20, SATURATION_SHIFT: 0.5 },
-				},
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 20, SATURATION_SHIFT: 0.5 } },
 			}, {
 				POSITION: [5, width - 1.5, -1.6, x - 1.5, y, angle, 0],
 				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10 } },
@@ -291,6 +289,9 @@ module.exports = ({ Class }) => {
 			}, {
 				POSITION: [5, width + 3, -1.7, x, y, angle, 0],
 				PROPERTIES: {COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 15 },}
+			}, {
+				POSITION: [3.5, width + 1.5, -1.7, x, y, angle, 0],
+				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.65 },}
 			},
 		];
 		for (let i = 0; i < 3; i++) {
@@ -390,7 +391,7 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 					TYPE: "bullet",
-					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.5 }
+					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.65 }
 				},
 			},
 		];
@@ -402,13 +403,13 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5 }},
 			}, {
 				POSITION: [length - x, width, 1, x, y, angle, 0],
-				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.5 }}
+				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.6 }}
 			}, {
 				POSITION: [length - x, width - 2, 1, x, y, angle, 0],
-				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.6 }, BORDERLESS: true}
+				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true}
 			}, {
 				POSITION: [5, width + 2, -1.5, x, y, angle, 0],
-				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 7.5, SATURATION_SHIFT: 0.5 }}
+				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 7.5, SATURATION_SHIFT: 0.6 }}
 			}, {
 				POSITION: [5, width + 0.5, -1.6, x - 1.5, y, angle, 0],
 				PROPERTIES: {COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10 }},
@@ -458,7 +459,27 @@ module.exports = ({ Class }) => {
 	function addLauncher({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic], isSkimmer = false, TYPE = "missile") {
 		if (isSkimmer) {
 			return [
-				
+				{
+					POSITION: [10, width - 1, -0.75, x + length - 8, y, angle, 0],
+					PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.6 }} 
+				}, {
+					POSITION: [9.5, width - 3, -0.75, x + length - 8, y, angle, 0],
+					PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true} 
+				}, {
+					POSITION: [length, width, 1, x, y, angle, delay],
+					PROPERTIES: {
+						SHOOT_SETTINGS: combineStats(stats),
+						TYPE,
+						STAT_CALCULATOR: gunCalcNames.sustained,
+						COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10 },
+					},
+				}, {
+					POSITION: [length - 2, width - 2, 0.8, x, y, angle, 0],
+					PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.6 }}
+				}, {
+					POSITION: [length, width - 2, 0.75, x - 4, y, angle, 0],
+					PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true}
+				},
 			];
 		} else {
 			return [
@@ -533,13 +554,13 @@ module.exports = ({ Class }) => {
 		}
 		return output;
 	}
-	function addTwister({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic], TYPE = "spinmissile") {
+	function addTwister({length = 18, width = 8, aspect = -1.4, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic], TYPE = "spinmissile") {
 		return [
 			{
 				POSITION: [10, width - 1, -0.5, x + length - 8, y, angle, 0],
 				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 7.5, SATURATION_SHIFT: 0.65 },}
 			}, {
-				POSITION: [length, width, -1.4, x, y, angle, delay],
+				POSITION: [length, width, aspect, x, y, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats(stats),
 					TYPE,
@@ -547,14 +568,14 @@ module.exports = ({ Class }) => {
 					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5 },
 				},
 			}, {
-				POSITION: [length, width * 1.08, -1.4, x - length / 5, y, angle, delay],
+				POSITION: [length, width * 1.08, aspect, x - length / 5, y, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 					TYPE: 'bullet',
 					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.7 },
 				},
 			}, {
-				POSITION: [length, width * 0.8, -1.5, x - length / 5 - 1.5, y, angle, delay],
+				POSITION: [length, width * 0.8, aspect - 0.1, x - length / 5 - 1.5, y, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 					TYPE: 'bullet',
@@ -1570,7 +1591,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [0, 7, 1, 3, 0, 0, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, {maxSpeed: 1e-3, speed: 1e-3}]),
+					SHOOT_SETTINGS: combineStats([g.trap, {recoil: 0, maxSpeed: 1e-3, speed: 1e-3}]),
 					TYPE: 'trap',
 					STAT_CALCULATOR: gunCalcNames.trap,
 				},
@@ -2556,7 +2577,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [0, 12, 1, 8, 0, 0, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, {health: 1.3, maxSpeed: 1e-3, speed: 1e-3}]),
+					SHOOT_SETTINGS: combineStats([g.trap, {health: 1.3, recoil: 0, maxSpeed: 1e-3, speed: 1e-3}]),
 					TYPE: 'trap',
 					STAT_CALCULATOR: gunCalcNames.trap,
 				},
@@ -2626,16 +2647,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.bayonetSnowdread.GUNS.push(
-			{
-				POSITION: [28, 7, 1, 0, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.assass, g.assass, {reload: 0.8, density: 2/5}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [5, 7, -1.6, 7, 0, 120*i, 0],
-			},
+			...addAssassin({length: 28, width: 7, x: 7, angle: 120*i}, 2.5, [g.basic, g.sniper, g.assass, g.assass, g.assass, {reload: 0.8, density: 2/5}])
 		)
 	}
 	Class.bladeSnowdread = {
@@ -2676,22 +2688,13 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.atlatlSnowdread.GUNS.push(
-			{
-				POSITION: [21, 6, 1, 0, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.hunter, g.hunter2, {health: 1.1}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [18, 9, 1, 0, 0, 120*i, 0.25],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.hunter, {health: 1.1}]),
-					TYPE: "bullet",
-				},
-			},
+			...addHunter({length: 18, width: 9, dimensionDifference: 3, angle: 120*i}, 0, [g.basic, g.sniper, g.assass, g.hunter, {health: 1.1}]),
 			{
 				POSITION: [5, 9, -1.6, 6, 0, 120*i, 0],
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -20, SATURATION_SHIFT: 0.5 }, },
+			}, {
+				POSITION: [5, 7.5, -1.6, 4.5, 0, 120*i, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 } },
 			},
 		)
 	}
@@ -2702,20 +2705,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.ballistaSnowdread.GUNS.push(
-			{
-				POSITION: [22, 11, 1, 0, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.bitlessspeed, g.lessreload, {health: 1.2, size: 2}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [4, 13, 1, 15, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.preda, g.preda, g.preda, g.lessreload, g.fake]),
-					TYPE: "bullet",
-				},
-			},
+			...addHeavySniper({length: 22, width: 11, angle: 120*i}, -2.5, [g.basic, g.sniper, g.preda, g.preda, g.preda, g.bitlessspeed, g.lessreload, {health: 1.2, size: 2}])
 		)
 	}
 	Class.barbSnowdread = { // railgun
@@ -2725,19 +2715,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.barbSnowdread.GUNS.push(
-			{
-				POSITION: [23, 7, 1, 0, 0, 120*i, 0],
-			},
-			{
-				POSITION: [26.5, 4, 1, 0, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.sniper, g.sniper, g.pound, g.lessreload, {damage: 1.2}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [5, 7, -1.7, 7, 0, 120*i, 0],
-			},
+			...addRailgun({length: 26.5, width: 4, x: 7, angle: 120*i}, 0, [g.basic, g.sniper, g.sniper, g.sniper, g.pound, g.lessreload, {damage: 1.2}])
 		)
 	}
 	Class.mitigatorSnowdread = {
@@ -2747,20 +2725,8 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.mitigatorSnowdread.GUNS.push(
-			{
-				POSITION: [13, 8, 1, 0, 5, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, {reload: 0.85}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [13, 8, 1, 0, -5, 120*i, 0.5],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, {reload: 0.85}]),
-					TYPE: "bullet",
-				},
-			},
+			...addNormal({length: 13, width: 8, y: 5, angle: 120*i}, 5, [g.basic, {reload: 0.85}]),
+			...addNormal({length: 13, width: 8, y: -5, angle: 120*i, delay: 0.5}, 5, [g.basic, {reload: 0.85}]),
 		)
 	}
 	Class.appeaserSnowdread = {
@@ -2784,15 +2750,13 @@ module.exports = ({ Class }) => {
 					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.power, g.twin, g.bent, {recoil: 0.5}]),
 					TYPE: "bullet",
 				},
-			},
-			{
+			}, {
 				POSITION: [16, 4, 1, 0, 3.5, 0, 0.5],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.power, g.twin, g.bent, {recoil: 0.5}]),
 					TYPE: "bullet",
 				},
-			},
-			{
+			}, {
 				POSITION: [18, 4, 1, 0, 0, 0, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.power, g.twin, g.bent, {recoil: 0.5}]),
@@ -2822,29 +2786,18 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.breakerSnowdread.GUNS.push(
+			...addGunner({length: 19, width: 2.75, y: -3, angle: 120*i, delay: 1/3}, 0, [g.basic, g.gunner, g.power, g.nail, {speed: 1.05, maxSpeed: 1.05}]),
+			...addGunner({length: 19, width: 2.75, y: 3, angle: 120*i, delay: 2/3}, 0, [g.basic, g.gunner, g.power, g.nail, {speed: 1.05, maxSpeed: 1.05}]),
+			...addGunner({length: 21.5, width: 3.25, y: 0, angle: 120*i}, 0, [g.basic, g.gunner, g.power, g.nail, {speed: 1.05, maxSpeed: 1.05, size: 2.75/3.25}]),
 			{
-				POSITION: [19, 2.75, 1, 0, -3, 120*i, 1/3],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.nail, {speed: 1.05, maxSpeed: 1.05}]),
-					TYPE: 'bullet',
-				},
-			},
-			{
-				POSITION: [19, 2.75, 1, 0, 3, 120*i, 2/3],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.nail, {speed: 1.05, maxSpeed: 1.05}]),
-					TYPE: 'bullet',
-				},
-			},
-			{
-				POSITION: [21.5, 2.75, 1, 0, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.nail, {speed: 1.05, maxSpeed: 1.05}]),
-					TYPE: 'bullet',
-				},
-			},
-			{
+				POSITION: [10, 8.5, 0.6, 5, 0, 120*i, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 } },
+			}, {
 				POSITION: [5.5, 9, -1.8, 6.5, 0, 120*i, 0],
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -20, SATURATION_SHIFT: 0.5 }, },
+			}, {
+				POSITION: [5.5, 7.5, -1.8, 5, 0, 120*i, 0],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 } },
 			},
 		)
 	}
@@ -2876,23 +2829,16 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.clasperSnowdread.GUNS.push(
-			{
-				POSITION: [38, 6.5, 1, 0, 0, 120*i, 0],
-			},
-			{
-				POSITION: [5, 8.5, -1.5, 8, 0, 120*i, 0],
-			},
+			...addCrowbar({length: 38, width: 6.5, aspect: -1.5, x: 8, angle: 120*i}, 0)
 		)
 		Class.clasperSnowdread.TURRETS.push(
 			{
 				POSITION: [6.5, 38, 0, 120*i, 200, 1],
 				TYPE: 'clasperTurretSnowdread'
-			},
-			{
+			}, {
 				POSITION: [6.5, 28, 0, 120*i, 200, 1],
 				TYPE: 'clasperTurretSnowdread'
-			},
-			{
+			}, {
 				POSITION: [6.5, 18, 0, 120*i, 200, 1],
 				TYPE: 'clasperTurretSnowdread'
 			},
@@ -2905,13 +2851,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.suppressorSnowdread.GUNS.push(
-			{
-				POSITION: [16.5, 11.5, 1, 0, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, {reload: 0.85}]),
-					TYPE: "bullet",
-				},
-			},
+			...addHeavy({length: 16.5, width: 11.5, angle: 120*i}, 0, [g.basic, g.pound, g.destroy, {reload: 0.85}])
 		)
 	}
 	Class.inhibitorSnowdread = {
@@ -2921,17 +2861,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.inhibitorSnowdread.GUNS.push(
-			{
-				POSITION: [10, 14, -0.75, 7, 0, 120*i, 0],
-			},
-			{
-				POSITION: [15, 15, 1, 0, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.skim, g.halfspeed, {reload: 1.5}]),
-					TYPE: "supermissile",
-					STAT_CALCULATOR: gunCalcNames.sustained,
-				},
-			},
+			...addLauncher({length: 15, width: 15, angle: 120*i}, -5, [g.basic, g.pound, g.arty, g.skim, g.halfspeed, {reload: 1.5}], true, "supermissile")
 		)
 	}
 	Class.tranquilizerSnowdread = { // shotgun
@@ -2941,58 +2871,14 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.tranquilizerSnowdread.GUNS.push(
-			{
-				POSITION: [4, 3, 1, 11, -3, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
-					TYPE: 'bullet',
-				},
-			},
-			{
-				POSITION: [4, 3, 1, 11, 3, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
-					TYPE: 'bullet',
-				},
-			},
-			{
-				POSITION: [4, 4, 1, 13, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
-					TYPE: 'bullet',
-				},
-			},
-			{
-				POSITION: [1, 4, 1, 12, -1, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
-					TYPE: 'casing',
-				},
-			},
-			{
-				POSITION: [1, 5, 1, 11, 1, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
-					TYPE: 'casing',
-				},
-			},
-			{
-				POSITION: [1, 5, 1, 11, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
-					TYPE: 'casing',
-				},
-			},
-			{
-				POSITION: [15, 14, 1, 6, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.fake]),
-					TYPE: 'casing',
-				},
-			},
-			{
-				POSITION: [8, 14, -1.3, 4, 0, 120*i, 0],
-			},
+			...addShotgun({length: 21, width: 14, x: 5, angle: 120*i}, 0, [
+				{l: 15, w: 3, y: -3},
+				{l: 15, w: 3, y: 3},
+				{l: 17, w: 4, y: 0},
+				{l: 13, w: 4, y: -1},
+				{l: 12, w: 5, y: 1},
+				{l: 12, w: 5, y: 0},
+			], [g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
 		)
 	}
 	Class.spiralMissileSnowdread = {
@@ -3025,17 +2911,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.spiralSnowdread.GUNS.push(
-			{
-				POSITION: [10, 10, -0.5, 9, 0, 120*i, 0],
-			},
-			{
-				POSITION: [17, 11, -1.4, 0, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim, g.morespeed, g.fast, g.one_third_reload]),
-					TYPE: "spiralMissileSnowdread",
-					STAT_CALCULATOR: gunCalcNames.sustained,
-				},
-			},
+			...addTwister({length: 17, width: 11, aspect: -1.4, angle: 120*i}, 0, [g.basic, g.pound, g.arty, g.arty, g.skim, g.morespeed, g.fast, g.one_third_reload], "spiralMissileSnowdread")
 		)
 	}
 	Class.shellerSnowdread = { // artillery
@@ -3482,7 +3358,7 @@ module.exports = ({ Class }) => {
 	    LABEL: "Megabyte",
 	    TURRETS: [
 			{
-				POSITION: [15, 0, 0, 180, 0, 1],
+				POSITION: [15.5, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3499,7 +3375,7 @@ module.exports = ({ Class }) => {
 	    LABEL: "Trojan",
 	    TURRETS: [
 			{
-				POSITION: [13, 0, 0, 180, 0, 1],
+				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3518,7 +3394,7 @@ module.exports = ({ Class }) => {
 	    LABEL: "Hardware",
 	    TURRETS: [
 			{
-				POSITION: [13, 0, 0, 180, 0, 1],
+				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3618,7 +3494,7 @@ module.exports = ({ Class }) => {
 		},
 		TURRETS: [
 			{
-				POSITION: [12, 0, 0, 180, 0, 1],
+				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3634,7 +3510,7 @@ module.exports = ({ Class }) => {
 	    LABEL: "Chromosphere",
 	    TURRETS: [
 			{
-				POSITION: [13, 0, 0, 180, 0, 1],
+				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3652,7 +3528,7 @@ module.exports = ({ Class }) => {
 	    LABEL: "Mesosphere",
 	    TURRETS: [
 			{
-				POSITION: [13, 0, 0, 180, 0, 1],
+				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3691,7 +3567,7 @@ module.exports = ({ Class }) => {
 				POSITION: [24, 0, 0, 180, 0, 0],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
-				POSITION: [12, 0, 0, 180, 0, 1],
+				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3709,7 +3585,7 @@ module.exports = ({ Class }) => {
 				POSITION: [24, 0, 0, 180, 0, 0],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
-				POSITION: [12, 0, 0, 180, 0, 1],
+				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3727,7 +3603,7 @@ module.exports = ({ Class }) => {
 				POSITION: [24, 0, 0, 180, 0, 0],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
-				POSITION: [12, 0, 0, 180, 0, 1],
+				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3746,7 +3622,7 @@ module.exports = ({ Class }) => {
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			},
 			{
-				POSITION: [13, 0, 0, 180, 0, 1],
+				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3794,7 +3670,7 @@ module.exports = ({ Class }) => {
 		GUNS: [],
 	    TURRETS: [
 			{
-				POSITION: [12, 0, 0, 180, 0, 1],
+				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3813,7 +3689,7 @@ module.exports = ({ Class }) => {
 		GUNS: [],
 	    TURRETS: [
 			{
-				POSITION: [12, 0, 0, 180, 0, 1],
+				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3831,7 +3707,7 @@ module.exports = ({ Class }) => {
 		BODY: speedBuffBodyStats[0],
 	    TURRETS: [
 			{
-				POSITION: [12, 0, 0, 180, 0, 1],
+				POSITION: [13, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3849,7 +3725,7 @@ module.exports = ({ Class }) => {
 		BODY: speedBuffBodyStats[0],
 	    TURRETS: [
 			{
-				POSITION: [13, 0, 0, 180, 0, 1],
+				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 5}}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -4146,10 +4022,10 @@ module.exports = ({ Class }) => {
 	    LABEL: "Cager",
 		GUNS: [
 			{
-				POSITION: [0, 9, 1, 8, 0, 0, 0],
+				POSITION: [0, 9, 1, 0, 0, 0, 0],
 				PROPERTIES: {
 					MAX_CHILDREN: 5,
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, {maxSpeed: 1e-3, speed: 1e-3}]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, {recoil: 0, maxSpeed: 1e-3, speed: 1e-3}]),
 					TYPE: 'unsetPillbox',
 					INDEPENDENT: true,
 					SYNCS_SKILLS: true,
@@ -4165,7 +4041,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["baseTriDeco"],
 			}, {
-				POSITION: [11, 0, 0, 0, 360, 1],
+				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: 'cagerTurretSnowdread',
 			}
 		],
@@ -4204,7 +4080,7 @@ module.exports = ({ Class }) => {
 				POSITION: [6, 0, 0, 0, 0, 1],
 				TYPE:['egg', {COLOR: 2}]
 			}, {
-				POSITION: [19, 0, 0, 0, 360, 1],
+				POSITION: [16, 0, 0, 0, 360, 1],
 				TYPE: 'monitorRadarSnowdread'
 			}
 		]
@@ -5975,7 +5851,7 @@ module.exports = ({ Class }) => {
 				POSITION: [0, 14, 1, 0, 0, 0, 0],
 				PROPERTIES: {
 					MAX_CHILDREN: 5,
-					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.construct, {maxSpeed: 1e-3, speed: 1e-3}]),
+					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.construct, {recoil: 0, maxSpeed: 1e-3, speed: 1e-3}]),
 					TYPE: 'unsetPillbox',
 					INDEPENDENT: true,
 					SYNCS_SKILLS: true,
