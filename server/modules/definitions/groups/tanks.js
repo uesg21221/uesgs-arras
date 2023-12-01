@@ -838,6 +838,7 @@ exports.pillbox = {
 };
 exports.unsetPillbox = {
     PARENT: 'unsetTrap',
+    INDEPENDENT: true,
     TURRETS: [
         {
             POSITION: [11, 0, 0, 0, 360, 1],
