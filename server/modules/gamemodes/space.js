@@ -1,5 +1,5 @@
-class Moon {
-    constructor () {
+module.exports = class Space extends Gamemode {
+    init () {
         let o = new Entity(room.center);
         o.define('moon');
         o.team = TEAM_ROOM;
@@ -17,6 +17,7 @@ class Moon {
             }
         }
     }
+    stop () {
+        this.moon.kill();
+    }
 }
-
-module.exports = { Moon };

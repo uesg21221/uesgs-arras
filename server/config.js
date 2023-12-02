@@ -212,6 +212,7 @@ module.exports = {
     // Change GAME_MODES instead.
     GAMEMODE_NAME_PREFIXES: [],
     SPECIAL_BOSS_SPAWNS: false,
+    GAMEMODES_TO_LOAD: [],
     MOTHERSHIP_LOOP: false,
     RANDOM_COLORS: false,
     SPACE_PHYSICS: false,

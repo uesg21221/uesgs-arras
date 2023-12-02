@@ -23,7 +23,14 @@ spawn = (tile, team, color, type = false) => {
     }
     teamcounts[team]++;
 
+    if (isPlayerTeam(team)) {
+        global.controllableEntities.push(o);
+    }
+
     o.on('dead', () => {
+        if (global.controllableEntities.includes(o)) {
+            global.controllableEntities.splice(global.controllableEntities.indexOf(o), 1);
+        }
 
         teamcounts[team]--;
         if (!teamcounts[team]) {

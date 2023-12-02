@@ -1,3 +1,3 @@
 module.exports = {
-    MOTHERSHIP_LOOP: true,
+    GAMEMODES_TO_LOAD: ['mothership']
 };

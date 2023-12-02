@@ -1,5 +1,4 @@
 module.exports = {
     MODE: "tdm",
-    HUNT: true,
-    TEAMS: 2
+    GAMEMODES_TO_LOAD: ['manhunt']
 };

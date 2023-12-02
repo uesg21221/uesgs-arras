@@ -1,5 +1,6 @@
-class ManHunt {
+module.exports = class ManHunt extends Gamemode {
     constructor () {
+        super();
         this.leaderIDs = [null];
     }
 
@@ -40,5 +41,3 @@ class ManHunt {
         // NOTE: This implementation does not care about someone new becoming leader in a way that doesn't kill the previous one.
     }
 }
-
-module.exports = { ManHunt };

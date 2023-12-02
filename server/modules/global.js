@@ -1,5 +1,7 @@
 // Global Utilities Requires
-let EventEmitter = require('events');
+let EventEmitter = require('events'),
+    path = require('path'),
+    fs = require('fs');
 global.events = new EventEmitter();
 global.ran = require(".././lib/random.js");
 global.util = require(".././lib/util.js");
@@ -8,6 +10,8 @@ global.protocol = require(".././lib/fasttalk.js");
 
 // Global Variables (These must come before we import from the modules folder.)
 global.fps = "Unknown";
+global.defeatedTeams = [];
+global.controllableEntities = [];
 global.minimap = [];
 global.entities = [];
 global.views = [];
@@ -112,6 +116,56 @@ for (let file of requires) {
     if (module.init) module.init(global);
     for (let key in module) {
         if (module.hasOwnProperty(key)) global[key] = module[key];
+    }
+}
+
+global.loadedGamemodes = [];
+global.Gamemode = class Gamemode {
+
+    // should usually not spawn entities or change the game in any way
+    // but it can prepare things like conditional flags like integer counters or empty arrays
+    constructor () {
+        this._activatedPrev = false;
+        this.activated = false;
+        global.loadedGamemodes.push(this);
+    }
+    
+    // runs once when gamemode activated
+    // should prepare required stuff for the gamemode
+    init () {}
+    
+    // runs once every frame
+    loop () {}
+    
+    // runs once when gamemode deactivated
+    // should clean up everything done by init and loop
+    stop () {}
+}
+global.gamemodeLoop = () => {
+    for (let i = 0; i < loadedGamemodes.length; i++) {
+        let gamemode = loadedGamemodes[i];
+        if (gamemode.activated == gamemode._activatedPrev) {
+            if (gamemode.activated) {
+                gamemode.loop();
+            }
+        } else if (gamemode.activated) {
+            gamemode.init();
+        } else {
+            gamemode.stop();
+        }
+        gamemode._activatedPrev = gamemode.activated;
+    }
+};
+
+let gamemodes = fs.readdirSync(path.resolve(__dirname, './gamemodes'));
+
+console.log(`Loading ${gamemodes.length} gamemodes...`);
+for (let filename of gamemodes) {
+    console.log(`Loading Gamemode: ${filename}`);
+    let gamemode = new (require('./gamemodes/' + filename))();
+    if (c.GAMEMODES_TO_LOAD.includes(filename.slice(0, -3))) {
+        console.log(`Activated Gamemode: ${filename}`);
+        gamemode.activated = true;
     }
 }
 
