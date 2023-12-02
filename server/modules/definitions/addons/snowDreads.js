@@ -1246,14 +1246,14 @@ module.exports = ({ Class }) => {
 		PARENT: 'autoTurret',
 		CONTROLLERS: ['nearestDifferentMaster'],
 		INDEPENDENT: true,
-		COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10},
+		COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.8},
 		GUNS: [
 			{
 				POSITION: [22, 10, 1, 0, 0, 0, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, g.overdrive]),
 					TYPE: "bullet",
-					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -5},
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -5, SATURATION_SHIFT: 0.8},
 				},
 			},
 		]
