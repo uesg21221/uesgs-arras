@@ -1547,7 +1547,7 @@ ezekiel.addLayer({gun: {
 }}, true, null, 18);
 ezekiel.addLayer({turret: {
     POSITION: [10, 7.5, 0, null, 160, 0],
-    TYPE: ["zaphkielSkimmerTurret", { INDEPENDENT: true }],
+    TYPE: ["skimmerTurret", { COLOR: "grey", INDEPENDENT: true }],
 }}, true, 6)
 
 let eris = new LayeredBoss(null, "Eris", "terrestrial", 7, "pink", "terrestrialTrapTurret", 7, 5.5);
@@ -1588,15 +1588,8 @@ selene.addLayer({turret: {
 exports.swarmerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Swarmer",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
@@ -1605,205 +1598,34 @@ exports.swarmerTurret = {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.hive]),
                 TYPE: "hive",
             },
-        },
-        {
+        }, {
             POSITION: [15, 12, 1, 5, 0, 0, 0],
         },
     ],
 };
-exports.paladinLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "purple",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    FOV: 1,
-    MAX_CHILDREN: 16,
-    FACING_TYPE: "autospin",
-    INDEPENDENT: true,
-    GUNS: [
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 26, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["demonchip", {INDEPENDENT: true}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 77, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["demonchip", {INDEPENDENT: true}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 129, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["demonchip", {INDEPENDENT: true}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["demonchip", {INDEPENDENT: true}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 231, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["demonchip", {INDEPENDENT: true}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 282, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["demonchip", {INDEPENDENT: true}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 333, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["demonchip", {INDEPENDENT: true}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-    ],
-};
-exports.paladinUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    AUTOSPIN: true,
-    COLOR: "purple",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [10, 7.5, 0, 35, 160, 0],
-            TYPE: ["swarmerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 110, 160, 0],
-            TYPE: ["swarmerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 180, 160, 0],
-            TYPE: ["swarmerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 252, 160, 0],
-            TYPE: ["swarmerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 325, 160, 0],
-            TYPE: ["swarmerTurret"],
-        },
-    ],
-};
-exports.paladin = {
-    PARENT: ["celestial"],
-    NAME: "Paladin",
-    UPGRADE_LABEL: "Paladin",
-    COLOR: "purple",
-    UPGRADE_COLOR: "purple",
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [6.5, 9, 0, 260, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 219, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 180, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 300, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 339, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 380, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 420, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 459, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 500, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [14.94, 0, 0, 0, 360, 1],
-            TYPE: ["paladinLowerBody"],
-        },
-        {
-            POSITION: [8.6, 0, 0, 0, 360, 1],
-            TYPE: ["paladinUpperBody"],
-        },
-    ],
-};
+let paladin = new LayeredBoss(null, "Paladin", "celestial", 9, "purple", "baseTrapTurret", 6.5, 5.5);
+paladin.addLayer({gun: {
+    POSITION: [3.8, 6, 1.4, 8, 0, null, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+        TYPE: ["demonchip", {INDEPENDENT: true}],
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+        STAT_CALCULATOR: gunCalcNames.drone,
+        WAIT_TO_CYCLE: true,
+    },
+}}, true, null, 16);
+paladin.addLayer({turret: {
+    POSITION: [10, 7.5, 0, null, 160, 0],
+    TYPE: "swarmerTurret",
+}}, true, 5.75);
 
 // FREYJA
 exports.cruiserTurret = {
     PARENT: ["genericTank"],
     LABEL: "Cruiser",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
@@ -1813,8 +1635,7 @@ exports.cruiserTurret = {
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [7, 7.5, 0.6, 7, -4, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
@@ -1824,762 +1645,107 @@ exports.cruiserTurret = {
         },
     ],
 };
-exports.freyjaLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "lightGreen",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 7,
-    INDEPENDENT: true,
-    FACING_TYPE: "autospin",
-    TURRETS: [
-        {
-            //*********    SIZE         X             Y         ANGLE        ARC
-            POSITION: [8.5, 9, 0, 26, 180, 0],
-            TYPE: ["cruiserTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 77, 180, 0],
-            TYPE: ["cruiserTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 129, 180, 0],
-            TYPE: ["cruiserTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 180, 180, 0],
-            TYPE: ["cruiserTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 231, 180, 0],
-            TYPE: ["cruiserTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 282, 180, 0],
-            TYPE: ["cruiserTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 333, 180, 0],
-            TYPE: ["cruiserTurret"],
-        },
-    ],
-};
-exports.freyjaUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    COLOR: "lightGreen",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [
-        {
-            //**     SIZE         X             Y         ANGLE        ARC
-            POSITION: [10.6, 7.5, 0, 35, 160, 0],
-            TYPE: ["auto4gun"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 110, 160, 0],
-            TYPE: ["auto4gun"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 180, 160, 0],
-            TYPE: ["auto4gun"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 252, 160, 0],
-            TYPE: ["auto4gun"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 325, 160, 0],
-            TYPE: ["auto4gun"],
-        },
-    ],
-};
-exports.freyja = {
-    PARENT: ["celestial"],
-    NAME: "Freyja",
-    UPGRADE_LABEL: "Freyja",
-    COLOR: "lightGreen",
-    UPGRADE_COLOR: "lightGreen",
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [6.5, 9, 0, 260, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 219, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 180, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 300, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 339, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 380, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 420, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 459, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 500, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [14.77, 0, 0, 0, 360, 1],
-            TYPE: ["freyjaLowerBody"],
-        },
-        {
-            POSITION: [8.7, 0, 0, 0, 360, 1],
-            TYPE: ["freyjaUpperBody"],
-        },
-    ],
-};
+let freyja = new LayeredBoss(null, "Freyja", "celestial", 9, "lightGreen", "baseTrapTurret", 6.5, 5.5);
+freyja.addLayer({turret: {
+    POSITION: [8.5, 9, 0, null, 180, 0],
+    TYPE: "cruiserTurret",
+}});
+freyja.addLayer({turret: {
+    POSITION: [10.6, 7.5, 0, null, 160, 0],
+    TYPE: "auto4gun",
+}}, true, 6);
 
 // ZAPHKIEL
-exports.zaphkielSkimmerTurret = {
-    PARENT: ["skimmerTurret"],
-    COLOR: "grey",
-};
-exports.zaphkielLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "orange",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    FOV: 1,
-    MAX_CHILDREN: 16,
-    FACING_TYPE: "autospin",
-    GUNS: [
-        {
-            //*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY
-            POSITION: [3.6, 6, 1.4, 8, 0, 26, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["drone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 77, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["drone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 129, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["drone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["drone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 231, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["drone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 282, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["drone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 333, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.over]),
-                TYPE: ["drone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-    ],
-};
-exports.zaphkielUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    AUTOSPIN: true,
-    COLOR: "orange",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [10, 7.5, 0, 35, 160, 0],
-            TYPE: ["zaphkielSkimmerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 110, 160, 0],
-            TYPE: ["zaphkielSkimmerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 180, 160, 0],
-            TYPE: ["zaphkielSkimmerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 252, 160, 0],
-            TYPE: ["zaphkielSkimmerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 325, 160, 0],
-            TYPE: ["zaphkielSkimmerTurret"],
-        },
-    ],
-};
-exports.zaphkiel = {
-    PARENT: ["celestial"],
-    NAME: "Zaphkiel",
-    UPGRADE_LABEL: "Zaphkiel",
-    COLOR: "orange",
-    UPGRADE_COLOR: "orange",
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [6.5, 9, 0, 260, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 219, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 180, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 300, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 339, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 380, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 420, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 459, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 500, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [14.94, 0, 0, 0, 360, 1],
-            TYPE: "zaphkielLowerBody",
-        },
-        {
-            POSITION: [8.6, 0, 0, 0, 360, 1],
-            TYPE: "zaphkielUpperBody",
-        },
-    ],
-};
+let zaphkiel = new LayeredBoss(null, "Zaphkiel", "celestial", 9, "orange", "baseTrapTurret", 6.5, 5.5);
+zaphkiel.addLayer({gun: {
+    POSITION: [3.8, 6, 1.4, 8, 0, null, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+        TYPE: ["drone", {INDEPENDENT: true,}],
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+    },
+}}, true, null, 16);
+zaphkiel.addLayer({turret: {
+    POSITION: [10.5, 8, 0, null, 160, 0],
+    TYPE: ["skimmerTurret", {COLOR: "grey", INDEPENDENT: true}],
+}}, true, 6);
 
 // NYX
 exports.rocketeerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Rocketeer",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
             POSITION: [10, 12.5, -0.7, 10, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.pound,
-                    g.launcher,
-                    g.rocketeer,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.launcher, g.rocketeer]),
                 TYPE: "rocketeerMissile",
                 STAT_CALCULATOR: gunCalcNames.sustained,
             },
-        },
-        {
+        }, {
             POSITION: [17, 18, 0.65, 0, 0, 0, 0],
         },
     ],
 };
-exports.nyxLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "pink",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    FOV: 1,
-    FACING_TYPE: "autospin",
-    INDEPENDENT: true,
-    MAX_CHILDREN: 16,
-    GUNS: [
-        {
-            POSITION: [3.6, 7, -1.4, 8, 0, 26, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
-                TYPE: ["minion", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 7, -1.4, 8, 0, 77, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
-                TYPE: ["minion", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 7, -1.4, 8, 0, 129, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
-                TYPE: ["minion", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 7, -1.4, 8, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
-                TYPE: ["minion", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 7, -1.4, 8, 0, 231, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
-                TYPE: ["minion", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 7, -1.4, 8, 0, 282, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
-                TYPE: ["minion", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 7, -1.4, 8, 0, 333, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
-                TYPE: ["minion", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-    ],
-};
-exports.nyxUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    AUTOSPIN: true,
-    COLOR: "pink",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [10, 7.5, 0, 35, 160, 0],
-            TYPE: ["rocketeerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 110, 160, 0],
-            TYPE: ["rocketeerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 180, 160, 0],
-            TYPE: ["rocketeerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 252, 160, 0],
-            TYPE: ["rocketeerTurret"],
-        },
-        {
-            POSITION: [10, 7.5, 0, 325, 160, 0],
-            TYPE: ["rocketeerTurret"],
-        },
-    ],
-};
-exports.nyx = {
-    PARENT: ["celestial"],
-    NAME: "Nyx",
-    UPGRADE_LABEL: "Nyx",
-    COLOR: "pink",
-    UPGRADE_COLOR: "pink",
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [6.5, 9, 0, 260, 180, 0],
-            TYPE: [
-                "baseTrapTurret",
-                {
-                    INDEPENDENT: true,
-                },
-            ],
-        },
-        {
-            POSITION: [6.5, 9, 0, 219, 180, 0],
-            TYPE: [
-                "baseTrapTurret",
-                {
-                    INDEPENDENT: true,
-                },
-            ],
-        },
-        {
-            POSITION: [6.5, 9, 0, 180, 180, 0],
-            TYPE: [
-                "baseTrapTurret",
-                {
-                    INDEPENDENT: true,
-                },
-            ],
-        },
-        {
-            POSITION: [6.5, 9, 0, 300, 180, 0],
-            TYPE: [
-                "baseTrapTurret",
-                {
-                    INDEPENDENT: true,
-                },
-            ],
-        },
-        {
-            POSITION: [6.5, 9, 0, 339, 180, 0],
-            TYPE: [
-                "baseTrapTurret",
-                {
-                    INDEPENDENT: true,
-                },
-            ],
-        },
-        {
-            POSITION: [6.5, 9, 0, 380, 180, 0],
-            TYPE: [
-                "baseTrapTurret",
-                {
-                    INDEPENDENT: true,
-                },
-            ],
-        },
-        {
-            POSITION: [6.5, 9, 0, 420, 180, 0],
-            TYPE: [
-                "baseTrapTurret",
-                {
-                    INDEPENDENT: true,
-                },
-            ],
-        },
-        {
-            POSITION: [6.5, 9, 0, 459, 180, 0],
-            TYPE: [
-                "baseTrapTurret",
-                {
-                    INDEPENDENT: true,
-                },
-            ],
-        },
-        {
-            POSITION: [6.5, 9, 0, 500, 180, 0],
-            TYPE: [
-                "baseTrapTurret",
-                {
-                    INDEPENDENT: true,
-                },
-            ],
-        },
-        {
-            POSITION: [14.94, 0, 0, 0, 360, 1],
-            TYPE: ["nyxLowerBody"],
-        },
-        {
-            POSITION: [8.6, 0, 0, 0, 360, 1],
-            TYPE: ["nyxUpperBody"],
-        },
-    ],
-};
+let nyx = new LayeredBoss(null, "Nyx", "celestial", 9, "pink", "baseTrapTurret", 6.5, 5.5);
+nyx.addLayer({gun: {
+    POSITION: [3.8, 7, -1.4, 8, 0, null, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+        TYPE: ["minion", {INDEPENDENT: true,}],
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+    },
+}}, true, null, 16);
+nyx.addLayer({turret: {
+    POSITION: [10.5, 8, 0, null, 160, 0],
+    TYPE: "rocketeerTurret",
+}}, true, 6);
 
 // THEIA
-exports.theiaTwisterTurret = {
-    PARENT: ["twisterTurret"],
-    COLOR: "grey",
-};
-exports.theiaLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "gold",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    FOV: 1,
-    FACING_TYPE: "autospin",
-    MAX_CHILDREN: 35,
-    INDEPENDENT: true,
-    GUNS: [
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 26, 1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
-                TYPE: ["summonerDrone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                WAIT_TO_CYCLE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 77, 1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
-                TYPE: ["summonerDrone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                WAIT_TO_CYCLE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 129, 1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
-                TYPE: ["summonerDrone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                WAIT_TO_CYCLE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 180, 1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
-                TYPE: ["summonerDrone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                WAIT_TO_CYCLE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 231, 1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
-                TYPE: ["summonerDrone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                WAIT_TO_CYCLE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 282, 1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
-                TYPE: ["summonerDrone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                WAIT_TO_CYCLE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-        {
-            POSITION: [3.6, 6, 1.4, 8, 0, 333, 1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
-                TYPE: ["summonerDrone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                WAIT_TO_CYCLE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-    ],
-};
-exports.theiaUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    AUTOSPIN: true,
-    COLOR: "gold",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [10, 7.5, 0, 35, 160, 0],
-            TYPE: "theiaTwisterTurret",
-        },
-        {
-            POSITION: [10, 7.5, 0, 110, 160, 0],
-            TYPE: "theiaTwisterTurret",
-        },
-        {
-            POSITION: [10, 7.5, 0, 180, 160, 0],
-            TYPE: "theiaTwisterTurret",
-        },
-        {
-            POSITION: [10, 7.5, 0, 252, 160, 0],
-            TYPE: "theiaTwisterTurret",
-        },
-        {
-            POSITION: [10, 7.5, 0, 325, 160, 0],
-            TYPE: "theiaTwisterTurret",
-        },
-    ],
-};
-exports.theia = {
-    PARENT: ["celestial"],
-    NAME: "Theia",
-    UPGRADE_LABEL: "Theia",
-    COLOR: "gold",
-    UPGRADE_COLOR: "gold",
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [6.5, 9, 0, 260, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 219, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 180, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 300, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 339, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 380, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 420, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 459, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 500, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [14.94, 0, 0, 0, 360, 1],
-            TYPE: ["theiaLowerBody"],
-        },
-        {
-            POSITION: [8.6, 0, 0, 0, 360, 1],
-            TYPE: ["theiaUpperBody"],
-        },
-    ],
-};
+let theia = new LayeredBoss(null, "Theia", "celestial", 9, "gold", "baseTrapTurret", 6.5, 5.5);
+theia.addLayer({gun: {
+    POSITION: [3.8, 6, 1.4, 8, 0, null, 1],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.celeslower]),
+        TYPE: ["summonerDrone", {INDEPENDENT: true}],
+        AUTOFIRE: true,
+        WAIT_TO_CYCLE: true,
+        SYNCS_SKILLS: true,
+    },
+}}, true, null, 35);
+theia.addLayer({turret: {
+    POSITION: [10.5, 8, 0, null, 160, 0],
+    TYPE: ["twisterTurret", {COLOR: "grey"}],
+}}, true, 6);
 
 // ATLAS
 exports.artilleryTurret = {
     PARENT: ["genericTank"],
     LABEL: "Artillery",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
-    GUNS: [{
+    GUNS: [
+        {
             POSITION: [17, 3, 1, 0, -6, -7, 0.25],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
                 TYPE: "bullet",
                 LABEL: "Secondary",
             },
-        },
-        {
+        }, {
             POSITION: [17, 3, 1, 0, 6, 7, 0.75],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
                 TYPE: "bullet",
                 LABEL: "Secondary",
             },
-        },
-        {
+        }, {
             POSITION: [19, 12, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty]),
@@ -2592,502 +1758,123 @@ exports.artilleryTurret = {
 exports.nailgunTurret = {
     PARENT: ["genericTank"],
     LABEL: "Nailgun",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [{
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [19, 2, 1, 0, -2.5, 0, 0.25],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.twin,
-                    g.nail,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.twin, g.nail]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [19, 2, 1, 0, 2.5, 0, 0.75],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.twin,
-                    g.nail,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.twin, g.nail]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [20, 2, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.twin,
-                    g.nail,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.twin, g.nail]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [5.5, 7, -1.8, 6.5, 0, 0, 0],
         },
     ],
 };
-exports.atlasLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [
-        ["spin", {
-            independent: true,
-            speed: -0.005
-        }]
-    ],
-    COLOR: "lavender",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 7,
-    INDEPENDENT: true,
-    FACING_TYPE: "autospin",
-    TURRETS: [{
-            //*********  SIZE     X       Y     ANGLE    ARC
-            POSITION: [7, 9, 0, 26, 180, 0],
-            TYPE: ["artilleryTurret"],
-        },
-        {
-            POSITION: [7, 9, 0, 77, 180, 0],
-            TYPE: ["artilleryTurret"],
-        },
-        {
-            POSITION: [7, 9, 0, 129, 180, 0],
-            TYPE: ["artilleryTurret"],
-        },
-        {
-            POSITION: [7, 9, 0, 180, 180, 0],
-            TYPE: ["artilleryTurret"],
-        },
-        {
-            POSITION: [7, 9, 0, 231, 180, 0],
-            TYPE: ["artilleryTurret"],
-        },
-        {
-            POSITION: [7, 9, 0, 282, 180, 0],
-            TYPE: ["artilleryTurret"],
-        },
-        {
-            POSITION: [7, 9, 0, 333, 180, 0],
-            TYPE: ["artilleryTurret"],
-        },
-    ],
-};
-exports.atlasUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [
-        ["spin", {
-            independent: true,
-            speed: 0.005
-        }]
-    ],
-    COLOR: "lavender",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [{
-            //**   SIZE     X       Y     ANGLE    ARC
-            POSITION: [10.6, 7.5, 0, 35, 160, 0],
-            TYPE: ["nailgunTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 110, 160, 0],
-            TYPE: ["nailgunTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 180, 160, 0],
-            TYPE: ["nailgunTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 252, 160, 0],
-            TYPE: ["nailgunTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 325, 160, 0],
-            TYPE: ["nailgunTurret"],
-        },
-    ],
-};
-exports.atlas = {
-    PARENT: ["celestial"],
-    NAME: "Atlas",
-    UPGRADE_LABEL: "Atlas",
-    COLOR: "lavender",
-    UPGRADE_COLOR: "lavender",
-    TURRETS: [{
-            /*********  SIZE     X       Y     ANGLE    ARC */
-            POSITION: [6.5, 9, 0, 260, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 219, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 180, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 300, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 339, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 380, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 420, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 459, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 500, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [14.77, 0, 0, 0, 360, 1],
-            TYPE: ["atlasLowerBody"],
-        },
-        {
-            POSITION: [8.7, 0, 0, 0, 360, 1],
-            TYPE: ["atlasUpperBody"],
-        },
-    ],
-};
+let atlas = new LayeredBoss(null, "Atlas", "celestial", 9, "lavender", "baseTrapTurret", 6.5, 5.5);
+atlas.addLayer({turret: {
+    POSITION: [7, 9, 0, null, 180, 0],
+    TYPE: "artilleryTurret",
+}});
+atlas.addLayer({turret: {
+    POSITION: [10.6, 7.5, 0, null, 160, 0],
+    TYPE: "nailgunTurret",
+}}, true, 6);
 
 // RHEA
 exports.crowbarTurret = {
     PARENT: ["genericTank"],
     LABEL: "Crowbar",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
-    GUNS: [{
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
+    GUNS: [
+        {
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [37, 6.5, 1, 0, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [5, 8.5, -1.5, 8, 0, 0, 0],
         },
     ],
-    TURRETS: [{
+    TURRETS: [
+        {
             /*  SIZE     X       Y     ANGLE    ARC */
             POSITION: [6, 38, 0, 0, 360, 1],
-            TYPE: [
-                "autoTankGun",
-                {
-                    INDEPENDENT: true,
-                    HAS_NO_RECOIL: true,
-                },
-            ],
-        },
-        {
+            TYPE: [ "autoTankGun", { INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+        }, {
             POSITION: [6, 28, 0, 0, 360, 1],
-            TYPE: [
-                "autoTankGun",
-                {
-                    INDEPENDENT: true,
-                    HAS_NO_RECOIL: true,
-                },
-            ],
-        },
-        {
+            TYPE: [ "autoTankGun", { INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+        }, {
             POSITION: [6, 18, 0, 0, 360, 1],
-            TYPE: [
-                "autoTankGun",
-                {
-                    INDEPENDENT: true,
-                    HAS_NO_RECOIL: true,
-                },
-            ],
+            TYPE: [ "autoTankGun", { INDEPENDENT: true, HAS_NO_RECOIL: true } ],
         },
     ],
 };
 exports.wrenchTurret = {
     PARENT: ["genericTank"],
     LABEL: "Wrench",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     GUNS: [{
             /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [67, 6.5, 1, 0, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [5, 8.5, -1.5, 8, 0, 0, 0],
         },
     ],
-    TURRETS: [{
+    TURRETS: [
+        {
             /*  SIZE     X       Y     ANGLE    ARC */
             POSITION: [6, 68, 0, 0, 360, 1],
-            TYPE: [
-                "autoTankGun",
-                {
-                    INDEPENDENT: true,
-                    HAS_NO_RECOIL: true,
-                },
-            ],
-        },
-        {
+            TYPE: [ "autoTankGun", { INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+        }, {
             POSITION: [6, 58, 0, 0, 360, 1],
-            TYPE: [
-                "autoTankGun",
-                {
-                    INDEPENDENT: true,
-                    HAS_NO_RECOIL: true,
-                },
-            ],
-        },
-        {
+            TYPE: [ "autoTankGun", { INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+        }, {
             POSITION: [6, 48, 0, 0, 360, 1],
-            TYPE: [
-                "autoTankGun",
-                {
-                    INDEPENDENT: true,
-                    HAS_NO_RECOIL: true,
-                },
-            ],
+            TYPE: [ "autoTankGun", { INDEPENDENT: true, HAS_NO_RECOIL: true } ],
         },
     ],
 };
-exports.rheaLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [
-        ["spin", {
-            independent: true,
-            speed: -0.005
-        }]
-    ],
-    COLOR: "darkGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 7,
-    INDEPENDENT: true,
-    FACING_TYPE: "autospin",
-    TURRETS: [{
-            //*********  SIZE     X       Y     ANGLE    ARC
-            POSITION: [8.5, 9, 0, 26, 180, 0],
-            TYPE: ["wrenchTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 77, 180, 0],
-            TYPE: ["wrenchTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 129, 180, 0],
-            TYPE: ["wrenchTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 180, 180, 0],
-            TYPE: ["wrenchTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 231, 180, 0],
-            TYPE: ["wrenchTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 282, 180, 0],
-            TYPE: ["wrenchTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 333, 180, 0],
-            TYPE: ["wrenchTurret"],
-        },
-    ],
-};
-exports.rheaUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [
-        ["spin", {
-            independent: true,
-            speed: 0.005
-        }]
-    ],
-    COLOR: "darkGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [{
-            //**   SIZE     X       Y     ANGLE    ARC
-            POSITION: [10.6, 7.5, 0, 35, 160, 0],
-            TYPE: ["crowbarTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 110, 160, 0],
-            TYPE: ["crowbarTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 180, 160, 0],
-            TYPE: ["crowbarTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 252, 160, 0],
-            TYPE: ["crowbarTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 325, 160, 0],
-            TYPE: ["crowbarTurret"],
-        },
-    ],
-};
-exports.rhea = {
-    PARENT: ["celestial"],
-    NAME: "Rhea",
-    UPGRADE_LABEL: "Rhea",
-    COLOR: "darkGrey",
-    UPGRADE_COLOR: "darkGrey",
-    TURRETS: [{
-            /*********  SIZE     X       Y     ANGLE    ARC */
-            POSITION: [6.5, 9, 0, 260, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 219, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 180, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 300, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 339, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 380, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 420, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 459, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 500, 180, 0],
-            TYPE: ["baseTrapTurret", {
-                INDEPENDENT: true
-            }],
-        },
-        {
-            POSITION: [14.77, 0, 0, 0, 360, 1],
-            TYPE: ["rheaLowerBody"],
-        },
-        {
-            POSITION: [8.7, 0, 0, 0, 360, 1],
-            TYPE: ["rheaUpperBody"],
-        },
-    ],
-};
+let rhea = new LayeredBoss(null, "Rhea", "celestial", 9, "darkGrey", "baseTrapTurret", 6.5, 5.5);
+rhea.addLayer({turret: {
+    POSITION: [8.5, 9, 0, null, 180, 0],
+    TYPE: "wrenchTurret",
+}});
+rhea.addLayer({turret: {
+    POSITION: [10.6, 7.5, 0, null, 160, 0],
+    TYPE: "crowbarTurret",
+}}, true, 6);
 
 // JULIUS
-exports.alvissDrone = {
+exports.juliusDrone = {
     PARENT: ["eggchip"],
     NECRO: false,
 };
 exports.launcherTurret = {
     PARENT: ["genericTank"],
     LABEL: "Launcher",
-    BODY: {
-        FOV: 2 * base.FOV,
-    },
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
     GUNS: [
         {
             /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [10, 9, 1, 9, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [17, 13, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty]),
@@ -3097,160 +1884,33 @@ exports.launcherTurret = {
         },
     ],
 };
-exports.alvissLowerTurret = {
+exports.juliusLowerTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
     MAX_CHILDREN: 3,
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [8.5, 11, 0.6, 6, 0, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.sunchip]),
-                TYPE: "alvissDrone",
+                TYPE: "juliusDrone",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
 };
-exports.alvissLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "darkGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    FOV: 1,
-    FACING_TYPE: "autospin",
-    MAX_CHILDREN: 24,
-    TURRETS: [
-        {
-            //*********    SIZE         X             Y         ANGLE        ARC
-            POSITION: [8.5, 9, 0, 26, 180, 0],
-            TYPE: ["alvissLowerTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 77, 180, 0],
-            TYPE: ["alvissLowerTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 129, 180, 0],
-            TYPE: ["alvissLowerTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 180, 180, 0],
-            TYPE: ["alvissLowerTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 231, 180, 0],
-            TYPE: ["alvissLowerTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 282, 180, 0],
-            TYPE: ["alvissLowerTurret"],
-        },
-        {
-            POSITION: [8.5, 9, 0, 333, 180, 0],
-            TYPE: ["alvissLowerTurret"],
-        },
-    ],
-};
-exports.alvissUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    COLOR: "darkGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [
-        {
-            //**     SIZE         X             Y         ANGLE        ARC
-            POSITION: [10.6, 7.5, 0, 35, 160, 0],
-            TYPE: ["launcherTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 110, 160, 0],
-            TYPE: ["launcherTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 180, 160, 0],
-            TYPE: ["launcherTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 252, 160, 0],
-            TYPE: ["launcherTurret"],
-        },
-        {
-            POSITION: [10.6, 7.5, 0, 325, 160, 0],
-            TYPE: ["launcherTurret"],
-        },
-    ],
-};
-exports.alviss = {
-    PARENT: ["rogueCelestial"],
-    NAME: "Julius",
-    UPGRADE_LABEL: "Julius",
-    UPGRADE_COLOR: "darkGrey",
-    TURRETS: [
-        {
-            /*********    SIZE         X             Y         ANGLE        ARC */
-            POSITION: [6.5, 9, 0, 260, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 219, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 180, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 300, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 339, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 380, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 420, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 459, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [6.5, 9, 0, 500, 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [14.94, 0, 0, 0, 360, 1],
-            TYPE: ["alvissLowerBody"],
-        },
-        {
-            POSITION: [8.6, 0, 0, 0, 360, 1],
-            TYPE: ["alvissUpperBody"],
-        },
-    ],
-};
+let julius = new LayeredBoss(null, "Julius", "celestial", 9, "darkGrey", "baseTrapTurret", 6.5, 5.5);
+julius.addLayer({turret: {
+    POSITION: [8.5, 9, 0, null, 180, 0],
+    TYPE: "juliusLowerTurret",
+}});
+julius.addLayer({turret: {
+    POSITION: [11, 8, 0, null, 160, 0],
+    TYPE: "launcherTurret",
+}}, true, 6);
 
 // GENGHIS
 exports.tinyMinion = {
@@ -3271,163 +1931,57 @@ exports.tinyMinion = {
         PUSHABILITY: 0.5,
         FOV: 1.5,
     },
-    AI: {
-        BLIND: true,
-    },
-    GUNS: [ { /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-        POSITION: [    17,         9,            1,            0,            0,            0,            0,     ],
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.lowpower]),
-            WAIT_TO_CYCLE: true,
-            TYPE: "bullet",
-        }, },
+    AI: { BLIND: true },
+    GUNS: [
+        {
+            POSITION: [17, 9, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.lowpower]),
+                WAIT_TO_CYCLE: true,
+                TYPE: "bullet",
+            }, 
+        },
     ],
     DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
 }
-exports.tyrLowerTurret = {
+exports.ghengisLowerTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
     MAX_CHILDREN: 4,
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [8.5, 11, 0.6, 6, 0, 0, 0.5],
-        },
-        {
-            POSITION: [3.4, 14, 1, 14.3, 0, 0, 0],
+            POSITION: [8, 11, 0.6, 6, 0, 0, 0.5],
+        }, {
+            POSITION: [2.5, 14, 1, 14, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.babyfactory, g.lessreload]),
-                TYPE: ["tinyMinion", {INDEPENDENT: true,}],
+                TYPE: ["tinyMinion", {INDEPENDENT: true}],
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
             },
         },
     ],
 };
-exports.tyrLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "darkGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    FOV: 1,
-    FACING_TYPE: "autospin",
-    MAX_CHILDREN: 23,
-    TURRETS: [{ //*********    SIZE         X             Y         ANGLE        ARC
-        POSITION: [8.5, 9, 0, 26, 180, 0],
-        TYPE: ["tyrLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 77, 180, 0],
-        TYPE: ["tyrLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 129, 180, 0],
-        TYPE: ["tyrLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 180, 180, 0],
-        TYPE: ["tyrLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 231, 180, 0],
-        TYPE: ["tyrLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 282, 180, 0],
-        TYPE: ["tyrLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 333, 180, 0],
-        TYPE: ["tyrLowerTurret"],
-    }]
-};
-exports.tyrUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    COLOR: "darkGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [{ //**     SIZE         X             Y         ANGLE        ARC
-        POSITION: [10.6, 7.5, 0, 35, 160, 0],
-        TYPE: ["auto4gun"],
-    },{
-        POSITION: [10.6, 7.5, 0, 110, 160, 0],
-        TYPE: ["auto4gun"],
-    },{
-        POSITION: [10.6, 7.5, 0, 180, 160, 0],
-        TYPE: ["auto4gun"],
-    },{
-        POSITION: [10.6, 7.5, 0, 252, 160, 0],
-        TYPE: ["auto4gun"],
-    },{
-        POSITION: [10.6, 7.5, 0, 325, 160, 0],
-        TYPE: ["auto4gun"],
-    }]
-};
-exports.tyr = {
-    PARENT: ["rogueCelestial"],
-    NAME: "Genghis",
-    UPGRADE_LABEL: "Genghis",
-    UPGRADE_COLOR: "darkGrey",
-    TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
-        POSITION: [6.5, 9, 0, 260, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 219, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 180, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 300, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 339, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 380, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 420, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 459, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 500, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [14.94, 0, 0, 0, 360, 1],
-        TYPE: ["tyrLowerBody"],
-    },{
-        POSITION: [8.6, 0, 0, 0, 360, 1],
-        TYPE: ["tyrUpperBody"],
-    }]
-};
+let ghengis = new LayeredBoss(null, "Ghengis", "celestial", 9, "darkGrey", "baseTrapTurret", 6.5, 5.5);
+ghengis.addLayer({turret: {
+    POSITION: [8.5, 9, 0, null, 180, 0],
+    TYPE: "ghengisLowerTurret",
+}});
+ghengis.addLayer({turret: {
+    POSITION: [11, 7, 0, null, 160, 0],
+    TYPE: "auto4gun",
+}});
 
 // NAPOLEON
-exports.fiolnirLowerTurret = {
+exports.napoleonLowerTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
@@ -3437,8 +1991,7 @@ exports.fiolnirLowerTurret = {
                 TYPE: ["bee", { INDEPENDENT: true }],
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [7, 8, 0.6, 6, 0, -30, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.bees, g.pound, g.morespeed]),
@@ -3448,59 +2001,17 @@ exports.fiolnirLowerTurret = {
         },
     ],
 };
-exports.fiolnirLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "darkGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    FOV: 1,
-    FACING_TYPE: "autospin",
-    MAX_CHILDREN: 23,
-    TURRETS: [{ //*********    SIZE         X             Y         ANGLE        ARC
-        POSITION: [8.5, 9, 0, 26, 180, 0],
-        TYPE: ["fiolnirLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 77, 180, 0],
-        TYPE: ["fiolnirLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 129, 180, 0],
-        TYPE: ["fiolnirLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 180, 180, 0],
-        TYPE: ["fiolnirLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 231, 180, 0],
-        TYPE: ["fiolnirLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 282, 180, 0],
-        TYPE: ["fiolnirLowerTurret"],
-    },{
-        POSITION: [8.5, 9, 0, 333, 180, 0],
-        TYPE: ["fiolnirLowerTurret"],
-    }]
-};
 exports.turretedBullet = makeAuto(bullet, "Auto-Bullet", {size: 14, color: "veryLightGrey", angle: 0});
-exports.fiolnirUpperTurret = {
+exports.napoleonUpperTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [12, 16, -0.6, 0, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [15, 12, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.bitlessspeed]),
@@ -3509,72 +2020,15 @@ exports.fiolnirUpperTurret = {
         },
     ],
 };
-exports.fiolnirUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    COLOR: "darkGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [{ //**     SIZE         X             Y         ANGLE        ARC
-        POSITION: [10.6, 7.5, 0, 35, 160, 0],
-        TYPE: ["fiolnirUpperTurret"],
-    },{
-        POSITION: [10.6, 7.5, 0, 110, 160, 0],
-        TYPE: ["fiolnirUpperTurret"],
-    },{
-        POSITION: [10.6, 7.5, 0, 180, 160, 0],
-        TYPE: ["fiolnirUpperTurret"],
-    },{
-        POSITION: [10.6, 7.5, 0, 252, 160, 0],
-        TYPE: ["fiolnirUpperTurret"],
-    },{
-        POSITION: [10.6, 7.5, 0, 325, 160, 0],
-        TYPE: ["fiolnirUpperTurret"],
-    }]
-};
-exports.fiolnir = {
-    PARENT: ["rogueCelestial"],
-    NAME: "Napoleon",
-    UPGRADE_LABEL: "Napoleon",
-    UPGRADE_COLOR: "darkGrey",
-    TURRETS: [{ /*********    SIZE         X             Y         ANGLE        ARC */
-        POSITION: [6.5, 9, 0, 260, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 219, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 180, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 300, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 339, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 380, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 420, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 459, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [6.5, 9, 0, 500, 180, 0],
-        TYPE: ["baseTrapTurret", { INDEPENDENT: true }],
-    },{
-        POSITION: [14.5, 0, 0, 0, 360, 1],
-        TYPE: ["fiolnirLowerBody"],
-    },{
-        POSITION: [8.6, 0, 0, 0, 360, 1],
-        TYPE: ["fiolnirUpperBody"],
-    }]
-};
+let napoleon = new LayeredBoss(null, "Napoleon", "celestial", 9, "darkGrey", "baseTrapTurret", 6.5, 5.5);
+napoleon.addLayer({turret: {
+    POSITION: [8.5, 9, 0, null, 180, 0],
+    TYPE: "napoleonLowerTurret",
+}});
+napoleon.addLayer({turret: {
+    POSITION: [11, 7, 0, null, 160, 0],
+    TYPE: "napoleonUpperTurret",
+}})
 
 // Eternals
 exports.kronosMissile = {
@@ -3584,74 +2038,37 @@ exports.kronosMissile = {
             POSITION: [4, 8, 1.5, 14, 0, 90, 0.5],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([
-                    g.trap,
-                    g.halfrange,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                ]),
-                TYPE: [
-                    "trap",
-                    {
-                        PERSISTS_AFTER_DEATH: true,
-                    },
-                ],
+                SHOOT_SETTINGS: combineStats([g.trap, g.halfrange, {reload: 3}]),
+                TYPE: [ "trap", { PERSISTS_AFTER_DEATH: true } ],
+                STAT_CALCULATOR: gunCalcNames.trap,
             },
-        },
-        {
+        }, {
             POSITION: [4, 8, 1.5, 14, 0, -90, 0.5],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([
-                    g.trap,
-                    g.halfrange,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                ]),
-                TYPE: [
-                    "trap",
-                    {
-                        PERSISTS_AFTER_DEATH: true,
-                    },
-                ],
+                SHOOT_SETTINGS: combineStats([g.trap, g.halfrange, {reload: 3}]),
+                TYPE: [ "trap", { PERSISTS_AFTER_DEATH: true } ],
+                STAT_CALCULATOR: gunCalcNames.trap,
             },
-        },
-        {
+        }, {
             POSITION: [14, 6, 1, 0, -2, 150, 0],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                ]),
-                TYPE: [
-                    "bullet",
-                    {
-                        PERSISTS_AFTER_DEATH: true,
-                    },
-                ],
+                SHOOT_SETTINGS: combineStats([g.basic, {reload: 3}]),
+                TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
                 STAT_CALCULATOR: gunCalcNames.thruster,
             },
-        },
-        {
+        }, {
             POSITION: [14, 6, 1, 0, 2, 210, 0],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    [3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                ]),
-                TYPE: [
-                    "bullet",
-                    {
-                        PERSISTS_AFTER_DEATH: true,
-                    },
-                ],
+                SHOOT_SETTINGS: combineStats([g.basic, {reload: 3}]),
+                TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
                 STAT_CALCULATOR: gunCalcNames.thruster,
             },
-        },
-        {
+        }, {
             POSITION: [14, 8, 1, 0, 0, 90, 0],
-        },
-        {
+        }, {
             POSITION: [14, 8, 1, 0, 0, -90, 0],
         },
     ],
@@ -3659,31 +2076,17 @@ exports.kronosMissile = {
 exports.kronosSkimmerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Skimmer",
-    BODY: {
-        FOV: 10,
-    },
+    BODY: { FOV: 10 },
     COLOR: "grey",
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    INDEPENDENT: true,
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     GUNS: [
         {
             POSITION: [8, 20, -0.5, 9, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [13, 18, -0.8, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.pound,
-                    g.arty,
-                    g.arty,
-                    g.skim,
-                    g.halfreload,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim, g.halfreload]),
                 TYPE: "kronosMissile",
             },
         },
@@ -3692,35 +2095,26 @@ exports.kronosSkimmerTurret = {
 exports.carrierTurret = {
     PARENT: ["genericTank"],
     LABEL: "Carrier",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
+    INDEPENDENT: true,
     COLOR: "grey",
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [7, 8, 0.6, 7, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound, g.morespeed]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [7, 8, 0.6, 7, 2, 30, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound, g.morespeed]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [7, 8, 0.6, 7, -2, -30, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound, g.morespeed]),
@@ -3733,15 +2127,9 @@ exports.carrierTurret = {
 exports.tripletTurret = {
     PARENT: ["genericTank"],
     LABEL: "Triplet",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
+    INDEPENDENT: true,
     COLOR: "grey",
     GUNS: [
         {
@@ -3750,15 +2138,13 @@ exports.tripletTurret = {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [18, 10, 1, 0, -5, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [21, 10, 1.2, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple]),
@@ -3767,111 +2153,33 @@ exports.tripletTurret = {
         },
     ],
 };
-exports.kronosBottomBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.01 }]],
-    COLOR: "veryLightGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 9,
-    FOV: 10,
-    TURRETS: [],
-};
-for(let i = 0; i < 9; i++) {
-    exports.kronosBottomBody.TURRETS.push(
-        {
-            POSITION: [6.5, 9, 0, 360/9*(i+0.5), 160, 0],
-            TYPE: ["kronosSkimmerTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.kronosMiddleBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    COLOR: "veryLightGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    FOV: 1,
-    TURRETS: [],
-};
-for(let i = 0; i < 7; i++) {
-    exports.kronosMiddleBody.TURRETS.push(
-        {
-            POSITION: [8, 8.5, 0, 360/7*(i+0.5), 160, 0],
-            TYPE: ["carrierTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.kronosTopBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "veryLightGrey",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 5,
-    FOV: 1,
-    TURRETS: [],
-};
-for(let i = 0; i < 5; i++) {
-    exports.kronosTopBody.TURRETS.push(
-        {
-            POSITION: [9.5, 9, 0, 360/5*(i+0.5), 160, 0],
-            TYPE: ["tripletTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.kronos = {
-    PARENT: ["eternal"],
-    NAME: "Kronos",
-    UPGRADE_LABEL: "Kronos",
-    COLOR: "veryLightGrey",
-    UPGRADE_COLOR: "veryLightGrey",
-    BODY: { REGEN: base.REGEN * 0.3 },
-    TURRETS: [
-        {
-            POSITION: [15.5, 0, 0, 0, 360, 1],
-            TYPE: ["kronosBottomBody"],
-        },
-        {
-            POSITION: [11, 0, 0, 0, 360, 1],
-            TYPE: ["kronosMiddleBody"],
-        },
-        {
-            POSITION: [6.5, 0, 0, 0, 360, 1],
-            TYPE: ["kronosTopBody"],
-        },
-    ],
-};
-for(let i = 0; i < 11; i++) {
-    exports.kronos.TURRETS.push(
-        {
-            POSITION: [6, 9, 0, 360/11*(i+0.5), 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
+let kronos = new LayeredBoss(null, "Kronos", "eternal", 11, "veryLightGrey", "baseTrapTurret", 6, 4.5);
+kronos.addLayer({turret: {
+    POSITION: [6.5, 9, 0, null, 160, 0],
+    TYPE: "kronosSkimmerTurret",
+}});
+kronos.addLayer({turret: {
+    POSITION: [7, 9, 0, null, 160, 0],
+    TYPE: "carrierTurret",
+}});
+kronos.addLayer({turret: {
+    POSITION: [9.5, 9, 0, null, 160, 0],
+    TYPE: "tripletTurret",
+}});
 
-exports.autoSmasherMissileTurret = {
-    PARENT: ["auto4gun"],
-    CONTROLLERS: ["nearestDifferentMaster"],
-};
 exports.autoSmasherMissile = {
     PARENT: ["missile"],
     LABEL: "Auto-Smasher",
     HITS_OWN_TYPE: "never",
-    DANGER: 6,
     BODY: {
         FOV: 1.05 * base.FOV,
         DENSITY: 2 * base.DENSITY,
     },
-    GUNS: [],
     TURRETS: [
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
             TYPE: "smasherBody",
-        },
-        {
+        }, {
             POSITION: [11, 0, 0, 0, 360, 1],
             TYPE: ["auto4gun", { INDEPENDENT: true }],
         },
@@ -3880,35 +2188,17 @@ exports.autoSmasherMissile = {
 exports.autosmashTurret = {
     PARENT: ["genericTank"],
     LABEL: "Launcher",
-    BODY: {
-        FOV: 10,
-    },
+    BODY: { FOV: 10 },
     COLOR: "grey",
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
+    INDEPENDENT: true,
     GUNS: [
         {
-            POSITION: [3, 10, 1.2, 15, 0, 0, 0],
-        },
-        {
-            POSITION: [16, 18, -0.7, 0, 0, 0, 0],
+            POSITION: [4, 12, 1.2, 16, 0, 0, 0],
+        }, {
+            POSITION: [18, 20, -0.7, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.pound,
-                    g.arty,
-                    g.arty,
-                    g.skim,
-                    g.halfreload,
-                    g.morespeed,
-                    g.morespeed,
-                    //g.morespeed,
-                    {range: 2.5},
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim, g.halfreload, g.morespeed, g.morespeed, {range: 2.5}]),
                 TYPE: "autoSmasherMissile",
             },
         },
@@ -3917,58 +2207,35 @@ exports.autosmashTurret = {
 exports.gunnerCruiserTurret = {
     PARENT: ["genericTank"],
     LABEL: "Launcher",
-    BODY: {
-        FOV: 10,
-    },
+    BODY: { FOV: 10 },
     COLOR: "grey",
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
+    INDEPENDENT: true,
     GUNS: [
         {
-            POSITION: [6, 7.5, 0.6, 6, 4.5, 0, 0],
+            POSITION: [4, 7.5, 0.6, 6, 4.5, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
-            POSITION: [6, 7.5, 0.6, 6, -4.5, 0, 0.5],
+        }, {
+            POSITION: [4, 7.5, 0.6, 6, -4.5, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
-            POSITION: [18, 3, 1, 0, -3, 0, 0],
+        }, {
+            POSITION: [16, 3, 1, 0, -3, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.twin,
-                    g.tonsmorrecoil,
-                    g.lotsmorrecoil,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.twin]),
                 TYPE: "bullet",
             },
-        },
-        {
-            POSITION: [18, 3, 1, 0, 3, 0, 0.5],
+        }, {
+            POSITION: [16, 3, 1, 0, 3, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.power,
-                    g.twin,
-                    g.tonsmorrecoil,
-                    g.lotsmorrecoil,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.twin]),
                 TYPE: "bullet",
             },
         },
@@ -3990,95 +2257,24 @@ exports.gemDrone = {
         FOV: 100,
     },
 }
-exports.ragnarokBottomBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.01 }]],
-    COLOR: "teal",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 9,
-    FOV: 10,
-    MAX_CHILDREN: 18,
-    GUNS: [],
-};
-for(let i = 0; i < 9; i++) {
-    exports.ragnarokBottomBody.GUNS.push(
-        {
-            POSITION: [2.5, 3, -1.8, 9, 0, 360/9*(i+0.5), 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.pound, {size: 1.7}]),
-                TYPE: ["gemDrone", {INDEPENDENT: true,}],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-            },
-        },
-    )
-};
-exports.ragnarokMiddleBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    COLOR: "teal",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    FOV: 1,
-    TURRETS: [],
-};
-for(let i = 0; i < 7; i++) {
-    exports.ragnarokMiddleBody.TURRETS.push(
-        {
-            POSITION: [7, 8.5, 0, 360/7*(i+0.5), 160, 0],
-            TYPE: ["autosmashTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.ragnarokTopBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "teal",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 5,
-    FOV: 1,
-    TURRETS: [],
-};
-for(let i = 0; i < 5; i++) {
-    exports.ragnarokTopBody.TURRETS.push(
-        {
-            POSITION: [8.5, 9, 0, 360/5*(i+0.5), 160, 0],
-            TYPE: ["gunnerCruiserTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.ragnarok = {
-    PARENT: ["eternal"],
-    NAME: "Ragnarok",
-    UPGRADE_LABEL: "Ragnarok",
-    COLOR: "teal",
-    UPGRADE_COLOR: "teal",
-    TURRETS: [
-        {
-            POSITION: [15.5, 0, 0, 0, 360, 1],
-            TYPE: ["ragnarokBottomBody"],
-        },
-        {
-            POSITION: [11, 0, 0, 0, 360, 1],
-            TYPE: ["ragnarokMiddleBody"],
-        },
-        {
-            POSITION: [6.5, 0, 0, 0, 360, 1],
-            TYPE: ["ragnarokTopBody"],
-        },
-    ],
-};
-for(let i = 0; i < 11; i++) {
-    exports.ragnarok.TURRETS.push(
-        {
-            POSITION: [5, 8.5, 0, 360/11*(i+0.5), 180, 0],
-            TYPE: ["baseTrapTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
+let ragnarok = new LayeredBoss(null, "Ragnarok", "eternal", 11, "teal", "baseTrapTurret", 4.5, 3.5);
+ragnarok.addLayer({gun: {
+    POSITION: [2.25, 3, -1.6, 9, 0, null, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.pound, {size: 1.7}]),
+        TYPE: ["gemDrone", {INDEPENDENT: true,}],
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+    },
+}}, true, null, 18);
+ragnarok.addLayer({turret: {
+    POSITION: [7, 8, 0, null, 160, 0],
+    TYPE: "autosmashTurret",
+}}, true, 4.5);
+ragnarok.addLayer({turret: {
+    POSITION: [8.5, 9, 0, null, 160, 0],
+    TYPE: "gunnerCruiserTurret",
+}}, true, 4.6);
 
 // Developer Bosses
 exports.taureonCoreBase = {
