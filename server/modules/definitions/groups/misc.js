@@ -158,6 +158,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -168,6 +169,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -178,6 +180,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -188,6 +191,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -198,6 +202,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -208,6 +213,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -218,6 +224,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -228,6 +235,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
     ],
@@ -464,7 +472,8 @@ exports.shotTrapBox = {
 let makeshottrapTurretProps = () => ({
     SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, {speed: 0.7, maxSpeed: 0.2, damage: 1.5}]),
     AUTOFIRE: true,
-    TYPE: "shotTrapBox"
+    TYPE: "shotTrapBox",
+    STAT_CALCULATOR: gunCalcNames.block,
 });
 exports.shottrapTurret = {
     PARENT: ["genericTank"],

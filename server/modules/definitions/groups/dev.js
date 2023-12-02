@@ -885,7 +885,8 @@ exports.vanquisher = {
         POSITION: [2, 12, 1.1, 18, 0, 0, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.trap, g.block]),
-            TYPE: "setTrap"
+            TYPE: "setTrap",
+            STAT_CALCULATOR: gunCalcNames.block
         }
 
     //launcher

@@ -3,7 +3,62 @@ const { base, gunCalcNames } = require('../constants.js');
 const g = require('../gunvals.js');
 const { bullet } = require('./generics.js');
 
-exports.miniboss = {
+class LayeredBoss {
+    constructor(identifier, NAME, PARENT = "celestial", SHAPE = 9, COLOR = 0, trapTurretType = "baseTrapTurret", trapTurretSize = 6.5, layerScale = 5, BODY, SIZE, VALUE) {
+        this.identifier = identifier ?? NAME.charAt(0).toLowerCase() + NAME.slice(1);
+        this.layerID = 0;
+        exports[this.identifier] = {
+            PARENT, SHAPE, NAME, COLOR, BODY, SIZE, VALUE,
+            UPGRADE_LABEL: NAME,
+            UPGRADE_COLOR: COLOR,
+            TURRETS: Array(SHAPE).fill().map((_, i) => ({
+                POSITION: [trapTurretSize, 9, 0, 360 / SHAPE * (i + 0.5), 180, 0],
+                TYPE: trapTurretType,
+            })),
+        };
+        this.layerScale = layerScale;
+        this.shape = SHAPE;
+    }
+
+    addLayer({gun, turret}, decreaseSides = true, layerScale, MAX_CHILDREN) {
+        this.layerID++;
+        this.shape -= decreaseSides ? 2 : 0;
+        let layer = {
+            PARENT: "genericTank",
+            SHAPE: this.shape,
+            COLOR: -1,
+            INDEPENDENT: true,
+            CONTROLLERS: [["spin", { independent: true, speed: 0.02 / c.runSpeed * (this.layerID % 2 ? -1 : 1) }]],
+            MAX_CHILDREN, 
+            GUNS: [],
+            TURRETS: [],
+        };
+        if (gun) {
+            for (let i = 0; i < this.shape; i++) {
+                layer.GUNS.push({
+                    POSITION: gun.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
+                    PROPERTIES: gun.PROPERTIES,
+                });
+            }
+        }
+        if (turret) {
+            for (let i = 0; i < this.shape; i++) {
+                layer.TURRETS.push({
+                    POSITION: turret.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
+                    TYPE: turret.TYPE,
+                });
+            }
+        }
+
+        exports[this.identifier + "Layer" + this.layerID] = layer;
+        exports[this.identifier].TURRETS.push({
+            POSITION: [20 - (layerScale ?? this.layerScale) * this.layerID, 0, 0, 0, 360, 1],
+            TYPE: this.identifier + "Layer" + this.layerID,
+        });
+    }
+}
+
+exports.minibossBase = {
     PARENT: ["genericTank"],
     TYPE: "miniboss",
     DANGER: 6,
@@ -20,41 +75,20 @@ exports.miniboss = {
         mob: 0,
     }),
     LEVEL: 45,
-    CONTROLLERS: ["nearestDifferentMaster", "minion", "canRepel"],
-    AI: {
-        NO_LEAD: true,
-    },
+    CONTROLLERS: ["nearestDifferentMaster", "canRepel"],
     FACING_TYPE: "autospin",
     HITS_OWN_TYPE: "hardOnlyBosses",
     BROADCAST_MESSAGE: "A visitor has left!",
-    BODY: {
-        PUSHABILITY: 0.05
-    }
+    BODY: { PUSHABILITY: 0.05 }
+}
+exports.miniboss = {
+    PARENT: ["minibossBase"],
+    CONTROLLERS: ["minion"],
+    AI: { NO_LEAD: true },
 };
 exports.ramMiniboss = {
-    PARENT: ["genericTank"],
-    TYPE: "miniboss",
-    DANGER: 6,
-    SKILL: skillSet({
-        rld: 0.7,
-        dam: 0.5,
-        pen: 0.8,
-        str: 0.8,
-        spd: 0.2,
-        atk: 0.3,
-        hlt: 1,
-        shi: 0.7,
-        rgn: 0.7,
-        mob: 0,
-    }),
-    LEVEL: 45,
-    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal", "canRepel"],
-    FACING_TYPE: "autospin",
-    HITS_OWN_TYPE: "hardOnlyBosses",
-    BROADCAST_MESSAGE: "A visitor has left!",
-    BODY: {
-        PUSHABILITY: 0.05
-    }
+    PARENT: ["minibossBase"],
+    CONTROLLERS: ["mapTargetToGoal"],
 };
 
 // GUNS
@@ -66,8 +100,7 @@ exports.baseTrapTurret = {
     GUNS: [
         {
             POSITION: [16, 14, 1, 0, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [4, 14, 1.8, 16, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.lowpower, g.pound, g.destroy, g.doublereload, g.hexatrap]),
@@ -86,8 +119,7 @@ exports.terrestrialTrapTurret = {
     GUNS: [
         {
             POSITION: [13, 14, 1, 0, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [4, 14, 1.8, 13, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.lowpower, g.pound, g.destroy, g.doublereload, g.hexatrap]),
@@ -101,9 +133,7 @@ exports.terrestrialTrapTurret = {
 exports.machineTripleTurret = {
     PARENT: ["genericTank"],
     LABEL: "Machine Gun",
-    BODY: {
-        FOV: 2,
-    },
+    BODY: { FOV: 2 },
     CONTROLLERS: [ ["spin", {speed: 0.04}] ],
     INDEPENDENT: true,
     COLOR: -1,
@@ -115,16 +145,14 @@ exports.machineTripleTurret = {
                 TYPE: "bullet",
                 AUTOFIRE: true,
             },
-        },
-        {
+        }, {
             POSITION: [12, 10, 1.4, 8, 0, 120, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.flank]),
                 TYPE: "bullet",
                 AUTOFIRE: true,
             },
-        },
-        {
+        }, {
             POSITION: [12, 10, 1.4, 8, 0, 240, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.flank]),
@@ -137,31 +165,18 @@ exports.machineTripleTurret = {
 exports.skimmerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Skimmer",
-    BODY: {
-        FOV: 2 * base.FOV,
-    },
+    BODY: { FOV: 2 * base.FOV },
     COLOR: -1,
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     GUNS: [
         {
             POSITION: [10, 14, -0.5, 9, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.pound,
-                    g.arty,
-                    g.arty,
-                    g.skim,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim]),
                 TYPE: "hypermissile",
+                STAT_CALCULATOR: gunCalcNames.sustained,
             },
-        },
-        {
+        }, {
             POSITION: [17, 15, 1, 0, 0, 0, 0],
         },
     ],
@@ -169,32 +184,16 @@ exports.skimmerTurret = {
 exports.twisterTurret = {
     PARENT: ["genericTank"],
     LABEL: "Twister",
-    BODY: {
-        FOV: 2,
-    },
+    BODY: { FOV: 2 },
     COLOR: -1,
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     GUNS: [
         {
             POSITION: [10, 13, -0.5, 9, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [17, 14, -1.4, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.pound,
-                    g.arty,
-                    g.arty,
-                    g.skim,
-                    g.morespeed,
-                    g.one_third_reload,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim, g.morespeed, g.one_third_reload]),
                 TYPE: "spinmissile",
                 STAT_CALCULATOR: gunCalcNames.sustained,
             },
@@ -204,32 +203,16 @@ exports.twisterTurret = {
 exports.hyperTwisterTurret = {
     PARENT: ["genericTank"],
     LABEL: "Twister",
-    BODY: {
-        FOV: 2,
-    },
+    BODY: { FOV: 2 },
     COLOR: -1,
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     GUNS: [
         {
             POSITION: [10, 13, -0.5, 9, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [17, 14, -1.4, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.pound,
-                    g.arty,
-                    g.arty,
-                    g.skim,
-                    g.morespeed,
-                    g.one_third_reload,
-                ]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim, g.morespeed, g.one_third_reload]),
                 TYPE: "hyperspinmissile",
                 STAT_CALCULATOR: gunCalcNames.sustained,
             },
@@ -239,28 +222,19 @@ exports.hyperTwisterTurret = {
 exports.boomerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Boomer",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: -1,
     GUNS: [
         {
             POSITION: [7.75, 10, 1, 12, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block, g.boomerang, g.fake]),
-                TYPE: "boomerang",
+                TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [6, 10, -1.5, 7, 0, 0, 0],
-        },
-        {
+        }, {
             POSITION: [2, 10, 1.3, 18, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block, g.boomerang]),
@@ -283,11 +257,9 @@ for(let i = 0; i < 3; i++) {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [13, 8, 1, 0, 0, 120*i+60, 0],
-        },
-        {
+        }, {
             POSITION: [4, 8, 1.7, 13, 0, 120*i+60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap]),
@@ -358,16 +330,14 @@ exports.eliteDestroyer = {
                 TYPE: "bullet",
                 LABEL: "Devastator",
             },
-        },
-        {
+        }, {
             POSITION: [5, 16, 1, 6, 0, 60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.pound, g.destroy]),
                 TYPE: "bullet",
                 LABEL: "Devastator",
             },
-        },
-        {
+        }, {
             POSITION: [5, 16, 1, 6, 0, -60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.pound, g.destroy]),
@@ -380,24 +350,15 @@ exports.eliteDestroyer = {
         {
             POSITION: [11, 0, 0, 180, 360, 0],
             TYPE: ["crasherSpawner"],
-        },
-        {
+        }, {
             POSITION: [11, 0, 0, 60, 360, 0],
             TYPE: ["crasherSpawner"],
-        },
-        {
+        }, {
             POSITION: [11, 0, 0, -60, 360, 0],
             TYPE: ["crasherSpawner"],
-        },
-        {
+        }, {
             POSITION: [11, 0, 0, 0, 360, 1],
-            TYPE: [
-                "bigauto4gun",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
+            TYPE: [ "bigauto4gun", { INDEPENDENT: true, COLOR: -1 } ],
         },
     ],
 };
@@ -409,30 +370,25 @@ exports.eliteGunner = {
     GUNS: [
         {
             POSITION: [14, 16, 1, 0, 0, 180, 0],
-        },
-        {
+        }, {
             POSITION: [4, 16, 1.5, 14, 0, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap]),
-                TYPE:  ["unsetPillbox", {MOTION_TYPE: "glide"}],
+                TYPE: ["unsetPillbox", {MOTION_TYPE: "glide"}],
+                STAT_CALCULATOR: gunCalcNames.trap,
             },
-        },
-        {
+        }, {
             POSITION: [6, 14, -2, 2, 0, 60, 0],
-        },
-        {
+        }, {
             POSITION: [6, 14, -2, 2, 0, 300, 0],
         },
     ],
-    AI: {
-        NO_LEAD: false,
-    },
+    AI: { NO_LEAD: false },
     TURRETS: [
         {
             POSITION: [14, 8, 0, 60, 180, 0],
             TYPE: ["auto4gun"],
-        },
-        {
+        }, {
             POSITION: [14, 8, 0, 300, 180, 0],
             TYPE: ["auto4gun"],
         },
@@ -450,28 +406,22 @@ exports.eliteSprayer = {
             /*    SIZE         X             Y         ANGLE        ARC */
             POSITION: [6, 0, 0, 0, 360, 1],
             TYPE: ["machineTripleTurret", { INDEPENDENT: true }],
-        },
-        {
+        }, {
             POSITION: [9, 6, -5, 180, 130, 0],
             TYPE: ["sprayer", { COLOR: "grey" }],
-        },
-        {
+        }, {
             POSITION: [9, 6, 5, 180, 130, 0],
             TYPE: ["sprayer", { COLOR: "grey" }],
-        },
-        {
+        }, {
             POSITION: [9, 6, 5, 60, 130, 0],
             TYPE: ["sprayer", { COLOR: "grey" }],
-        },
-        {
+        }, {
             POSITION: [9, 6, -5, 60, 130, 0],
             TYPE: ["sprayer", { COLOR: "grey" }],
-        },
-        {
+        }, {
             POSITION: [9, 6, 5, -60, 130, 0],
             TYPE: ["sprayer", { COLOR: "grey" }],
-        },
-        {
+        }, {
             POSITION: [9, 6, -5, -60, 130, 0],
             TYPE: ["sprayer", { COLOR: "grey" }],
         },
@@ -489,64 +439,56 @@ exports.eliteBattleship = {
                 TYPE: "autoswarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [4, 6, 0.6, 7, 0, 60, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
                 TYPE: "autoswarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [4, 6, 0.6, 7, 8, 60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
                 TYPE: "autoswarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [4, 6, 0.6, 7, -8, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
                 TYPE: "autoswarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [4, 6, 0.6, 7, 0, 180, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
                 TYPE: "autoswarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [4, 6, 0.6, 7, 8, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
                 TYPE: "autoswarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [4, 6, 0.6, 7, -8, -60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
                 TYPE: "autoswarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [4, 6, 0.6, 7, 0, -60, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
                 TYPE: "autoswarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [4, 6, 0.6, 7, 8, -60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle]),
@@ -558,33 +500,13 @@ exports.eliteBattleship = {
     TURRETS: [
         {
             POSITION: [5, 7, 0, 0, 360, 1],
-            TYPE: [
-                "autoTankGun",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
-        },
-        {
+            TYPE: [ "autoTankGun", { INDEPENDENT: true, COLOR: -1 } ],
+        }, {
             POSITION: [5, 7, 0, 120, 360, 1],
-            TYPE: [
-                "autoTankGun",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
-        },
-        {
+            TYPE: [ "autoTankGun", { INDEPENDENT: true, COLOR: -1 } ],
+        }, {
             POSITION: [5, 7, 0, 240, 360, 1],
-            TYPE: [
-                "autoTankGun",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
+            TYPE: [ "autoTankGun", { INDEPENDENT: true, COLOR: -1 } ],
         },
     ],
 };
@@ -597,14 +519,11 @@ exports.eliteSpawner = {
     GUNS: [
         {
             POSITION: [11, 16, 1, 0, 0, 60, 0],
-        },
-        {
+        }, {
             POSITION: [11, 16, 1, 0, 0, 180, 0],
-        },
-        {
+        }, {
             POSITION: [11, 16, 1, 0, 0, 300, 0],
-        },
-        {
+        }, {
             /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [2, 18, 1, 11, 0, 60, 0],
             PROPERTIES: {
@@ -614,9 +533,7 @@ exports.eliteSpawner = {
                 AUTOFIRE: true,
                 STAT_CALCULATOR: gunCalcNames.drone,
             },
-        },
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
+        }, {
             POSITION: [2, 18, 1, 11, 0, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.celeslower]),
@@ -625,9 +542,7 @@ exports.eliteSpawner = {
                 AUTOFIRE: true,
                 STAT_CALCULATOR: gunCalcNames.drone,
             },
-        },
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
+        }, {
             POSITION: [2, 18, 1, 11, 0, 300, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.celeslower]),
@@ -662,8 +577,7 @@ for (let i = 0; i < 3; i++) {
     exports.eliteTrapGuard.GUNS.push(
         {
             POSITION: [10.5, 6, 1, 0, 0, 120*i+60, 0],
-        },
-        {
+        }, {
             POSITION: [3, 6, 1.7, 10.5, 0, 120*i+60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap]),
@@ -676,8 +590,7 @@ for (let i = 0; i < 3; i++) {
         {
             POSITION: [5, 8, -7, 120*i+60, 160, 0],
             TYPE: ["autoTurret", { INDEPENDENT: false }],
-        },
-        {
+        }, {
             POSITION: [5, 8, 7, 120*i+60, 160, 0],
             TYPE: ["autoTurret", { INDEPENDENT: false }],
         },
@@ -705,22 +618,19 @@ for (let i = 0; i < 3; i++) {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.morespeed]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [9.5, 2, 1, 3.5, 6.5, 120*i+10, 1/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.morespeed]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [9.5, 2, 1, 8.5, 1.5, 120*i+10, 2/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.puregunner, g.morespeed]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [2, 20, 0.75, 8, 0, 120*i+60, 0],
         },
     )
@@ -731,36 +641,17 @@ exports.oldEliteSprayer = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Sprayer (Old)",
     UPGRADE_COLOR: "pink",
-    AI: {
-        NO_LEAD: false,
-    },
+    AI: { NO_LEAD: false },
     TURRETS: [
         {
             POSITION: [14, 6, 0, 180, 190, 0],
-            TYPE: [
-                "sprayer",
-                {
-                    COLOR: -1,
-                },
-            ],
-        },
-        {
+            TYPE: [ "sprayer", { COLOR: -1 } ],
+        }, {
             POSITION: [14, 6, 0, 60, 190, 0],
-            TYPE: [
-                "sprayer",
-                {
-                    COLOR: -1,
-                },
-            ],
-        },
-        {
+            TYPE: [ "sprayer", { COLOR: -1 } ],
+        }, {
             POSITION: [14, 6, 0, -60, 190, 0],
-            TYPE: [
-                "sprayer",
-                {
-                    COLOR: -1,
-                },
-            ],
+            TYPE: [ "sprayer", { COLOR: -1 } ],
         },
     ],
 };
@@ -776,8 +667,7 @@ exports.legionaryTwin = {
                 SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.twin, g.power, g.slow]),
                 TYPE: "bullet",
             },
-        },
-        {
+        }, {
             POSITION: [17.5, 5, 1, 0, 4.5, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.auto, g.gunner, g.twin, g.power, g.slow]),
@@ -804,10 +694,7 @@ exports.legionaryPillbox = {
 exports.legionaryCrasherTop = {
     PARENT: ["elite"],
     AI: { STRAFE: false, NO_LEAD: false },
-    CONTROLLERS: [
-        ["spin", { independent: true, speed: -0.005 }],
-        //"nearestDifferentMaster",
-    ],
+    CONTROLLERS: [ ["spin", { independent: true, speed: -0.005 }] ],
     INDEPENDENT: true,
     GUNS: [],
     TURRETS: [],
@@ -823,8 +710,7 @@ for (let i = 0; i < 3; i++) {
                 AUTOFIRE: true,
                 
             },
-        },
-        {
+        }, {
             POSITION: [4, 9.5, 0.7, 7, -5, 120*i+60, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.pound, g.morespeed, g.morespeed, {size: 0.7, speed: 5, maxSpeed: 2, shudder: 5, range: 1.5}]),
@@ -867,8 +753,7 @@ for (let i = 0; i < 3; i++) {
     exports.legionaryCrasher.GUNS.push(
         {
             POSITION: [14.5, 13, 1, 0, 0, 120*i, 0],
-        },
-        {
+        }, {
             POSITION: [3, 13, 1.7, 14.5, 0, 120*i, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.destroy, g.veryfast, {size: 0.6, maxSpeed: 3}]),
@@ -896,19 +781,15 @@ exports.sprayerLegion = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Sprayer Legion",
     UPGRADE_COLOR: "pink",
-    AI: {
-        NO_LEAD: false,
-    },
+    AI: { NO_LEAD: false },
     TURRETS: [
         {
             POSITION: [14, 6, 0, 180, 190, 0],
             TYPE: ["machineGun", {COLOR: -1}],
-        },
-        {
+        }, {
             POSITION: [14, 6, 0, 60, 190, 0],
             TYPE: ["machineGun", {COLOR: -1}],
-        },
-        {
+        }, {
             POSITION: [14, 6, 0, -60, 190, 0],
             TYPE: ["machineGun", {COLOR: -1}],
         },
@@ -1090,12 +971,10 @@ exports.eliteSkimmer = {
         {
             POSITION: [15, 5, 0, 60, 170, 0],
             TYPE: "skimmerTurret",
-        },
-        {
+        }, {
             POSITION: [15, 5, 0, 180, 170, 0],
             TYPE: "skimmerTurret",
-        },
-        {
+        }, {
             POSITION: [15, 5, 0, 300, 170, 0],
             TYPE: "skimmerTurret",
         },
@@ -1127,105 +1006,65 @@ exports.nestKeeper = {
                 TYPE: "drone",
                 AUTOFIRE: true,
                 LABEL: "Mega Crasher",
+                STAT_CALCULATOR: gunCalcNames.drone,
             },
-        },
-        {
+        }, {
             POSITION: [3.5, 6.65, 1.2, 8, 0, -35, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.nest_keeper]),
                 TYPE: "drone",
                 AUTOFIRE: true,
                 LABEL: "Mega Crasher",
+                STAT_CALCULATOR: gunCalcNames.drone,
             },
-        },
-        {
+        }, {
             POSITION: [3.5, 6.65, 1.2, 8, 0, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.nest_keeper]),
                 TYPE: "drone",
                 AUTOFIRE: true,
                 LABEL: "Mega Crasher",
+                STAT_CALCULATOR: gunCalcNames.drone,
             },
-        },
-        {
+        }, {
             POSITION: [3.5, 6.65, 1.2, 8, 0, 108, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.nest_keeper]),
                 TYPE: "drone",
                 AUTOFIRE: true,
                 LABEL: "Mega Crasher",
+                STAT_CALCULATOR: gunCalcNames.drone,
             },
-        },
-        {
+        }, {
             POSITION: [3.5, 6.65, 1.2, 8, 0, -108, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.nest_keeper]),
                 TYPE: "drone",
                 AUTOFIRE: true,
                 LABEL: "Mega Crasher",
+                STAT_CALCULATOR: gunCalcNames.drone,
             },
         },
     ],
     TURRETS: [
         {
             POSITION: [8, 9, 0, 72, 120, 0],
-            TYPE: [
-                "auto4gun",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
-        },
-        {
+            TYPE: [ "auto4gun", { INDEPENDENT: true, COLOR: -1 } ],
+        }, {
             POSITION: [8, 9, 0, 0, 120, 0],
-            TYPE: [
-                "auto4gun",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
-        },
-        {
+            TYPE: [ "auto4gun", { INDEPENDENT: true, COLOR: -1 } ],
+        }, {
             POSITION: [8, 9, 0, 144, 120, 0],
-            TYPE: [
-                "auto4gun",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
-        },
-        {
+            TYPE: [ "auto4gun", { INDEPENDENT: true, COLOR: -1 } ],
+        }, {
             POSITION: [8, 9, 0, 216, 120, 0],
-            TYPE: [
-                "auto4gun",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
-        },
-        {
+            TYPE: [ "auto4gun", { INDEPENDENT: true, COLOR: -1 } ],
+        }, {
             POSITION: [8, 9, 0, -72, 120, 0],
-            TYPE: [
-                "auto4gun",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
-        },
-        {
+            TYPE: [ "auto4gun", { INDEPENDENT: true, COLOR: -1 } ],
+        }, {
             POSITION: [9, 0, 0, 0, 360, 1],
-            TYPE: [
-                "boomerTurret",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
+            TYPE: [ "auto4gun", { INDEPENDENT: true, COLOR: -1 } ],
         },
     ],
 };
@@ -1248,13 +1087,7 @@ exports.nestWarden = {
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
-            TYPE: [
-                "barricadeTurret",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
+            TYPE: [ "barricadeTurret", { INDEPENDENT: true, COLOR: -1 } ],
         },
     ],
 };
@@ -1262,25 +1095,19 @@ for(let i = 0; i < 5; i++) {
     exports.nestWarden.GUNS.push(
         {
             POSITION: [10.7, 8, 1, 0, 0, 72*i+36, 0],
-        },
-        {
+        }, {
             POSITION: [1.5, 8, 1.2, 10.7, 0, 72*i+36, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.fast, g.block, g.construct]),
                 TYPE: "unsetTrap",
+                STAT_CALCULATOR: gunCalcNames.block
             },
         },
     );
     exports.nestWarden.TURRETS.push(
         {
             POSITION: [8, 9, 0, 72*i, 120, 0],
-            TYPE: [
-                "cruiserTurret",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
+            TYPE: [ "cruiserTurret", { INDEPENDENT: true, COLOR: -1 } ],
         }
     );
 };
@@ -1303,13 +1130,7 @@ exports.nestGuardian = {
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
-            TYPE: [
-                "twisterTurret",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
+            TYPE: [ "twisterTurret", { INDEPENDENT: true, COLOR: -1 } ],
         },
     ],
 };
@@ -1327,13 +1148,7 @@ for(let i = 0; i < 5; i++) {
     exports.nestGuardian.TURRETS.push(
         {
             POSITION: [8, 9, 0, 72*i, 120, 0],
-            TYPE: [
-                "swarmerTurret",
-                {
-                    INDEPENDENT: true,
-                    COLOR: -1,
-                },
-            ],
+            TYPE: [ "swarmerTurret", { INDEPENDENT: true, COLOR: -1 } ],
         }
     );
 };
@@ -1444,12 +1259,10 @@ exports.bob = {
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
             TYPE: "smasherBody",
-        },
-        {
+        }, {
             POSITION: [21.5, 0, 0, 30, 360, 0],
             TYPE: "landmineBody",
-        },
-        {
+        }, {
             POSITION: [23.75, 0, 0, 0, 360, 0],
             TYPE: "spikeBody",
         },
@@ -1486,9 +1299,7 @@ exports.guardian = {
             },
         },
     ],
-    AI: {
-        NO_LEAD: false,
-    },
+    AI: { NO_LEAD: false },
 };
 exports.defenderAutoTankGun = {
     PARENT: ["autoTankGun"],
@@ -1510,30 +1321,25 @@ exports.defender = {
     GUNS: [
         {
             POSITION: [15, 7, 1, -3, 0, 60, 0],
-        },
-        {
+        }, {
             POSITION: [3, 7, 1.7, 12, 0, 60, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.flank]),
                 TYPE: ["trap", {COLOR: "yellow"}],
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
-        },
-        {
+        }, {
             POSITION: [15, 7, 1, -3, 0, 180, 0],
-        },
-        {
+        }, {
             POSITION: [3, 7, 1.7, 12, 0, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.flank]),
                 TYPE: ["trap", {COLOR: "yellow"}],
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
-        },
-        {
+        }, {
             POSITION: [15, 7, 1, -3, 0, 300, 0],
-        },
-        {
+        }, {
             POSITION: [3, 7, 1.7, 12, 0, 300, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.flank]),
@@ -1546,19 +1352,15 @@ exports.defender = {
         {
             POSITION: [5, 7, 0, 0, 190, 1],
             TYPE: "defenderAutoTankGun",
-        },
-        {
+        }, {
             POSITION: [5, 7, 0, 120, 190, 1],
             TYPE: "defenderAutoTankGun",
-        },
-        {
+        }, {
             POSITION: [5, 7, 0, 240, 190, 1],
             TYPE: "defenderAutoTankGun",
         },
     ],
-    AI: {
-        NO_LEAD: false,
-    },
+    AI: { NO_LEAD: false },
 };
 
 // CELESTIALS
@@ -1627,9 +1429,7 @@ exports.protoHive = {
     FACING_TYPE: "turnWithSpeed",
     INDEPENDENT: true,
     CONTROLLERS: ["alwaysFire", "nearestDifferentMaster", "targetSelf"],
-    AI: {
-        NO_LEAD: true,
-    },
+    AI: { NO_LEAD: true },
     GUNS: [
         {
             POSITION: [7, 9.5, 0.6, 7, 0, 0, 0],
@@ -1638,16 +1438,14 @@ exports.protoHive = {
                 TYPE: ["bee", { INDEPENDENT: true }],
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [7, 9.5, 0.6, 7, 0, 120, 0.2],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees]),
                 TYPE: ["bee", { INDEPENDENT: true }],
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
-        },
-        {
+        }, {
             POSITION: [7, 9.5, 0.6, 7, 0, -120, 0.4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.hive, g.bees]),
@@ -1660,15 +1458,8 @@ exports.protoHive = {
 exports.protoSwarmerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Swarmer",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
@@ -1677,100 +1468,33 @@ exports.protoSwarmerTurret = {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.hive]),
                 TYPE: "protoHive",
             },
-        },
-        {
+        }, {
             POSITION: [11, 12, 1, 5, 0, 0, 0],
         },
     ],
 };
-exports.aresLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "purple",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    INDEPENDENT: true,
-    BODY: {
-        FOV: 10,
+let ares = new LayeredBoss(null, "Ares", "terrestrial", 7, "purple", "terrestrialTrapTurret", 7, 5.5);
+ares.addLayer({gun: {
+    POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.halfspeed]),
+        TYPE: ["demonchip", { INDEPENDENT: true, }],
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+        STAT_CALCULATOR: gunCalcNames.necro,
+        WAIT_TO_CYCLE: true,
     },
-    MAX_CHILDREN: 18,
-    FACING_TYPE: "autospin",
-    GUNS: [],
-};
-for(let i = 0; i < 7; i++) {
-    exports.aresLowerBody.GUNS.push(
-        {
-            POSITION: [3.75, 7, 1.2, 8, 0, 360/7*(i+0.5), 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.halfspeed]),
-                TYPE: ["demonchip", { INDEPENDENT: true, }],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.necro,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-    )
-};
-exports.aresUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    AUTOSPIN: true,
-    COLOR: "purple",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [],
-};
-for(let i = 0; i < 5; i++) {
-    exports.aresUpperBody.TURRETS.push(
-        {
-            POSITION: [10, 8.5, 0, 360/5*(i+0.5), 160, 0],
-            TYPE: ["protoSwarmerTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.ares = {
-    PARENT: ["terrestrial"],
-    NAME: "Ares",
-    UPGRADE_LABEL: "Ares",
-    COLOR: "purple",
-    UPGRADE_COLOR: "purple",
-    TURRETS: [
-        {
-            POSITION: [14.5, 0, 0, 0, 360, 1],
-            TYPE: ["aresLowerBody"],
-        },
-        {
-            POSITION: [9, 0, 0, 0, 360, 1],
-            TYPE: ["aresUpperBody"],
-        },
-    ],
-};
-for(let i = 0; i < 7; i++) {
-    exports.ares.TURRETS.push(
-        {
-            POSITION: [7, 9, 0, 360/7*(i+0.5), 180, 0],
-            TYPE: ["terrestrialTrapTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
+}}, false, 18);
+ares.addLayer({turret: {
+    POSITION: [10, 8.5, 0, null, 160, 0],
+    TYPE: ["protoSwarmerTurret", { INDEPENDENT: true }],
+}});
 
 exports.swarmTurret = {
     PARENT: ["genericTank"],
     LABEL: "Swarm",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
@@ -1786,15 +1510,8 @@ exports.swarmTurret = {
 exports.basicTurret = {
     PARENT: ["genericTank"],
     LABEL: "Turret",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
+    BODY: { FOV: 2 },
+    CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     COLOR: "grey",
     GUNS: [
         {
@@ -1806,302 +1523,66 @@ exports.basicTurret = {
         },
     ],
 };
-exports.gersemiLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "lightGreen",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 5,
-    INDEPENDENT: true,
-    BODY: {
-        FOV: 10,
-    },
-    MAX_CHILDREN: 18,
-    FACING_TYPE: "autospin",
-    TURRETS: [],
-};
-for(let i = 0; i < 5; i++) {
-    exports.gersemiLowerBody.TURRETS.push(
-        {
-            POSITION: [9, 8, 0, 360/5*(i+0.5), 160, 0],
-            TYPE: ["swarmTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.gersemiUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    AUTOSPIN: true,
-    COLOR: "lightGreen",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 3,
-    INDEPENDENT: true,
-    TURRETS: [],
-};
-for(let i = 0; i < 3; i++) {
-    exports.gersemiUpperBody.TURRETS.push(
-        {
-            POSITION: [9.5, 7.5, 0, 360/3*(i+0.5), 160, 0],
-            TYPE: ["basicTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.gersemi = {
-    PARENT: ["terrestrial"],
-    NAME: "Gersemi",
-    UPGRADE_LABEL: "Gersemi",
-    COLOR: "lightGreen",
-    UPGRADE_COLOR: "lightGreen",
-    TURRETS: [
-        {
-            POSITION: [14.5, 0, 0, 0, 360, 1],
-            TYPE: ["gersemiLowerBody"],
-        },
-        {
-            POSITION: [8.5, 0, 0, 0, 360, 1],
-            TYPE: ["gersemiUpperBody"],
-        },
-    ],
-};
-for(let i = 0; i < 7; i++) {
-    exports.gersemi.TURRETS.push(
-        {
-            POSITION: [7, 9, 0, 360/7*(i+0.5), 180, 0],
-            TYPE: ["terrestrialTrapTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
+let gersemi = new LayeredBoss(null, "Gersemi", "terrestrial", 7, "lightGreen", "terrestrialTrapTurret", 7, 5.5);
+gersemi.addLayer({turret: {
+    POSITION: [9, 8, 0, null, 160, 0],
+    TYPE: ["swarmTurret", { INDEPENDENT: true, }],
+}});
+gersemi.addLayer({turret: {
+    POSITION: [9.5, 7.5, 0, null, 160, 0],
+    TYPE: ["basicTurret", { INDEPENDENT: true, }],
+}}, true, 6);
 
-exports.ezekielLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "orange",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 5,
-    INDEPENDENT: true,
-    BODY: {
-        FOV: 10,
+let ezekiel = new LayeredBoss(null, "Ezekiel", "terrestrial", 7, "orange", "terrestrialTrapTurret", 7, 5.5);
+ezekiel.addLayer({gun: {
+    POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.halfspeed]),
+        TYPE: ["dorito", { COLOR: "orange", INDEPENDENT: true, }],
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+        STAT_CALCULATOR: gunCalcNames.necro,
+        WAIT_TO_CYCLE: true,
     },
-    MAX_CHILDREN: 18,
-    FACING_TYPE: "autospin",
-    GUNS: [],
-};
-for(let i = 0; i < 5; i++) {
-    exports.ezekielLowerBody.GUNS.push(
-        {
-            POSITION: [3.75, 7, 1.2, 8, 0, 360/5*(i+0.5), 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.halfspeed]),
-                TYPE: ["dorito", { COLOR: "orange", INDEPENDENT: true, }],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.necro,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-    )
-};
-exports.ezekielUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    AUTOSPIN: true,
-    COLOR: "orange",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 3,
-    INDEPENDENT: true,
-    TURRETS: [],
-};
-for(let i = 0; i < 3; i++) {
-    exports.ezekielUpperBody.TURRETS.push(
-        {
-            POSITION: [10, 7.5, 0, 360/3*(i+0.5), 160, 0],
-            TYPE: ["zaphkielSkimmerTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.ezekiel = {
-    PARENT: ["terrestrial"],
-    NAME: "Ezekiel",
-    UPGRADE_LABEL: "Ezekiel",
-    COLOR: "orange",
-    UPGRADE_COLOR: "orange",
-    TURRETS: [
-        {
-            POSITION: [14.5, 0, 0, 0, 360, 1],
-            TYPE: ["ezekielLowerBody"],
-        },
-        {
-            POSITION: [8.5, 0, 0, 0, 360, 1],
-            TYPE: ["ezekielUpperBody"],
-        },
-    ],
-};
-for(let i = 0; i < 7; i++) {
-    exports.ezekiel.TURRETS.push(
-        {
-            POSITION: [7, 9, 0, 360/7*(i+0.5), 180, 0],
-            TYPE: ["terrestrialTrapTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
+}}, true, null, 18);
+ezekiel.addLayer({turret: {
+    POSITION: [10, 7.5, 0, null, 160, 0],
+    TYPE: ["zaphkielSkimmerTurret", { INDEPENDENT: true }],
+}}, true, 6)
 
-exports.erisLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "pink",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 7,
-    BODY: {
-        FOV: 100,
+let eris = new LayeredBoss(null, "Eris", "terrestrial", 7, "pink", "terrestrialTrapTurret", 7, 5.5);
+eris.addLayer({gun: {
+    POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
+        TYPE: ["minion", { INDEPENDENT: true, COLOR: "pink", HAS_NO_RECOIL: true, }],
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+        STAT_CALCULATOR: gunCalcNames.necro,
+        WAIT_TO_CYCLE: true,
     },
-    MAX_CHILDREN: 14,
-    INDEPENDENT: true,
-    FACING_TYPE: "autospin",
-    GUNS: [],
-};
-for(let i = 0; i < 7; i++) {
-    exports.erisLowerBody.GUNS.push(
-        {
-            POSITION: [3.75, 7, 1.2, 8, 0, 360/7*(i+0.5), 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
-                TYPE: ["minion", { INDEPENDENT: true, COLOR: "pink", HAS_NO_RECOIL: true, }],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.necro,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-    )
-};
-exports.erisUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    AUTOSPIN: true,
-    COLOR: "pink",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 5,
-    INDEPENDENT: true,
-    TURRETS: [],
-};
-for(let i = 0; i < 5; i++) {
-    exports.erisUpperBody.TURRETS.push(
-        {
-            POSITION: [10, 8.5, 0, 360/5*(i+0.5), 160, 0],
-            TYPE: ["rocketeerTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.eris = {
-    PARENT: ["terrestrial"],
-    NAME: "Eris",
-    UPGRADE_LABEL: "Eris",
-    COLOR: "pink",
-    UPGRADE_COLOR: "pink",
-    TURRETS: [
-        {
-            POSITION: [14.5, 0, 0, 0, 360, 1],
-            TYPE: ["erisLowerBody"],
-        },
-        {
-            POSITION: [9, 0, 0, 0, 360, 1],
-            TYPE: ["erisUpperBody"],
-        },
-    ],
-};
-for(let i = 0; i < 7; i++) {
-    exports.eris.TURRETS.push(
-        {
-            POSITION: [7, 9, 0, 360/7*(i+0.5), 180, 0],
-            TYPE: ["terrestrialTrapTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
+}}, false, null, 14);
+eris.addLayer({turret: {
+    POSITION: [10, 8.5, 0, null, 160, 0],
+    TYPE: ["rocketeerTurret", { INDEPENDENT: true, }],
+}})
 
-exports.seleneLowerBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: -0.005 }]],
-    COLOR: "gold",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    SHAPE: 5,
-    INDEPENDENT: true,
-    BODY: {
-        FOV: 10,
+let selene = new LayeredBoss(null, "Selene", "terrestrial", 7, "gold", "terrestrialTrapTurret", 7, 5.5);
+selene.addLayer({gun: {
+    POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.halfspeed]),
+        TYPE: ["sunchip", { COLOR: "gold", INDEPENDENT: true, }],
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+        STAT_CALCULATOR: gunCalcNames.necro,
+        WAIT_TO_CYCLE: true,
     },
-    MAX_CHILDREN: 18,
-    FACING_TYPE: "autospin",
-    GUNS: [],
-};
-for(let i = 0; i < 5; i++) {
-    exports.seleneLowerBody.GUNS.push(
-        {
-            POSITION: [3.75, 7, 1.2, 8, 0, 360/5*(i+0.5), 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.halfspeed]),
-                TYPE: ["sunchip", { COLOR: "gold", INDEPENDENT: true, }],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.necro,
-                WAIT_TO_CYCLE: true,
-            },
-        },
-    )
-};
-exports.seleneUpperBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { independent: true, speed: 0.005 }]],
-    AUTOSPIN: true,
-    COLOR: "gold",
-    SIZE: 100,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    MAX_CHILDREN: 28,
-    SHAPE: 3,
-    INDEPENDENT: true,
-    TURRETS: [],
-};
-for(let i = 0; i < 3; i++) {
-    exports.seleneUpperBody.TURRETS.push(
-        {
-            POSITION: [10, 7.5, 0, 360/3*(i+0.5), 160, 0],
-            TYPE: ["hyperTwisterTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
-exports.selene = {
-    PARENT: ["terrestrial"],
-    NAME: "Selene",
-    UPGRADE_LABEL: "Selene",
-    COLOR: "gold",
-    UPGRADE_COLOR: "gold",
-    TURRETS: [
-        {
-            POSITION: [14.5, 0, 0, 0, 360, 1],
-            TYPE: ["seleneLowerBody"],
-        },
-        {
-            POSITION: [8.5, 0, 0, 0, 360, 1],
-            TYPE: ["seleneUpperBody"],
-        },
-    ],
-};
-for(let i = 0; i < 7; i++) {
-    exports.selene.TURRETS.push(
-        {
-            POSITION: [7, 9, 0, 360/7*(i+0.5), 180, 0],
-            TYPE: ["terrestrialTrapTurret", { INDEPENDENT: true, }],
-        },
-    )
-};
+}}, true, null, 18);
+selene.addLayer({turret: {
+    POSITION: [10, 7.5, 0, null, 160, 0],
+    TYPE: ["hyperTwisterTurret", { INDEPENDENT: true }],
+}}, true, 6);
 
 // PALADIN
 exports.swarmerTurret = {
@@ -5484,59 +4965,6 @@ exports.trplnrBossVulnerableForm = {
             IDENTIFIER: 'onHandler'
         }
     }]
-}
-
-class LayeredBoss {
-    constructor(identifier, NAME, PARENT = "celestial", SHAPE = 9, COLOR = 0, trapTurretType = "baseTrapTurret", trapTurretSize = 6.5, layerScale = 5, BODY, SIZE, VALUE) {
-        this.identifier = identifier ?? NAME.charAt(0).toLowerCase() + NAME.slice(1);
-        this.layerID = 0;
-        exports[this.identifier] = {
-            PARENT, SHAPE, NAME, COLOR, BODY, SIZE, VALUE,
-            TURRETS: Array(SHAPE).fill().map((_, i) => ({
-                POSITION: [trapTurretSize, 9, 0, 360 / SHAPE * (i + 0.5), 180, 0],
-                TYPE: trapTurretType,
-            })),
-        };
-        this.layerScale = layerScale;
-        this.shape = SHAPE;
-    }
-
-    addLayer({gun, turret}, decreaseSides = true, MAX_CHILDREN) {
-        this.layerID++;
-        this.shape -= decreaseSides ? 2 : 0;
-        let layer = {
-            PARENT: "genericTank",
-            SHAPE: this.shape,
-            COLOR: -1,
-            INDEPENDENT: true,
-            CONTROLLERS: [["spin", { independent: true, speed: 0.02 / c.runSpeed * (this.layerID % 2 ? -1 : 1) }]],
-            MAX_CHILDREN, 
-            GUNS: [],
-            TURRETS: [],
-        };
-        if (gun) {
-            for (let i = 0; i < this.shape; i++) {
-                layer.GUNS.push({
-                    POSITION: gun.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
-                    PROPERTIES: gun.PROPERTIES,
-                });
-            }
-        }
-        if (turret) {
-            for (let i = 0; i < this.shape; i++) {
-                layer.TURRETS.push({
-                    POSITION: turret.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
-                    TYPE: turret.TYPE,
-                });
-            }
-        }
-
-        exports[this.identifier + "Layer" + this.layerID] = layer;
-        exports[this.identifier].TURRETS.push({
-            POSITION: [20 - this.layerScale * this.layerID, 0, 0, 0, 360, 1],
-            TYPE: this.identifier + "Layer" + this.layerID,
-        });
-    }
 }
 
 let testLayeredBoss = new LayeredBoss("testLayeredBoss", "Test Layered Boss", "terrestrial", 7, 3, "terrestrialTrapTurret", 5, 7, {SPEED: 10});

@@ -476,7 +476,7 @@ module.exports = ({ Class }) => {
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.trap, g.block, g.veryfast, g.pound, g.morereload, {range: 3}]),
 	            TYPE: ["unsetTrap", {HITS_OWN_TYPE: "never"} ],
-	            STAT_CALCULATOR: gunCalcNames.trap
+	            STAT_CALCULATOR: gunCalcNames.block
 	        }
 	    });
 	}
