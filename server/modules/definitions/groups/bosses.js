@@ -18,11 +18,13 @@ class LayeredBoss {
         };
         this.layerScale = layerScale;
         this.shape = SHAPE;
+        this.layerSize = 20;
     }
 
     addLayer({gun, turret}, decreaseSides = true, layerScale, MAX_CHILDREN) {
         this.layerID++;
         this.shape -= decreaseSides ? 2 : 0;
+        this.layerSize -= layerScale ?? this.layerScale;
         let layer = {
             PARENT: "genericTank",
             SHAPE: this.shape,
@@ -52,7 +54,7 @@ class LayeredBoss {
 
         exports[this.identifier + "Layer" + this.layerID] = layer;
         exports[this.identifier].TURRETS.push({
-            POSITION: [20 - (layerScale ?? this.layerScale) * this.layerID, 0, 0, 0, 360, 1],
+            POSITION: [this.layerSize, 0, 0, 0, 360, 1],
             TYPE: this.identifier + "Layer" + this.layerID,
         });
     }
@@ -1484,11 +1486,11 @@ ares.addLayer({gun: {
         STAT_CALCULATOR: gunCalcNames.necro,
         WAIT_TO_CYCLE: true,
     },
-}}, false, 18);
+}}, false, null, 18);
 ares.addLayer({turret: {
     POSITION: [10, 8.5, 0, null, 160, 0],
     TYPE: ["protoSwarmerTurret", { INDEPENDENT: true }],
-}});
+}}, true, 6.5);
 
 exports.swarmTurret = {
     PARENT: ["genericTank"],
@@ -1526,12 +1528,12 @@ exports.basicTurret = {
 let gersemi = new LayeredBoss(null, "Gersemi", "terrestrial", 7, "lightGreen", "terrestrialTrapTurret", 7, 5.5);
 gersemi.addLayer({turret: {
     POSITION: [9, 8, 0, null, 160, 0],
-    TYPE: ["swarmTurret", { INDEPENDENT: true, }],
+    TYPE: ["swarmTurret", { INDEPENDENT: true }],
 }});
 gersemi.addLayer({turret: {
     POSITION: [9.5, 7.5, 0, null, 160, 0],
-    TYPE: ["basicTurret", { INDEPENDENT: true, }],
-}}, true, 6);
+    TYPE: ["basicTurret", { INDEPENDENT: true }],
+}}, true, 6.5);
 
 let ezekiel = new LayeredBoss(null, "Ezekiel", "terrestrial", 7, "orange", "terrestrialTrapTurret", 7, 5.5);
 ezekiel.addLayer({gun: {
@@ -1548,14 +1550,14 @@ ezekiel.addLayer({gun: {
 ezekiel.addLayer({turret: {
     POSITION: [10, 7.5, 0, null, 160, 0],
     TYPE: ["skimmerTurret", { COLOR: "grey", INDEPENDENT: true }],
-}}, true, 6)
+}}, true, 6.5)
 
 let eris = new LayeredBoss(null, "Eris", "terrestrial", 7, "pink", "terrestrialTrapTurret", 7, 5.5);
 eris.addLayer({gun: {
     POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
     PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.factory, g.celeslower]),
-        TYPE: ["minion", { INDEPENDENT: true, COLOR: "pink", HAS_NO_RECOIL: true, }],
+        TYPE: ["minion", { INDEPENDENT: true, COLOR: "pink", HAS_NO_RECOIL: true }],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
         STAT_CALCULATOR: gunCalcNames.necro,
@@ -1564,15 +1566,15 @@ eris.addLayer({gun: {
 }}, false, null, 14);
 eris.addLayer({turret: {
     POSITION: [10, 8.5, 0, null, 160, 0],
-    TYPE: ["rocketeerTurret", { INDEPENDENT: true, }],
-}})
+    TYPE: ["rocketeerTurret", { INDEPENDENT: true }],
+}}, true, 6.5);
 
 let selene = new LayeredBoss(null, "Selene", "terrestrial", 7, "gold", "terrestrialTrapTurret", 7, 5.5);
 selene.addLayer({gun: {
     POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
     PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroy, g.halfspeed]),
-        TYPE: ["sunchip", { COLOR: "gold", INDEPENDENT: true, }],
+        TYPE: ["sunchip", { COLOR: "gold", INDEPENDENT: true }],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
         STAT_CALCULATOR: gunCalcNames.necro,
@@ -1582,7 +1584,7 @@ selene.addLayer({gun: {
 selene.addLayer({turret: {
     POSITION: [10, 7.5, 0, null, 160, 0],
     TYPE: ["hyperTwisterTurret", { INDEPENDENT: true }],
-}}, true, 6);
+}}, true, 6.5);
 
 // PALADIN
 exports.swarmerTurret = {
@@ -1618,7 +1620,7 @@ paladin.addLayer({gun: {
 paladin.addLayer({turret: {
     POSITION: [10, 7.5, 0, null, 160, 0],
     TYPE: "swarmerTurret",
-}}, true, 5.75);
+}}, true, 6);
 
 // FREYJA
 exports.cruiserTurret = {
@@ -1667,7 +1669,7 @@ zaphkiel.addLayer({gun: {
     },
 }}, true, null, 16);
 zaphkiel.addLayer({turret: {
-    POSITION: [10.5, 8, 0, null, 160, 0],
+    POSITION: [10, 7.5, 0, null, 160, 0],
     TYPE: ["skimmerTurret", {COLOR: "grey", INDEPENDENT: true}],
 }}, true, 6);
 
@@ -1702,7 +1704,7 @@ nyx.addLayer({gun: {
     },
 }}, true, null, 16);
 nyx.addLayer({turret: {
-    POSITION: [10.5, 8, 0, null, 160, 0],
+    POSITION: [10, 7.5, 0, null, 160, 0],
     TYPE: "rocketeerTurret",
 }}, true, 6);
 
@@ -1719,7 +1721,7 @@ theia.addLayer({gun: {
     },
 }}, true, null, 35);
 theia.addLayer({turret: {
-    POSITION: [10.5, 8, 0, null, 160, 0],
+    POSITION: [10, 7.5, 0, null, 160, 0],
     TYPE: ["twisterTurret", {COLOR: "grey"}],
 }}, true, 6);
 
@@ -1791,7 +1793,7 @@ atlas.addLayer({turret: {
     TYPE: "artilleryTurret",
 }});
 atlas.addLayer({turret: {
-    POSITION: [10.6, 7.5, 0, null, 160, 0],
+    POSITION: [10.5, 8, 0, null, 160, 0],
     TYPE: "nailgunTurret",
 }}, true, 6);
 
@@ -1855,7 +1857,7 @@ rhea.addLayer({turret: {
     TYPE: "wrenchTurret",
 }});
 rhea.addLayer({turret: {
-    POSITION: [10.6, 7.5, 0, null, 160, 0],
+    POSITION: [10.5, 8, 0, null, 160, 0],
     TYPE: "crowbarTurret",
 }}, true, 6);
 
@@ -1908,7 +1910,7 @@ julius.addLayer({turret: {
     TYPE: "juliusLowerTurret",
 }});
 julius.addLayer({turret: {
-    POSITION: [11, 8, 0, null, 160, 0],
+    POSITION: [10.5, 8, 0, null, 160, 0],
     TYPE: "launcherTurret",
 }}, true, 6);
 
@@ -1954,9 +1956,9 @@ exports.ghengisLowerTurret = {
     COLOR: "grey",
     GUNS: [
         {
-            POSITION: [8, 11, 0.6, 6, 0, 0, 0.5],
+            POSITION: [7, 11, 0.6, 6, 0, 0, 0.5],
         }, {
-            POSITION: [2.5, 14, 1, 14, 0, 0, 0],
+            POSITION: [2, 12, 1, 13, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.babyfactory, g.lessreload]),
                 TYPE: ["tinyMinion", {INDEPENDENT: true}],
@@ -1972,9 +1974,9 @@ ghengis.addLayer({turret: {
     TYPE: "ghengisLowerTurret",
 }});
 ghengis.addLayer({turret: {
-    POSITION: [11, 7, 0, null, 160, 0],
+    POSITION: [10.5, 8, 0, null, 160, 0],
     TYPE: "auto4gun",
-}});
+}}, true, 6);
 
 // NAPOLEON
 exports.napoleonLowerTurret = {
@@ -1985,14 +1987,14 @@ exports.napoleonLowerTurret = {
     COLOR: "grey",
     GUNS: [
         {
-            POSITION: [7, 8, 0.6, 6, 0, 30, 0],
+            POSITION: [8, 8, 0.6, 6, 0, 30, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.bees, g.pound, g.morespeed]),
                 TYPE: ["bee", { INDEPENDENT: true }],
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
         }, {
-            POSITION: [7, 8, 0.6, 6, 0, -30, 0.5],
+            POSITION: [8, 8, 0.6, 6, 0, -30, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.bees, g.pound, g.morespeed]),
                 TYPE: ["bee", { INDEPENDENT: true }],
@@ -2010,9 +2012,9 @@ exports.napoleonUpperTurret = {
     COLOR: "grey",
     GUNS: [
         {
-            POSITION: [12, 16, -0.6, 0, 0, 0, 0],
+            POSITION: [12, 17, -0.6, 0, 0, 0, 0],
         }, {
-            POSITION: [15, 12, 1, 0, 0, 0, 0],
+            POSITION: [16, 12, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.bitlessspeed]),
                 TYPE: ["turretedBullet", {COLOR: "veryLightGrey"}],
@@ -2026,9 +2028,9 @@ napoleon.addLayer({turret: {
     TYPE: "napoleonLowerTurret",
 }});
 napoleon.addLayer({turret: {
-    POSITION: [11, 7, 0, null, 160, 0],
+    POSITION: [10.5, 8, 0, null, 160, 0],
     TYPE: "napoleonUpperTurret",
-}})
+}}, true, 6)
 
 // Eternals
 exports.kronosMissile = {
@@ -2082,9 +2084,9 @@ exports.kronosSkimmerTurret = {
     CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
     GUNS: [
         {
-            POSITION: [8, 20, -0.5, 9, 0, 0, 0],
+            POSITION: [8, 20, -0.25, 11, 0, 0, 0],
         }, {
-            POSITION: [13, 18, -0.8, 0, 0, 0, 0],
+            POSITION: [15, 18, -0.8, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty, g.skim, g.halfreload]),
                 TYPE: "kronosMissile",
@@ -2153,19 +2155,19 @@ exports.tripletTurret = {
         },
     ],
 };
-let kronos = new LayeredBoss(null, "Kronos", "eternal", 11, "veryLightGrey", "baseTrapTurret", 6, 4.5);
+let kronos = new LayeredBoss(null, "Kronos", "eternal", 11, "veryLightGrey", "baseTrapTurret", 6, 5.5);
 kronos.addLayer({turret: {
     POSITION: [6.5, 9, 0, null, 160, 0],
     TYPE: "kronosSkimmerTurret",
 }});
 kronos.addLayer({turret: {
-    POSITION: [7, 9, 0, null, 160, 0],
+    POSITION: [6.5, 9, 0, null, 160, 0],
     TYPE: "carrierTurret",
-}});
+}}, true, 4);
 kronos.addLayer({turret: {
-    POSITION: [9.5, 9, 0, null, 160, 0],
+    POSITION: [8.5, 9, 0, null, 160, 0],
     TYPE: "tripletTurret",
-}});
+}}, true, 4);
 
 exports.autoSmasherMissile = {
     PARENT: ["missile"],
@@ -2259,7 +2261,7 @@ exports.gemDrone = {
 }
 let ragnarok = new LayeredBoss(null, "Ragnarok", "eternal", 11, "teal", "baseTrapTurret", 4.5, 3.5);
 ragnarok.addLayer({gun: {
-    POSITION: [2.25, 3, -1.6, 9, 0, null, 0],
+    POSITION: [2.25, 3.25, -1.6, 9, 0, null, 0],
     PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.pound, {size: 1.7}]),
         TYPE: ["gemDrone", {INDEPENDENT: true,}],
@@ -2270,11 +2272,11 @@ ragnarok.addLayer({gun: {
 ragnarok.addLayer({turret: {
     POSITION: [7, 8, 0, null, 160, 0],
     TYPE: "autosmashTurret",
-}}, true, 4.5);
+}}, true, 5.5);
 ragnarok.addLayer({turret: {
-    POSITION: [8.5, 9, 0, null, 160, 0],
+    POSITION: [8, 9, 0, null, 160, 0],
     TYPE: "gunnerCruiserTurret",
-}}, true, 4.6);
+}}, true, 4.5);
 
 // Developer Bosses
 exports.taureonCoreBase = {
