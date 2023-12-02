@@ -261,6 +261,7 @@ Unfinished list of all features that OSA/APS++ has included in the base template
 
 ## Fixes
 
+* `public/lib/gameDraw.js` is now actually used.
 * Turrets no longer shoot multiple times as fast than intended.
 * Entities with 0 body damage don't get assist credit when they happen to ram something as it dies.
 * Entities now die if they are dead but are touching a rock.
