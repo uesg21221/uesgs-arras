@@ -800,6 +800,7 @@ exports.architectGun = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block, g.auto]),
                 TYPE: "setTrap",
+                STAT_CALCULATOR: gunCalcNames.block
             },
         },
     ],
@@ -4262,6 +4263,7 @@ exports.builder = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block]),
                 TYPE: "setTrap",
+                STAT_CALCULATOR: gunCalcNames.block
             },
         },
     ],
@@ -4377,6 +4379,7 @@ exports.construct = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block, g.construct]),
                 TYPE: "setTrap",
+                STAT_CALCULATOR: gunCalcNames.block
             },
         },
     ],
@@ -4406,6 +4409,7 @@ exports.engineer = {
                 TYPE: "pillbox",
                 SYNCS_SKILLS: true,
                 DESTROY_OLDEST_CHILD: true,
+                STAT_CALCULATOR: gunCalcNames.block
             },
         },
         {
@@ -4436,6 +4440,7 @@ exports.boomer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block, g.boomerang]),
                 TYPE: "boomerang",
+                STAT_CALCULATOR: gunCalcNames.block
             },
         },
     ],
@@ -4489,7 +4494,8 @@ exports.assembler = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block]),
                 TYPE: 'assemblerTrap',
-                MAX_CHILDREN: 8
+                MAX_CHILDREN: 8,
+                STAT_CALCULATOR: gunCalcNames.block,
             }
         }
     ],
@@ -4823,6 +4829,7 @@ exports.conqueror = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block]),
                 TYPE: "setTrap",
+                STAT_CALCULATOR: gunCalcNames.block
             },
         },
     ],
@@ -5188,6 +5195,7 @@ exports.surgeon = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.block, g.slow]),
                 TYPE: "surgeonPillbox",
                 SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.block
             },
         },
         {

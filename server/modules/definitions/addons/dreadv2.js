@@ -595,6 +595,7 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.block, {health: 2}]),
 					TYPE: "unsetTrap",
+					STAT_CALCULATOR: gunCalcNames.block
 				},
 			},
 		)
@@ -1008,6 +1009,7 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.twin, g.pound, g.fast]),
 					TYPE: "unsetTrap",
+					STAT_CALCULATOR: gunCalcNames.block
 				},
 			},
 		)
@@ -1027,6 +1029,7 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.2, health: 2}]),
 					TYPE: "unsetTrap",
+					STAT_CALCULATOR: gunCalcNames.block
 				},
 			},
 		)
@@ -1746,6 +1749,7 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.twin, g.pound, g.fast]),
 					TYPE: "unsetTrap",
+					STAT_CALCULATOR: gunCalcNames.block
 				},
 			},
 		)
@@ -1765,6 +1769,7 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.3, health: 2}]),
 					TYPE: "unsetTrap",
+					STAT_CALCULATOR: gunCalcNames.block
 				},
 			},
 		)
