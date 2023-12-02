@@ -221,7 +221,7 @@ Unfinished list of all features that OSA/APS++ has included in the base template
 
 * `POSITION` (both for guns and turrets)
   * Can now be an object with the following (all optional) attributes:
-  * Guns: `LENGTH`, `WIDTH, `ASPECT, `X`, `Y`, `ANGLE`, `DELAY`.
+  * Guns: `LENGTH`, `WIDTH`, `ASPECT`, `X`, `Y`, `ANGLE`, `DELAY`.
   * Turrets: `SIZE`, `X, `Y, `ANGLE`, `ARC`, `LAYER`
 
 * `STAT_NAMES`
