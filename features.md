@@ -5,7 +5,26 @@ Unfinished list of all features that OSA/APS++ has included in the base template
 
 ## Added
 
+* Addon API Support.
+  * Addons can be added to `server/modules/definitions/addons`.
+  * Addons can easily be downloaded, installed and published.
+  * They can add custom entities and gamemodes, aswell as server configuration if needed.
+  * Template comes with some example addons:
+    * basicChatModeration*: Basic antispam which adds a ratelimit and chat message length limit to chat.
+    * dreadv1 & dreadv2: Adds V1 and V2 dreadnoughts.
+    * exampleAddon*: Showcases how addons can add custom definitions and interact with already existing ones.
+    * labyFood*: Sets the food spawns to the Labyrinth ones.
+    * \* = disabled by default, needs to be enabled.
+
+* Ingame Chat.
+  * 'Enter' in game to make and send messages.
+  * 'Escape' to instantly close the message and clear the message content.
+  * Literally no other template has this.
+
 * 8 Team Support.
+  * Also added the following constants: `TEAM_BLUE`, `TEAM_GREEN`, `TEAM_RED`, `TEAM_PURPLE`, `TEAM_YELLOW`, `TEAM_ORANGE`, `TEAM_BROWN`, `TEAM_CYAN`, `TEAM_ROOM`, `TEAM_ENEMIES`.
+  * Added the following global methods: `getSpawnableArea(teamID)`, `getTeamName(teamID)`, `getTeamColor(teamID)`, `isPlayerTeam(teamID)`, `getWeakestTeam()`.
+  * This is to prevent unreadable magic numbers in code.
 
 * `SHAPE` supports decimal numbers.
   * Rotates the shape based on the decimal value.
@@ -26,11 +45,48 @@ Unfinished list of all features that OSA/APS++ has included in the base template
 * Entity Definition Attribute: `UPGRADE_LABEL`.
   * Lets you change an entity's upgrade box label.
 
+* Entity Definition Attribute: `MIRROR_MASTER_ANGLE`.
+  * If enabled, makes the turret's angle not lag behind the main entity's angle.
+  * Enables uses of visual turrets that don't break visually if they rotate.
+
 * Entity Definition Attribute: `IGNORED_BY_AI`.
   * Makes `io_nearestDifferentMaster` ignore you.
+  * Base Protectors and Developer menus have them.
+
+* Entity Definition Attribute: `LEVEL_SKILL_POINT_FUNCTION`.
+  * Makes the entity use a custom LSPF then the one in the configuration file.
+
+* Entity Definition Attribute: `RECALC_SKILL`.
+  * Resets the spent skill upgrades as if they just spawned with their current level.
+  * Runs after `LEVEL_SKILL_POINT_FUNCTION`.
+
+* Entity Definition Attribute: `EXTRA_SKILL`.
+  * How many extra skill points the entity gets to spend.
+  * Runs after `RECALC_SKILL`.
 
 * Gun Definition Attribute: `SHOOT_ON_DEATH`.
   * Makes the gun shoot if the entity it is attached to dies.
+
+* Gun Definition Attribute: `DRAW_ABOVE`.
+  * Makes a gun appear above the player but below top turrets.
+
+* Definition Attribute: `BORDERLESS`.
+  * Removes shape or gun borders, can be applied to both guns and entities.
+
+* Definition Attribute: `DRAW_FILL`.
+  * Fills a shape or gun when drawn.
+  * `true` by default.
+
+* Added Auras.
+  * Comes with a new motionType `withMaster` and a facilitator `addAura`.
+
+* Extensive Foods.
+  * All labyrinth Foods.
+  * All Relic variants of Old Food.
+  * Sphere, Tetrahedron, Octahedron and Tesseract as Extradimensional Food.
+  * Still kept the old Alpha/Beta Pentagons.
+
+* More Gamemodes: Train Wars, Manhunt, Space.
 
 * Shape kill counter in the death screen.
 * Auto LVL up.
@@ -59,25 +115,65 @@ Unfinished list of all features that OSA/APS++ has included in the base template
 
 * Token Management
   * Your actual token strings go into `.env`.
-  * The permissions of your token go into `server/permissions.js`.
+  * The permissions of your tokens go into `server/permissions.js`.
+  * Tokens can have permissions like `infiniteLevelUp`.
 
 * Definitions Management
   * Split up into numerous other files, all located in `server/modules/definitions`.
+  * Entity definitions are in `/groups`.
+  * "Facilitators" (makeHybrid, combineStats, etc.), constants and gun values are in their own files.
+  * Facilitators require `exports.entity` references.
+  * As a requirement, you can now put `"strings"` as references instead of `exports.entity` references.
+  * Added definition flattening, which would improve performance a bit by applying `PARENT`'s definitions directly to the definition.
+  * Definition flattening also checks for entities that do not exist.
+  * Needs `flattenDefintions` to be true in the configuration.
+
+* `combineStats(StatsArray)`
+  * Can now accept objects with values in them.
+  * Example: `combineStats([g.drone, g.summoner, { size: 0.8 }])`.
+
+* Gamemode Configurations
+  * Gamemode configurations are now different files located in `server/modules/setup/gamemodeconfigs`.
+  * Gamemode configs are loaded by `server/modules/setup/config.js`.
+  * You can easily combine different gamemodes by loading multiple ones in `GAME_MODES` in config.
+  * Also generates the gamemode's name.
 
 * Upgrade Tiers
   * Instead of manually having to add tiers, you now change `MAX_UPGRADE_TIER`, `TIER_MULTIPLIER`.
 
+* Default Class Tree
+  * Up to date (as reasonably possible) with arras.io.
+
+* `PARENT`
+  * If only one definition reference is inside `PARENT`, it is no longer required for it to be an array.
+  * Example: `PARENT: "genericTank"`.
+
 * `NECRO`
   * Can be a `SHAPE` number, or an array of them, which details what kind of shaped foods it can infect.
+
+* `COLOR`
+  * Can now support strings.
+  * Can now use color names like `"red"`, `animatedTrans` or `pureBlack`.
+  * Which now allows you to enter CSS color codes like `#F08842`.
+  * Can also be an Object which contains HSL modification instructions for a basis color.
+  * Can be `-1` to copy their parent's color.
+
+* `ALPHA`
+  * Can now be an array of 2 numbers.
+  * First number defines the maximum alpha (max visibility).
+  * Second number defines the minimum alpha (min visibility).
 
 * Configuration Files.
   * `.json` files are in `.js` instead.
 
 * Skills now support up to 255 stat points instead of 15.
+  * Updated the skill upgrades UI renderer to compensate.
 
 * Siege
   * Reworked how wave generation works.
   * Spawns friendly bosses.
+
+* Changelogs are now a HTML file instead of a MD file.
 
 
 ## Removed
@@ -85,9 +181,17 @@ Unfinished list of all features that OSA/APS++ has included in the base template
 * 3rd party packages.
   * All NPM packages besides `ws` have been optimised away.
 
+* Food evolution.
+  * It brings no real benefits outside of encouraging people to be selfish.
+  * It brings 2 real downsides of screwing up Underseer-branch and making the code terrible to read.
+
+* Removed skill bleeding, aswell as other redundant functions.
+  * They did nothing of value anyway.
+
 
 ## Fixes
 
+* Turrets no longer shoot multiple times as fast.
 * Entities with 0 body damage don't get assist credit when they happen to ram something as it dies.
 * Bots spawn in their team's bases if there are bases.
 * Bots fire alt-fire barrels.
