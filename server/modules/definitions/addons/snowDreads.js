@@ -4080,16 +4080,7 @@ module.exports = ({ Class }) => {
 	}
   	for (let i = 0; i < 5; i++) {
 		Class.javelinSnowdread.GUNS.push(
-			{
-				POSITION: [28, 7, 1, 0, 0, 72*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.assass, g.assass, g.assass, {reload: 0.8, density: 2/9}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [5, 7, -1.6, 7, 0, 72*i, 0],
-			},
+			...addAssassin({length: 28, width: 7, x: 7, angle: 72*i}, 10, [g.basic, g.sniper, g.assass, g.assass, g.assass, g.assass, {reload: 0.8, density: 2/9}])
 		)
 	}
 	Class.rapierSnowdread = {
@@ -4099,26 +4090,7 @@ module.exports = ({ Class }) => {
 	}
   	for (let i = 0; i < 5; i++) {
 		Class.rapierSnowdread.GUNS.push(
-			{
-				POSITION: [17, 1, 1, 0, 6, 72*i, 0],
-			},
-			{
-				POSITION: [17, 1, 1, 0, -6, 72*i, 0],
-			},
-			{
-				POSITION: [18, 5, 1, 0, 3, 72*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, {speed: 0.8, health: 1.5}]),
-					TYPE: "bullet",
-				},
-			},
-			{
-				POSITION: [18, 5, 1, 0, -3, 72*i, 0.5],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, {speed: 0.8, health: 1.5}]),
-					TYPE: "bullet",
-				},
-			},
+			...addRifle({length: 18, width: 5, angle: 72*i}, 5, [g.basic, g.sniper, g.rifle, {speed: 0.8, health: 1.5}], true)
 		)
 	}
 	Class.woomeraSnowdread = { // hunter
@@ -5521,7 +5493,7 @@ module.exports = ({ Class }) => {
 				TYPE: ["pentagonBaseDeco"],
 			}, {
 				POSITION: [11, 0, 0, 0, 0, 1],
-				TYPE: ['pentagonWispTurretSnowdread', {}]
+				TYPE: ['pentagonWispTurretSnowdread']
 			}
 		],
 	}
@@ -5606,10 +5578,10 @@ module.exports = ({ Class }) => {
 				TYPE: ["pentagonBaseDeco"],
 			}, {
 				POSITION: [6, 0, 0, 0, 360, 1],
-				TYPE: ['pentagonTitaniumTopSnowdread', {}]
+				TYPE: ['pentagonTitaniumTopSnowdread']
 			}, {
 				POSITION: [20, 0, 0, 0, 360, 0],
-				TYPE: ['pentagonTitaniumBottomSnowdread', {}]
+				TYPE: ['pentagonTitaniumBottomSnowdread']
 			},
 		],
 	}
@@ -5697,7 +5669,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [10, 0, 0, 0, 0, 1],
-				TYPE: ['pentagonCrusherTurretSnowdread', {}]
+				TYPE: ['pentagonCrusherTurretSnowdread']
 			}
 		],
 	}
@@ -5712,7 +5684,7 @@ module.exports = ({ Class }) => {
 				TYPE: ["pentagonBaseDeco"],
 			}, {
 				POSITION: [10, 0, 0, 0, 0, 1],
-				TYPE: ['pentagonCrusherTurret2Snowdread', {}]
+				TYPE: ['pentagonCrusherTurret2Snowdread']
 			},
 			...addPentanoughtAuraRing(),
 		],
@@ -5728,7 +5700,7 @@ module.exports = ({ Class }) => {
 				TYPE: ["pentagonBaseDeco"],
 			}, {
 				POSITION: [10, 0, 0, 0, 0, 1],
-				TYPE: ['pentagonCrusherTurret2Snowdread', {}]
+				TYPE: ['pentagonCrusherTurret2Snowdread']
 			},
 			...addPentanoughtAuraRing(true),
 		],
@@ -5744,7 +5716,7 @@ module.exports = ({ Class }) => {
 				TYPE: ["pentagonBaseDeco"],
 			}, {
 				POSITION: [12, 0, 0, 0, 0, 1],
-				TYPE: ['pentagonCrusherTurret3Snowdread', {}]
+				TYPE: ['pentagonCrusherTurret3Snowdread']
 			}, {
 				POSITION: [9, 0, 0, 0, 360, 1],
 				TYPE: "pentanoughtBigAura",
@@ -5762,7 +5734,7 @@ module.exports = ({ Class }) => {
 				TYPE: ["pentagonBaseDeco"],
 			}, {
 				POSITION: [12, 0, 0, 0, 0, 1],
-				TYPE: ['pentagonCrusherTurret3Snowdread', {}]
+				TYPE: ['pentagonCrusherTurret3Snowdread']
 			}, {
 				POSITION: [9.5, 0, 0, 0, 360, 1],
 				TYPE: "pentanoughtBigHealAura",
@@ -5780,7 +5752,7 @@ module.exports = ({ Class }) => {
 				TYPE: ["pentagonBaseDeco"],
 			}, {
 				POSITION: [12, 0, 0, 0, 0, 1],
-				TYPE: ['pentagonCrusherTurret3Snowdread', {}]
+				TYPE: ['pentagonCrusherTurret3Snowdread']
 			}, {
 				POSITION: [11.5, 0, 0, 0, 360, 1],
 				TYPE: "megabyteTurretSnowdread",
@@ -5821,7 +5793,7 @@ module.exports = ({ Class }) => {
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 0, 0, 1],
-				TYPE: ['pentagonFinchTurretSnowdread', {}]
+				TYPE: ['pentagonFinchTurretSnowdread']
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
@@ -5901,7 +5873,7 @@ module.exports = ({ Class }) => {
 				TYPE: ["pentagonBaseDeco"],
 			}, {
 				POSITION: [10, 0, 0, 0, 360, 1],
-				TYPE: ['pentagonHoarderTurretSnowdread', {}]
+				TYPE: ['pentagonHoarderTurretSnowdread']
 			}
 		],
 	}
