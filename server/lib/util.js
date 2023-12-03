@@ -68,3 +68,13 @@ exports.remove = (array, index) => {
     return o
   }
 }
+
+// convenience
+exports.forcePush = (property, item) => {
+  try {
+    property.push(item);
+  } catch {
+    property = [item];
+  }
+  return property;
+}
