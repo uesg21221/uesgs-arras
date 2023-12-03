@@ -257,6 +257,8 @@ global.player = {
     lasty: global.player.y,
     cx: 0,
     cy: 0,
+    screenx: 0,
+    screeny: 0,
     target: calculateTarget(),
     name: "",
     lastUpdate: 0,
@@ -700,9 +702,9 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     // Draw turrets beneath us
     for (let i = 0; i < source.turrets.length; i++) {
         let t = source.turrets[i];
-        source.turrets[i].lerpedFacing == undefined
-            ? (source.turrets[i].lerpedFacing = source.turrets[i].facing)
-            : (source.turrets[i].lerpedFacing = util.lerpAngle(source.turrets[i].lerpedFacing, source.turrets[i].facing, 0.1, true));
+        t.lerpedFacing == undefined
+            ? (t.lerpedFacing = t.facing)
+            : (t.lerpedFacing = util.lerpAngle(t.lerpedFacing, t.facing, 0.1, true));
         if (!t.layer) {
             let ang = t.direction + t.angle + rot,
                 len = t.offset * drawSize,
@@ -710,9 +712,9 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
             if (t.mirrorMasterAngle || turretsObeyRot) {
                 facing = rot + t.angle;
             } else {
-                facing = source.turrets[i].lerpedFacing;
+                facing = t.lerpedFacing;
             }
-            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, source.turrets[i], render);
+            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
         }
     }
     // Draw guns below us
@@ -781,9 +783,9 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
             if (t.mirrorMasterAngle || turretsObeyRot) {
                 facing = rot + t.angle;
             } else {
-                facing = source.turrets[i].lerpedFacing;
+                facing = t.lerpedFacing;
             }
-            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, source.turrets[i], render);
+            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
         }
     }
     if (assignedContext == false && context != ctx && context.canvas.width > 0 && context.canvas.height > 0) {
