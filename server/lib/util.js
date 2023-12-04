@@ -70,11 +70,10 @@ exports.remove = (array, index) => {
 }
 
 // convenience
-exports.forcePush = (property, item) => {
-  try {
-    property.push(item);
-  } catch {
-    property = [item];
+exports.forcePush = (object, property, item) => {
+  if (Array.isArray(object[property])) {
+    object[property].push(item);
+  } else {
+    object[property] = [item];
   }
-  return property;
 }
