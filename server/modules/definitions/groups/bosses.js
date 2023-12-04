@@ -3174,7 +3174,7 @@ testLayeredBoss.addLayer({gun: {
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
     },
-}}, true, 16);
+}}, true, null, 16);
 testLayeredBoss.addLayer({turret: {
     POSITION: [10, 7.5, 0, null, 160, 0],
     TYPE: "crowbarTurret",
