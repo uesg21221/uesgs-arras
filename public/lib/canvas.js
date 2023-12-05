@@ -1,5 +1,5 @@
 import { global } from "./global.js";
-import { config } from "./config.js";
+import { settings } from "./settings.js";
 
 class Canvas {
     constructor() {
@@ -21,10 +21,12 @@ class Canvas {
 
         this.cv = document.getElementById('gameCanvas');
         this.cv.addEventListener('mousemove', event => this.mouseMove(event), false);
-        this.cv.addEventListener("mousedown", event => this.mouseDown(event), false);
-        this.cv.addEventListener("mouseup", event => this.mouseUp(event), false);
+        this.cv.addEventListener('mousedown', event => this.mouseDown(event), false);
+        this.cv.addEventListener('mouseup', event => this.mouseUp(event), false);
+        this.cv.addEventListener('keypress', event => this.keyPress(event), false);
         this.cv.addEventListener('keydown', event => this.keyDown(event), false);
         this.cv.addEventListener('keyup', event => this.keyUp(event), false);
+        this.cv.addEventListener('wheel', event => this.wheel(event), false);
         this.cv.resize = (width, height) => {
             this.cv.width = this.width = width;
             this.cv.height = this.height = height;
@@ -37,16 +39,37 @@ class Canvas {
         this.treeScrollSpeedMultiplier = 1;
         global.canvas = this;
     }
+    wheel(event) {
+        if (!global.died && global.showTree) {
+            if (event.deltaY > 1) {
+                global.treeScale /= 1.1;
+            } else {
+                global.treeScale *= 1.1;
+            }
+        }
+    }
+    keyPress(event) {
+        console.log(event);
+        switch (event.keyCode) {
+            case global.KEY_ZOOM_OUT:
+                if (!global.died && global.showTree) global.treeScale /= 1.1;
+                break;
+            case global.KEY_ZOOM_IN:
+                if (!global.died && global.showTree) global.treeScale *= 1.1;
+                break;
+        }
+    }
     keyDown(event) {
         switch (event.keyCode) {
             case global.KEY_SHIFT:
-                this.treeScrollSpeedMultiplier = 5;
+                if (global.showTree) this.treeScrollSpeedMultiplier = 5;
+                else this.socket.cmd.set(6, true);
                 break;
 
             case global.KEY_ENTER:
                 // Enter to respawn
                 if (global.died) {
-                    this.socket.talk('s', global.playerName, 0, 1 * config.game.autoLevelUp);
+                    this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp);
                     global.died = false;
                     break;
                 }
@@ -60,22 +83,22 @@ class Canvas {
                 break;
 
             case global.KEY_UP_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollY = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+                if (!global.died && global.showTree) return global.scrollVelocityY = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_UP:
                 this.socket.cmd.set(0, true);
                 break;
             case global.KEY_DOWN_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollY = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+                if (!global.died && global.showTree) return global.scrollVelocityY = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_DOWN:
                 this.socket.cmd.set(1, true);
                 break;
             case global.KEY_LEFT_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+                if (!global.died && global.showTree) return global.scrollVelocityX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_LEFT:
                 this.socket.cmd.set(2, true);
                 break;
             case global.KEY_RIGHT_ARROW:
-                if (!global.died && global.showTree) return global.shouldScrollX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+                if (!global.died && global.showTree) return global.scrollVelocityX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_RIGHT:
                 this.socket.cmd.set(3, true);
                 break;
@@ -134,6 +157,7 @@ class Canvas {
                     this.socket.talk('t', 6);
                     break;
                 case global.KEY_CLASS_TREE:
+                    global.treeScale = 1;
                     global.showTree = !global.showTree;
                     break;
             }
@@ -173,25 +197,26 @@ class Canvas {
     keyUp(event) {
         switch (event.keyCode) {
             case global.KEY_SHIFT:
-                this.treeScrollSpeedMultiplier = 1;
+                if (global.showTree) this.treeScrollSpeedMultiplier = 1;
+                else this.socket.cmd.set(6, false);
                 break;
             case global.KEY_UP_ARROW:
-                global.shouldScrollY = 0;
+                global.scrollVelocityY = 0;
             case global.KEY_UP:
                 this.socket.cmd.set(0, false);
                 break;
             case global.KEY_DOWN_ARROW:
-                global.shouldScrollY = 0;
+                global.scrollVelocityY = 0;
             case global.KEY_DOWN:
                 this.socket.cmd.set(1, false);
                 break;
             case global.KEY_LEFT_ARROW:
-                global.shouldScrollX = 0;
+                global.scrollVelocityX = 0;
             case global.KEY_LEFT:
                 this.socket.cmd.set(2, false);
                 break;
             case global.KEY_RIGHT_ARROW:
-                global.shouldScrollX = 0;
+                global.scrollVelocityX = 0;
             case global.KEY_RIGHT:
                 this.socket.cmd.set(3, false);
                 break;
@@ -260,14 +285,8 @@ class Canvas {
             y: mouse.clientY * global.ratio,
         }) === 0;
         if (!this.spinLock) return;
-        this.target.x = mouse.clientX * global.ratio - this.width / 2;
-        this.target.y = mouse.clientY * global.ratio - this.height / 2;
-        if (this.reverseDirection) {
-            this.target.x *= -1;
-            this.target.y *= -1;
-        }
-        this.target.x *= global.screenWidth / this.width;
-        this.target.y *= global.screenHeight / this.height;
+        global.mouse.x = mouse.clientX;
+        global.mouse.y = mouse.clientY;
     }
 }
 export { Canvas }

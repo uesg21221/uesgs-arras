@@ -1,12 +1,15 @@
-const bossRush = new BossRush()
-const train = new Train()
-const moon = new Moon()
-const hunt = new ManHunt()
+let bossRush;
+if (c.SPECIAL_BOSS_SPAWNS) bossRush = new BossRush();
+let train;
+if (c.TRAIN) train = new Train();
+let moon;
+if (c.SPACE_MODE) moon = new Moon();
+let hunt;
+if (c.HUNT) hunt = new ManHunt();
 
 if (c.MOTHERSHIP_LOOP) mothershipLoop.spawn();
 if (c.SPECIAL_BOSS_SPAWNS) bossRush.init();
-if (c.MAZE && typeof c.MAZE === "number") generateMaze(c.MAZE);
-if (c.DOMINATOR_LOOP) for (let loc of room.dom0) dominatorLoop.spawn(loc, TEAM_ENEMIES, 3);
+if (c.MAZE > 0) generateMaze(c.MAZE);
 
 let logger = new LagLogger();
 const gamemodeLoop = function() {

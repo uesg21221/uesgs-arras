@@ -1,6 +1,6 @@
 import { global } from "./global.js";
 import { util } from "./util.js";
-import { config } from "./config.js";
+import { settings } from "./settings.js";
 import { protocol } from "./protocol.js";
 window.fakeLagMS = 0;
 var sync = [];
@@ -12,20 +12,18 @@ let level = 0;
 let sscore = util.Smoothbar(0, 10);
 var serverStart = 0,
     gui = {
-        getStatNames: data => {
-            return [
-                    data?.body_damage ?? 'Body Damage',
-                    data?.max_health ?? 'Max Health',
-                    data?.bullet_speed ?? 'Bullet Speed',
-                    data?.bullet_health ?? 'Bullet Health',
-                    data?.bullet_pen ?? 'Bullet Penetration',
-                    data?.bullet_damage ?? 'Bullet Damage',
-                    data?.reload ?? 'Reload',
-                    data?.move_speed ?? 'Movement Speed',
-                    data?.shield_regen ?? 'Shield Regeneration',
-                    data?.shield_cap ?? 'Shield Capacity',
-                ]
-        },
+        getStatNames: data => [
+            data?.body_damage ?? 'Body Damage',
+            data?.max_health ?? 'Max Health',
+            data?.bullet_speed ?? 'Bullet Speed',
+            data?.bullet_health ?? 'Bullet Health',
+            data?.bullet_pen ?? 'Bullet Penetration',
+            data?.bullet_damage ?? 'Bullet Damage',
+            data?.reload ?? 'Reload',
+            data?.move_speed ?? 'Movement Speed',
+            data?.shield_regen ?? 'Shield Regeneration',
+            data?.shield_cap ?? 'Shield Capacity',
+        ],
         skills: [
             { amount: 0, color: 'purple', cap: 1, softcap: 1 },
             { amount: 0, color: 'pink'  , cap: 1, softcap: 1 },
@@ -83,7 +81,7 @@ var moveCompensation = {
         yy = 0;
     },
     get: () => {
-        if (config.lag.unresponsive) {
+        if (settings.lag.unresponsive) {
             return {
                 x: 0,
                 y: 0,
@@ -104,7 +102,7 @@ var moveCompensation = {
         // Dampen motion
         let motion = Math.sqrt(_vx * _vx + _vy * _vy);
         if (motion > 0 && damp) {
-            let finalvelocity = motion / (damp / config.roomSpeed + 1);
+            let finalvelocity = motion / (damp / settings.roomSpeed + 1);
             _vx = finalvelocity * _vx / motion;
             _vy = finalvelocity * _vy / motion;
         }
@@ -273,7 +271,7 @@ var lag = {
     get: () => lags.length ? lags.reduce((a, b) => a + b) / lags.length : 0,
     add: l => {
         lags.push(l);
-        if (lags.length > config.lag.memory) {
+        if (lags.length > settings.lag.memory) {
             lags.splice(0, 1);
         }
     }
@@ -331,6 +329,7 @@ const GunContainer = n => {
             isUpdated: true,
             configLoaded: false,
             color: "",
+            alpha: 0,
             borderless: false, 
             drawFill: true, 
             drawAbove: false,
@@ -349,6 +348,7 @@ const GunContainer = n => {
         getConfig: () => a.map(g => {
             return {
                 color: g.color,
+                alpha: g.alpha,
                 borderless: g.borderless, 
                 drawFill: g.drawFill,
                 drawAbove: g.drawAbove,
@@ -365,6 +365,7 @@ const GunContainer = n => {
             if (!g.configLoaded) {
                 g.configLoaded = true;
                 g.color = c.color;
+                g.alpha = c.alpha;
                 g.borderless = c.borderless; 
                 g.drawFill = c.drawFill;
                 g.drawAbove = c.drawAbove;
@@ -427,6 +428,8 @@ const process = (z = {}) => {
         z.layer = get.next();
         z.index = get.next();
         z.color = get.next();
+        z.borderless = get.next();
+        z.drawFill = get.next();
         z.size = get.next();
         z.realSize = get.next();
         z.sizeFactor = get.next();
@@ -468,6 +471,8 @@ const process = (z = {}) => {
         z.twiggle = get.next();
         z.layer = get.next();
         z.color = get.next();
+        z.borderless = get.next();
+        z.drawFill = get.next();
         let invuln = get.next();
         // Update health, flagging as injured if needed
         if (isNew) {
@@ -502,8 +507,8 @@ const process = (z = {}) => {
                 lastRender: global.player.time,
                 x: z.x,
                 y: z.y,
-                lastx: z.x - global.metrics.rendergap * config.roomSpeed * (1000 / 30) * z.vx,
-                lasty: z.y - global.metrics.rendergap * config.roomSpeed * (1000 / 30) * z.vy,
+                lastx: z.x - global.metrics.rendergap * settings.roomSpeed * (1000 / 30) * z.vx,
+                lasty: z.y - global.metrics.rendergap * settings.roomSpeed * (1000 / 30) * z.vy,
                 lastvx: z.vx,
                 lastvy: z.vy,
                 lastf: z.facing,
@@ -541,6 +546,7 @@ const process = (z = {}) => {
         let time = get.next(),
             power = get.next(),
             color = get.next(),
+            alpha = get.next(),
             borderless = get.next(),
             drawFill = get.next(),
             drawAbove = get.next(),
@@ -550,7 +556,7 @@ const process = (z = {}) => {
             angle = get.next(),
             direction = get.next(),
             offset = get.next();
-        z.guns.setConfig(i, {color, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
+        z.guns.setConfig(i, {color, alpha, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
         if (time > global.player.lastUpdate - global.metrics.rendergap) z.guns.fire(i, power); // Shoot it
     }
     // Update turrets
@@ -644,7 +650,7 @@ const convert = {
         if (indices.upgrades) {
             gui.upgrades = [];
             for (let i = 0, len = get.next(); i < len; i++) {
-                gui.upgrades.push(get.next().split("_"));
+                gui.upgrades.push(get.next().split("\\\\//"));
             }
         }
         if (indices.statsdata) {
@@ -683,7 +689,6 @@ const convert = {
     broadcast: () => {
         let all = get.all();
         let by = minimapAllInt.update(all);
-        minimapTeamInt.reset();
         by = minimapTeamInt.update(all, by);
         by = leaderboardInt.update(all, by);
         get.take(by);
@@ -770,7 +775,7 @@ const socketInit = port => {
                 if (commands[i]) o += Math.pow(2, i);
             }
             let ratio = util.getRatio();
-            socket.talk('C', Math.round(window.canvas.target.x / ratio), Math.round(window.canvas.target.y / ratio), o);
+            socket.talk('C', Math.round(global.target.x / ratio), Math.round(global.target.y / ratio), o);
         },
         check: () => flag,
         getMotion: () => ({
@@ -811,7 +816,7 @@ const socketInit = port => {
             case 'w': // welcome to the game
                 if (m[0]) { // Ask to spawn
                     console.log('The server has welcomed us to the game room. Sending spawn request.');
-                    socket.talk('s', global.playerName, 1, 1 * config.game.autoLevelUp);
+                    socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp);
                     global.message = '';
                 }
             break;
@@ -820,7 +825,7 @@ const socketInit = port => {
                 global.gameHeight = m[1];
                 global.roomSetup = JSON.parse(m[2]);
                 serverStart = JSON.parse(m[3]);
-                config.roomSpeed = m[4];
+                settings.roomSpeed = m[4];
                 console.log('Room data recieved. Commencing syncing process.');
                 // Start the syncing process
                 socket.talk('S', getNow());
@@ -869,10 +874,14 @@ const socketInit = port => {
                     clockDiff = Math.round(sum / valid);
                     // Start the game
                     console.log(sync);
-                    console.log('Syncing complete, calculated clock difference ' + clockDiff + 'ms. Beginning game.');
-                    global.gameStart = true;
-                    global.entities = [];
-                    global.message = '';
+                    console.log('Syncing complete, calculated clock difference ' + clockDiff + 'ms.');
+                    global.message = 'Loading mockups, this could take a bit...';
+                    global.mockupLoading.then(() => {
+                        console.log('Beginning game.');
+                        global.gameStart = true;
+                        global.entities = [];
+                        global.message = '';
+                    });
                 }
                 break;
             case 'm': // message
@@ -891,8 +900,9 @@ const socketInit = port => {
                     camfov = m[3],
                     camvx = m[4],
                     camvy = m[5],
+                    camscoping = m[6],
                     // We'll have to do protocol decoding on the remaining data
-                    theshit = m.slice(6);
+                    theshit = m.slice(7);
                 // Process the data
                 if (camtime > global.player.lastUpdate) { // Don't accept out-of-date information.
                     // Time shenanigans
@@ -917,6 +927,8 @@ const socketInit = port => {
                     global.player.cy = camy;
                     global.player.vx = global.died ? 0 : camvx;
                     global.player.vy = global.died ? 0 : camvy;
+                    // For centered camera
+                    global.player.isScoping = camscoping;
                     // Figure out where we're rendering if we don't yet know
                     if (isNaN(global.player.renderx)) {
                         global.player.renderx = global.player.cx;
@@ -970,7 +982,6 @@ const socketInit = port => {
                 window.onbeforeunload = () => false;
                 break;
             case 'z': // name color
-                console.log(m[0]);
                 global.nameColor = m[0];
                 break;
             case 'CHAT_MESSAGE_ENTITY':

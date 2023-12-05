@@ -96,6 +96,11 @@ exports.dereference = type => {
             output.TURRETS[i].TYPE = type.TURRETS[i].TYPE;
         }
     }
+    for (let key in output) {
+        if (key.startsWith('UPGRADES_TIER_')) {
+            delete output[key];
+        }
+    }
     return output;
 }
 
@@ -125,6 +130,7 @@ exports.makeConq = (type, name = -1) => {
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.trap, g.block]),
             TYPE: "setTrap",
+            STAT_CALCULATOR: gunCalcNames.block
         },
     }];
     output.GUNS = type.GUNS == null ? cannons : type.GUNS.concat(cannons);
@@ -170,6 +176,42 @@ exports.addBackGunner = (type, name = -1) => {
     }];
     output.GUNS = type.GUNS == null ? cannons : type.GUNS.concat(cannons);
     output.LABEL = name == -1 ? type.LABEL : name;
+    return output;
+}
+exports.makeMulti = (type, count, name = -1, startRotation = 0) => {
+    let greekNumbers = ',Double ,Triple ,Quad ,Penta ,Hexa ,Septa ,Octo ,Nona ,Deca ,Hendeca ,Dodeca ,Trideca ,Tetradeca ,Pentadeca ,Hexadeca ,Septadeca ,Octadeca ,Nonadeca ,Icosa ,Henicosa ,Doicosa ,Triaicosa ,Tetraicosa ,Pentaicosa ,Hexaicosa ,Septaicosa ,Octoicosa ,Nonaicosa ,Triaconta '.split(','),
+        output = exports.dereference(type),
+        shootyBois = output.GUNS,
+        fraction = 360 / count;
+    output.GUNS = [];
+    for (let gun of type.GUNS) {
+        for (let i = 0; i < count; i++) {
+            let newgun = exports.dereference(gun);
+            newgun.POSITION[5] += startRotation + fraction * i;
+            if (gun.PROPERTIES) newgun.PROPERTIES.TYPE = gun.PROPERTIES.TYPE;
+            output.GUNS.push(newgun);
+        };
+    }
+    output.LABEL = name == -1 ? (greekNumbers[count - 1] || (count + ' ')) + type.LABEL : name;
+    return output;
+}
+exports.makeBird = (type, name = -1, color) => {
+    let output = exports.dereference(type),
+        shootyBois = [{
+            POSITION: [16, 8, 1, 0, 0, 150, 0.1],
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, g.halfrecoil]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+        },{
+            POSITION: [16, 8, 1, 0, 0, 210, 0.1],
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, g.halfrecoil]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+        },{
+            POSITION: [18, 8, 1, 0, 0, 180, 0.6],
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, g.halfrecoil]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+        }];
+    if (color) for (let i = 0; i < 3; i++) shootyBois[i].PROPERTIES.TYPE = [shootyBois[i].PROPERTIES.TYPE, { COLOR: color, KEEP_OWN_COLOR: true }];
+    for (let i in output.GUNS) if (output.GUNS[i].PROPERTIES) output.GUNS[i].PROPERTIES.ALT_FIRE = true;
+    if (output.FACING_TYPE == "locksFacing") output.FACING_TYPE = "toTarget";
+    output.GUNS = type.GUNS == null ? [...shootyBois] : [...output.GUNS, ...shootyBois];
+    output.LABEL = name == -1 ? "Bird " + type.LABEL : name;
     return output;
 }
 
@@ -414,41 +456,6 @@ exports.makeCross = (type, name = -1) => {
     }
     return output;
 }
-exports.makeZipper = (type, name = -1) => {
-    let output = exports.dereference(type);
-    let spawner1 = {
-        /********* LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-        POSITION: [7, 7.5, 0.6, 7, 2.5, 20, 0],
-        PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.swarm]),
-            TYPE: "swarm",
-            STAT_CALCULATOR: gunCalcNames.swarm,
-        },
-    };
-    let spawner2 = {
-        /********* LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-        POSITION: [7, 7.5, 0.6, 7, -2.5, -20, 0.5],
-        PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.swarm]),
-            TYPE: "swarm",
-            STAT_CALCULATOR: gunCalcNames.swarm,
-        },
-    };
-    if (type.TURRETS != null) {
-        output.TURRETS = type.TURRETS;
-    }
-    if (type.GUNS == null) {
-        output.GUNS = [spawner1, spawner2];
-    } else {
-        output.GUNS = [spawner1, spawner2, ...type.GUNS];
-    }
-    if (name == -1) {
-        output.LABEL = "Bi-Swarming " + type.LABEL;
-    } else {
-        output.LABEL = name;
-    }
-    return output;
-}
 exports.makeSwarming = (type, name = -1) => {
     let output = exports.dereference(type);
     let spawner = {
@@ -456,7 +463,7 @@ exports.makeSwarming = (type, name = -1) => {
         POSITION: [7, 7.5, 0.6, 7, 0, 0, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.swarm]),
-            TYPE: "minion",
+            TYPE: "autoswarm",
             STAT_CALCULATOR: gunCalcNames.swarm,
         },
     };
@@ -651,7 +658,6 @@ exports.makeCeption = (type, name = -1, options = {}) => {
     output.DANGER = type.DANGER + 1;
     return output;
 }
-
 exports.makeDeco = (shape = 0, color = 16) => {
     return {
         PARENT: ["genericTank"],
@@ -659,7 +665,6 @@ exports.makeDeco = (shape = 0, color = 16) => {
         COLOR: color,
     };
 }
-
 exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) => {
     let isHeal = damageFactor < 0;
     let auraType = isHeal ? "healAura" : "aura";

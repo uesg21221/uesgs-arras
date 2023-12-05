@@ -1,4 +1,4 @@
-const { base, dfltskl, smshskl } = require('../constants.js');
+const { base, statnames, dfltskl, smshskl } = require('../constants.js');
 
 exports.genericEntity = {
     NAME: "",
@@ -9,7 +9,7 @@ exports.genericEntity = {
     VALUE: 0,
     SHAPE: 0,
     COLOR: {
-        BASE: 16, // ID
+        BASE: "grey", // ID
         HUE_SHIFT: 0, // Additive, degrees
         SATURATION_SHIFT: 1, // Multiplicative
         BRIGHTNESS_SHIFT: 0, // Additive, ranges from -100 to 100
@@ -54,14 +54,14 @@ exports.genericEntity = {
     UPGRADES_TIER_9: [],
     SKILL: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     LEVEL: 0,
-    BORDERLESS: false,
-    DRAW_FILL: true,
     SKILL_CAP: Array(10).fill(dfltskl),
     GUNS: [],
     MAX_CHILDREN: 0,
     BORDERLESS: false,
     DRAW_FILL: true,
     REROOT_UPGRADE_TREE: null,
+    DISPLAY_NAME: true,
+    ON: [],
     BODY: {
         ACCELERATION: 1,
         SPEED: 0,
@@ -78,12 +78,12 @@ exports.genericEntity = {
         DENSITY: 1,
         STEALTH: 1,
         PUSHABILITY: 1,
-        HETERO: 2,
+        HETERO: 2
     },
     FOOD: {
-        LEVEL: -1,
-    },
-};
+        LEVEL: -1
+    }
+}
 exports.genericTank = {
     LABEL: "Unknown Class",
     TYPE: "tank",
@@ -111,10 +111,22 @@ exports.genericTank = {
     },
     GUNS: [],
     TURRETS: [],
+    ON: [],
     GIVE_KILL_MESSAGE: true,
     DRAW_HEALTH: true,
-    HITS_OWN_TYPE: "hardOnlyTanks",
-};
+    HITS_OWN_TYPE: "hardOnlyTanks"
+}
+exports.genericSmasher = {
+    PARENT: "genericTank",
+    DANGER: 7,
+    IS_SMASHER: true,
+    SKILL_CAP: [smshskl, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
+    STAT_NAMES: statnames.smasher,
+    BODY: {
+        FOV: 1.05 * base.FOV,
+        DENSITY: 2 * base.DENSITY
+    }
+}
 
 exports.food = {
     TYPE: "food",
@@ -231,7 +243,7 @@ exports.trap = {
 
 exports.mendersymbol = {
     PARENT: ["genericTank"],
-    COLOR: 16,
+    COLOR: "grey",
     LABEL: "",
     SHAPE: 3,
 };
@@ -244,7 +256,7 @@ exports.healerSymbol = {
     PARENT: ["genericEntity"],
     SHAPE: [[0.3, -0.3],[1,-0.3],[1,0.3],[0.3,0.3],[0.3,1],[-0.3,1],[-0.3,0.3],[-1,0.3],[-1,-0.3],[-0.3,-0.3],[-0.3,-1],[0.3,-1]],
     SIZE: 13,
-    COLOR: 12,
+    COLOR: "red",
 };
 
 exports.auraBase = {
@@ -271,7 +283,7 @@ exports.auraBase = {
 exports.aura = {
     PARENT: ["auraBase"],
     LABEL: "Aura",
-    COLOR: 0,
+    COLOR: "teal",
     BODY: {
         DAMAGE: 0.5,
     },
@@ -280,15 +292,15 @@ exports.healAura = {
     PARENT: ["auraBase"],
     LABEL: "Heal Aura",
     HEALER: true,
-    COLOR: 12,
+    COLOR: "red",
     BODY: {
-        DAMAGE: 0.5/3,
+        DAMAGE: 0.1,
     },
 };
 exports.auraSymbol = {
     PARENT: ["genericTank"],
     CONTROLLERS: [["spin", {speed: -0.04}]],
     INDEPENDENT: true,
-    COLOR: 0,
+    COLOR: "teal",
     SHAPE: [[-0.598,-0.7796],[-0.3817,-0.9053],[0.9688,-0.1275],[0.97,0.125],[-0.3732,0.9116],[-0.593,0.785]]
 };

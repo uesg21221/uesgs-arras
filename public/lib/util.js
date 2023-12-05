@@ -1,5 +1,5 @@
 import { global } from "./global.js";
-import { config } from "./config.js";
+import { settings } from "./settings.js";
 const util = {
     submitToLocalStorage: name => {
         localStorage.setItem(name + 'Value', document.getElementById(name).value);
@@ -124,7 +124,7 @@ const util = {
     },
     isInView: (x, y, r, mid = false) => {
         let ratio = util.getRatio();
-        r += config.graphical.borderChunk;
+        r += settings.graphical.borderChunk;
         if (mid) {
             ratio *= 2;
             return x > -global.screenWidth / ratio - r && x < global.screenWidth / ratio + r && y > -global.screenHeight / ratio - r && y < global.screenHeight / ratio + r;
@@ -163,6 +163,8 @@ const util = {
             size: mainMockup.size,
             realSize: mainMockup.realSize,
             color: trueColor,
+            borderless: mainMockup.borderless,
+            drawFill: mainMockup.drawFill,
             upgradeColor: mainMockup.upgradeColor,
             glow: mainMockup.glow,
             render: {
@@ -203,6 +205,7 @@ const util = {
                 getConfig: () => guns.map(g => {
                     return {
                         color: g.color,
+                        alpha: g.alpha,
                         borderless: g.borderless, 
                         drawFill: g.drawFill,
                         drawAbove: g.drawAbove,
@@ -219,6 +222,8 @@ const util = {
             turrets: turrets.map((t) => {
                 let o = util.getEntityImageFromMockup(t.index);
                 o.color = t.color;
+                o.borderless = t.borderless;
+                o.drawFill = t.drawFill;
                 o.realSize = o.realSize / o.size * mainMockup.size * t.sizeFactor;
                 o.size = mainMockup.size * t.sizeFactor;
                 o.sizeFactor = t.sizeFactor;

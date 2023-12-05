@@ -20,7 +20,7 @@ const dreadnoughtBody = {
     SPEED: 1.4,
     HEALTH: 400,
     DAMAGE: 10,
-    RESIST: 3,
+    RESIST: 1,
     PENETRATION: 2,
     SHIELD: 40,
     REGEN: 0.025,
@@ -38,7 +38,7 @@ module.exports = ({ Class }) => {
 	    BODY: dreadnoughtBody,
 	    SHAPE: 6,
 	    COLOR: 9,
-	    SIZE: 50,
+	    SIZE: 30,
 	    SKILL_CAP: Array(10).fill(smshskl+3),
 		REROOT_UPGRADE_TREE: "dreadOfficialV1",
 	};
@@ -93,14 +93,65 @@ module.exports = ({ Class }) => {
 	        }
 	    }]
 	};
+	Class.medicareTurret = {
+		PARENT: ["genericTank"],
+	    LABEL: "Turret",
+	    CONTROLLERS: [ ["spin", {speed: 0.04}] ],
+	    INDEPENDENT: true,
+	    COLOR: 16,
+	    GUNS: [],
+		TURRETS: [{
+			POSITION: [13, 0, 0, 0, 360, 1],
+            TYPE: "healerSymbol",
+		}],
+	};
+	for(let i = 0; i < 3; i++) {
+		Class.medicareTurret.GUNS.push({
+            POSITION: [8, 9, -0.5, 12.5, 0, 120*i, 0],
+        },
+        {
+            POSITION: [18, 10, 1, 0, 0, 120*i, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.pound, g.halfspeed, g.healer]),
+                TYPE: "healerBullet",
+				AUTOFIRE: true,
+            },
+        })
+	}
+	Class.medicaidTurret = {
+		PARENT: ["genericTank"],
+	    LABEL: "Turret",
+	    CONTROLLERS: [ ["spin", {speed: 0.04}] ],
+	    INDEPENDENT: true,
+	    COLOR: 16,
+	    GUNS: [],
+		TURRETS: [{
+			POSITION: [13, 0, 0, 0, 360, 1],
+            TYPE: "healerSymbol",
+		}],
+	};
+	for(let i = 0; i < 5; i++) {
+		Class.medicaidTurret.GUNS.push({
+            POSITION: [8, 9, -0.5, 12.5, 0, 72*i, 0],
+        },
+        {
+            POSITION: [18, 10, 1, 0, 0, 72*i, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.flank, g.pound, g.halfspeed, g.healer]),
+                TYPE: "healerBullet",
+				AUTOFIRE: true,
+            },
+        })
+	}
 	Class.turretedTrap = makeAuto(Class.trap);
 
 	// T0
 	Class.dreadOfficialV1 = {
 	    PARENT: ["genericDreadnought1"],
 	    LABEL: "Dreadnought",
+	    UPGRADE_LABEL: "Dreads V1",
 		LEVEL: 150,
-		EXTRA_SKILL: 48,
+		EXTRA_SKILL: 47,
 	}
 
 	// T1
@@ -202,6 +253,14 @@ module.exports = ({ Class }) => {
 	        TYPE: ["smasherBody", {INDEPENDENT: false} ]
 	    }]
 	}
+	Class.medicareOfficialV1 = {
+		PARENT: ["genericDreadnought1"],
+	    LABEL: "Medicare",
+	    TURRETS: [{
+			POSITION: [8, 0, 0, 0, 360, 1],
+			TYPE: "medicareTurret",
+		}],
+	}
 
 	// T2
 	Class.sabreOfficialV1 = {
@@ -246,13 +305,13 @@ module.exports = ({ Class }) => {
 	    Class.appeaserOfficialV1.GUNS.push({
 	        POSITION: [6, 8, 1.3, 7, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.pound, g.morereload, g.slow, {size: 0.55}]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.twin, g.pound, g.doublereload, g.slow, g.bitlessspeed, {size: 0.55}]),
 	            TYPE: "bullet"
 	        }
 	    }, {
 	        POSITION: [6, 7.5, 1.2, 9, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.pound, g.morereload, g.slow, {size: 0.55 * 8 / 7.5}]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.twin, g.pound, g.doublereload, g.slow, g.bitlessspeed, {size: 0.55 * 8 / 7.5}]),
 	            TYPE: "bullet"
 	        }
 	    });
@@ -280,19 +339,19 @@ module.exports = ({ Class }) => {
 	    Class.diplomatOfficialV1.GUNS.push({
 	        POSITION: [13.5, 6, 1, 0, 2.2, 120*i, 0.5],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple, g.slow, g.pound, g.morereload]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triple, g.slow, g.pound, g.doublereload]),
 	            TYPE: "bullet"
 	        }
 	    }, {
 	        POSITION: [13.5, 6, 1, 0, -2.2, 120*i, 0.5],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple, g.slow, g.pound, g.morereload]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triple, g.slow, g.pound, g.doublereload]),
 	            TYPE: "bullet"
 	        }
 	    }, {
-	        POSITION: [15.5, 6, 1, 0, 0, 120*i, 0],
+	        POSITION: [15, 6, 1, 0, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple, g.slow, g.pound, g.morereload]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triple, g.slow, g.pound, g.doublereload]),
 	            TYPE: "bullet"
 	        }
 	    });
@@ -307,7 +366,7 @@ module.exports = ({ Class }) => {
 	    Class.inquisitorOfficialV1.GUNS.push({
 	        POSITION: [7, 8.5, 1.3, 7.5, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.drone, g.over, g.morespeed, g.battle, {SIZE: 1.25}]),
+	            SHOOT_SETTINGS: combineStats([g.drone, g.over, g.morespeed, g.morespeed, g.weak, g.battle, {SIZE: 1.25}]),
 	            TYPE: "drone",
 	            AUTOFIRE: true,
 	            SYNCS_SKILLS: true,
@@ -329,7 +388,7 @@ module.exports = ({ Class }) => {
 	        POSITION: [1.5, 10, 1, 13.5, 0, 120*i, 0],
 	        PROPERTIES: {
 	            MAX_CHILDREN: 4,
-	            SHOOT_SETTINGS: combineStats([g.factory, g.weak, g.morespeed]),
+	            SHOOT_SETTINGS: combineStats([g.factory, g.weak, g.weak, g.weak, g.morespeed, g.morespeed, g.morespeed, g.morespeed, g.doublereload, g.doublereload]),
 	            TYPE: "minion",
 	            STAT_CALCULATOR: gunCalcNames.drone,
 	            AUTOFIRE: true,
@@ -348,21 +407,21 @@ module.exports = ({ Class }) => {
 	    Class.infiltratorOfficialV1.GUNS.push({
 	        POSITION: [7, 6, 0.6, 5.5, 2.8, 120*i, 0.5],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound]),
+	            SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, g.morespeed, {speed: 0.75, range: 1.9}]),
 	            TYPE: "swarm",
 	            STAT_CALCULATOR: gunCalcNames.swarm
 	        }
 	    }, {
 	        POSITION: [7, 6, 0.6, 5.5, -2.8, 120*i, 0.5],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound]),
+	            SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, g.morespeed, {speed: 0.75, range: 1.9}]),
 	            TYPE: "swarm",
 	            STAT_CALCULATOR: gunCalcNames.swarm
 	        }
 	    }, {
 	        POSITION: [7, 6, 0.6, 8, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound]),
+	            SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, g.morespeed, {speed: 0.75, range: 1.9}]),
 	            TYPE: "swarm",
 	            STAT_CALCULATOR: gunCalcNames.swarm
 	        }
@@ -417,7 +476,7 @@ module.exports = ({ Class }) => {
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.trap, g.block, g.veryfast, g.pound, g.morereload, {range: 3}]),
 	            TYPE: ["unsetTrap", {HITS_OWN_TYPE: "never"} ],
-	            STAT_CALCULATOR: gunCalcNames.trap
+	            STAT_CALCULATOR: gunCalcNames.block
 	        }
 	    });
 	}
@@ -469,6 +528,14 @@ module.exports = ({ Class }) => {
 	        TYPE: ["smasherBody", {INDEPENDENT: false} ]
 	    }],
 	}
+	Class.medicaidOfficialV1 = {
+		PARENT: ["genericDreadnought1"],
+	    LABEL: "Medicaid",
+	    TURRETS: [{
+			POSITION: [8, 0, 0, 0, 360, 1],
+			TYPE: "medicaidTurret",
+		}],
+	}
 
 	Class.addons.UPGRADES_TIER_0.push("dreadOfficialV1");
 		Class.dreadOfficialV1.UPGRADES_TIER_1 = ["swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1"];
@@ -478,13 +545,14 @@ module.exports = ({ Class }) => {
 			Class.centaurOfficialV1.UPGRADES_TIER_M1 = ["cerberusOfficialV1", "minotaurOfficialV1", "sirenOfficialV1"];
 			Class.automationOfficialV1.UPGRADES_TIER_M1 = ["mechanismOfficialV1"];
 			Class.juggernautOfficialV1.UPGRADES_TIER_M1 = ["behemothOfficialV1"];
+			Class.medicareOfficialV1.UPGRADES_TIER_M1 = ["medicaidOfficialV1"];
 
 	for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_1) {
 		let primaryName = primary;
 		primary = ensureIsClass(Class, primary);
 		primary.UPGRADES_TIER_1 = [];
 
-		for (let secondary of [ "swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1", "automationOfficialV1", "juggernautOfficialV1" ]) {
+		for (let secondary of [ "swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1", "automationOfficialV1", "juggernautOfficialV1", "medicareOfficialV1" ]) {
 			let secondaryName = secondary;
 	        secondary = ensureIsClass(Class, secondary);
 

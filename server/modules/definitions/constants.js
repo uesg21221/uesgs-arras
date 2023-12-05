@@ -86,7 +86,7 @@ module.exports = {
 	    PENETRATION: 1.05,
 	    SHIELD: 8,
 	    REGEN: 0.025,
-	    FOV: 1.04,
+	    FOV: 1.075,
 	    DENSITY: 0.5,
 	}
 };
