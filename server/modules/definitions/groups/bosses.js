@@ -1947,7 +1947,7 @@ exports.tinyMinion = {
     DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
 }
-exports.ghengisLowerTurret = {
+exports.genghisLowerTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
     MAX_CHILDREN: 4,
@@ -1968,12 +1968,12 @@ exports.ghengisLowerTurret = {
         },
     ],
 };
-let ghengis = new LayeredBoss(null, "Ghengis", "celestial", 9, "darkGrey", "baseTrapTurret", 6.5, 5.5);
-ghengis.addLayer({turret: {
+let genghis = new LayeredBoss(null, "Genghis", "celestial", 9, "darkGrey", "baseTrapTurret", 6.5, 5.5);
+genghis.addLayer({turret: {
     POSITION: [8.5, 9, 0, null, 180, 0],
-    TYPE: "ghengisLowerTurret",
+    TYPE: "genghisLowerTurret",
 }});
-ghengis.addLayer({turret: {
+genghis.addLayer({turret: {
     POSITION: [10.5, 8, 0, null, 160, 0],
     TYPE: "auto4gun",
 }}, true, 6);
