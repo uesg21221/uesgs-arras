@@ -1109,7 +1109,7 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
 	    exports.rammers.UPGRADES_TIER_0 = ["bob", "nemesis"];
         exports.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"];
         exports.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "julius", "genghis", "napoleon"];
-        exports.eternals.UPGRADES_TIER_0 = ["ragnarok", "kronos"];
+        exports.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
     exports.testing.UPGRADES_TIER_0 = ["funTanks", "testingTanks"];

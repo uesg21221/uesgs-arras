@@ -2259,8 +2259,8 @@ exports.gemDrone = {
         FOV: 100,
     },
 }
-let ragnarok = new LayeredBoss(null, "Ragnarok", "eternal", 11, "teal", "baseTrapTurret", 4.5, 3.5);
-ragnarok.addLayer({gun: {
+let odin = new LayeredBoss(null, "Odin", "eternal", 11, "teal", "baseTrapTurret", 4.5, 3.5);
+odin.addLayer({gun: {
     POSITION: [2.25, 3.25, -1.6, 9, 0, null, 0],
     PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.pound, {size: 1.7}]),
@@ -2269,11 +2269,11 @@ ragnarok.addLayer({gun: {
         SYNCS_SKILLS: true,
     },
 }}, true, null, 18);
-ragnarok.addLayer({turret: {
+odin.addLayer({turret: {
     POSITION: [7, 8, 0, null, 160, 0],
     TYPE: "autosmashTurret",
 }}, true, 5.5);
-ragnarok.addLayer({turret: {
+odin.addLayer({turret: {
     POSITION: [8, 9, 0, null, 160, 0],
     TYPE: "gunnerCruiserTurret",
 }}, true, 4.5);
