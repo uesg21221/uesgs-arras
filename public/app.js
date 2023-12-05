@@ -646,7 +646,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
     if (fill) context.fill();
     context.lineJoin = "round";
 }
-function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha) {
+function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha, position) {
     let h = [];
     h = aspect > 0 ? [height * aspect, height] : [height, -height * aspect];
 
@@ -654,13 +654,13 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     let points = [],
         sinT = Math.sin(angle),
         cosT = Math.cos(angle);
-    points.push([0, h[1]]);
-    points.push([length * 2, h[0]]);
-    points.push([length * 2, -h[0]]);
-    points.push([0, -h[1]]);
-
-    // Rotate it to the new angle via vector rotation
+    points.push([-position, h[1]]);
+    points.push([length * 2 - position, h[0]]);
+    points.push([length * 2 - position, -h[0]]);
+    points.push([-position, -h[1]]);
     context.globalAlpha = alpha;
+    
+    // Rotate it to the new angle via vector rotation
     context.beginPath();
     for (let point of points) {
         let newX = point[0] * cosT - point[1] * sinT + x,
@@ -730,7 +730,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
                 borderless = g.borderless,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length - positions[i]) / 2, (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill, alpha);
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, drawSize * positions[i]);
         }
     }
     // Draw body
@@ -770,7 +770,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
                 borderless = g.borderless,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length - positions[i]) / 2, (drawSize * g.width) / 2, g.aspect, g.angle + rot, borderless, fill, alpha);
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, drawSize * positions[i]);
         }
     }
     // Draw turrets above us
