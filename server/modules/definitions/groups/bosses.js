@@ -1947,7 +1947,7 @@ exports.tinyMinion = {
     DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
 }
-exports.ghengisLowerTurret = {
+exports.genghisLowerTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
     MAX_CHILDREN: 4,
@@ -1968,12 +1968,12 @@ exports.ghengisLowerTurret = {
         },
     ],
 };
-let ghengis = new LayeredBoss(null, "Ghengis", "celestial", 9, "darkGrey", "baseTrapTurret", 6.5, 5.5);
-ghengis.addLayer({turret: {
+let genghis = new LayeredBoss(null, "Genghis", "celestial", 9, "darkGrey", "baseTrapTurret", 6.5, 5.5);
+genghis.addLayer({turret: {
     POSITION: [8.5, 9, 0, null, 180, 0],
-    TYPE: "ghengisLowerTurret",
+    TYPE: "genghisLowerTurret",
 }});
-ghengis.addLayer({turret: {
+genghis.addLayer({turret: {
     POSITION: [10.5, 8, 0, null, 160, 0],
     TYPE: "auto4gun",
 }}, true, 6);
@@ -2259,8 +2259,8 @@ exports.gemDrone = {
         FOV: 100,
     },
 }
-let ragnarok = new LayeredBoss(null, "Ragnarok", "eternal", 11, "teal", "baseTrapTurret", 4.5, 3.5);
-ragnarok.addLayer({gun: {
+let odin = new LayeredBoss(null, "Odin", "eternal", 11, "teal", "baseTrapTurret", 4.5, 3.5);
+odin.addLayer({gun: {
     POSITION: [2.25, 3.25, -1.6, 9, 0, null, 0],
     PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.factory, g.celeslower, g.pound, {size: 1.7}]),
@@ -2269,11 +2269,11 @@ ragnarok.addLayer({gun: {
         SYNCS_SKILLS: true,
     },
 }}, true, null, 18);
-ragnarok.addLayer({turret: {
+odin.addLayer({turret: {
     POSITION: [7, 8, 0, null, 160, 0],
     TYPE: "autosmashTurret",
 }}, true, 5.5);
-ragnarok.addLayer({turret: {
+odin.addLayer({turret: {
     POSITION: [8, 9, 0, null, 160, 0],
     TYPE: "gunnerCruiserTurret",
 }}, true, 4.5);
@@ -3174,7 +3174,7 @@ testLayeredBoss.addLayer({gun: {
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
     },
-}}, true, 16);
+}}, true, null, 16);
 testLayeredBoss.addLayer({turret: {
     POSITION: [10, 7.5, 0, null, 160, 0],
     TYPE: "crowbarTurret",
