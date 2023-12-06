@@ -1322,7 +1322,7 @@ module.exports = ({ Class }) => {
 		TURRETS: [
 			{
 				POSITION: [13, 0, 0, 0, 0, 1],
-				TYPE: ["egg", {COLOR: /*{BASE: -1, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.7}*/ -1, BORDERLESS: true}],
+				TYPE: ["egg", {COLOR: -1, BORDERLESS: true}],
 			},
 		],
 	}
@@ -1338,7 +1338,7 @@ module.exports = ({ Class }) => {
 				POSITION: [14, 6, 1, 0, -2, 130, 0],
 				PROPERTIES: {
 					AUTOFIRE: true,
-					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed, {recoil: 2, damage: 0.6}]),
 					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
 					STAT_CALCULATOR: gunCalcNames.thruster,
 				},
@@ -1346,7 +1346,7 @@ module.exports = ({ Class }) => {
 				POSITION: [14, 6, 1, 0, 2, 230, 0],
 				PROPERTIES: {
 					AUTOFIRE: true,
-					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed, {recoil: 2, damage: 0.6}]),
 					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
 					STAT_CALCULATOR: gunCalcNames.thruster,
 				},
@@ -1354,7 +1354,7 @@ module.exports = ({ Class }) => {
 				POSITION: [14, 6, 1, 0, 0, 0, 0.2],
 				PROPERTIES: {
 					AUTOFIRE: true,
-					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.morespeed, g.morespeed]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.morespeed, g.morespeed, g.morespeed, {damage: 0.9}]),
 					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
 				},
 			},
@@ -1365,7 +1365,7 @@ module.exports = ({ Class }) => {
 		TURRETS: [
 			{
 				POSITION: [10, 0, 0, 180, 0, 1],
-				TYPE: ["triangle", {COLOR: -1}],
+				TYPE: ["triangle", {MIRROR_MASTER_ANGLE: true, COLOR: -1}],
 			},
 		]
 	}
@@ -1378,7 +1378,7 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [22, 10, 1, 0, 0, 0, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, g.overdrive]),
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.overdrive]),
 					TYPE: "bullet",
 					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -5, SATURATION_SHIFT: 0.8},
 				},
@@ -2035,7 +2035,7 @@ module.exports = ({ Class }) => {
 				{l: 17, w: 4, y: 0},
 				{l: 13, w: 4, y: -1},
 				{l: 12, w: 4, y: 1},
-			], [g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+			], [g.basic, g.mach, g.shotgun, {health: 1.5, damage: 1.5}]),
 		)
 	}
 	Class.swirlMissileSnowdread = {
@@ -2980,7 +2980,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.inhibitorSnowdread.GUNS.push(
-			...addLauncher({length: 15, width: 15, angle: 120*i}, -5, [g.basic, g.pound, g.arty, g.skim, g.halfspeed, {reload: 1.5}], true, "supermissile")
+			...addLauncher({length: 15, width: 15, angle: 120*i}, -5, [g.basic, g.pound, g.arty, g.skim, {reload: 1.5}], true, "supermissile")
 		)
 	}
 	Class.tranquilizerSnowdread = { // shotgun
@@ -2997,7 +2997,7 @@ module.exports = ({ Class }) => {
 				{l: 13, w: 4, y: -1},
 				{l: 12, w: 5, y: 1},
 				{l: 12, w: 5, y: 0},
-			], [g.basic, g.mach, g.shotgun, {health: 1.4, damage: 1.4}]),
+			], [g.basic, g.mach, g.shotgun, {health: 1.5, damage: 1.5}]),
 		)
 	}
 	Class.spiralMissileSnowdread = {
@@ -4231,8 +4231,8 @@ module.exports = ({ Class }) => {
 			...addSpam({length: 12, width: 4, y: 4.5, angle: 72*i, delay: 0.5}, 0, [g.basic, g.mini, {health: 1.1}]),
 			...addSpam({length: 14, width: 4, y: -4.5, angle: 72*i, delay: 0.25}, 0, [g.basic, g.mini, {health: 1.1}]),
 			...addSpam({length: 12, width: 4, y: -4.5, angle: 72*i, delay: 0.75}, 0, [g.basic, g.mini, {health: 1.1}]),
-			...addGunner({length: 18.5, width: 1.6, y: -2, angle: 72*i}, 0, [g.basic, g.gunner, g.twin, g.power, g.slow]),
-			...addGunner({length: 18.5, width: 1.6, y: 2, angle: 72*i, delay: 0.5}, 0, [g.basic, g.gunner, g.twin, g.power, g.slow]),
+			...addGunner({length: 18, width: 1.6, y: -2, angle: 72*i}, 0, [g.basic, g.gunner, g.twin, g.power, g.slow]),
+			...addGunner({length: 18, width: 1.6, y: 2, angle: 72*i, delay: 0.5}, 0, [g.basic, g.gunner, g.twin, g.power, g.slow]),
 			{
 				POSITION: [13.5, 7.5, 1, 0, 0, 72*i, 0],
 				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.5 }, },
@@ -4286,7 +4286,7 @@ module.exports = ({ Class }) => {
 	}
   	for (let i = 0; i < 5; i++) {
 		Class.tyrantSnowdread.GUNS.push(
-			...addLauncher({length: 15, width: 12, angle: 72*i}, 0, [g.basic, g.destroy, g.arty, g.skim, g.halfspeed, {reload: 1.5}], true, "supermissile")
+			...addLauncher({length: 15, width: 12, angle: 72*i}, 0, [g.basic, g.pound, g.arty, g.skim, {damage: 1.2, reload: 1.5}], true, "supermissile")
 		)
 	}
 	Class.anesthesiologistSnowdread = { // shotgun
@@ -4304,7 +4304,7 @@ module.exports = ({ Class }) => {
 				{l: 12, w: 1.5, y: -1, small: true},
 				{l: 12, w: 2, y: 1, small: true},
 				{l: 12, w: 2, y: 2, small: true},
-			], [g.basic, g.mach, g.shotgun, {reload: 1.2, health: 1.4, damage: 1.4}], [g.basic, g.mach, g.shotgun, g.morespeed, g.fast, {reload: 1.2}])
+			], [g.basic, g.mach, g.shotgun, {reload: 1.2, health: 1.75, damage: 1.3}], [g.basic, g.mach, g.shotgun, g.morespeed, g.fast, {reload: 1.2}])
 		)
 	}
 	Class.helixSnowdread = { // twister
@@ -4973,6 +4973,7 @@ module.exports = ({ Class }) => {
 	Class.pentagonLeviathanTopSnowdread = {
 	    PARENT: ["genericPentanought"],
 	    LABEL: "Leviathan",
+		COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 		MIRROR_MASTER_ANGLE: true,
 	    GUNS: [],
 	}
@@ -5002,6 +5003,7 @@ module.exports = ({ Class }) => {
 	Class.hexagonLeviathanTopSnowdread = {
 	    PARENT: ["genericHexnought"],
 	    LABEL: "Leviathan",
+		COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 		MIRROR_MASTER_ANGLE: true,
 	    GUNS: [],
 	}
