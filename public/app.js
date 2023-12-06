@@ -124,7 +124,6 @@ function getMockups() {
     global.mockupLoading = new Promise(Resolve => {
         util.pullJSON("mockups").then(data => {
             global.mockups = data;
-            generateTankTree(global.mockups.find((r) => r.name === "Basic").index);
             console.log('Mockups loading complete.');
             Resolve();
         });
