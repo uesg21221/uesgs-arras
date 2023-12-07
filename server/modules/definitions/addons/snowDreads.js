@@ -4349,6 +4349,12 @@ module.exports = ({ Class }) => {
 		SHAPE: 3.5,
 	    COLOR: 5,
 		GUNS: [],
+		TURRETS: [
+			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "aggressorMinionTopSnowdread"
+			}
+		]
 	}
 	Class.gladiatorTritankMinionSnowdread = {
 	    PARENT: ["gladiatorGenericMinionSnowdread"],
@@ -4362,24 +4368,73 @@ module.exports = ({ Class }) => {
 	    PARENT: ["gladiatorGenericMinionSnowdread"],
 		GUNS: [],
 	}
-	Class.gladiatorAutoMinionSnowdread = makeAuto({
+	Class.gladiatorAutoMinionTurretSnowdread = {
+		PARENT: "spamAutoTurret",
+		GUNS: [
+			{
+				POSITION: [18, 12, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.turret, g.fake]),
+					TYPE: "bullet",
+					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 },
+				},
+			}, { // Main gun
+				POSITION: [22, 10, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.turret]),
+					TYPE: "bullet",
+					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.5 },
+				},
+			}, {
+				POSITION: [14.5, 2, 1, 0, 5, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.turret, g.fake]),
+					TYPE: "bullet",
+					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 17.5 },
+				},
+			}, {
+				POSITION: [14.5, 2, 1, 0, -5, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.turret, g.fake]),
+					TYPE: "bullet",
+					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 17.5 },
+				},
+			},
+		]
+	}
+	Class.gladiatorAutoMinionSnowdread = {
 	    PARENT: ["gladiatorGenericMinionSnowdread"],
-	}, "Minion", {size: 12, angle: 0});
+		TURRETS: [
+			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "aggressorMinionTopSnowdread"
+			}, {
+				POSITION: [12, 0, 0, 0, 360, 1],
+				TYPE: "gladiatorAutoMinionTurretSnowdread"
+			}
+		]
+	}
 	Class.gladiatorAuraMinionAuraSnowdread = addAura(1, 1.2, 0.3, 0, "Small");
 	Class.gladiatorAuraMinionSnowdread = {
 	    PARENT: ["gladiatorGenericMinionSnowdread"],
 		TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "aggressorMinionTopSnowdread"
+			}, {
 				POSITION: [12, 0, 0, 0, 360, 1],
 				TYPE: "gladiatorAuraMinionAuraSnowdread",
 			}
 		]
 	}
-	Class.gladiatorHealAuraMinionAuraSnowdread = addAura(-2/3, 1.2);
+	Class.gladiatorHealAuraMinionAuraSnowdread = addAura(-2/3, 1.2, 0.3, "red", "Small");
 	Class.gladiatorHealAuraMinionSnowdread = {
 	    PARENT: ["gladiatorGenericMinionSnowdread"],
 		TURRETS: [
 			{
+				POSITION: [20, 0, 0, 0, 0, 1],
+				TYPE: "aggressorMinionTopSnowdread"
+			}, {
 				POSITION: [12, 0, 0, 0, 360, 1],
 				TYPE: "gladiatorHealAuraMinionAuraSnowdread",
 			}
@@ -4392,29 +4447,38 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.slow, g.minion]),
 					WAIT_TO_CYCLE: true,
+					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 },
+					TYPE: ["bullet", {COLOR: 5}],
+				},
+			}, {
+				POSITION: [13.5, 5.5, 1, 0, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.minion, g.fake]),
+					WAIT_TO_CYCLE: true,
+					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -2.5, SATURATION_SHIFT: 0.85 },
 					TYPE: ["bullet", {COLOR: 5}],
 				},
 			},
 		);
 		Class.gladiatorTritrapMinionSnowdread.GUNS.push(
-			{
-				POSITION: [13, 7, 1, 0, 0, 120*i, 0],
-			}, {
-				POSITION: [3, 7, 1.7, 13, 0, 120*i, 0],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.trap, g.flank, g.minion]),
-					TYPE: "trap",
-					STAT_CALCULATOR: gunCalcNames.trap,
-				},
-			},
+			...addTrap({length: 13, length2: 3, width: 7, aspect: 1.7, angle: 120*i}, 2.5, [g.trap, g.flank, g.minion])
 		);
 		Class.gladiatorTriswarmMinionSnowdread.GUNS.push(
 			{
 				POSITION: [7, 8.5, -1.5, 7, 0, 120*i, 0],
 				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats([g.swarm, {size: 1.6, range: 0.5}]),
+					SHOOT_SETTINGS: combineStats([g.swarm, g.minion, {size: 1.6, range: 0.5}]),
 					TYPE: ["swarm", {COLOR: 5}],
 					STAT_CALCULATOR: gunCalcNames.swarm,
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.7}
+				},
+			}, {
+				POSITION: [10.5, 6.8, -1.5, 2.5, 0, 120*i, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.swarm, g.minion, g.fake]),
+					TYPE: "swarm",
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -2.5, SATURATION_SHIFT: 0.7},
+					BORDERLESS: true
 				},
 			},
 		);
