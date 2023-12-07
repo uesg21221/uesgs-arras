@@ -1349,6 +1349,8 @@ exports.developer.UPGRADES_TIER_0 = [
   "eggGenerator",
   "testing",
   "addons",
+  "rapture",
+  "AutoRapture",
 ];
 exports.tanks.UPGRADES_TIER_0 = [
   "basic",
@@ -1482,4 +1484,8 @@ exports.testingTanks.UPGRADES_TIER_0 = [
   "onTest",
   "alphaGunTest",
   "testLayeredBoss",
+  "youtuber",
+  "machineShot",
+  "machinetrapper",
+  "youtuberDeco",
 ];
