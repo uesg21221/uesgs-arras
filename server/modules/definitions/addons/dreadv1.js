@@ -151,7 +151,7 @@ module.exports = ({ Class }) => {
 	    LABEL: "Dreadnought",
 	    UPGRADE_LABEL: "Dreads V1",
 		LEVEL: 150,
-		EXTRA_SKILL: 48,
+		EXTRA_SKILL: 47,
 	}
 
 	// T1
@@ -305,13 +305,13 @@ module.exports = ({ Class }) => {
 	    Class.appeaserOfficialV1.GUNS.push({
 	        POSITION: [6, 8, 1.3, 7, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.pound, g.morereload, g.slow, {size: 0.55}]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.twin, g.pound, g.doublereload, g.slow, g.bitlessspeed, {size: 0.55}]),
 	            TYPE: "bullet"
 	        }
 	    }, {
 	        POSITION: [6, 7.5, 1.2, 9, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.pound, g.morereload, g.slow, {size: 0.55 * 8 / 7.5}]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.twin, g.pound, g.doublereload, g.slow, g.bitlessspeed, {size: 0.55 * 8 / 7.5}]),
 	            TYPE: "bullet"
 	        }
 	    });
@@ -339,19 +339,19 @@ module.exports = ({ Class }) => {
 	    Class.diplomatOfficialV1.GUNS.push({
 	        POSITION: [13.5, 6, 1, 0, 2.2, 120*i, 0.5],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple, g.slow, g.pound, g.morereload]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triple, g.slow, g.pound, g.doublereload]),
 	            TYPE: "bullet"
 	        }
 	    }, {
 	        POSITION: [13.5, 6, 1, 0, -2.2, 120*i, 0.5],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple, g.slow, g.pound, g.morereload]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triple, g.slow, g.pound, g.doublereload]),
 	            TYPE: "bullet"
 	        }
 	    }, {
-	        POSITION: [15.5, 6, 1, 0, 0, 120*i, 0],
+	        POSITION: [15, 6, 1, 0, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triple, g.slow, g.pound, g.morereload]),
+	            SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triple, g.slow, g.pound, g.doublereload]),
 	            TYPE: "bullet"
 	        }
 	    });
@@ -366,7 +366,7 @@ module.exports = ({ Class }) => {
 	    Class.inquisitorOfficialV1.GUNS.push({
 	        POSITION: [7, 8.5, 1.3, 7.5, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.drone, g.over, g.morespeed, g.battle, {SIZE: 1.25}]),
+	            SHOOT_SETTINGS: combineStats([g.drone, g.over, g.morespeed, g.morespeed, g.weak, g.battle, {SIZE: 1.25}]),
 	            TYPE: "drone",
 	            AUTOFIRE: true,
 	            SYNCS_SKILLS: true,
@@ -407,21 +407,21 @@ module.exports = ({ Class }) => {
 	    Class.infiltratorOfficialV1.GUNS.push({
 	        POSITION: [7, 6, 0.6, 5.5, 2.8, 120*i, 0.5],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound]),
+	            SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, g.morespeed, {speed: 0.75, range: 1.9}]),
 	            TYPE: "swarm",
 	            STAT_CALCULATOR: gunCalcNames.swarm
 	        }
 	    }, {
 	        POSITION: [7, 6, 0.6, 5.5, -2.8, 120*i, 0.5],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound]),
+	            SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, g.morespeed, {speed: 0.75, range: 1.9}]),
 	            TYPE: "swarm",
 	            STAT_CALCULATOR: gunCalcNames.swarm
 	        }
 	    }, {
 	        POSITION: [7, 6, 0.6, 8, 0, 120*i, 0],
 	        PROPERTIES: {
-	            SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier, g.pound]),
+	            SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, g.morespeed, {speed: 0.75, range: 1.9}]),
 	            TYPE: "swarm",
 	            STAT_CALCULATOR: gunCalcNames.swarm
 	        }
@@ -476,7 +476,7 @@ module.exports = ({ Class }) => {
 	        PROPERTIES: {
 	            SHOOT_SETTINGS: combineStats([g.trap, g.block, g.veryfast, g.pound, g.morereload, {range: 3}]),
 	            TYPE: ["unsetTrap", {HITS_OWN_TYPE: "never"} ],
-	            STAT_CALCULATOR: gunCalcNames.trap
+	            STAT_CALCULATOR: gunCalcNames.block
 	        }
 	    });
 	}

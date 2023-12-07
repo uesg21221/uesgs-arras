@@ -68,3 +68,12 @@ exports.remove = (array, index) => {
     return o
   }
 }
+
+// convenience
+exports.forcePush = (object, property, ...items) => {
+  if (Array.isArray(object[property])) {
+    object[property].push(...items);
+  } else {
+    object[property] = [...items];
+  }
+}

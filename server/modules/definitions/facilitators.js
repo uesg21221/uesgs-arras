@@ -130,6 +130,7 @@ exports.makeConq = (type, name = -1) => {
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.trap, g.block]),
             TYPE: "setTrap",
+            STAT_CALCULATOR: gunCalcNames.block
         },
     }];
     output.GUNS = type.GUNS == null ? cannons : type.GUNS.concat(cannons);

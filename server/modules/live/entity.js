@@ -2183,6 +2183,13 @@ class Entity extends EventEmitter {
         entitiesToAvoid.push(this);
         this.isProtected = true;
     }
+    say(message, duration = c.CHAT_MESSAGE_DURATION) {
+        let id = player.body.id;
+        if (!chats[id]) {
+            chats[id] = [];
+        }
+        chats[id].unshift({ message, expires: Date.now() + duration });
+    }
     sendMessage(message) {} // Dummy
     setKillers(killers) {} // Dummy
     kill() {
