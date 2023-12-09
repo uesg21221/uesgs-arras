@@ -396,7 +396,7 @@ exports.rocketeerMissile = {
     PARENT: "missile",
     GUNS: [
         {
-            POSITION: [16.5, 10, 1.5, 0, 0, 180, 7.5],
+            POSITION: [16.5, 10, 1.5, 0, 0, 180, 3],
             PROPERTIES: {
                 AUTOFIRE: true,
                 SHOOT_SETTINGS: combineStats([
@@ -4209,7 +4209,7 @@ exports.swarmer = {
     LABEL: "Swarmer",
     GUNS: [
         {
-            POSITION: [14, 14, -1.2, 5, 0, 0, 0],
+            POSITION: [15, 14, -1.2, 5, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.hive]),
                 TYPE: "hive",
