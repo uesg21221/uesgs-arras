@@ -2126,7 +2126,7 @@ exports.streamliner = {
     ],
 }
 exports.barricade = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Barricade",
     STAT_NAMES: statnames.trap,
