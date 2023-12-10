@@ -2,32 +2,11 @@ function updateCheckbox(checkbox) {
     checkbox.innerText = checkbox.checked ? '✔' : '';
 }
 document.querySelectorAll('checkbox').forEach(checkbox => {
+    checkbox.checked = true;
     updateCheckbox(checkbox);
     checkbox.addEventListener('click', () => {
         checkbox.checked = !checkbox.checked;
         updateCheckbox(checkbox);
-    });
-});
-getValueOfId('tagsInclude').onupdate = filter;
-getValueOfId('tagsExclude').onupdate = filter;
-getValueOfId('hasApp').onupdate = filter;
-getValueOfId('hasBrowser').onupdate = filter;
-getValueOfId('fullServers').onupdate = filter;
-getValueOfId('maxPing').onupdate = filter;
-getValueOfId('minPlayers').onupdate = filter;
-
-let optionLists = {
-    sortType: 'index',
-    sortOrder: 'ascending'
-};
-document.querySelectorAll('options').forEach(options => {
-    Array.from(options.children).forEach(option => {
-        option.addEventListener('click', () => {
-            getNode(optionLists[options.id]).classList.remove('selectedOption');
-            option.classList.add('selectedOption');
-            optionLists[options.id] = option.id;
-            sort();
-        });
     });
 });
 
@@ -85,6 +64,29 @@ window.onresize = () => {
     iframe.width = window.innerWidth;
     iframe.height = window.innerHeight;
 };
+
+let optionLists = {
+    sortType: 'index',
+    sortOrder: 'ascending'
+};
+document.querySelectorAll('options').forEach(options => {
+    Array.from(options.children).forEach(option => {
+        option.addEventListener('click', () => {
+            getNode(optionLists[options.id]).classList.remove('selectedOption');
+            option.classList.add('selectedOption');
+            optionLists[options.id] = option.id;
+            sort();
+        });
+    });
+});
+
+getNode('tagsInclude').onupdate = filter;
+getNode('tagsExclude').onupdate = filter;
+getNode('hasApp').onupdate = filter;
+getNode('hasBrowser').onupdate = filter;
+getNode('fullServers').onupdate = filter;
+getNode('maxPing').onupdate = filter;
+getNode('minPlayers').onupdate = filter;
 
 function switchPopup(element) {
     filterPopup.style.display = 'none';

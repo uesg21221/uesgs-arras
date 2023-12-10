@@ -28,17 +28,17 @@
             </div>
             <div id="managerPopup" hidden>
                 <div class="managerPopupContent" id="filterPopup" hidden>
-                    <div class="genericOption">Include<input type="text" id="tagsInclude" placeholder="Tags seperated by commas"></div>
-                    <div class="genericOption">Exclude<input type="text" id="tagsExclude" placeholder="Tags seperated by commas"></div>
                     <div class="optionContainer">
-                        <div class="genericOption">App<checkbox id="hasApp" checked></div>
-                        <div class="genericOption">Browser<checkbox id="hasBrowser" checked></div>
-                        <div class="genericOption">Full<checkbox id="fullServers" checked></div>
+                        <div class="genericOption">App<checkbox id="hasApp"></div>
+                        <div class="genericOption">Browser<checkbox id="hasBrowser"></div>
+                        <div class="genericOption">Full<checkbox id="fullServers"></div>
                     </div>
                     <div class="optionContainer">
                         <div class="genericOption">Max Ping<input type="number" id="maxPing" min="0" value="0"></div>
                         <div class="genericOption">Minimum Players<input type="number" id="minPlayers" min="0" value="0"></div>
                     </div>
+                    <div class="genericOption">Include Tags<input type="text" id="tagsInclude" placeholder="Tags seperated by commas"></div>
+                    <div class="genericOption">Exclude Tags<input type="text" id="tagsExclude" placeholder="Tags seperated by commas"></div>
                 </div>
                 <div class="managerPopupContent" id="sortPopup" hidden>
                     <options class="optionContainer" id="sortType">
