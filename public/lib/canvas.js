@@ -49,7 +49,6 @@ class Canvas {
         }
     }
     keyPress(event) {
-        console.log(event);
         switch (event.keyCode) {
             case global.KEY_ZOOM_OUT:
                 if (!global.died && global.showTree) global.treeScale /= 1.1;
