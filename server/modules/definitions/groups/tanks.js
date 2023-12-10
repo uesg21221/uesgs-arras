@@ -396,7 +396,7 @@ exports.rocketeerMissile = {
     PARENT: "missile",
     GUNS: [
         {
-            POSITION: [16.5, 10, 1.5, 0, 0, 180, 7.5],
+            POSITION: [16.5, 10, 1.5, 0, 0, 180, 3],
             PROPERTIES: {
                 AUTOFIRE: true,
                 SHOOT_SETTINGS: combineStats([
@@ -827,7 +827,7 @@ exports.pillboxTurret = {
 exports.pillbox = {
     PARENT: "setTrap",
     LABEL: "Pillbox",
-    CONTROLLERS: ["goToMasterTarget", "nearestDifferentMaster"],
+    CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     DIE_AT_RANGE: true,
     TURRETS: [
@@ -839,14 +839,17 @@ exports.pillbox = {
 };
 exports.unsetPillbox = {
     PARENT: 'unsetTrap',
+    LABEL: "Pillbox",
+    CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
+    DIE_AT_RANGE: true,
     TURRETS: [
         {
             POSITION: [11, 0, 0, 0, 360, 1],
             TYPE: "pillboxTurret",
         },
     ],
-}
+};
 
 // Swarms
 exports.swarm = {
@@ -4206,7 +4209,7 @@ exports.swarmer = {
     LABEL: "Swarmer",
     GUNS: [
         {
-            POSITION: [14, 14, -1.2, 5, 0, 0, 0],
+            POSITION: [15, 14, -1.2, 5, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.hive]),
                 TYPE: "hive",
