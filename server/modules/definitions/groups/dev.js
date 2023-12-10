@@ -1113,6 +1113,12 @@ exports.testWhirlwind = {
     }]
 };
 
+exports.tooltipTank = {
+    PARENT: 'genericTank',
+    LABEL: "Tooltip Test",
+    UPGRADE_TOOLTIP: "Allan please add details"
+}
+
 exports.levels = {
     PARENT: ["menu"],
     LABEL: "Level Switcher",
@@ -1188,4 +1194,4 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
 
     exports.testing.UPGRADES_TIER_0 = ["funTanks", "testingTanks"];
         exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
-        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "testDesmos", "testWhirlwind"];
+        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "testDesmos", "testWhirlwind", "tooltipTank"];
