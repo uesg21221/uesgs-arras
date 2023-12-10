@@ -265,8 +265,8 @@ global.player = {
     nameColor: "#ffffff",
 };
 function calculateTarget() {
-    global.target.x = global.mouse.x * global.ratio - (global.player.screenx / global.screenWidth * window.canvas.width + window.canvas.width / 2);
-    global.target.y = global.mouse.y * global.ratio - (global.player.screeny / global.screenHeight * window.canvas.height + window.canvas.height / 2);
+    global.target.x = global.mouse.x - (global.player.screenx / global.screenWidth * window.canvas.width + window.canvas.width / 2);
+    global.target.y = global.mouse.y - (global.player.screeny / global.screenHeight * window.canvas.height + window.canvas.height / 2);
     if (window.canvas.reverseDirection) {
         global.target.x *= -1;
         global.target.y *= -1;

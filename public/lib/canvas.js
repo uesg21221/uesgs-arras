@@ -284,8 +284,8 @@ class Canvas {
             y: mouse.clientY * global.ratio,
         }) === 0;
         if (!this.spinLock) return;
-        global.mouse.x = mouse.clientX;
-        global.mouse.y = mouse.clientY;
+        global.mouse.x = mouse.clientX * global.ratio;
+        global.mouse.y = mouse.clientY * global.ratio;
     }
 }
 export { Canvas }
