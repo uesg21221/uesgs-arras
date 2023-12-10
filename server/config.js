@@ -208,8 +208,8 @@ module.exports = {
 
 
     // Gamemode related.
-    // Do not change these, you'll likely break stuff.
-    // Change GAME_MODES instead.
+    // !! Do not change these, you'll likely break stuff.
+    // !! Change GAME_MODES instead.
     GAMEMODE_NAME_PREFIXES: [],
     SPECIAL_BOSS_SPAWNS: false,
     GAMEMODES_TO_LOAD: [],

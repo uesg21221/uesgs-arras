@@ -78,9 +78,20 @@ global.Tile = class Tile {
 }
 
 global.tickIndex = 0;
-global.tickEvents = new EventEmitter();
-global.syncedDelaysLoop = () => tickEvents.emit(tickIndex++);
-global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.once(tickIndex + Math.round(ticks), () => callback(...args));
+global.tickEvents = [];
+global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.push(tickIndex + ticks, callback, args);
+global.syncedDelaysLoop = () => {
+    tickIndex += 1 / c.runSpeed;
+
+    // theyre q and p because i thought it looked like a sad guy and i wanted to keep that
+    // expecially (q - p)
+    tickEvents.sort(([q], [p]) => q - p);
+    //if an idiot pushes their own custom stuff into tickEvents its their own fault
+    while (tickIndex > tickEvents[0]) {
+        let tickEvent = tickEvents.shift();
+        tickEvent[1](...tickEvent[2]);
+    }
+}
 
 global.c = require("./setup/config.js");
 global.c.port = process.env.PORT || c.port;
@@ -99,15 +110,11 @@ const requires = [
     "./setup/mockups.js", // This file loads the mockups.
     "./debug/logs.js", // The logging pattern for the game. Useful for pinpointing lag.
     "./debug/speedLoop.js", // The speed check loop lmao.
-    "./gamemodes/bossRush.js", // Boss Rush
-    "./gamemodes/maze.js", // Maze
-    "./gamemodes/mothership.js", // The mothership mode
-    "./gamemodes/manhunt.js", // The Manhunt mode
-    "./gamemodes/trainwars.js", // The Train Wars mode
-    "./gamemodes/moon.js", // The Space mode
-    "./gamemodes/gamemodeLoop.js", // The gamemode loop.
+
     "./gamemodes/groups.js", // Duos/Trios/Squads
+    "./gamemodes/gamemodeLoop.js", // The gamemode loop.
     "./gamemodes/tag.js", // Tag
+    "./gamemodes/maze.js", // Maze
     "./gamemodes/closeArena.js", // Arena Closing mechanics
 ];
 

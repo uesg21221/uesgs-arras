@@ -69,4 +69,4 @@ module.exports = class Mothership extends Gamemode {
         }
         this.teamWon = false;
     }
-}
+};

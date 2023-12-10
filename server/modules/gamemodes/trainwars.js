@@ -19,4 +19,4 @@ module.exports = class TrainWars extends Gamemode {
             }
         }
     }
-}
+};

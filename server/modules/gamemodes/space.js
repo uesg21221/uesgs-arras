@@ -20,4 +20,4 @@ module.exports = class Space extends Gamemode {
     stop () {
         this.moon.kill();
     }
-}
+};

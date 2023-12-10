@@ -297,7 +297,7 @@ let maintainloop = () => {
 
                 names.push(boss.name);
                 naturallySpawnedBosses.push(boss);
-                boss.on('dead', () => util.remove(naturallySpawnedBosses, naturallySpawnedBosses.indexOf(boss)));
+                boss.on('dead', () => naturallySpawnedBosses.includes(boss) && util.remove(naturallySpawnedBosses, naturallySpawnedBosses.indexOf(boss)));
             }
 
             sockets.broadcast(`${util.listify(names)} ${names.length == 1 ? 'has' : 'have'} arrived!`);
