@@ -26,11 +26,36 @@
                 <div class="button listButton" id="sorts">Sorts</div>
                 <div class="button listButton" id="favorites">Favorites</div>
             </div>
+            <div id="managerPopup" hidden>
+                <div class="managerPopupContent" id="filterPopup" hidden>
+                    <div class="genericOption">Include<input type="text" id="tagsInclude" placeholder="Tags seperated by commas"></div>
+                    <div class="genericOption">Exclude<input type="text" id="tagsExclude" placeholder="Tags seperated by commas"></div>
+                    <div class="optionContainer">
+                        <div class="genericOption">App<checkbox id="hasApp" checked></div>
+                        <div class="genericOption">Browser<checkbox id="hasBrowser" checked></div>
+                        <div class="genericOption">Full<checkbox id="fullServers" checked></div>
+                    </div>
+                    <div class="optionContainer">
+                        <div class="genericOption">Max Ping<input type="number" id="maxPing" min="0" value="0"></div>
+                        <div class="genericOption">Minimum Players<input type="number" id="minPlayers" min="0" value="0"></div>
+                    </div>
+                </div>
+                <div class="managerPopupContent" id="sortPopup" hidden>
+                    <options class="optionContainer" id="sortType">
+                        <div class="genericOption uniqueOption" id="index">Default</div>
+                        <div class="genericOption uniqueOption" id="players">Players</div>
+                        <div class="genericOption uniqueOption" id="ping">Ping</div>
+                    </options>
+                    <options class="optionContainer" id="sortOrder">
+                        <div class="genericOption uniqueOption" id="ascending">Ascending</div>
+                        <div class="genericOption uniqueOption" id="descending">Descending</div>
+                    </options>
+                </div>
+                <div class="managerPopupContent" id="favoritePopup" hidden>
+                    <div>favoritePopup</div>
+                </div>
+            </div>
             <div id="selected">
-                <!--
-                    thats some lame shit right here 
-                    i have to put these 5 elements in some dumbass divs or else css won't cooperate
-                -->
                 <div>
                     <div id="version">Version</div>
                     <div id="name">Name</div>

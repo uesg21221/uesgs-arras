@@ -113,9 +113,15 @@ getIP = req => {
 },
 
 motdSocket = socket => {
+    socket.lastMessageTimestamp = 0;
     socket.on("message", message => {
         if (socket.readyState !== socket.OPEN) return;
         if (message.length > 32) return socket.close();
+
+        let now = Date.now();
+        if (now - socket.lastMessageTimestamp < c.MOTD_SOCKET_REFRESH_DELAY) return socket.close();
+        socket.lastMessageTimestamp = now;
+
         c.MOTD_DATA.players = sockets.players.length;
         c.MOTD_DATA.maxPlayers = c.maxPlayers;
         socket.send(message.toString() + ' ' + c.MOTD_SOCKET_REFRESH_DELAY + ' ' + JSON.stringify(c.MOTD_DATA));

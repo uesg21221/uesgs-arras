@@ -88,20 +88,22 @@ span {
 
 #controls {
 	border: 2px solid #adb5ba;
-	display: block;
+	display: flex;
+	flex-direction: column;
 	width: 300px;
 	background: #c2cacf;
 	margin: 20px;
 	margin-left: 0px;
 	padding: 5px;
 	border-radius: 15px;
+	align-content: stretch;
 }
 
 #manage {
-	margin-top: 5px;
-	width: 100%;
+	margin: 5px;
 	display: flex;
 	height: 30px;
+	gap: 10px;
 }
 
 .button {
@@ -116,8 +118,6 @@ span {
 	width: calc(calc(100% / 3) - 10px);
 	background-color: #9199d9;
 	border: 2px solid #777eb5;
-	margin-left: 5px;
-	margin-right: 5px;
 }
 .listButton:hover {
 	background-color: #a0a7d9;
@@ -129,12 +129,10 @@ span {
 	justify-content: space-between;
 	padding: 10px;
 	box-sizing: border-box;
-	height: calc(100% - 50px);
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 10px;
+	margin: 5px;
 	background-color: #c7c8d1;
 	border: 2px solid #aeafb8;
+	flex-grow: 1;
 }
 
 #version {
@@ -192,6 +190,7 @@ span {
 	margin-bottom: 10px;
 	margin-top: 10px;
 	padding: 10px;
+	cursor: pointer;
 }
 .mainContainer:hover {
 	background-color: #cfd8dd;
@@ -219,6 +218,74 @@ span {
 .ping {}
 .players {}
 .version {}
+
+#managerPopup {
+	padding: 10px;
+	margin: 5px;
+	background-color: #b4b7d4;
+	border: 2px solid #9fa1bd;
+}
+
+.managerPopupContent {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: center;
+}
+
+.optionContainer {
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.genericOption {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-items: stretch;
+}
+
+.uniqueOption {
+	padding: 5px;
+	user-select: none;
+	background-color: #a2a8d6;
+	border: 2px solid #8e93bd;
+}
+
+.uniqueOption:hover {
+	background-color: #9ca1d9;
+}
+
+.selectedOption {
+	background-color: '#969abd';
+}
+
+input {
+	border: 2px solid #9c9da6;
+	margin: 5px;
+}
+
+input[type="text"] {
+	margin: 0px;
+	width: 100%;
+}
+
+input[type="number"] {
+	width: 4em;
+}
+
+checkbox {
+	color: #000;
+	text-align: center;
+	user-select: none;
+	background-color: #fff;
+	border: 2px solid #9c9da6;
+	margin: 5px;
+	margin-left: 5px;
+	width: 20px;
+	height: 20px;
+}
 
 /* [google.com screenshot]
 	# What order do CSS classes apply?

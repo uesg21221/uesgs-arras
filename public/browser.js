@@ -1,3 +1,36 @@
+function updateCheckbox(checkbox) {
+    checkbox.innerText = checkbox.checked ? '✔' : '';
+}
+document.querySelectorAll('checkbox').forEach(checkbox => {
+    updateCheckbox(checkbox);
+    checkbox.addEventListener('click', () => {
+        checkbox.checked = !checkbox.checked;
+        updateCheckbox(checkbox);
+    });
+});
+getValueOfId('tagsInclude').onupdate = filter;
+getValueOfId('tagsExclude').onupdate = filter;
+getValueOfId('hasApp').onupdate = filter;
+getValueOfId('hasBrowser').onupdate = filter;
+getValueOfId('fullServers').onupdate = filter;
+getValueOfId('maxPing').onupdate = filter;
+getValueOfId('minPlayers').onupdate = filter;
+
+let optionLists = {
+    sortType: 'index',
+    sortOrder: 'ascending'
+};
+document.querySelectorAll('options').forEach(options => {
+    Array.from(options.children).forEach(option => {
+        option.addEventListener('click', () => {
+            getNode(optionLists[options.id]).classList.remove('selectedOption');
+            option.classList.add('selectedOption');
+            optionLists[options.id] = option.id;
+            sort();
+        });
+    });
+});
+
 //literally not needed, but looks cleaner
 let getNode = id => document.getElementById(id),
     makeNode = (cssClass, tag = 'div') => {
@@ -10,6 +43,7 @@ let getNode = id => document.getElementById(id),
     iframe = getNode('client'),
 
     container = getNode('container'),
+    managerPopup = getNode('managerPopup'),
 
     //server list
     browser = getNode('browser'),
@@ -18,6 +52,10 @@ let getNode = id => document.getElementById(id),
     filters = getNode('filters'),
     sorts = getNode('sorts'),
     favorites = getNode('favorites'),
+
+    filterPopup = getNode('filterPopup'),
+    sortPopup = getNode('sortPopup'),
+    favoritePopup = getNode('favoritePopup'),
 
     //info about current selected server
     version = getNode('version'),
@@ -32,7 +70,10 @@ let getNode = id => document.getElementById(id),
     //list of server ips
     servers = [],
 
-    selected = 0;
+    selectedServer = 0,
+    selectedPopup = null,
+
+    getSelected = () => servers.find(server => server.index == selectedServer);
 
 //client wants its src to be renamed
 window.onmessage = ({ data: { secure, ip, key, autojoin }}) => {
@@ -45,13 +86,80 @@ window.onresize = () => {
     iframe.height = window.innerHeight;
 };
 
+function switchPopup(element) {
+    filterPopup.style.display = 'none';
+    sortPopup.style.display = 'none';
+    favoritePopup.style.display = 'none';
+    if (selectedPopup == element) {
+        selectedPopup = null;
+        managerPopup.hidden = true;
+    } else {
+        managerPopup.hidden = false;
+        element.style.display = 'flex';
+        selectedPopup = element;
+    }
+}
+
+filters.onclick = () => switchPopup(filterPopup, 1);
+sorts.onclick = () => switchPopup(sortPopup, 2);
+favorites.onclick = () => switchPopup(favoritePopup, 3);
+
+function getValueOfId(id) {
+    let element = getNode(id);
+    return 'checkbox' === element.tagName.toLowerCase() ? !!element.checked : element.value;
+}
+
+function filter() {
+    let tagsInclude = getValueOfId('tagsInclude').split(/, ?/),
+        tagsExclude = getValueOfId('tagsExclude').split(/, ?/),
+        hasApp = getValueOfId('hasApp'),
+        hasBrowser = getValueOfId('hasBrowser'),
+        fullServers = getValueOfId('fullServers'),
+        maxPing = parseInt(getValueOfId('maxPing')),
+        minPlayers = parseInt(getValueOfId('minPlayers'));
+
+    for (let server of servers) {
+        this.mainContainer.hidden = !(
+
+            (!hasApp || server.hasApp) &&
+            (!hasBrowser || server.hasBrowser) &&
+
+            (!maxPing || server.ping <= maxPing) &&
+            (!minPlayers || server.players >= minPlayers) &&
+            (!fullServers || server.maxPlayers >= server.players) &&
+
+            (!tagsInclude || tagsInclude.every(tag => server.tags.includes(tag))) &&
+            (!tagsInclude || tagsExclude.every(tag => !server.tags.includes(tag)))
+        );
+    }
+}
+
+function sort() {
+    let sortType = optionLists.sortType, // 'index' / 'players' / 'ping'
+        sortAscending = optionLists.sortOrder == 'ascending';
+
+    servers.sort((a, b) => {
+        let weight = a[sortType] - b[sortType];
+        return sortAscending ? weight * -1 : weight;
+    });
+
+    // TrollgeScript
+    let temp = makeNode('');
+    for (let { element: { mainContainer } } of servers) {
+        temp.append(mainContainer);
+        browser.append(mainContainer);
+    }
+}
+
+// function favorites() {}
+
 join.onclick = () => {
     for (let { motdSocket } of servers) {
         if (motdSocket.readyState === motdSocket.OPEN) {
             motdSocket.close();
         }
     }
-    let { secure, ip } = servers[selected];
+    let { secure, ip } = getSelected();
     console.log('setting iframe src\nip:', ip, '\nsecure:', secure);
     iframe.src = `${secure ? 'https' : 'http'}://${ip}/app`;
     iframe.style.display = 'block';
@@ -64,7 +172,7 @@ list.onclick = () => {
             motdSocket.close();
         }
     }
-    let { secure, ip } = servers[selected];
+    let { secure, ip } = getSelected();
     console.log('redirecting to browser\nip:', ip, '\nsecure:', secure);
     location.href = `${secure ? 'https' : 'http'}://${ip}/browser`;
 };
@@ -78,6 +186,9 @@ class DOMServerListItem {
         this.errors = [];
         this.hasApp = hasApp;
         this.hasBrowser = hasBrowser;
+        this.ping = 0;
+        this.players = 0;
+        this.maxPlayers = 0;
 
         //DOM stuff
         this.mainContainer = makeNode('mainContainer');
@@ -87,30 +198,24 @@ class DOMServerListItem {
         this.icon = makeNode('icon', 'img');
         this.name = makeNode('name');
         this.description = makeNode('description');
-        this.ping = makeNode('ping');
-        this.players = makeNode('players');
+        this._ping = makeNode('ping');
+        this._players = makeNode('players');
         this.version = makeNode('version');
         this.icon.hidden = true;
         this.notLoaded.innerHTML = this.ip + '<br><br>Loading...';
         this.icon.src = `${this.secure ? 'https' : 'http'}://${ip}/iconBrowser.png`;
         this.icon.onerror = () => this.error("Server Icon didn't load successfully");
-        this.textContainer.append(this.name);
-        this.textContainer.append(this.description);
-        this.statsContainer.append(this.version);
-        this.statsContainer.append(this.players);
-        this.statsContainer.append(this.ping);
-        this.mainContainer.append(this.notLoaded);
-        this.mainContainer.append(this.icon);
-        this.mainContainer.append(this.textContainer);
-        this.mainContainer.append(this.statsContainer);
+        this.textContainer.append(this.name, this.description);
+        this.statsContainer.append(this.version, this._players, this._ping);
+        this.mainContainer.append(this.notLoaded, this.icon, this.textContainer, this.statsContainer);
         browser.append(this.mainContainer);
 
         this.mainContainer.addEventListener('click', () => this.select());
     }
     select () {
-        servers[selected].element.mainContainer.classList.remove('selected');
+        getSelected().element.mainContainer.classList.remove('selected');
         this.mainContainer.classList.add('selected');
-        selected = this.index;
+        selectedServer = this.index;
 
         name.innerHTML = this.name.innerHTML;
         version.innerHTML = this.version.innerHTML;
@@ -124,10 +229,13 @@ class DOMServerListItem {
         this.icon.hidden = false;
         this.name.innerHTML = toColored(motd.name);
         this.description.innerHTML = toColored(motd.description);
-        this.ping.innerText = motd.ping + 'ms Ping';
+        this._ping.innerText = motd.ping + 'ms Ping';
         this.version.innerText = motd.version;
-        this.players.innerText = motd.players + '/' + motd.maxPlayers + ' Players';
-        this.tags = motd.tags.map(tag => tag.toLowerCase().replace(/[^a-z0-1]/g, ''));
+        this._players.innerText = motd.players + '/' + motd.maxPlayers + ' Players';
+        this.tags = motd.tags.map(tag => tag.toLowerCase().replace(/[^a-z0-9]/g, ''));
+        this.ping = motd.ping;
+        this.players = motd.players;
+        this.maxPlayers = motd.maxPlayers;
     }
     socketClosed () {
         if (this.errors.length || this.notLoaded.hidden) return;
@@ -150,7 +258,7 @@ fetch(`${location.protocol}//${location.host}/servers.json`).then(x => x.json())
         let element = new DOMServerListItem(hasApp, hasBrowser, secure, ip, servers.length),
             motdSocket = new WebSocket(`${secure ? 'wss' : 'ws'}://${ip}/motd`),
 
-            listEntry = { hasApp, hasBrowser, secure, ip, motdSocket, element };
+            listEntry = { hasApp, hasBrowser, secure, ip, motdSocket, element, index: servers.length };
 
         motdSocket.pings = [];
         motdSocket.onmessage = ({ data: str }) => {
@@ -186,7 +294,7 @@ fetch(`${location.protocol}//${location.host}/servers.json`).then(x => x.json())
         servers.push(listEntry);
     }
 
-    servers[selected].motdSocket.addEventListener('message', () => servers[selected].element.select(), { once: true });
+    getSelected().motdSocket.addEventListener('message', () => getSelected().element.select(), { once: true });
 });
 
 //most of this is drawText from the game client but modified
