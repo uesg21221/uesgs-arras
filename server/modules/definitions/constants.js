@@ -52,6 +52,13 @@ module.exports = {
 			BULLET_PEN: 'Trap Penetration',
 			BULLET_DAMAGE: 'Trap Damage',
 		},
+		whirlwind: {
+			BULLET_SPEED: 'Orbit Speed',
+			BULLET_HEALTH: 'Satellite Health',
+			BULLET_PEN: 'Satellite Penetration',
+			BULLET_DAMAGE: 'Satellite Damage',
+			RELOAD: 'Respawn Rate',
+		},
 		heal: {
 			BULLET_PEN: 'Heal Rate',
 			BULLET_DAMAGE: 'Heal Amount',

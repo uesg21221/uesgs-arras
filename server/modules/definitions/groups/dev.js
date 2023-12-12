@@ -1133,44 +1133,46 @@ exports.satellite = {
     DIE_AT_RANGE: false, 
     FACING_TYPE: "chase",  
     MOTION_TYPE: "motor",
-    CLEAR_ON_MASTER_UPGRADE: true, 
+    CLEAR_ON_MASTER_UPGRADE: true,
+    ACCEPTS_SCORE: false,
     // CAN_GO_OUTSIDE_ROOM: false,
 }
-exports.whirlwindDeco = makeDeco(6);
-exports.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.05 }]];
+exports.whirlwindDeco = makeDeco(6)
+exports.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.05 }]]
 exports.whirlwind = {
     PARENT: "genericTank",
     LABEL: "Whirlwind",
     ANGLE: 60,
     CONTROLLERS: ["whirlwind"],
     HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
-            TYPE: "whirlwindDeco",
-        },
+            TYPE: "whirlwindDeco"
+        }
     ],
     AI: {
-        SPEED: 2,  
+        SPEED: 2, 
     }, 
     GUNS: (() => { 
         let output = []
         for (let i = 0; i < 6; i++) { 
             output.push({ 
-                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.2},
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([{reload:5}]), 
+                    SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
                     TYPE: ["satellite", {ANGLE: i * 60}], 
                     MAX_CHILDREN: 1,   
                     AUTOFIRE: true,  
                     SYNCS_SKILLS: false,
-                    WAIT_TO_CYCLE: true,
+                    WAIT_TO_CYCLE: true
                 }
             }) 
         }
         return output
     })()
-};
+}
 
 exports.tooltipTank = {
     PARENT: 'genericTank',
