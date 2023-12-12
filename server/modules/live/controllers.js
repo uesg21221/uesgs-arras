@@ -722,7 +722,7 @@ class io_formulaTarget extends IO {
     }
 }
 
-class io_orbit extends IO {
+class io_orbitOld extends IO {
     constructor (b, opts = {}) {
         super(b);
         this.radius = opts.radius || 3;
@@ -766,7 +766,7 @@ class io_whirlwind extends IO {
     }
   }
 }
-class io_satellite extends IO {
+class io_orbit extends IO {
   constructor(body) {
     super(body);
     this.realDist = 0
@@ -814,7 +814,7 @@ let ioTypes = {
     boomerang: io_boomerang,
     formulaTarget: io_formulaTarget,
     orbit: io_orbit,
-    satellite: io_satellite,
+    orbitOld: io_orbitOld,
     goToMasterTarget: io_goToMasterTarget,
     avoid: io_avoid,
     minion: io_minion,
