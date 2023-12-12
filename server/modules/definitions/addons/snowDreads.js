@@ -1412,6 +1412,7 @@ module.exports = ({ Class }) => {
 		PARENT: ["genericEggnought"],
 		LABEL: "Dreadnought",
 		UPGRADE_LABEL: "Snowdreads",
+		UPGRADE_TOOLTIP: "The explosions of gunfire pierce\nthrough the quiet drifting of snow.",
 		LEVEL: 90,
 		EXTRA_SKILL: 18,
 	}
@@ -1430,6 +1431,7 @@ module.exports = ({ Class }) => {
 	Class.swordSnowdread = {
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Sword",
+		UPGRADE_TOOLTIP: "Snipers",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 2; i++) {
@@ -1444,6 +1446,7 @@ module.exports = ({ Class }) => {
 	Class.pacifierSnowdread = {
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Pacifier",
+		UPGRADE_TOOLTIP: "Bullet Spam",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 2; i++) {
@@ -1458,6 +1461,7 @@ module.exports = ({ Class }) => {
 	Class.peacekeeperSnowdread = {
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Peacekeeper",
+		UPGRADE_TOOLTIP: "Heavy Bullets",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 2; i++) {
@@ -1472,6 +1476,7 @@ module.exports = ({ Class }) => {
 	Class.invaderSnowdread = {
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Invader",
+		UPGRADE_TOOLTIP: "Drones",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 2; i++) {
@@ -1486,6 +1491,7 @@ module.exports = ({ Class }) => {
 	Class.centaurSnowdread = {
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Centaur",
+		UPGRADE_TOOLTIP: "Traps",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 2; i++) {
@@ -1572,6 +1578,7 @@ module.exports = ({ Class }) => {
 	Class.byteSnowdread = {
 	    PARENT: ["genericEggnought"],
 		LABEL: "Byte",
+		UPGRADE_TOOLTIP: "Auto Turret",
 	    TURRETS: [
 			{
 				POSITION: [15, 0, 0, 0, 0, 1],
@@ -1613,6 +1620,7 @@ module.exports = ({ Class }) => {
 	Class.showerSnowdread = { // Drones
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Shower",
+		UPGRADE_TOOLTIP: "Drone Turret",
 	    BODY: {
 			SPEED: 0.93,
 			FOV: 1.1,
@@ -1634,6 +1642,7 @@ module.exports = ({ Class }) => {
 	Class.atmosphereSnowdread = {
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Atmosphere",
+		UPGRADE_TOOLTIP: "Damage Aura",
 	    TURRETS: [
 			{
 				POSITION: [14, 0, 0, 0, 0, 1],
@@ -1650,6 +1659,7 @@ module.exports = ({ Class }) => {
 	Class.juggernautSnowdread = {
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Juggernaut",
+		UPGRADE_TOOLTIP: "Health Buff",
 		BODY: {
 			HEALTH: 1.6,
 			SHIELD: 1.6,
@@ -1699,6 +1709,7 @@ module.exports = ({ Class }) => {
 	Class.stomperSnowdread = { // Size increase
 	    PARENT: ["genericEggnought"],
 		LABEL: "Stomper",
+		UPGRADE_TOOLTIP: "Size Increase",
 		SIZE: 1.2,
 		BODY: {
 			SPEED: 0.9,
@@ -1742,6 +1753,7 @@ module.exports = ({ Class }) => {
     Class.dropperSnowdread = { // Minelayer
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Dropper",
+		UPGRADE_TOOLTIP: "Trap Setter",	
 		GUNS: [
 			{
 				POSITION: [0, 7, 1, 3, 0, 0, 0],
@@ -1784,6 +1796,7 @@ module.exports = ({ Class }) => {
     Class.spotterSnowdread = { // FOV
 	    PARENT: ["genericEggnought"],
 	    LABEL: "Spotter",
+		UPGRADE_TOOLTIP: "FOV Boost",
 		BODY: {
 			FOV: 1.1,
 		},
@@ -1808,6 +1821,7 @@ module.exports = ({ Class }) => {
 	Class.sabreSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Sabre",
+		UPGRADE_TOOLTIP: "Assassins",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -1818,6 +1832,7 @@ module.exports = ({ Class }) => {
 	Class.gladiusSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Gladius",
+		UPGRADE_TOOLTIP: "Rifles",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -1828,6 +1843,7 @@ module.exports = ({ Class }) => {
 	Class.slingSnowdread = { // hunter
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Sling",
+		UPGRADE_TOOLTIP: "Hunters",
 		CONTROLLERS: [["zoom", { distance: 300 }]],
     	TOOLTIP: "Hold right click to zoom.",
 	    GUNS: [],
@@ -1840,6 +1856,7 @@ module.exports = ({ Class }) => {
 	Class.catapultSnowdread = { // mega-sniper
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Catapult",
+		UPGRADE_TOOLTIP: "Mega-Snipers",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -1850,6 +1867,7 @@ module.exports = ({ Class }) => {
 	Class.dartSnowdread = { // railgun
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Dart",
+		UPGRADE_TOOLTIP: "Railguns",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -1860,6 +1878,7 @@ module.exports = ({ Class }) => {
 	Class.mediatorSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Mediator",
+		UPGRADE_TOOLTIP: "Twins",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -1871,6 +1890,7 @@ module.exports = ({ Class }) => {
 	Class.negotiatorSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Negotiator",
+		UPGRADE_TOOLTIP: "Machine Guns",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -1932,6 +1952,7 @@ module.exports = ({ Class }) => {
 	Class.melderSnowdread = { // all auto
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Melder",
+		UPGRADE_TOOLTIP: "All Autos",
 		TURRETS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -1945,6 +1966,7 @@ module.exports = ({ Class }) => {
 	Class.crackerSnowdread = { // ultra bullet spam
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Cracker",
+		UPGRADE_TOOLTIP: "Miniguns",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -1984,6 +2006,7 @@ module.exports = ({ Class }) => {
 	Class.grabberSnowdread = { // crowbar
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Grabber",
+		UPGRADE_TOOLTIP: "Crowbars",
 	    GUNS: [],
 		TURRETS: [],
 	}
@@ -2005,6 +2028,7 @@ module.exports = ({ Class }) => {
 	Class.enforcerSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Enforcer",
+		UPGRADE_TOOLTIP: "Heavy Bullets",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -2015,6 +2039,7 @@ module.exports = ({ Class }) => {
 	Class.executorSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Executor",
+		UPGRADE_TOOLTIP: "Launchers",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -2025,6 +2050,7 @@ module.exports = ({ Class }) => {
 	Class.doserSnowdread = { // shotgun
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Doser",
+		UPGRADE_TOOLTIP: "Shotguns",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -2049,8 +2075,7 @@ module.exports = ({ Class }) => {
 					TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
 					STAT_CALCULATOR: gunCalcNames.thruster,
 				},
-			},
-			{
+			}, {
 				POSITION: [14, 8, 1, 0, 0, 180, 0],
 				PROPERTIES: {
 					AUTOFIRE: !0,
@@ -2064,6 +2089,7 @@ module.exports = ({ Class }) => {
 	Class.swirlSnowdread = { // twister
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Swirl",
+		UPGRADE_TOOLTIP: "Twisters",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -2074,6 +2100,7 @@ module.exports = ({ Class }) => {
 	Class.pelterSnowdread = { // artillery
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Pelter",
+		UPGRADE_TOOLTIP: "Artillery",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -2086,6 +2113,7 @@ module.exports = ({ Class }) => {
 	Class.inquisitorSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Inquisitor",
+		UPGRADE_TOOLTIP: "Drones",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -2122,6 +2150,7 @@ module.exports = ({ Class }) => {
 	Class.assailantSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Assailant",
+		UPGRADE_TOOLTIP: "Minions",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -2132,6 +2161,7 @@ module.exports = ({ Class }) => {
 	Class.radiationSnowdread = { // auto-drones
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Radiation",
+		UPGRADE_TOOLTIP: "Auto-Drones",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -2142,6 +2172,7 @@ module.exports = ({ Class }) => {
 	Class.boxerSnowdread = { // honcho
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Boxer",
+		UPGRADE_TOOLTIP: "Heavy Drones",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -2152,6 +2183,7 @@ module.exports = ({ Class }) => {
 	Class.disablerSnowdread = { // swarms
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Disabler",
+		UPGRADE_TOOLTIP: "Swarms",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -2163,6 +2195,7 @@ module.exports = ({ Class }) => {
 	Class.daemonSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Daemon",
+		UPGRADE_TOOLTIP: "Trap Spam",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -2174,6 +2207,7 @@ module.exports = ({ Class }) => {
 	Class.minotaurSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Minotaur",
+		UPGRADE_TOOLTIP: "Blocks",
 	    GUNS: [],
 	}
 	for (let i = 0; i < 4; i++) {
@@ -2193,6 +2227,7 @@ module.exports = ({ Class }) => {
 	Class.cleanerSnowdread = { // auto-traps
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Cleaner",
+		UPGRADE_TOOLTIP: "Auto-Traps",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -2205,6 +2240,7 @@ module.exports = ({ Class }) => {
 	Class.shadeSnowdread = { // aura-traps
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Shade",
+		UPGRADE_TOOLTIP: "Aura-Traps",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -2215,6 +2251,7 @@ module.exports = ({ Class }) => {
 	Class.screwdriverSnowdread = { // trap + gun
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Screwdriver",
+		UPGRADE_TOOLTIP: "Traps And Bullets",
 	    GUNS: [],
 	}
 	for(let i = 0; i < 4; i++) {
@@ -2228,6 +2265,7 @@ module.exports = ({ Class }) => {
 	Class.automationSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Automation",
+		UPGRADE_TOOLTIP: "Small Auto Turrets",
 	    TURRETS: [
 			{
 				POSITION: [11, 0, 0, 0, 0, 1],
@@ -2315,6 +2353,7 @@ module.exports = ({ Class }) => {
 	Class.kilobyteSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Kilobyte",
+		UPGRADE_TOOLTIP: "Heavy Auto Turret",
 	    TURRETS: [
 			{
 				POSITION: [12, 0, 0, 0, 0, 1],
@@ -2372,6 +2411,7 @@ module.exports = ({ Class }) => {
 	Class.lighterSnowdread = { // Flamethrower
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Lighter",
+		UPGRADE_TOOLTIP: "Flamethrower",
 	    TURRETS: [
 			{
 				POSITION: [13, 0, 0, 0, 0, 1],
@@ -2410,6 +2450,7 @@ module.exports = ({ Class }) => {
 	Class.stormSnowdread = { // Drones
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Storm",
+		UPGRADE_TOOLTIP: "Drone Turret",
 		BODY: {
 			SPEED: 0.93,
 			FOV: 1.1,
@@ -2431,6 +2472,7 @@ module.exports = ({ Class }) => {
 	Class.coronaSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Corona",
+		UPGRADE_TOOLTIP: "Damage Aura",
 	    TURRETS: [
 			{
 				POSITION: [14, 0, 0, 0, 0, 1],
@@ -2448,6 +2490,7 @@ module.exports = ({ Class }) => {
 	Class.thermosphereSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Thermosphere",
+		UPGRADE_TOOLTIP: "Healing Aura",
 	    TURRETS: [
 			{
 				POSITION: [14, 0, 0, 0, 0, 1],
@@ -2465,6 +2508,7 @@ module.exports = ({ Class }) => {
 	Class.jumboSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Jumbo",
+		UPGRADE_TOOLTIP: "Health Buff",
 	    BODY: hpBuffBodyStats[0],
 	    TURRETS: [
 			{
@@ -2520,6 +2564,7 @@ module.exports = ({ Class }) => {
 	Class.colossalSnowdread = {
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Colossal",
+		UPGRADE_TOOLTIP: "Speed Buff",
 		BODY: speedBuffBodyStats[0],
 		GUNS: [],
 	    TURRETS: [
@@ -2560,6 +2605,7 @@ module.exports = ({ Class }) => {
 	Class.cottonSnowdread = { // Drifter
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Cotton",
+		UPGRADE_TOOLTIP: "Icy Movement",
 		BODY: {
 			SPEED: 1.9,
 			ACCELERATION: 0.25,
@@ -2611,6 +2657,7 @@ module.exports = ({ Class }) => {
 	Class.ironSnowdread = { // Body damage increase
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Iron",
+		UPGRADE_TOOLTIP: "Body Damage Buff",
 		BODY: {
 			DAMAGE: 2,
 			PENETRATION: 1.6,
@@ -2648,6 +2695,7 @@ module.exports = ({ Class }) => {
 	Class.rollerSnowdread = { // Size increase
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Roller",
+		UPGRADE_TOOLTIP: "Size Increase",
 		SIZE: 1.3,
 		BODY: sizeBuffBodyStats[0],
 	    TURRETS: [
@@ -2666,6 +2714,7 @@ module.exports = ({ Class }) => {
 	Class.owlSnowdread = { // Size decrease
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Owl",
+		UPGRADE_TOOLTIP: "Size Decrease",
 		SIZE: 0.85,
 		BODY: {
 			HEALTH: 0.8,
@@ -2719,6 +2768,7 @@ module.exports = ({ Class }) => {
     Class.baiterSnowdread = { // Minelayer
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Baiter",
+		UPGRADE_TOOLTIP: "Trap Setter",
 		GUNS: [
 			{
 				POSITION: [0, 12, 1, 8, 0, 0, 0],
@@ -2761,6 +2811,7 @@ module.exports = ({ Class }) => {
     Class.spySnowdread = { // FOV
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Spy",
+		UPGRADE_TOOLTIP: "FOV Boost",
 		BODY: {
 			FOV: 1.2,
 			SPEED: 0.95,
