@@ -1640,12 +1640,17 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         if (upgradeHoverIndex > -1) {
             let picture = util.getEntityImageFromMockup(gui.upgrades[upgradeHoverIndex][2], gui.color);
             if (picture.upgradeTooltip.length > 0) {
-                let boxWidth = Math.max(measureText(picture.name, alcoveSize / 10), measureText(picture.upgradeTooltip, alcoveSize / 15)),
+                let boxWidth = measureText(picture.name, alcoveSize / 10),
                     boxX = global.mouse.x * global.screenWidth / window.canvas.width + 2,
                     boxY = global.mouse.y * global.screenHeight / window.canvas.height + 2,
                     boxPadding = 6,
                     splitTooltip = picture.upgradeTooltip.split("\n"),
                     textY = boxY + boxPadding + alcoveSize / 10;
+                
+                // Tooltip box width
+                for (let line of splitTooltip) boxWidth = Math.max(boxWidth, measureText(line, alcoveSize / 15));
+
+                // Draw tooltip box
                 gameDraw.setColor(ctx, color.dgrey);
                 ctx.lineWidth /= 1.5;
                 drawGuiRect(boxX, boxY, boxWidth + boxPadding * 3, alcoveSize * (splitTooltip.length + 1) / 10 + boxPadding * 3, false);
