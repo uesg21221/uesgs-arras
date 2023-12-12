@@ -1113,11 +1113,13 @@ exports.testWhirlwind = {
     }]
 };
 
+// VERY wip whirlwind (thanks sontrux42!)
 exports.satellite = { 
     PARENT: "bullet",
     // TYPE: "wall",
     LABEL: "Satellite",
     SIZE: 5,
+    LAYER: 13,
     BODY: { 
         SPEED: 4.5,
         DENSITY: 1,
@@ -1133,9 +1135,7 @@ exports.satellite = {
     MOTION_TYPE: "motor",
     CLEAR_ON_MASTER_UPGRADE: true, 
     // CAN_GO_OUTSIDE_ROOM: false,
-};
-
-// VERY wip whirlwind (thanks rel!)
+}
 exports.whirlwindDeco = makeDeco(6);
 exports.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.05 }]];
 exports.whirlwind = {
