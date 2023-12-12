@@ -1143,6 +1143,7 @@ exports.whirlwind = {
     LABEL: "Whirlwind",
     ANGLE: 60,
     CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
