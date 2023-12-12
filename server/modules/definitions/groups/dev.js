@@ -1083,6 +1083,7 @@ exports.satellite = {
     ACCEPTS_SCORE: false,
     DANGER: 2,
     SHAPE: 0,
+    LAYER: 13,
     CONTROLLERS: ['orbit'],
     FACING_TYPE: "smoothToTarget",
     BODY: {
