@@ -1,4 +1,4 @@
-const { combineStats, addAura } = require('../facilitators.js');
+const { combineStats, addAura, makeDeco } = require('../facilitators.js');
 const { base, gunCalcNames, basePolygonDamage, basePolygonHealth, dfltskl, statnames } = require('../constants.js');
 const g = require('../gunvals.js');
 
@@ -1113,6 +1113,64 @@ exports.testWhirlwind = {
     }]
 };
 
+exports.satellite = { 
+    PARENT: "bullet",
+    // TYPE: "wall",
+    LABEL: "Satellite",
+    SIZE: 5,
+    BODY: { 
+        SPEED: 4.5,
+        DENSITY: 1,
+        DAMAGE: 10, 
+        HEALTH: 10,
+        PENETRATION: 1, 
+        PUSHABILITY: 1, 
+        ACCELERATION: 4.5,
+    },  
+    CONTROLLERS: ["satellite"],  
+    DIE_AT_RANGE: false, 
+    FACING_TYPE: "chase",  
+    MOTION_TYPE: "motor",
+    CLEAR_ON_MASTER_UPGRADE: true, 
+    // CAN_GO_OUTSIDE_ROOM: false,
+};
+
+// VERY wip whirlwind (thanks rel!)
+exports.whirlwindDeco = makeDeco(6);
+exports.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.05 }]];
+exports.whirlwind = {
+    PARENT: "genericTank",
+    LABEL: "Whirlwind",
+    ANGLE: 60,
+    CONTROLLERS: ["whirlwind"],
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "whirlwindDeco",
+        },
+    ],
+    AI: {
+        SPEED: 2,  
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 6; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([{reload:30}]), 
+                    TYPE: ["satellite", {ANGLE: i * 60}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true,
+                }
+            }) 
+        }
+        return output
+    })()
+};
+
 exports.tooltipTank = {
     PARENT: 'genericTank',
     LABEL: "Tooltip Test",
@@ -1192,6 +1250,6 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
         exports.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
-    exports.testing.UPGRADES_TIER_0 = ["funTanks", "testingTanks"];
+    exports.testing.UPGRADES_TIER_0 = ["funTanks", "testingTanks", "whirlwind"];
         exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
         exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "testDesmos", "testWhirlwind", "tooltipTank"];
