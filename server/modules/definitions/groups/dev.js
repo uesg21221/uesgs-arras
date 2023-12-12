@@ -1156,9 +1156,9 @@ exports.whirlwind = {
         let output = []
         for (let i = 0; i < 6; i++) { 
             output.push({ 
-                POSITION: {WIDTH: 8, LENGTH: 1},
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.2},
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([{reload:30}]), 
+                    SHOOT_SETTINGS: combineStats([{reload:5}]), 
                     TYPE: ["satellite", {ANGLE: i * 60}], 
                     MAX_CHILDREN: 1,   
                     AUTOFIRE: true,  
