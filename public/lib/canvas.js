@@ -49,7 +49,6 @@ class Canvas {
         }
     }
     keyPress(event) {
-        console.log(event);
         switch (event.keyCode) {
             case global.KEY_ZOOM_OUT:
                 if (!global.died && global.showTree) global.treeScale /= 1.1;
@@ -285,8 +284,8 @@ class Canvas {
             y: mouse.clientY * global.ratio,
         }) === 0;
         if (!this.spinLock) return;
-        global.mouse.x = mouse.clientX;
-        global.mouse.y = mouse.clientY;
+        global.mouse.x = mouse.clientX * global.ratio;
+        global.mouse.y = mouse.clientY * global.ratio;
     }
 }
 export { Canvas }

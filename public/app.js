@@ -265,8 +265,8 @@ global.player = {
     nameColor: "#ffffff",
 };
 function calculateTarget() {
-    global.target.x = global.mouse.x * global.ratio - (global.player.screenx / global.screenWidth * window.canvas.width + window.canvas.width / 2);
-    global.target.y = global.mouse.y * global.ratio - (global.player.screeny / global.screenHeight * window.canvas.height + window.canvas.height / 2);
+    global.target.x = global.mouse.x - (global.player.screenx / global.screenWidth * window.canvas.width + window.canvas.width / 2);
+    global.target.y = global.mouse.y - (global.player.screeny / global.screenHeight * window.canvas.height + window.canvas.height / 2);
     if (window.canvas.reverseDirection) {
         global.target.x *= -1;
         global.target.y *= -1;
@@ -1634,6 +1634,30 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
         drawText(msg, buttonX, buttonY + h / 2, h - 2, color.guiwhite, "center", true);
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
+
+        // Upgrade tooltip
+        let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
+        if (upgradeHoverIndex > -1) {
+            let picture = util.getEntityImageFromMockup(gui.upgrades[upgradeHoverIndex][2], gui.color);
+            if (picture.upgradeTooltip.length > 0) {
+                let boxWidth = Math.max(measureText(picture.name, alcoveSize / 10), measureText(picture.upgradeTooltip, alcoveSize / 15)),
+                    boxX = global.mouse.x * global.screenWidth / window.canvas.width + 2,
+                    boxY = global.mouse.y * global.screenHeight / window.canvas.height + 2,
+                    boxPadding = 6,
+                    splitTooltip = picture.upgradeTooltip.split("\n"),
+                    textY = boxY + boxPadding + alcoveSize / 10;
+                gameDraw.setColor(ctx, color.dgrey);
+                ctx.lineWidth /= 1.5;
+                drawGuiRect(boxX, boxY, boxWidth + boxPadding * 3, alcoveSize * (splitTooltip.length + 1) / 10 + boxPadding * 3, false);
+                drawGuiRect(boxX, boxY, boxWidth + boxPadding * 3, alcoveSize * (splitTooltip.length + 1) / 10 + boxPadding * 3, true);
+                ctx.lineWidth *= 1.5;
+                drawText(picture.name, boxX + boxPadding * 1.5, textY, alcoveSize / 10, color.guiwhite);
+                for (let t of splitTooltip) {
+                    textY += boxPadding + alcoveSize / 15
+                    drawText(t, boxX + boxPadding * 1.5, textY, alcoveSize / 15, color.guiwhite);
+                }
+            }
+        }
     } else {
         global.canUpgrade = false;
         global.clickables.upgrade.hide();
@@ -1746,7 +1770,7 @@ const gameDrawDead = () => {
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
-    drawText("That pond it seems me many multiplied of fishes. Let us amuse rather to the fishing.", x, y - 80, 8, color.guiwhite, "center");
+    drawText("If you need instructions on how to get through the hotels, check out the enclosed instruction book.", x, y - 80, 8, color.guiwhite, "center");
     drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);

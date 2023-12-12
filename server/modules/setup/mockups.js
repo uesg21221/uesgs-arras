@@ -10,6 +10,7 @@ function getMockup(e, positionInfo) {
         index: e.index,
         name: e.label,
         upgradeName: e.upgradeLabel,
+        upgradeTooltip: e.upgradeTooltip,
         x: rounder(e.x),
         y: rounder(e.y),
         color: e.color,
