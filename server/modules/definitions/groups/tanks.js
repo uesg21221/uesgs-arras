@@ -1154,7 +1154,7 @@ exports.whirlwind = {
     STAT_NAMES: statnames.whirlwind,
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "whirlwindDeco"
         }
     ],
@@ -4478,7 +4478,7 @@ exports.tornado = {
     TOOLTIP: "[DEV NOTE] The Tornado does not function yet yet. This tank is currently just a mockup.",
     TURRETS: [
         {
-            POSITION: [11, 0, 0, 0, 360, 1],
+            POSITION: [10, 0, 0, 0, 360, 1],
             TYPE: "tornadoDeco",
         },
     ],
@@ -4508,11 +4508,11 @@ exports.tempest = {
     TOOLTIP: "[DEV NOTE] The Tempest does not function yet yet. This tank is currently just a mockup.",
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "tempestDeco1",
         },
         {
-            POSITION: [4.5, 0, 0, 180, 360, 1],
+            POSITION: [4, 0, 0, 180, 360, 1],
             TYPE: "tempestDeco2",
         },
     ],
@@ -4526,7 +4526,7 @@ exports.thunderbolt = {
     TOOLTIP: "[DEV NOTE] The Thunderbolt does not function yet yet. This tank is currently just a mockup.",
     TURRETS: [
         {
-            POSITION: [11, 0, 0, 0, 360, 1],
+            POSITION: [10, 0, 0, 0, 360, 1],
             TYPE: "thunderboltDeco",
         },
     ],
@@ -4543,7 +4543,7 @@ exports.hurricane = {
     STAT_NAMES: statnames.whirlwind,
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "hurricaneDeco",
         },
     ],
@@ -4580,7 +4580,7 @@ exports.typhoon = {
     STAT_NAMES: statnames.whirlwind,
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "typhoonDeco",
         },
     ],
@@ -4616,11 +4616,11 @@ exports.blizzard = {
     TOOLTIP: "[DEV NOTE] The Blizzard does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "blizzardDeco1",
         },
         {
-            POSITION: [6.5, 0, 0, 180, 360, 1],
+            POSITION: [6, 0, 0, 180, 360, 1],
             TYPE: "blizzardDeco2",
         },
     ],
@@ -4638,7 +4638,7 @@ exports.hexaWhirl = {
     },
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "tornadoDeco",
         },
     ],
@@ -4748,7 +4748,7 @@ exports.munition = {
     },
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "tornadoDeco",
         },
     ],
@@ -4841,7 +4841,7 @@ exports.whirl3 = {
     },
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "tornadoDeco",
         },
         {
@@ -4889,7 +4889,7 @@ exports.whirlGuard = {
     DANGER: 7,
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "tornadoDeco",
         },
     ],
@@ -4979,7 +4979,7 @@ exports.prophet = {
     SHAPE: 4,
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "tornadoDeco",
         },
     ],
@@ -5072,7 +5072,7 @@ exports.vortex = {
     DANGER: 7,
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [8, 0, 0, 0, 360, 1],
             TYPE: "tornadoDeco",
         },
     ],
