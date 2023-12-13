@@ -4726,7 +4726,7 @@ exports.whirl3 = {
     ANGLE: 90,
     CONTROLLERS: ["whirlwind"],
     HAS_NO_RECOIL: true,
-    STAT_NAMES: statnames.whirlwind,
+    STAT_NAMES: statnames.mixed,
     TOOLTIP: "[DEV NOTE] The Whirl-3 is still under construction and may not function as intended!",
     AI: {
         SPEED: 2,
