@@ -498,7 +498,7 @@ exports.satellite = {
     SHAPE: 0,
     LAYER: 13,
     CONTROLLERS: ['orbit'],
-    FACING_TYPE: "smoothToTarget",
+    FACING_TYPE: "spin",
     BODY: {
         PENETRATION: 1.2,
         PUSHABILITY: 0.6,
@@ -515,6 +515,10 @@ exports.satellite = {
     CLEAR_ON_MASTER_UPGRADE: true,
     BUFF_VS_FOOD: true,
     MOTION_TYPE: 'motor'
+}
+exports.squareSatellite = {
+    PARENT: "satellite",
+    SHAPE: 4
 }
 
 // Sunchips
@@ -1148,7 +1152,6 @@ exports.whirlwind = {
     CONTROLLERS: ["whirlwind"],
     HAS_NO_RECOIL: true,
     STAT_NAMES: statnames.whirlwind,
-    TOOLTIP: "[DEV NOTE] The Whirlwind is still under construction and may not function as intended!",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -4538,7 +4541,6 @@ exports.hurricane = {
     CONTROLLERS: ["whirlwind"],
     HAS_NO_RECOIL: true,
     STAT_NAMES: statnames.whirlwind,
-    TOOLTIP: "[DEV NOTE] The Hurricane is still under construction and may not function as intended!",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -4576,7 +4578,6 @@ exports.typhoon = {
     CONTROLLERS: ["whirlwind"],
     HAS_NO_RECOIL: true,
     STAT_NAMES: statnames.whirlwind,
-    TOOLTIP: "[DEV NOTE] The Typhoon is still under construction and may not function as intended!",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -4628,7 +4629,6 @@ exports.hexaWhirl = {
     PARENT: ["genericTank"],
     LABEL: "Hexa Whirl",
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Hexa Whirl does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -4678,6 +4678,54 @@ exports.hexaWhirl = {
                 TYPE: "bullet",
             },
         },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 0}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 90}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 180}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 270}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        }
     ],
 };
 exports.munition = {
@@ -4690,7 +4738,6 @@ exports.munition = {
             TYPE: "tornadoDeco",
         },
     ],
-    TOOLTIP: "[DEV NOTE] The Munition does not function yet. This tank is currently just a mockup.",
     GUNS: [
         {
             POSITION: [17, 3, 1, 0, -6, -7, 0.25],
@@ -4716,6 +4763,54 @@ exports.munition = {
                 LABEL: "Heavy",
             },
         },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 0}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 90}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 180}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 270}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        }
     ],
 };
 exports.whirl3 = {
@@ -4727,7 +4822,6 @@ exports.whirl3 = {
     CONTROLLERS: ["whirlwind"],
     HAS_NO_RECOIL: true,
     STAT_NAMES: statnames.mixed,
-    TOOLTIP: "[DEV NOTE] The Whirl-3 is still under construction and may not function as intended!",
     AI: {
         SPEED: 2,
     },
@@ -4773,7 +4867,6 @@ exports.whirlGuard = {
     LABEL: "Whirl Guard",
     STAT_NAMES: statnames.mixed,
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Whirl Guard does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -4799,6 +4892,54 @@ exports.whirlGuard = {
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
         },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 0}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 90}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 180}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 270}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        }
     ],
 };
 exports.prophet = {
@@ -4810,8 +4951,6 @@ exports.prophet = {
         SPEED: 0.9 * base.SPEED,
     },
     SHAPE: 4,
-    MAX_CHILDREN: 14,
-    TOOLTIP: "[DEV NOTE] The Phophet does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -4827,6 +4966,7 @@ exports.prophet = {
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
                 STAT_CALCULATOR: gunCalcNames.necro,
+                MAX_CHILDREN: 7,
             },
         },
         {
@@ -4837,8 +4977,57 @@ exports.prophet = {
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
                 STAT_CALCULATOR: gunCalcNames.necro,
+                MAX_CHILDREN: 7,
             },
         },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["squareSatellite", {ANGLE: 0}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["squareSatellite", {ANGLE: 90}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["squareSatellite", {ANGLE: 180}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["squareSatellite", {ANGLE: 270}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        }
     ],
 };
 exports.vortex = {
@@ -4848,7 +5037,6 @@ exports.vortex = {
         FOV: base.FOV * 1.1,
     },
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Vortex does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -4868,6 +5056,54 @@ exports.vortex = {
                 STAT_CALCULATOR: gunCalcNames.sustained,
             },
         },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 0}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 90}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 180}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        },
+        {
+            POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                TYPE: ["satellite", {ANGLE: 270}], 
+                MAX_CHILDREN: 1,   
+                AUTOFIRE: true,  
+                SYNCS_SKILLS: false,
+                WAIT_TO_CYCLE: true,
+                HAS_NO_RECOIL: true
+            }
+        }
     ],
 };
 
