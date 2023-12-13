@@ -83,6 +83,7 @@ module.exports = {
     mehdrone: { size: 1.35, health: 1.75, speed: 1.125 },
     bigdrone: { size: 1.8, health: 2.5, speed: 1.25 },
     mothership: { reload: 1.25, pen: 1.1, speed: 0.775, maxSpeed: 0.8, range: 15, resist: 1.15 },
+    satellite: { size: 0.8, reload: 3, damage: 1.875 },
 
     // Heavy cannons
     pound: { reload: 2, recoil: 1.6, damage: 2, speed: 0.85, maxSpeed: 0.8, density: 1.5, resist: 1.15 },

@@ -1,4 +1,4 @@
-const { combineStats, addAura } = require('../facilitators.js');
+const { combineStats, addAura, makeDeco } = require('../facilitators.js');
 const { base, gunCalcNames, basePolygonDamage, basePolygonHealth, dfltskl, statnames } = require('../constants.js');
 const g = require('../gunvals.js');
 
@@ -1066,48 +1066,12 @@ exports.testDesmosBullet = {
 exports.testDesmos = {
     PARENT: 'genericTank',
     LABEL: "Test Desmos",
+    STAT_NAMES: statnames.desmos,
     GUNS: [{
         POSITION: {},
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic]),
             TYPE: 'testDesmosBullet',
-            MAX_CHILDREN: 3,
-        }
-    }]
-};
-exports.testWhirlwindBullet = {
-    LABEL: "Drone",
-    TYPE: "drone",
-    ACCEPTS_SCORE: false,
-    DANGER: 2,
-    SHAPE: 3,
-    CONTROLLERS: ['orbit'],
-    FACING_TYPE: "smoothToTarget",
-    BODY: {
-        PENETRATION: 1.2,
-        PUSHABILITY: 0.6,
-        ACCELERATION: 0.75,
-        HEALTH: 0.3,
-        DAMAGE: 3.375,
-        SPEED: 10,
-        RANGE: 200,
-        DENSITY: 0.03,
-        RESIST: 1.5,
-        FOV: 0.5,
-    },
-    DRAW_HEALTH: false,
-    CLEAR_ON_MASTER_UPGRADE: true,
-    BUFF_VS_FOOD: true,
-    MOTION_TYPE: 'motor'
-};
-exports.testWhirlwind = {
-    PARENT: 'genericTank',
-    LABEL: 'Test Whirlwind',
-    GUNS: [{
-        POSITION: {},
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic]),
-            TYPE: 'testWhirlwindBullet',
             MAX_CHILDREN: 3,
         }
     }]
@@ -1194,4 +1158,4 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
 
     exports.testing.UPGRADES_TIER_0 = ["funTanks", "testingTanks"];
         exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
-        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "testDesmos", "testWhirlwind", "tooltipTank"];
+        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "testDesmos", "tooltipTank"];

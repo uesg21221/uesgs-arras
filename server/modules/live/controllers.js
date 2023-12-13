@@ -722,7 +722,7 @@ class io_formulaTarget extends IO {
     }
 }
 
-class io_orbit extends IO {
+class io_orbitOld extends IO {
     constructor (b, opts = {}) {
         super(b);
         this.radius = opts.radius || 3;
@@ -746,6 +746,48 @@ class io_orbit extends IO {
         };
     }
 }
+class io_whirlwind extends IO {
+  constructor(body) {
+    super(body);
+    this.body.angle = 0
+    this.body.dist = 0
+  }
+  
+  think(input) {
+    this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
+    if(input.fire){
+      if(this.body.dist!=110) this.body.dist = 110
+    }
+    else if(input.alt){
+      if(this.body.dist!=40) this.body.dist = 40
+    }
+    else{
+      if(this.body.dist!=70) this.body.dist = 70
+    }
+  }
+}
+class io_orbit extends IO {
+  constructor(body) {
+    super(body);
+    this.realDist = 0
+  }
+  
+  think(input) {
+    let master = this.body.master.master,
+        radius = this.body.angle * Math.PI / 180 + master.angle
+    
+    if(this.realDist>master.dist){
+      this.realDist-=10
+    }
+    else if(this.realDist<master.dist){
+      this.realDist+=10
+    }
+    this.body.x = master.x + Math.cos(radius) * this.realDist;
+        this.body.y = master.y + Math.sin(radius) * this.realDist;
+    
+    this.body.facing = radius
+  }
+}
 
 let ioTypes = {
     //misc
@@ -755,6 +797,7 @@ let ioTypes = {
     alwaysFire: io_alwaysFire,
     mapAltToFire: io_mapAltToFire,
     mapFireToAlt: io_mapFireToAlt,
+    whirlwind: io_whirlwind,
 
     //aiming related
     stackGuns: io_stackGuns,
@@ -771,6 +814,7 @@ let ioTypes = {
     boomerang: io_boomerang,
     formulaTarget: io_formulaTarget,
     orbit: io_orbit,
+    orbitOld: io_orbitOld,
     goToMasterTarget: io_goToMasterTarget,
     avoid: io_avoid,
     minion: io_minion,
