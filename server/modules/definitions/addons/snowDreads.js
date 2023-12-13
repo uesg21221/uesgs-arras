@@ -756,6 +756,8 @@ module.exports = ({ Class }) => {
 		];
 	}
 	function addHoncho({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.drone], MAX_CHILDREN = 4) {
+		let sideAngle = Math.atan(((aspect - 1) * width / 2) / (x * 0.8));
+		let xShift = -20 * Math.cos(sideAngle) + 11;
 		return [
 			{
 				POSITION: [length, width, aspect, x, y, angle, delay],
@@ -776,10 +778,10 @@ module.exports = ({ Class }) => {
 				POSITION: [1.5, width * 1.1, 1, x + length - 4.5, y, angle, 0],
 				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5}}
 			}, {
-				POSITION: [length + 3, 4, 0.001, x, y + width * 0.3, angle + 22.5, 0],
+				POSITION: [length + 11, 4, 0.001, x + xShift, y + width * 0.25, angle + sideAngle * 180 / Math.PI, 0],
 				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5},}
 			}, {
-				POSITION: [length + 3, 4, 0.001, x, y - width * 0.3, angle - 22.5, 0],
+				POSITION: [length + 11, 4, 0.001, x + xShift, y - width * 0.25, angle - sideAngle * 180 / Math.PI, 0],
 				PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5},}
 			},
 		];
@@ -4618,7 +4620,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 5; i++) {
 		Class.bruiserSnowdread.GUNS.push(
-			...addHoncho({length: 5, width: 9, aspect: 1.5, x: 9, angle: 72*i}, 0, [g.drone, g.over, g.over, g.honcho, {maxSpeed: 0.85}], 2)
+			...addHoncho({length: 5, width: 8.5, aspect: 1.5, x: 9, angle: 72*i}, 0, [g.drone, g.over, g.over, g.honcho, {maxSpeed: 0.85}], 2)
 		)
 	};
 	Class.incapacitatorSnowdread = { // swarms
