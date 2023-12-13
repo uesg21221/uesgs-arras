@@ -490,6 +490,32 @@ exports.surgeonPillbox = {
 
 // Drones
 exports.turretedDrone = makeAuto(generics.drone)
+exports.satellite = { 
+    LABEL: "Satellite",
+    TYPE: "drone",
+    ACCEPTS_SCORE: false,
+    DANGER: 2,
+    SHAPE: 0,
+    LAYER: 13,
+    CONTROLLERS: ['orbit'],
+    FACING_TYPE: "smoothToTarget",
+    BODY: {
+        PENETRATION: 1.2,
+        PUSHABILITY: 0.6,
+        ACCELERATION: 0.75,
+        HEALTH: 0.3,
+        DAMAGE: 3.375,
+        SPEED: 10,
+        RANGE: 200,
+        DENSITY: 0.03,
+        RESIST: 1.5,
+        FOV: 0.5,
+    },
+    DRAW_HEALTH: false,
+    CLEAR_ON_MASTER_UPGRADE: true,
+    BUFF_VS_FOOD: true,
+    MOTION_TYPE: 'motor'
+}
 
 // Sunchips
 exports.sunchip = {
@@ -926,6 +952,8 @@ exports.homingBullet = {
 
 // Decorations
 exports.overdriveDeco = makeDeco(4)
+exports.whirlwindDeco = makeDeco(6)
+exports.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.05 }]]
 exports.assemblerEffect = {
     PARENT: ['bullet'],
     MOTION_TYPE: 'assembler',
@@ -1113,9 +1141,45 @@ exports.trapper = {
         }
     ]
 }
+exports.whirlwind = {
+    PARENT: "genericTank",
+    LABEL: "Whirlwind",
+    ANGLE: 60,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TOOLTIP: "[DEV NOTE] The Whirlwind is still under construction and may not function as intended!",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "whirlwindDeco"
+        }
+    ],
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 6; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                    TYPE: ["satellite", {ANGLE: i * 60}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
 exports.desmos = {
     PARENT: "genericTank",
     LABEL: "Desmos",
+    STAT_NAMES: statnames.desmos,
     TOOLTIP: "[DEV NOTE] The Desmos is not finished yet. This tank is currently just a mockup.",
     GUNS: [
         {
@@ -4401,11 +4465,393 @@ exports.bulwark = {
     ],
 }
 
+// Whirlwind upgrades
+exports.tornadoDeco = makeDeco(4);
+exports.tornadoDeco.CONTROLLERS = [["spin", { independent: true }]];
+exports.tornado = {
+    PARENT: ["genericTank"],
+    LABEL: "Tornado",
+    DANGER: 6,
+    TOOLTIP: "[DEV NOTE] The Tornado is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+};
+exports.megaTornadoDeco = makeDeco([[0,-1],[0.5,0],[0,1],[-0.5,0]])
+exports.megaTornadoDeco.CONTROLLERS = [["spin", { independent: true }]];
+exports.megaTornado = {
+    PARENT: ["genericTank"],
+    LABEL: "Mega Tornado",
+    DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Mega Tornado is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [16, 0, 0, 0, 360, 1],
+            TYPE: "megaTornadoDeco",
+        },
+    ],
+};
+exports.tempestDeco1 = makeDeco(3);
+exports.tempestDeco1.CONTROLLERS = [["spin", { independent: true }]];
+exports.tempestDeco2 = makeDeco(3);
+exports.tempestDeco2.CONTROLLERS = [["spin", { independent: true, speed: 0.025 }]];
+exports.tempest = {
+    PARENT: ["genericTank"],
+    LABEL: "Tempest",
+    DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Tempest is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tempestDeco1",
+        },
+        {
+            POSITION: [4.5, 0, 0, 180, 360, 1],
+            TYPE: "tempestDeco2",
+        },
+    ],
+};
+exports.thunderboltDeco = makeDeco(4);
+exports.thunderboltDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.1 }]];
+exports.thunderbolt = {
+    PARENT: ["genericTank"],
+    LABEL: "Thunderbolt",
+    DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Thunderbolt is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: "thunderboltDeco",
+        },
+    ],
+};
+exports.hurricaneDeco = makeDeco(8);
+exports.hurricaneDeco.CONTROLLERS = [["spin", { independent: true }]];
+exports.hurricane = {
+    PARENT: ["genericTank"],
+    LABEL: "Hurricane",
+    DANGER: 6,
+    ANGLE: 45,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TOOLTIP: "[DEV NOTE] The Hurricane is still under construction and may not function as intended!",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "hurricaneDeco",
+        },
+    ],
+    AI: {
+        SPEED: 0.125, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 8; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                    TYPE: ["satellite", {ANGLE: i * 45}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+};
+exports.typhoonDeco = makeDeco(10);
+exports.typhoonDeco.CONTROLLERS = [["spin", { independent: true }]];
+exports.typhoon = {
+    PARENT: ["genericTank"],
+    LABEL: "Typhoon",
+    DANGER: 7,
+    ANGLE: 36,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TOOLTIP: "[DEV NOTE] The Typhoon is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "typhoonDeco",
+        },
+    ],
+    AI: {
+        SPEED: 0.0625/8, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 10; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                    TYPE: ["satellite", {ANGLE: i * 36}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+};
+exports.blizzardDeco1 = makeDeco(5);
+exports.blizzardDeco1.CONTROLLERS = [["spin", { independent: true }]];
+exports.blizzardDeco2 = makeDeco(5);
+exports.blizzardDeco2.CONTROLLERS = [["spin", { independent: true, speed: 0.025 }]];
+exports.blizzard = {
+    PARENT: ["genericTank"],
+    LABEL: "Blizzard",
+    DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Blizzard is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "blizzardDeco1",
+        },
+        {
+            POSITION: [6.5, 0, 0, 180, 360, 1],
+            TYPE: "blizzardDeco2",
+        },
+    ],
+};
+exports.hexaWhirl = {
+    PARENT: ["genericTank"],
+    LABEL: "Hexa Whirl",
+    DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Hexa Whirl is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 120, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 240, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 60, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 180, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [18, 8, 1, 0, 0, 300, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+    ],
+};
+exports.munition = {
+    PARENT: ["genericTank"],
+    DANGER: 7,
+    LABEL: "Munition",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    TOOLTIP: "[DEV NOTE] The Munition is not finished yet. This tank is currently just a mockup.",
+    GUNS: [
+        {
+            POSITION: [17, 3, 1, 0, -6, -7, 0.25],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
+                TYPE: "bullet",
+                LABEL: "Secondary",
+            },
+        },
+        {
+            POSITION: [17, 3, 1, 0, 6, 7, 0.75],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
+                TYPE: "bullet",
+                LABEL: "Secondary",
+            },
+        },
+        {
+            POSITION: [19, 12, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty]),
+                TYPE: "bullet",
+                LABEL: "Heavy",
+            },
+        },
+    ],
+};
+exports.whirl3 = {
+    PARENT: ["genericTank"],
+    LABEL: "Whirl-3",
+    DANGER: 7,
+    FACING_TYPE: "autospin",
+    TOOLTIP: "[DEV NOTE] The Whirl-3 is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+        {
+            POSITION: [11, 8, 0, 0, 190, 0],
+            TYPE: "autoTankGun",
+        },
+        {
+            POSITION: [11, 8, 0, 120, 190, 0],
+            TYPE: "autoTankGun",
+        },
+        {
+            POSITION: [11, 8, 0, 240, 190, 0],
+            TYPE: "autoTankGun",
+        },
+    ],
+};
+exports.whirlGuard = {
+    PARENT: ["genericTank"],
+    LABEL: "Whirl Guard",
+    STAT_NAMES: statnames.mixed,
+    DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Whirl Guard is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    GUNS: [
+        {
+            POSITION: [20, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [13, 8, 1, 0, 0, 180, 0],
+        },
+        {
+            POSITION: [4, 8, 1.7, 13, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap]),
+                TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
+exports.prophet = {
+    PARENT: ["genericTank"],
+    LABEL: "Prophet",
+    DANGER: 7,
+    STAT_NAMES: statnames.drone,
+    BODY: {
+        SPEED: 0.9 * base.SPEED,
+    },
+    SHAPE: 4,
+    MAX_CHILDREN: 14,
+    TOOLTIP: "[DEV NOTE] The Phophet is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    GUNS: [
+        {
+            POSITION: [5.25, 12, 1.2, 8, 0, 90, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+                TYPE: "sunchip",
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.necro,
+            },
+        },
+        {
+            POSITION: [5.25, 12, 1.2, 8, 0, 270, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+                TYPE: "sunchip",
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: gunCalcNames.necro,
+            },
+        },
+    ],
+};
+exports.vortex = {
+    PARENT: ["genericTank"],
+    LABEL: "Vortex",
+    BODY: {
+        FOV: base.FOV * 1.1,
+    },
+    DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Vortex is not finished yet. This tank is currently just a mockup.",
+    TURRETS: [
+        {
+            POSITION: [9, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    GUNS: [
+        {
+            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [10, 9, 1, 9, 0, 0, 0],
+        },
+        {
+            POSITION: [17, 13, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty]),
+                TYPE: "minimissile",
+                STAT_CALCULATOR: gunCalcNames.sustained,
+            },
+        },
+    ],
+};
+
 // Desmos upgrades
 exports.volute = {
     PARENT: ["genericTank"],
     LABEL: "Volute",
     DANGER: 6,
+    STAT_NAMES: statnames.desmos,
     TOOLTIP: "[DEV NOTE] The Volute is not finished yet. This tank is currently just a mockup.",
     GUNS: [
         {
@@ -4429,6 +4875,7 @@ exports.helix = {
     PARENT: ["genericTank"],
     LABEL: "Helix",
     DANGER: 6,
+    STAT_NAMES: statnames.desmos,
     TOOLTIP: "[DEV NOTE] The Helix is not finished yet. This tank is currently just a mockup.",
     GUNS: [
         {
@@ -4489,6 +4936,7 @@ exports.triplex = {
     PARENT: ["genericTank"],
     LABEL: "Triplex",
     DANGER: 7,
+    STAT_NAMES: statnames.desmos,
     TOOLTIP: "[DEV NOTE] The Triplex is not finished yet. This tank is currently just a mockup.",
     GUNS: [
         {
@@ -4948,8 +5396,8 @@ exports.autoSmasher = makeAuto({
 })
 
 // Upgrade paths
-exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "desmos"];
-    exports.basic.UPGRADES_TIER_2 = ["smasher"];
+exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "whirlwind", "desmos"];
+    exports.basic.UPGRADES_TIER_2 = ["smasher"]
         exports.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "autoSmasher", "landmine"];
         exports.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
 
@@ -4971,28 +5419,33 @@ exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "
 
     exports.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "auto3", "trapGuard", "triTrapper"];
         exports.flankGuard.UPGRADES_TIER_3 = ["tripleTwin", "quadruplex"];
-        exports.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper"];
+        exports.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper", "hexaWhirl"];
         exports.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "surfer", "eagle", "phoenix", "vulture"];
-        exports.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee"];
+        exports.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee", "whirl3"];
 
     exports.director.UPGRADES_TIER_2 = ["overseer", "cruiser", "underseer", "spawner"];
         exports.director.UPGRADES_TIER_3 = ["manager", "bigCheese"];
         exports.overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "autoOverseer", "overdrive", "commander"];
         exports.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "autoCruiser", "commander"];
-        exports.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor"];
+        exports.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor", "prophet"];
         exports.spawner.UPGRADES_TIER_3 = ["factory", "autoSpawner"];
 
     exports.pounder.UPGRADES_TIER_2 = ["destroyer", "builder", "artillery", "launcher", "volute"];
         exports.pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"];
         exports.destroyer.UPGRADES_TIER_3 = ["conqueror", "annihilator", "hybrid", "construct"];
-        exports.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun"];
-        exports.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "rocketeer", "fieldGun"];
+        exports.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun", "munition"];
+        exports.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "rocketeer", "fieldGun", "vortex"];
 
     exports.trapper.UPGRADES_TIER_2 = ["builder", "triTrapper", "trapGuard"];
         exports.trapper.UPGRADES_TIER_3 = ["barricade", "overtrapper"];
         exports.builder.UPGRADES_TIER_3 = ["construct", "autoBuilder", "engineer", "boomer", "assembler", "architect", "conqueror"];
         exports.triTrapper.UPGRADES_TIER_3 = ["fortress", "hexaTrapper", "septaTrapper", "architect"];
-        exports.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark"];
+        exports.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark", "whirlGuard"];
+
+    exports.whirlwind.UPGRADES_TIER_2 = ["tornado", "hurricane"];
+        exports.whirlwind.UPGRADES_TIER_3 = ["hexaWhirl", "munition", "whirl3", "whirlGuard", "prophet", "vortex"];
+        exports.tornado.UPGRADES_TIER_3 = ["megaTornado", "tempest", "thunderbolt"];
+        exports.hurricane.UPGRADES_TIER_3 = ["typhoon", "blizzard"];
 
     exports.desmos.UPGRADES_TIER_2 = ["volute", "helix"];
         exports.volute.UPGRADES_TIER_3 = ["sidewinder"];

@@ -52,6 +52,9 @@ module.exports = {
 			BULLET_PEN: 'Trap Penetration',
 			BULLET_DAMAGE: 'Trap Damage',
 		},
+		desmos: {
+			BULLET_SPEED: 'Wave Frequency',
+		},
 		whirlwind: {
 			BULLET_SPEED: 'Orbit Speed',
 			BULLET_HEALTH: 'Satellite Health',
