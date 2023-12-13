@@ -4629,6 +4629,13 @@ exports.hexaWhirl = {
     PARENT: ["genericTank"],
     LABEL: "Hexa Whirl",
     DANGER: 7,
+    ANGLE: 45,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.mixed,
+    AI: {
+        SPEED: 2,
+    },
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -4732,6 +4739,13 @@ exports.munition = {
     PARENT: ["genericTank"],
     DANGER: 7,
     LABEL: "Munition",
+    ANGLE: 45,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.mixed,
+    AI: {
+        SPEED: 2,
+    },
     TURRETS: [
         {
             POSITION: [9, 0, 0, 0, 360, 1],
@@ -4865,7 +4879,13 @@ exports.whirl3 = {
 exports.whirlGuard = {
     PARENT: ["genericTank"],
     LABEL: "Whirl Guard",
+    ANGLE: 45,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
     STAT_NAMES: statnames.mixed,
+    AI: {
+        SPEED: 2,
+    },
     DANGER: 7,
     TURRETS: [
         {
@@ -4946,9 +4966,15 @@ exports.prophet = {
     PARENT: ["genericTank"],
     LABEL: "Prophet",
     DANGER: 7,
-    STAT_NAMES: statnames.drone,
+    ANGLE: 45,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.mixed,
     BODY: {
         SPEED: 0.9 * base.SPEED,
+    },
+    AI: {
+        SPEED: 2,
     },
     SHAPE: 4,
     TURRETS: [
@@ -5035,6 +5061,13 @@ exports.vortex = {
     LABEL: "Vortex",
     BODY: {
         FOV: base.FOV * 1.1,
+    },
+    ANGLE: 45,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.mixed,
+    AI: {
+        SPEED: 2,
     },
     DANGER: 7,
     TURRETS: [
