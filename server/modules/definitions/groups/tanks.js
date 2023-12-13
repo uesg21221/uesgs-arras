@@ -1167,7 +1167,7 @@ exports.whirlwind = {
             output.push({ 
                 POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
                     TYPE: ["satellite", {ANGLE: i * 60}], 
                     MAX_CHILDREN: 1,   
                     AUTOFIRE: true,  
@@ -4556,7 +4556,7 @@ exports.hurricane = {
             output.push({ 
                 POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
                     TYPE: ["satellite", {ANGLE: i * 45}], 
                     MAX_CHILDREN: 1,   
                     AUTOFIRE: true,  
@@ -4593,7 +4593,7 @@ exports.typhoon = {
             output.push({ 
                 POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
                     TYPE: ["satellite", {ANGLE: i * 36}], 
                     MAX_CHILDREN: 1,   
                     AUTOFIRE: true,  
@@ -4681,7 +4681,7 @@ exports.hexaWhirl = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 0}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4693,7 +4693,7 @@ exports.hexaWhirl = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 90}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4705,7 +4705,7 @@ exports.hexaWhirl = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 180}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4717,7 +4717,7 @@ exports.hexaWhirl = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 270}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4766,7 +4766,7 @@ exports.munition = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 0}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4778,7 +4778,7 @@ exports.munition = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 90}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4790,7 +4790,7 @@ exports.munition = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 180}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4802,7 +4802,7 @@ exports.munition = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 270}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4849,7 +4849,7 @@ exports.whirl3 = {
             output.push({ 
                 POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
                     TYPE: ["satellite", {ANGLE: i * 90}], 
                     MAX_CHILDREN: 1,   
                     AUTOFIRE: true,  
@@ -4895,7 +4895,7 @@ exports.whirlGuard = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 0}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4907,7 +4907,7 @@ exports.whirlGuard = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 90}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4919,7 +4919,7 @@ exports.whirlGuard = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 180}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4931,7 +4931,7 @@ exports.whirlGuard = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 270}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4983,7 +4983,7 @@ exports.prophet = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["squareSatellite", {ANGLE: 0}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -4995,7 +4995,7 @@ exports.prophet = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["squareSatellite", {ANGLE: 90}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -5007,7 +5007,7 @@ exports.prophet = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["squareSatellite", {ANGLE: 180}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -5019,7 +5019,7 @@ exports.prophet = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["squareSatellite", {ANGLE: 270}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -5059,7 +5059,7 @@ exports.vortex = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 0}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -5071,7 +5071,7 @@ exports.vortex = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 90}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -5083,7 +5083,7 @@ exports.vortex = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 180}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
@@ -5095,7 +5095,7 @@ exports.vortex = {
         {
             POSITION: {WIDTH: 8, LENGTH: 1, DELAY: 0.25},
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([{reload: 3, damage: 1.75}]), 
+                SHOOT_SETTINGS: combineStats([g.satellite]), 
                 TYPE: ["satellite", {ANGLE: 270}], 
                 MAX_CHILDREN: 1,   
                 AUTOFIRE: true,  
