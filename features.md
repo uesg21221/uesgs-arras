@@ -116,7 +116,7 @@ Unfinished list of all features that OSA/APS++ has included in the base template
   * All labyrinth Foods.
   * All Relic variants of Old Food.
   * Sphere, Tetrahedron, Octahedron and Tesseract as Extradimensional Food.
-  * Still kept the old Alpha/Beta Pentagons.
+  * Still kept the old Alpha/Beta Pentagons and Gems/Jewels.
 
 * More Gamemodes: Train Wars, Manhunt, Space.
 
