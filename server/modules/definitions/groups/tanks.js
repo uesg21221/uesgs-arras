@@ -4692,10 +4692,10 @@ exports.tempestDeco1.CONTROLLERS = [["spin", { independent: true }]];
 exports.tempestDeco2 = makeDeco(3);
 exports.tempestDeco2.CONTROLLERS = [["spin", { independent: true, speed: 0.025 }]];
 exports.tempest = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Tempest",
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Tempest does not function yet. This tank is currently just a mockup.",
+    TOOLTIP: "[DEV NOTE] The Tempest does not function as intended yet!",
     TURRETS: [
         {
             POSITION: [8, 0, 0, 0, 360, 1],
@@ -4706,6 +4706,30 @@ exports.tempest = {
             TYPE: "tempestDeco2",
         },
     ],
+    ANGLE: 120,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 3; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 12, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pound]), 
+                    TYPE: ["satellite", {ANGLE: i * 120}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
 };
 exports.thunderboltDeco = makeDeco(4);
 exports.thunderboltDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.1 }]];
@@ -4713,7 +4737,6 @@ exports.thunderbolt = {
     PARENT: ["genericTank"],
     LABEL: "Thunderbolt",
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Thunderbolt does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [10, 0, 0, 0, 360, 1],
@@ -4824,10 +4847,10 @@ exports.blizzardDeco1.CONTROLLERS = [["spin", { independent: true }]];
 exports.blizzardDeco2 = makeDeco(5);
 exports.blizzardDeco2.CONTROLLERS = [["spin", { independent: true, speed: 0.025 }]];
 exports.blizzard = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Blizzard",
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Blizzard does not function yet. This tank is currently just a mockup.",
+    TOOLTIP: "[DEV NOTE] The Blizzard does not function as intended yet!",
     TURRETS: [
         {
             POSITION: [8, 0, 0, 0, 360, 1],
@@ -4838,6 +4861,30 @@ exports.blizzard = {
             TYPE: "blizzardDeco2",
         },
     ],
+    ANGLE: 72,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 5; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", {ANGLE: i * 72}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
 };
 exports.hexaWhirl = {
     PARENT: ["genericTank"],

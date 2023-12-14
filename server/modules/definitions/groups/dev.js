@@ -669,6 +669,12 @@ exports.auraBasicGen = addAura();
 exports.auraBasic = {
     PARENT: ["genericTank"],
     LABEL: "Aura Basic",
+    TURRETS: [
+        {
+            POSITION: [14, 0, 0, 0, 0, 1],
+            TYPE: "auraBasicGen"
+        }
+    ],
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
@@ -678,13 +684,6 @@ exports.auraBasic = {
             },
         },
     ],
-    TURRETS: [
-        {
-            POSITION: [18, 0, 0, 0, 0, 0],
-            TYPE: "auraBasicGen",
-            VULNERABLE: true,
-        }
-    ],
 };
 exports.auraHealerGen = addAura(-1);
 exports.auraHealer = {
@@ -693,12 +692,11 @@ exports.auraHealer = {
     TURRETS: [
         {
             POSITION: [14, 0, 0, 0, 0, 1],
-            TYPE: "auraHealerGen",
+            TYPE: "auraHealerGen"
         }
     ],
     GUNS: [
         {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [8, 9, -0.5, 12.5, 0, 0, 0],
         },
         {
@@ -788,78 +786,6 @@ exports.switcheroo = {
             IDENTIFIER: 'switcherooGun'
         }
     }]
-}
-
-// FUN
-exports.florr_tank_eye = {
-    PARENT: "genericTank",
-    BORDERLESS: true,
-    MIRROR_MASTER_ANGLE: true,
-    SHAPE: 'M 0 -1.5 C -1 -1.5 -1 1.5 0 1.5 C 1 1.5 1 -1.5 0 -1.5'
-}
-exports.florr_tank_smile = {
-    PARENT: "genericTank",
-    COLOR: 'black',
-    BORDERLESS: true,
-    MIRROR_MASTER_ANGLE: true,
-    SHAPE: 'M 5 1.5 C 3 -2.5 -3 -2.5 -5 1.5 L -4 2 C -2 -1.5 2 -1.5 4 2 L 5 1.5'
-}
-exports.florr_tank = {
-    PARENT: "genericTank",
-    COLOR: 'yellow',
-    LABEL: 'Flower',
-    STAT_NAMES: {
-        BODY_DAMAGE: 'Flower Thorns',
-        BULLET_SPEED: 'Petal Speed',
-        BULLET_HEALTH: 'Petal Health',
-        BULLET_PEN: 'Petal Penetration',
-        BULLET_DAMAGE: 'Petal Damage',
-        RELOAD: 'Petal Cooldown',
-        MOVE_SPEED: 'Flower Speed',
-        SHIELD_REGEN: 'Photosynthesis',
-        SHIELD_CAP: 'Vacuole Capacity',
-    },
-    GUNS: (() => {
-        let output = []
-        for (let i = 0; i < 32; i++) {
-            output.push({
-                POSITION: {
-                    WIDTH: 10, 
-                    LENGTH: 1, 
-                    X: -2, 
-                    ANGLE: (360/8)*i, 
-                    DELAY: i < 8 ? 1 : i < 16 ? 2 : i < 24 ? 3 : i < 32 ? 4 : 5
-                },
-                PROPERTIES: {
-                    TYPE: 'bullet',
-                    SHOOT_SETTINGS: combineStats([g.basic, {spread: 0}])
-                }
-            })
-        }
-        return output
-    })(),
-    TURRETS: [
-        {
-            POSITION: { SIZE: 3.5, X: -3, Y: 2, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_eye", {COLOR: 'black'}]
-        },
-        {
-            POSITION: { SIZE: 3.5, X: 3, Y: 2, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_eye", {COLOR: 'black'}]
-        },
-        {
-            POSITION: { SIZE: 1.75, X: -3.5, Y: 2.5, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_eye", { COLOR: 'white' }]
-        },
-        {
-            POSITION: { SIZE: 1.75, X: 2.5, Y: 2.5, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_eye", { COLOR: 'white' }]
-        },
-        {
-            POSITION: { SIZE: 1.25, Y: -4, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_smile"]
-        }
-    ]
 }
 
 exports.vanquisher = {
@@ -1157,5 +1083,5 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
     exports.testing.UPGRADES_TIER_0 = ["funTanks", "testingTanks"];
-        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
+        exports.funTanks.UPGRADES_TIER_0 = ["vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
         exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "testDesmos", "tooltipTank"];
