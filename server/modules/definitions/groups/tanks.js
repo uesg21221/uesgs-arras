@@ -1243,6 +1243,7 @@ exports.whirlwind = {
     CONTROLLERS: ["whirlwind"],
     HAS_NO_RECOIL: true,
     STAT_NAMES: statnames.whirlwind,
+    TOOLTIP: "[DEV NOTE] We are aware of an issue dramatically affecting satellite speed when upgrading.",
     TURRETS: [
         {
             POSITION: [8, 0, 0, 0, 360, 1],
@@ -1250,7 +1251,7 @@ exports.whirlwind = {
         }
     ],
     AI: {
-        SPEED: 2.125, 
+        SPEED: 2, 
     }, 
     GUNS: (() => { 
         let output = []
@@ -4615,30 +4616,76 @@ exports.bulwark = {
 exports.tornadoDeco = makeDeco(4);
 exports.tornadoDeco.CONTROLLERS = [["spin", { independent: true }]];
 exports.tornado = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Tornado",
     DANGER: 6,
-    TOOLTIP: "[DEV NOTE] The Tornado does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [10, 0, 0, 0, 360, 1],
             TYPE: "tornadoDeco",
         },
     ],
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 12, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pound]), 
+                    TYPE: ["satellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
 };
 exports.megaTornadoDeco = makeDeco([[0,-1],[0.5,0],[0,1],[-0.5,0]])
 exports.megaTornadoDeco.CONTROLLERS = [["spin", { independent: true }]];
 exports.megaTornado = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Mega Tornado",
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Mega Tornado does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [16, 0, 0, 0, 360, 1],
             TYPE: "megaTornadoDeco",
         },
     ],
+    ANGLE: 180,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 2; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 16, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pound, g.destroy]), 
+                    TYPE: ["satellite", {ANGLE: i * 180}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
 };
 exports.tempestDeco1 = makeDeco(3);
 exports.tempestDeco1.CONTROLLERS = [["spin", { independent: true }]];
@@ -4673,6 +4720,30 @@ exports.thunderbolt = {
             TYPE: "thunderboltDeco",
         },
     ],
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2.5, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 12, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pound]), 
+                    TYPE: ["satellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
 };
 exports.hurricaneDeco = makeDeco(8);
 exports.hurricaneDeco.CONTROLLERS = [["spin", { independent: true }]];
@@ -4691,7 +4762,7 @@ exports.hurricane = {
         },
     ],
     AI: {
-        SPEED: 0.125, 
+        SPEED: 2, 
     }, 
     GUNS: (() => { 
         let output = []
@@ -4728,7 +4799,7 @@ exports.typhoon = {
         },
     ],
     AI: {
-        SPEED: 0.0625/8, 
+        SPEED: 2, 
     }, 
     GUNS: (() => { 
         let output = []
@@ -4777,8 +4848,8 @@ exports.hexaWhirl = {
     HAS_NO_RECOIL: true,
     STAT_NAMES: statnames.mixed,
     AI: {
-        SPEED: 2,
-    },
+        SPEED: 2, 
+    }, 
     TURRETS: [
         {
             POSITION: [8, 0, 0, 0, 360, 1],
