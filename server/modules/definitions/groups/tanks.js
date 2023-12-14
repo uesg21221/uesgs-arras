@@ -5270,7 +5270,7 @@ exports.triplex = {
 }
 exports.quadruplex = {
     PARENT: ["genericTank"],
-    LABEL: "Triplex",
+    LABEL: "Quadruplex",
     DANGER: 7,
     STAT_NAMES: statnames.desmos,
     GUNS: [
