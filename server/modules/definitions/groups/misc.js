@@ -1344,6 +1344,7 @@ exports.tracker3 = {
   PARENT: ["genericTank"],
   LABEL: "Tracker-3",
   FACING_TYPE: "autospin",
+  SKILL_CAP: [0, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
   TURRETS: [
     {
       /*  SIZE     X       Y     ANGLE    ARC */

@@ -419,11 +419,10 @@ exports.masterBullet = {
     PARENT: "missile",
     FACING_TYPE: "veryfastspin",
     MOTION_TYPE: "motor",
-    HAS_NO_RECOIL: true,
+    HAS_NO_RECOIL: false,
     DIE_AT_RANGE: false,
     GUNS: [
         {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([
@@ -432,8 +431,6 @@ exports.masterBullet = {
                     g.tri,
                     g.trifront,
                     g.tonsmorrecoil,
-                    g.weak,
-                    g.morereload,
                 ]),
                 TYPE: "bullet",
                 LABEL: "Front",
@@ -448,8 +445,6 @@ exports.masterBullet = {
                     g.flank,
                     g.tri,
                     g.thruster,
-                    g.weak,
-                    g.morereload,
                 ]),
                 TYPE: "bullet",
                 LABEL: "Thruster",
@@ -464,8 +459,6 @@ exports.masterBullet = {
                     g.flank,
                     g.tri,
                     g.thruster,
-                    g.weak,
-                    g.morereload,
                 ]),
                 TYPE: "bullet",
                 LABEL: "Thruster",
@@ -480,8 +473,6 @@ exports.masterBullet = {
                     g.flank,
                     g.tri,
                     g.thruster,
-                    g.weak,
-                    g.morereload,
                 ]),
                 TYPE: "bullet",
                 LABEL: "Thruster",
@@ -496,8 +487,6 @@ exports.masterBullet = {
                     g.flank,
                     g.tri,
                     g.thruster,
-                    g.weak,
-                    g.morereload,
                 ]),
                 TYPE: "bullet",
                 LABEL: "Thruster",
