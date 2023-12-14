@@ -713,7 +713,7 @@ class StatusEffect extends EventEmitter {
 }
 
 let entitiesIdLog = 0;
-const forceTwiggle = ["autospin", "turnWithSpeed", "spin", "fastspin", "withMotion", "smoothWithMotion", "looseWithMotion"];
+const forceTwiggle = ["autospin", "turnWithSpeed", "spin", "fastspin", "veryfastspin", "withMotion", "smoothWithMotion", "looseWithMotion"];
 class Entity extends EventEmitter {
     constructor(position, master) {
         super();
@@ -1873,6 +1873,9 @@ class Entity extends EventEmitter {
                 break;
             case "fastspin":
                 this.facing += 0.1 / c.runSpeed;
+                break;
+            case "veryfastspin":
+                this.facing += 1 / c.runSpeed;
                 break;
             case "withMotion":
                 this.facing = this.velocity.direction;
