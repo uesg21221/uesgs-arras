@@ -1183,13 +1183,12 @@ exports.desmos = {
     PARENT: "genericTank",
     LABEL: "Desmos",
     STAT_NAMES: statnames.desmos,
-    TOOLTIP: "[DEV NOTE] The Desmos does not function yet yet. This tank is currently just a mockup.",
     GUNS: [
         {
             POSITION: [20, 10, 0.8, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: "bullet"
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: "desmos"}]
             }
         },
         {
@@ -4475,7 +4474,7 @@ exports.tornado = {
     PARENT: ["genericTank"],
     LABEL: "Tornado",
     DANGER: 6,
-    TOOLTIP: "[DEV NOTE] The Tornado does not function yet yet. This tank is currently just a mockup.",
+    TOOLTIP: "[DEV NOTE] The Tornado does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [10, 0, 0, 0, 360, 1],
@@ -4489,7 +4488,7 @@ exports.megaTornado = {
     PARENT: ["genericTank"],
     LABEL: "Mega Tornado",
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Mega Tornado does not function yet yet. This tank is currently just a mockup.",
+    TOOLTIP: "[DEV NOTE] The Mega Tornado does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [16, 0, 0, 0, 360, 1],
@@ -4505,7 +4504,7 @@ exports.tempest = {
     PARENT: ["genericTank"],
     LABEL: "Tempest",
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Tempest does not function yet yet. This tank is currently just a mockup.",
+    TOOLTIP: "[DEV NOTE] The Tempest does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [8, 0, 0, 0, 360, 1],
@@ -4523,7 +4522,7 @@ exports.thunderbolt = {
     PARENT: ["genericTank"],
     LABEL: "Thunderbolt",
     DANGER: 7,
-    TOOLTIP: "[DEV NOTE] The Thunderbolt does not function yet yet. This tank is currently just a mockup.",
+    TOOLTIP: "[DEV NOTE] The Thunderbolt does not function yet. This tank is currently just a mockup.",
     TURRETS: [
         {
             POSITION: [10, 0, 0, 0, 360, 1],
@@ -5146,13 +5145,12 @@ exports.volute = {
     LABEL: "Volute",
     DANGER: 6,
     STAT_NAMES: statnames.desmos,
-    TOOLTIP: "[DEV NOTE] The Volute does not function yet. This tank is currently just a mockup.",
     GUNS: [
         {
             POSITION: [20, 13, 0.8, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound]),
-                TYPE: "bullet",
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, g.pound]),
+                TYPE: ["bullet", {MOTION_TYPE: "desmos"}]
             },
         },
         {
@@ -5170,20 +5168,19 @@ exports.helix = {
     LABEL: "Helix",
     DANGER: 6,
     STAT_NAMES: statnames.desmos,
-    TOOLTIP: "[DEV NOTE] The Helix does not function yet. This tank is currently just a mockup.",
     GUNS: [
         {
             POSITION: [20, 8, 0.75, 0, -5, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin]),
-                TYPE: "bullet",
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: false}]}]
             },
         },
         {
             POSITION: [20, 8, 0.75, 0, 5, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin]),
-                TYPE: "bullet",
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: true}]}]
             },
         },
         {
@@ -5231,27 +5228,26 @@ exports.triplex = {
     LABEL: "Triplex",
     DANGER: 7,
     STAT_NAMES: statnames.desmos,
-    TOOLTIP: "[DEV NOTE] The Triplex does not function yet. This tank is currently just a mockup.",
     GUNS: [
         {
             POSITION: [18, 10, 0.7, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.bent, g.desmos]),
                 TYPE: "bullet",
             },
         },
         {
-            POSITION: [18, 10, 0.7, 0, 0, 45, 0],
+            POSITION: [18, 10, 0.7, 0, 0, 45, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: "bullet",
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.bent, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: "desmos"}]
             },
         },
         {
-            POSITION: [18, 10, 0.7, 0, 0, -45, 0],
+            POSITION: [18, 10, 0.7, 0, 0, -45, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: "bullet",
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.bent, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: true}]}]
             },
         },
         {
@@ -5272,8 +5268,66 @@ exports.triplex = {
         },
     ],
 }
-exports.quadruplex = makeMulti(exports.desmos, 4, "Quadruplex", 45)
-exports.quadruplex.TOOLTIP = "[DEV NOTE] The Quadruplex does not function yet. This tank is currently just a mockup."
+exports.quadruplex = {
+    PARENT: ["genericTank"],
+    LABEL: "Triplex",
+    DANGER: 7,
+    STAT_NAMES: statnames.desmos,
+    GUNS: [
+        {
+            POSITION: [20, 10, 0.8, 0, 0, 45, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {amplitude: 25}]}]
+            }
+        },
+        {
+            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 135, 0]
+        },
+        {
+            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -45, 0]
+        },
+        {
+            POSITION: [20, 10, 0.8, 0, 0, -45, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {amplitude: 25, invert: true}]}]
+            }
+        },
+        {
+            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 45, 0]
+        },
+        {
+            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -135, 0]
+        },
+        {
+            POSITION: [20, 10, 0.8, 0, 0, 135, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {period: 7, amplitude: 10}]}]
+            }
+        },
+        {
+            POSITION: [3.75, 10, 2.125, 1.25, -6.25, -135, 0]
+        },
+        {
+            POSITION: [3.75, 10, 2.125, 1.25, 6.25, 45, 0]
+        },
+        {
+            POSITION: [20, 10, 0.8, 0, 0, -135, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {period: 7, amplitude: 10, invert: true}]}]
+            }
+        },
+        {
+            POSITION: [3.75, 10, 2.125, 1.25, -6.25, -45, 0]
+        },
+        {
+            POSITION: [3.75, 10, 2.125, 1.25, 6.25, 135, 0]
+        },
+    ],
+}
 
 // Smasher upgrades
 exports.megaSmasher = {

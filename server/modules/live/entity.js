@@ -1070,6 +1070,7 @@ class Entity extends EventEmitter {
         }
         if (set.IGNORED_BY_AI != null) this.ignoredByAi = set.IGNORED_BY_AI;
         if (set.MOTION_TYPE != null) this.motionType = set.MOTION_TYPE;
+        if (typeof this.motionType == "string") this.motionType = [this.motionType];
         if (set.FACING_TYPE != null) this.facingType = set.FACING_TYPE;
         if (set.MIRROR_MASTER_ANGLE != null) this.settings.mirrorMasterAngle = set.MIRROR_MASTER_ANGLE
         if (set.DRAW_HEALTH != null) this.settings.drawHealth = set.DRAW_HEALTH;
@@ -1573,7 +1574,7 @@ class Entity extends EventEmitter {
         this.activation.update();
         this.facing = this.bond.facing + this.bound.angle;
         this.facingType = "bound";
-        this.motionType = "bound";
+        this.motionType = ["bound"];
         this.move();
     }
     get level() {
@@ -1718,16 +1719,18 @@ class Entity extends EventEmitter {
             this.maxSpeed = this.topSpeed;
             this.damp = 100;
         }
-        switch (this.motionType) {
+        let type = this.motionType[0],
+            args = this.motionType[1] ?? {};
+        switch (type) {
             case "grow":
-                this.SIZE += 1;
+                this.SIZE += args.growSpeed ?? 1;
                 break;
             case "fastgrow":
-                this.SIZE += 5;
+                this.SIZE += args.growSpeed ?? 5;
                 break;
             case "glide":
                 this.maxSpeed = this.topSpeed;
-                this.damp = 0.05;
+                this.damp = args.damp ?? 0.05;
                 break;
             case "motor":
                 this.maxSpeed = 0;
@@ -1743,14 +1746,14 @@ class Entity extends EventEmitter {
                 }
                 break;
             case "spgw":
-                this.SIZE += 0.75;
+                this.SIZE += args.growSpeed ?? 0.75;
                 this.maxSpeed = this.topSpeed;
-                this.damp = -0.025;
+                this.damp = args.damp ?? -0.025;
                 break;
             case "chonk":
-                this.SIZE += 50;
+                this.SIZE += args.growSpeed ?? 50;
                 this.maxSpeed = this.topSpeed;
-                this.damp = -0.025;
+                this.damp = args.damo ?? -0.025;
                 break;
             case "swarm":
                 this.maxSpeed = this.topSpeed;
@@ -1834,6 +1837,18 @@ class Entity extends EventEmitter {
                     }
                 }
                 break;
+            case "desmos":
+                this.damp = 0;
+                if (this.waveReversed == null) this.waveReversed = this.master.control.alt ? -1 : 1;
+                if (this.waveAngle == null) {
+                    this.waveAngle = this.master.facing;
+                    this.velocity.x = this.velocity.length * Math.cos(this.waveAngle);
+                    this.velocity.y = this.velocity.length * Math.sin(this.waveAngle);;
+                }
+                let waveX = this.maxSpeed * 5 * Math.cos((this.RANGE - this.range) / (args.period ?? 4) * 2);
+                let waveY = (args.amplitude ?? 15) * Math.cos((this.RANGE - this.range) / (args.period ?? 4)) * this.waveReversed * (args.invert ? -1 : 1);
+                this.x += Math.cos(this.waveAngle) * waveX - Math.sin(this.waveAngle) * waveY;
+                this.y += Math.sin(this.waveAngle) * waveX + Math.cos(this.waveAngle) * waveY;
         }
         this.accel.x += engine.x * this.control.power;
         this.accel.y += engine.y * this.control.power;
