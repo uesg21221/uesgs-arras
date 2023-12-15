@@ -5502,57 +5502,58 @@ exports.autoSmasher = makeAuto({
 })
 
 // Upgrade paths
-exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "whirlwind", "desmos"];
+exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "whirlwind", "desmos"]
     exports.basic.UPGRADES_TIER_2 = ["smasher"]
-        exports.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "autoSmasher", "landmine"];
+        exports.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "autoSmasher", "landmine"]
         exports.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
 
-    exports.twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "hexaTank", "helix"];
-        exports.twin.UPGRADES_TIER_3 = ["dual", "bulwark", "musket"];
-        exports.doubleTwin.UPGRADES_TIER_3 = ["tripleTwin", "hewnDouble", "autoDouble", "bentDouble"];
-        exports.tripleShot.UPGRADES_TIER_3 = ["pentaShot", "spreadshot", "bentHybrid", "bentDouble", "triplet", "triplex"];
+    exports.twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "hexaTank", "helix"]
+        exports.twin.UPGRADES_TIER_3 = ["dual", "bulwark", "musket"]
+        exports.doubleTwin.UPGRADES_TIER_3 = ["tripleTwin", "hewnDouble", "autoDouble", "bentDouble"]
+        exports.tripleShot.UPGRADES_TIER_3 = ["pentaShot", "spreadshot", "bentHybrid", "bentDouble", "triplet", "triplex"]
 
-    exports.sniper.UPGRADES_TIER_2 = ["assassin", "hunter", "minigun", "rifle"];
-        exports.sniper.UPGRADES_TIER_3 = ["bushwhacker"];
-        exports.assassin.UPGRADES_TIER_3 = ["ranger", "falcon", "stalker", "autoAssassin", "single"];
-        exports.hunter.UPGRADES_TIER_3 = ["predator", "xHunter", "poacher", "ordnance", "dual"];
-        exports.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman"];
+    exports.sniper.UPGRADES_TIER_2 = ["assassin", "hunter", "minigun", "rifle"]
+        exports.sniper.UPGRADES_TIER_3 = ["bushwhacker"]
+        exports.assassin.UPGRADES_TIER_3 = ["ranger", "falcon", "stalker", "autoAssassin", "single"]
+        exports.hunter.UPGRADES_TIER_3 = ["predator", "xHunter", "poacher", "ordnance", "dual"]
+        exports.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman"]
 
-    exports.machineGun.UPGRADES_TIER_2 = ["artillery", "minigun", "gunner", "sprayer"];
-        exports.minigun.UPGRADES_TIER_3 = ["streamliner", "nailgun", "cropDuster", "barricade", "vulture"];
-        exports.gunner.UPGRADES_TIER_3 = ["autoGunner", "nailgun", "auto4", "machineGunner", "gunnerTrapper", "cyclone", "overgunner"];
-        exports.sprayer.UPGRADES_TIER_3 = ["redistributor", "phoenix", "atomizer", "focal"];
+    exports.machineGun.UPGRADES_TIER_2 = ["artillery", "minigun", "gunner", "sprayer"]
+        exports.minigun.UPGRADES_TIER_3 = ["streamliner", "nailgun", "cropDuster", "barricade", "vulture"]
+        exports.gunner.UPGRADES_TIER_3 = ["autoGunner", "nailgun", "auto4", "machineGunner", "gunnerTrapper", "cyclone", "overgunner"]
+        exports.sprayer.UPGRADES_TIER_3 = ["redistributor", "phoenix", "atomizer", "focal"]
 
-    exports.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "auto3", "trapGuard", "triTrapper"];
-        exports.flankGuard.UPGRADES_TIER_3 = ["tripleTwin", "quadruplex"];
-        exports.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper", "hexaWhirl"];
-        exports.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "surfer", "eagle", "phoenix", "vulture", "master"];
-        exports.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee", "whirl3"];
+    exports.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "auto3", "trapGuard", "triTrapper"]
+        exports.flankGuard.UPGRADES_TIER_3 = ["tripleTwin", "quadruplex"]
+        exports.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper", "hexaWhirl"]
+        exports.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "surfer", "eagle", "phoenix", "vulture", "master"]
+        exports.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee", "whirl3"]
 
-    exports.director.UPGRADES_TIER_2 = ["overseer", "cruiser", "underseer", "spawner"];
-        exports.director.UPGRADES_TIER_3 = ["manager", "bigCheese"];
-        exports.overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "autoOverseer", "overdrive", "commander"];
-        exports.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "autoCruiser", "commander"];
-        exports.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor", "prophet"];
-        exports.spawner.UPGRADES_TIER_3 = ["factory", "autoSpawner"];
+    exports.director.UPGRADES_TIER_2 = ["overseer", "cruiser", "underseer", "spawner"]
+        exports.director.UPGRADES_TIER_3 = ["manager", "bigCheese"]
+        exports.overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "autoOverseer", "overdrive", "commander"]
+        exports.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "autoCruiser", "commander"]
+        exports.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor", "prophet"]
+        exports.spawner.UPGRADES_TIER_3 = ["factory", "autoSpawner"]
 
-    exports.pounder.UPGRADES_TIER_2 = ["destroyer", "builder", "artillery", "launcher", "volute"];
-        exports.pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"];
-        exports.destroyer.UPGRADES_TIER_3 = ["conqueror", "annihilator", "hybrid", "construct"];
-        exports.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun", "munition"];
-        exports.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "rocketeer", "fieldGun", "vortex"];
+    exports.pounder.UPGRADES_TIER_2 = ["destroyer", "builder", "artillery", "launcher", "volute"]
+        exports.pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"]
+        exports.destroyer.UPGRADES_TIER_3 = ["conqueror", "annihilator", "hybrid", "construct"]
+        exports.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun", "munition"]
+        exports.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "rocketeer", "fieldGun", "vortex"]
 
-    exports.trapper.UPGRADES_TIER_2 = ["builder", "triTrapper", "trapGuard"];
-        exports.trapper.UPGRADES_TIER_3 = ["barricade", "overtrapper"];
-        exports.builder.UPGRADES_TIER_3 = ["construct", "autoBuilder", "engineer", "boomer", "assembler", "architect", "conqueror"];
-        exports.triTrapper.UPGRADES_TIER_3 = ["fortress", "hexaTrapper", "septaTrapper", "architect"];
-        exports.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark", "whirlGuard"];
+    exports.trapper.UPGRADES_TIER_2 = ["builder", "triTrapper", "trapGuard"]
+        exports.trapper.UPGRADES_TIER_3 = ["barricade", "overtrapper"]
+        exports.builder.UPGRADES_TIER_3 = ["construct", "autoBuilder", "engineer", "boomer", "assembler", "architect", "conqueror"]
+        exports.triTrapper.UPGRADES_TIER_3 = ["fortress", "hexaTrapper", "septaTrapper", "architect"]
+        exports.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark", "whirlGuard"]
 
-    exports.whirlwind.UPGRADES_TIER_2 = ["tornado", "hurricane"];
-        exports.whirlwind.UPGRADES_TIER_3 = ["hexaWhirl", "munition", "whirl3", "whirlGuard", "prophet", "vortex"];
-        exports.tornado.UPGRADES_TIER_3 = ["megaTornado", "tempest", "thunderbolt"];
-        exports.hurricane.UPGRADES_TIER_3 = ["typhoon", "blizzard"];
+    exports.whirlwind.UPGRADES_TIER_2 = ["tornado", "hurricane"]
+        exports.whirlwind.UPGRADES_TIER_3 = ["hexaWhirl", "munition", "whirl3", "whirlGuard", "prophet", "vortex"]
+        exports.tornado.UPGRADES_TIER_3 = ["megaTornado", "tempest", "thunderbolt"]
+        exports.hurricane.UPGRADES_TIER_3 = ["typhoon", "blizzard"]
 
-    exports.desmos.UPGRADES_TIER_2 = ["volute", "helix", "undertow"];
-        exports.volute.UPGRADES_TIER_3 = ["sidewinder"];
-        exports.helix.UPGRADES_TIER_3 = ["triplex", "quadruplex"];
+    exports.desmos.UPGRADES_TIER_2 = ["volute", "helix", "undertow"]
+        exports.volute.UPGRADES_TIER_3 = ["sidewinder"]
+        exports.helix.UPGRADES_TIER_3 = ["triplex", "quadruplex"]
+        exports.undertow.UPGRADES_TIER_3 = ["riptide"]
