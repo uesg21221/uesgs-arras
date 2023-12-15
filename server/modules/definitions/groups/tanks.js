@@ -4930,6 +4930,27 @@ exports.helix = {
         },
     ],
 }
+exports.undertow = {
+    PARENT: "genericTank",
+    LABEL: "Undertow",
+    DANGER: 6,
+    TOOLTIP: "[DEV NOTE] The Undertow does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: [14, 12, 0.8, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, { size: 0.8, reload: 1.25 }]),
+                TYPE: "bullet"
+            }
+        },
+        {
+            POSITION: [11.25, 8, 0.15, 4.25, 4, 13.5, 0]
+        },
+        {
+            POSITION: [11.25, 8, 0.15, 4.25, -4, -13.5, 0]
+        }
+    ]
+}
 
 // Volute upgrades
 exports.sidewinder = {
@@ -5506,6 +5527,6 @@ exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "
         exports.tornado.UPGRADES_TIER_3 = ["megaTornado", "tempest", "thunderbolt"];
         exports.hurricane.UPGRADES_TIER_3 = ["typhoon", "blizzard"];
 
-    exports.desmos.UPGRADES_TIER_2 = ["volute", "helix"];
+    exports.desmos.UPGRADES_TIER_2 = ["volute", "helix", "undertow"];
         exports.volute.UPGRADES_TIER_3 = ["sidewinder"];
         exports.helix.UPGRADES_TIER_3 = ["triplex", "quadruplex"];
