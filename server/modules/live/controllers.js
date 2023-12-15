@@ -721,31 +721,6 @@ class io_formulaTarget extends IO {
         };
     }
 }
-
-class io_orbitOld extends IO {
-    constructor (b, opts = {}) {
-        super(b);
-        this.radius = opts.radius || 3;
-        this.spin = opts.spin || 0.1;
-    }
-    think (input) {
-        let distance = this.body.master.size * this.radius,
-            angle = this.spin + Math.atan2(this.body.master.y - this.body.y, this.body.master.x - this.body.x);
-
-        //this.body.x = this.body.master.x + distance * Math.cos(angle);
-        //this.body.y = this.body.master.y + distance * Math.sin(angle);
-        let goalRelative = new Vector(this.body.master.x + distance * Math.cos(angle) - this.body.x, this.body.master.y + distance * Math.sin(angle) - this.body.y),
-            goalRelativeLength = goalRelative.length;
-        goalRelative.x /= goalRelativeLength;
-        goalRelative.y /= goalRelativeLength;
-        return {
-            goal: {
-                x: this.body.x + goalRelative.x,
-                y: this.body.y + goalRelative.y
-            }
-        };
-    }
-}
 class io_whirlwind extends IO {
   constructor(body) {
     super(body);
@@ -814,7 +789,6 @@ let ioTypes = {
     boomerang: io_boomerang,
     formulaTarget: io_formulaTarget,
     orbit: io_orbit,
-    orbitOld: io_orbitOld,
     goToMasterTarget: io_goToMasterTarget,
     avoid: io_avoid,
     minion: io_minion,
