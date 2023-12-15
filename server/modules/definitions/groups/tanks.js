@@ -4939,7 +4939,7 @@ exports.undertow = {
         {
             POSITION: [14, 12, 0.8, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, { size: 0.8, reload: 1.25 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, { size: 0.8, reload: 1.2 }]),
                 TYPE: "bullet"
             }
         },
@@ -5081,6 +5081,32 @@ exports.quadruplex = {
             POSITION: [3.75, 10, 2.125, 1.25, 6.25, 135, 0]
         },
     ],
+}
+
+// Undertow upgrades
+exports.riptide = {
+    PARENT: "genericTank",
+    LABEL: "Riptide",
+    DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Riptide does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: [6.5, 23.5, 0.25, 3, 0, 180, 0],
+        },
+        {
+            POSITION: [18, 16, 0.75, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, { size: 0.75, reload: 1.2 }]),
+                TYPE: "bullet"
+            }
+        },
+        {
+            POSITION: [17, 16, 0.1, 0.25, 4, 13.5, 0]
+        },
+        {
+            POSITION: [17, 16, 0.1, 0.25, -4, -13.5, 0]
+        }
+    ]
 }
 
 // Smasher upgrades
