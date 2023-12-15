@@ -209,10 +209,14 @@ exports.funTanks = {
     PARENT: ["menu"],
     LABEL: "Fun Tanks",
 };
-exports.testingTanks = {
-    PARENT: ["menu"],
-    LABEL: "Testing Tanks",
-};
+exports.features = {
+    PARENT: "menu",
+    LABEL: "Features"
+}
+exports.overpowered = {
+    PARENT: "menu",
+    LABEL: "Overpowered"
+}
 
 // GENERATORS
 function compileMatrix(matrix, matrix2Entrance) {
@@ -363,13 +367,13 @@ for (let x = 0; x < tensorWidth; x++) for (let y = 0; y < tensorHeight; y++) for
 
 exports.diamondShape = {
     PARENT: ["basic"],
-    LABEL: "Diamond Test Shape",
+    LABEL: "Rotated Body",
     SHAPE: 4.5
 };
 
 exports.rotatedTrap = {
     PARENT: ["basic"],
-    LABEL: "Rotated Trap Test Shape",
+    LABEL: "Rotated Inverted Body",
     SHAPE: -3.5
 };
 
@@ -380,6 +384,7 @@ exports.mummyHat = {
 exports.mummy = {
     PARENT: ["drone"],
     SHAPE: 4,
+    NECRO: [4],
     TURRETS: [{
         POSITION: [20 * Math.SQRT1_2, 0, 0, 180, 360, 1],
         TYPE: ["mummyHat"]
@@ -454,7 +459,7 @@ exports.colorMan = {
 
 exports.miscTestHelper2 = {
     PARENT: ["genericTank"],
-    LABEL: "Turret Reload Test 3",
+    LABEL: "Turret Reload 3",
     MIRROR_MASTER_ANGLE: true,
     COLOR: -1,
     GUNS: [
@@ -470,7 +475,7 @@ exports.miscTestHelper2 = {
 };
 exports.miscTestHelper = {
     PARENT: ["genericTank"],
-    LABEL: "Turret Reload Test 2",
+    LABEL: "Turret Reload 2",
     //MIRROR_MASTER_ANGLE: true,
     COLOR: {
         BASE: -1,
@@ -495,7 +500,7 @@ exports.miscTestHelper = {
 };
 exports.miscTest = {
     PARENT: ["genericTank"],
-    LABEL: "Turret Reload Test",
+    LABEL: "Turret Reload",
     COLOR: "teal",
     GUNS: [
         {
@@ -538,7 +543,7 @@ exports.mmaTest1 = {
 }
 exports.mmaTest = {
     PARENT: ["genericTank"],
-    LABEL: "Mirror Master Angle Test",
+    LABEL: "Mirror Master Angle",
     TURRETS: [
         {
             POSITION: [10, 0, 0, 0, 360, 1],
@@ -560,8 +565,8 @@ exports.vulnturrettest_turret = {
 
 exports.vulnturrettest = {
     PARENT: ["genericTank"],
-    LABEL: "Vulurable Turret Test",
-    TOOLTIP: 'warning: vuln turrets aren\'t done yet',
+    LABEL: "Vulnerable Turrets",
+    TOOLTIP: "[DEV NOTE] Vulnerable turrets are still being worked on and may not function as intended!",
     BODY: {
         FOV: 2,
     },
@@ -589,7 +594,7 @@ exports.vulnturrettest = {
 // unfinished
 exports.alphaGunTest = {
     PARENT: "basic",
-    LABEL: "Alpha Gun Test",
+    LABEL: "Translucent Guns",
     GUNS: [{
         POSITION: {},
         PROPERTIES: {
@@ -602,7 +607,7 @@ exports.alphaGunTest = {
 
 exports.onTest = {
     PARENT: 'genericTank',
-    LABEL: '`ON` property test',
+    LABEL: "'ON' property",
     TOOLTIP: [
         'Refer to exports.onTest to know more ',
         'On collide is a bit buggy right now, please use other methods until its fixed'
@@ -669,6 +674,12 @@ exports.auraBasicGen = addAura();
 exports.auraBasic = {
     PARENT: ["genericTank"],
     LABEL: "Aura Basic",
+    TURRETS: [
+        {
+            POSITION: [14, 0, 0, 0, 0, 1],
+            TYPE: "auraBasicGen"
+        }
+    ],
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
@@ -678,13 +689,6 @@ exports.auraBasic = {
             },
         },
     ],
-    TURRETS: [
-        {
-            POSITION: [18, 0, 0, 0, 0, 0],
-            TYPE: "auraBasicGen",
-            VULNERABLE: true,
-        }
-    ],
 };
 exports.auraHealerGen = addAura(-1);
 exports.auraHealer = {
@@ -693,12 +697,11 @@ exports.auraHealer = {
     TURRETS: [
         {
             POSITION: [14, 0, 0, 0, 0, 1],
-            TYPE: "auraHealerGen",
+            TYPE: "auraHealerGen"
         }
     ],
     GUNS: [
         {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [8, 9, -0.5, 12.5, 0, 0, 0],
         },
         {
@@ -788,78 +791,6 @@ exports.switcheroo = {
             IDENTIFIER: 'switcherooGun'
         }
     }]
-}
-
-// FUN
-exports.florr_tank_eye = {
-    PARENT: "genericTank",
-    BORDERLESS: true,
-    MIRROR_MASTER_ANGLE: true,
-    SHAPE: 'M 0 -1.5 C -1 -1.5 -1 1.5 0 1.5 C 1 1.5 1 -1.5 0 -1.5'
-}
-exports.florr_tank_smile = {
-    PARENT: "genericTank",
-    COLOR: 'black',
-    BORDERLESS: true,
-    MIRROR_MASTER_ANGLE: true,
-    SHAPE: 'M 5 1.5 C 3 -2.5 -3 -2.5 -5 1.5 L -4 2 C -2 -1.5 2 -1.5 4 2 L 5 1.5'
-}
-exports.florr_tank = {
-    PARENT: "genericTank",
-    COLOR: 'yellow',
-    LABEL: 'Flower',
-    STAT_NAMES: {
-        BODY_DAMAGE: 'Flower Thorns',
-        BULLET_SPEED: 'Petal Speed',
-        BULLET_HEALTH: 'Petal Health',
-        BULLET_PEN: 'Petal Penetration',
-        BULLET_DAMAGE: 'Petal Damage',
-        RELOAD: 'Petal Cooldown',
-        MOVE_SPEED: 'Flower Speed',
-        SHIELD_REGEN: 'Photosynthesis',
-        SHIELD_CAP: 'Vacuole Capacity',
-    },
-    GUNS: (() => {
-        let output = []
-        for (let i = 0; i < 32; i++) {
-            output.push({
-                POSITION: {
-                    WIDTH: 10, 
-                    LENGTH: 1, 
-                    X: -2, 
-                    ANGLE: (360/8)*i, 
-                    DELAY: i < 8 ? 1 : i < 16 ? 2 : i < 24 ? 3 : i < 32 ? 4 : 5
-                },
-                PROPERTIES: {
-                    TYPE: 'bullet',
-                    SHOOT_SETTINGS: combineStats([g.basic, {spread: 0}])
-                }
-            })
-        }
-        return output
-    })(),
-    TURRETS: [
-        {
-            POSITION: { SIZE: 3.5, X: -3, Y: 2, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_eye", {COLOR: 'black'}]
-        },
-        {
-            POSITION: { SIZE: 3.5, X: 3, Y: 2, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_eye", {COLOR: 'black'}]
-        },
-        {
-            POSITION: { SIZE: 1.75, X: -3.5, Y: 2.5, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_eye", { COLOR: 'white' }]
-        },
-        {
-            POSITION: { SIZE: 1.75, X: 2.5, Y: 2.5, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_eye", { COLOR: 'white' }]
-        },
-        {
-            POSITION: { SIZE: 1.25, Y: -4, LAYER: 1, ANGLE: -90 },
-            TYPE: ["florr_tank_smile"]
-        }
-    ]
 }
 
 exports.vanquisher = {
@@ -1038,48 +969,10 @@ exports.weirdAutoBasic = {
         }]
     }]
 };
-exports.testDesmosBullet = {
-    LABEL: "Drone",
-    TYPE: "bullet",
-    ACCEPTS_SCORE: false,
-    DANGER: 2,
-    SHAPE: 3,
-    CONTROLLERS: ['formulaTarget'],
-    FACING_TYPE: "smoothToTarget",
-    BODY: {
-        PENETRATION: 1.2,
-        PUSHABILITY: 0.6,
-        ACCELERATION: 0.75,
-        HEALTH: 0.3,
-        DAMAGE: 3.375,
-        SPEED: 10,
-        RANGE: 200,
-        DENSITY: 0.03,
-        RESIST: 1.5,
-        FOV: 0.5,
-    },
-    DRAW_HEALTH: false,
-    CLEAR_ON_MASTER_UPGRADE: true,
-    BUFF_VS_FOOD: true,
-    MOTION_TYPE: 'motor'
-};
-exports.testDesmos = {
-    PARENT: 'genericTank',
-    LABEL: "Test Desmos",
-    STAT_NAMES: statnames.desmos,
-    GUNS: [{
-        POSITION: {},
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic]),
-            TYPE: 'testDesmosBullet',
-            MAX_CHILDREN: 3,
-        }
-    }]
-};
 
 exports.tooltipTank = {
     PARENT: 'genericTank',
-    LABEL: "Tooltip Test",
+    LABEL: "Tooltips",
     UPGRADE_TOOLTIP: "Allan please add details"
 }
 
@@ -1156,6 +1049,6 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
         exports.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
-    exports.testing.UPGRADES_TIER_0 = ["funTanks", "testingTanks"];
-        exports.funTanks.UPGRADES_TIER_0 = ["florr_tank", "vanquisher", "armyOfOne", "godbasic", "maximumOverdrive", "mummifier", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", "tracker3", ["developer", "developer"]];
-        exports.testingTanks.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "testDesmos", "tooltipTank"];
+    exports.testing.UPGRADES_TIER_0 = ["features", "overpowered", "vanquisher", "mummifier", "tracker3"];
+        exports.features.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "tooltipTank", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
+        exports.overpowered.UPGRADES_TIER_0 = ["armyOfOne", "godbasic", "maximumOverdrive"]
