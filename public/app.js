@@ -782,8 +782,11 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     }
     // Draw turrets above us
     for (let i = upperTurretsIndex; i < source.turrets.length; i++) {
-        let t = source.turrets[i],
-            ang = t.direction + t.angle + rot,
+        let t = source.turrets[i];
+        t.lerpedFacing == undefined
+            ? (t.lerpedFacing = t.facing)
+            : (t.lerpedFacing = util.lerpAngle(t.lerpedFacing, t.facing, 0.1, true));
+        let ang = t.direction + t.angle + rot,
             len = t.offset * drawSize,
             facing;
         if (t.mirrorMasterAngle || turretsObeyRot) {
