@@ -2931,9 +2931,9 @@ module.exports = ({ Class }) => {
 		PARENT: 'autoTankGun',
 		BODY: {FOV: 2},
 		GUNS: [
-			...addGunner({length: 16, width: 4, y: -3.5, delay: 0.5}, 0, [g.basic, g.auto, g.gunner, g.power, g.twin, g.bent, {recoil: 0.5}]),
-			...addGunner({length: 16, width: 4, y: 3.5, delay: 0.5}, 0, [g.basic, g.auto, g.gunner, g.power, g.twin, g.bent, {recoil: 0.5}]),
-			...addGunner({length: 18, width: 4, delay: 0}, 0, [g.basic, g.auto, g.gunner, g.power, g.twin, g.bent, {recoil: 0.5}]),
+			...addGunner({length: 16, width: 4, y: -3.5, delay: 0.5}, 0, [g.basic, g.auto, g.gunner, g.power, g.twin, g.bent]),
+			...addGunner({length: 16, width: 4, y: 3.5, delay: 0.5}, 0, [g.basic, g.auto, g.gunner, g.power, g.twin, g.bent]),
+			...addGunner({length: 18, width: 4, delay: 0}, 0, [g.basic, g.auto, g.gunner, g.power, g.twin, g.bent]),
 			{
 				POSITION: [7, 11, -1.3, 5, 0, 0, 0],
 				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.5 } },
@@ -4303,8 +4303,8 @@ module.exports = ({ Class }) => {
 		PARENT: 'autoTankGun',
 		BODY: {FOV: 5},
 		GUNS: [
-			...addGunner({length: 25.5, width: 5, y: -3.5}, 0, [g.basic, g.sniper, g.assass, g.flank, g.flank, g.auto]),
-			...addGunner({length: 25.5, width: 5, y: 3.5, delay: 0.5}, 0, [g.basic, g.sniper, g.assass, g.flank, g.flank, g.auto]),
+			...addGunner({length: 25.5, width: 5, y: -3.5}, 0, [g.basic, g.sniper, g.assass, g.flank, g.flank, g.auto, {recoil: 0.9}]),
+			...addGunner({length: 25.5, width: 5, y: 3.5, delay: 0.5}, 0, [g.basic, g.sniper, g.assass, g.flank, g.flank, g.auto, {recoil: 0.9}]),
 			{
 				POSITION: [7, 13, -1.3, 6, 0, 0, 0],
 				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.5 }, },
@@ -6432,7 +6432,7 @@ module.exports = ({ Class }) => {
 			Lucifer: 'Galaxy',
 			Sterilizer: 'Evaporator',
 			Hielaman: 'Protostar', 
-			Jackhammer: 'Luminance',
+			Jackhammer: 'Illuminator',
 		},
 		Bruiser: {
 			Bruiser: 'Bruiser',
