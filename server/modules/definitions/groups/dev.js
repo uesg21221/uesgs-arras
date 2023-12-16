@@ -302,6 +302,8 @@ let generatorMatrix = [
       "rainbowSquare",
       "transSquare",
       "SquareRelic",
+      "gravel",
+      "rock",
     ],
     [
       "triangle",
@@ -1349,8 +1351,8 @@ exports.developer.UPGRADES_TIER_0 = [
   "eggGenerator",
   "testing",
   "addons",
-  "rapture",
-  "AutoRapture",
+  "betatester",
+  "testbedformods",
 ];
 exports.tanks.UPGRADES_TIER_0 = [
   "basic",

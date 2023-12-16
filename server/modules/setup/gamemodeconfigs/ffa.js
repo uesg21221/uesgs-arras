@@ -1,1 +1,3 @@
-module.exports = {};
+module.exports = {
+  RANDOM_COLORS: true,
+};

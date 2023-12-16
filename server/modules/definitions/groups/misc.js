@@ -1735,3 +1735,437 @@ exports.medoing = {
     },
   ],
 };
+exports.basicminion = {
+  PARENT: "genericTank",
+  //CONTROLLERS: ["alwaysFire"],
+  LABEL: "Basic",
+  DANGER: 4,
+  BODY: {
+    ACCELERATION: base.ACCEL * 1,
+    SPEED: base.SPEED * 1,
+    HEALTH: base.HEALTH * 1,
+    DAMAGE: base.DAMAGE * 1,
+    PENETRATION: base.PENETRATION * 1,
+    SHIELD: base.SHIELD * 1,
+    REGEN: base.REGEN * 1,
+    FOV: base.FOV * 1,
+    DENSITY: base.DENSITY * 1,
+    PUSHABILITY: 1,
+    HETERO: 3,
+  },
+  GUNS: [
+    {
+      POSITION: [18, 8, 1, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basiception]),
+        TYPE: "bullet",
+        COLOR: "black",
+        LABEL: "",
+        STAT_CALCULATOR: 0,
+        WAIT_TO_CYCLE: false,
+        AUTOFIRE: true,
+        SYNCS_SKILLS: false,
+        MAX_CHILDREN: 0,
+        ALT_FIRE: false,
+        NEGATIVE_RECOIL: false,
+      },
+    },
+  ],
+};
+exports.basiception = {
+  PARENT: "genericTank",
+  //CONTROLLERS: ["alwaysFire", "mapAltToFire"],
+  TOOLTIP: "Tank Made By Content lol", // AE or other developer Please dont delete this lol but if you want go ahead! :D
+  LABEL: "Basic-Ception",
+  BODY: {
+    ACCELERATION: base.ACCEL * 1,
+    SPEED: base.SPEED * 1,
+    HEALTH: base.HEALTH * 1,
+    DAMAGE: base.DAMAGE * 1,
+    PENETRATION: base.PENETRATION * 1,
+    SHIELD: base.SHIELD * 1,
+    REGEN: base.REGEN * 1,
+    FOV: base.FOV * 1,
+    DENSITY: base.DENSITY * 1,
+    PUSHABILITY: 1,
+    HETERO: 3,
+  },
+  GUNS: [
+    {
+      POSITION: [18, 8, 1, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic]),
+        TYPE: "basicminion",
+        COLOR: "grey",
+        LABEL: "",
+        STAT_CALCULATOR: 0,
+        WAIT_TO_CYCLE: false,
+        AUTOFIRE: false,
+        SYNCS_SKILLS: false,
+        MAX_CHILDREN: 0,
+        ALT_FIRE: false,
+        NEGATIVE_RECOIL: false,
+      },
+    },
+  ],
+};
+exports.tripilet = {
+  PARENT: ["genericTank"],
+  LABEL: "Tripilet",
+  TOOLTIP: "Click G To Shoot Your Gun That Pushes You!",
+  GUNS: [
+    {
+      POSITION: [18, 8, 1, 0, -6, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.norecoil]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [18, 8, 1, 0, 6, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.norecoil]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [19, 8, 1, 1, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.norecoil]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [14, 16, 1.4, 0, 0, 180, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.mach]),
+        TYPE: "bullet",
+        ALT_FIRE: true,
+      },
+    },
+    {
+      POSITION: [12, 8, 1.3, 0, 0, -90, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.swarm]),
+        TYPE: "swarm",
+      },
+    },
+    {
+      POSITION: [12, 8, 1.3, 0, 0, 90, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.swarm]),
+        TYPE: "swarm",
+      },
+    },
+  ],
+};
+
+// Ceptionists
+// Auto Branch Upgrades!
+exports.autobasic.UPGRADES_TIER_1 = [
+  "AutoTwin",
+  "AutoSniper",
+  "AutoMachine",
+  "AutoFlankGuard",
+  "AutoDirector",
+  "AutoPounder",
+  "AutoTrapper",
+];
+
+// Auto Branches
+exports.autobasic = makeAuto(exports.basic, "Auto-Basic", {
+  type: exports.AutoTurret,
+  size: 12,
+});
+exports.AutoBasic.UPGRADE_LABEL = "Auto-Basic";
+
+exports.AutoTwin = makeAuto(exports.twin, "Auto-Twin", {
+  type: exports.AutoTurret,
+  size: 12,
+});
+exports.AutoTwin.UPGRADE_LABEL = "Auto-Twin";
+
+exports.AutoMachine = makeAuto(exports.machineGun, "Auto-Machine Gun", {
+  type: exports.AutoTurret,
+  size: 12,
+});
+exports.AutoMachine.UPGRADE_LABEL = "Auto-Machine Gun";
+
+exports.AutoSniper = makeAuto(exports.sniper, "Auto-Sniper", {
+  type: exports.AutoTurret,
+  size: 12,
+});
+exports.AutoSniper.UPGRADE_LABEL = "Auto-Sniper";
+
+exports.AutoTrapper = makeAuto(exports.trapper, "Auto-Trapper", {
+  type: exports.AutoTurret,
+  size: 12,
+});
+exports.AutoTrapper.UPGRADE_LABEL = "Auto-Trapper";
+
+exports.AutoDirector = makeAuto(exports.director, "Auto-Director", {
+  type: exports.AutoTurret,
+  size: 12,
+});
+exports.AutoDirector.UPGRADE_LABEL = "Auto-Director";
+
+exports.AutoPounder = makeAuto(exports.pounder, "Auto-Pounder", {
+  type: exports.AutoTurret,
+  size: 12,
+});
+exports.AutoPounder.UPGRADE_LABEL = "Auto-Pounder";
+
+exports.AutoFlankGuard = makeAuto(exports.flankGuard, "Auto-Flank Guard", {
+  type: exports.AutoTurret,
+  size: 12,
+});
+exports.AutoFlankGuard.UPGRADE_LABEL = "Auto-Flank Guard";
+
+// Game Moderator Menu's
+//exports.unreleasedtanks.UPGRADES_TIER_0 = [
+//"betatester",
+// "ceptioniststanks",
+//"tripilet",
+//];
+//exports.removedtanks.UPGRADES_TIER_0 = ["betatester"];
+//exports.ceptioniststanks.UPGRADES_TIER_0 = ["basiception"];
+exports.testbedformods = {
+  PARENT: "menu",
+  COLOR: 1,
+  LABEL: "Game Moderator Menu",
+};
+
+exports.balls = {
+  PARENT: ["genericTank"],
+  LABEL: "Ball",
+  COLOR: 15,
+  GUNS: [
+    {
+      POSITION: [1, 8, 1, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic]),
+        TYPE: "trianglebullet",
+        COLOR: "red",
+      },
+    },
+  ],
+};
+
+exports.octothot = {
+  PARENT: ["genericTank"],
+  LABEL: "Octo Thot Destoryer!",
+  COLOR: 36,
+  GUNS: [
+    {
+      POSITION: [37, 18, 5, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.thot]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [37, 18, 5, 0, 0, -90, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.thot]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [37, 18, 5, 0, 0, 90, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.thot]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [37, 18, 5, 0, 0, -180, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.thot]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [37, 18, 5, 0, 0, 37.5, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.thot]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [37, 18, 5, 0, 0, -52.5, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.thot]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [37, 18, 5, 0, 0, -150, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.thot]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [37, 18, 5, 0, 0, 127.5, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.thot]),
+        TYPE: "bullet",
+      },
+    },
+  ],
+};
+exports.flamethrower = {
+  PARENT: ["genericTank"],
+  LABEL: "Flamethrower",
+  GUNS: [
+    {
+      POSITION: [26, 8, 1, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic]),
+        TYPE: "flare",
+      },
+    },
+    {
+      POSITION: [18, 8, 1, 0, 5, 0, 0],
+    },
+  ],
+};
+exports.twinFlamethrower = {
+  PARENT: ["genericTank"],
+  LABEL: "Twin Flamethrower",
+  GUNS: [
+    {
+      POSITION: [26, 8, 1, 0, -5, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic]),
+        TYPE: "flare",
+      },
+    },
+    {
+      POSITION: [26, 8, 1, 0, 5, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic]),
+        TYPE: "flare",
+      },
+    },
+    {
+      POSITION: [28, 8, 1, 0, 0, 0, 0],
+    },
+    {
+      POSITION: [18, 8, 1, 0, 0, -180, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.tri, g.basic]),
+        TYPE: "bullet",
+      },
+    },
+  ],
+};
+exports.lorry = {
+  PARENT: ["genericTank"],
+  LABEL: "Lorry",
+  GUNS: [
+    {
+      /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+      POSITION: [12, 10, 2.4, 8, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.larry]),
+        TYPE: "bullet",
+      },
+    },
+  ],
+};
+exports.rocketeer2 = {
+  PARENT: ["genericTank"],
+  LABEL: "Rocketeer",
+  GUNS: [
+    {
+      POSITION: [18, 7, 2, 0, 0, 0, 0],
+    },
+    {
+      POSITION: [-10, 7, 0, 18, 0, 0, 0],
+    },
+    {
+      POSITION: [2, 14, 1, 18, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.shot]),
+        TYPE: "rocketeerMissile",
+      },
+    },
+  ],
+};
+
+exports.misclite = {
+  PARENT: "menu",
+  COLOR: 3,
+  LABEL: "Miscellaneous Tanks (Lite)",
+};
+
+exports.trianglebullet = {
+  PARENT: "bullet",
+  SHAPE: 3,
+};
+
+exports.betatester = {
+  PARENT: "menu",
+  LABEL: "Game Beta Tester Menu",
+};
+exports.removedtanks = {
+  PARENT: "menu",
+  LABEL: "Removed Tanks Menu",
+  COLOR: 9,
+};
+exports.unreleasedtanks = {
+  PARENT: "menu",
+  LABEL: "Unreleased Tanks Menu",
+  COLOR: 36,
+};
+
+exports.ceptioniststanks = {
+  PARENT: "menu",
+  LABEL: "Ceptionists Menu",
+  COLOR: 5,
+};
+exports.testbedformods.UPGRADES_TIER_0 = [
+  "sentries",
+  "unreleasedtanks",
+  "removedtanks",
+  "misclite",
+  //"rouges",
+  "elites",
+  "dominators",
+  "sanctuaries",
+  "betatester",
+];
+exports.misclite.UPGRADES_TIER_0 = [
+  "balls",
+  "rapture",
+  "quadtrapper",
+  "blockmachine",
+  "machinetrapper",
+  "machineShot",
+  "rock",
+  "gravel",
+  "tripilet",
+  "bullet",
+  "trianglebullet",
+  "octothot",
+  "lighter",
+  "flamethrower",
+  "twinFlamethrower",
+  "rocketeer2",
+  "lorry",
+];
+exports.unreleasedtanks.UPGRADES_TIER_0 = [
+  "betatester",
+  "ceptioniststanks",
+  "tripilet",
+];
+exports.removedtanks.UPGRADES_TIER_0 = ["betatester"];
+
+exports.ceptioniststanks.UPGRADES_TIER_0 = ["basiception"];
+// bt upgrades
+exports.betatester.UPGRADES_TIER_0 = [
+  "removedtanks",
+  "unreleasedtanks",
+  "sentries",
+];

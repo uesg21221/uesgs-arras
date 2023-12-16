@@ -3,7 +3,7 @@ module.exports = {
 
   // Game server domain.
   // If 'localhost:NUMBER', the port must equal the port setting.
-  host: "8yhcyh-26301.csb.app",
+  host: "sngfdm-26301.csb.app",
 
   // Which port to run the web server on.
   port: 26301,
@@ -20,7 +20,8 @@ module.exports = {
 
   // The \modules\setup\gamemodeconfigs\ files to load.
   // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-  GAME_MODES: ["ffa"],
+  GAME_MODES: ["siege", "growth"],
+  //GAME_MODES: ["nexus"],
 
   // The room files to load in the setup/rooms folder.
   // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
@@ -100,10 +101,10 @@ module.exports = {
   LEVEL_CHEAT_CAP: 45,
 
   // Amount of player-bots to spawn.
-  BOTS: 0,
+  BOTS: 4,
 
   // How much XP player-bots get per second until they reach LEVEL_CAP.
-  BOT_XP: 125,
+  BOT_XP: 175,
 
   // The chances of a player-bot upgrading a specific skill when skill upgrades are available.
   BOT_SKILL_UPGRADE_CHANCES: [1, 1, 3, 4, 4, 4, 4, 2, 1, 1],

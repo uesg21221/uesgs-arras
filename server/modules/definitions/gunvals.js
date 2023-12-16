@@ -39,9 +39,9 @@ module.exports = {
   },
   fake: {
     recoil: 0.00001,
-    size: 0.00001,
-    health: 0.0001,
-    speed: 0.00001,
+    size: 1,
+    health: 1,
+    speed: 1,
     maxSpeed: 2,
     range: 0,
   },
@@ -73,6 +73,36 @@ module.exports = {
   basic: {
     reload: 18,
     recoil: 1.4,
+    shudder: 0.1,
+    damage: 0.75,
+    speed: 4.5,
+    spray: 15,
+  },
+  thot: {
+    reload: 4,
+    size: 6,
+    recoil: 0,
+    shudder: 0.1,
+    damage: 0.75,
+    speed: 4.5,
+    spray: 15,
+  },
+  lighter: {
+    reload: 0.3,
+    recoil: 0.4,
+    damage: 1.4,
+    pen: 1.5,
+    speed: 1.1,
+    maxSpeed: 1.2,
+    range: 1.1,
+    density: 1.2,
+  },
+  norecoil: {
+    recoil: 0.000000000001,
+  },
+  basiception: {
+    reload: 0.1,
+    recoil: -5,
     shudder: 0.1,
     damage: 0.75,
     speed: 4.5,
@@ -137,8 +167,9 @@ module.exports = {
     spray: 0.5,
   },
   shot: {
-    reload: 0.09,
+    reload: 0.03,
     health: 0.9,
+    spray: 2,
     pen: 0.8,
   },
   spreadmain: {
@@ -183,6 +214,11 @@ module.exports = {
     density: 1.1,
     spray: 0.9,
     resist: 0.95,
+  },
+  larry: {
+    reload: 0.06,
+    shudder: 5,
+    spray: 9,
   },
   turret: { reload: 2, health: 0.8, damage: 0.6, pen: 0.7, density: 0.1 },
 

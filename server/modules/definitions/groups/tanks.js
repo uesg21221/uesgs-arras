@@ -5391,7 +5391,39 @@ exports.paramedic = {
   ],
   STAT_NAMES: statnames.heal,
 };
-
+exports.lighterDeco = makeDeco(4);
+exports.plateDeco = makeDeco(0);
+exports.lighter = {
+  PARENT: "genericTank",
+  LABEL: "Lighter",
+  DANGER: 7,
+  COLOR: "purple",
+  TOOLTIP: "suggested my you.",
+  UPGRADE_COLOR: "purple",
+  TURRETS: [
+    {
+      POSITION: [13, 0, 0, 0, 0, 1],
+      TYPE: "plateDeco",
+    },
+    {
+      POSITION: [7, 0, 0, 40, 40, 40],
+      TYPE: "lighterDeco",
+      COLOR: "red",
+    },
+  ],
+  GUNS: [
+    {
+      POSITION: [19, 8, 1, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.single, g.lighter]),
+        TYPE: "trianglebullet",
+      },
+    },
+    {
+      POSITION: [5.5, 8, -1.8, 6.5, 0, 0, 0],
+    },
+  ],
+};
 // Upgrade paths
 exports.basic.UPGRADES_TIER_1 = [
   "twin",
@@ -5402,6 +5434,7 @@ exports.basic.UPGRADES_TIER_1 = [
   "pounder",
   "trapper",
   "desmos",
+  //"autobasic",
 ];
 exports.basic.UPGRADES_TIER_2 = ["smasher"];
 exports.smasher.UPGRADES_TIER_3 = [
@@ -5474,6 +5507,7 @@ exports.gunner.UPGRADES_TIER_3 = [
   "gunnerTrapper",
   "cyclone",
   "overgunner",
+  "lighter",
 ];
 exports.sprayer.UPGRADES_TIER_3 = [
   "redistributor",
