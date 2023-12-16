@@ -860,7 +860,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
 }
 
 function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, colorIndex, upgradeKey) {
-    let picture = util.getEntityImageFromMockup(model, gui.color),
+    let picture = (typeof model == "object") ? model : util.getEntityImageFromMockup(model, gui.color),
         position = picture.position,
         scale = (0.6 * len) / position.axis,
         entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(angle),
@@ -1645,7 +1645,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         // Upgrade tooltip
         let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
         if (upgradeHoverIndex > -1) {
-            let picture = util.getEntityImageFromMockup(gui.upgrades[upgradeHoverIndex][2], gui.color);
+            let picture = gui.upgrades[upgradeHoverIndex][2];
             if (picture.upgradeTooltip.length > 0) {
                 let boxWidth = measureText(picture.name, alcoveSize / 10),
                     boxX = global.mouse.x * global.screenWidth / window.canvas.width + 2,

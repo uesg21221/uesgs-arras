@@ -651,6 +651,7 @@ const convert = {
             gui.upgrades = [];
             for (let i = 0, len = get.next(); i < len; i++) {
                 gui.upgrades.push(get.next().split("\\\\//"));
+                gui.upgrades[i][2] = util.getEntityImageFromMockup(gui.upgrades[i][2], gui.color);
             }
         }
         if (indices.statsdata) {
