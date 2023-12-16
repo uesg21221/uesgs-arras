@@ -844,8 +844,11 @@ exports.smasherBody = {
     INDEPENDENT: true
 }
 exports.landmineBody = {
-    PARENT: ["smasherBody"],
-    CONTROLLERS: [["spin", { independent: true, speed: 0.08 }]]
+    LABEL: "",
+    CONTROLLERS: [["spin", { independent: true, speed: 0.08 }]],
+    COLOR: 9,
+    SHAPE: 6,
+    INDEPENDENT: true
 }
 exports.spikeBody = {
     PARENT: ["smasherBody"],
