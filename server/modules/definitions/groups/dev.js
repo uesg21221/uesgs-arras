@@ -591,6 +591,33 @@ exports.vulnturrettest = {
     })(),
 };
 
+exports.turretLayerTesting = {
+    PARENT: 'genericTank',
+    LABEL: 'Turret Layer Testing',
+    TURRETS: [
+        {
+            POSITION: [20, 10, 10, 0, 0, 2],
+            TYPE: ["basic", {COLOR: "lightGrey", MIRROR_MASTER_ANGLE: true}]
+        },
+        {
+            POSITION: [20, 10, 5, 0, 0, 2],
+            TYPE: ["basic", {COLOR: "grey", MIRROR_MASTER_ANGLE: true}]
+        },
+        {
+            POSITION: [20, 10, -5, 0, 0, 1],
+            TYPE: ["basic", {COLOR: "darkGrey", MIRROR_MASTER_ANGLE: true}]
+        },
+        {
+            POSITION: [20, -10, -5, 0, 0, -2],
+            TYPE: ["basic", {COLOR: "darkGrey", MIRROR_MASTER_ANGLE: true}]
+        },
+        {
+            POSITION: [20, -10, 5, 0, 0, -1],
+            TYPE: ["basic", {COLOR: "grey", MIRROR_MASTER_ANGLE: true}]
+        },
+    ]
+}
+
 // unfinished
 exports.alphaGunTest = {
     PARENT: "basic",
@@ -1050,5 +1077,5 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
     exports.testing.UPGRADES_TIER_0 = ["features", "overpowered", "vanquisher", "mummifier", "tracker3"];
-        exports.features.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "tooltipTank", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
+        exports.features.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
         exports.overpowered.UPGRADES_TIER_0 = ["armyOfOne", "godbasic", "maximumOverdrive"]

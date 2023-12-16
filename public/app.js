@@ -699,23 +699,30 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     context.lineCap = "round";
     context.lineJoin = "round";
     context.lineWidth = lineWidthMult * Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
+
+    let upperTurretsIndex = source.turrets.length;
     // Draw turrets beneath us
     for (let i = 0; i < source.turrets.length; i++) {
         let t = source.turrets[i];
         t.lerpedFacing == undefined
             ? (t.lerpedFacing = t.facing)
             : (t.lerpedFacing = util.lerpAngle(t.lerpedFacing, t.facing, 0.1, true));
-        if (!t.layer) {
-            let ang = t.direction + t.angle + rot,
-                len = t.offset * drawSize,
-                facing = 0;
-            if (t.mirrorMasterAngle || turretsObeyRot) {
-                facing = rot + t.angle;
-            } else {
-                facing = t.lerpedFacing;
-            }
-            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
+        
+        // Break condition
+        if (t.layer > 0) {
+            upperTurretsIndex = i;
+            break;
         }
+
+        let ang = t.direction + t.angle + rot,
+            len = t.offset * drawSize,
+            facing;
+        if (t.mirrorMasterAngle || turretsObeyRot) {
+            facing = rot + t.angle;
+        } else {
+            facing = t.lerpedFacing;
+        }
+        drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
     }
     // Draw guns below us
     let positions = source.guns.getPositions(),
@@ -774,19 +781,17 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         }
     }
     // Draw turrets above us
-    for (let i = 0; i < source.turrets.length; i++) {
-        let t = source.turrets[i];
-        if (t.layer) {
-            let ang = t.direction + t.angle + rot,
-                len = t.offset * drawSize,
-                facing = 0;
-            if (t.mirrorMasterAngle || turretsObeyRot) {
-                facing = rot + t.angle;
-            } else {
-                facing = t.lerpedFacing;
-            }
-            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
+    for (let i = upperTurretsIndex; i < source.turrets.length; i++) {
+        let t = source.turrets[i],
+            ang = t.direction + t.angle + rot,
+            len = t.offset * drawSize,
+            facing;
+        if (t.mirrorMasterAngle || turretsObeyRot) {
+            facing = rot + t.angle;
+        } else {
+            facing = t.lerpedFacing;
         }
+        drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
     }
     if (assignedContext == false && context != ctx && context.canvas.width > 0 && context.canvas.height > 0) {
         ctx.save();

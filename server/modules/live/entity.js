@@ -1388,6 +1388,9 @@ class Entity extends EventEmitter {
             }
             this.maxChildren = null; // Required because it just doesn't work out otherwise - overlord-triplet would make the triplet inoperable at 8 drones, etc
         }
+        // Turret layer ordering
+        this.turrets.sort(this.turretSort);
+
         // Batch upgrades
         if (this.batchUpgrades && emitEvent) {
             this.tempUpgrades = [];
@@ -1404,6 +1407,9 @@ class Entity extends EventEmitter {
             this.selection = JSON.parse(JSON.stringify(this.defs));
             this.chooseUpgradeFromBranch(numBranches); // Recursively build upgrade options
         }
+    }
+    turretSort(a, b) {
+        return a.bound.layer - b.bound.layer;
     }
     chooseUpgradeFromBranch(remaining) {
         if (remaining > 0) { // If there's more to select
