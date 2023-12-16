@@ -1,7 +1,7 @@
 # List of added, changed or removed features
 
-Unfinished list of all features that OSA/APS++ has included in the base template that are not in other templates.
-
+The list of all features that OSA/APS++ has included in the base template that are not in other templates.
+It includes all features up to the latest release version.
 
 ## Added
 
