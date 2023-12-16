@@ -722,20 +722,22 @@ class io_formulaTarget extends IO {
     }
 }
 class io_whirlwind extends IO {
-  constructor(body, opts = {}) {
+  constructor(body) {
     super(body);
     this.body.angle = 0
-    this.body.dist = opts.initialDist || 110
-    this.radiusScalingSpeed = opts.radiusScalingSpeed || 10
+    this.body.dist = 0
   }
-  
+
   think(input) {
     this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
     if(input.fire){
-      if(this.body.dist <= 150) this.body.dist += this.radiusScalingSpeed
+      if(this.body.dist!=150) this.body.dist = 150
     }
     else if(input.alt){
-      if(this.body.dist >= 60) this.body.dist -= this.radiusScalingSpeed
+      if(this.body.dist!=60) this.body.dist = 60
+    }
+    else{
+      if(this.body.dist!=110) this.body.dist = 110
     }
   }
 }
