@@ -1012,7 +1012,7 @@ exports.whirlwind = {
     PARENT: "genericTank",
     LABEL: "Whirlwind",
     ANGLE: 60,
-    CONTROLLERS: ["whirlwind"],
+    CONTROLLERS: [["whirlwind", {initialDist: 110, radiusScalingSpeed: 10}]],
     HAS_NO_RECOIL: true,
     STAT_NAMES: statnames.whirlwind,
     TOOLTIP: "[DEV NOTE] We are aware of an issue dramatically affecting satellite speed when upgrading.",
