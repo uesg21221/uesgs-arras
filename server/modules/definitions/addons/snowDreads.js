@@ -2523,7 +2523,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["squareBaseDeco"],
 			}, {
-				POSITION: [24, 0, 0, 0, 0, 0],
+				POSITION: [24, 0, 0, 0, 0, -1],
 				TYPE: ['square', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			},
 		],
@@ -2577,7 +2577,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["squareBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ['colossalBottomSnowdread', {MIRROR_MASTER_ANGLE: true}]
 			},
 		],
@@ -2673,7 +2673,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["squareBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: 'ironBottomSnowdread',
 			},
 		],
@@ -3631,7 +3631,7 @@ module.exports = ({ Class }) => {
 				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -3646,7 +3646,7 @@ module.exports = ({ Class }) => {
 		BODY: hpBuffBodyStats[0],
 	    TURRETS: [
 			{
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [13, 0, 0, 180, 0, 1],
@@ -3665,7 +3665,7 @@ module.exports = ({ Class }) => {
 		BODY: hpBuffBodyStats[0],
 	    TURRETS: [
 			{
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [13, 0, 0, 180, 0, 1],
@@ -3684,7 +3684,7 @@ module.exports = ({ Class }) => {
 		BODY: hpBuffBodyStats[0],
 	    TURRETS: [
 			{
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [13, 0, 0, 180, 0, 1],
@@ -3703,7 +3703,7 @@ module.exports = ({ Class }) => {
 		BODY: hpBuffBodyStats[0],
 	    TURRETS: [
 			{
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ['triangle', {COLOR: 9, MIRROR_MASTER_ANGLE: true}]
 			},
 			{
@@ -3744,7 +3744,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["triangleBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 		],
@@ -3763,7 +3763,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["triangleBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 			...addTrinoughtAuraRing(),
@@ -3783,7 +3783,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["triangleBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 			...addTrinoughtAuraRing(true),
@@ -3802,7 +3802,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["triangleBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 			...addTrinoughtTurretRing(),
@@ -3821,7 +3821,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["triangleBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [10, 0, 0, 0, 360, 1],
@@ -3847,7 +3847,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["triangleBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["titanTopSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 		],
@@ -3940,7 +3940,7 @@ module.exports = ({ Class }) => {
 				POSITION: [6, 0, 0, 0, 360, 1],
 				TYPE: 'steelTopSnowdread'
 			}, {
-				POSITION: [20, 0, 0, 0, 360, 0],
+				POSITION: [20, 0, 0, 0, 360, -1],
 				TYPE: 'steelBottomSnowdread'
 			},
 		],
@@ -5101,7 +5101,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ["pentagon", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
 			},
 		],
@@ -5116,7 +5116,7 @@ module.exports = ({ Class }) => {
 				POSITION: [12, 0, 0, 180, 0, 1],
 				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
 			}, {
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
@@ -5138,7 +5138,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
 			},
 			...addPentanoughtAuraRing(true),
@@ -5157,7 +5157,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
 			},
 			...addPentanoughtTurretRing(),
@@ -5176,7 +5176,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [24, 0, 0, 180, 0, 0],
+				POSITION: [24, 0, 0, 180, 0, -1],
 				TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
 			}, {
 				POSITION: [11.5, 0, 0, 0, 360, 1],
@@ -5257,7 +5257,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 		],
@@ -5275,7 +5275,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 			...addPentanoughtAuraRing(),
@@ -5294,7 +5294,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 			...addPentanoughtAuraRing(true),
@@ -5313,7 +5313,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 			...addPentanoughtTurretRing(),
@@ -5332,7 +5332,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			}, {
 				POSITION: [11.5, 0, 0, 0, 360, 1],
@@ -5358,7 +5358,7 @@ module.exports = ({ Class }) => {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
 			}, {
-				POSITION: [20, 0, 0, 0, 0, 0],
+				POSITION: [20, 0, 0, 0, 0, -1],
 				TYPE: ["pentagonLeviathanBottomSnowdread", {MIRROR_MASTER_ANGLE: true}]
 			},
 		],
@@ -5503,7 +5503,7 @@ module.exports = ({ Class }) => {
 				POSITION: [6, 0, 0, 0, 360, 1],
 				TYPE: ['pentagonTitaniumTopSnowdread']
 			}, {
-				POSITION: [20, 0, 0, 0, 360, 0],
+				POSITION: [20, 0, 0, 0, 360, -1],
 				TYPE: ['pentagonTitaniumBottomSnowdread']
 			},
 		],
