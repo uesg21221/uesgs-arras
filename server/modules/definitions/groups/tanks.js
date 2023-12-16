@@ -1816,7 +1816,6 @@ exports.minigun = {
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [21, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.mini]),
@@ -1981,6 +1980,34 @@ exports.barricade = {
             },
         },
     ],
+}
+exports.lamgSpinnyThing = makeMulti({
+    PARENT: "genericTank",
+    GUNS: [
+        {
+            POSITION: [15, 3.5, 1, 0, 0, 0, 0]
+        }
+    ]
+}, 10)
+exports.literallyAMachineGun = {
+    PARENT: "genericTank",
+    LABEL: "Literally a Machine Gun",
+    DANGER: 7,
+    BODY: {
+        FOV: base.FOV * 1.2
+    },
+    TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
+    TURRETS: [
+        {
+            POSITION: [10, 14, 0, 0, 0, 1],
+            TYPE: "lamgSpinnyThing"
+        }
+    ],
+    GUNS: [
+        {
+            POSITION: [22, 8, 1, 0, 0, 0, 0]
+        }
+    ]
 }
 
 // Gunner upgrades
@@ -5522,7 +5549,7 @@ exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "
         exports.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman"]
 
     exports.machineGun.UPGRADES_TIER_2 = ["artillery", "minigun", "gunner", "sprayer"]
-        exports.minigun.UPGRADES_TIER_3 = ["streamliner", "nailgun", "cropDuster", "barricade", "vulture"]
+        exports.minigun.UPGRADES_TIER_3 = ["streamliner", "nailgun", "cropDuster", "barricade", "vulture", "literallyAMachineGun"]
         exports.gunner.UPGRADES_TIER_3 = ["autoGunner", "nailgun", "auto4", "machineGunner", "gunnerTrapper", "cyclone", "overgunner"]
         exports.sprayer.UPGRADES_TIER_3 = ["redistributor", "phoenix", "atomizer", "focal"]
 
