@@ -646,7 +646,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
     if (fill) context.fill();
     context.lineJoin = "round";
 }
-function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha, position) {
+function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha, strokeWidth, position) {
     let h = [];
     h = aspect > 0 ? [height * aspect, height] : [height, -height * aspect];
 
@@ -668,6 +668,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
         context.lineTo(newX, newY);
     }
     context.closePath();
+    context.lineWidth *= strokeWidth
     context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
     if (!borderless) context.stroke();
     context.lineWidth /= fill ? 1 : 0.5; // Maintain constant border width
@@ -683,7 +684,8 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         xx = x,
         yy = y,
         source = turretInfo === false ? instance : turretInfo,
-        blend = render.status.getBlend();
+        blend = render.status.getBlend(),
+        initStrokeWidth = lineWidthMult * Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
     source.guns.update();
     if (fade === 0 || alpha === 0) return;
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
@@ -698,12 +700,13 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     }
     context.lineCap = "round";
     context.lineJoin = "round";
-    context.lineWidth = lineWidthMult * Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
+    context.lineWidth = initStrokeWidth
 
     let upperTurretsIndex = source.turrets.length;
     // Draw turrets beneath us
     for (let i = 0; i < source.turrets.length; i++) {
         let t = source.turrets[i];
+        context.lineWidth = initStrokeWidth * t.strokeWidth
         t.lerpedFacing == undefined
             ? (t.lerpedFacing = t.facing)
             : (t.lerpedFacing = util.lerpAngle(t.lerpedFacing, t.facing, 0.1, true));
@@ -728,20 +731,23 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     let positions = source.guns.getPositions(),
         gunConfig = source.guns.getConfig();
     for (let i = 0; i < source.guns.length; i++) {
+        context.lineWidth = initStrokeWidth
         let g = gunConfig[i];
         if (!g.drawAbove) {
             let gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
                 alpha = g.alpha,
+                strokeWidth = g.strokeWidth,
                 borderless = g.borderless,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, drawSize * positions[i]);
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, strokeWidth, drawSize * positions[i]);
         }
     }
     // Draw body
     context.globalAlpha = 1;
+    context.lineWidth = initStrokeWidth * m.strokeWidth
     gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), blend));
     
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
@@ -768,6 +774,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {
+        context.lineWidth = initStrokeWidth
         let g = gunConfig[i];
         if (g.drawAbove) {
             let gx = g.offset * Math.cos(g.direction + g.angle + rot),
@@ -783,6 +790,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     // Draw turrets above us
     for (let i = upperTurretsIndex; i < source.turrets.length; i++) {
         let t = source.turrets[i];
+        context.lineWidth = initStrokeWidth * t.strokeWidth
         t.lerpedFacing == undefined
             ? (t.lerpedFacing = t.facing)
             : (t.lerpedFacing = util.lerpAngle(t.lerpedFacing, t.facing, 0.1, true));
@@ -861,7 +869,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
 }
 
 function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, colorIndex, upgradeKey) {
-    let picture = util.getEntityImageFromMockup(model, gui.color),
+    let picture = (typeof model == "object") ? model : util.getEntityImageFromMockup(model, gui.color),
         position = picture.position,
         scale = (0.6 * len) / position.axis,
         entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(angle),
@@ -1646,7 +1654,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         // Upgrade tooltip
         let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
         if (upgradeHoverIndex > -1) {
-            let picture = util.getEntityImageFromMockup(gui.upgrades[upgradeHoverIndex][2], gui.color);
+            let picture = gui.upgrades[upgradeHoverIndex][2];
             if (picture.upgradeTooltip.length > 0) {
                 let boxWidth = measureText(picture.name, alcoveSize / 10),
                     boxX = global.mouse.x * global.screenWidth / window.canvas.width + 2,

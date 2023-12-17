@@ -2,18 +2,31 @@
 
 **Open Source Arras is beta software.** This build is **not** representative of the final product. Expect bugs and missing features.
 
-## Requirements
+## Setup Guide (Localhost)
 
-In order to run your server via localhost, you will need to install these first:
-- [The latest release of the template](https://github.com/Taureon/aps-plus-plus/releases)
-- [Node.js v16 or later](https://nodejs.org/en)
-- [ws](https://www.npmjs.com/package/ws)
+This guide covers setting up your server on your own hardware and only supports PCs running up-to-date versions of Windows/macOS/Linux.
 
-Once `Node.js` and `ws` are installed, open either `run.bat` (if you're on Windows) or `run.sh` (if you're not). If there aren't any errors, your server will start up. Go to `localhost:26301` in your favourite web browser (keep the terminal window open, closing it will shut down the server) to play.
+You'll first need to install [Node.js](https://nodejs.org). It doesn't matter if you pick the LTS or Latest version, they'll both work fine.
+
+Once `Node.js` is installed, run the command `npm i ws`. This will install the WebSocket library that Open Source Arras uses.
+
+After installing `ws`, [download the source code of the latest release of Open Source Arras](https://github.com/Taureon/aps-plus-plus/releases). Extract it once it's downloaded and open either `run.bat` (if you're on Windows) or `run.sh` (if you're not). If there aren't any errors, your server will start up. Go to `localhost:26301` in your favourite web browser (keep the terminal window open, closing it will shut down the server) to play.
 
 [If you need a more detailed guide, click here for a step by step list.](https://github.com/Taureon/aps-plus-plus/wiki/Frequently-Asked-Questions#how-do-i-set-up-my-server)
 
 If you want to stay up to date, fork this template, download a git client, and sync the fork whenever there's a major update.
+
+## Setup Guide (Webhost)
+
+Don't have a supported device or don't want to mess around with localhost? Get a webhost to do the dirty work for you.
+
+This guide will specifically go through setting up your server on [Glitch](https://glitch.com). These steps should be similar you use Replit or another webhost.
+
+Click the "New project" button at the top-right of the dashboard, and select "Import from GitHub". When prompted for the URL of the repository, type in `https://github.com/Taureon/aps-plus-plus.git`.
+
+Navigate to `server/config.js` and replace `localhost:26301` with `your-project.glitch.me` (replace `your-project` with the actual name of your project, it should be above settings).
+
+After doing that, your server should be ready!
 
 ## Useful Tools
 - [Create a custom shape](https://arras.io/ext/custom-shape)
