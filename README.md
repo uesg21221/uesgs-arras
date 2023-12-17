@@ -4,7 +4,7 @@
 
 ## Setup Guide (Localhost)
 
-This guide covers setting up your server on your own hardware and only supports PCs running Windows/macOS/Linux.
+This guide covers setting up your server on your own hardware and only supports PCs running up-to-date versions of Windows/macOS/Linux.
 
 You'll first need to install [Node.js](https://nodejs.org). It doesn't matter if you pick the LTS or Latest version, they'll both work fine.
 
