@@ -4,7 +4,9 @@
 
 ## Setup Guide (Localhost)
 
-In order to run your server via localhost, you will need to install [Node.js](https://nodejs.org). It doesn't matter if you pick the LTS or Latest version, they'll both work fine.
+This guide covers setting up your server on your own hardware and only supports Windows/Linux PCs and Macs.
+
+You'll first need to install [Node.js](https://nodejs.org). It doesn't matter if you pick the LTS or Latest version, they'll both work fine.
 
 Once `Node.js` is installed, run the command `npm i ws`. This will install the WebSocket library that Open Source Arras uses.
 
