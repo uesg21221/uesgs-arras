@@ -18,6 +18,8 @@ If you want to stay up to date, fork this template, download a git client, and s
 
 ## Setup Guide (Webhost)
 
+Don't have a supported device or don't want to mess around with localhost? Get a webhost to do the dirty work for you.
+
 This guide will specifically go through setting up your server on [Glitch](https://glitch.com). These steps should be similar you use Replit or another webhost.
 
 Click the "New project" button at the top-right of the dashboard, and select "Import from GitHub". When prompted for the URL of the repository, type in `https://github.com/Taureon/aps-plus-plus.git`.
