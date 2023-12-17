@@ -50,6 +50,7 @@ class Gun {
         };
         this.color = '16 0 1 0 false';
         this.alpha = 1;
+        this.strokeWidth = 1;
         this.canShoot = false;
         this.borderless = false;
         this.drawFill = true;
@@ -100,6 +101,7 @@ class Gun {
                 this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
             }
             this.alpha = info.PROPERTIES.ALPHA == null ? 1 : info.PROPERTIES.ALPHA
+            this.strokeWidth = info.PROPERTIES.STROKE_WIDTH == null ? 1 : info.PROPERTIES.STROKE_WIDTH
             this.borderless = info.PROPERTIES.BORDERLESS == null ? false : info.PROPERTIES.BORDERLESS;
             this.drawFill = info.PROPERTIES.DRAW_FILL == null ? true : info.PROPERTIES.DRAW_FILL;
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
@@ -190,6 +192,7 @@ class Gun {
             ...this.lastShot, 
             color: this.color,
             alpha: this.alpha,
+            strokeWidth: this.strokeWidth,
             borderless: this.borderless, 
             drawFill: this.drawFill, 
             drawAbove: this.drawAbove,
@@ -830,6 +833,7 @@ class Entity extends EventEmitter {
         this.firingArc = [0, 360];
         this.invuln = false;
         this.alpha = 1;
+        this.strokeWidth = 1;
         this.colorUnboxed = {
             base: 16,
             hueShift: 0,
@@ -1124,6 +1128,7 @@ class Entity extends EventEmitter {
                 set.ALPHA[1] || 1
             ];
         }
+        if (set.STROKE_WIDTH != null) this.strokeWidth = set.STROKE_WIDTH
         if (set.DANGER != null) this.dangerValue = set.DANGER;
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
@@ -1629,6 +1634,7 @@ class Entity extends EventEmitter {
             twiggle: forceTwiggle.includes(this.facingType) || (this.facingType === "locksFacing" && this.control.alt),
             layer: this.layerID ? this.layerID : this.bond != null ? this.bound.layer : this.type === "wall" ? 11 : this.type === "food" ? 10 : this.type === "tank" ? 5 : this.type === "crasher" ? 1 : 0,
             color: this.color,
+            strokeWidth: this.strokeWidth,
             borderless: this.borderless,
             drawFill: this.drawFill,
             name: (this.nameColor || "#FFFFFF") + this.name,

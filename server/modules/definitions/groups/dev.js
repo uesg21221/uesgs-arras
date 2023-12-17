@@ -618,7 +618,6 @@ exports.turretLayerTesting = {
     ]
 }
 
-// unfinished
 exports.alphaGunTest = {
     PARENT: "basic",
     LABEL: "Translucent Guns",
@@ -628,6 +627,21 @@ exports.alphaGunTest = {
             SHOOT_SETTINGS: combineStats([g.basic]),
             TYPE: 'bullet',
             ALPHA: 0.5
+        }
+    }]
+}
+
+// unfinished
+exports.strokeWidthTest = {
+    PARENT: "basic",
+    LABEL: "Stroke Width Test",
+    STROKE_WIDTH: 2,
+    GUNS: [{
+        POSITION: {},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet',
+            STROKE_WIDTH: 0.5
         }
     }]
 }
@@ -1077,5 +1091,5 @@ exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "
         exports.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zenphiaBoss", "dogeiscutBoss", "trplnrBoss"];
 
     exports.testing.UPGRADES_TIER_0 = ["features", "overpowered", "vanquisher", "mummifier", "tracker3"];
-        exports.features.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
+        exports.features.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
         exports.overpowered.UPGRADES_TIER_0 = ["armyOfOne", "godbasic", "maximumOverdrive"]

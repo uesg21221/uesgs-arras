@@ -210,6 +210,7 @@ const util = {
                     return {
                         color: g.color,
                         alpha: g.alpha,
+                        strokeWidth: g.strokeWidth,
                         borderless: g.borderless, 
                         drawFill: g.drawFill,
                         drawAbove: g.drawAbove,

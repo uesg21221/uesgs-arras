@@ -330,6 +330,7 @@ const GunContainer = n => {
             configLoaded: false,
             color: "",
             alpha: 0,
+            strokeWidth: 0,
             borderless: false, 
             drawFill: true, 
             drawAbove: false,
@@ -349,6 +350,7 @@ const GunContainer = n => {
             return {
                 color: g.color,
                 alpha: g.alpha,
+                strokeWidth: g.strokeWidth,
                 borderless: g.borderless, 
                 drawFill: g.drawFill,
                 drawAbove: g.drawAbove,
@@ -366,6 +368,7 @@ const GunContainer = n => {
                 g.configLoaded = true;
                 g.color = c.color;
                 g.alpha = c.alpha;
+                g.strokeWidth = c.strokeWidth
                 g.borderless = c.borderless; 
                 g.drawFill = c.drawFill;
                 g.drawAbove = c.drawAbove;
@@ -428,6 +431,7 @@ const process = (z = {}) => {
         z.layer = get.next();
         z.index = get.next();
         z.color = get.next();
+        z.strokeWidth = get.next();
         z.borderless = get.next();
         z.drawFill = get.next();
         z.size = get.next();
@@ -547,6 +551,7 @@ const process = (z = {}) => {
             power = get.next(),
             color = get.next(),
             alpha = get.next(),
+            strokeWidth = get.next(),
             borderless = get.next(),
             drawFill = get.next(),
             drawAbove = get.next(),
@@ -556,7 +561,7 @@ const process = (z = {}) => {
             angle = get.next(),
             direction = get.next(),
             offset = get.next();
-        z.guns.setConfig(i, {color, alpha, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
+        z.guns.setConfig(i, {color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
         if (time > global.player.lastUpdate - global.metrics.rendergap) z.guns.fire(i, power); // Shoot it
     }
     // Update turrets
