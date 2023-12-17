@@ -20,13 +20,13 @@ module.exports = {
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['tdm', 'domination'],
+    GAME_MODES: ['thefrontier'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
     // NOTE: Files starting with `map_` are maps. files starting with `overlay_` are overlays that get added on.
     // NOTE: These prefixes are only for categorisation, a room file would work the same regardless of its prefix. APS++ does nothing based on file name prefixes.
-    ROOM_SETUP: ['map_apspp_default'],
+    ROOM_SETUP: ['map_thefrontier'],
 
     // The dimensions of a single tile on the map.
     TILE_WIDTH: 400,
@@ -131,6 +131,14 @@ module.exports = {
     FOOD_SPAWN_CHANCE_NEST: 0.25, // Likeliness of nest food spawn attempts succeeding.
     FOOD_SPAWN_COOLDOWN_NEST: 45, // Cooldown (in game ticks) of nest food spawn attempts being made.
 
+    FOOD_CAP_LABYRINTH: 2, // Max labyrinth food per labyrinth tile.
+    FOOD_SPAWN_CHANCE_LABYRINTH: 0.2, // Likeliness of labyrinth food spawn attempts succeeding.
+    FOOD_SPAWN_COOLDOWN_LABYRINTH: 30, // Cooldown (in game ticks) of labyrinth food spawn attempts being made.
+
+    FOOD_CAP_INK: 2, // Max ink food per ink tile.
+    FOOD_SPAWN_CHANCE_INK: 0.1, // Likeliness of ink food spawn attempts succeeding.
+    FOOD_SPAWN_COOLDOWN_INK: 45, // Cooldown (in game ticks) of ink food spawn attempts being made.
+
     ENEMY_CAP_NEST: 1, // Max nest enemies per nest tile.
     ENEMY_SPAWN_CHANCE_NEST: 0.9, // Likeliness of nest enemies spawn attempts succeeding.
     ENEMY_SPAWN_COOLDOWN_NEST: 60, // Cooldown (in game ticks) of nest enemies spawn attempts being made.
@@ -181,6 +189,38 @@ module.exports = {
         [1, [
             [1, 'sentryGun'], [1, 'sentrySwarm'], [1, 'sentryTrap']
         ]]
+    ],
+
+    // The possible labyrinth food types that can spawn.
+    FOOD_TYPES_LABYRINTH: [
+        [200, [
+            [16, 'egg'], [32, 'square'], [64, 'triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
+        ]],
+        [20, [
+            [25, 'gem'], [56, 'shinySquare'], [125, 'shinyTriangle'], [25, 'shinyPentagon'], [5, 'shinyBetaPentagon'], [1, 'shinyAlphaPentagon']
+        ]],
+        [4, [
+            [36, 'jewel'], [88, 'legendarySquare'], [216, 'legendaryTriangle'], [36, 'legendaryPentagon'], [6, 'legendaryBetaPentagon'], [1, 'legendaryAlphaPentagon']
+        ]],
+        [0.2, [
+            /*[16807, 'egg'], */[130, 'shadowSquare'], [343, 'shadowTriangle'], [49, 'shadowPentagon'], [7, 'shadowBetaPentagon'], [1, 'shadowAlphaPentagon']
+        ]],
+        [0.04, [
+            /*[65536, 'egg'], */[181, 'rainbowSquare'], [512, 'rainbowTriangle'], [64, 'rainbowPentagon'], [8, 'rainbowBetaPentagon'], [1, 'rainbowAlphaPentagon']
+        ]],
+        [0.02, [
+            /*[59549, 'egg'], */[243, 'transSquare'], [729, 'transTriangle'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
+        ]],
+        [0.004, [
+            [100000, 'sphere'], [10000, 'cube'], [1000, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
+        ]]
+    ],
+
+    // The possible ink food types that can spawn.
+    FOOD_TYPES_INK: [
+        [1, [
+            [3, 'jewel'], [6, 'legendarySquare'], [15, 'legendaryTriangle'], [36, 'legendaryPentagon'], [6, 'legendaryBetaPentagon'], [1, 'legendaryAlphaPentagon']
+        ]],
     ],
 
     // The possible boss types that can spawn.

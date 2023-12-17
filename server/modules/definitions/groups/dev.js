@@ -42,6 +42,7 @@ exports.developer = {
         DENSITY: 20,
         FOV: 2,
     },
+    ACCEPTS_SCORE: true,
     RESET_CHILDREN: true,
     INVISIBLE: [0, 0],
     SHAPE: [
@@ -78,6 +79,26 @@ exports.spectator = {
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
         SPEED: 5,
+        FOV: 2.5,
+        DAMAGE: 0,
+        HEALTH: 1e100,
+        SHIELD: 1e100,
+        REGEN: 1e100,
+    },
+    GUNS: [],
+};
+exports.fastSpectator = {
+    PARENT: ["menu"],
+    LABEL: "Fast Spectator",
+    ALPHA: 0,
+    CAN_BE_ON_LEADERBOARD: false,
+    ACCEPTS_SCORE: false,
+    DRAW_HEALTH: false,
+    HITS_OWN_TYPE: "never",
+    ARENA_CLOSER: true,
+    SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    BODY: {
+        SPEED: 25,
         FOV: 2.5,
         DAMAGE: 0,
         HEALTH: 1e100,
@@ -1075,6 +1096,8 @@ exports.addons = {
 exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
     exports.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "spectator", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"];
         exports.unavailable.UPGRADES_TIER_0 = ["healer"];
+        exports.spectator.UPGRADES_TIER_0 = ["fastSpectator"];
+        exports.fastSpectator.UPGRADES_TIER_0 = ["spectator"];
         exports.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
         exports.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
 
