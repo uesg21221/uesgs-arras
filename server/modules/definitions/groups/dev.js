@@ -99,7 +99,7 @@ exports.fastSpectator = {
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
         SPEED: 25,
-        FOV: 2.5,
+        FOV: 5,
         DAMAGE: 0,
         HEALTH: 1e100,
         SHIELD: 1e100,

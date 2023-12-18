@@ -30,7 +30,7 @@ laby = new Tile({
 ink = new Tile({
     color: "black",
     data: {
-        allowMazeWallSpawn: false,
+        allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,
         enemySpawnCooldown: 0, enemyCount: 0
     },

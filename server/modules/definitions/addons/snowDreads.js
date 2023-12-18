@@ -58,7 +58,7 @@ const hexnoughtBody = {
 
 module.exports = ({ Class }) => {
 	// Comment out the line below to enable this addon, uncomment it to disable this addon (WARNING: Increases load time by approximately 3x).
-	//return console.log('--- Snowdreads addon [snowdreads.js] is disabled. ---');
+	return console.log('--- Snowdreads addon [snowdreads.js] is disabled. ---');
 
 	// Set the below variable to true to enable hex dreadnought building (WARNING: increases load time by approximately 10x)
 	const buildHexnoughts = true;
@@ -4701,7 +4701,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 5; i++) {
 		Class.hielamanSnowdread.GUNS.push(
-			...addAuraTrap({length: 15, length2: 3, width: 9, aspect: 1.6, angle: 72*i}, 0, [g.trap, g.block, g.hexatrap, {reload: 2.4, range: 0.8, health: 2.4}], true)
+			...addAuraTrap({length: 15, length2: 3, width: 9, aspect: 1.6, angle: 72*i}, 0, [g.trap, g.block, g.hexatrap, {reload: 2.4, health: 2.4}], true)
 		)
 	}
 	Class.jackhammerSnowdread = { // trap + gun
@@ -5460,10 +5460,10 @@ module.exports = ({ Class }) => {
 	for(let i = 0; i < 12; i++) {
 		Class.hexagonTitaniumTopSnowdread.GUNS.push(
 			{
-				POSITION: [8, 6, 0.001, 20, 0, 30*i, 0],
+				POSITION: [7, 5, 0.001, 18, 0, 30*i, 0],
 				PROPERTIES: {COLOR: 9},
 			}, {
-				POSITION: [8, 6, 0.001, -20, 0, 30*i, 0],
+				POSITION: [7, 5, 0.001, -18, 0, 30*i, 0],
 				PROPERTIES: {COLOR: 9},
 			},
 		)
@@ -5476,10 +5476,10 @@ module.exports = ({ Class }) => {
 	for(let i = 0; i < 6; i++) {
 		Class.hexagonTitaniumBottomSnowdread.GUNS.push(
 			{
-				POSITION: [5, 5.5, 0.001, 9.5, 3.5, 60*i, 0],
+				POSITION: [5, 5, 0.001, 9.5, 3.25, 60*i, 0],
 				PROPERTIES: {COLOR: 9},
 			}, {
-				POSITION: [5, 5.5, 0.001, 9.5, -3.5, 60*i, 0],
+				POSITION: [5, 5, 0.001, 9.5, -3.25, 60*i, 0],
 				PROPERTIES: {COLOR: 9},
 			},
 		)
