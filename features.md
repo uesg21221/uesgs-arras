@@ -104,17 +104,10 @@ It includes all features up to the latest release version.
 
 * Definition Attribute: `BORDERLESS`.
   * Removes shape or gun borders, can be applied to both guns and entities.
-  * **This will be deprecated and removed soon because of `STROKE_WIDTH`**
 
 * Definition Attribute: `DRAW_FILL`.
   * Fills a shape or gun when drawn.
   * `true` by default.
-
-* Definition Attribute: `STROKE_WIDTH`
-  * Can adjust the border width of the body or gun.
-  * Multiplies the default stroke width (inside `public\lib\json\settings.js`) with `STROKE_WIDTH`
-    * Example: `STROKE_WIDTH: 2` will double the default stroke width, lets say 6, it will be 12.
-  * `1` by default.
 
 * Added Auras.
   * Comes with a new motionType `withMaster` and a facilitator `addAura`.
