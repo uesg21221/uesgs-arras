@@ -26,6 +26,8 @@ Click the "New project" button at the top-right of the dashboard, and select "Im
 
 Navigate to `server/config.js` and replace `localhost:26301` with `your-project.glitch.me` (replace `your-project` with the actual name of your project, it should be above settings).
 
+If you're experiencing issues when trying to launch the project, go to `package.json` and replace `"node": "18.x"` with `"node": "16.x"`.
+
 After doing that, your server should be ready!
 
 ## Useful Tools
