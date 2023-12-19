@@ -1663,6 +1663,7 @@ class Entity extends EventEmitter {
     }
     upgrade(number) {
         let old = this
+        this.reset()
         if (
             number < this.upgrades.length &&
             this.level >= this.upgrades[number].level
