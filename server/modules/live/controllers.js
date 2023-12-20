@@ -732,10 +732,10 @@ class io_whirlwind extends IO {
   think(input) {
     this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
     if(input.fire){
-      if(this.body.dist <= 150) this.body.dist += this.radiusScalingSpeed
+      if(this.body.dist <= 225) this.body.dist += this.radiusScalingSpeed
     }
     else if(input.alt){
-      if(this.body.dist >= 60) this.body.dist -= this.radiusScalingSpeed
+      if(this.body.dist >= 75) this.body.dist -= this.radiusScalingSpeed
     }
   }
 }
