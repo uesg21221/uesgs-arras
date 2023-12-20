@@ -58,7 +58,7 @@ const hexnoughtBody = {
 
 module.exports = ({ Class }) => {
 	// Comment out the line below to enable this addon, uncomment it to disable this addon (WARNING: Increases load time by approximately 3x).
-	return console.log('--- Snowdreads addon [snowdreads.js] is disabled. ---');
+	// return console.log('--- Snowdreads addon [snowdreads.js] is disabled. ---');
 
 	// Set the below variable to true to enable hex dreadnought building (WARNING: increases load time by approximately 10x)
 	const buildHexnoughts = true;
@@ -2911,8 +2911,8 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.mitigatorSnowdread.GUNS.push(
-			...addNormal({length: 13, width: 8, y: 5, angle: 120*i}, 5, [g.basic, {reload: 0.85}]),
-			...addNormal({length: 13, width: 8, y: -5, angle: 120*i, delay: 0.5}, 5, [g.basic, {reload: 0.85}]),
+			...addNormal({length: 10, width: 8, x: 3, y: 5, angle: 120*i}, 5, [g.basic, {reload: 0.85}]),
+			...addNormal({length: 10, width: 8, x: 3, y: -5, angle: 120*i, delay: 0.5}, 5, [g.basic, {reload: 0.85}]),
 		)
 	}
 	Class.appeaserSnowdread = {
@@ -3351,7 +3351,7 @@ module.exports = ({ Class }) => {
 		INDEPENDENT: true,
 		GUNS: [
 			{
-				POSITION: [21, 15, -1.4, 0, 0, 0, 0],
+				POSITION: [21, 14.5, -1.4, 0, 0, 0, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.pound, g.auto, g.fake]),
 					TYPE: "bullet",
@@ -4812,6 +4812,12 @@ module.exports = ({ Class }) => {
 		COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 5 },
 		GUNS: [
 			{
+				POSITION: [14, 8, 0.001, -2, -11, 135, 0],
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: 5, SATURATION_SHIFT: 1.2 } },
+			}, {
+				POSITION: [14, 8, 0.001, -2, 11, -135, 0],
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: 5, SATURATION_SHIFT: 1.2 } },
+			}, {
 				POSITION: [21, 16, 1.3, 0, 0, 0, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.pound, g.destroy, g.auto, g.fake]),
