@@ -10,15 +10,6 @@ import * as socketStuff from "./lib/socketInit.js";
 (async function (util, global, settings, Canvas, color, gameDraw, socketStuff) {
 
 let { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow } = socketStuff;
-// fetch("changelog.md", { cache: "no-cache" })
-// .then((response) => response.text())
-// .then((response) => {
-//     const changelogs = response.split("\n\n").map((changelog) => changelog.split("\n"));
-//     for (let changelog of changelogs) {
-//         changelog[0] = changelog[0].split(":").map((line) => line.trim());
-//         document.getElementById("patchNotes").innerHTML += `<div><b>${changelog[0][0].slice(1).trim()}</b>: ${changelog[0].slice(1).join(":") || "Update lol"}<ul>${changelog.slice(1).map((line) => `<li>${line.slice(1).trim()}</li>`).join("")}</ul><hr></div>`;
-//     }
-// });
 
 fetch("changelog.html", { cache: "no-cache" })
 .then(async ChangelogsHTMLFile => {
@@ -372,59 +363,39 @@ function arrayifyText(rawText) {
     }
     return textArray;
 }
-const measureText = (text, fontSize, withHeight = false) => {
+let textImageCache = {},
+measureText = (text, fontSize, withHeight = false) => {
     fontSize += settings.graphical.fontSizeBoost;
     ctx.font = "bold " + fontSize + "px Ubuntu";
     let measurement = ctx.measureText(arrayifyText(text).reduce((a, b, i) => (i & 1) ? a : a + b, ''));
     return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
 };
-function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
-    size += settings.graphical.fontSizeBoost;
-    // Get text dimensions and resize/reset the canvas
-    let offset = size / 5,
-        ratio = 1,
-        textArray = arrayifyText(rawText),
-        renderedFullText = textArray.reduce((a, b, i) => (i & 1) ? a : a + b, '');
-    if (context.getTransform) {
-        ratio = ctx.getTransform().d;
-        offset *= ratio;
-    }
-    if (ratio !== 1) {
-        size *= ratio;
-    }
-    context.font = "bold " + size + "px Ubuntu";
-    let Xoffset = offset,
-        Yoffset = (size + 2 * offset) / 2,
-        alignMultiplier = 0;
-    switch (align) {
-        //case "left":
-        //    //do nothing.
-        //    break;
-        case "center":
-            alignMultiplier = 0.5;
-            break;
-        case "right":
-            alignMultiplier = 1;
-    }
-    if (alignMultiplier) {
-        Xoffset -= ctx.measureText(renderedFullText).width * alignMultiplier;
-    }
-    // Draw it
+function generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center) {
+    let image = document.createElement('canvas'),
+        context = image.getContext('2d');
     context.lineWidth = (size + 1) / settings.graphical.fontStrokeRatio;
+
+    let halfLineWidth = Math.ceil(context.lineWidth / 2),
+        x = halfLineWidth,
+        y = x,
+
+        textArray = arrayifyText(rawText),
+        renderedFullText = textArray.reduce((a, b, i) => (i & 1) ? a : a + b, ''),
+
+        textSizes = measureText(renderedFullText, size, true);
+    image.width = textSizes.width + halfLineWidth * 2;
+    image.height = textSizes.height + halfLineWidth * 2;
+    image.textWidth = textSizes.width;
+
+    // Draw it
     context.textAlign = "left";
-    context.textBaseline = "middle";
+    context.textBaseline = "top";
     context.strokeStyle = color.black;
     context.fillStyle = defaultFillStyle;
-    context.save();
-    context.lineCap = settings.graphical.miterText ? "miter" : "round";
-    context.lineJoin = settings.graphical.miterText ? "miter" : "round";
-    if (ratio !== 1) {
-        context.scale(1 / ratio, 1 / ratio);
-    }
-    Xoffset += x * ratio - size / 4; //this extra size-dependant margin is a guess lol // apparently this guess worked out to be a hella good one
-    Yoffset += y * ratio - Yoffset * (center ? 1.05 : 1.5);
+    context.lineCap = "round";
+    context.lineJoin = "round";
     if (stroke) {
-        context.strokeText(renderedFullText, Xoffset, Yoffset);
+        context.strokeText(renderedFullText, x, y);
     }
     for (let i = 0; i < textArray.length; i++) {
         let str = textArray[i];
@@ -449,26 +420,61 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
             // the last letter of last text and the first letter of current text,
             // making it align perfectly with what we drew with strokeText earlier
             if (i) {
-                Xoffset += ctx.measureText(textArray[i - 2] + str).width - ctx.measureText(str).width;
+                x += ctx.measureText(textArray[i - 2] + str).width - ctx.measureText(str).width;
             }
-            context.fillText(str, Xoffset, Yoffset);
+            context.fillText(str, x, y);
         }
     }
-    context.restore();
+    return image;
+}
+function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
+    size += settings.graphical.fontSizeBoost;
+    // Get text dimensions and resize/reset the canvas
+    let offset = size / 5,
+        ratio = 1;
+    if (context.getTransform) {
+        ratio = ctx.getTransform().d;
+        offset *= ratio;
+    }
+    if (ratio !== 1) {
+        size *= ratio;
+    }
+    context.font = "bold " + size + "px Ubuntu";
+
+    let cacheLabel = size + rawText;
+    if (!textImageCache[cacheLabel]) {
+        textImageCache[cacheLabel] = generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center);
+    }
+    let alignMultiplier = 0,
+        image = textImageCache[cacheLabel];
+    switch (align) {
+        // case "left":
+        //     //do nothing.
+        //     break;
+        case "center":
+            alignMultiplier = 0.5;
+            break;
+        case "right":
+            alignMultiplier = 1;
+    }
+    if (ratio !== 1) {
+        context.scale(1 / ratio, 1 / ratio);
+    }
+    if (alignMultiplier) {
+        x -= image.textWidth * alignMultiplier;
+    }
+    ctx.drawImage(image, x, y);
 }
 // Gui drawing functions
-function drawGuiRect(x, y, length, height, stroke = false) {
-    switch (stroke) {
-        case true:
-            ctx.strokeRect(x, y, length, height);
-            break;
-        case false:
-            ctx.fillRect(x, y, length, height);
-            break;
+function drawGuiRect(x, y, length, height, stroke) {
+    if (stroke) {
+        ctx.strokeRect(x, y, length, height);
+    } else {
+        ctx.fillRect(x, y, length, height);
     }
 }
 
-function drawGuiCircle(x, y, radius, stroke = false) {
+function drawGuiCircle(x, y, radius, stroke) {
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     if (stroke) {
@@ -1617,7 +1623,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
                 y += height + internalSpacing;
                 if (upgradeBranch != lastBranch) {
                     if (upgradeBranchLabel.length > 0) {
-                        drawText(" " + upgradeBranchLabel, xStart, y + internalSpacing * 2, internalSpacing * 2.3, color.guiwhite, "left", false);
+                        drawText(" " + upgradeBranchLabel, xStart, y + internalSpacing * 2, internalSpacing * 2.3, color.guiwhite, "left");
                         y += 3 * internalSpacing;
                     }
                     colorIndex = 10;
