@@ -980,6 +980,12 @@ class Entity extends EventEmitter {
             listenToPlayer = this.controllers.shift();
         }
         if (!Array.isArray(newIO)) newIO = [newIO];
+        for (let io of newIO) {
+            for (let i in this.controllers) {
+                let oldIO = this.controllers[i];
+                if (io.constructor === oldIO.constructor) this.controllers.splice(i, 1);
+            }
+        }
         this.controllers = newIO.concat(this.controllers);
         if (listenToPlayer) this.controllers.unshift(listenToPlayer);
     }
@@ -1663,7 +1669,7 @@ class Entity extends EventEmitter {
         return suc;
     }
     upgrade(number) {
-        let old = this
+        let old = this;
         if (
             number < this.upgrades.length &&
             this.level >= this.upgrades[number].level

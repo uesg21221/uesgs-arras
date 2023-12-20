@@ -362,8 +362,9 @@ exports.sphere = {
     },
     BODY: {
         DAMAGE: 10,
-        DENSITY: 15,
+        DENSITY: 16,
         HEALTH: 300,
+        RESIST: 2.5,
         PENETRATION: 15,
         ACCELERATION: 0.002
     },
@@ -399,7 +400,8 @@ exports.cube = {
     BODY: {
         DAMAGE: 12,
         DENSITY: 20,
-        HEALTH: 500,
+        HEALTH: 400,
+        RESIST: 3,
         PENETRATION: 17.5,
         ACCELERATION: 0.002
     },
@@ -417,7 +419,8 @@ exports.tetrahedron = {
     BODY: {
         DAMAGE: 15,
         DENSITY: 23,
-        HEALTH: 666,
+        HEALTH: 500,
+        RESIST: 3.5,
         PENETRATION: 22.5,
         ACCELERATION: 0.002
     },
@@ -434,7 +437,8 @@ exports.octahedron = {
     BODY: {
         DAMAGE: 18,
         DENSITY: 26,
-        HEALTH: 866,
+        HEALTH: 600,
+        RESIST: 4,
         PENETRATION: 30,
         ACCELERATION: 0.002
     },
@@ -449,11 +453,11 @@ exports.dodecahedron = {
     COLOR: "white",
     SHAPE: "M -0.3273 -0.4318 H 0.3045 L 0.5068 0.1727 L -0.0091 0.5455 L -0.5227 0.1727 L -0.3273 -0.4318 Z M -0.6068 0.2682 L -0.0773 0.6545 V 0.9591 L -0.5955 0.7977 L -0.9136 0.3545 L -0.6068 0.2682 Z M 0.5909 0.2682 L 0.0523 0.6591 V 0.9636 L 0.5773 0.7955 L 0.8955 0.3545 L 0.5909 0.2682 Z M -0.65 0.1455 L -0.4477 -0.4818 L -0.6318 -0.7505 L -0.9545 -0.3182 V 0.2318 L -0.65 0.1455 Z M 0.4273 -0.4841 L 0.6318 0.1455 L 0.9341 0.2341 V -0.3136 L 0.6145 -0.7591 L 0.4273 -0.4841 Z M -0.0091 -1 L -0.5318 -0.8341 L -0.3455 -0.5609 H 0.3227 L 0.5159 -0.8314 L -0.0091 -1",
     BODY: {
-        DAMAGE: 22.5,
-        DENSITY: 30,
-        HEALTH: 1000,
-        RESIST: 10,
-        PENETRATION: 35,
+        DAMAGE: 17.5,
+        DENSITY: 28,
+        HEALTH: 700,
+        RESIST: 4.5,
+        PENETRATION: 32.5,
         ACCELERATION: 0.002
     },
     DRAW_HEALTH: true,
@@ -465,13 +469,13 @@ exports.icosahedron = {
     VALUE: 1e8,
     SIZE: 20,
     COLOR: "white",
-    SHAPE: "M -0.39 -0.245 L 0.392 -0.245 L 0 0.47 L -0.39 -0.245 Z M -0.465 -0.2 L -0.893 0.475 L -0.073 0.51 L -0.465 -0.2 Z M 0.4636 -0.2 L 0.073 0.509 L 0.891 0.4736 L 0.4636 -0.2 Z M 0 -1 L -0.39 -0.33 L 0.389 -0.328 L 0 -1 Z M -0.142 -0.925 L -0.875 -0.506 L -0.48 -0.339 L -0.142 -0.925 Z M -0.925 0.366 L -0.925 -0.431 L -0.525 -0.266 L -0.925 0.366 Z M -0.042 0.595 L -0.808 0.562 L -0.042 1 L -0.042 0.595 Z M 0.042 0.595 L 0.808 0.562 L 0.042 1 L 0.042 0.595 Z M 0.142 -0.925 L 0.858 -0.516 L 0.48 -0.339 L 0.142 -0.925 Z M 0.925 0.366 L 0.925 -0.452 L 0.523 -0.269 L 0.925 0.366 Z",
+    SHAPE: "M 0 0.65 L -0.563 -0.325 L 0.563 -0.325 Z M -0.866 0.5 L -0.108 0.653 L -0.619 -0.233 Z M 0.679 -0.332 L 0.906 0.331 L 0.892 -0.455 Z M 0.627 -0.422 L 0.166 -0.95 L 0.84 -0.545 Z M 0.866 0.5 L 0.619 -0.233 L 0.108 0.653 Z M -0.627 -0.422 L -0.166 -0.95 L -0.84 -0.545 Z M -0.679 -0.332 L -0.906 0.331 L -0.892 -0.455 Z M 0 -1 L -0.511 -0.42 L 0.511 -0.42 Z M -0.052 0.754 L -0.74 0.619 L -0.052 1 Z M 0.052 0.754 L 0.74 0.619 L 0.052 1 Z",
     BODY: {
-        DAMAGE: 17.5,
-        DENSITY: 25,
-        HEALTH: 1200,
-        RESIST: 7.5,
-        PENETRATION: 22.5,
+        DAMAGE: 22.5,
+        DENSITY: 30,
+        HEALTH: 800,
+        RESIST: 5,
+        PENETRATION: 35,
         ACCELERATION: 0.002
     },
     DRAW_HEALTH: true,

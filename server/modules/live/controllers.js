@@ -722,44 +722,44 @@ class io_formulaTarget extends IO {
     }
 }
 class io_whirlwind extends IO {
-  constructor(body, opts = {}) {
-    super(body);
-    this.body.angle = 0
-    this.body.dist = opts.initialDist || 110
-    this.radiusScalingSpeed = opts.radiusScalingSpeed || 10
-  }
-  
-  think(input) {
-    this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
-    if(input.fire){
-      if(this.body.dist <= 150) this.body.dist += this.radiusScalingSpeed
+    constructor(body, opts = {}) {
+        super(body);
+        this.body.angle = 0
+        this.body.dist = opts.initialDist || 110
+        this.radiusScalingSpeed = opts.radiusScalingSpeed || 10
     }
-    else if(input.alt){
-      if(this.body.dist >= 60) this.body.dist -= this.radiusScalingSpeed
+    
+    think(input) {
+        this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
+        if(input.fire){
+            if(this.body.dist <= 225) this.body.dist += this.radiusScalingSpeed
+        }
+        else if(input.alt){
+            if(this.body.dist >= 75) this.body.dist -= this.radiusScalingSpeed
+        }
     }
-  }
 }
 class io_orbit extends IO {
-  constructor(body) {
-    super(body);
-    this.realDist = 0
-  }
+    constructor(body) {
+        super(body);
+        this.realDist = 0
+    }
   
-  think(input) {
-    let master = this.body.master.master,
-        radius = this.body.angle * Math.PI / 180 + master.angle
-    
-    if(this.realDist>master.dist){
-      this.realDist-=10
-    }
-    else if(this.realDist<master.dist){
-      this.realDist+=10
-    }
-    this.body.x = master.x + Math.cos(radius) * this.realDist;
+    think(input) {
+        let master = this.body.master.master,
+            radius = this.body.angle * Math.PI / 180 + master.angle
+        
+        if(this.realDist>master.dist){
+            this.realDist-=10
+        }
+        else if(this.realDist<master.dist){
+            this.realDist+=10
+        }
+        this.body.x = master.x + Math.cos(radius) * this.realDist;
         this.body.y = master.y + Math.sin(radius) * this.realDist;
-    
-    this.body.facing = radius
-  }
+        
+        this.body.facing = radius
+    }
 }
 
 let ioTypes = {
