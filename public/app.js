@@ -371,6 +371,7 @@ measureText = (text, fontSize, withHeight = false) => {
     return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
 };
 function generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center) {
+    console.log({rawText, size, defaultFillStyle, fade, stroke, center});
     let image = document.createElement('canvas'),
         context = image.getContext('2d');
     context.lineWidth = (size + 1) / settings.graphical.fontStrokeRatio;
@@ -430,18 +431,10 @@ function generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center
 function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
     size += settings.graphical.fontSizeBoost;
     // Get text dimensions and resize/reset the canvas
-    let offset = size / 5,
-        ratio = 1;
-    if (context.getTransform) {
-        ratio = ctx.getTransform().d;
-        offset *= ratio;
-    }
-    if (ratio !== 1) {
-        size *= ratio;
-    }
+    let offset = size / 5;
     context.font = "bold " + size + "px Ubuntu";
 
-    let cacheLabel = size + rawText;
+    let cacheLabel = size.toFixed(2) + defaultFillStyle + rawText;
     if (!textImageCache[cacheLabel]) {
         textImageCache[cacheLabel] = generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center);
     }
@@ -457,12 +450,11 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
         case "right":
             alignMultiplier = 1;
     }
-    if (ratio !== 1) {
-        context.scale(1 / ratio, 1 / ratio);
-    }
     if (alignMultiplier) {
         x -= image.textWidth * alignMultiplier;
     }
+    x /= ctx.getTransform().d;
+    y /= ctx.getTransform().d;
     ctx.drawImage(image, x, y);
 }
 // Gui drawing functions
