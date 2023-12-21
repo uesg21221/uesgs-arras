@@ -724,41 +724,53 @@ class io_formulaTarget extends IO {
 class io_whirlwind extends IO {
     constructor(body, opts = {}) {
         super(body);
-        this.body.angle = 0
-        this.body.dist = opts.initialDist || 110
-        this.radiusScalingSpeed = opts.radiusScalingSpeed || 10
+        this.body.angle = 0;
+        this.minDistance = opts.minDistance ?? 75;
+        this.maxDistance = opts.maxDistance ?? 225;
+        this.body.dist = opts.initialDist || this.minDistance;
+        this.body.inverseDist = this.maxDistance - this.body.dist + this.minDistance;
+        this.radiusScalingSpeed = opts.radiusScalingSpeed || 10;
     }
     
     think(input) {
         this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
         if(input.fire){
-            if(this.body.dist <= 225) this.body.dist += this.radiusScalingSpeed
+            if(this.body.dist <= this.maxDistance) {
+                this.body.dist += Math.min(this.radiusScalingSpeed, this.maxDistance - this.body.dist);
+                this.body.inverseDist -= Math.min(this.radiusScalingSpeed, this.body.inverseDist - this.minDistance);
+            }
         }
         else if(input.alt){
-            if(this.body.dist >= 75) this.body.dist -= this.radiusScalingSpeed
+            if(this.body.dist >= this.minDistance) {
+                this.body.dist -= Math.min(this.radiusScalingSpeed, this.body.dist - this.minDistance);
+                this.body.inverseDist += Math.min(this.radiusScalingSpeed, this.maxDistance - this.body.inverseDist);
+            }
         }
     }
 }
 class io_orbit extends IO {
-    constructor(body) {
+    constructor(body, opts = {}) {
         super(body);
-        this.realDist = 0
+        this.realDist = 0;
+        this.invert = opts.invert ?? false;
     }
   
     think(input) {
-        let master = this.body.master.master,
-            radius = this.body.angle * Math.PI / 180 + master.angle
+        let invertFactor = this.invert ? -1 : 1,
+            master = this.body.master.master,
+            dist = this.invert ? master.inverseDist : master.dist,
+            angle = (this.body.angle * Math.PI / 180 + master.angle) * invertFactor;
         
-        if(this.realDist>master.dist){
-            this.realDist-=10
+        if(this.realDist > dist){
+            this.realDist -= Math.min(10, Math.abs(this.realDist - dist));
         }
-        else if(this.realDist<master.dist){
-            this.realDist+=10
+        else if(this.realDist < dist){
+            this.realDist += Math.min(10, Math.abs(dist - this.realDist));
         }
-        this.body.x = master.x + Math.cos(radius) * this.realDist;
-        this.body.y = master.y + Math.sin(radius) * this.realDist;
+        this.body.x = master.x + Math.cos(angle) * this.realDist;
+        this.body.y = master.y + Math.sin(angle) * this.realDist;
         
-        this.body.facing = radius
+        this.body.facing = angle;
     }
 }
 
