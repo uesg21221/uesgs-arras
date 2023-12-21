@@ -106,12 +106,16 @@ class io_listenToPlayer extends IO {
                 x: this.player.target.x,
                 y: this.player.target.y,
             };
+        if (this.body.reverseTargetWithTank) {
+            target.x *= this.body.reverseTank;
+            target.y *= this.body.reverseTank;
+        }
         this.body.facingLocked = this.player.command.spinlock;
         if (this.player.command.autospin) {
             let kk = Math.atan2(this.body.control.target.y, this.body.control.target.x) + (this.player.command.rmb ? 0.02 * -1 : 0.02);
             if (this.body.autospinBoost) {
                 let thing = (0.02 * (this.body.autospinBoost * ((this.body.skill.spd / 4) + 0.5)));
-                if (this.player.command.lmb) thing = thing * 1.5;
+                if (this.player.command.lmb) thing = thing * 2;
                 if (this.player.command.rmb) thing = thing * -1;
                 kk += thing / c.gameSpeed;
             }
