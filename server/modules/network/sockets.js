@@ -292,7 +292,7 @@ function incoming(message, socket) {
             // }
             // Put the new target in
             player.target = target;
-            player.body.reverseTank = reverseTank;
+            if (player.body) player.body.reverseTank = reverseTank;
             // Process the commands
             if (player.command != null && player.body != null) {
                 player.command.up = commands & 1;
