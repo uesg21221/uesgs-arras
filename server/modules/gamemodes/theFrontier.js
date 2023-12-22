@@ -1,4 +1,4 @@
-let { LABYRINTH_START, LABYRINTH_INTERCONNECT_RATE_X, LABYRINTH_INTERCONNECT_RATE_Y, LABYRINTH_STREAK_RATE, LABYRINTH_STREAK_SHIFT_RATE, INK_EROSION_STRENGTH, INK_EROSION_DROPOFF, INK_EROSION_MINIMUM_STRENGTH } = require('../setup/gamemodeconfigs/theFrontier');
+let { UNDERGROUND_START, UNDERGROUND_INTERCONNECT_RATE_X, UNDERGROUND_INTERCONNECT_RATE_Y, UNDERGROUND_STREAK_RATE, UNDERGROUND_STREAK_SHIFT_RATE, INK_EROSION_STRENGTH, INK_EROSION_DROPOFF, INK_EROSION_MINIMUM_STRENGTH } = require('../setup/gamemodeconfigs/theFrontier');
 const offset = [0, 1, 0, -1, 0];
 
 function generateFrontierMaze(width, height) {
@@ -15,7 +15,7 @@ function generateFrontierMaze(width, height) {
 
             if ((i % 4) == (j % 4)) {
                 for (let k = 0; k < 4; k++) {
-                    let threshold = k % 2 ? LABYRINTH_INTERCONNECT_RATE_X : LABYRINTH_INTERCONNECT_RATE_Y;
+                    let threshold = k % 2 ? UNDERGROUND_INTERCONNECT_RATE_X : UNDERGROUND_INTERCONNECT_RATE_Y;
                     if (ran.random(100) <= threshold) {
                         let xOffset = offset[k],
                             yOffset = offset[k + 1];
@@ -28,14 +28,14 @@ function generateFrontierMaze(width, height) {
 
     // Horizontal streaks
     for (let i = 2; i < height; i += 2) {
-        if (ran.random(100) <= LABYRINTH_STREAK_RATE) {
+        if (ran.random(100) <= UNDERGROUND_STREAK_RATE) {
             let y = i,
                 lastY = y;
             maze[y][width] = 2;
             for (let x = 0; x < width; x += 2) {
                 maze[y][x] = 2;
                 maze[y][x + 1] = 2;
-                if (ran.random(100) <= LABYRINTH_STREAK_SHIFT_RATE) {
+                if (ran.random(100) <= UNDERGROUND_STREAK_SHIFT_RATE) {
                     if (ran.random() <= 0.5)
                         y = Math.min(height - 1, y + 2);
                     else
@@ -125,7 +125,7 @@ function generateFrontierMaze(width, height) {
             else spawnWall = false;
             if (spawnWall /*&& room.getAt(loc).data.allowMazeWallSpawn*/) {
                 let o = new Entity({
-                    x: d.x + LABYRINTH_START * c.TILE_WIDTH,
+                    x: d.x + UNDERGROUND_START * c.TILE_WIDTH,
                     y: d.y
                 });
                 o.define(Class.wall);

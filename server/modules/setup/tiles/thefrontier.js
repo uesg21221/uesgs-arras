@@ -1,6 +1,6 @@
 let { pickFromChanceSet, spawnNatural } = require('./misc.js'),
 
-spawnLabyNatural = (tile, layeredSet, kind) => {
+spawnUndergroundNatural = (tile, layeredSet, kind) => {
     let o = new Entity(tile.randomInside());
     o.define(pickFromChanceSet(pickFromChanceSet(layeredSet)));
     // Abort if colliding
@@ -19,10 +19,10 @@ spawnLabyNatural = (tile, layeredSet, kind) => {
     return o;
 },
 
-labyTick = tile => {
-    if (++tile.data.foodSpawnCooldown > c.FOOD_SPAWN_COOLDOWN_LABYRINTH) {
-        if (tile.data.foodCount < c.FOOD_CAP_LABYRINTH && Math.random() < c.FOOD_SPAWN_CHANCE_LABYRINTH) {
-            spawnLabyNatural(tile, c.FOOD_TYPES_LABYRINTH, 'food');
+undergroundTick = tile => {
+    if (++tile.data.foodSpawnCooldown > c.FOOD_SPAWN_COOLDOWN_UNDERGROUND) {
+        if (tile.data.foodCount < c.FOOD_CAP_UNDERGROUND && Math.random() < c.FOOD_SPAWN_CHANCE_UNDERGROUND) {
+            spawnUndergroundNatural(tile, c.FOOD_TYPES_UNDERGROUND, 'food');
         }
     }
 },
@@ -36,13 +36,13 @@ inkTick = tile => {
     }
 },
 
-laby = new Tile({
+underground = new Tile({
     color: "darkGrey",
     data: {
         allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,
     },
-    tick: labyTick
+    tick: undergroundTick
 }),
 
 ink = new Tile({
@@ -55,4 +55,4 @@ ink = new Tile({
     tick: inkTick
 });
 
-module.exports = {laby, ink}
+module.exports = {underground, ink}

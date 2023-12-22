@@ -1,8 +1,8 @@
 let { rock, roid } = require('../tiles/decoration.js'),
     { normal: ____, nest, wall } = require('../tiles/misc.js'),
-    { laby, ink } = require('../tiles/theFrontier.js'),
+    { underground, ink } = require('../tiles/theFrontier.js'),
     bases = require('../tiles/tdm.js'),
-    { TEAMS: teams, TDM_END: tdmEnd, LABYRINTH_START: labyStart, LABYRINTH_END: labyEnd } = require('../gamemodeconfigs/theFrontier.js'),
+    { TEAMS: teams, TDM_END: tdmEnd, UNDERGROUND_START: undergroundStart, UNDERGROUND_END: undergroundEnd } = require('../gamemodeconfigs/theFrontier.js'),
 
 // 4T open arena
 room = [
@@ -48,15 +48,15 @@ for (let i = 1; i <= teams; i++) {
 	for (let [y, x] of protectors) room[y][x] = bases[`base${i}protected`];
 }
 
-// Add laby tiles
+// Add underground tiles
 for (let row of room) {
-    for (let i = tdmEnd; i < labyStart; i++) row.push(wall);
-    for (let i = labyStart; i < labyEnd; i++) row.push(laby);
+    for (let i = tdmEnd; i < undergroundStart; i++) row.push(wall);
+    for (let i = undergroundStart; i < undergroundEnd; i++) row.push(underground);
 }
 
 // Add ink tiles
 for (let row of room) {
-    for (let i = labyEnd; i < 68; i++) row.push(ink);
+    for (let i = undergroundEnd; i < 68; i++) row.push(ink);
 }
 
 module.exports = room;

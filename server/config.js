@@ -131,9 +131,9 @@ module.exports = {
     FOOD_SPAWN_CHANCE_NEST: 0.25, // Likeliness of nest food spawn attempts succeeding.
     FOOD_SPAWN_COOLDOWN_NEST: 45, // Cooldown (in game ticks) of nest food spawn attempts being made.
 
-    FOOD_CAP_LABYRINTH: 2, // Max labyrinth food per labyrinth tile.
-    FOOD_SPAWN_CHANCE_LABYRINTH: 0.2, // Likeliness of labyrinth food spawn attempts succeeding.
-    FOOD_SPAWN_COOLDOWN_LABYRINTH: 30, // Cooldown (in game ticks) of labyrinth food spawn attempts being made.
+    FOOD_CAP_UNDERGROUND: 2, // Max underground food per underground tile.
+    FOOD_SPAWN_CHANCE_UNDERGROUND: 0.2, // Likeliness of underground food spawn attempts succeeding.
+    FOOD_SPAWN_COOLDOWN_UNDERGROUND: 30, // Cooldown (in game ticks) of underground food spawn attempts being made.
 
     FOOD_CAP_INK: 2, // Max ink food per ink tile.
     FOOD_SPAWN_CHANCE_INK: 0.1, // Likeliness of ink food spawn attempts succeeding.
@@ -191,8 +191,8 @@ module.exports = {
         ]]
     ],
 
-    // The possible labyrinth food types that can spawn.
-    FOOD_TYPES_LABYRINTH: [
+    // The possible underground food types that can spawn.
+    FOOD_TYPES_UNDERGROUND: [
         [16384, [ // 92.3% - 11 in every 12
             [16, 'egg'], [32, 'square'], [64, 'triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
         ]],
