@@ -982,6 +982,7 @@ const socketInit = port => {
                 }
                 window.animations.deathScreen.reset();
                 global.died = true;
+                global.reverseTank = false;
                 window.onbeforeunload = () => false;
                 break;
             case 'K': // kicked

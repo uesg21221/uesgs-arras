@@ -274,9 +274,11 @@ for (let k in Class) {
         // Kill the reference entities.
         temptank.destroy();
     } catch (error) {
+        util.error('[WARNING] An error has occured during mockup loading:');
         util.error(error);
-        util.error(k);
-        util.error(Class[k]);
+        util.error('When attempting to generate mockup "' + k + '":');
+        for (let i in Class[k]) util.error("\t" + i + ": " + Class[k][i]);
+        throw Error("Mockups load aborted.");
     }
 }
 
