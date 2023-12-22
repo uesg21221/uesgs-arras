@@ -370,8 +370,7 @@ measureText = (text, fontSize, withHeight = false) => {
     let measurement = ctx.measureText(arrayifyText(text).reduce((a, b, i) => (i & 1) ? a : a + b, ''));
     return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
 };
-function generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center) {
-    console.log({rawText, size, defaultFillStyle, fade, stroke, center});
+function generateTextImage(rawText, size, defaultFillStyle) {
     let image = document.createElement('canvas'),
         context = image.getContext('2d');
     context.lineWidth = (size + 1) / settings.graphical.fontStrokeRatio;
@@ -387,6 +386,7 @@ function generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center
     image.width = textSizes.width + halfLineWidth * 2;
     image.height = textSizes.height + halfLineWidth * 2;
     image.textWidth = textSizes.width;
+    image.dontCache = Object.values(gameDraw.animatedColor).includes(defaultFillStyle);
 
     // Draw it
     context.textAlign = "left";
@@ -395,9 +395,7 @@ function generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center
     context.fillStyle = defaultFillStyle;
     context.lineCap = "round";
     context.lineJoin = "round";
-    if (stroke) {
-        context.strokeText(renderedFullText, x, y);
-    }
+    context.strokeText(renderedFullText, x, y);
     for (let i = 0; i < textArray.length; i++) {
         let str = textArray[i];
 
@@ -411,6 +409,9 @@ function generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center
                 // try your best to get a valid color out of it
                 if (!isNaN(str)) {
                     str = parseInt(str);
+                }
+                if (gameDraw.animatedColors[str]) {
+                    image.dontCache = true;
                 }
                 str = gameDraw.getColor(str) ?? str;
             }
@@ -428,18 +429,23 @@ function generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center
     }
     return image;
 }
-function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
+function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false) {
     size += settings.graphical.fontSizeBoost;
     // Get text dimensions and resize/reset the canvas
     let offset = size / 5;
-    context.font = "bold " + size + "px Ubuntu";
+    ctx.font = "bold " + size + "px Ubuntu";
 
-    let cacheLabel = size.toFixed(2) + defaultFillStyle + rawText;
-    if (!textImageCache[cacheLabel]) {
-        textImageCache[cacheLabel] = generateTextImage(rawText, size, defaultFillStyle, fade, stroke, center);
-    }
-    let alignMultiplier = 0,
+    let cacheLabel = size.toFixed(2) + defaultFillStyle + rawText,
+        image;
+    if (textImageCache[cacheLabel]) {
         image = textImageCache[cacheLabel];
+    } else {
+        image = generateTextImage(rawText, size, defaultFillStyle);
+        if (image.dontCache) {
+            textImageCache[cacheLabel] = image;
+        }
+    }
+    let alignMultiplier = 0;
     switch (align) {
         // case "left":
         //     //do nothing.
