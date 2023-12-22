@@ -778,8 +778,7 @@ class io_orbit extends IO {
     }
 }
 
-// WIP
-class io_pacifyOnOverride extends IO {
+class io_disableOnOverride extends IO {
     constructor(body) {
         super(body);
         this.originalDamage = this.body.damage;
@@ -799,7 +798,7 @@ class io_pacifyOnOverride extends IO {
         }
         if (this.body.alpha != this.targetAlpha) {
             this.body.alpha += util.clamp(this.targetAlpha - this.body.alpha, -0.05, 0.05);
-            this.body.flattenedPhoto = null;
+            if (this.body.flattenedPhoto) this.body.flattenedPhoto.alpha = this.body.alpha;
         }
     }
 }
@@ -813,7 +812,7 @@ let ioTypes = {
     mapAltToFire: io_mapAltToFire,
     mapFireToAlt: io_mapFireToAlt,
     whirlwind: io_whirlwind,
-    pacifyOnOverride: io_pacifyOnOverride,
+    disableOnOverride: io_disableOnOverride,
 
     //aiming related
     stackGuns: io_stackGuns,
