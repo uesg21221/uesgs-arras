@@ -6,6 +6,7 @@ function generateFrontierMaze(width, height) {
     let maze = JSON.parse(JSON.stringify(Array(height + 2).fill([2, ...Array(width).fill(1), 2])));
     maze[0] = Array(width + 2).fill(2);
     maze[height + 1] = Array(width + 2).fill(2);
+    global.frontierMazeWalls = [];
 
     // Interconnecting
     for (let i = 2; i < height; i += 2) {
@@ -132,6 +133,7 @@ function generateFrontierMaze(width, height) {
                 o.team = TEAM_ENEMIES;
                 o.protect();
                 o.life();
+                frontierMazeWalls.push(o);
             }
         }
     }

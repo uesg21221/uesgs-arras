@@ -1,6 +1,6 @@
 let { rock, roid } = require('../tiles/decoration.js'),
     { normal: ____, nest, wall } = require('../tiles/misc.js'),
-    { laby } = require('../tiles/theFrontier.js'),
+    { laby, ink } = require('../tiles/theFrontier.js'),
     bases = require('../tiles/tdm.js'),
     { TEAMS: teams, TDM_END: tdmEnd, LABYRINTH_START: labyStart, LABYRINTH_END: labyEnd } = require('../gamemodeconfigs/theFrontier.js'),
 

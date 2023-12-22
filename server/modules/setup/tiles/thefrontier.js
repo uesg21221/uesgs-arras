@@ -1,10 +1,28 @@
-let { spawnNatural } = require('./misc.js');
+let { pickFromChanceSet, spawnNatural } = require('./misc.js'),
+
+spawnLabyNatural = (tile, layeredSet, kind) => {
+    let o = new Entity(tile.randomInside());
+    o.define(pickFromChanceSet(pickFromChanceSet(layeredSet)));
+    // Abort if colliding
+    for (let entity of frontierMazeWalls) {
+        if (entity.type == 'wall' && Math.abs(o.x - entity.x) < (entity.size + o.size) && Math.abs(o.y - entity.y) < (entity.size + o.size)) {
+            o.kill();
+            return;
+        }
+    }
+    
+    tile.data.foodSpawnCooldown = 0;
+    o.facing = ran.randomAngle();
+    o.team = TEAM_ENEMIES;
+    o.on('dead', () => tile.data[kind + 'Count']--);
+    tile.data[kind + 'Count']++;
+    return o;
+},
 
 labyTick = tile => {
     if (++tile.data.foodSpawnCooldown > c.FOOD_SPAWN_COOLDOWN_LABYRINTH) {
-        tile.data.foodSpawnCooldown = 0;
         if (tile.data.foodCount < c.FOOD_CAP_LABYRINTH && Math.random() < c.FOOD_SPAWN_CHANCE_LABYRINTH) {
-            spawnNatural(tile, c.FOOD_TYPES_LABYRINTH, 'food');
+            spawnLabyNatural(tile, c.FOOD_TYPES_LABYRINTH, 'food');
         }
     }
 },
@@ -32,9 +50,9 @@ ink = new Tile({
     data: {
         allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,
-        enemySpawnCooldown: 0, enemyCount: 0
+        enemySpawnCooldown: -c.FOOD_SPAWN_COOLDOWN_INK, enemyCount: 0
     },
     tick: inkTick
-}),
+});
 
-module.exports = {laby}
+module.exports = {laby, ink}

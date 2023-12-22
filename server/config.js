@@ -193,25 +193,25 @@ module.exports = {
 
     // The possible labyrinth food types that can spawn.
     FOOD_TYPES_LABYRINTH: [
-        [200, [
+        [16384, [ // 92.3% - 11 in every 12
             [16, 'egg'], [32, 'square'], [64, 'triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
         ]],
-        [20, [
+        [1024, [ // 5.77% - 1 in every 17
             [25, 'gem'], [56, 'shinySquare'], [125, 'shinyTriangle'], [25, 'shinyPentagon'], [5, 'shinyBetaPentagon'], [1, 'shinyAlphaPentagon']
         ]],
-        [4, [
+        [256, [ // 1.44% - 1 in every 69
             [36, 'jewel'], [88, 'legendarySquare'], [216, 'legendaryTriangle'], [36, 'legendaryPentagon'], [6, 'legendaryBetaPentagon'], [1, 'legendaryAlphaPentagon']
         ]],
-        [0.2, [
+        [64, [ // 0.361% - 1 in every 277
             /*[16807, 'egg'], */[130, 'shadowSquare'], [343, 'shadowTriangle'], [49, 'shadowPentagon'], [7, 'shadowBetaPentagon'], [1, 'shadowAlphaPentagon']
         ]],
-        [0.04, [
+        [16, [ // 0.090% - 1 in every 1109
             /*[65536, 'egg'], */[181, 'rainbowSquare'], [512, 'rainbowTriangle'], [64, 'rainbowPentagon'], [8, 'rainbowBetaPentagon'], [1, 'rainbowAlphaPentagon']
         ]],
-        [0.02, [
+        [4, [ // 0.0225% - 1 in every 4437
             /*[59549, 'egg'], */[243, 'transSquare'], [729, 'transTriangle'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
         ]],
-        [0.004, [
+        [1, [ // 0.0056% - 1 in every 17749
             [100000, 'sphere'], [10000, 'cube'], [1000, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
         ]]
     ],
