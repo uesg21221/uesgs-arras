@@ -778,6 +778,32 @@ class io_orbit extends IO {
     }
 }
 
+// WIP
+class io_pacifyOnOverride extends IO {
+    constructor(body) {
+        super(body);
+        this.originalDamage = this.body.damage;
+    }
+
+    think(input) {
+        if (!this.initialAlpha) {
+            this.initialAlpha = this.body.alpha;
+            this.targetAlpha = this.initialAlpha;
+        }
+        if (this.body.parent.master.autoOverride || this.body.parent.master.master.autoOverride) {
+            this.targetAlpha = 0;
+            this.body.damage = 0;
+        } else {
+            this.targetAlpha = this.initialAlpha;
+            this.body.damage = this.originalDamage;
+        }
+        if (this.body.alpha != this.targetAlpha) {
+            this.body.alpha += util.clamp(this.targetAlpha - this.body.alpha, -0.05, 0.05);
+            this.body.flattenedPhoto = null;
+        }
+    }
+}
+
 let ioTypes = {
     //misc
     zoom: io_zoom,
@@ -787,6 +813,7 @@ let ioTypes = {
     mapAltToFire: io_mapAltToFire,
     mapFireToAlt: io_mapFireToAlt,
     whirlwind: io_whirlwind,
+    pacifyOnOverride: io_pacifyOnOverride,
 
     //aiming related
     stackGuns: io_stackGuns,

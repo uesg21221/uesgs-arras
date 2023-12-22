@@ -271,6 +271,7 @@ exports.auraBase = {
     ALPHA: 0.3,
     CLEAR_ON_MASTER_UPGRADE: true,
     CAN_GO_OUTSIDE_ROOM: true,
+    CONTROLLERS: ["disableOnOverride"],
     BODY: {
         SHIELD: 1e9,
         REGEN: 1e6,
