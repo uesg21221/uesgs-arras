@@ -1,5 +1,6 @@
 function generateMaze(size) {
     let maze = JSON.parse(JSON.stringify(Array(size).fill(Array(size).fill(true))));
+    let activeLocsThatWeCantPlaceIn = 0;
     maze[0] = Array(size).fill(false);
     maze[size - 1] = Array(size).fill(false);
     maze[Math.floor(size * 0.15)] = [true, true, true, true, true, true, ...Array(size - 12).fill(false), true, true, true, true, true, true];
@@ -86,6 +87,7 @@ function generateMaze(size) {
                 let spawnWall = true;
                 let d = {};
                 let scale = room.width / size;
+                let loc = {x, y}
                 if (maze[x][y] === 3) d = {
                     x: (x * scale) + (scale * 1.5),
                     y: (y * scale) + (scale * 1.5),
@@ -111,7 +113,7 @@ function generateMaze(size) {
                         y: d.y
                     });
                     o.define(Class.wall);
-                    o.SIZE = (d.s * 0.5) + d.sS;
+                    o.SIZE = d.s * 0.5;
                     o.team = TEAM_ENEMIES;
                     o.protect();
                     o.life();

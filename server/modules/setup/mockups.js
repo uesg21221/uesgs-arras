@@ -10,9 +10,11 @@ function getMockup(e, positionInfo) {
         index: e.index,
         name: e.label,
         upgradeName: e.upgradeLabel,
+        upgradeTooltip: e.upgradeTooltip,
         x: rounder(e.x),
         y: rounder(e.y),
         color: e.color,
+        strokeWidth: e.strokeWidth,
         upgradeColor: e.upgradeColor,
         glow: e.glow,
         borderless: e.borderless,
@@ -41,6 +43,7 @@ function getMockup(e, positionInfo) {
                 aspect: rounder(gun.aspect),
                 angle: rounder(gun.angle),
                 color: gun.color,
+                strokeWidth: gun.strokeWidth,
                 alpha: gun.alpha,
                 borderless: gun.borderless,
                 drawFill: gun.drawFill,
@@ -270,9 +273,11 @@ for (let k in Class) {
         // Kill the reference entities.
         temptank.destroy();
     } catch (error) {
+        util.error('[WARNING] An error has occured during mockup loading:');
         util.error(error);
-        util.error(k);
-        util.error(Class[k]);
+        util.error('When attempting to generate mockup "' + k + '":');
+        for (let i in Class[k]) util.error("\t" + i + ": " + Class[k][i]);
+        throw Error("Mockups load aborted.");
     }
 }
 

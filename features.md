@@ -1,7 +1,8 @@
 # List of added, changed or removed features
 
-Unfinished list of all features that OSA/APS++ has included in the base template that are not in other templates.
+The list of all features that OSA/APS++ has included in the base template that are not in other templates.
 
+It includes all features up to the latest release version.
 
 ## Added
 
@@ -99,7 +100,7 @@ Unfinished list of all features that OSA/APS++ has included in the base template
 * Gun Definition Attribute: `DRAW_ABOVE`.
   * Makes a gun appear above the player but below top turrets.
 
-* Gun Definition Attribute. `INDEPENDENT_CHILDREN`.
+* Gun Definition Attribute: `INDEPENDENT_CHILDREN`.
   * Spawns `TYPE` as an independent entity instead of a projectile.
 
 * Definition Attribute: `BORDERLESS`.
@@ -116,7 +117,7 @@ Unfinished list of all features that OSA/APS++ has included in the base template
   * All labyrinth Foods.
   * All Relic variants of Old Food.
   * Sphere, Tetrahedron, Octahedron and Tesseract as Extradimensional Food.
-  * Still kept the old Alpha/Beta Pentagons.
+  * Still kept the old Alpha/Beta Pentagons and Gems/Jewels.
 
 * More Gamemodes: Train Wars, Manhunt, Space.
 

@@ -241,6 +241,33 @@ exports.trap = {
     },
 };
 
+exports.satellite = { 
+    LABEL: "Satellite",
+    TYPE: "drone",
+    ACCEPTS_SCORE: false,
+    DANGER: 2,
+    SHAPE: 0,
+    LAYER: 13,
+    CONTROLLERS: ['orbit'],
+    FACING_TYPE: "spin",
+    BODY: {
+        PENETRATION: 1.2,
+        PUSHABILITY: 0.6,
+        ACCELERATION: 0.75,
+        HEALTH: 0.3,
+        DAMAGE: 3.375,
+        SPEED: 10,
+        RANGE: 200,
+        DENSITY: 0.03,
+        RESIST: 1.5,
+        FOV: 0.5,
+    },
+    DRAW_HEALTH: false,
+    CLEAR_ON_MASTER_UPGRADE: true,
+    BUFF_VS_FOOD: true,
+    MOTION_TYPE: 'motor'
+}
+
 exports.mendersymbol = {
     PARENT: ["genericTank"],
     COLOR: "grey",
@@ -271,6 +298,7 @@ exports.auraBase = {
     ALPHA: 0.3,
     CLEAR_ON_MASTER_UPGRADE: true,
     CAN_GO_OUTSIDE_ROOM: true,
+    CONTROLLERS: ["disableOnOverride"],
     BODY: {
         SHIELD: 1e9,
         REGEN: 1e6,

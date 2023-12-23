@@ -18,6 +18,7 @@ module.exports = {
     productionist: { reload: 75, recoil: 0.25, shudder: 0.05, size: 0.7, damage: 0.75, speed: 4, range: 1.5, spray: 5 },
 
     // Spammers
+    desmos: {shudder: 0, spray: 0, size: 0.8},
     single: { reload: 1.05, speed: 1.05 },
     twin: { recoil: 0.5, shudder: 0.9, health: 0.9, damage: 0.7, spray: 1.2 },
     double: { damage: 0.9 },
@@ -83,6 +84,7 @@ module.exports = {
     mehdrone: { size: 1.35, health: 1.75, speed: 1.125 },
     bigdrone: { size: 1.8, health: 2.5, speed: 1.25 },
     mothership: { reload: 1.25, pen: 1.1, speed: 0.775, maxSpeed: 0.8, range: 15, resist: 1.15 },
+    satellite: { size: 0.8, reload: 3, damage: 1.875 },
 
     // Heavy cannons
     pound: { reload: 2, recoil: 1.6, damage: 2, speed: 0.85, maxSpeed: 0.8, density: 1.5, resist: 1.15 },

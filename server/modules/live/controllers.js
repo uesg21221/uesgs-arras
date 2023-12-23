@@ -106,12 +106,16 @@ class io_listenToPlayer extends IO {
                 x: this.player.target.x,
                 y: this.player.target.y,
             };
+        if (this.body.reverseTargetWithTank) {
+            target.x *= this.body.reverseTank;
+            target.y *= this.body.reverseTank;
+        }
         this.body.facingLocked = this.player.command.spinlock;
         if (this.player.command.autospin) {
             let kk = Math.atan2(this.body.control.target.y, this.body.control.target.x) + (this.player.command.rmb ? 0.02 * -1 : 0.02);
             if (this.body.autospinBoost) {
                 let thing = (0.02 * (this.body.autospinBoost * ((this.body.skill.spd / 4) + 0.5)));
-                if (this.player.command.lmb) thing = thing * 1.5;
+                if (this.player.command.lmb) thing = thing * 2;
                 if (this.player.command.rmb) thing = thing * -1;
                 kk += thing / c.gameSpeed;
             }
@@ -721,29 +725,81 @@ class io_formulaTarget extends IO {
         };
     }
 }
-
-class io_orbit extends IO {
-    constructor (b, opts = {}) {
-        super(b);
-        this.radius = opts.radius || 3;
-        this.spin = opts.spin || 0.1;
+class io_whirlwind extends IO {
+    constructor(body, opts = {}) {
+        super(body);
+        this.body.angle = 0;
+        this.minDistance = opts.minDistance ?? 75;
+        this.maxDistance = opts.maxDistance ?? 225;
+        this.body.dist = opts.initialDist || this.minDistance;
+        this.body.inverseDist = this.maxDistance - this.body.dist + this.minDistance;
+        this.radiusScalingSpeed = opts.radiusScalingSpeed || 10;
     }
-    think (input) {
-        let distance = this.body.master.size * this.radius,
-            angle = this.spin + Math.atan2(this.body.master.y - this.body.y, this.body.master.x - this.body.x);
-
-        //this.body.x = this.body.master.x + distance * Math.cos(angle);
-        //this.body.y = this.body.master.y + distance * Math.sin(angle);
-        let goalRelative = new Vector(this.body.master.x + distance * Math.cos(angle) - this.body.x, this.body.master.y + distance * Math.sin(angle) - this.body.y),
-            goalRelativeLength = goalRelative.length;
-        goalRelative.x /= goalRelativeLength;
-        goalRelative.y /= goalRelativeLength;
-        return {
-            goal: {
-                x: this.body.x + goalRelative.x,
-                y: this.body.y + goalRelative.y
+    
+    think(input) {
+        this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
+        if(input.fire){
+            if(this.body.dist <= this.maxDistance) {
+                this.body.dist += Math.min(this.radiusScalingSpeed, this.maxDistance - this.body.dist);
+                this.body.inverseDist -= Math.min(this.radiusScalingSpeed, this.body.inverseDist - this.minDistance);
             }
-        };
+        }
+        else if(input.alt){
+            if(this.body.dist >= this.minDistance) {
+                this.body.dist -= Math.min(this.radiusScalingSpeed, this.body.dist - this.minDistance);
+                this.body.inverseDist += Math.min(this.radiusScalingSpeed, this.maxDistance - this.body.inverseDist);
+            }
+        }
+    }
+}
+class io_orbit extends IO {
+    constructor(body, opts = {}) {
+        super(body);
+        this.realDist = 0;
+        this.invert = opts.invert ?? false;
+    }
+  
+    think(input) {
+        let invertFactor = this.invert ? -1 : 1,
+            master = this.body.master.master,
+            dist = this.invert ? master.inverseDist : master.dist,
+            angle = (this.body.angle * Math.PI / 180 + master.angle) * invertFactor;
+        
+        if(this.realDist > dist){
+            this.realDist -= Math.min(10, Math.abs(this.realDist - dist));
+        }
+        else if(this.realDist < dist){
+            this.realDist += Math.min(10, Math.abs(dist - this.realDist));
+        }
+        this.body.x = master.x + Math.cos(angle) * this.realDist;
+        this.body.y = master.y + Math.sin(angle) * this.realDist;
+        
+        this.body.facing = angle;
+    }
+}
+
+class io_disableOnOverride extends IO {
+    constructor(body) {
+        super(body);
+        this.originalDamage = this.body.damage;
+    }
+
+    think(input) {
+        if (!this.initialAlpha) {
+            this.initialAlpha = this.body.alpha;
+            this.targetAlpha = this.initialAlpha;
+        }
+        if (this.body.parent.master.autoOverride || this.body.parent.master.master.autoOverride) {
+            this.targetAlpha = 0;
+            this.body.damage = 0;
+        } else {
+            this.targetAlpha = this.initialAlpha;
+            this.body.damage = this.originalDamage;
+        }
+        if (this.body.alpha != this.targetAlpha) {
+            this.body.alpha += util.clamp(this.targetAlpha - this.body.alpha, -0.05, 0.05);
+            if (this.body.flattenedPhoto) this.body.flattenedPhoto.alpha = this.body.alpha;
+        }
     }
 }
 
@@ -755,6 +811,8 @@ let ioTypes = {
     alwaysFire: io_alwaysFire,
     mapAltToFire: io_mapAltToFire,
     mapFireToAlt: io_mapFireToAlt,
+    whirlwind: io_whirlwind,
+    disableOnOverride: io_disableOnOverride,
 
     //aiming related
     stackGuns: io_stackGuns,

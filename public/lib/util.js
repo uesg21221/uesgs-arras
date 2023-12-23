@@ -137,6 +137,7 @@ const util = {
             guns = [],
             turrets = [],
             name = "",
+            upgradeTooltip = "",
             rerootUpgradeTree = [],
             allRoots = [],
             trueColor = mainMockup.color;
@@ -147,12 +148,14 @@ const util = {
             guns.push(...mockup.guns);
             turrets.push(...mockup.turrets);
             name += mockup.name.length > 0 ? "-" + mockup.name : "";
+            upgradeTooltip += mockup.upgradeTooltip ? "\n" + mockup.upgradeTooltip : "";
             if (mockup.rerootUpgradeTree) allRoots.push(...mockup.rerootUpgradeTree.split("\\/"));
         }
         for (let root of allRoots) {
             if (!rerootUpgradeTree.includes(root))
                 rerootUpgradeTree.push(root);
         }
+        turrets.sort(a => a.layer);
         return {
             time: 0,
             index: index,
@@ -193,6 +196,7 @@ const util = {
             facing: mainMockup.facing,
             shape: mainMockup.shape,
             name: name.substring(1),
+            upgradeTooltip: upgradeTooltip.substring(1),
             upgradeName: mainMockup.upgradeName,
             score: 0,
             tiggle: 0,
@@ -206,6 +210,7 @@ const util = {
                     return {
                         color: g.color,
                         alpha: g.alpha,
+                        strokeWidth: g.strokeWidth,
                         borderless: g.borderless, 
                         drawFill: g.drawFill,
                         drawAbove: g.drawAbove,
