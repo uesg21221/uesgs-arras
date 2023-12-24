@@ -2149,57 +2149,56 @@ exports.fighter = {
     ],
 }
 exports.booster = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Booster",
     BODY: {
         HEALTH: base.HEALTH * 0.4,
         SHIELD: base.SHIELD * 0.4,
-        DENSITY: base.DENSITY * 0.3,
+        DENSITY: base.DENSITY * 0.3
     },
     DANGER: 7,
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.trifront, g.tonsmorrecoil]),
                 TYPE: "bullet",
-                LABEL: "Front",
-            },
+                LABEL: "Front"
+            }
         },
         {
-            POSITION: [13, 8, 1, 0, -1, 140, 0.6],
+            POSITION: [14, 8, 1, 0, -1, 140, 0.6],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
-            },
+                LABEL: gunCalcNames.thruster
+            }
         },
         {
-            POSITION: [13, 8, 1, 0, 1, 220, 0.6],
+            POSITION: [14, 8, 1, 0, 1, -140, 0.6],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
-            },
+                LABEL: gunCalcNames.thruster
+            }
         },
         {
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
-            },
+                LABEL: gunCalcNames.thruster
+            }
         },
         {
-            POSITION: [16, 8, 1, 0, 0, 210, 0.1],
+            POSITION: [16, 8, 1, 0, 0, -150, 0.1],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
-            },
-        },
-    ],
+                LABEL: gunCalcNames.thruster
+            }
+        }
+    ]
 }
 exports.surfer = {
     PARENT: ["genericTank"],
@@ -4042,7 +4041,7 @@ exports.triplex = {
     ],
 }
 exports.quadruplex = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Quadruplex",
     DANGER: 7,
     STAT_NAMES: statnames.desmos,
