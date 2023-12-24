@@ -829,7 +829,7 @@ module.exports = ({ Class }) => {
 			},
 		];
 	}
-	function addAutoTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.trap], isBox = false) {
+	function addAutoTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.trap], MAX_CHILDREN = 6, isBox = false) {
 		let output = [
 			{
 				POSITION: [length, width, 1, x, y, angle, 0],
@@ -844,10 +844,12 @@ module.exports = ({ Class }) => {
 				POSITION: [length2, width, aspect, x + length, y, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats(stats),
-					TYPE: isBox ? 'unsetPillbox' : 'autoTrap',
+					TYPE: isBox ? 'unsetPillboxWeakSnowdread' : 'autoTrapSnowdread',
 					STAT_CALCULATOR: gunCalcNames.trap,
 					INDEPENDENT: true,
-					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6}
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6},
+					MAX_CHILDREN,
+					DESTROY_OLDEST_CHILD: true,
 				},
 			}, {
 				POSITION: [length + length2 / 2, width * 0.9, 0.6, x, y, angle, 0],
@@ -1405,6 +1407,110 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [20, 0, 0, 180, 0, 1],
 				TYPE: ["aggressorMinionTopSnowdread"],
+			},
+		]
+	}
+	Class.trapAutoTurret = {
+		PARENT: "spamAutoTurret",
+		GUNS: [
+			{
+				POSITION: [22, 10, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.turret, g.overdrive, {recoil: 0}]),
+					TYPE: "bullet",
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.6}
+				},
+			},
+		],
+	}
+	Class.autoTrapSnowdread = {
+		PARENT: 'trap',
+		TURRETS: [
+			{
+				POSITION: [11, 0, 0, 0, 360, 1],
+				TYPE: "trapAutoTurret",
+			},
+		],
+	}
+	Class.pillboxTurretWeakSnowdread = {
+		PARENT: "spamAutoTurret",
+		LABEL: "",
+		BODY: {
+			FOV: 2,
+		},
+		HAS_NO_RECOIL: true,
+		GUNS: [
+			{
+				POSITION: [17, 15, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.minion, g.turret, g.power, g.auto, g.fake]),
+					TYPE: "bullet",
+					COLOR: {BASE: 17, BRIGHTNESS_SHIFT: -7.5}
+				},
+			}, {
+				POSITION: [22, 11, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.minion, g.turret, g.power, g.auto, g.notdense]),
+					TYPE: "bullet",
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.6}
+				},
+			}, {
+				POSITION: [14, 13, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.minion, g.turret, g.power, g.auto, g.fake]),
+					TYPE: "bullet",
+					COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}
+				},
+			},
+		],
+	}
+	Class.pillboxTurretSnowdread = {
+		PARENT: "spamAutoTurret",
+		LABEL: "",
+		BODY: {
+			FOV: 2,
+		},
+		HAS_NO_RECOIL: true,
+		GUNS: [
+			{
+				POSITION: [17, 15, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.turret, g.power, g.auto, g.fake]),
+					TYPE: "bullet",
+					COLOR: {BASE: 17, BRIGHTNESS_SHIFT: -7.5}
+				},
+			}, {
+				POSITION: [22, 11, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.turret, g.power, g.auto, g.notdense]),
+					TYPE: "bullet",
+					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.6}
+				},
+			}, {
+				POSITION: [14, 13, 1, 0, 0, 0, 0],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.turret, g.power, g.auto, g.fake]),
+					TYPE: "bullet",
+					COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}
+				},
+			},
+		],
+	}
+	Class.unsetPillboxWeakSnowdread = {
+		PARENT: 'unsetPillbox',
+		TURRETS: [
+			{
+				POSITION: [11, 0, 0, 0, 360, 1],
+				TYPE: "pillboxTurretWeakSnowdread",
+			},
+		]
+	}
+	Class.unsetPillboxSnowdread = {
+		PARENT: 'unsetPillbox',
+		TURRETS: [
+			{
+				POSITION: [11, 0, 0, 0, 360, 1],
+				TYPE: "pillboxTurretSnowdread",
 			},
 		]
 	}
@@ -2217,15 +2323,6 @@ module.exports = ({ Class }) => {
 			...addTrap({length: 13, length2: 3.75, width: 7, aspect: 1.75, angle: 90*i}, 0, [g.trap, g.block, {health: 2}], true),
 		)
 	}
-	Class.autoTrap = {
-		PARENT: 'trap',
-		TURRETS: [
-			{
-				POSITION: [11, 0, 0, 0, 360, 1],
-				TYPE: "pillboxTurret",
-			},
-		],
-	}
 	Class.cleanerSnowdread = { // auto-traps
 	    PARENT: ["genericSquarenought"],
 	    LABEL: "Cleaner",
@@ -2234,7 +2331,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 4; i++) {
 		Class.cleanerSnowdread.GUNS.push(
-			...addAutoTrap({length: 15, width: 6, aspect: 1.7, angle: 90*i}, -5, [g.trap, {health: 1.2, reload: 1.15}])
+			...addAutoTrap({length: 15, width: 6, aspect: 1.7, angle: 90*i}, -5, [g.trap, {health: 1.2, reload: 1.15, speed: 0.8}], 7)
 		)
 	}
 	Class.auraTrapAura = addAura(1/3, 2, 0.15, 0, "Small");
@@ -3231,7 +3328,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 3; i++) {
 		Class.sweeperSnowdread.GUNS.push(
-			...addAutoTrap({length: 15.5, length2: 2, width: 15, aspect: 1.3, angle: 120*i}, -2.5, [g.trap, g.block, g.halfreload, {reload: 1.25}], true)
+			...addAutoTrap({length: 15.5, length2: 2, width: 15, aspect: 1.3, angle: 120*i}, -2.5, [g.trap, g.block, g.halfreload, {reload: 1.25}], 4, true)
 		)
 	}
 	Class.auraBlockAura = addAura(1/3, 1.6, 0.15, 0, "Small");
@@ -4690,7 +4787,7 @@ module.exports = ({ Class }) => {
 	}
 	for(let i = 0; i < 5; i++) {
 		Class.sterilizerSnowdread.GUNS.push(
-			...addAutoTrap({length: 16.5, length2: 2, width: 11, aspect: 1.3, angle: 72*i}, 0, [g.trap, g.block, g.halfreload, g.one_third_reload], true)
+			...addAutoTrap({length: 16.5, length2: 2, width: 11, aspect: 1.3, angle: 72*i}, 0, [g.trap, g.block, g.halfreload, g.one_third_reload], 4, true)
 		)
 	}
 	Class.hielamanSnowdread = { // aura-traps
