@@ -1871,6 +1871,7 @@ class Entity extends EventEmitter {
                 let waveY = (args.amplitude ?? 15) * Math.cos((this.RANGE - this.range) / (args.period ?? 4)) * this.waveReversed * (args.invert ? -1 : 1);
                 this.x += Math.cos(this.waveAngle) * waveX - Math.sin(this.waveAngle) * waveY;
                 this.y += Math.sin(this.waveAngle) * waveX + Math.cos(this.waveAngle) * waveY;
+                break;
         }
         this.accel.x += engine.x * this.control.power;
         this.accel.y += engine.y * this.control.power;
