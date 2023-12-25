@@ -77,7 +77,7 @@ exports.minibossBase = {
         mob: 0,
     }),
     LEVEL: 45,
-    CONTROLLERS: ["nearestDifferentMaster", "canRepel"],
+    CONTROLLERS: ["nearestDifferentMaster", "canRepel", "mapTargetToGoal"],
     FACING_TYPE: ['spin', {speed: 0.02}],
     HITS_OWN_TYPE: "hardOnlyBosses",
     BROADCAST_MESSAGE: "A visitor has left!",
