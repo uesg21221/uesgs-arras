@@ -43,7 +43,13 @@ exports.developer = {
         FOV: 2,
     },
     RESET_CHILDREN: true,
+    ACCEPTS_SCORE: true,
+    CAN_BE_ON_LEADERBOARD: true,
+    DRAW_HEALTH: true,
+    ARENA_CLOSER: false,
     INVISIBLE: [0, 0],
+    ALPHA: [0, 1],
+    HITS_OWN_TYPE: "hardOnlyTanks",
     SHAPE: [
         [-1, -0.8],
         [-0.8, -1],
