@@ -77,7 +77,7 @@ exports.minibossBase = {
         mob: 0,
     }),
     LEVEL: 45,
-    CONTROLLERS: ["nearestDifferentMaster", "canRepel", "mapTargetToGoal"],
+    CONTROLLERS: ["nearestDifferentMaster", "canRepel"],
     FACING_TYPE: ['spin', {speed: 0.02}],
     HITS_OWN_TYPE: "hardOnlyBosses",
     BROADCAST_MESSAGE: "A visitor has left!",
@@ -85,12 +85,12 @@ exports.minibossBase = {
 }
 exports.miniboss = {
     PARENT: ["minibossBase"],
-    CONTROLLERS: ["minion"],
+    CONTROLLERS: ["nearestDifferentMaster", "minion", "canRepel"],
     AI: { NO_LEAD: true },
 };
 exports.ramMiniboss = {
     PARENT: ["minibossBase"],
-    CONTROLLERS: ["mapTargetToGoal"],
+    CONTROLLERS: ["nearestDifferentMaster", "canRepel", "mapTargetToGoal"],
 };
 
 // GUNS
@@ -529,7 +529,7 @@ exports.eliteSpawner = {
             /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [2, 18, 1, 11, 0, 60, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.weak, g.celeslower, {health: 0.1}]),
                 TYPE: ["sentrySwarm", {GIVE_KILL_MESSAGE: false}],
                 SYNCS_SKILLS: true,
                 AUTOFIRE: true,
@@ -538,7 +538,7 @@ exports.eliteSpawner = {
         }, {
             POSITION: [2, 18, 1, 11, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.weak, g.celeslower, {health: 0.1}]),
                 TYPE: ["sentryTrap", {GIVE_KILL_MESSAGE: false}],
                 SYNCS_SKILLS: true,
                 AUTOFIRE: true,
@@ -547,7 +547,7 @@ exports.eliteSpawner = {
         }, {
             POSITION: [2, 18, 1, 11, 0, 300, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.celeslower]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, g.weak, g.celeslower, {health: 0.1}]),
                 TYPE: ["sentryGun", {GIVE_KILL_MESSAGE: false}],
                 SYNCS_SKILLS: true,
                 AUTOFIRE: true,
