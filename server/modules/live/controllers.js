@@ -781,7 +781,8 @@ class io_orbit extends IO {
 class io_disableOnOverride extends IO {
     constructor(body) {
         super(body);
-        this.originalDamage = this.body.damage;
+        this.pacify = false;
+        this.lastPacify = false;
     }
 
     think(input) {
@@ -789,13 +790,19 @@ class io_disableOnOverride extends IO {
             this.initialAlpha = this.body.alpha;
             this.targetAlpha = this.initialAlpha;
         }
-        if (this.body.parent.master.autoOverride || this.body.parent.master.master.autoOverride) {
+        
+        this.pacify = (this.body.parent.master.autoOverride || this.body.parent.master.master.autoOverride);
+        if (this.pacify && !this.lastPacify) {
             this.targetAlpha = 0;
-            this.body.damage = 0;
-        } else {
+            this.body.pacify = true;
+            this.body.refreshBodyAttributes();
+        } else if (!this.pacify && this.lastPacify) {
             this.targetAlpha = this.initialAlpha;
-            this.body.damage = this.originalDamage;
+            this.body.pacify = false;
+            this.body.refreshBodyAttributes();
         }
+        this.lastPacify = this.pacify;
+
         if (this.body.alpha != this.targetAlpha) {
             this.body.alpha += util.clamp(this.targetAlpha - this.body.alpha, -0.05, 0.05);
             if (this.body.flattenedPhoto) this.body.flattenedPhoto.alpha = this.body.alpha;
