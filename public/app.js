@@ -429,7 +429,7 @@ function generateTextImage(rawText, size, defaultFillStyle) {
     }
     return image;
 }
-function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false) {
+function drawText(rawText, x, y, size, defaultFillStyle, align = "left") {
     size += settings.graphical.fontSizeBoost;
     // Get text dimensions and resize/reset the canvas
     let offset = size / 5;
@@ -445,6 +445,9 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
             textImageCache[cacheLabel] = image;
         }
     }
+
+    // TODO: unfuck positioning, somehow
+    // potentially, refactor all cases where `center = true`
     let alignMultiplier = 0;
     switch (align) {
         // case "left":
@@ -1329,7 +1332,7 @@ function drawMessages(spacing) {
         drawBar(x - msg.len / 2, x + msg.len / 2, y + height / 2, height, color.black);
         // Draw the text
         ctx.globalAlpha = Math.min(1, msg.alpha);
-        drawText(text, x, y + height / 2, height - 4, color.guiwhite, "center", true);
+        drawText(text, x, y + 2, height - 4, color.guiwhite, "center");
         // Iterate and move
         y += vspacing + height;
         if (msg.status > 1) {
@@ -1410,10 +1413,10 @@ function drawSkillBars(spacing, alcoveSize) {
         // Skill name
         len = save * ska(max);
         let textcolor = level == maxLevel ? col : !gui.points || (cap !== maxLevel && level == cap) ? color.grey : color.guiwhite;
-        drawText(name, Math.round(x + len / 2) + 0.5, y + height / 2, height - 5, textcolor, "center", true);
+        drawText(name, Math.round(x + len / 2) + 0.5, y + 2.5, height - 5, textcolor, "center");
 
         // Skill key
-        drawText("[" + (ticker % 10) + "]", Math.round(x + len - height * 0.25) - 1.5, y + height / 2, height - 5, textcolor, "right", true);
+        drawText("[" + (ticker % 10) + "]", Math.round(x + len - height * 0.25) - 1.5, y + 2.5, height - 5, textcolor, "right");
         if (textcolor === color.guiwhite) {
             // If it's active
             global.clickables.stat.place(ticker - 1, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
@@ -1421,7 +1424,7 @@ function drawSkillBars(spacing, alcoveSize) {
 
         // Skill value
         if (level) {
-            drawText(textcolor === col ? "MAX" : "+" + level, Math.round(x + len + 4) + 0.5, y + height / 2, height - 5, col, "left", true);
+            drawText(textcolor === col ? "MAX" : "+" + level, Math.round(x + len + 4) + 0.5, y + 2.5, height - 5, col, "left");
         }
 
         // Move on
@@ -1449,7 +1452,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     drawBar(x, x + len * gui.__s.getProgress(), y + height / 2, height - 2, color.gold);
 
     // Draw the class type
-    drawText("Level " + gui.__s.getLevel() + " " + gui.class, x + len / 2, y + height / 2 + 1, height - 2.5, color.guiwhite, "center", true);
+    drawText("Level " + gui.__s.getLevel() + " " + gui.class, x + len / 2, y + 1.25, height - 2.5, color.guiwhite, "center");
     height = 16;
     y -= height + vspacing;
 
@@ -1459,7 +1462,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     drawBar(x + len * 0.1, x + len * (0.1 + 0.8 * (max ? Math.min(1, gui.__s.getScore() / max) : 1)), y + height / 2, height - 3 - settings.graphical.barChunk / 4, color.green);
 
     //write the score and name
-    drawText("Score: " + util.formatLargeNumber(Math.floor(gui.__s.getScore())), x + len / 2, y + height / 2 + 1, height - 3.5, color.guiwhite, "center", true);
+    drawText("Score: " + util.formatLargeNumber(Math.floor(gui.__s.getScore())), x + len / 2, y + 1.75, height - 3.5, color.guiwhite, "center");
     ctx.lineWidth = 4;
     drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor, "center");
 }
@@ -1574,7 +1577,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         drawBar(x, x + len * shift, y + height / 2, height - 3.5, gameDraw.modifyColor(entry.barColor));
         // Leadboard name + score
         let nameColor = entry.nameColor || "#FFFFFF";
-        drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor, "center", true);
+        drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + 2.5, height - 5, nameColor, "center");
         // Mini-image
         let scale = height / entry.position.axis,
             xx = x - 1.5 * height - scale * entry.position.middle.x * 0.707,
@@ -1652,7 +1655,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             buttonY = initialY + height + internalSpacing;
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h + settings.graphical.barChunk, color.black);
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
-        drawText(msg, buttonX, buttonY + h / 2, h - 2, color.guiwhite, "center", true);
+        drawText(msg, buttonX, buttonY + 1, h - 2, color.guiwhite, "center");
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
 
         // Upgrade tooltip
