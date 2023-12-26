@@ -729,27 +729,31 @@ class io_whirlwind extends IO {
     constructor(body, opts = {}) {
         super(body);
         this.body.angle = 0;
-        this.minDistance = opts.minDistance ?? 75;
-        this.maxDistance = opts.maxDistance ?? 225;
-        this.body.dist = opts.initialDist || this.minDistance;
-        this.body.inverseDist = this.maxDistance - this.body.dist + this.minDistance;
+        this.minDistance = opts.minDistance ?? 3.5;
+        this.maxDistance = opts.maxDistance ?? 10;
+        this.body.dist = opts.initialDist || this.minDistance * this.body.size;
+        this.body.inverseDist = this.maxDistance * this.body.size - this.body.dist + this.minDistance * this.body.size;
         this.radiusScalingSpeed = opts.radiusScalingSpeed || 10;
     }
     
     think(input) {
         this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
+        let trueMaxDistance = this.maxDistance * this.body.size;
+        let trueMinDistance = this.minDistance * this.body.size;
         if(input.fire){
-            if(this.body.dist <= this.maxDistance) {
-                this.body.dist += Math.min(this.radiusScalingSpeed, this.maxDistance - this.body.dist);
-                this.body.inverseDist -= Math.min(this.radiusScalingSpeed, this.body.inverseDist - this.minDistance);
+            if(this.body.dist <= trueMaxDistance) {
+                this.body.dist += this.radiusScalingSpeed;
+                this.body.inverseDist -= this.radiusScalingSpeed;
             }
         }
         else if(input.alt){
-            if(this.body.dist >= this.minDistance) {
-                this.body.dist -= Math.min(this.radiusScalingSpeed, this.body.dist - this.minDistance);
-                this.body.inverseDist += Math.min(this.radiusScalingSpeed, this.maxDistance - this.body.inverseDist);
+            if(this.body.dist >= trueMinDistance) {
+                this.body.dist -= this.radiusScalingSpeed;
+                this.body.inverseDist += this.radiusScalingSpeed;
             }
         }
+        this.body.dist = Math.min(trueMaxDistance, Math.max(trueMinDistance, this.body.dist));
+        this.body.inverseDist = Math.min(trueMaxDistance, Math.max(trueMinDistance, this.body.inverseDist));
     }
 }
 class io_orbit extends IO {
