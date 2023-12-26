@@ -386,7 +386,6 @@ function generateTextImage(rawText, size, defaultFillStyle) {
     image.width = textSizes.width + halfLineWidth * 2;
     image.height = textSizes.height + halfLineWidth * 2;
     image.textWidth = textSizes.width;
-    image.dontCache = Object.values(gameDraw.animatedColor).includes(defaultFillStyle);
 
     // Draw it
     context.textAlign = "left";
