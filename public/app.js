@@ -441,7 +441,7 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left") {
         image = textImageCache[cacheLabel];
     } else {
         image = generateTextImage(rawText, size, defaultFillStyle);
-        if (image.dontCache) {
+        if (!image.dontCache) {
             textImageCache[cacheLabel] = image;
         }
     }
