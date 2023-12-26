@@ -386,6 +386,8 @@ function generateTextImage(rawText, size, defaultFillStyle) {
     image.width = textSizes.width + halfLineWidth * 2;
     image.height = textSizes.height + halfLineWidth * 2;
     image.textWidth = textSizes.width;
+    image.textHeight = textSizes.height;
+    image.dontCache = Object.keys(gameDraw.animatedColor).includes(defaultFillStyle);
 
     // Draw it
     context.textAlign = "left";
@@ -429,6 +431,8 @@ function generateTextImage(rawText, size, defaultFillStyle) {
     return image;
 }
 function drawText(rawText, x, y, size, defaultFillStyle, align = "left") {
+    if (!rawText) return;
+
     size += settings.graphical.fontSizeBoost;
     // Get text dimensions and resize/reset the canvas
     let offset = size / 5;
@@ -439,27 +443,35 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left") {
     if (textImageCache[cacheLabel]) {
         image = textImageCache[cacheLabel];
     } else {
+        console.log({ defaultFillStyle, rawText, size });
         image = generateTextImage(rawText, size, defaultFillStyle);
         if (!image.dontCache) {
             textImageCache[cacheLabel] = image;
         }
     }
 
-    // TODO: unfuck positioning, somehow
-    // potentially, refactor all cases where `center = true`
-    let alignMultiplier = 0;
+    // TODO: rework text positioning
+    // 
+    let alignFactorX = 0,
+        alignFactorY = 0;
     switch (align) {
+        // case "top":
+        // case "topright":
+        // case "topleft":
+        // case "bottom":
+        // case "bottomright":
+        // case "bottomleft":
         // case "left":
         //     //do nothing.
         //     break;
         case "center":
-            alignMultiplier = 0.5;
+            alignFactorX = 0.5;
             break;
         case "right":
-            alignMultiplier = 1;
+            alignFactorX = 1;
     }
-    if (alignMultiplier) {
-        x -= image.textWidth * alignMultiplier;
+    if (alignFactorX) {
+        x -= image.textWidth * alignFactorX;
     }
     x /= ctx.getTransform().d;
     y /= ctx.getTransform().d;
