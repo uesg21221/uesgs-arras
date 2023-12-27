@@ -219,7 +219,6 @@ exports.makeBird = (type, name = -1, color) => {
 exports.makeHybrid = (type, name = -1) => {
     let output = exports.dereference(type);
     let spawner = {
-        /********* LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
         POSITION: [6, 12, 1.2, 8, 0, 180, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.drone, g.weak]),
@@ -345,7 +344,6 @@ exports.makeBattle = (type, name = -1) => {
 exports.makeCap = (type, name = -1) => {
     let output = exports.dereference(type);
     let spawner1 = {
-        /**** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
         POSITION: [4.5, 10, 1, 10.5, 0, 125, 0],
     };
     let spawner2 = {
@@ -363,7 +361,6 @@ exports.makeCap = (type, name = -1) => {
         POSITION: [11.5, 12, 1, 0, 0, 125, 0],
     };
     let spawner4 = {
-        /**** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
         POSITION: [4.5, 10, 1, 10.5, 0, 235, 0],
     };
     let spawner5 = {
@@ -459,7 +456,6 @@ exports.makeCross = (type, name = -1) => {
 exports.makeSwarming = (type, name = -1) => {
     let output = exports.dereference(type);
     let spawner = {
-        /********* LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
         POSITION: [7, 7.5, 0.6, 7, 0, 0, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.swarm]),
@@ -485,7 +481,6 @@ exports.makeSwarming = (type, name = -1) => {
 exports.makeBiSwarming = (type, name = -1) => {
     let output = exports.dereference(type);
     let spawner1 = {
-        /********* LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
         POSITION: [7, 7.5, 0.6, 7, 0, 25, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.swarm]),
@@ -494,7 +489,6 @@ exports.makeBiSwarming = (type, name = -1) => {
         },
     };
     let spawner2 = {
-        /********* LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
         POSITION: [7, 7.5, 0.6, 7, 0, -25, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.swarm]),
@@ -520,7 +514,6 @@ exports.makeBiSwarming = (type, name = -1) => {
 exports.makeTriSwarming = (type, name = -1) => {
     let output = exports.dereference(type);
     let spawner1 = {
-        /********* LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
         POSITION: [7, 7.5, 0.6, 7, 0, 45, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.swarm]),
@@ -529,7 +522,6 @@ exports.makeTriSwarming = (type, name = -1) => {
         },
     };
     let spawner2 = {
-        /********* LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
         POSITION: [7, 7.5, 0.6, 7, 0, -45, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.swarm]),
@@ -538,7 +530,6 @@ exports.makeTriSwarming = (type, name = -1) => {
         },
     };
     let spawner3 = {
-        /********* LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
         POSITION: [7, 7.5, 0.6, 7, 0, 0, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.swarm]),
@@ -588,7 +579,6 @@ exports.makeAuto = (type, name = -1, options = {}) => {
     }
     let output = exports.dereference(type);
     let autogun = {
-        /*********    SIZE                             X             Y         ANGLE        ARC */
         POSITION: [turret.size, 0, 0, turret.angle, 360, 1],
         TYPE: [
             turret.type,
@@ -632,7 +622,6 @@ exports.makeCeption = (type, name = -1, options = {}) => {
     }
     let output = exports.dereference(type);
     let autogun = {
-        /********* SIZE X Y ANGLE ARC */
         POSITION: [turret.size, 0, 0, 180, 360, 1],
         TYPE: [
             type,
