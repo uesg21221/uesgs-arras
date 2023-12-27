@@ -433,7 +433,7 @@ exports.unsetTrap = {
         SPEED: 1,
         DENSITY: 5,
     },
-};
+}
 exports.boomerang = {
     PARENT: "trap",
     LABEL: "Boomerang",
@@ -661,7 +661,7 @@ exports.pillbox = {
             TYPE: "pillboxTurret",
         },
     ],
-};
+}
 exports.unsetPillbox = {
     PARENT: "unsetTrap",
     LABEL: "Pillbox",
@@ -674,7 +674,7 @@ exports.unsetPillbox = {
             TYPE: "pillboxTurret",
         },
     ],
-};
+}
 
 // Swarms
 exports.swarm = {
@@ -4391,7 +4391,7 @@ exports.overgunner = makeOver({
             POSITION: [12, 11, 1, 0, 0, 0, 0],
         },
     ],
-});
+})
 exports.overtrapper = makeOver({
     PARENT: "genericTank",
     LABEL: "Trapper",
@@ -4419,7 +4419,7 @@ exports.overtrapper = makeOver({
 // Auto tanks
 exports.autoDouble = makeAuto(exports.doubleTwin, "Auto-Double")
 exports.autoAssassin = makeAuto(exports.assassin)
-exports.autoGunner = makeAuto(exports.gunner);
+exports.autoGunner = makeAuto(exports.gunner)
 exports.autoTriAngle = makeAuto(exports.triAngle)
 exports.autoOverseer = makeAuto(exports.overseer)
 exports.autoCruiser = makeAuto(exports.cruiser)
