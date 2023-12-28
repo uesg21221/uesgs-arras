@@ -32,6 +32,7 @@ module.exports = [
         "nameColor": "#ffffff",
         "class": "developer",
         "infiniteLevelUp": true,
+        "evalCommand": true,
         "name": "unnamed#0000",
         "note": "note here"
     },

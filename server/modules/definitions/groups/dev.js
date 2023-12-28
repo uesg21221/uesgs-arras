@@ -1116,6 +1116,49 @@ exports.whirlwind = {
     })()
 }
 
+exports.itemDropTest_itemDrop = {
+    PARENT: 'genericTank',
+    COLOR: 'gray',
+    SHAPE: 4,
+    NAME: 'Gun (this is just a test for drop system, item drops arent real yet)',
+    LABEL: 'Gun (this is just a test for drop system, item drops arent real yet)',
+    SIZE: 10
+}
+
+exports.itemDropTest = {
+    PARENT: 'basic',
+    ITEM_DROPS: [
+        {
+            drop: 'itemDropTest_itemDrop',
+            chance: 7
+        },
+        {
+            drop: 'whirlwind',
+            chance: 6
+        },
+        {
+            drop: 'smasher',
+            chance: 6
+        },
+        {
+            drop: 'arenaCloser',
+            chance: 1
+        },
+        {
+            drop: 'mothership',
+            chance: 1
+        },
+        {
+            drop: 'nyx',
+            chance: 100
+        },
+        {
+            drop: 'bob',
+            chance: 100
+        },
+    ]
+}
+
 exports.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
     exports.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "spectator", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"];
         exports.unavailable.UPGRADES_TIER_0 = ["healer"];

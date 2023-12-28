@@ -1128,6 +1128,7 @@ class Entity extends EventEmitter {
             shield_regen: set.STAT_NAMES?.SHIELD_REGEN ?? 'Shield Regeneration',
             shield_cap: set.STAT_NAMES?.SHIELD_CAP ?? 'Shield Capacity',
         };
+        if (set.ITEM_DROPS != null) this.itemDrops = set.ITEM_DROPS;
         if (set.AI != null) this.aiSettings = set.AI;
         if (set.INVISIBLE != null) this.invisible = set.INVISIBLE;
         if (set.ALPHA != null) {
@@ -2032,6 +2033,27 @@ class Entity extends EventEmitter {
             }
         }
     }
+    spawnItemDrops() {
+        if (this.itemDrops == null || this.itemDrops.length == 0) return
+        for (let i = 0; i < this.itemDrops.length; i++) {
+
+            let chance = this.itemDrops[i].chance / this.itemDrops.length
+            if (!(chance >= Math.random())) return
+
+            // will change after I implement actual item drops
+            let itemDrop = new Entity(this)
+            console.log(this.itemDrops[i].drop.toUpperCase())
+            console.log(`before define velocity (${itemDrop.x},${itemDrop.y})`)
+            itemDrop.define(this.itemDrops[i].drop)
+            console.log(`after define (${itemDrop.x},${itemDrop.y})`)
+            itemDrop.velocity.x = ran.randomAngle() * (Math.random() * (10 - -10) + -10)
+            itemDrop.velocity.y = ran.randomAngle() * (Math.random() * (10 - -10) + -10)
+            console.log(`after velocity (${itemDrop.x},${itemDrop.y})`)
+            itemDrop.life()
+            console.log(`after life (${itemDrop.x},${itemDrop.y})`)
+
+        }
+    }
     contemplationOfMortality() {
         if (this.invuln) {
             this.damageRecieved = 0;
@@ -2084,6 +2106,9 @@ class Entity extends EventEmitter {
         if (this.isDead()) {
 
             this.emit('dead');
+
+            // Item drops
+            this.spawnItemDrops()
 
             //Shoot on death
             for (let i = 0; i < this.guns.length; i++) {
