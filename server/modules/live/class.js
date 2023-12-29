@@ -1,4 +1,4 @@
-let Class = require("../definitions/combined.js"),
+let Class = require("../definitions/entity/combined.js"),
     i = 0;
 for (let key in Class) {
     if (!Class.hasOwnProperty(key)) continue;

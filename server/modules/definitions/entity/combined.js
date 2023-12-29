@@ -2,7 +2,7 @@ let fs = require('fs'),
     path = require('path'),
     groups = fs.readdirSync(path.resolve(__dirname, './groups')),
     addons = fs.readdirSync(path.resolve(__dirname, './addons')),
-    Class = {},
+    Entity_Class = {},
     definitionCount = 0,
     definitionGroupsLoadStart = Date.now();
 console.log(`Loading ${groups.length} groups...`);
@@ -10,12 +10,12 @@ for (let filename of groups) {
     console.log(`Loading group: ${filename}`);
     let group = require('./groups/' + filename);
     for (let key in group) {
-        if (key in Class) {
+        if (key in Entity_Class) {
             console.warn(`WARNING: ${key} is present in multiple definition groups!`);
         } else {
             definitionCount++;
         }
-        Class[key] = group[key];
+        Entity_Class[key] = group[key];
     }
 }
 
@@ -27,7 +27,7 @@ for (let filename of addons) {
     if (!filename.endsWith('.js')) continue;
     
     console.log(`Loading addon: ${filename}`);
-    require('./addons/' + filename)({ Config: c, Class, Events: events });
+    require('./addons/' + filename)({ Config: c, Class: Entity_Class, Events: events });
 }
 
 let addonsLoadEnd = Date.now();
@@ -40,8 +40,8 @@ if (c.flattenDefintions) {
 
         // Support for string definition references
         if ("string" == typeof definition) {
-            if (definition in Class) {
-                definition = Class[definition];
+            if (definition in Entity_Class) {
+                definition = Entity_Class[definition];
             } else {
                 throw Error(`Definition ${definition} is attempted to be gotten but does not exist!`);
             }
@@ -65,15 +65,15 @@ if (c.flattenDefintions) {
     };
 
     let flattened = {};
-    for (let key in Class) {
+    for (let key in Entity_Class) {
         let output = {};
-        flatten(output, Class[key]);
+        flatten(output, Entity_Class[key]);
         flattened[key] = output;
     }
-    Class = flattened;
-    definitionCount = Object.keys(Class).length;
+    Entity_Class = flattened;
+    definitionCount = Object.keys(Entity_Class).length;
     console.log("Definitions flattened in " + (Date.now() - addonsLoadEnd) + " milliseconds. \n");
 }
 
 console.log(`Combined ${groups.length} definition groups and ${addons.length} addons into ${definitionCount} ${c.flattenDefintions ? 'flattened ' : ''}definitions!\n`);
-module.exports = Class;
+module.exports = Entity_Class;

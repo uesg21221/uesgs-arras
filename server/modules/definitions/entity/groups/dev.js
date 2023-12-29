@@ -1130,31 +1130,19 @@ exports.itemDropTest = {
     ITEM_DROPS: [
         {
             drop: 'itemDropTest_itemDrop',
-            chance: 7
+            chance: 4
         },
         {
             drop: 'whirlwind',
-            chance: 6
+            chance: 4
         },
         {
             drop: 'smasher',
-            chance: 6
+            chance: 4
         },
         {
             drop: 'arenaCloser',
             chance: 1
-        },
-        {
-            drop: 'mothership',
-            chance: 1
-        },
-        {
-            drop: 'nyx',
-            chance: 100
-        },
-        {
-            drop: 'bob',
-            chance: 100
         },
     ]
 }

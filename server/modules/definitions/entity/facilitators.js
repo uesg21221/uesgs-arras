@@ -1,5 +1,5 @@
 const { gunCalcNames } = require('./constants.js');
-const { MAX_SKILL } = require("../../config.js");
+const { MAX_SKILL } = require("../../../config.js");
 const g = require('./gunvals.js');
 
 let skcnv = {

@@ -88,7 +88,9 @@ const requires = [
     "./live/entitySubFunctions.js", // Skill, HealthType and other functions related to entities are here.
     "./live/controllers.js", // The AI of the game.
     "./live/entity.js", // The actual Entity constructor.
-    "./live/class.js", // Class dictionary.
+    "./live/itemdrop.js", // The actual ItemDrop constructor.
+    "./live/class.js", // Entity Class dictionary.
+    "./live/itemdrop_class.js", // Entity Class dictionary.
     "./setup/room.js", // These are the basic room functions, set up by config.json
     "./network/sockets.js", // The networking that helps players interact with the game.
     "./network/webServer.js", // The networking that actually hosts the server.
