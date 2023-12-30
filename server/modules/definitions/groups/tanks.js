@@ -774,7 +774,7 @@ exports.basic = {
     PARENT: "genericTank",
     LABEL: "Basic",
     DANGER: 4,
-    BODY: {
+    /*BODY: {
         ACCELERATION: base.ACCEL * 1,
         SPEED: base.SPEED * 1,
         HEALTH: base.HEALTH * 1,
@@ -786,14 +786,14 @@ exports.basic = {
         DENSITY: base.DENSITY * 1,
         PUSHABILITY: 1,
         HETERO: 3
-    },
+    },*/
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic]),
                 TYPE: "bullet",
-                COLOR: "grey",
+                /*COLOR: "grey",
                 LABEL: "",
                 STAT_CALCULATOR: 0,
                 WAIT_TO_CYCLE: false,
@@ -801,7 +801,7 @@ exports.basic = {
                 SYNCS_SKILLS: false,
                 MAX_CHILDREN: 0,
                 ALT_FIRE: false,
-                NEGATIVE_RECOIL: false
+                NEGATIVE_RECOIL: false*/
             }
         }
     ]
@@ -2569,7 +2569,7 @@ exports.overdrive = makeMulti({
     },
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [10, 0, 0, 0, 360, 1],
             TYPE: "overdriveDeco",
         },
     ],
