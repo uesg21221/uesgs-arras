@@ -72,19 +72,19 @@ module.exports = ({ Class }) => {
 
 	// Body helpers
 	const hpBuffBodyStats = [
-		{ HEALTH: 2.4, SHIELD: 2.4, REGEN: 2,   SPEED: 0.65 },
-		{ HEALTH: 3.2, SHIELD: 3.2, REGEN: 2.5, SPEED: 0.5  },
-		{ HEALTH: 4,   SHIELD: 4,   REGEN: 2.5, SPEED: 0.4  },
+		{ HEALTH: 2.1, SHIELD: 2.1, REGEN: 2,   SPEED: 0.8  },
+		{ HEALTH: 2.9, SHIELD: 2.9, REGEN: 2.2, SPEED: 0.65 },
+		{ HEALTH: 3.5, SHIELD: 3.4, REGEN: 2.5, SPEED: 0.55 },
 	];
 	const speedBuffBodyStats = [
-		{ SPEED: 1.75, HEALTH: 0.65 },
-		{ SPEED: 2.15, HEALTH: 0.5  },
-		{ SPEED: 2.35, HEALTH: 0.35 },
+		{ SPEED: 1.95, HEALTH: 0.65 },
+		{ SPEED: 2.3,  HEALTH: 0.5  },
+		{ SPEED: 2.55, HEALTH: 0.35 },
 	];
 	const sizeBuffBodyStats = [
-		{ SPEED: 0.9,  HEALTH: 2.4 },
-		{ SPEED: 0.85, HEALTH: 3.2 },
-		{ SPEED: 0.8,  HEALTH: 3.7 },
+		{ SPEED: 0.9,  HEALTH: 2   },
+		{ SPEED: 0.85, HEALTH: 2.4 },
+		{ SPEED: 0.8,  HEALTH: 2.8 },
 	];
 
 	// Snowdread Building Functions --------------
@@ -525,7 +525,7 @@ module.exports = ({ Class }) => {
 			},
 		];
 	}
-	function addLauncher({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic], isSkimmer = false, TYPE = "missile") {
+	function addLauncher({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic], isSkimmer = false, TYPE = "missileProjectileSnowdread") {
 		if (isSkimmer) {
 			return [
 				{
@@ -916,6 +916,30 @@ module.exports = ({ Class }) => {
 			}, {
 				POSITION: [length - 2, width * 2/3, 1, x - 1, y, angle, 0],
 				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10 }, DRAW_ABOVE: true },
+			},
+		];
+	}
+	function addThruster({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic], useThrusterCalculator = true) {
+		let STAT_CALCULATOR = useThrusterCalculator ? gunCalcNames.thruster : undefined;
+		return [
+			{ // Main barrel
+				POSITION: [length, width, 1, x, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats(stats),
+					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
+					STAT_CALCULATOR,
+					AUTOFIRE: true,
+					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 15 }
+				},
+			}, {
+				POSITION: [length - 6, width * 0.8, 1.6, x + 4, y, angle, delay],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
+					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
+					STAT_CALCULATOR,
+					AUTOFIRE: true,
+					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.65 }
+				},
 			},
 		];
 	}
@@ -1330,37 +1354,39 @@ module.exports = ({ Class }) => {
 			},
 		],
 	}
+	Class.missileProjectileSnowdread = {
+		PARENT: "bullet",
+		LABEL: "Missile",
+		INDEPENDENT: true,
+		BODY: { RANGE: 120 },
+		GUNS: [
+			...addThruster({length: 16, width: 6, y: -2, angle: 130}, -2.5, [g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
+			...addThruster({length: 16, width: 6, y: 2, angle: -130}, -2.5, [g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
+		],
+		TURRETS: [
+			{
+				POSITION: [10, 0, 0, 0, 0, 1],
+				TYPE: ["egg", {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 5}}],
+			}
+		],
+	}
 	Class.supermissile = {
 		PARENT: ["bullet"],
 		LABEL: "Missile",
 		INDEPENDENT: true,
-		BODY: {
-			RANGE: 120,
-		},
+		BODY: { RANGE: 120 },
 		GUNS: [
+			...addThruster({length: 14, width: 7, y: -2, angle: 130}, -2.5, [g.basic, g.skim, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed, {recoil: 2, damage: 0.6}]),
+			...addThruster({length: 14, width: 7, y: 2, angle: -130}, -2.5, [g.basic, g.skim, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed, {recoil: 2, damage: 0.6}]),
+			...addThruster({length: 15.5, width: 7, delay: 0.2}, -2.5, [g.basic, g.skim, g.morespeed, g.morespeed, g.morespeed, {damage: 0.9}], false),
+		],
+		TURRETS: [
 			{
-				POSITION: [14, 6, 1, 0, -2, 130, 0],
-				PROPERTIES: {
-					AUTOFIRE: true,
-					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed, {recoil: 2, damage: 0.6}]),
-					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
-					STAT_CALCULATOR: gunCalcNames.thruster,
-				},
+				POSITION: [14, 0, 0, 0, 0, 1],
+				TYPE: ["egg", {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 5}}],
 			}, {
-				POSITION: [14, 6, 1, 0, 2, 230, 0],
-				PROPERTIES: {
-					AUTOFIRE: true,
-					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed, {recoil: 2, damage: 0.6}]),
-					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
-					STAT_CALCULATOR: gunCalcNames.thruster,
-				},
-			}, {
-				POSITION: [14, 6, 1, 0, 0, 0, 0.2],
-				PROPERTIES: {
-					AUTOFIRE: true,
-					SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.morespeed, g.morespeed, g.morespeed, {damage: 0.9}]),
-					TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
-				},
+				POSITION: [9, 0, 0, 0, 0, 1],
+				TYPE: ["egg", {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -5, SATURATION_SHIFT: 0.6}, BORDERLESS: true}],
 			},
 		],
 	};
@@ -1377,7 +1403,7 @@ module.exports = ({ Class }) => {
 		PARENT: 'autoTurret',
 		CONTROLLERS: ['nearestDifferentMaster'],
 		INDEPENDENT: true,
-		COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.8},
+		COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -12.5, SATURATION_SHIFT: 0.8},
 		GUNS: [
 			{
 				POSITION: [22, 10, 1, 0, 0, 0, 0],
@@ -1496,10 +1522,18 @@ module.exports = ({ Class }) => {
 			},
 		],
 	}
+	Class.unsetPillboxTopSnowdread = {
+		SHAPE: "M -1.3 -0.15 L -1.3 0.15 L -0.3 0.3 L -0.15 1.3 L 0.15 1.3 L 0.3 0.3 L 1.3 0.15 L 1.3 -0.15 L 0.3 -0.3 L 0.15 -1.3 L -0.15 -1.3 L -0.3 -0.3 Z",
+		COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 5 },
+		MIRROR_MASTER_ANGLE: true,
+	}
 	Class.unsetPillboxWeakSnowdread = {
 		PARENT: 'unsetPillbox',
 		TURRETS: [
 			{
+				POSITION: [20, 0, 0, 45, 360, 1],
+				TYPE: "unsetPillboxTopSnowdread",
+			}, {
 				POSITION: [11, 0, 0, 0, 360, 1],
 				TYPE: "pillboxTurretWeakSnowdread",
 			},
@@ -1509,6 +1543,9 @@ module.exports = ({ Class }) => {
 		PARENT: 'unsetPillbox',
 		TURRETS: [
 			{
+				POSITION: [20, 0, 0, 45, 360, 1],
+				TYPE: "unsetPillboxTopSnowdread",
+			}, {
 				POSITION: [11, 0, 0, 0, 360, 1],
 				TYPE: "pillboxTurretSnowdread",
 			},
@@ -3098,6 +3135,12 @@ module.exports = ({ Class }) => {
 			...addGunner({length: 16, width: 4, y: -4}, 0, [g.basic, g.auto, g.gunner, g.twin, g.power, g.flank, g.flank, g.slow, {recoil: 0.25}]),
 			...addGunner({length: 16, width: 4, y: 4, delay: 0.5}, 0, [g.basic, g.auto, g.gunner, g.twin, g.power, g.flank, g.flank, g.slow, {recoil: 0.25}]),
 		],
+		TURRETS: [
+			{
+				POSITION: [13, 0, 0, 0, 0, 1],
+				TYPE: ["egg", {COLOR: -1}],
+			},
+		],
 	};
 	Class.clasperSnowdread = { // crowbar
 	    PARENT: ["genericTrinought"],
@@ -3332,7 +3375,18 @@ module.exports = ({ Class }) => {
 		)
 	}
 	Class.auraBlockAura = addAura(1/3, 1.6, 0.15, 0, "Small");
-	Class.auraBlock = makeAuto(Class.unsetTrap, "", {type: 'auraBlockAura'});
+	Class.auraBlock = {
+		PARENT: 'unsetTrap',
+		TURRETS: [
+			{
+				POSITION: [20, 0, 0, 45, 0, 1],
+				TYPE: 'unsetPillboxTopSnowdread'
+			}, {
+				POSITION: [10, 0, 0, 0, 360, 1],
+				TYPE: 'auraBlockAura'
+			}
+		]
+	}
 	Class.aegisSnowdread = { // aura-traps
 	    PARENT: ["genericTrinought"],
 	    LABEL: "Aegis",
@@ -4461,7 +4515,17 @@ module.exports = ({ Class }) => {
 		PARENT: ["spamAutoTurret"],
 		INDEPENDENT: true,
 		GUNS: [
+			{
+				POSITION: [15, 14, -1.4, 0, 0, 0, 0],
+				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.6 } },
+			},
 			...addGunner({length: 23, width: 13}, -2.5, [g.basic, g.pound, g.flank, g.flank, g.auto, {reload: 0.9, recoil: 0.25}])
+		],
+		TURRETS: [
+			{
+				POSITION: [13, 0, 0, 0, 0, 1],
+				TYPE: ["egg", {COLOR: -1}],
+			},
 		],
 	};
 	Class.gripperSnowdread = { // crowbar
@@ -4560,16 +4624,15 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 5; i++) {
 		Class.raiderSnowdread.GUNS.push(
-			...addDrone({length: 4, width: 5, aspect: 2.1, x: 9, y: 3.25, angle: 72*i}, 0, [g.drone, g.over, g.over, g.over, {size: 1.5, reload: 0.6}], 2, ["drone", {COLOR: 5}]),
-			...addDrone({length: 4, width: 5, aspect: 2.1, x: 9, y: -3.25, angle: 72*i}, 0, [g.drone, g.over, g.over, g.over, {size: 1.5, reload: 0.6}], 2, ["drone", {COLOR: 5}]),
-			...addDrone({length: 6, width: 6.5, aspect: 1.4, x: 9, angle: 72*i}, 0, [g.drone, g.over, g.over, g.over, g.pound, {size: 2, reload: 0.4}], 2, ["betadrone", {COLOR: 5}]),
+			...addDrone({length: 4, width: 5, aspect: 2.1, x: 9, y: 3.25, angle: 72*i}, 0, [g.drone, g.over, g.over, g.over, {size: 1.5, reload: 0.6}], 2, "drone"),
+			...addDrone({length: 4, width: 5, aspect: 2.1, x: 9, y: -3.25, angle: 72*i}, 0, [g.drone, g.over, g.over, g.over, {size: 1.5, reload: 0.6}], 2, "drone"),
+			...addDrone({length: 6, width: 6.5, aspect: 1.4, x: 9, angle: 72*i}, 0, [g.drone, g.over, g.over, g.over, g.pound, {size: 2, reload: 0.4}], 2, "betadrone"),
 		)
 	}
 	Class.gladiatorGenericMinionSnowdread = {
 	    PARENT: ["minion"],
 		BODY: { SPEED: 1 },
 		SHAPE: 3.5,
-	    COLOR: 5,
 		GUNS: [],
 		TURRETS: [
 			{
@@ -4670,7 +4733,7 @@ module.exports = ({ Class }) => {
 					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.slow, g.minion]),
 					WAIT_TO_CYCLE: true,
 					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 },
-					TYPE: ["bullet", {COLOR: 5}],
+					TYPE: 'bullet',
 				},
 			}, {
 				POSITION: [13.5, 5.5, 1, 0, 0, 120*i, 0],
@@ -4678,7 +4741,7 @@ module.exports = ({ Class }) => {
 					SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.minion, g.fake]),
 					WAIT_TO_CYCLE: true,
 					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -2.5, SATURATION_SHIFT: 0.85 },
-					TYPE: ["bullet", {COLOR: 5}],
+					TYPE: 'bullet',
 				},
 			},
 		);
@@ -4690,7 +4753,7 @@ module.exports = ({ Class }) => {
 				POSITION: [7, 8.5, -1.5, 7, 0, 120*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.swarm, g.minion, {size: 1.6, range: 0.5}]),
-					TYPE: ["swarm", {COLOR: 5}],
+					TYPE: 'swarm',
 					STAT_CALCULATOR: gunCalcNames.swarm,
 					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.7}
 				},
@@ -4698,7 +4761,7 @@ module.exports = ({ Class }) => {
 				POSITION: [10.5, 6.8, -1.5, 2.5, 0, 120*i, 0],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([g.swarm, g.minion, g.fake]),
-					TYPE: "swarm",
+					TYPE: 'swarm',
 					COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -2.5, SATURATION_SHIFT: 0.7},
 					BORDERLESS: true
 				},
@@ -5200,6 +5263,9 @@ module.exports = ({ Class }) => {
 			{
 				POSITION: [14, 0, 0, 180, 0, 1],
 				TYPE: ["pentagon", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
+			}, {
+				POSITION: [7.5, 0, 0, 180, 0, 1],
+				TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 10}, BORDERLESS: true}],
 			}, {
 				POSITION: [20, 0, 0, 0, 0, 1],
 				TYPE: ["pentagonBaseDeco"],
