@@ -71,7 +71,7 @@ function collide(collision) {
             if (entity.ac || entity.master.ac) return;
             switch (wall.shape) {
                 case 4:
-                    reflectCollide(wall, entity);
+                    mazewallcollide(wall, entity);
                     break;
                 case 0:
                     mooncollide(wall, entity);
@@ -97,8 +97,8 @@ function collide(collision) {
                 advancedcollide(pusher, entity, false, false, a);
             }
             break;
-        case (instance.type === "crasher" && other.type === "food") ||
-            (other.type === "crasher" && instance.type === "food"):
+        case (instance.type === "crasher" && other.type === "food" && instance.team === other.team) ||
+            (other.type === "crasher" && instance.type === "food" && other.team === instance.team):
             firmcollide(instance, other);
             break;
         case instance.team !== other.team ||
