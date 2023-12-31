@@ -1370,7 +1370,7 @@ module.exports = ({ Class }) => {
 			}
 		],
 	}
-	Class.supermissile = {
+	Class.superMissileSnowdread = {
 		PARENT: ["bullet"],
 		LABEL: "Missile",
 		INDEPENDENT: true,
@@ -3185,7 +3185,7 @@ module.exports = ({ Class }) => {
 	}
 	for (let i = 0; i < 3; i++) {
 		Class.inhibitorSnowdread.GUNS.push(
-			...addLauncher({length: 15, width: 15, angle: 120*i}, -5, [g.basic, g.pound, g.arty, g.skim, {reload: 1.5}], true, "supermissile")
+			...addLauncher({length: 15, width: 15, angle: 120*i}, -5, [g.basic, g.pound, g.arty, g.skim, {reload: 1.5}], true, "superMissileSnowdread")
 		)
 	}
 	Class.tranquilizerSnowdread = { // shotgun
@@ -4568,7 +4568,7 @@ module.exports = ({ Class }) => {
 	}
   	for (let i = 0; i < 5; i++) {
 		Class.tyrantSnowdread.GUNS.push(
-			...addLauncher({length: 15, width: 12, angle: 72*i}, 0, [g.basic, g.pound, g.arty, g.skim, {damage: 1.2, reload: 1.5}], true, "supermissile")
+			...addLauncher({length: 15, width: 12, angle: 72*i}, 0, [g.basic, g.pound, g.arty, g.skim, {damage: 1.2, reload: 1.5}], true, "superMissileSnowdread")
 		)
 	}
 	Class.anesthesiologistSnowdread = { // shotgun
