@@ -484,7 +484,7 @@ class io_avoid extends IO {
             x: this.body.x,
             y: this.body.y
         }, function (test, sqrdst) {
-            return (test.master.id !== masterId && (test.type === 'bullet' || test.type === 'drone' || test.type === 'swarm' || test.type === 'trap' || test.type === 'block') && sqrdst < range);
+            return (test.master.id !== masterId && (test.type === 'bullet' || test.type === 'drone' || test.type === 'swarm' || test.type === 'satellite' || test.type === 'trap' || test.type === 'block') && sqrdst < range);
         })
         // Aim at that target
         if (this.avoid != null) {
@@ -729,27 +729,31 @@ class io_whirlwind extends IO {
     constructor(body, opts = {}) {
         super(body);
         this.body.angle = 0;
-        this.minDistance = opts.minDistance ?? 75;
-        this.maxDistance = opts.maxDistance ?? 225;
-        this.body.dist = opts.initialDist || this.minDistance;
-        this.body.inverseDist = this.maxDistance - this.body.dist + this.minDistance;
+        this.minDistance = opts.minDistance ?? 3.5;
+        this.maxDistance = opts.maxDistance ?? 10;
+        this.body.dist = opts.initialDist || this.minDistance * this.body.size;
+        this.body.inverseDist = this.maxDistance * this.body.size - this.body.dist + this.minDistance * this.body.size;
         this.radiusScalingSpeed = opts.radiusScalingSpeed || 10;
     }
     
     think(input) {
         this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
+        let trueMaxDistance = this.maxDistance * this.body.size;
+        let trueMinDistance = this.minDistance * this.body.size;
         if(input.fire){
-            if(this.body.dist <= this.maxDistance) {
-                this.body.dist += Math.min(this.radiusScalingSpeed, this.maxDistance - this.body.dist);
-                this.body.inverseDist -= Math.min(this.radiusScalingSpeed, this.body.inverseDist - this.minDistance);
+            if(this.body.dist <= trueMaxDistance) {
+                this.body.dist += this.radiusScalingSpeed;
+                this.body.inverseDist -= this.radiusScalingSpeed;
             }
         }
         else if(input.alt){
-            if(this.body.dist >= this.minDistance) {
-                this.body.dist -= Math.min(this.radiusScalingSpeed, this.body.dist - this.minDistance);
-                this.body.inverseDist += Math.min(this.radiusScalingSpeed, this.maxDistance - this.body.inverseDist);
+            if(this.body.dist >= trueMinDistance) {
+                this.body.dist -= this.radiusScalingSpeed;
+                this.body.inverseDist += this.radiusScalingSpeed;
             }
         }
+        this.body.dist = Math.min(trueMaxDistance, Math.max(trueMinDistance, this.body.dist));
+        this.body.inverseDist = Math.min(trueMaxDistance, Math.max(trueMinDistance, this.body.inverseDist));
     }
 }
 class io_orbit extends IO {
@@ -781,7 +785,8 @@ class io_orbit extends IO {
 class io_disableOnOverride extends IO {
     constructor(body) {
         super(body);
-        this.originalDamage = this.body.damage;
+        this.pacify = false;
+        this.lastPacify = false;
     }
 
     think(input) {
@@ -789,13 +794,19 @@ class io_disableOnOverride extends IO {
             this.initialAlpha = this.body.alpha;
             this.targetAlpha = this.initialAlpha;
         }
-        if (this.body.parent.master.autoOverride || this.body.parent.master.master.autoOverride) {
+        
+        this.pacify = (this.body.parent.master.autoOverride || this.body.parent.master.master.autoOverride);
+        if (this.pacify && !this.lastPacify) {
             this.targetAlpha = 0;
-            this.body.damage = 0;
-        } else {
+            this.body.pacify = true;
+            this.body.refreshBodyAttributes();
+        } else if (!this.pacify && this.lastPacify) {
             this.targetAlpha = this.initialAlpha;
-            this.body.damage = this.originalDamage;
+            this.body.pacify = false;
+            this.body.refreshBodyAttributes();
         }
+        this.lastPacify = this.pacify;
+
         if (this.body.alpha != this.targetAlpha) {
             this.body.alpha += util.clamp(this.targetAlpha - this.body.alpha, -0.05, 0.05);
             if (this.body.flattenedPhoto) this.body.flattenedPhoto.alpha = this.body.alpha;

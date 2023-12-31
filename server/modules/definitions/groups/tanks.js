@@ -433,7 +433,7 @@ exports.unsetTrap = {
         SPEED: 1,
         DENSITY: 5,
     },
-};
+}
 exports.boomerang = {
     PARENT: "trap",
     LABEL: "Boomerang",
@@ -447,7 +447,7 @@ exports.boomerang = {
     },
 }
 exports.assemblerTrap = {
-    PARENT: ['setTrap'],
+    PARENT: "setTrap",
     LABEL: "Assembler Trap",
     BODY: {
         SPEED: 0.7,
@@ -661,9 +661,9 @@ exports.pillbox = {
             TYPE: "pillboxTurret",
         },
     ],
-};
+}
 exports.unsetPillbox = {
-    PARENT: 'unsetTrap',
+    PARENT: "unsetTrap",
     LABEL: "Pillbox",
     CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
@@ -674,7 +674,7 @@ exports.unsetPillbox = {
             TYPE: "pillboxTurret",
         },
     ],
-};
+}
 
 // Swarms
 exports.swarm = {
@@ -733,7 +733,7 @@ exports.homingBullet = {
 // Decorations
 exports.overdriveDeco = makeDeco(4)
 exports.assemblerEffect = {
-    PARENT: ['bullet'],
+    PARENT: "bullet",
     MOTION_TYPE: 'assembler',
     LABEL: '',
     BODY: {
@@ -765,7 +765,7 @@ exports.landmineBody = {
     INDEPENDENT: true
 }
 exports.spikeBody = {
-    PARENT: ["smasherBody"],
+    PARENT: "smasherBody",
     SHAPE: 3
 }
 
@@ -774,7 +774,7 @@ exports.basic = {
     PARENT: "genericTank",
     LABEL: "Basic",
     DANGER: 4,
-    BODY: {
+    /*BODY: {
         ACCELERATION: base.ACCEL * 1,
         SPEED: base.SPEED * 1,
         HEALTH: base.HEALTH * 1,
@@ -786,14 +786,14 @@ exports.basic = {
         DENSITY: base.DENSITY * 1,
         PUSHABILITY: 1,
         HETERO: 3
-    },
+    },*/
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic]),
                 TYPE: "bullet",
-                COLOR: "grey",
+                /*COLOR: "grey",
                 LABEL: "",
                 STAT_CALCULATOR: 0,
                 WAIT_TO_CYCLE: false,
@@ -801,7 +801,7 @@ exports.basic = {
                 SYNCS_SKILLS: false,
                 MAX_CHILDREN: 0,
                 ALT_FIRE: false,
-                NEGATIVE_RECOIL: false
+                NEGATIVE_RECOIL: false*/
             }
         }
     ]
@@ -1008,7 +1008,6 @@ exports.tripleShot = {
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [19, 8, 1, 0, -2, -17.5, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.bent]),
@@ -1338,7 +1337,6 @@ exports.hunter = {
     TOOLTIP: "Hold right click to zoom.",
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [24, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunter2]),
@@ -1377,7 +1375,7 @@ exports.rifle = {
 
 // Assassin upgrades
 exports.ranger = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Ranger",
     DANGER: 7,
     BODY: {
@@ -1386,7 +1384,6 @@ exports.ranger = {
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [32, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass]),
@@ -1723,7 +1720,7 @@ exports.sprayer = {
 
 // Minigun upgrades
 exports.streamliner = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Streamliner",
     DANGER: 7,
     BODY: {
@@ -1731,7 +1728,6 @@ exports.streamliner = {
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [25, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.mini, g.stream]),
@@ -1778,7 +1774,6 @@ exports.barricade = {
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [24, 8, 1, 0, 0, 0, 0],
         },
         {
@@ -1810,7 +1805,7 @@ exports.barricade = {
 
 // Gunner upgrades
 exports.nailgun = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Nailgun",
     DANGER: 7,
     BODY: {
@@ -1819,7 +1814,6 @@ exports.nailgun = {
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [19, 2, 1, 0, -2.5, 0, 0.25],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.twin, g.nail]),
@@ -1846,7 +1840,7 @@ exports.nailgun = {
     ],
 }
 exports.machineGunner = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Machine Gunner",
     DANGER: 7,
     BODY: {
@@ -1893,7 +1887,7 @@ exports.machineGunner = {
 
 // Sprayer upgrades
 exports.redistributor = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Redistributor",
     DANGER: 7,
     GUNS: [
@@ -1921,7 +1915,7 @@ exports.redistributor = {
     ],
 }
 exports.atomizer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Atomizer",
     DANGER: 7,
     GUNS: [
@@ -1942,7 +1936,7 @@ exports.atomizer = {
     ],
 }
 exports.focal = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Focal",
     DANGER: 7,
     GUNS: [
@@ -1985,7 +1979,7 @@ exports.hexaTank = makeMulti({
     ]
 }, 3, "Hexa Tank")
 exports.triAngle = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Tri-Angle",
     BODY: {
         HEALTH: 0.8 * base.HEALTH,
@@ -2021,7 +2015,7 @@ exports.triAngle = {
     ],
 }
 exports.auto3 = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Auto-3",
     DANGER: 6,
     FACING_TYPE: ["spin", {speed: 0.02}],
@@ -2099,7 +2093,7 @@ exports.cyclone = makeMulti({
 
 // Tri-Angle upgrades
 exports.fighter = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Fighter",
     BODY: {
         DENSITY: 0.6 * base.DENSITY,
@@ -2201,7 +2195,7 @@ exports.booster = {
     ]
 }
 exports.surfer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Surfer",
     BODY: {
         DENSITY: 0.6 * base.DENSITY,
@@ -2253,7 +2247,7 @@ exports.surfer = {
 
 // Auto-3 upgrades
 exports.auto5 = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Auto-5",
     DANGER: 7,
     FACING_TYPE: ["spin", {speed: 0.02}],
@@ -2281,7 +2275,7 @@ exports.auto5 = {
     ],
 }
 exports.mega3 = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Mega-3",
     BODY: {
         SPEED: 0.95 * base.SPEED,
@@ -2304,7 +2298,7 @@ exports.mega3 = {
     ],
 }
 exports.auto4 = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Auto-4",
     FACING_TYPE: ["spin", {speed: 0.02}],
     DANGER: 7,
@@ -2328,7 +2322,7 @@ exports.auto4 = {
     ],
 }
 exports.banshee = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Banshee",
     DANGER: 7,
     BODY: {
@@ -2415,7 +2409,7 @@ exports.overseer = makeMulti({
     ]
 }, 2, "Overseer", 90)
 exports.cruiser = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Cruiser",
     DANGER: 6,
     FACING_TYPE: "locksFacing",
@@ -2465,7 +2459,7 @@ exports.underseer = makeMulti({
     ]
 }, 2, "Underseer", 90)
 exports.spawner = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Spawner",
     DANGER: 6,
     STAT_NAMES: statnames.drone,
@@ -2475,7 +2469,6 @@ exports.spawner = {
     },
     GUNS: [
         {
-            /**** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [4.5, 10, 1, 10.5, 0, 0, 0],
         },
         {
@@ -2495,7 +2488,7 @@ exports.spawner = {
     ],
 }
 exports.manager = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Manager",
     DANGER: 7,
     STAT_NAMES: statnames.drone,
@@ -2520,7 +2513,7 @@ exports.manager = {
     ],
 }
 exports.bigCheese = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Big Cheese",
     STAT_NAMES: statnames.drone,
     DANGER: 7,
@@ -2529,7 +2522,6 @@ exports.bigCheese = {
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [16, 16, 1.4, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.bigdrone]),
@@ -2577,7 +2569,7 @@ exports.overdrive = makeMulti({
     },
     TURRETS: [
         {
-            POSITION: [9, 0, 0, 0, 360, 1],
+            POSITION: [10, 0, 0, 0, 360, 1],
             TYPE: "overdriveDeco",
         },
     ],
@@ -2628,7 +2620,7 @@ exports.commander = makeMulti({
 
 // Cruiser upgrades
 exports.carrier = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Carrier",
     DANGER: 7,
     STAT_NAMES: statnames.swarm,
@@ -2638,7 +2630,6 @@ exports.carrier = {
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [7, 8, 0.6, 7, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battle, g.carrier]),
@@ -2665,7 +2656,7 @@ exports.carrier = {
     ],
 }
 exports.battleship = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Battleship",
     DANGER: 7,
     STAT_NAMES: statnames.swarm,
@@ -2713,7 +2704,7 @@ exports.battleship = {
     ]
 }
 exports.fortress = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Fortress",
     DANGER: 7,
     STAT_NAMES: statnames.mixed,
@@ -2799,7 +2790,7 @@ exports.fortress = {
 
 // Underseer upgrades
 exports.necromancer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Necromancer",
     DANGER: 7,
     STAT_NAMES: statnames.necro,
@@ -2854,7 +2845,7 @@ exports.necromancer = {
     ],
 }
 exports.maleficitor = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Maleficitor",
     DANGER: 7,
     TOOLTIP: "Press R and wait to turn your drones invisible.",
@@ -2866,7 +2857,6 @@ exports.maleficitor = {
     MAX_CHILDREN: 20,
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [5.25, 12, 1.2, 8, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, g.maleficitor]),
@@ -2917,7 +2907,7 @@ exports.infestor = makeMulti({
 
 // Spawner upgrades
 exports.factory = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Factory",
     DANGER: 7,
     STAT_NAMES: statnames.drone,
@@ -2928,7 +2918,6 @@ exports.factory = {
     MAX_CHILDREN: 6,
     GUNS: [
         {
-            /**** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [5, 11, 1, 10.5, 0, 0, 0],
         },
         {
@@ -2949,7 +2938,7 @@ exports.factory = {
 
 // Pounder upgrades
 exports.destroyer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Destroyer",
     DANGER: 6,
     GUNS: [
@@ -2963,9 +2952,9 @@ exports.destroyer = {
     ],
 }
 exports.artillery = {
-    PARENT: ["genericTank"],
-    DANGER: 6,
+    PARENT: "genericTank",
     LABEL: "Artillery",
+    DANGER: 6,
     GUNS: [
         {
             POSITION: [17, 3, 1, 0, -6, -7, 0.25],
@@ -2994,7 +2983,7 @@ exports.artillery = {
     ],
 }
 exports.launcher = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Launcher",
     BODY: {
         FOV: base.FOV * 1.1,
@@ -3002,7 +2991,6 @@ exports.launcher = {
     DANGER: 6,
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [10, 9, 1, 9, 0, 0, 0],
         },
         {
@@ -3016,7 +3004,7 @@ exports.launcher = {
     ],
 }
 exports.shotgun = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Shotgun",
     GUNS: [
@@ -3098,7 +3086,7 @@ exports.shotgun = {
 
 // Destroyer upgrades
 exports.annihilator = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Annihilator",
     DANGER: 7,
     GUNS: [
@@ -3114,7 +3102,7 @@ exports.annihilator = {
 
 // Artillery upgrades
 exports.mortar = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Mortar",
     DANGER: 7,
     GUNS: [
@@ -3161,7 +3149,7 @@ exports.mortar = {
     ],
 }
 exports.ordnance = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Ordnance",
     DANGER: 7,
     BODY: {
@@ -3172,7 +3160,6 @@ exports.ordnance = {
     TOOLTIP: "Hold right click to zoom.",
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [17, 3, 1, 0, -5.75, -6, 0.25],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
@@ -3205,12 +3192,11 @@ exports.ordnance = {
     ],
 }
 exports.beekeeper = {
-    PARENT: ["genericTank"],
-    DANGER: 7,
+    PARENT: "genericTank",
     LABEL: "Beekeeper",
+    DANGER: 7,
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [14, 3, 1, 0, -6, -7, 0.25],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.bees]),
@@ -3243,7 +3229,7 @@ exports.beekeeper = {
     ],
 }
 exports.fieldGun = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Field Gun",
     BODY: {
         FOV: base.FOV * 1.1,
@@ -3251,7 +3237,6 @@ exports.fieldGun = {
     DANGER: 7,
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [15, 3, 1, 0, -6, -7, 0.25],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
@@ -3284,12 +3269,12 @@ exports.fieldGun = {
 
 // Launcher upgrades
 exports.skimmer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
+    LABEL: "Skimmer",
+    DANGER: 7,
     BODY: {
         FOV: 1.15 * base.FOV,
     },
-    LABEL: "Skimmer",
-    DANGER: 7,
     GUNS: [
         {
             POSITION: [10, 14, -0.5, 9, 0, 0, 0],
@@ -3305,12 +3290,12 @@ exports.skimmer = {
     ],
 }
 exports.twister = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
+    LABEL: "Twister",
+    DANGER: 7,
     BODY: {
         FOV: 1.1 * base.FOV,
     },
-    LABEL: "Twister",
-    DANGER: 7,
     GUNS: [
         {
             POSITION: [10, 13, -0.5, 9, 0, 0, 0],
@@ -3326,7 +3311,7 @@ exports.twister = {
     ],
 }
 exports.swarmer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Swarmer",
     GUNS: [
@@ -3343,7 +3328,7 @@ exports.swarmer = {
     ],
 }
 exports.rocketeer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Rocketeer",
     BODY: {
         FOV: 1.15 * base.FOV,
@@ -3406,11 +3391,9 @@ exports.triTrapper = makeMulti({
         }
     ]
 }, 3, "Tri-Trapper")
-exports.trapGuard = {
+exports.trapGuard = makeGuard({
     PARENT: "genericTank",
-    LABEL: "Trap Guard",
     STAT_NAMES: statnames.mixed,
-    DANGER: 6,
     GUNS: [
         {
             POSITION: [20, 8, 1, 0, 0, 0, 0],
@@ -3418,20 +3401,9 @@ exports.trapGuard = {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank]),
                 TYPE: "bullet"
             }
-        },
-        {
-            POSITION: [13, 8, 1, 0, 0, 180, 0],
-        },
-        {
-            POSITION: [4, 8, 1.7, 13, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
-            }
         }
     ]
-}
+}, "Trap Guard")
 
 // Builder upgrades
 exports.construct = {
@@ -3458,7 +3430,7 @@ exports.construct = {
     ]
 }
 exports.engineer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Engineer",
     STAT_NAMES: statnames.trap,
@@ -3490,7 +3462,7 @@ exports.engineer = {
     ],
 }
 exports.boomer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Boomer",
     STAT_NAMES: statnames.trap,
@@ -3501,7 +3473,6 @@ exports.boomer = {
     },
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [5, 10, 1, 14, 0, 0, 0],
         },
         {
@@ -3518,7 +3489,7 @@ exports.boomer = {
     ],
 }
 exports.assembler = {
-    PARENT: ['genericTank'],
+    PARENT: "genericTank",
     DANGER: 7,
     LABEL: 'Assembler',
     STAT_NAMES: statnames.trap,
@@ -3551,7 +3522,7 @@ exports.assembler = {
 
 // Tri-Trapper upgrades
 exports.hexaTrapper = makeAuto({
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     DANGER: 7,
     BODY: {
         SPEED: 0.8 * base.SPEED,
@@ -3631,7 +3602,7 @@ exports.septaTrapper = (() => {
     let a = 360 / 7,
         d = 1 / 7;
     return {
-        PARENT: ["genericTank"],
+        PARENT: "genericTank",
         LABEL: "Septa-Trapper",
         DANGER: 7,
         BODY: {
@@ -3641,7 +3612,6 @@ exports.septaTrapper = (() => {
         HAS_NO_RECOIL: true,
         GUNS: [
             {
-                /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
                 POSITION: [15, 7, 1, 0, 0, 0, 0],
             },
             {
@@ -3722,12 +3692,12 @@ exports.septaTrapper = (() => {
     };
 })()
 exports.architect = {
+    PARENT: "genericTank",
     LABEL: "Architect",
+    DANGER: 7,
     BODY: {
         SPEED: 1.1 * base.SPEED,
     },
-    PARENT: ["genericTank"],
-    DANGER: 7,
     FACING_TYPE: ["spin", {speed: 0.02}],
     TURRETS: [
         {
@@ -3748,7 +3718,7 @@ exports.architect = {
 // Trap Guard upgrades
 exports.bushwhacker = makeGuard(exports.sniper, "Bushwhacker")
 exports.gunnerTrapper = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Gunner Trapper",
     DANGER: 7,
     STAT_NAMES: statnames.mixed,
@@ -3787,7 +3757,7 @@ exports.gunnerTrapper = {
     ],
 }
 exports.bomber = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Bomber",
     BODY: {
         DENSITY: base.DENSITY * 0.6,
@@ -3795,7 +3765,6 @@ exports.bomber = {
     DANGER: 7,
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [20, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.trifront]),
@@ -3833,7 +3802,7 @@ exports.bomber = {
     ],
 }
 exports.conqueror = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Conqueror",
     STAT_NAMES: statnames.mixed,
@@ -3863,13 +3832,12 @@ exports.conqueror = {
     ],
 }
 exports.bulwark = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Bulwark",
     STAT_NAMES: statnames.mixed,
     DANGER: 7,
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [20, 8, 1, 0, 5.5, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.twin]),
@@ -3877,7 +3845,6 @@ exports.bulwark = {
             },
         },
         {
-            /* LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [20, 8, 1, 0, -5.5, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.twin]),
@@ -3885,7 +3852,6 @@ exports.bulwark = {
             },
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [14, 8, 1, 0, 5.5, 185, 0],
         },
         {
@@ -3897,7 +3863,6 @@ exports.bulwark = {
             },
         },
         {
-            /* LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [14, 8, 1, 0, -5.5, 175, 0],
         },
         {
@@ -3913,7 +3878,7 @@ exports.bulwark = {
 
 // Desmos upgrades
 exports.volute = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Volute",
     DANGER: 6,
     STAT_NAMES: statnames.desmos,
@@ -3926,17 +3891,15 @@ exports.volute = {
             },
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [4.75, 10, 2.125, 1.25, -6.375, 90, 0],
+            POSITION: [5, 10, 2.125, 1, -6.375, 90, 0],
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [4.75, 10, 2.125, 1.25, 6.375, -90, 0],
+            POSITION: [5, 10, 2.125, 1, 6.375, -90, 0],
         },
     ],
 }
 exports.helix = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Helix",
     DANGER: 6,
     STAT_NAMES: statnames.desmos,
@@ -3956,15 +3919,12 @@ exports.helix = {
             },
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [3.625, 7.5, 2.75, 5.75, -6.75, 90, 0],
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [3.625, 7.5, 2.75, 5.75, 6.75, -90, 0],
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [6, 8, 0.25, 10.5, 0, 0, 0],
         },
     ],
@@ -3972,7 +3932,7 @@ exports.helix = {
 
 // Volute upgrades
 exports.sidewinder = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Sidewinder",
     DANGER: 7,
     BODY: {
@@ -3996,7 +3956,7 @@ exports.sidewinder = {
 
 // Helix upgrades
 exports.triplex = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Triplex",
     DANGER: 7,
     STAT_NAMES: statnames.desmos,
@@ -4023,19 +3983,15 @@ exports.triplex = {
             },
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [3.75, 10, 2.125, 1, -4.25, 10, 0],
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [3.75, 10, 2.125, 1, 4.25, -10, 0],
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [5, 6, 0.5, 10.5, 0, 22.5, 0],
         },
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [5, 6, 0.5, 10.5, 0, -22.5, 0],
         },
     ],
@@ -4126,7 +4082,6 @@ exports.spike = {
     },
     TURRETS: [
         {
-            /** SIZE     X       Y     ANGLE    ARC */
             POSITION: [18.5, 0, 0, 0, 360, 0],
             TYPE: "spikeBody",
         },
@@ -4166,21 +4121,19 @@ exports.landmine = {
 
 // Healer upgrades
 exports.medic = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Medic",
     BODY: {
         FOV: base.FOV * 1.2,
     },
     TURRETS: [
         {
-            /** SIZE     X       Y     ANGLE    ARC */
             POSITION: [13, 0, 0, 0, 360, 1],
             TYPE: "healerSymbol",
         },
     ],
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [8, 9, -0.5, 16.5, 0, 0, 0],
         },
         {
@@ -4194,7 +4147,7 @@ exports.medic = {
     STAT_NAMES: statnames.heal,
 }
 exports.ambulance = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Ambulance",
     BODY: {
         HEALTH: base.HEALTH * 0.8,
@@ -4203,14 +4156,12 @@ exports.ambulance = {
     },
     TURRETS: [
         {
-            /** SIZE     X       Y     ANGLE    ARC */
             POSITION: [13, 0, 0, 0, 360, 1],
             TYPE: "healerSymbol",
         },
     ],
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [8, 9, -0.5, 12.5, 0, 0, 0],
         },
         {
@@ -4241,7 +4192,7 @@ exports.ambulance = {
     STAT_NAMES: statnames.heal,
 }
 exports.surgeon = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Surgeon",
     STAT_NAMES: statnames.trap,
     BODY: {
@@ -4250,14 +4201,12 @@ exports.surgeon = {
     },
     TURRETS: [
         {
-            /** SIZE     X       Y     ANGLE    ARC */
             POSITION: [13, 0, 0, 0, 360, 1],
             TYPE: "healerSymbol",
         },
     ],
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [5, 11, 1, 10.5, 0, 0, 0],
         },
         {
@@ -4280,21 +4229,19 @@ exports.surgeon = {
     STAT_NAMES: statnames.heal,
 }
 exports.paramedic = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Paramedic",
     BODY: {
         SPEED: base.SPEED * 0.9,
     },
     TURRETS: [
         {
-            /** SIZE     X       Y     ANGLE    ARC */
             POSITION: [13, 0, 0, 0, 360, 1],
             TYPE: "healerSymbol",
         },
     ],
     GUNS: [
         {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
             POSITION: [8, 9, -0.5, 10, 0, -17.5, 0.5],
         },
         {
@@ -4422,7 +4369,7 @@ exports.hybrid = makeHybrid(exports.destroyer, "Hybrid")
 
 // Over tanks
 exports.overgunner = makeOver({
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Gunner",
     DANGER: 6,
     GUNS: [
@@ -4444,7 +4391,7 @@ exports.overgunner = makeOver({
             POSITION: [12, 11, 1, 0, 0, 0, 0],
         },
     ],
-});
+})
 exports.overtrapper = makeOver({
     PARENT: "genericTank",
     LABEL: "Trapper",
@@ -4472,7 +4419,7 @@ exports.overtrapper = makeOver({
 // Auto tanks
 exports.autoDouble = makeAuto(exports.doubleTwin, "Auto-Double")
 exports.autoAssassin = makeAuto(exports.assassin)
-exports.autoGunner = makeAuto(exports.gunner);
+exports.autoGunner = makeAuto(exports.gunner)
 exports.autoTriAngle = makeAuto(exports.triAngle)
 exports.autoOverseer = makeAuto(exports.overseer)
 exports.autoCruiser = makeAuto(exports.cruiser)
