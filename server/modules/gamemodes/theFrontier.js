@@ -189,6 +189,13 @@ function generateFrontierMaze(width, height) {
             }
         }
     }
+    let towerTop = new Entity({
+        x: c.TILE_WIDTH * 9,
+        y: c.TILE_HEIGHT * 9,
+    });
+    towerTop.define(Class.towerMedium);
+    towerTop.protect();
+    towerTop.life();
 };
 
 module.exports = { generateFrontierMaze };

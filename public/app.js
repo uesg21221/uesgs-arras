@@ -654,10 +654,10 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 ]);
             }
             let wallToggles = Array(4).fill(true);
-            if (centerY < global.screenHeight / 2) wallToggles[2] = false;
-            else if (centerY > global.screenHeight / 2) wallToggles[0] = false;
-            if (centerX < global.screenWidth / 2) wallToggles[1] = false;
-            else if (centerX > global.screenWidth / 2) wallToggles[3] = false;
+            if (centerY < (global.screenHeight / 2 + radius * Math.SQRT1_2)) wallToggles[2] = false;
+            if (centerY > (global.screenHeight / 2 - radius * Math.SQRT1_2)) wallToggles[0] = false;
+            if (centerX < (global.screenWidth / 2 + radius * Math.SQRT1_2)) wallToggles[1] = false;
+            if (centerX > (global.screenWidth / 2 - radius * Math.SQRT1_2)) wallToggles[3] = false;
             for (let i = 0; i < sides; i++) {
                 if (!wallToggles[i]) continue;
                 context.lineTo(...bottomPoints[i]);
