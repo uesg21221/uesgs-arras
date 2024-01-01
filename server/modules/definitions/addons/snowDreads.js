@@ -1099,7 +1099,7 @@ module.exports = ({ Class }) => {
 				POSITION: [1.75, 3, -0.75, 7.5, 0, 60 * i, 0],
 				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: 2.5, SATURATION_SHIFT: 0.9 }, DRAW_ABOVE: true },
 			}, {
-				POSITION: [1, 9, 0, 8.8, 0, 60 * i + 30, 0],
+				POSITION: [1, 9, 0, 8.5, 0, 60 * i + 30, 0],
 				PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: 10, SATURATION_SHIFT: 1.15 } },
 			},
 		)

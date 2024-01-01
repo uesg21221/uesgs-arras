@@ -844,6 +844,7 @@ class Entity extends EventEmitter {
             allowBrightnessInvert: false,
         };
         this.color = '16 0 1 0 false';
+        this.heightScale = 1;
         this.glow = {radius: null, color: null, alpha: 1, recursion: 1}
         this.invisible = [0, 0];
         this.alphaRange = [0, 1];
@@ -1048,6 +1049,7 @@ class Entity extends EventEmitter {
             this.shape = typeof set.SHAPE === "number" ? set.SHAPE : 0;
             this.shapeData = set.SHAPE;
         }
+        if (set.HEIGHT_SCALE != null) this.heightScale = set.HEIGHT_SCALE;
         this.imageInterpolation = set.IMAGE_INTERPOLATION != null ? set.IMAGE_INTERPOLATION : 'bilinear'
         if (set.COLOR != null) {
             if (typeof set.COLOR === "number" || typeof set.COLOR === 'string')

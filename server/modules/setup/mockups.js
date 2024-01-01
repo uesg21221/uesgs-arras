@@ -21,6 +21,7 @@ function getMockup(e, positionInfo) {
         borderFirst: e.borderFirst,
         drawFill: e.drawFill,
         shape: e.shapeData,
+        heightScale: e.heightScale,
         imageInterpolation: e.imageInterpolation,
         size: rounder(e.size),
         realSize: rounder(e.realSize),
