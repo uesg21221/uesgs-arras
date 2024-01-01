@@ -26,10 +26,9 @@ for (let filename of addons) {
     if (!filename.endsWith('.js')) continue;
     
     console.log(`Loading addon: ${filename}`);
-    try {
-        require('./addons/' + filename)({ Config: c, Events: events });
-    } catch(e) {
-        require('./addons/' + filename);
+    let result = require('./addons/' + filename);
+    if ('function' === typeof result) {
+        result({ Config: c, Events: events });
     }
 }
 
