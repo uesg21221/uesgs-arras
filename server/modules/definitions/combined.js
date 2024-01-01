@@ -39,15 +39,7 @@ console.log("Loaded addons in " + (addonsLoadEnd - definitionGroupsLoadEnd) + " 
 if (c.flattenDefintions) {
     console.log(`Flattening ${definitionCount} definitions...`);
     let flatten = (output, definition) => {
-
-        // Support for string definition references
-        if ("string" == typeof definition) {
-            if (definition in Class) {
-                definition = Class[definition];
-            } else {
-                throw Error(`Definition ${definition} is attempted to be gotten but does not exist!`);
-            }
-        }
+        definition = ensureIsClass(definition);
 
         if (definition.PARENT) {
             if (!Array.isArray(definition.PARENT)) {
