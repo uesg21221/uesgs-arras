@@ -1,66 +1,9 @@
-const { combineStats, skillSet, makeAuto, addAura } = require('../facilitators.js');
+const { combineStats, skillSet, makeAuto, addAura, LayeredBoss } = require('../facilitators.js');
 const { base, gunCalcNames } = require('../constants.js');
 const g = require('../gunvals.js');
-const { bullet } = require('./generics.js');
+require('./generics.js');
 
-class LayeredBoss {
-    constructor(identifier, NAME, PARENT = "celestial", SHAPE = 9, COLOR = 0, trapTurretType = "baseTrapTurret", trapTurretSize = 6.5, layerScale = 5, BODY, SIZE, VALUE) {
-        this.identifier = identifier ?? NAME.charAt(0).toLowerCase() + NAME.slice(1);
-        this.layerID = 0;
-        exports[this.identifier] = {
-            PARENT, SHAPE, NAME, COLOR, BODY, SIZE, VALUE,
-            UPGRADE_LABEL: NAME,
-            UPGRADE_COLOR: COLOR,
-            TURRETS: Array(SHAPE).fill().map((_, i) => ({
-                POSITION: [trapTurretSize, 9, 0, 360 / SHAPE * (i + 0.5), 180, 0],
-                TYPE: trapTurretType,
-            })),
-        };
-        this.layerScale = layerScale;
-        this.shape = SHAPE;
-        this.layerSize = 20;
-    }
-
-    addLayer({gun, turret}, decreaseSides = true, layerScale, MAX_CHILDREN) {
-        this.layerID++;
-        this.shape -= decreaseSides ? 2 : 0;
-        this.layerSize -= layerScale ?? this.layerScale;
-        let layer = {
-            PARENT: "genericTank",
-            SHAPE: this.shape,
-            COLOR: -1,
-            INDEPENDENT: true,
-            CONTROLLERS: [["spin", { independent: true, speed: 0.02 / c.runSpeed * (this.layerID % 2 ? -1 : 1) }]],
-            MAX_CHILDREN, 
-            GUNS: [],
-            TURRETS: [],
-        };
-        if (gun) {
-            for (let i = 0; i < this.shape; i++) {
-                layer.GUNS.push({
-                    POSITION: gun.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
-                    PROPERTIES: gun.PROPERTIES,
-                });
-            }
-        }
-        if (turret) {
-            for (let i = 0; i < this.shape; i++) {
-                layer.TURRETS.push({
-                    POSITION: turret.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
-                    TYPE: turret.TYPE,
-                });
-            }
-        }
-
-        exports[this.identifier + "Layer" + this.layerID] = layer;
-        exports[this.identifier].TURRETS.push({
-            POSITION: [this.layerSize, 0, 0, 0, 360, 1],
-            TYPE: this.identifier + "Layer" + this.layerID,
-        });
-    }
-}
-
-exports.minibossBase = {
+Class.minibossBase = {
     PARENT: ["genericTank"],
     TYPE: "miniboss",
     DANGER: 6,
@@ -83,18 +26,18 @@ exports.minibossBase = {
     BROADCAST_MESSAGE: "A visitor has left!",
     BODY: { PUSHABILITY: 0.05 }
 }
-exports.miniboss = {
+Class.miniboss = {
     PARENT: ["minibossBase"],
     CONTROLLERS: ["nearestDifferentMaster", "minion", "canRepel"],
     AI: { NO_LEAD: true },
 };
-exports.ramMiniboss = {
+Class.ramMiniboss = {
     PARENT: ["minibossBase"],
     CONTROLLERS: ["nearestDifferentMaster", "canRepel", "mapTargetToGoal"],
 };
 
 // GUNS
-exports.baseTrapTurret = {
+Class.baseTrapTurret = {
     PARENT: ["genericTank"],
     LABEL: "Turret",
     INDEPENDENT: true,
@@ -113,7 +56,7 @@ exports.baseTrapTurret = {
         },
     ],
 }
-exports.terrestrialTrapTurret = {
+Class.terrestrialTrapTurret = {
     PARENT: ["genericTank"],
     LABEL: "Turret",
     INDEPENDENT: true,
@@ -132,7 +75,7 @@ exports.terrestrialTrapTurret = {
         },
     ],
 }
-exports.machineTripleTurret = {
+Class.machineTripleTurret = {
     PARENT: ["genericTank"],
     LABEL: "Machine Gun",
     BODY: { FOV: 2 },
@@ -164,7 +107,7 @@ exports.machineTripleTurret = {
         },
     ],
 };
-exports.skimmerTurret = {
+Class.skimmerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Skimmer",
     BODY: { FOV: 2 * base.FOV },
@@ -183,7 +126,7 @@ exports.skimmerTurret = {
         },
     ],
 };
-exports.twisterTurret = {
+Class.twisterTurret = {
     PARENT: ["genericTank"],
     LABEL: "Twister",
     BODY: { FOV: 2 },
@@ -202,7 +145,7 @@ exports.twisterTurret = {
         },
     ],
 };
-exports.hyperTwisterTurret = {
+Class.hyperTwisterTurret = {
     PARENT: ["genericTank"],
     LABEL: "Twister",
     BODY: { FOV: 2 },
@@ -221,7 +164,7 @@ exports.hyperTwisterTurret = {
         },
     ],
 };
-exports.boomerTurret = {
+Class.boomerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Boomer",
     BODY: { FOV: 2 },
@@ -245,14 +188,14 @@ exports.boomerTurret = {
         },
     ],
 };
-exports.triTrapGuardTurret = {
+Class.triTrapGuardTurret = {
     PARENT: ["genericTank"],
     COLOR: -1,
     CONTROLLERS: [["spin", { independent: true }]],
     GUNS: [],
 };
 for(let i = 0; i < 3; i++) {
-    exports.triTrapGuardTurret.GUNS.push(
+    Class.triTrapGuardTurret.GUNS.push(
         {
             POSITION: [17, 8, 1, 0, 0, 120*i, 0],
             PROPERTIES: {
@@ -271,7 +214,7 @@ for(let i = 0; i < 3; i++) {
         },
     )
 };
-exports.eliteSpinnerCyclone = {
+Class.eliteSpinnerCyclone = {
     PARENT: ["genericTank"],
     COLOR: -1,
     CONTROLLERS: [["spin", { speed: 0.1, independent: true }]],
@@ -293,7 +236,7 @@ for (let i = 0; i < 12; i++) {
             delay = 0.75;
             break;
     }
-    exports.eliteSpinnerCyclone.GUNS.push(
+    Class.eliteSpinnerCyclone.GUNS.push(
         {
             POSITION: [15, 3.5, 1, 0, 0, 30 * i, delay],
             PROPERTIES: {
@@ -305,7 +248,7 @@ for (let i = 0; i < 12; i++) {
 };
 
 // ELITE CRASHERS
-exports.elite = {
+Class.elite = {
     PARENT: ["miniboss"],
     LABEL: "Elite Crasher",
     COLOR: "pink",
@@ -320,7 +263,7 @@ exports.elite = {
         DAMAGE: 2.5 * base.DAMAGE,
     },
 };
-exports.eliteDestroyer = {
+Class.eliteDestroyer = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Destroyer",
     UPGRADE_COLOR: "pink",
@@ -364,7 +307,7 @@ exports.eliteDestroyer = {
         },
     ],
 };
-exports.eliteGunner = {
+Class.eliteGunner = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Gunner",
     UPGRADE_COLOR: "pink",
@@ -396,7 +339,7 @@ exports.eliteGunner = {
         },
     ],
 };
-exports.eliteSprayer = {
+Class.eliteSprayer = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Sprayer",
     UPGRADE_COLOR: "pink",
@@ -429,7 +372,7 @@ exports.eliteSprayer = {
         },
     ],
 };
-exports.eliteBattleship = {
+Class.eliteBattleship = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Battleship",
     UPGRADE_COLOR: "pink",
@@ -512,7 +455,7 @@ exports.eliteBattleship = {
         },
     ],
 };
-exports.eliteSpawner = {
+Class.eliteSpawner = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Spawner",
     UPGRADE_COLOR: "pink",
@@ -562,7 +505,7 @@ exports.eliteSpawner = {
         },
     ],
 };
-exports.eliteTrapGuard = {
+Class.eliteTrapGuard = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Trap Guard",
     UPGRADE_COLOR: "pink",
@@ -576,7 +519,7 @@ exports.eliteTrapGuard = {
     ],
 };
 for (let i = 0; i < 3; i++) {
-    exports.eliteTrapGuard.GUNS.push(
+    Class.eliteTrapGuard.GUNS.push(
         {
             POSITION: [10.5, 6, 1, 0, 0, 120*i+60, 0],
         }, {
@@ -588,7 +531,7 @@ for (let i = 0; i < 3; i++) {
             },
         },
     )
-    exports.eliteTrapGuard.TURRETS.push(
+    Class.eliteTrapGuard.TURRETS.push(
         {
             POSITION: [5, 8, -7, 120*i+60, 160, 0],
             TYPE: ["autoTurret", { INDEPENDENT: false }],
@@ -598,7 +541,7 @@ for (let i = 0; i < 3; i++) {
         },
     )
 };
-exports.eliteSpinner = {
+Class.eliteSpinner = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Spinner",
     UPGRADE_COLOR: "pink",
@@ -613,7 +556,7 @@ exports.eliteSpinner = {
     ],
 };
 for (let i = 0; i < 3; i++) {
-    exports.eliteSpinner.GUNS.push(
+    Class.eliteSpinner.GUNS.push(
         {
             POSITION: [9.5, 2, 1, -1.5, 11.5, 120*i+10, 0],
             PROPERTIES: {
@@ -639,7 +582,7 @@ for (let i = 0; i < 3; i++) {
 };
 
 // OLD ELITE
-exports.oldEliteSprayer = {
+Class.oldEliteSprayer = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Elite Sprayer (Old)",
     UPGRADE_COLOR: "pink",
@@ -659,7 +602,7 @@ exports.oldEliteSprayer = {
 };
 
 // Legionary Crasher
-exports.legionaryTwin = {
+Class.legionaryTwin = {
     PARENT: ["auto4gun"],
     COLOR: "grey",
     GUNS: [
@@ -678,7 +621,7 @@ exports.legionaryTwin = {
         },
     ],
 }
-exports.legionaryPillbox = {
+Class.legionaryPillbox = {
     PARENT: ["unsetTrap"],
     LABEL: "Pillbox",
     BODY: {
@@ -693,7 +636,7 @@ exports.legionaryPillbox = {
         },
     ],
 }
-exports.legionaryCrasherTop = {
+Class.legionaryCrasherTop = {
     PARENT: ["elite"],
     AI: { STRAFE: false, NO_LEAD: false },
     CONTROLLERS: [ ["spin", { independent: true, speed: -0.005 }] ],
@@ -702,7 +645,7 @@ exports.legionaryCrasherTop = {
     TURRETS: [],
 }
 for (let i = 0; i < 3; i++) {
-    exports.legionaryCrasherTop.GUNS.push(
+    Class.legionaryCrasherTop.GUNS.push(
         {
             POSITION: [4, 9.5, 0.7, 7, 5, 120*i+60, 0],
             PROPERTIES: {
@@ -722,14 +665,14 @@ for (let i = 0; i < 3; i++) {
             },
         },
     )
-    exports.legionaryCrasherTop.TURRETS.push(
+    Class.legionaryCrasherTop.TURRETS.push(
         {
             POSITION: [9.5, 10, 0, 120*i, 190, 0],
             TYPE: "auto4gun",
         },
     )
 }
-exports.legionaryCrasher = {
+Class.legionaryCrasher = {
     PARENT: ["elite"],
     LABEL: "Legionary Crasher",
     UPGRADE_COLOR: "pink",
@@ -752,7 +695,7 @@ exports.legionaryCrasher = {
     ],
 }
 for (let i = 0; i < 3; i++) {
-    exports.legionaryCrasher.GUNS.push(
+    Class.legionaryCrasher.GUNS.push(
         {
             POSITION: [14.5, 13, 1, 0, 0, 120*i, 0],
         }, {
@@ -766,12 +709,12 @@ for (let i = 0; i < 3; i++) {
     )
 }
 for (let i = 0; i < 3; i++) {
-    exports.legionaryCrasher.GUNS.push(
+    Class.legionaryCrasher.GUNS.push(
         {
             POSITION: [5, 12, 1.6, -11, 0, 120*i, 0],
         }
     )
-    exports.legionaryCrasher.TURRETS.push(
+    Class.legionaryCrasher.TURRETS.push(
         {
             POSITION: [14, 8, 0, 120*i+60, 180, 0],
             TYPE: [ "sprayer", { COLOR: -1, } ],
@@ -779,7 +722,7 @@ for (let i = 0; i < 3; i++) {
     )
 }
 
-exports.sprayerLegion = {
+Class.sprayerLegion = {
     PARENT: ["elite"],
     UPGRADE_LABEL: "Sprayer Legion",
     UPGRADE_COLOR: "pink",
@@ -799,12 +742,12 @@ exports.sprayerLegion = {
 };
 
 // STRANGE BOSSES
-exports.waferbread = {
+Class.waferbread = {
     PARENT: ["sunchip"],
     NECRO: [0],
     SHAPE: 0
 };
-exports.sorcerer = {
+Class.sorcerer = {
     PARENT: ["miniboss"],
     LABEL: "Sorcerer",
     DANGER: 7,
@@ -832,7 +775,7 @@ exports.sorcerer = {
         },
     }))
 };
-exports.summoner = {
+Class.summoner = {
     PARENT: ["miniboss"],
     LABEL: "Summoner",
     DANGER: 8,
@@ -860,12 +803,12 @@ exports.summoner = {
         },
     }))
 };
-exports.dorito = {
+Class.dorito = {
     PARENT: ["sunchip"],
     NECRO: [3],
     SHAPE: 3
 };
-exports.enchantress = {
+Class.enchantress = {
     PARENT: ["miniboss"],
     LABEL: "Enchantress",
     DANGER: 8,
@@ -893,12 +836,12 @@ exports.enchantress = {
         },
     }))
 };
-exports.demonchip = {
+Class.demonchip = {
     PARENT: ["sunchip"],
     NECRO: [5],
     SHAPE: 5
 };
-exports.exorcistor = {
+Class.exorcistor = {
     PARENT: ["miniboss"],
     LABEL: "Exorcistor",
     DANGER: 8,
@@ -926,12 +869,12 @@ exports.exorcistor = {
         },
     }))
 };
-exports.realchip = {
+Class.realchip = {
     PARENT: ["sunchip"],
     NECRO: [6],
     SHAPE: 6
 };
-exports.shaman = {
+Class.shaman = {
     PARENT: ["miniboss"],
     LABEL: "Shaman",
     DANGER: 8,
@@ -959,7 +902,7 @@ exports.shaman = {
         },
     }))
 };
-exports.eliteSkimmer = {
+Class.eliteSkimmer = {
     PARENT: ["elite"],
     LABEL: "Elite Skimmer",
     COLOR: "orange",
@@ -979,7 +922,7 @@ exports.eliteSkimmer = {
 };
 
 // Nesters
-exports.nestKeeper = {
+Class.nestKeeper = {
     PARENT: ["miniboss"],
     LABEL: "Nest Keeper",
     COLOR: "purple",
@@ -1066,7 +1009,7 @@ exports.nestKeeper = {
         },
     ],
 };
-exports.nestWarden = {
+Class.nestWarden = {
     PARENT: ["miniboss"],
     LABEL: "Nest Warden",
     COLOR: "purple",
@@ -1091,7 +1034,7 @@ exports.nestWarden = {
     ],
 };
 for(let i = 0; i < 5; i++) {
-    exports.nestWarden.GUNS.push(
+    Class.nestWarden.GUNS.push(
         {
             POSITION: [10.7, 8, 1, 0, 0, 72*i+36, 0],
         }, {
@@ -1103,14 +1046,14 @@ for(let i = 0; i < 5; i++) {
             },
         },
     );
-    exports.nestWarden.TURRETS.push(
+    Class.nestWarden.TURRETS.push(
         {
             POSITION: [8, 9, 0, 72*i, 120, 0],
             TYPE: [ "cruiserTurret", { INDEPENDENT: true, COLOR: -1 } ],
         }
     );
 };
-exports.nestGuardian = {
+Class.nestGuardian = {
     PARENT: ["miniboss"],
     LABEL: "Nest Guardian",
     COLOR: "purple",
@@ -1135,7 +1078,7 @@ exports.nestGuardian = {
     ],
 };
 for(let i = 0; i < 5; i++) {
-    exports.nestGuardian.GUNS.push(
+    Class.nestGuardian.GUNS.push(
         {
             POSITION: [5.5, 7, 1, 6, 0, 72*i+36, 0],
             PROPERTIES: {
@@ -1145,7 +1088,7 @@ for(let i = 0; i < 5; i++) {
             },
         },
     );
-    exports.nestGuardian.TURRETS.push(
+    Class.nestGuardian.TURRETS.push(
         {
             POSITION: [8, 9, 0, 72*i, 120, 0],
             TYPE: [ "swarmerTurret", { INDEPENDENT: true, COLOR: -1 } ],
@@ -1154,7 +1097,7 @@ for(let i = 0; i < 5; i++) {
 };
 
 // Rogues
-exports.roguePalisade = {
+Class.roguePalisade = {
     PARENT: ["miniboss"],
     LABEL: "Rogue Palisade",
     COLOR: "darkGrey",
@@ -1187,7 +1130,7 @@ exports.roguePalisade = {
         { POSITION: [5, 10, 0, 330, 110, 0], TYPE: "baseTrapTurret" },
     ],
 };
-exports.rogueArmada = (() => {
+Class.rogueArmada = (() => {
     let SHAPE = 7,
         GUNS = [],
         TURRETS = [];
@@ -1238,7 +1181,7 @@ exports.rogueArmada = (() => {
 })();
 
 // Bob.
-exports.bob = {
+Class.bob = {
     PARENT: ["ramMiniboss"],
     LABEL: "Bob",
     SHAPE: 0,
@@ -1268,7 +1211,7 @@ exports.bob = {
         },
     ],
 };
-exports.nemesis = {
+Class.nemesis = {
     PARENT: ["bob"],
     LABEL: "Nemesis",
     COLOR: "red",
@@ -1283,7 +1226,7 @@ exports.nemesis = {
 };
 
 // DIEP BOSSES
-exports.guardian = {
+Class.guardian = {
     PARENT: ["elite"],
     LABEL: "Guardian of the Pentagons",
     UPGRADE_LABEL: "Guardian",
@@ -1301,7 +1244,7 @@ exports.guardian = {
     ],
     AI: { NO_LEAD: false },
 };
-exports.defenderAutoTankGun = {
+Class.defenderAutoTankGun = {
     PARENT: ["autoTankGun"],
     GUNS: [
         {
@@ -1313,7 +1256,7 @@ exports.defenderAutoTankGun = {
         },
     ],
 };
-exports.defender = {
+Class.defender = {
     PARENT: ["elite"],
     LABEL: "Defender",
     COLOR: "orange",
@@ -1364,7 +1307,7 @@ exports.defender = {
 };
 
 // CELESTIALS
-exports.terrestrial = {
+Class.terrestrial = {
     PARENT: ["miniboss"],
     LABEL: "Terrestrial",
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
@@ -1380,7 +1323,7 @@ exports.terrestrial = {
         DAMAGE: 9,
     },
 };
-exports.celestial = {
+Class.celestial = {
     PARENT: ["miniboss"],
     LABEL: "Celestial",
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
@@ -1396,12 +1339,12 @@ exports.celestial = {
         DAMAGE: 12,
     },
 };
-exports.rogueCelestial = {
+Class.rogueCelestial = {
     PARENT: ["celestial"],
     LABEL: "Rogue Celestial",
     COLOR: "darkGrey",
 };
-exports.eternal = {
+Class.eternal = {
     PARENT: ["miniboss"],
     LABEL: "Eternal",
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
@@ -1419,7 +1362,7 @@ exports.eternal = {
 };
 
 // Terrestrials
-exports.protoHive = {
+Class.protoHive = {
     PARENT: ["bullet"],
     LABEL: "Proto-Hive",
     BODY: {
@@ -1455,7 +1398,7 @@ exports.protoHive = {
         },
     ],
 };
-exports.protoSwarmerTurret = {
+Class.protoSwarmerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Swarmer",
     BODY: { FOV: 2 },
@@ -1490,7 +1433,7 @@ ares.addLayer({turret: {
     TYPE: ["protoSwarmerTurret", { INDEPENDENT: true }],
 }}, true, 6.5);
 
-exports.swarmTurret = {
+Class.swarmTurret = {
     PARENT: ["genericTank"],
     LABEL: "Swarm",
     BODY: { FOV: 2 },
@@ -1507,7 +1450,7 @@ exports.swarmTurret = {
         },
     ],
 };
-exports.basicTurret = {
+Class.basicTurret = {
     PARENT: ["genericTank"],
     LABEL: "Turret",
     BODY: { FOV: 2 },
@@ -1585,7 +1528,7 @@ selene.addLayer({turret: {
 }}, true, 6.5);
 
 // PALADIN
-exports.swarmerTurret = {
+Class.swarmerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Swarmer",
     BODY: { FOV: 2 },
@@ -1621,7 +1564,7 @@ paladin.addLayer({turret: {
 }}, true, 6);
 
 // FREYJA
-exports.cruiserTurret = {
+Class.cruiserTurret = {
     PARENT: ["genericTank"],
     LABEL: "Cruiser",
     BODY: { FOV: 2 },
@@ -1672,7 +1615,7 @@ zaphkiel.addLayer({turret: {
 }}, true, 6);
 
 // NYX
-exports.rocketeerTurret = {
+Class.rocketeerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Rocketeer",
     BODY: { FOV: 2 },
@@ -1724,7 +1667,7 @@ theia.addLayer({turret: {
 }}, true, 6);
 
 // ATLAS
-exports.artilleryTurret = {
+Class.artilleryTurret = {
     PARENT: ["genericTank"],
     LABEL: "Artillery",
     BODY: { FOV: 2 },
@@ -1755,7 +1698,7 @@ exports.artilleryTurret = {
         },
     ],
 };
-exports.nailgunTurret = {
+Class.nailgunTurret = {
     PARENT: ["genericTank"],
     LABEL: "Nailgun",
     BODY: { FOV: 2 },
@@ -1796,7 +1739,7 @@ atlas.addLayer({turret: {
 }}, true, 6);
 
 // RHEA
-exports.crowbarTurret = {
+Class.crowbarTurret = {
     PARENT: ["genericTank"],
     LABEL: "Crowbar",
     BODY: { FOV: 2 },
@@ -1823,7 +1766,7 @@ exports.crowbarTurret = {
         },
     ],
 };
-exports.wrenchTurret = {
+Class.wrenchTurret = {
     PARENT: ["genericTank"],
     LABEL: "Wrench",
     BODY: { FOV: 2 },
@@ -1860,11 +1803,11 @@ rhea.addLayer({turret: {
 }}, true, 6);
 
 // JULIUS
-exports.juliusDrone = {
+Class.juliusDrone = {
     PARENT: ["eggchip"],
     NECRO: false,
 };
-exports.launcherTurret = {
+Class.launcherTurret = {
     PARENT: ["genericTank"],
     LABEL: "Launcher",
     BODY: { FOV: 2 },
@@ -1884,7 +1827,7 @@ exports.launcherTurret = {
         },
     ],
 };
-exports.juliusLowerTurret = {
+Class.juliusLowerTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
     MAX_CHILDREN: 3,
@@ -1913,7 +1856,7 @@ julius.addLayer({turret: {
 }}, true, 6);
 
 // GENGHIS
-exports.tinyMinion = {
+Class.tinyMinion = {
     PARENT: ["minion"],
     LABEL: "Tiny Minion",
     ACCEPTS_SCORE: false,
@@ -1945,7 +1888,7 @@ exports.tinyMinion = {
     DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
 }
-exports.genghisLowerTurret = {
+Class.genghisLowerTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
     MAX_CHILDREN: 4,
@@ -1977,7 +1920,7 @@ genghis.addLayer({turret: {
 }}, true, 6);
 
 // NAPOLEON
-exports.napoleonLowerTurret = {
+Class.napoleonLowerTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
     BODY: { FOV: 2 },
@@ -2001,8 +1944,8 @@ exports.napoleonLowerTurret = {
         },
     ],
 };
-exports.turretedBullet = makeAuto(bullet, "Auto-Bullet", {size: 14, color: "veryLightGrey", angle: 0});
-exports.napoleonUpperTurret = {
+Class.turretedBullet = makeAuto('bullet', "Auto-Bullet", {size: 14, color: "veryLightGrey", angle: 0});
+Class.napoleonUpperTurret = {
     PARENT: ["genericTank"],
     LABEL: "",
     BODY: { FOV: 2 },
@@ -2031,7 +1974,7 @@ napoleon.addLayer({turret: {
 }}, true, 6)
 
 // Eternals
-exports.kronosMissile = {
+Class.kronosMissile = {
     PARENT: ["missile"],
     GUNS: [
         {
@@ -2073,7 +2016,7 @@ exports.kronosMissile = {
         },
     ],
 };
-exports.kronosSkimmerTurret = {
+Class.kronosSkimmerTurret = {
     PARENT: ["genericTank"],
     LABEL: "Skimmer",
     BODY: { FOV: 10 },
@@ -2092,7 +2035,7 @@ exports.kronosSkimmerTurret = {
         },
     ],
 };
-exports.carrierTurret = {
+Class.carrierTurret = {
     PARENT: ["genericTank"],
     LABEL: "Carrier",
     BODY: { FOV: 2 },
@@ -2124,7 +2067,7 @@ exports.carrierTurret = {
         },
     ],
 };
-exports.tripletTurret = {
+Class.tripletTurret = {
     PARENT: ["genericTank"],
     LABEL: "Triplet",
     BODY: { FOV: 2 },
@@ -2167,7 +2110,7 @@ kronos.addLayer({turret: {
     TYPE: "tripletTurret",
 }}, true, 4);
 
-exports.autoSmasherMissile = {
+Class.autoSmasherMissile = {
     PARENT: ["missile"],
     LABEL: "Auto-Smasher",
     HITS_OWN_TYPE: "never",
@@ -2185,7 +2128,7 @@ exports.autoSmasherMissile = {
         },
     ],
 }
-exports.autosmashTurret = {
+Class.autosmashTurret = {
     PARENT: ["genericTank"],
     LABEL: "Launcher",
     BODY: { FOV: 10 },
@@ -2204,7 +2147,7 @@ exports.autosmashTurret = {
         },
     ],
 };
-exports.gunnerCruiserTurret = {
+Class.gunnerCruiserTurret = {
     PARENT: ["genericTank"],
     LABEL: "Launcher",
     BODY: { FOV: 10 },
@@ -2241,7 +2184,7 @@ exports.gunnerCruiserTurret = {
         },
     ],
 };
-exports.gemDrone = {
+Class.gemDrone = {
     PARENT: ["drone"],
     COLOR: "teal",
     DRAW_HEALTH: true,
@@ -2277,11 +2220,11 @@ odin.addLayer({turret: {
 }}, true, 4.5);
 
 // Developer Bosses
-exports.taureonCoreBase = {
+Class.taureonCoreBase = {
     SHAPE: 4,
     COLOR: '#00A2E8'
 };
-exports.taureonCore = {
+Class.taureonCore = {
     PARENT: "genericTank",
     LABEL: "Core Turret",
     SHAPE: 4.5,
@@ -2302,18 +2245,18 @@ exports.taureonCore = {
         TYPE: "taureonCoreBase"
     }]
 };
-exports.taureonBase = {
+Class.taureonBase = {
     SHAPE: 4.5,
     COLOR: '#161B54',
     MIRROR_MASTER_ANGLE: true
 };
 let d = 1/4;
-exports.taureonStar = {
+Class.taureonStar = {
     SHAPE: [[0,1],[d,d],[1,0],[d,-d],[0,-1],[-d,-d],[-1,0],[-d,d]],
     COLOR: '#3F48CC',
     MIRROR_MASTER_ANGLE: true
 };
-exports.taureonRailgunTurret = {
+Class.taureonRailgunTurret = {
     PARENT: "genericTank",
     LABEL: "Railgun Turret",
     CONTROLLERS: ["nearestDifferentMaster", "onlyAcceptInArc"],
@@ -2330,7 +2273,7 @@ exports.taureonRailgunTurret = {
         POSITION: [5, 7.5, -1.6, 8, 0, 0, 0],
     }]
 };
-exports.taureonThruster = {
+Class.taureonThruster = {
     PARENT: "genericTank",
     LABEL: "Thruster",
     CONTROLLERS: ["onlyAcceptInArc"],
@@ -2348,7 +2291,7 @@ exports.taureonThruster = {
         },
     }]
 };
-exports.taureonMissile = {
+Class.taureonMissile = {
     PARENT: ["bullet"],
     LABEL: "Missile",
     TYPE: "swarm",
@@ -2389,7 +2332,7 @@ exports.taureonMissile = {
         },
     }))]
 };
-exports.taureonBoss = {
+Class.taureonBoss = {
     PARENT: "miniboss",
     LABEL: "Diamond Marauder",
     NAME: "Taureon",
@@ -2463,7 +2406,7 @@ exports.taureonBoss = {
     }]
 };
 
-exports.shinyomegasunchip = {
+Class.shinyomegasunchip = {
     PARENT: ["drone"],
     SHAPE: 4,
     HITS_OWN_TYPE: "hard",
@@ -2485,11 +2428,11 @@ exports.shinyomegasunchip = {
         TYPE: ["shinySquare", { MIRROR_MASTER_ANGLE: true }]
     }]
 };
-exports.shinyEggDummy = {
+Class.shinyEggDummy = {
     SHAPE: 0,
     COLOR: "lightGreen"
 }
-exports.shinybetawaferbread = {
+Class.shinybetawaferbread = {
     PARENT: ["drone"],
     SHAPE: 0,
     HITS_OWN_TYPE: "hard",
@@ -2505,7 +2448,7 @@ exports.shinybetawaferbread = {
         TYPE: "shinyEggDummy"
     },]
 };;
-exports.zenphiaBoss = {
+Class.zenphiaBoss = {
     PARENT: "miniboss",
     LABEL: "Shiny Omega Thaumaturge",
     NAME: "Zenphia",
@@ -2567,11 +2510,11 @@ exports.zenphiaBoss = {
     }]
 };
 
-exports.dogeiscutBody = {
+Class.dogeiscutBody = {
     PARENT: "genericTank",
     SHAPE: [[1,0],[-0.7,0.7],[-0.35,0],[-0.7,-0.7]]
 }
-exports.dogeiscutTurret = {
+Class.dogeiscutTurret = {
     PARENT: "genericTank",
     GUNS: [ {
             POSITION: [ 50, 5, 2.5, 0, 0, 0, 0, ],
@@ -2647,21 +2590,21 @@ function createDogeiscutMissile(color) {
         ]
     }
 }
-exports.dogeiscutMissileTurret_red = createDogeiscutMissileTurret('red')
-exports.dogeiscutMissile_red = createDogeiscutMissile('red')
-exports.dogeiscutMissileTurret_orange = createDogeiscutMissileTurret('orange')
-exports.dogeiscutMissile_orange = createDogeiscutMissile('orange')
-exports.dogeiscutMissileTurret_yellow = createDogeiscutMissileTurret('yellow')
-exports.dogeiscutMissile_yellow = createDogeiscutMissile('yellow')
-exports.dogeiscutMissileTurret_green = createDogeiscutMissileTurret('green')
-exports.dogeiscutMissile_green = createDogeiscutMissile('green')
-exports.dogeiscutMissileTurret_cyan = createDogeiscutMissileTurret('cyan')
-exports.dogeiscutMissile_cyan = createDogeiscutMissile('cyan')
-exports.dogeiscutMissileTurret_blue = createDogeiscutMissileTurret('blue')
-exports.dogeiscutMissile_blue = createDogeiscutMissile('blue')
-exports.dogeiscutMissileTurret_purple = createDogeiscutMissileTurret('purple')
-exports.dogeiscutMissile_purple = createDogeiscutMissile('purple')
-exports.dogeiscutBomb = {
+Class.dogeiscutMissileTurret_red = createDogeiscutMissileTurret('red')
+Class.dogeiscutMissile_red = createDogeiscutMissile('red')
+Class.dogeiscutMissileTurret_orange = createDogeiscutMissileTurret('orange')
+Class.dogeiscutMissile_orange = createDogeiscutMissile('orange')
+Class.dogeiscutMissileTurret_yellow = createDogeiscutMissileTurret('yellow')
+Class.dogeiscutMissile_yellow = createDogeiscutMissile('yellow')
+Class.dogeiscutMissileTurret_green = createDogeiscutMissileTurret('green')
+Class.dogeiscutMissile_green = createDogeiscutMissile('green')
+Class.dogeiscutMissileTurret_cyan = createDogeiscutMissileTurret('cyan')
+Class.dogeiscutMissile_cyan = createDogeiscutMissile('cyan')
+Class.dogeiscutMissileTurret_blue = createDogeiscutMissileTurret('blue')
+Class.dogeiscutMissile_blue = createDogeiscutMissile('blue')
+Class.dogeiscutMissileTurret_purple = createDogeiscutMissileTurret('purple')
+Class.dogeiscutMissile_purple = createDogeiscutMissile('purple')
+Class.dogeiscutBomb = {
         PARENT: "trap",
         LABEL: "Bomb",
         SHAPE: 0,
@@ -2694,7 +2637,7 @@ exports.dogeiscutBomb = {
             }
         ]
     }
-exports.dogeiscutBoss = {
+Class.dogeiscutBoss = {
     PARENT: "miniboss",
     LABEL: "DOG",
     NAME: "DogeisCut",
@@ -2861,8 +2804,8 @@ exports.dogeiscutBoss = {
         },
     ]
 }
-exports.trplnrBossAuraBulletAura = addAura(1, 1)
-exports.trplnrBossAuraBullet = {
+Class.trplnrBossAuraBulletAura = addAura(1, 1)
+Class.trplnrBossAuraBullet = {
     PARENT: 'genericTank',
     LABEL: 'Nest',
     SHAPE: -4,
@@ -2926,7 +2869,7 @@ const trplnrBossDecor = {
         TYPE: ['triangle', { COLOR: 'black', MIRROR_MASTER_ANGLE: true }]
     }],
 }
-exports.trplnrBoss = {
+Class.trplnrBoss = {
     PARENT: "miniboss",
     ...trplnrBossDecor,
     BODY: {
@@ -3009,7 +2952,7 @@ exports.trplnrBoss = {
     })()
 }
 
-exports.trplnrBossBulletHellFormPentagonsAuraBullet = {
+Class.trplnrBossBulletHellFormPentagonsAuraBullet = {
     PARENT: 'bullet',
     TURRETS: [{
         POSITION: {SIZE: 15, LAYER: 1},
@@ -3017,7 +2960,7 @@ exports.trplnrBossBulletHellFormPentagonsAuraBullet = {
     }]
 } 
 
-exports.trplnrBossBulletHellFormPentagons = {
+Class.trplnrBossBulletHellFormPentagons = {
     PARENT: 'bullet',
     LABEL: 'Pentagon',
     SHAPE: -5,
@@ -3041,7 +2984,7 @@ exports.trplnrBossBulletHellFormPentagons = {
         return output
     })()
 }
-exports.trplnrBossBulletHellForm = {
+Class.trplnrBossBulletHellForm = {
     PARENT: "miniboss",
     ...trplnrBossDecor,
     LABEL: 'Lavender - Bullet Hell Form',
@@ -3130,7 +3073,7 @@ exports.trplnrBossBulletHellForm = {
         return output
     })()
 }
-exports.trplnrBossVulnerableForm = {
+Class.trplnrBossVulnerableForm = {
     PARENT: "miniboss",
     ...trplnrBossDecor,
     LABEL: 'Lavender - Vulnerable Form',
