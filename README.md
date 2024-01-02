@@ -1,4 +1,4 @@
-# Open Source Arras (APS++)
+# Open Source Arras
 
 **Open Source Arras is beta software.** This build is **not** representative of the final product. Expect bugs and missing features.
 

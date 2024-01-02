@@ -11,6 +11,7 @@ exports.rock = {
     LABEL: "Rock",
     FACING_TYPE: "turnWithSpeed",
     SHAPE: -9,
+    CAN_GO_OUTSIDE_ROOM: true,
     BODY: {
         PUSHABILITY: 0,
         HEALTH: 10000,

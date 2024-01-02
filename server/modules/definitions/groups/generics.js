@@ -243,7 +243,7 @@ exports.trap = {
 
 exports.satellite = { 
     LABEL: "Satellite",
-    TYPE: "drone",
+    TYPE: "satellite",
     ACCEPTS_SCORE: false,
     DANGER: 2,
     SHAPE: 0,
