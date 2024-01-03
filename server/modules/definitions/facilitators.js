@@ -130,7 +130,7 @@ exports.makeConq = (type, name = -1) => {
     }, {
         POSITION: [2, 14, 1.1, 18, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.trap, g.block]),
+            SHOOT_SETTINGS: exports.combineStats([g.trap, g.setTrap]),
             TYPE: "setTrap",
             STAT_CALCULATOR: gunCalcNames.block
         },
@@ -145,14 +145,14 @@ exports.makeSplit = (type, name = -1) => {
     let cannon1 = {
         POSITION: [18, 8, 1, 0, 0, 90, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank]),
+            SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard]),
             TYPE: "bullet",
         },
     };
     let cannon2 = {
         POSITION: [18, 8, 1, 0, 0, 270, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank]),
+            SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard]),
             TYPE: "bullet",
         },
     };
@@ -166,13 +166,13 @@ exports.addBackGunner = (type, name = -1) => {
     let cannons = [{
         POSITION: [19, 2, 1, 0, -2.5, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.basic, g.gunner, g.power, g.twin, { recoil: 4 }, { recoil: 1.8 }]),
+            SHOOT_SETTINGS: exports.combineStats([g.basic, g.pelleter, g.power, g.twin, { recoil: 4 }, { recoil: 1.8 }]),
             TYPE: "bullet",
         },
     }, {
         POSITION: [19, 2, 1, 0, 2.5, 180, 0.5],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.basic, g.gunner, g.power, g.twin, { recoil: 4 }, { recoil: 1.8 }]),
+            SHOOT_SETTINGS: exports.combineStats([g.basic, g.pelleter, g.power, g.twin, { recoil: 4 }, { recoil: 1.8 }]),
             TYPE: "bullet",
         },
     }, {
@@ -205,13 +205,13 @@ exports.makeBird = (type, name = -1, color) => {
     let output = exports.dereference(type),
         shootyBois = [{
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
         },{
             POSITION: [16, 8, 1, 0, 0, 210, 0.1],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
         },{
             POSITION: [18, 8, 1, 0, 0, 180, 0.6],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
         }];
     if (color) for (let i = 0; i < 3; i++) shootyBois[i].PROPERTIES.TYPE = [shootyBois[i].PROPERTIES.TYPE, { COLOR: color, KEEP_OWN_COLOR: true }];
     for (let i in output.GUNS) if (output.GUNS[i].PROPERTIES) output.GUNS[i].PROPERTIES.ALT_FIRE = true;
@@ -247,7 +247,7 @@ exports.makeOver = (type, name = -1) => {
     let spawners = [{
         POSITION: [6, 12, 1.2, 8, 0, 125, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.drone, g.over]),
+            SHOOT_SETTINGS: exports.combineStats([g.drone, g.overseer]),
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
@@ -258,7 +258,7 @@ exports.makeOver = (type, name = -1) => {
     }, {
         POSITION: [6, 12, 1.2, 8, 0, 235, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.drone, g.over]),
+            SHOOT_SETTINGS: exports.combineStats([g.drone, g.overseer]),
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
@@ -277,7 +277,7 @@ exports.makeOversplit = (type, name = -1) => {
     let spawners = [{
         POSITION: [6, 12, 1.2, 8, 0, 90, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.drone, g.over]),
+            SHOOT_SETTINGS: exports.combineStats([g.drone, g.overseer]),
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
@@ -288,7 +288,7 @@ exports.makeOversplit = (type, name = -1) => {
     }, {
         POSITION: [6, 12, 1.2, 8, 0, 270, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.drone, g.over]),
+            SHOOT_SETTINGS: exports.combineStats([g.drone, g.overseer]),
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
@@ -417,7 +417,7 @@ exports.makeCross = (type, name = -1) => {
     let spawner1 = {
         POSITION: [6, 12, 1.2, 8, 0, 90, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.drone, g.over]),
+            SHOOT_SETTINGS: exports.combineStats([g.drone, g.overseer]),
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
@@ -429,7 +429,7 @@ exports.makeCross = (type, name = -1) => {
     let spawner2 = {
         POSITION: [6, 12, 1.2, 8, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.drone, g.over]),
+            SHOOT_SETTINGS: exports.combineStats([g.drone, g.overseer]),
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
@@ -441,7 +441,7 @@ exports.makeCross = (type, name = -1) => {
     let spawner3 = {
         POSITION: [6, 12, 1.2, 8, 0, 270, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.drone, g.over]),
+            SHOOT_SETTINGS: exports.combineStats([g.drone, g.overseer]),
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,

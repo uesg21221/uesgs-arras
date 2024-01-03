@@ -111,7 +111,7 @@ Class.spamAutoTurret = {
 		{
 			POSITION: [22, 10, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.auto, {recoil: 0.2}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard, g.autoTurret, {recoil: 0.2}]),
 				TYPE: "bullet",
 			},
 		},
@@ -129,7 +129,7 @@ Class.supermissile = {
 			POSITION: [14, 6, 1, 0, -2, 130, 0],
 			PROPERTIES: {
 				AUTOFIRE: true,
-				SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, { recoil: 1.35 }, g.morespeed, g.morespeed]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, { reload: 0.5 }, g.lowPower, { recoil: 1.35 }, { speed: 1.3, maxSpeed: 1.3 }, { speed: 1.3, maxSpeed: 1.3 }]),
 				TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
 				STAT_CALCULATOR: gunCalcNames.thruster,
 			},
@@ -138,7 +138,7 @@ Class.supermissile = {
 			POSITION: [14, 6, 1, 0, 2, 230, 0],
 			PROPERTIES: {
 				AUTOFIRE: true,
-				SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, { recoil: 1.35 }, g.morespeed, g.morespeed]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, { reload: 0.5 }, g.lowPower, { recoil: 1.35 }, { speed: 1.3, maxSpeed: 1.3 }, { speed: 1.3, maxSpeed: 1.3 }]),
 				TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
 				STAT_CALCULATOR: gunCalcNames.thruster,
 			},
@@ -147,7 +147,7 @@ Class.supermissile = {
 			POSITION: [14, 6, 1, 0, 0, 0, 0.2],
 			PROPERTIES: {
 				AUTOFIRE: true,
-				SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.morespeed, g.morespeed]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, { reload: 0.5 }, { speed: 1.3, maxSpeed: 1.3 }, { speed: 1.3, maxSpeed: 1.3 }]),
 				TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
 			},
 		},
@@ -193,7 +193,7 @@ for (let i = 0; i < 2; i++) {
 		{
 			POSITION: [20, 7, 1, 0, 0, 180*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, {reload: 0.85}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, {reload: 0.85}]),
 				TYPE: "bullet",
 			},
 		},
@@ -253,7 +253,7 @@ for (let i = 0; i < 2; i++) {
 		{
 			POSITION: [5, 9, 1.2, 8, 0, 180*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.over, {reload: 0.85}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, {reload: 0.85}]),
 				TYPE: "drone",
 				MAX_CHILDREN: 4,
 				AUTOFIRE: true,
@@ -301,7 +301,7 @@ Class.byteTurretOfficialV2 = {
 		{
 			POSITION: [22, 10, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.auto, {health: 1.2, speed: 0.8}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.autoTurret, {health: 1.2, speed: 0.8}]),
 				TYPE: "bullet",
 			},
 		},
@@ -368,7 +368,7 @@ for (let i = 0; i < 4; i++) {
 		{
 			POSITION: [24, 7, 1, 0, 0, 90*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.assass, {reload: 0.85, density: 1/2}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.assassin, {reload: 0.85, density: 1/2}]),
 				TYPE: "bullet",
 			},
 		},
@@ -429,7 +429,7 @@ for (let i = 0; i < 4; i++) {
 		{
 			POSITION: [9, 8, 1.4, 6, 0, 90*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.mach, {size: 0.8, health: 1.3}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, {size: 0.8, health: 1.3}]),
 				TYPE: "bullet",
 			},
 		},
@@ -445,7 +445,7 @@ for (let i = 0; i < 4; i++) {
 		{
 			POSITION: [17, 9, 1, 0, 0, 90*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pound, {reload: 0.9}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pounder, {reload: 0.9}]),
 				TYPE: "bullet",
 			},
 		},
@@ -461,7 +461,7 @@ for (let i = 0; i < 4; i++) {
 		{
 			POSITION: [11, 6, 1, 8, 0, 90*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.halfspeed, {reload: 0.8}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, { speed: 0.5, maxSpeed: 0.5 }, {reload: 0.8}]),
 				TYPE: "missile",
 				STAT_CALCULATOR: gunCalcNames.sustained,
 			},
@@ -481,7 +481,7 @@ for (let i = 0; i < 4; i++) {
 		{
 			POSITION: [5, 11, 1.1, 8, 0, 90*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, {size: 1.5, reload: 0.6}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, {size: 1.5, reload: 0.6}]),
 				TYPE: "drone",
 				MAX_CHILDREN: 3,
 				AUTOFIRE: true,
@@ -506,7 +506,7 @@ for (let i = 0; i < 4; i++) {
 		{
 			POSITION: [15, 7.5, 1, 0, 0, 90*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.assass, g.minionGun]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.assassin, g.minionGun]),
 				WAIT_TO_CYCLE: true,
 				TYPE: "bullet",
 			},
@@ -584,7 +584,7 @@ for (let i = 0; i < 4; i++) {
 		{
 			POSITION: [3.75, 7, 1.75, 13, 0, 90*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.block, {health: 2}]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, {health: 2}]),
 				TYPE: "unsetTrap",
 				STAT_CALCULATOR: gunCalcNames.block
 			},
@@ -618,7 +618,7 @@ Class.kilobyteTurretOfficialV2 = {
 		{
 			POSITION: [26, 10, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.assass, g.auto, {health: 1.2, speed: 0.8}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.assassin, g.autoTurret, {health: 1.2, speed: 0.8}]),
 				TYPE: "bullet",
 			},
 		},
@@ -750,7 +750,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [28, 7, 1, 0, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.assass, g.assass, {reload: 0.8, density: 2/5}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.assassin, g.assassin, {reload: 0.8, density: 2/5}]),
 				TYPE: "bullet",
 			},
 		},
@@ -821,14 +821,14 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [7, 11, 1.35, 6, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.mach, {size: 0.8}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, {size: 0.8}]),
 				TYPE: "bullet",
 			},
 		},
 		{
 			POSITION: [7, 10, 1.3, 8, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.mach, {size: 0.8, reload: 0.9}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, {size: 0.8, reload: 0.9}]),
 				TYPE: "bullet",
 			},
 		},
@@ -844,7 +844,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [16.5, 11.5, 1, 0, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, {reload: 0.85}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {reload: 0.85}]),
 				TYPE: "bullet",
 			},
 		},
@@ -863,7 +863,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [15, 15, 1, 0, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.skim, g.halfspeed, {reload: 0.8}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.skimmer, { speed: 0.5, maxSpeed: 0.5 }, {reload: 0.8}]),
 				TYPE: "supermissile",
 				STAT_CALCULATOR: gunCalcNames.sustained,
 			},
@@ -880,7 +880,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [5, 6, 1.4, 6, 5.5, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, {size: 1.5, reload: 0.6}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, {size: 1.5, reload: 0.6}]),
 				TYPE: "drone",
 				MAX_CHILDREN: 2,
 				AUTOFIRE: true,
@@ -892,7 +892,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [5, 6, 1.4, 6, -5.5, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, {size: 1.5, reload: 0.6}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, {size: 1.5, reload: 0.6}]),
 				TYPE: "drone",
 				MAX_CHILDREN: 2,
 				AUTOFIRE: true,
@@ -904,7 +904,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [5, 6, 1.4, 8, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.pound, {size: 2, reload: 0.4}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, g.pounder, {size: 2, reload: 0.4}]),
 				TYPE: "betadrone",
 				MAX_CHILDREN: 2,
 				AUTOFIRE: true,
@@ -929,7 +929,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [16, 8.5, 1, 0, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.bitlessspeed, g.minionGun]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, { speed: 0.93, maxSpeed: 0.93 }, g.minionGun]),
 				WAIT_TO_CYCLE: true,
 				TYPE: "bullet",
 			},
@@ -976,7 +976,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [2, 3.5, 1.8, 10, 8.5, 120*i, 2/3],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pounder, { speed: 1.2 }]),
 				TYPE: "trap",
 				STAT_CALCULATOR: gunCalcNames.trap,
 			},
@@ -987,7 +987,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [2, 3.5, 1.8, 10, -8.5, 120*i, 1/3],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pounder, { speed: 1.2 }]),
 				TYPE: "trap",
 				STAT_CALCULATOR: gunCalcNames.trap,
 			},
@@ -998,7 +998,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [2.5, 5, 1.7, 12, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.block, g.twin, g.pound, g.fast]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.twin, g.pounder, { speed: 1.2 }]),
 				TYPE: "unsetTrap",
 				STAT_CALCULATOR: gunCalcNames.block
 			},
@@ -1018,7 +1018,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [3.5, 10, 1.6, 13, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.2, health: 2}]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.pounder, { speed: 1.3, maxSpeed: 1.3 }, {size: 1.2, health: 2}]),
 				TYPE: "unsetTrap",
 				STAT_CALCULATOR: gunCalcNames.block
 			},
@@ -1126,7 +1126,7 @@ Class.megabyteTurretOfficialV2 = {
 		{
 			POSITION: [26, 13, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.pound, g.auto, {health: 1.2, speed: 0.8}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.pounder, g.autoTurret, {health: 1.2, speed: 0.8}]),
 				TYPE: "bullet",
 			},
 		},
@@ -1413,7 +1413,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [28, 7, 1, 0, 0, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.assass, g.assass, g.assass, {reload: 0.8, density: 2/9}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.assassin, g.assassin, g.assassin, {reload: 0.8, density: 2/9}]),
 				TYPE: "bullet",
 			},
 		},
@@ -1491,21 +1491,21 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [7.5, 10.75, 1.33, 5.5, 0, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.spam, g.spam, {size: 0.7, reload: 1.2}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.spam, g.spam, {size: 0.7, reload: 1.2}]),
 				TYPE: "bullet",
 			},
 		},
 		{
 			POSITION: [7.5, 9.5, 1.33, 7.5, 0, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.spam, g.spam, {size: 0.7, reload: 1.1}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.spam, g.spam, {size: 0.7, reload: 1.1}]),
 				TYPE: "bullet",
 			},
 		},
 		{
 			POSITION: [7.5, 7.25, 1.25, 9.5, 0, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.spam, g.spam, {size: 0.7, reload: 1}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.spam, g.spam, {size: 0.7, reload: 1}]),
 				TYPE: "bullet",
 			},
 		},
@@ -1521,7 +1521,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [17, 12, 1, 0, 0, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni, {reload: 0.9, health: 1.1}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, {reload: 0.9, health: 1.1}]),
 				TYPE: "bullet",
 			},
 		},
@@ -1540,7 +1540,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [15, 12, 1, 0, 0, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.destroy, g.arty, g.skim, g.halfspeed, {reload: 0.8}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.destroyer, g.artillery, g.skimmer, { speed: 0.5, maxSpeed: 0.5 }, {reload: 0.8}]),
 				TYPE: "supermissile",
 				STAT_CALCULATOR: gunCalcNames.sustained,
 			},
@@ -1557,7 +1557,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [4, 5, 2.1, 8, 3.25, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.over, {size: 1.5, reload: 0.6}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, g.overseer, {size: 1.5, reload: 0.6}]),
 				TYPE: ["drone", {COLOR: 5}],
 				MAX_CHILDREN: 2,
 				AUTOFIRE: true,
@@ -1569,7 +1569,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [4, 5, 2.1, 8, -3.25, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.over, {size: 1.5, reload: 0.6}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, g.overseer, {size: 1.5, reload: 0.6}]),
 				TYPE: ["drone", {COLOR: 5}],
 				MAX_CHILDREN: 2,
 				AUTOFIRE: true,
@@ -1581,7 +1581,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [6, 6.5, 1.4, 8, 0, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.over, g.over, g.over, g.pound, {size: 2, reload: 0.4}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, g.overseer, g.pounder, {size: 2, reload: 0.4}]),
 				TYPE: ["betadrone", {COLOR: 5}],
 				MAX_CHILDREN: 2,
 				AUTOFIRE: true,
@@ -1641,7 +1641,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [15, 8.5, 1, 0, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.slow, g.minionGun]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, { speed: 0.7, maxSpeed: 0.7 }, g.minionGun]),
 				WAIT_TO_CYCLE: true,
 				TYPE: ["bullet", {COLOR: 5}],
 			},
@@ -1654,7 +1654,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [3, 7, 1.7, 13, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.flank, g.minionGun]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.flankGuard, g.minionGun]),
 				TYPE: "trap",
 				STAT_CALCULATOR: gunCalcNames.trap,
 			},
@@ -1716,7 +1716,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [1.5, 4, 1.6, 12, 2.5, 72*i+10, 0.5],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pounder, { speed: 1.2 }]),
 				TYPE: "trap",
 				STAT_CALCULATOR: gunCalcNames.trap,
 			},
@@ -1727,7 +1727,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [1.5, 4, 1.6, 12, -2.5, 72*i-10, 0.5],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pound, g.fast]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pounder, { speed: 1.2 }]),
 				TYPE: "trap",
 				STAT_CALCULATOR: gunCalcNames.trap,
 			},
@@ -1738,7 +1738,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [2, 5.5, 1.7, 14, 0, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.block, g.twin, g.pound, g.fast]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.twin, g.pounder, { speed: 1.2 }]),
 				TYPE: "unsetTrap",
 				STAT_CALCULATOR: gunCalcNames.block
 			},
@@ -1758,7 +1758,7 @@ for (let i = 0; i < 5; i++) {
 		{
 			POSITION: [3.5, 10, 1.6, 13, 0, 72*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.block, g.pound, g.morespeed, {size: 1.3, health: 2}]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.pounder, { speed: 1.3, maxSpeed: 1.3 }, {size: 1.3, health: 2}]),
 				TYPE: "unsetTrap",
 				STAT_CALCULATOR: gunCalcNames.block
 			},
@@ -1870,7 +1870,7 @@ Class.gigabyteTurretOfficialV2 = {
 		{
 			POSITION: [26, 16, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.pound, g.destroy, g.auto, {speed: 1.1, health: 0.8}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.pounder, g.destroyer, g.autoTurret, {speed: 1.1, health: 0.8}]),
 				TYPE: "bullet",
 			},
 		},

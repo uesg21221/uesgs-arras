@@ -458,7 +458,7 @@ Class.trapTurret = {
         {
             POSITION: [4, 14, 1.8, 16, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.lowpower, g.fast, { reload: 2 }]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.lowPower, { speed: 1.2 }, { reload: 2 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -471,7 +471,7 @@ Class.shotTrapBox = {
     MOTION_TYPE: "glide",
 }
 let makeshottrapTurretProps = () => ({
-    SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, { speed: 0.7, maxSpeed: 0.2, damage: 1.5 }]),
+    SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, { speed: 0.7, maxSpeed: 0.2, damage: 1.5 }]),
     AUTOFIRE: true,
     TYPE: "shotTrapBox",
     STAT_CALCULATOR: gunCalcNames.block,
@@ -519,7 +519,7 @@ Class.shottrapTurret = {
             POSITION: [ 16, 14, -1.4,  0, 0, 0, 0 ], 
     }, {
             POSITION: [  6, 14,  1.6, 16, 0, 0, 0 ], PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, g.fake]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, g.fake]),
                 AUTOFIRE: true,
                 TYPE: "bullet"
             }
@@ -545,7 +545,7 @@ Class.barricadeTurret = {
         {
             POSITION: [4, 8, 1.3, 22, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -553,7 +553,7 @@ Class.barricadeTurret = {
         {
             POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -561,7 +561,7 @@ Class.barricadeTurret = {
         {
             POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -594,7 +594,7 @@ Class.megaAutoTurret = {
   GUNS: [{
     POSITION: [22, 14, 1, 0, 0, 0, 0],
     PROPERTIES: {
-      SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.auto]),
+      SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.autoTurret]),
       TYPE: "bullet"
     }
   }]
@@ -629,7 +629,7 @@ Class.shinySentrySwarm = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }, g.mach, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }, g.machineGun, { reload: 0.25 }]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -652,7 +652,7 @@ Class.artilleryAutoTankgun = {
     GUNS: [{
         POSITION: [17, 3, 1, 0, -6, -7, 0.25],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, { reload: 0.25 }]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, { reload: 0.25 }]),
             TYPE: "bullet",
             LABEL: "Secondary",
         },
@@ -660,7 +660,7 @@ Class.artilleryAutoTankgun = {
         {
             POSITION: [17, 3, 1, 0, 6, 7, 0.75],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, { reload: 0.25 }]),
                 TYPE: "bullet",
                 LABEL: "Secondary",
             },
@@ -668,7 +668,7 @@ Class.artilleryAutoTankgun = {
         {
             POSITION: [19, 12, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, { reload: 0.25 }]),
                 TYPE: "bullet",
                 LABEL: "Heavy",
             },
@@ -700,7 +700,7 @@ Class.barricadeAutoTankGun = {
         {
             POSITION: [4, 8, 1.3, 22, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -708,7 +708,7 @@ Class.barricadeAutoTankGun = {
         {
             POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -716,7 +716,7 @@ Class.barricadeAutoTankGun = {
         {
             POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -784,8 +784,8 @@ Class.sentinelMissile = {
         AUTOFIRE: true,
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.pound,
-          g.destroy, 
+          g.pounder,
+          g.destroyer, 
         ]),
         TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
         STAT_CALCULATOR: gunCalcNames.thruster,
@@ -797,7 +797,7 @@ Class.sentinelMissile = {
         AUTOFIRE: true,
         SHOOT_SETTINGS: combineStats([
           g.basic,
-                    g.skim,
+                    g.skimmer,
         ]),
         TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
         STAT_CALCULATOR: gunCalcNames.thruster,
@@ -809,7 +809,7 @@ Class.sentinelMissile = {
         AUTOFIRE: true,
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.skim,
+          g.skimmer,
         ]),
         TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
         STAT_CALCULATOR: gunCalcNames.thruster,
@@ -827,8 +827,8 @@ Class.sentinelLauncher = {
             PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.gunner,
-          g.pound,
+          g.pelleter,
+          g.pounder,
           g.launcher,
         ]),
         TYPE: "sentinelMissile",
@@ -856,7 +856,7 @@ Class.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
+                    { speed: 0.7, maxSpeed: 0.7 },
                     g.crossbow,
                     { recoil: 0.5 },
                 ]),
@@ -870,7 +870,7 @@ Class.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
+                    { speed: 0.7, maxSpeed: 0.7 },
                     g.crossbow,
                     { recoil: 0.5 },
                 ]),
@@ -884,7 +884,7 @@ Class.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
+                    { speed: 0.7, maxSpeed: 0.7 },
                     g.crossbow,
                     { recoil: 0.5 },
                 ]),
@@ -898,7 +898,7 @@ Class.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
+                    { speed: 0.7, maxSpeed: 0.7 },
                     g.crossbow,
                     { recoil: 0.5 },
                 ]),
@@ -912,7 +912,7 @@ Class.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
+                    { speed: 0.7, maxSpeed: 0.7 },
                     { reload: 2 },
                     { recoil: 0.5 },
                 ]),
@@ -931,7 +931,7 @@ Class.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -942,7 +942,7 @@ Class.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -953,7 +953,7 @@ Class.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -964,7 +964,7 @@ Class.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -976,7 +976,7 @@ Class.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -987,7 +987,7 @@ Class.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -998,7 +998,7 @@ Class.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -1025,7 +1025,7 @@ Class.baseSwarmTurret = {
         {
             POSITION: [5, 4.5, 0.6, 7, 2, 0, 0.15],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.protectorswarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -1033,7 +1033,7 @@ Class.baseSwarmTurret = {
         {
             POSITION: [5, 4.5, 0.6, 7, -2, 0, 0.15],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.protectorswarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -1041,7 +1041,7 @@ Class.baseSwarmTurret = {
         {
             POSITION: [5, 4.5, 0.6, 7.5, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.protectorswarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
                 TYPE: ["swarm", { INDEPENDENT: true, AI: { LIKES_SHAPES: true }}],
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -1161,7 +1161,7 @@ Class.mothership = {
             let S = 22.5 * (t + 1),
                 E = {
                     MAX_CHILDREN: 2,
-                    SHOOT_SETTINGS: combineStats([g.drone, g.over, g.mothership]),
+                    SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
                     TYPE: "drone",
                     AUTOFIRE: true,
                     SYNCS_SKILLS: true,
@@ -1215,7 +1215,7 @@ Class.arenaCloser = {
     GUNS: [{
         POSITION: [14, 10, 1, 0, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.closer]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.arenaCloser]),
             TYPE: [ "bullet", { LAYER: 12 } ]
         }
     }]

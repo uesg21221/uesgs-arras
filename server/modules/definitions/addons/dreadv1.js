@@ -39,7 +39,7 @@ Class.mechanismMainTurret = {
 	GUNS: [{
 		POSITION: [22, 10, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, { recoil: 1.15 }, g.turret, g.pound, g.morespeed, g.morereload, g.doublereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 1.15 }, g.turret, g.pounder, { speed: 1.3, maxSpeed: 1.3 }, { reload: 0.75 }, { reload: 0.5 }]),
 			TYPE: "bullet"
 		}
 	}]
@@ -56,7 +56,7 @@ Class.automationMainTurret = {
 	GUNS: [{
 		POSITION: [22, 10, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, { recoil: 1.15 }, g.turret, g.morereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 1.15 }, g.turret, { reload: 0.75 }]),
 			TYPE: "bullet"
 		}
 	}]
@@ -73,7 +73,7 @@ Class.automationSecondaryTurret = {
 	GUNS: [{
 		POSITION: [22, 10, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, { recoil: 1.15 }, g.turret, g.morereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 1.15 }, g.turret, { reload: 0.75 }]),
 			TYPE: "bullet"
 		}
 	}]
@@ -97,7 +97,7 @@ for(let i = 0; i < 3; i++) {
 	{
 		POSITION: [18, 10, 1, 0, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.pound, g.halfspeed, g.healer]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard, g.pounder, { speed: 0.5, maxSpeed: 0.5 }, g.healer]),
 			TYPE: "healerBullet",
 			AUTOFIRE: true,
 		},
@@ -122,7 +122,7 @@ for(let i = 0; i < 5; i++) {
 	{
 		POSITION: [18, 10, 1, 0, 0, 72*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.flank, g.flank, g.pound, g.halfspeed, g.healer]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard, g.flankGuard, g.pounder, { speed: 0.5, maxSpeed: 0.5 }, g.healer]),
 			TYPE: "healerBullet",
 			AUTOFIRE: true,
 		},
@@ -150,7 +150,7 @@ for (let i = 0; i < 3; i++) {
 	Class.swordOfficialV1.GUNS.push({
 		POSITION: [18, 7, 1, 0, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.sniper, g.morereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.sniper, { reload: 0.75 }]),
 			TYPE: "bullet"
 		}
 	});
@@ -166,7 +166,7 @@ for (let i = 0; i < 3; i++) {
 	Class.pacifierOfficialV1.GUNS.push({
 		POSITION: [15, 7, 1, 0, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.morereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { reload: 0.75 }]),
 			TYPE: "bullet"
 		}
 	});
@@ -182,7 +182,7 @@ for (let i = 0; i < 3; i++) {
 	Class.invaderOfficialV1.GUNS.push({
 		POSITION: [5.5, 7.5, 1.3, 7.5, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.drone, g.over, g.morespeed]),
+			SHOOT_SETTINGS: combineStats([g.drone, g.overseer, { speed: 1.3, maxSpeed: 1.3 }]),
 			TYPE: "drone",
 			AUTOFIRE: true,
 			SYNCS_SKILLS: true,
@@ -205,7 +205,7 @@ for (let i = 0; i < 3; i++) {
 	}, {
 		POSITION: [2.5, 7, 1.6, 12, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.trap, g.pound, g.morereload, {range: 3}]),
+			SHOOT_SETTINGS: combineStats([g.trap, g.pounder, { reload: 0.75 }, {range: 3}]),
 			TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
 			STAT_CALCULATOR: gunCalcNames.trap,
 		},
@@ -265,7 +265,7 @@ for (let i = 0; i < 3; i++) {
 	Class.sabreOfficialV1.GUNS.push({
 		POSITION: [25, 7, 1, 0, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.sniper, g.assass, g.morespeed, g.morereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.sniper, g.assassin, { speed: 1.3, maxSpeed: 1.3 }, { reload: 0.75 }]),
 			TYPE: "bullet"
 		}
 	}, {
@@ -284,7 +284,7 @@ for (let i = 0; i < 3; i++) {
 	}, {
 		POSITION: [20, 6, 1, 0, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.sniper, g.rifle, g.morespeed, g.morereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.sniper, g.rifle, { speed: 1.3, maxSpeed: 1.3 }, { reload: 0.75 }]),
 			TYPE: "bullet"
 		}
 	});
@@ -300,13 +300,13 @@ for (let i = 0; i < 3; i++) {
 	Class.appeaserOfficialV1.GUNS.push({
 		POSITION: [6, 8, 1.3, 7, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.twin, g.pound, g.doublereload, g.slow, g.bitlessspeed, {size: 0.55}]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.pounder, { reload: 0.5 }, { speed: 0.7, maxSpeed: 0.7 }, { speed: 0.93, maxSpeed: 0.93 }, {size: 0.55}]),
 			TYPE: "bullet"
 		}
 	}, {
 		POSITION: [6, 7.5, 1.2, 9, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.twin, g.pound, g.doublereload, g.slow, g.bitlessspeed, {size: 0.55 * 8 / 7.5}]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.pounder, { reload: 0.5 }, { speed: 0.7, maxSpeed: 0.7 }, { speed: 0.93, maxSpeed: 0.93 }, {size: 0.55 * 8 / 7.5}]),
 			TYPE: "bullet"
 		}
 	});
@@ -321,7 +321,7 @@ for (let i = 0; i < 3; i++) {
 	Class.peacekeeperOfficialV1.GUNS.push({
 		POSITION: [17, 10, 1, 0, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.destroy, g.morereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.destroyer, { reload: 0.75 }]),
 			TYPE: "bullet",
 		}
 	});
@@ -336,19 +336,19 @@ for (let i = 0; i < 3; i++) {
 	Class.diplomatOfficialV1.GUNS.push({
 		POSITION: [13.5, 6, 1, 0, 2.2, 120*i, 0.5],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triple, g.slow, g.pound, g.doublereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triplet, { speed: 0.7, maxSpeed: 0.7 }, g.pounder, { reload: 0.5 }]),
 			TYPE: "bullet"
 		}
 	}, {
 		POSITION: [13.5, 6, 1, 0, -2.2, 120*i, 0.5],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triple, g.slow, g.pound, g.doublereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triplet, { speed: 0.7, maxSpeed: 0.7 }, g.pounder, { reload: 0.5 }]),
 			TYPE: "bullet"
 		}
 	}, {
 		POSITION: [15, 6, 1, 0, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triple, g.slow, g.pound, g.doublereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triplet, { speed: 0.7, maxSpeed: 0.7 }, g.pounder, { reload: 0.5 }]),
 			TYPE: "bullet"
 		}
 	});
@@ -364,7 +364,7 @@ for (let i = 0; i < 3; i++) {
 	Class.inquisitorOfficialV1.GUNS.push({
 		POSITION: [7, 8.5, 1.3, 7.5, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.drone, g.over, g.morespeed, g.morespeed, g.weak, g.battle, {SIZE: 1.25}]),
+			SHOOT_SETTINGS: combineStats([g.drone, g.overseer, { speed: 1.3, maxSpeed: 1.3 }, { speed: 1.3, maxSpeed: 1.3 }, g.weak, g.battleship, {SIZE: 1.25}]),
 			TYPE: "drone",
 			AUTOFIRE: true,
 			SYNCS_SKILLS: true,
@@ -387,7 +387,7 @@ for (let i = 0; i < 3; i++) {
 		POSITION: [1.5, 10, 1, 13.5, 0, 120*i, 0],
 		PROPERTIES: {
 			MAX_CHILDREN: 4,
-			SHOOT_SETTINGS: combineStats([g.factory, g.weak, g.weak, g.weak, g.morespeed, g.morespeed, g.morespeed, g.morespeed, g.doublereload, g.doublereload]),
+			SHOOT_SETTINGS: combineStats([g.factory, g.weak, g.weak, g.weak, { speed: 1.3, maxSpeed: 1.3 }, { speed: 1.3, maxSpeed: 1.3 }, { speed: 1.3, maxSpeed: 1.3 }, { speed: 1.3, maxSpeed: 1.3 }, { reload: 0.5 }, { reload: 0.5 }]),
 			TYPE: "minion",
 			STAT_CALCULATOR: gunCalcNames.drone,
 			AUTOFIRE: true,
@@ -407,21 +407,21 @@ for (let i = 0; i < 3; i++) {
 	Class.infiltratorOfficialV1.GUNS.push({
 		POSITION: [7, 6, 0.6, 5.5, 2.8, 120*i, 0.5],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, g.morespeed, {speed: 0.75, range: 1.9}]),
+			SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, { speed: 1.3, maxSpeed: 1.3 }, {speed: 0.75, range: 1.9}]),
 			TYPE: "swarm",
 			STAT_CALCULATOR: gunCalcNames.swarm
 		}
 	}, {
 		POSITION: [7, 6, 0.6, 5.5, -2.8, 120*i, 0.5],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, g.morespeed, {speed: 0.75, range: 1.9}]),
+			SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, { speed: 1.3, maxSpeed: 1.3 }, {speed: 0.75, range: 1.9}]),
 			TYPE: "swarm",
 			STAT_CALCULATOR: gunCalcNames.swarm
 		}
 	}, {
 		POSITION: [7, 6, 0.6, 8, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, g.morespeed, {speed: 0.75, range: 1.9}]),
+			SHOOT_SETTINGS: combineStats([g.swarm, g.weak, g.carrier, { speed: 1.3, maxSpeed: 1.3 }, {speed: 0.75, range: 1.9}]),
 			TYPE: "swarm",
 			STAT_CALCULATOR: gunCalcNames.swarm
 		}
@@ -440,7 +440,7 @@ for (let i = 0; i < 3; i++) {
 	}, {
 		POSITION: [1.75, 2.5, 1.7, 11.5, 4, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap, g.fast, g.pound, g.morereload, {range: 3}]),
+			SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper, { speed: 1.2 }, g.pounder, { reload: 0.75 }, {range: 3}]),
 			TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
 			STAT_CALCULATOR: gunCalcNames.trap,
 		},
@@ -449,7 +449,7 @@ for (let i = 0; i < 3; i++) {
 	}, {
 		POSITION: [1.75, 2.5, 1.7, 11.5, -4, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap, g.fast, g.pound, g.morereload, {range: 3}]),
+			SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper, { speed: 1.2 }, g.pounder, { reload: 0.75 }, {range: 3}]),
 			TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
 			STAT_CALCULATOR: gunCalcNames.trap
 		}
@@ -458,7 +458,7 @@ for (let i = 0; i < 3; i++) {
 	}, {
 		POSITION: [1.75, 3.2, 1.7, 13.5, 0, 120*i, 0.5],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap, g.fast, g.pound, g.morereload, {range: 3}]),
+			SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper, { speed: 1.2 }, g.pounder, { reload: 0.75 }, {range: 3}]),
 			TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
 			STAT_CALCULATOR: gunCalcNames.trap
 		}
@@ -476,7 +476,7 @@ for (let i = 0; i < 3; i++) {
 	}, {
 		POSITION: [3, 9, 1.6, 13, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.trap, g.block, g.veryfast, g.pound, g.morereload, {range: 3}]),
+			SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, { speed: 2.5 }, g.pounder, { reload: 0.75 }, {range: 3}]),
 			TYPE: ["unsetTrap", {HITS_OWN_TYPE: "never"} ],
 			STAT_CALCULATOR: gunCalcNames.block
 		}
@@ -493,7 +493,7 @@ for (let i = 0; i < 3; i++) {
 	}, {
 		POSITION: [2.5, 7, 1.6, 13, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.trap, g.hexatrap, g.fast, g.pound, g.morereload, {range: 3}]),
+			SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper, { speed: 1.2 }, g.pounder, { reload: 0.75 }, {range: 3}]),
 			TYPE: ["turretedTrap", {HITS_OWN_TYPE: "never"} ],
 			STAT_CALCULATOR: gunCalcNames.trap,
 		}
