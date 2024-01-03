@@ -81,6 +81,18 @@ global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.once(tick
 global.c = require("./setup/config.js");
 global.c.port = process.env.PORT || c.port;
 
+global.Class = {};
+global.ensureIsClass = str => {
+    if ("object" == typeof str) {
+        return str;
+    }
+    if (str in Class) {
+        return Class[str];
+    }
+    console.log(Class);
+    throw Error(`Definition ${str} is attempted to be gotten but does not exist!`);
+}
+
 // Now that we've set up the global variables, we import all the modules, then put them into global varialbles and then export something just so this file is run.
 const requires = [
     "./physics/relative.js", // Some basic physics functions that are used across the game.
@@ -88,7 +100,7 @@ const requires = [
     "./live/entitySubFunctions.js", // Skill, HealthType and other functions related to entities are here.
     "./live/controllers.js", // The AI of the game.
     "./live/entity.js", // The actual Entity constructor.
-    "./live/class.js", // Class dictionary.
+    "./definitions/combined.js", // Class dictionary.
     "./setup/room.js", // These are the basic room functions, set up by config.json
     "./network/sockets.js", // The networking that helps players interact with the game.
     "./network/webServer.js", // The networking that actually hosts the server.

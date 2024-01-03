@@ -2,7 +2,6 @@ let fs = require('fs'),
     path = require('path'),
     groups = fs.readdirSync(path.resolve(__dirname, './groups')),
     addons = fs.readdirSync(path.resolve(__dirname, './addons')),
-    Class = {},
     definitionCount = 0,
     definitionGroupsLoadStart = Date.now();
 console.log(`Loading ${groups.length} groups...`);
@@ -27,7 +26,10 @@ for (let filename of addons) {
     if (!filename.endsWith('.js')) continue;
     
     console.log(`Loading addon: ${filename}`);
-    require('./addons/' + filename)({ Config: c, Class, Events: events });
+    let result = require('./addons/' + filename);
+    if ('function' === typeof result) {
+        result({ Config: c, Events: events });
+    }
 }
 
 let addonsLoadEnd = Date.now();
@@ -37,15 +39,7 @@ console.log("Loaded addons in " + (addonsLoadEnd - definitionGroupsLoadEnd) + " 
 if (c.flattenDefintions) {
     console.log(`Flattening ${definitionCount} definitions...`);
     let flatten = (output, definition) => {
-
-        // Support for string definition references
-        if ("string" == typeof definition) {
-            if (definition in Class) {
-                definition = Class[definition];
-            } else {
-                throw Error(`Definition ${definition} is attempted to be gotten but does not exist!`);
-            }
-        }
+        definition = ensureIsClass(definition);
 
         if (definition.PARENT) {
             if (!Array.isArray(definition.PARENT)) {
@@ -76,4 +70,10 @@ if (c.flattenDefintions) {
 }
 
 console.log(`Combined ${groups.length} definition groups and ${addons.length} addons into ${definitionCount} ${c.flattenDefintions ? 'flattened ' : ''}definitions!\n`);
-module.exports = Class;
+
+// Index the definitions
+let i = 0;
+for (let key in Class) {
+    if (!Class.hasOwnProperty(key)) continue;
+    Class[key].index = i++;
+}

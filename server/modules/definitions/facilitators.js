@@ -106,6 +106,7 @@ exports.dereference = type => {
 
 // CANNON FUNCTIONS
 exports.makeGuard = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type),
     cannons = [{
         POSITION: [13, 8, 1, 0, 0, 180, 0],
@@ -122,6 +123,7 @@ exports.makeGuard = (type, name = -1) => {
     return output;
 }
 exports.makeConq = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type),
     cannons = [{
         POSITION: [18, 14, 1, 0, 0, 180, 0],
@@ -138,6 +140,7 @@ exports.makeConq = (type, name = -1) => {
     return output;
 }
 exports.makeSplit = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let cannon1 = {
         POSITION: [18, 8, 1, 0, 0, 90, 0],
@@ -158,6 +161,7 @@ exports.makeSplit = (type, name = -1) => {
     return output;
 }
 exports.addBackGunner = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let cannons = [{
         POSITION: [19, 2, 1, 0, -2.5, 180, 0],
@@ -179,6 +183,7 @@ exports.addBackGunner = (type, name = -1) => {
     return output;
 }
 exports.makeMulti = (type, count, name = -1, startRotation = 0) => {
+    type = ensureIsClass(type);
     let greekNumbers = ',Double ,Triple ,Quad ,Penta ,Hexa ,Septa ,Octo ,Nona ,Deca ,Hendeca ,Dodeca ,Trideca ,Tetradeca ,Pentadeca ,Hexadeca ,Septadeca ,Octadeca ,Nonadeca ,Icosa ,Henicosa ,Doicosa ,Triaicosa ,Tetraicosa ,Pentaicosa ,Hexaicosa ,Septaicosa ,Octoicosa ,Nonaicosa ,Triaconta '.split(','),
         output = exports.dereference(type),
         shootyBois = output.GUNS,
@@ -196,6 +201,7 @@ exports.makeMulti = (type, count, name = -1, startRotation = 0) => {
     return output;
 }
 exports.makeBird = (type, name = -1, color) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type),
         shootyBois = [{
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
@@ -217,6 +223,7 @@ exports.makeBird = (type, name = -1, color) => {
 
 // SPAWNER FUNCTIONS
 exports.makeHybrid = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawner = {
         POSITION: [6, 12, 1.2, 8, 0, 180, 0],
@@ -235,6 +242,7 @@ exports.makeHybrid = (type, name = -1) => {
     return output;
 }
 exports.makeOver = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawners = [{
         POSITION: [6, 12, 1.2, 8, 0, 125, 0],
@@ -264,6 +272,7 @@ exports.makeOver = (type, name = -1) => {
     return output;
 }
 exports.makeOversplit = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawners = [{
         POSITION: [6, 12, 1.2, 8, 0, 90, 0],
@@ -293,6 +302,7 @@ exports.makeOversplit = (type, name = -1) => {
     return output;
 }
 exports.makeBattle = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawner1 = {
         POSITION: [7, 7.5, 0.6, 7, 4, 125, 0],
@@ -342,6 +352,7 @@ exports.makeBattle = (type, name = -1) => {
     return output;
 }
 exports.makeCap = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawner1 = {
         POSITION: [4.5, 10, 1, 10.5, 0, 125, 0],
@@ -401,6 +412,7 @@ exports.makeCap = (type, name = -1) => {
     return output;
 }
 exports.makeCross = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawner1 = {
         POSITION: [6, 12, 1.2, 8, 0, 90, 0],
@@ -454,6 +466,7 @@ exports.makeCross = (type, name = -1) => {
     return output;
 }
 exports.makeSwarming = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawner = {
         POSITION: [7, 7.5, 0.6, 7, 0, 0, 0],
@@ -479,6 +492,7 @@ exports.makeSwarming = (type, name = -1) => {
     return output;
 }
 exports.makeBiSwarming = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawner1 = {
         POSITION: [7, 7.5, 0.6, 7, 0, 25, 0],
@@ -512,6 +526,7 @@ exports.makeBiSwarming = (type, name = -1) => {
     return output;
 }
 exports.makeTriSwarming = (type, name = -1) => {
+    type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawner1 = {
         POSITION: [7, 7.5, 0.6, 7, 0, 45, 0],
@@ -555,6 +570,7 @@ exports.makeTriSwarming = (type, name = -1) => {
 
 // AUTO FUNCTIONS
 exports.makeAuto = (type, name = -1, options = {}) => {
+    type = ensureIsClass(type);
     let turret = {
         type: "autoTurret",
         size: 10,
@@ -606,6 +622,7 @@ exports.makeAuto = (type, name = -1, options = {}) => {
     return output;
 }
 exports.makeCeption = (type, name = -1, options = {}) => {
+    type = ensureIsClass(type);
     let turret = {
         type: "autoTurret",
         size: 12.5,
@@ -684,6 +701,64 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) =
         ]
     };
 }
+
+class LayeredBoss {
+    constructor(identifier, NAME, PARENT = "celestial", SHAPE = 9, COLOR = 0, trapTurretType = "baseTrapTurret", trapTurretSize = 6.5, layerScale = 5, BODY, SIZE, VALUE) {
+        this.identifier = identifier ?? NAME.charAt(0).toLowerCase() + NAME.slice(1);
+        this.layerID = 0;
+        Class[this.identifier] = {
+            PARENT, SHAPE, NAME, COLOR, BODY, SIZE, VALUE,
+            UPGRADE_LABEL: NAME,
+            UPGRADE_COLOR: COLOR,
+            TURRETS: Array(SHAPE).fill().map((_, i) => ({
+                POSITION: [trapTurretSize, 9, 0, 360 / SHAPE * (i + 0.5), 180, 0],
+                TYPE: trapTurretType,
+            })),
+        };
+        this.layerScale = layerScale;
+        this.shape = SHAPE;
+        this.layerSize = 20;
+    }
+
+    addLayer({gun, turret}, decreaseSides = true, layerScale, MAX_CHILDREN) {
+        this.layerID++;
+        this.shape -= decreaseSides ? 2 : 0;
+        this.layerSize -= layerScale ?? this.layerScale;
+        let layer = {
+            PARENT: "genericTank",
+            SHAPE: this.shape,
+            COLOR: -1,
+            INDEPENDENT: true,
+            CONTROLLERS: [["spin", { independent: true, speed: 0.02 / c.runSpeed * (this.layerID % 2 ? -1 : 1) }]],
+            MAX_CHILDREN, 
+            GUNS: [],
+            TURRETS: [],
+        };
+        if (gun) {
+            for (let i = 0; i < this.shape; i++) {
+                layer.GUNS.push({
+                    POSITION: gun.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
+                    PROPERTIES: gun.PROPERTIES,
+                });
+            }
+        }
+        if (turret) {
+            for (let i = 0; i < this.shape; i++) {
+                layer.TURRETS.push({
+                    POSITION: turret.POSITION.map(n => n ?? 360 / this.shape * (i + 0.5)),
+                    TYPE: turret.TYPE,
+                });
+            }
+        }
+
+        Class[this.identifier + "Layer" + this.layerID] = layer;
+        Class[this.identifier].TURRETS.push({
+            POSITION: [this.layerSize, 0, 0, 0, 360, 1],
+            TYPE: this.identifier + "Layer" + this.layerID,
+        });
+    }
+}
+exports.LayeredBoss = LayeredBoss;
 
 //unfinished lolo
 exports.makeLabyrinthShape = (type) => {

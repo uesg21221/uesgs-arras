@@ -1,10 +1,10 @@
 const { combineStats, makeAuto, makeHybrid, makeOver, makeDeco, makeGuard, makeBird, makeMulti } = require('../facilitators.js');
 const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js');
-const generics = require('./generics.js');
+require('./generics.js');
 const g = require('../gunvals.js');
 
 // Missiles
-exports.missile = {
+Class.missile = {
     PARENT: "bullet",
     LABEL: "Missile",
     INDEPENDENT: true,
@@ -30,7 +30,7 @@ exports.missile = {
         }
     ]
 }
-exports.hypermissile = {
+Class.hypermissile = {
     PARENT: "missile",
     GUNS: [
         {
@@ -70,7 +70,7 @@ exports.hypermissile = {
         },
     ],
 }
-exports.minimissile = {
+Class.minimissile = {
     PARENT: "missile",
     GUNS: [
         {
@@ -85,7 +85,7 @@ exports.minimissile = {
         },
     ],
 }
-exports.spinmissile = {
+Class.spinmissile = {
     PARENT: "missile",
     FACING_TYPE: ["spin", {speed: 0.1}],
     GUNS: [
@@ -109,7 +109,7 @@ exports.spinmissile = {
         },
     ],
 }
-exports.hyperspinmissile = {
+Class.hyperspinmissile = {
     PARENT: "spinmissile",
     GUNS: [
         {
@@ -150,7 +150,7 @@ exports.hyperspinmissile = {
         },
     ],
 }
-exports.hive = {
+Class.hive = {
     PARENT: "bullet",
     LABEL: "Hive",
     BODY: {
@@ -206,7 +206,7 @@ exports.hive = {
         },
     ],
 }
-exports.snake = {
+Class.snake = {
     PARENT: "missile",
     LABEL: "Snake",
     GUNS: [
@@ -231,7 +231,7 @@ exports.snake = {
         },
     ],
 }
-exports.rocketeerMissile = {
+Class.rocketeerMissile = {
     PARENT: "missile",
     GUNS: [
         {
@@ -247,7 +247,7 @@ exports.rocketeerMissile = {
 }
 
 // Healer Projectiles
-exports.surgeonPillboxTurret = {
+Class.surgeonPillboxTurret = {
     PARENT: "genericTank",
     LABEL: "",
     COLOR: "grey",
@@ -297,7 +297,7 @@ exports.surgeonPillboxTurret = {
         },
     ],
 }
-exports.surgeonPillbox = {
+Class.surgeonPillbox = {
     PARENT: "trap",
     LABEL: "Pillbox",
     SHAPE: -6,
@@ -319,10 +319,10 @@ exports.surgeonPillbox = {
 }
 
 // Drones
-exports.turretedDrone = makeAuto(generics.drone)
+Class.turretedDrone = makeAuto('drone')
 
 // Sunchips
-exports.sunchip = {
+Class.sunchip = {
     PARENT: "drone",
     SHAPE: 4,
     NECRO: true,
@@ -336,12 +336,12 @@ exports.sunchip = {
     },
     DRAW_HEALTH: false,
 }
-exports.eggchip = {
+Class.eggchip = {
     PARENT: "sunchip",
     NECRO: [0],
     SHAPE: 0
 }
-exports.autosunchip = {
+Class.autosunchip = {
     PARENT: "sunchip",
     AI: {
         BLIND: true,
@@ -349,27 +349,27 @@ exports.autosunchip = {
     },
     INDEPENDENT: true,
 }
-exports.autoeggchip = {
+Class.autoeggchip = {
     PARENT: "autosunchip",
     NECRO: [0],
     SHAPE: 0,
 }
-exports.pentachip = {
+Class.pentachip = {
     PARENT: "sunchip",
     SHAPE: 5
 }
-exports.summonerDrone = {
+Class.summonerDrone = {
     PARENT: "sunchip",
     NECRO: false
 }
-exports.gunchip = {
+Class.gunchip = {
     PARENT: "sunchip",
     NECRO: [-2],
     SHAPE: -2
 }
 
 // Minions
-exports.minion = {
+Class.minion = {
     PARENT: "genericTank",
     LABEL: "Minion",
     TYPE: "minion",
@@ -413,7 +413,7 @@ exports.minion = {
 }
 
 // Traps
-exports.setTrap = {
+Class.setTrap = {
     PARENT: "trap",
     LABEL: "Set Trap",
     SHAPE: -4,
@@ -424,7 +424,7 @@ exports.setTrap = {
         DENSITY: 5,
     },
 }
-exports.unsetTrap = {
+Class.unsetTrap = {
     PARENT: "trap",
     LABEL: "Set Trap",
     SHAPE: -4,
@@ -434,7 +434,7 @@ exports.unsetTrap = {
         DENSITY: 5,
     },
 }
-exports.boomerang = {
+Class.boomerang = {
     PARENT: "trap",
     LABEL: "Boomerang",
     CONTROLLERS: ["boomerang"],
@@ -446,7 +446,7 @@ exports.boomerang = {
         RANGE: 120,
     },
 }
-exports.assemblerTrap = {
+Class.assemblerTrap = {
     PARENT: "setTrap",
     LABEL: "Assembler Trap",
     BODY: {
@@ -464,7 +464,7 @@ exports.assemblerTrap = {
 }
 
 // Auto Guns
-exports.autoTankGun = {
+Class.autoTankGun = {
     PARENT: "genericTank",
     LABEL: "",
     BODY: {
@@ -482,7 +482,7 @@ exports.autoTankGun = {
         },
     ],
 }
-exports.bansheegun = {
+Class.bansheegun = {
     PARENT: "autoTankGun",
     BODY: {
         FOV: 2,
@@ -498,7 +498,7 @@ exports.bansheegun = {
         },
     ],
 }
-exports.auto4gun = {
+Class.auto4gun = {
     PARENT: "autoTankGun",
     BODY: {
         FOV: 2,
@@ -520,7 +520,7 @@ exports.auto4gun = {
         },
     ],
 }
-exports.bigauto4gun = {
+Class.bigauto4gun = {
     PARENT: "auto4gun",
     GUNS: [
         {
@@ -546,7 +546,7 @@ exports.bigauto4gun = {
         },
     ],
 }
-exports.megaAutoTankgun = {
+Class.megaAutoTankgun = {
     PARENT: "autoTankGun",
     BODY: {
         FOV: 2,
@@ -563,7 +563,7 @@ exports.megaAutoTankgun = {
 }
 
 // Mounted Turrets
-exports.autoTurret = {
+Class.autoTurret = {
     PARENT: "genericTank",
     LABEL: "Turret",
     BODY: {
@@ -580,7 +580,7 @@ exports.autoTurret = {
         },
     ],
 }
-exports.droneAutoTurret = {
+Class.droneAutoTurret = {
     PARENT: "autoTurret",
     GUNS: [
         {
@@ -592,7 +592,7 @@ exports.droneAutoTurret = {
         },
     ],
 }
-exports.autoSmasherTurret = {
+Class.autoSmasherTurret = {
     PARENT: "autoTurret",
     GUNS: [
         {
@@ -613,7 +613,7 @@ exports.autoSmasherTurret = {
         },
     ],
 }
-exports.architectGun = {
+Class.architectGun = {
     PARENT: "autoTurret",
     LABEL: "",
     GUNS: [
@@ -630,7 +630,7 @@ exports.architectGun = {
         },
     ],
 }
-exports.pillboxTurret = {
+Class.pillboxTurret = {
     PARENT: "autoTurret",
     LABEL: "",
     BODY: {
@@ -649,7 +649,7 @@ exports.pillboxTurret = {
 }
 
 // Pillbox
-exports.pillbox = {
+Class.pillbox = {
     PARENT: "setTrap",
     LABEL: "Pillbox",
     CONTROLLERS: ["nearestDifferentMaster"],
@@ -662,7 +662,7 @@ exports.pillbox = {
         },
     ],
 }
-exports.unsetPillbox = {
+Class.unsetPillbox = {
     PARENT: "unsetTrap",
     LABEL: "Pillbox",
     CONTROLLERS: ["nearestDifferentMaster"],
@@ -677,7 +677,7 @@ exports.unsetPillbox = {
 }
 
 // Swarms
-exports.swarm = {
+Class.swarm = {
     LABEL: "Swarm Drone",
     TYPE: "swarm",
     ACCEPTS_SCORE: false,
@@ -701,21 +701,21 @@ exports.swarm = {
     DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
 }
-exports.autoswarm = {
+Class.autoswarm = {
     PARENT: "swarm",
     AI: {
         FARMER: true
     },
     INDEPENDENT: true
 }
-exports.bee = {
+Class.bee = {
     PARENT: "swarm",
     PERSISTS_AFTER_DEATH: true,
     SHAPE: 4,
     LABEL: "Drone",
     HITS_OWN_TYPE: "hardWithBuffer"
 }
-exports.homingBullet = {
+Class.homingBullet = {
     PARENT: "autoswarm",
     SHAPE: 0,
     BODY: {
@@ -731,8 +731,8 @@ exports.homingBullet = {
 }
 
 // Decorations
-exports.overdriveDeco = makeDeco(4)
-exports.assemblerEffect = {
+Class.overdriveDeco = makeDeco(4)
+Class.assemblerEffect = {
     PARENT: "bullet",
     MOTION_TYPE: 'assembler',
     LABEL: '',
@@ -742,7 +742,7 @@ exports.assemblerEffect = {
     },
     ALPHA: 0.8
 }
-exports.assemblerDot = {
+Class.assemblerDot = {
     LABEL: '',
     SHAPE: -4,
     COLOR: "darkGrey",
@@ -750,27 +750,27 @@ exports.assemblerDot = {
 }
 
 // Bodies
-exports.smasherBody = {
+Class.smasherBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { independent: true }]],
     COLOR: "black",
     SHAPE: 6,
     INDEPENDENT: true
 }
-exports.landmineBody = {
+Class.landmineBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { independent: true, speed: 0.08 }]],
     COLOR: 9,
     SHAPE: 6,
     INDEPENDENT: true
 }
-exports.spikeBody = {
+Class.spikeBody = {
     PARENT: "smasherBody",
     SHAPE: 3
 }
 
 // Basic & starting upgrades
-exports.basic = {
+Class.basic = {
     PARENT: "genericTank",
     LABEL: "Basic",
     DANGER: 4,
@@ -806,7 +806,7 @@ exports.basic = {
         }
     ]
 }
-exports.twin = {
+Class.twin = {
     PARENT: "genericTank",
     LABEL: "Twin",
     GUNS: [
@@ -826,7 +826,7 @@ exports.twin = {
         }
     ]
 }
-exports.sniper = {
+Class.sniper = {
     PARENT: "genericTank",
     LABEL: "Sniper",
     BODY: {
@@ -842,7 +842,7 @@ exports.sniper = {
         }
     ]
 }
-exports.machineGun = {
+Class.machineGun = {
     PARENT: "genericTank",
     LABEL: "Machine Gun",
     GUNS: [
@@ -855,7 +855,7 @@ exports.machineGun = {
         }
     ]
 }
-exports.flankGuard = makeMulti({
+Class.flankGuard = makeMulti({
     PARENT: "genericTank",
     BODY: {
         SPEED: 1.1 * base.SPEED
@@ -870,7 +870,7 @@ exports.flankGuard = makeMulti({
         }
     ]
 }, 3, "Flank Guard")
-exports.director = {
+Class.director = {
     PARENT: "genericTank",
     LABEL: "Director",
     STAT_NAMES: statnames.drone,
@@ -891,7 +891,7 @@ exports.director = {
         }
     ]
 }
-exports.pounder = {
+Class.pounder = {
     PARENT: "genericTank",
     LABEL: "Pounder",
     GUNS: [
@@ -904,7 +904,7 @@ exports.pounder = {
         }
     ]
 }
-exports.trapper = {
+Class.trapper = {
     PARENT: "genericTank",
     LABEL: "Trapper",
     STAT_NAMES: statnames.trap,
@@ -922,7 +922,7 @@ exports.trapper = {
         }
     ]
 }
-exports.desmos = {
+Class.desmos = {
     PARENT: "genericTank",
     LABEL: "Desmos",
     STAT_NAMES: statnames.desmos,
@@ -942,7 +942,7 @@ exports.desmos = {
         }
     ]
 }
-exports.smasher = {
+Class.smasher = {
     PARENT: "genericSmasher",
     LABEL: "Smasher",
     DANGER: 6,
@@ -953,7 +953,7 @@ exports.smasher = {
         }
     ]
 }
-exports.healer = {
+Class.healer = {
     PARENT: "genericTank",
     LABEL: "Healer",
     STAT_NAMES: statnames.heal,
@@ -978,7 +978,7 @@ exports.healer = {
 }
 
 // Twin upgrades
-exports.doubleTwin = makeMulti({
+Class.doubleTwin = makeMulti({
     PARENT: "genericTank",
     LABEL: "Twin",
     DANGER: 6,
@@ -999,7 +999,7 @@ exports.doubleTwin = makeMulti({
         }
     ]
 }, 2)
-exports.tripleShot = {
+Class.tripleShot = {
     PARENT: "genericTank",
     LABEL: "Triple Shot",
     DANGER: 6,
@@ -1032,7 +1032,7 @@ exports.tripleShot = {
 }
 
 // Double Twin upgrades
-exports.tripleTwin = makeMulti({
+Class.tripleTwin = makeMulti({
     PARENT: "genericTank",
     LABEL: "Twin",
     DANGER: 6,
@@ -1053,7 +1053,7 @@ exports.tripleTwin = makeMulti({
         }
     ]
 }, 3)
-exports.hewnDouble = {
+Class.hewnDouble = {
     PARENT: "genericTank",
     LABEL: "Hewn Double",
     DANGER: 7,
@@ -1104,7 +1104,7 @@ exports.hewnDouble = {
 }
 
 // Triple Shot upgrades
-exports.pentaShot = {
+Class.pentaShot = {
     PARENT: "genericTank",
     LABEL: "Penta Shot",
     DANGER: 7,
@@ -1149,7 +1149,7 @@ exports.pentaShot = {
         }
     ]
 }
-exports.spreadshot = {
+Class.spreadshot = {
     PARENT: "genericTank",
     LABEL: "Spreadshot",
     DANGER: 7,
@@ -1244,7 +1244,7 @@ exports.spreadshot = {
         }
     ]
 }
-exports.bentDouble = makeMulti({
+Class.bentDouble = makeMulti({
     PARENT: "genericTank",
     DANGER: 7,
     GUNS: [
@@ -1271,7 +1271,7 @@ exports.bentDouble = makeMulti({
         }
     ]
 }, 2, "Bent Double")
-exports.triplet = {
+Class.triplet = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Triplet",
@@ -1304,7 +1304,7 @@ exports.triplet = {
 }
 
 // Sniper upgrades
-exports.assassin = {
+Class.assassin = {
     PARENT: "genericTank",
     DANGER: 6,
     LABEL: "Assassin",
@@ -1325,7 +1325,7 @@ exports.assassin = {
         }
     ]
 }
-exports.hunter = {
+Class.hunter = {
     PARENT: "genericTank",
     LABEL: "Hunter",
     DANGER: 6,
@@ -1352,7 +1352,7 @@ exports.hunter = {
         }
     ]
 }
-exports.rifle = {
+Class.rifle = {
     PARENT: "genericTank",
     LABEL: "Rifle",
     DANGER: 6,
@@ -1374,7 +1374,7 @@ exports.rifle = {
 }
 
 // Assassin upgrades
-exports.ranger = {
+Class.ranger = {
     PARENT: "genericTank",
     LABEL: "Ranger",
     DANGER: 7,
@@ -1395,7 +1395,7 @@ exports.ranger = {
         },
     ],
 }
-exports.stalker = {
+Class.stalker = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Stalker",
@@ -1415,7 +1415,7 @@ exports.stalker = {
         }
     ]
 }
-exports.single = {
+Class.single = {
     PARENT: "genericTank",
     LABEL: "Single",
     DANGER: 7,
@@ -1434,7 +1434,7 @@ exports.single = {
 }
 
 // Hunter upgrades
-exports.predator = {
+Class.predator = {
     PARENT: "genericTank",
     LABEL: "Predator",
     DANGER: 7,
@@ -1468,7 +1468,7 @@ exports.predator = {
         }
     ]
 }
-exports.xHunter = {
+Class.xHunter = {
     PARENT: "genericTank",
     LABEL: "X-Hunter",
     DANGER: 7,
@@ -1498,7 +1498,7 @@ exports.xHunter = {
         }
     ]
 }
-exports.dual = {
+Class.dual = {
     PARENT: "genericTank",
     LABEL: "Dual",
     DANGER: 7,
@@ -1542,7 +1542,7 @@ exports.dual = {
 }
 
 // Rifle upgrades
-exports.musket = {
+Class.musket = {
     PARENT: "genericTank",
     LABEL: "Musket",
     DANGER: 7,
@@ -1569,7 +1569,7 @@ exports.musket = {
         }
     ]
 }
-exports.crossbow = {
+Class.crossbow = {
     PARENT: "genericTank",
     LABEL: "Crossbow",
     DANGER: 7,
@@ -1630,7 +1630,7 @@ exports.crossbow = {
 }
 
 // Machine Gun upgrades
-exports.minigun = {
+Class.minigun = {
     PARENT: "genericTank",
     LABEL: "Minigun",
     DANGER: 6,
@@ -1661,7 +1661,7 @@ exports.minigun = {
         }
     ]
 }
-exports.gunner = {
+Class.gunner = {
     PARENT: "genericTank",
     LABEL: "Gunner",
     DANGER: 6,
@@ -1696,7 +1696,7 @@ exports.gunner = {
         }
     ]
 }
-exports.sprayer = {
+Class.sprayer = {
     PARENT: "genericTank",
     LABEL: "Sprayer",
     DANGER: 6,
@@ -1719,7 +1719,7 @@ exports.sprayer = {
 }
 
 // Minigun upgrades
-exports.streamliner = {
+Class.streamliner = {
     PARENT: "genericTank",
     LABEL: "Streamliner",
     DANGER: 7,
@@ -1764,7 +1764,7 @@ exports.streamliner = {
         },
     ],
 }
-exports.barricade = {
+Class.barricade = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Barricade",
@@ -1804,7 +1804,7 @@ exports.barricade = {
 }
 
 // Gunner upgrades
-exports.nailgun = {
+Class.nailgun = {
     PARENT: "genericTank",
     LABEL: "Nailgun",
     DANGER: 7,
@@ -1839,7 +1839,7 @@ exports.nailgun = {
         },
     ],
 }
-exports.machineGunner = {
+Class.machineGunner = {
     PARENT: "genericTank",
     LABEL: "Machine Gunner",
     DANGER: 7,
@@ -1886,7 +1886,7 @@ exports.machineGunner = {
 }
 
 // Sprayer upgrades
-exports.redistributor = {
+Class.redistributor = {
     PARENT: "genericTank",
     LABEL: "Redistributor",
     DANGER: 7,
@@ -1914,7 +1914,7 @@ exports.redistributor = {
         },
     ],
 }
-exports.atomizer = {
+Class.atomizer = {
     PARENT: "genericTank",
     LABEL: "Atomizer",
     DANGER: 7,
@@ -1935,7 +1935,7 @@ exports.atomizer = {
         },
     ],
 }
-exports.focal = {
+Class.focal = {
     PARENT: "genericTank",
     LABEL: "Focal",
     DANGER: 7,
@@ -1958,7 +1958,7 @@ exports.focal = {
 }
 
 // Flank Guard upgrades
-exports.hexaTank = makeMulti({
+Class.hexaTank = makeMulti({
     PARENT: "genericTank",
     DANGER: 6,
     GUNS: [
@@ -1978,7 +1978,7 @@ exports.hexaTank = makeMulti({
         }
     ]
 }, 3, "Hexa Tank")
-exports.triAngle = {
+Class.triAngle = {
     PARENT: "genericTank",
     LABEL: "Tri-Angle",
     BODY: {
@@ -2014,7 +2014,7 @@ exports.triAngle = {
         },
     ],
 }
-exports.auto3 = {
+Class.auto3 = {
     PARENT: "genericTank",
     LABEL: "Auto-3",
     DANGER: 6,
@@ -2036,7 +2036,7 @@ exports.auto3 = {
 }
 
 // Hexa Tank upgrades
-exports.octoTank = makeMulti({
+Class.octoTank = makeMulti({
     PARENT: "genericTank",
     DANGER: 6,
     GUNS: [
@@ -2056,7 +2056,7 @@ exports.octoTank = makeMulti({
         }
     ]
 }, 4, "Octo Tank")
-exports.cyclone = makeMulti({
+Class.cyclone = makeMulti({
     PARENT: "genericTank",
     DANGER: 7,
     GUNS: [
@@ -2092,7 +2092,7 @@ exports.cyclone = makeMulti({
 }, 3, "Cyclone")
 
 // Tri-Angle upgrades
-exports.fighter = {
+Class.fighter = {
     PARENT: "genericTank",
     LABEL: "Fighter",
     BODY: {
@@ -2142,7 +2142,7 @@ exports.fighter = {
         },
     ],
 }
-exports.booster = {
+Class.booster = {
     PARENT: "genericTank",
     LABEL: "Booster",
     BODY: {
@@ -2194,7 +2194,7 @@ exports.booster = {
         }
     ]
 }
-exports.surfer = {
+Class.surfer = {
     PARENT: "genericTank",
     LABEL: "Surfer",
     BODY: {
@@ -2246,7 +2246,7 @@ exports.surfer = {
 }
 
 // Auto-3 upgrades
-exports.auto5 = {
+Class.auto5 = {
     PARENT: "genericTank",
     LABEL: "Auto-5",
     DANGER: 7,
@@ -2274,7 +2274,7 @@ exports.auto5 = {
         },
     ],
 }
-exports.mega3 = {
+Class.mega3 = {
     PARENT: "genericTank",
     LABEL: "Mega-3",
     BODY: {
@@ -2297,7 +2297,7 @@ exports.mega3 = {
         },
     ],
 }
-exports.auto4 = {
+Class.auto4 = {
     PARENT: "genericTank",
     LABEL: "Auto-4",
     FACING_TYPE: ["spin", {speed: 0.02}],
@@ -2321,7 +2321,7 @@ exports.auto4 = {
         },
     ],
 }
-exports.banshee = {
+Class.banshee = {
     PARENT: "genericTank",
     LABEL: "Banshee",
     DANGER: 7,
@@ -2385,7 +2385,7 @@ exports.banshee = {
 }
 
 // Director upgrades
-exports.overseer = makeMulti({
+Class.overseer = makeMulti({
     PARENT: "genericTank",
     DANGER: 6,
     STAT_NAMES: statnames.drone,
@@ -2408,7 +2408,7 @@ exports.overseer = makeMulti({
         }
     ]
 }, 2, "Overseer", 90)
-exports.cruiser = {
+Class.cruiser = {
     PARENT: "genericTank",
     LABEL: "Cruiser",
     DANGER: 6,
@@ -2436,7 +2436,7 @@ exports.cruiser = {
         },
     ],
 }
-exports.underseer = makeMulti({
+Class.underseer = makeMulti({
     PARENT: "genericTank",
     DANGER: 6,
     STAT_NAMES: statnames.drone,
@@ -2458,7 +2458,7 @@ exports.underseer = makeMulti({
         }
     ]
 }, 2, "Underseer", 90)
-exports.spawner = {
+Class.spawner = {
     PARENT: "genericTank",
     LABEL: "Spawner",
     DANGER: 6,
@@ -2487,7 +2487,7 @@ exports.spawner = {
         },
     ],
 }
-exports.manager = {
+Class.manager = {
     PARENT: "genericTank",
     LABEL: "Manager",
     DANGER: 7,
@@ -2512,7 +2512,7 @@ exports.manager = {
         },
     ],
 }
-exports.bigCheese = {
+Class.bigCheese = {
     PARENT: "genericTank",
     LABEL: "Big Cheese",
     STAT_NAMES: statnames.drone,
@@ -2536,7 +2536,7 @@ exports.bigCheese = {
 }
 
 // Overseer upgrades
-exports.overlord = makeMulti({
+Class.overlord = makeMulti({
     PARENT: "genericTank",
     DANGER: 7,
     STAT_NAMES: statnames.drone,
@@ -2559,7 +2559,7 @@ exports.overlord = makeMulti({
         }
     ]
 }, 4, "Overlord", 90)
-exports.overdrive = makeMulti({
+Class.overdrive = makeMulti({
     PARENT: "genericTank",
     DANGER: 7,
     STAT_NAMES: statnames.drone,
@@ -2588,7 +2588,7 @@ exports.overdrive = makeMulti({
         }
     ]
 }, 2, "Overdrive", 90)
-exports.commander = makeMulti({
+Class.commander = makeMulti({
     PARENT: "genericTank",
     STAT_NAMES: statnames.drone,
     DANGER: 7,
@@ -2619,7 +2619,7 @@ exports.commander = makeMulti({
 }, 3, "Commander")
 
 // Cruiser upgrades
-exports.carrier = {
+Class.carrier = {
     PARENT: "genericTank",
     LABEL: "Carrier",
     DANGER: 7,
@@ -2655,7 +2655,7 @@ exports.carrier = {
         },
     ],
 }
-exports.battleship = {
+Class.battleship = {
     PARENT: "genericTank",
     LABEL: "Battleship",
     DANGER: 7,
@@ -2703,7 +2703,7 @@ exports.battleship = {
         }
     ]
 }
-exports.fortress = {
+Class.fortress = {
     PARENT: "genericTank",
     LABEL: "Fortress",
     DANGER: 7,
@@ -2789,7 +2789,7 @@ exports.fortress = {
 }
 
 // Underseer upgrades
-exports.necromancer = {
+Class.necromancer = {
     PARENT: "genericTank",
     LABEL: "Necromancer",
     DANGER: 7,
@@ -2844,7 +2844,7 @@ exports.necromancer = {
         },
     ],
 }
-exports.maleficitor = {
+Class.maleficitor = {
     PARENT: "genericTank",
     LABEL: "Maleficitor",
     DANGER: 7,
@@ -2873,7 +2873,7 @@ exports.maleficitor = {
         },
     ],
 }
-exports.infestor = makeMulti({
+Class.infestor = makeMulti({
     PARENT: "genericTank",
     DANGER: 7,
     STAT_NAMES: statnames.drone,
@@ -2906,7 +2906,7 @@ exports.infestor = makeMulti({
 }, 2, "Infestor", 90)
 
 // Spawner upgrades
-exports.factory = {
+Class.factory = {
     PARENT: "genericTank",
     LABEL: "Factory",
     DANGER: 7,
@@ -2937,7 +2937,7 @@ exports.factory = {
 }
 
 // Pounder upgrades
-exports.destroyer = {
+Class.destroyer = {
     PARENT: "genericTank",
     LABEL: "Destroyer",
     DANGER: 6,
@@ -2951,7 +2951,7 @@ exports.destroyer = {
         },
     ],
 }
-exports.artillery = {
+Class.artillery = {
     PARENT: "genericTank",
     LABEL: "Artillery",
     DANGER: 6,
@@ -2982,7 +2982,7 @@ exports.artillery = {
         },
     ],
 }
-exports.launcher = {
+Class.launcher = {
     PARENT: "genericTank",
     LABEL: "Launcher",
     BODY: {
@@ -3003,7 +3003,7 @@ exports.launcher = {
         },
     ],
 }
-exports.shotgun = {
+Class.shotgun = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Shotgun",
@@ -3085,7 +3085,7 @@ exports.shotgun = {
 }
 
 // Destroyer upgrades
-exports.annihilator = {
+Class.annihilator = {
     PARENT: "genericTank",
     LABEL: "Annihilator",
     DANGER: 7,
@@ -3101,7 +3101,7 @@ exports.annihilator = {
 }
 
 // Artillery upgrades
-exports.mortar = {
+Class.mortar = {
     PARENT: "genericTank",
     LABEL: "Mortar",
     DANGER: 7,
@@ -3148,7 +3148,7 @@ exports.mortar = {
         },
     ],
 }
-exports.ordnance = {
+Class.ordnance = {
     PARENT: "genericTank",
     LABEL: "Ordnance",
     DANGER: 7,
@@ -3191,7 +3191,7 @@ exports.ordnance = {
         },
     ],
 }
-exports.beekeeper = {
+Class.beekeeper = {
     PARENT: "genericTank",
     LABEL: "Beekeeper",
     DANGER: 7,
@@ -3228,7 +3228,7 @@ exports.beekeeper = {
         },
     ],
 }
-exports.fieldGun = {
+Class.fieldGun = {
     PARENT: "genericTank",
     LABEL: "Field Gun",
     BODY: {
@@ -3268,7 +3268,7 @@ exports.fieldGun = {
 }
 
 // Launcher upgrades
-exports.skimmer = {
+Class.skimmer = {
     PARENT: "genericTank",
     LABEL: "Skimmer",
     DANGER: 7,
@@ -3289,7 +3289,7 @@ exports.skimmer = {
         },
     ],
 }
-exports.twister = {
+Class.twister = {
     PARENT: "genericTank",
     LABEL: "Twister",
     DANGER: 7,
@@ -3310,7 +3310,7 @@ exports.twister = {
         },
     ],
 }
-exports.swarmer = {
+Class.swarmer = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Swarmer",
@@ -3327,7 +3327,7 @@ exports.swarmer = {
         },
     ],
 }
-exports.rocketeer = {
+Class.rocketeer = {
     PARENT: "genericTank",
     LABEL: "Rocketeer",
     BODY: {
@@ -3350,7 +3350,7 @@ exports.rocketeer = {
 }
 
 // Trapper upgrades
-exports.builder = {
+Class.builder = {
     PARENT: "genericTank",
     DANGER: 6,
     LABEL: "Builder",
@@ -3373,7 +3373,7 @@ exports.builder = {
         }
     ]
 }
-exports.triTrapper = makeMulti({
+Class.triTrapper = makeMulti({
     PARENT: "genericTank",
     DANGER: 6,
     STAT_NAMES: statnames.trap,
@@ -3391,7 +3391,7 @@ exports.triTrapper = makeMulti({
         }
     ]
 }, 3, "Tri-Trapper")
-exports.trapGuard = makeGuard({
+Class.trapGuard = makeGuard({
     PARENT: "genericTank",
     STAT_NAMES: statnames.mixed,
     GUNS: [
@@ -3406,7 +3406,7 @@ exports.trapGuard = makeGuard({
 }, "Trap Guard")
 
 // Builder upgrades
-exports.construct = {
+Class.construct = {
     PARENT: "genericTank",
     LABEL: "Constructor",
     STAT_NAMES: statnames.trap,
@@ -3429,7 +3429,7 @@ exports.construct = {
         }
     ]
 }
-exports.engineer = {
+Class.engineer = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Engineer",
@@ -3461,7 +3461,7 @@ exports.engineer = {
         },
     ],
 }
-exports.boomer = {
+Class.boomer = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Boomer",
@@ -3488,7 +3488,7 @@ exports.boomer = {
         },
     ],
 }
-exports.assembler = {
+Class.assembler = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: 'Assembler',
@@ -3521,7 +3521,7 @@ exports.assembler = {
 }
 
 // Tri-Trapper upgrades
-exports.hexaTrapper = makeAuto({
+Class.hexaTrapper = makeAuto({
     PARENT: "genericTank",
     DANGER: 7,
     BODY: {
@@ -3598,7 +3598,7 @@ exports.hexaTrapper = makeAuto({
         },
     ],
 }, "Hexa-Trapper")
-exports.septaTrapper = (() => {
+Class.septaTrapper = (() => {
     let a = 360 / 7,
         d = 1 / 7;
     return {
@@ -3691,7 +3691,7 @@ exports.septaTrapper = (() => {
         ],
     };
 })()
-exports.architect = {
+Class.architect = {
     PARENT: "genericTank",
     LABEL: "Architect",
     DANGER: 7,
@@ -3716,8 +3716,8 @@ exports.architect = {
 }
 
 // Trap Guard upgrades
-exports.bushwhacker = makeGuard(exports.sniper, "Bushwhacker")
-exports.gunnerTrapper = {
+Class.bushwhacker = makeGuard(Class.sniper, "Bushwhacker")
+Class.gunnerTrapper = {
     PARENT: "genericTank",
     LABEL: "Gunner Trapper",
     DANGER: 7,
@@ -3756,7 +3756,7 @@ exports.gunnerTrapper = {
         },
     ],
 }
-exports.bomber = {
+Class.bomber = {
     PARENT: "genericTank",
     LABEL: "Bomber",
     BODY: {
@@ -3801,7 +3801,7 @@ exports.bomber = {
         },
     ],
 }
-exports.conqueror = {
+Class.conqueror = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Conqueror",
@@ -3831,7 +3831,7 @@ exports.conqueror = {
         },
     ],
 }
-exports.bulwark = {
+Class.bulwark = {
     PARENT: "genericTank",
     LABEL: "Bulwark",
     STAT_NAMES: statnames.mixed,
@@ -3877,7 +3877,7 @@ exports.bulwark = {
 }
 
 // Desmos upgrades
-exports.volute = {
+Class.volute = {
     PARENT: "genericTank",
     LABEL: "Volute",
     DANGER: 6,
@@ -3898,7 +3898,7 @@ exports.volute = {
         },
     ],
 }
-exports.helix = {
+Class.helix = {
     PARENT: "genericTank",
     LABEL: "Helix",
     DANGER: 6,
@@ -3931,7 +3931,7 @@ exports.helix = {
 }
 
 // Volute upgrades
-exports.sidewinder = {
+Class.sidewinder = {
     PARENT: "genericTank",
     LABEL: "Sidewinder",
     DANGER: 7,
@@ -3955,7 +3955,7 @@ exports.sidewinder = {
 }
 
 // Helix upgrades
-exports.triplex = {
+Class.triplex = {
     PARENT: "genericTank",
     LABEL: "Triplex",
     DANGER: 7,
@@ -3996,7 +3996,7 @@ exports.triplex = {
         },
     ],
 }
-exports.quadruplex = {
+Class.quadruplex = {
     PARENT: "genericTank",
     LABEL: "Quadruplex",
     DANGER: 7,
@@ -4058,7 +4058,7 @@ exports.quadruplex = {
 }
 
 // Smasher upgrades
-exports.megaSmasher = {
+Class.megaSmasher = {
     PARENT: "genericSmasher",
     LABEL: "Mega-Smasher",
     BODY: {
@@ -4073,7 +4073,7 @@ exports.megaSmasher = {
         },
     ],
 }
-exports.spike = {
+Class.spike = {
     PARENT: "genericSmasher",
     LABEL: "Spike",
     BODY: {
@@ -4099,7 +4099,7 @@ exports.spike = {
         },
     ],
 }
-exports.landmine = {
+Class.landmine = {
     PARENT: "genericSmasher",
     LABEL: "Landmine",
     INVISIBLE: [0.06, 0.01],
@@ -4120,7 +4120,7 @@ exports.landmine = {
 }
 
 // Healer upgrades
-exports.medic = {
+Class.medic = {
     PARENT: "genericTank",
     LABEL: "Medic",
     BODY: {
@@ -4146,7 +4146,7 @@ exports.medic = {
     ],
     STAT_NAMES: statnames.heal,
 }
-exports.ambulance = {
+Class.ambulance = {
     PARENT: "genericTank",
     LABEL: "Ambulance",
     BODY: {
@@ -4191,7 +4191,7 @@ exports.ambulance = {
     ],
     STAT_NAMES: statnames.heal,
 }
-exports.surgeon = {
+Class.surgeon = {
     PARENT: "genericTank",
     LABEL: "Surgeon",
     STAT_NAMES: statnames.trap,
@@ -4228,7 +4228,7 @@ exports.surgeon = {
     ],
     STAT_NAMES: statnames.heal,
 }
-exports.paramedic = {
+Class.paramedic = {
     PARENT: "genericTank",
     LABEL: "Paramedic",
     BODY: {
@@ -4276,7 +4276,7 @@ exports.paramedic = {
 }
 
 // Bird tanks
-exports.falcon = makeBird({
+Class.falcon = makeBird({
     PARENT: "genericTank",
     DANGER: 7,
     BODY: {
@@ -4296,7 +4296,7 @@ exports.falcon = makeBird({
         }
     ]
 }, "Falcon")
-exports.vulture = makeBird({
+Class.vulture = makeBird({
     PARENT: "genericTank",
     DANGER: 7,
     BODY: {
@@ -4326,7 +4326,7 @@ exports.vulture = makeBird({
         }
     ]
 }, "Vulture")
-exports.phoenix = makeBird({
+Class.phoenix = makeBird({
     PARENT: "genericTank",
     DANGER: 7,
     GUNS: [
@@ -4346,7 +4346,7 @@ exports.phoenix = makeBird({
         }
     ]
 }, "Phoenix")
-exports.eagle = makeBird({
+Class.eagle = makeBird({
     PARENT: "genericTank",
     DANGER: 7,
     GUNS: [
@@ -4361,14 +4361,14 @@ exports.eagle = makeBird({
 }, "Eagle")
 
 // Hybrid tanks
-exports.bentHybrid = makeHybrid(exports.tripleShot, "Bent Hybrid")
-exports.poacher = makeHybrid(exports.hunter, "Poacher")
-exports.armsman = makeHybrid(exports.rifle, "Armsman")
-exports.cropDuster = makeHybrid(exports.minigun, "Crop Duster")
-exports.hybrid = makeHybrid(exports.destroyer, "Hybrid")
+Class.bentHybrid = makeHybrid('tripleShot', "Bent Hybrid")
+Class.poacher = makeHybrid('hunter', "Poacher")
+Class.armsman = makeHybrid('rifle', "Armsman")
+Class.cropDuster = makeHybrid('minigun', "Crop Duster")
+Class.hybrid = makeHybrid('destroyer', "Hybrid")
 
 // Over tanks
-exports.overgunner = makeOver({
+Class.overgunner = makeOver({
     PARENT: "genericTank",
     LABEL: "Gunner",
     DANGER: 6,
@@ -4392,7 +4392,7 @@ exports.overgunner = makeOver({
         },
     ],
 })
-exports.overtrapper = makeOver({
+Class.overtrapper = makeOver({
     PARENT: "genericTank",
     LABEL: "Trapper",
     DANGER: 6,
@@ -4417,15 +4417,15 @@ exports.overtrapper = makeOver({
 })
 
 // Auto tanks
-exports.autoDouble = makeAuto(exports.doubleTwin, "Auto-Double")
-exports.autoAssassin = makeAuto(exports.assassin)
-exports.autoGunner = makeAuto(exports.gunner)
-exports.autoTriAngle = makeAuto(exports.triAngle)
-exports.autoOverseer = makeAuto(exports.overseer)
-exports.autoCruiser = makeAuto(exports.cruiser)
-exports.autoSpawner = makeAuto(exports.spawner)
-exports.autoBuilder = makeAuto(exports.builder)
-exports.autoSmasher = makeAuto({
+Class.autoDouble = makeAuto(Class.doubleTwin, "Auto-Double")
+Class.autoAssassin = makeAuto(Class.assassin)
+Class.autoGunner = makeAuto(Class.gunner)
+Class.autoTriAngle = makeAuto(Class.triAngle)
+Class.autoOverseer = makeAuto(Class.overseer)
+Class.autoCruiser = makeAuto(Class.cruiser)
+Class.autoSpawner = makeAuto(Class.spawner)
+Class.autoBuilder = makeAuto(Class.builder)
+Class.autoSmasher = makeAuto({
     PARENT: "genericSmasher",
     DANGER: 6,
     TURRETS: [
@@ -4441,52 +4441,52 @@ exports.autoSmasher = makeAuto({
 })
 
 // Upgrade paths
-exports.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "desmos"]
-    exports.basic.UPGRADES_TIER_2 = ["smasher"]
-        exports.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "autoSmasher", "landmine"]
-        exports.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
+Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "desmos"]
+    Class.basic.UPGRADES_TIER_2 = ["smasher"]
+        Class.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "autoSmasher", "landmine"]
+        Class.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
 
-    exports.twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "hexaTank", "helix"]
-        exports.twin.UPGRADES_TIER_3 = ["dual", "bulwark", "musket"]
-        exports.doubleTwin.UPGRADES_TIER_3 = ["tripleTwin", "hewnDouble", "autoDouble", "bentDouble"]
-        exports.tripleShot.UPGRADES_TIER_3 = ["pentaShot", "spreadshot", "bentHybrid", "bentDouble", "triplet", "triplex"]
+    Class.twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "hexaTank", "helix"]
+        Class.twin.UPGRADES_TIER_3 = ["dual", "bulwark", "musket"]
+        Class.doubleTwin.UPGRADES_TIER_3 = ["tripleTwin", "hewnDouble", "autoDouble", "bentDouble"]
+        Class.tripleShot.UPGRADES_TIER_3 = ["pentaShot", "spreadshot", "bentHybrid", "bentDouble", "triplet", "triplex"]
 
-    exports.sniper.UPGRADES_TIER_2 = ["assassin", "hunter", "minigun", "rifle"]
-        exports.sniper.UPGRADES_TIER_3 = ["bushwhacker"]
-        exports.assassin.UPGRADES_TIER_3 = ["ranger", "falcon", "stalker", "autoAssassin", "single"]
-        exports.hunter.UPGRADES_TIER_3 = ["predator", "xHunter", "poacher", "ordnance", "dual"]
-        exports.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman"]
+    Class.sniper.UPGRADES_TIER_2 = ["assassin", "hunter", "minigun", "rifle"]
+        Class.sniper.UPGRADES_TIER_3 = ["bushwhacker"]
+        Class.assassin.UPGRADES_TIER_3 = ["ranger", "falcon", "stalker", "autoAssassin", "single"]
+        Class.hunter.UPGRADES_TIER_3 = ["predator", "xHunter", "poacher", "ordnance", "dual"]
+        Class.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman"]
 
-    exports.machineGun.UPGRADES_TIER_2 = ["artillery", "minigun", "gunner", "sprayer"]
-        exports.minigun.UPGRADES_TIER_3 = ["streamliner", "nailgun", "cropDuster", "barricade", "vulture"]
-        exports.gunner.UPGRADES_TIER_3 = ["autoGunner", "nailgun", "auto4", "machineGunner", "gunnerTrapper", "cyclone", "overgunner"]
-        exports.sprayer.UPGRADES_TIER_3 = ["redistributor", "phoenix", "atomizer", "focal"]
+    Class.machineGun.UPGRADES_TIER_2 = ["artillery", "minigun", "gunner", "sprayer"]
+        Class.minigun.UPGRADES_TIER_3 = ["streamliner", "nailgun", "cropDuster", "barricade", "vulture"]
+        Class.gunner.UPGRADES_TIER_3 = ["autoGunner", "nailgun", "auto4", "machineGunner", "gunnerTrapper", "cyclone", "overgunner"]
+        Class.sprayer.UPGRADES_TIER_3 = ["redistributor", "phoenix", "atomizer", "focal"]
 
-    exports.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "auto3", "trapGuard", "triTrapper"]
-        exports.flankGuard.UPGRADES_TIER_3 = ["tripleTwin", "quadruplex"]
-        exports.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper"]
-        exports.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "surfer", "eagle", "phoenix", "vulture"]
-        exports.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee"]
+    Class.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "auto3", "trapGuard", "triTrapper"]
+        Class.flankGuard.UPGRADES_TIER_3 = ["tripleTwin", "quadruplex"]
+        Class.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper"]
+        Class.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "surfer", "eagle", "phoenix", "vulture"]
+        Class.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee"]
 
-    exports.director.UPGRADES_TIER_2 = ["overseer", "cruiser", "underseer", "spawner"]
-        exports.director.UPGRADES_TIER_3 = ["manager", "bigCheese"]
-        exports.overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "autoOverseer", "overdrive", "commander"]
-        exports.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "autoCruiser", "commander"]
-        exports.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor"]
-        exports.spawner.UPGRADES_TIER_3 = ["factory", "autoSpawner"]
+    Class.director.UPGRADES_TIER_2 = ["overseer", "cruiser", "underseer", "spawner"]
+        Class.director.UPGRADES_TIER_3 = ["manager", "bigCheese"]
+        Class.overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "autoOverseer", "overdrive", "commander"]
+        Class.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "autoCruiser", "commander"]
+        Class.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor"]
+        Class.spawner.UPGRADES_TIER_3 = ["factory", "autoSpawner"]
 
-    exports.pounder.UPGRADES_TIER_2 = ["destroyer", "builder", "artillery", "launcher", "volute"]
-        exports.pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"]
-        exports.destroyer.UPGRADES_TIER_3 = ["conqueror", "annihilator", "hybrid", "construct"]
-        exports.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun"]
-        exports.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "rocketeer", "fieldGun"]
+    Class.pounder.UPGRADES_TIER_2 = ["destroyer", "builder", "artillery", "launcher", "volute"]
+        Class.pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"]
+        Class.destroyer.UPGRADES_TIER_3 = ["conqueror", "annihilator", "hybrid", "construct"]
+        Class.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun"]
+        Class.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "rocketeer", "fieldGun"]
 
-    exports.trapper.UPGRADES_TIER_2 = ["builder", "triTrapper", "trapGuard"]
-        exports.trapper.UPGRADES_TIER_3 = ["barricade", "overtrapper"]
-        exports.builder.UPGRADES_TIER_3 = ["construct", "autoBuilder", "engineer", "boomer", "assembler", "architect", "conqueror"]
-        exports.triTrapper.UPGRADES_TIER_3 = ["fortress", "hexaTrapper", "septaTrapper", "architect"]
-        exports.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark"]
+    Class.trapper.UPGRADES_TIER_2 = ["builder", "triTrapper", "trapGuard"]
+        Class.trapper.UPGRADES_TIER_3 = ["barricade", "overtrapper"]
+        Class.builder.UPGRADES_TIER_3 = ["construct", "autoBuilder", "engineer", "boomer", "assembler", "architect", "conqueror"]
+        Class.triTrapper.UPGRADES_TIER_3 = ["fortress", "hexaTrapper", "septaTrapper", "architect"]
+        Class.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark"]
 
-    exports.desmos.UPGRADES_TIER_2 = ["volute", "helix"]
-        exports.volute.UPGRADES_TIER_3 = ["sidewinder"]
-        exports.helix.UPGRADES_TIER_3 = ["triplex", "quadruplex"]
+    Class.desmos.UPGRADES_TIER_2 = ["volute", "helix"]
+        Class.volute.UPGRADES_TIER_3 = ["sidewinder"]
+        Class.helix.UPGRADES_TIER_3 = ["triplex", "quadruplex"]
