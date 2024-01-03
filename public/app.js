@@ -1460,7 +1460,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
 
 function drawMinimapAndDebug(spacing, alcoveSize) {
     // Draw minimap and FPS monitors
-    //minimap stuff stards here
+    //minimap stuff starts here
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
