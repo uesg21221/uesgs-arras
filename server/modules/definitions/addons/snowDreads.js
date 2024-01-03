@@ -4296,7 +4296,7 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					MAX_CHILDREN: 5,
 					SHOOT_SETTINGS: combineStats([g.trap, g.block, {recoil: 0, maxSpeed: 1e-3, speed: 1e-3}]),
-					TYPE: 'unsetPillbox',
+					TYPE: 'unsetPillboxWeakSnowdread',
 					INDEPENDENT: true,
 					SYNCS_SKILLS: true,
 					DESTROY_OLDEST_CHILD: true,
@@ -5980,7 +5980,7 @@ module.exports = ({ Class }) => {
 				PROPERTIES: {
 					MAX_CHILDREN: 5,
 					SHOOT_SETTINGS: combineStats([g.trap, g.block, g.construct, {recoil: 0, maxSpeed: 1e-3, speed: 1e-3}]),
-					TYPE: 'unsetPillbox',
+					TYPE: 'unsetPillboxSnowdread',
 					INDEPENDENT: true,
 					SYNCS_SKILLS: true,
 					DESTROY_OLDEST_CHILD: true,

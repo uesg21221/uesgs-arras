@@ -2032,7 +2032,7 @@ class Entity extends EventEmitter {
                     this.y = lerp(this.y, centerPoint.y, strength);
                 }
             } else {
-                let padding = this.realSize - 50;
+                let padding = this.realSize;
                 this.accel.x -= Math.max(this.x + padding - room.width, Math.min(this.x - padding, 0)) * c.ROOM_BOUND_FORCE / c.runSpeed;
                 this.accel.y -= Math.max(this.y + padding - room.height, Math.min(this.y - padding, 0)) * c.ROOM_BOUND_FORCE / c.runSpeed;
             }
