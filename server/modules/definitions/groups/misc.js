@@ -458,7 +458,7 @@ Class.trapTurret = {
         {
             POSITION: [4, 14, 1.8, 16, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.lowpower, g.fast, g.halfreload]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.lowpower, g.fast, { reload: 2 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -471,7 +471,7 @@ Class.shotTrapBox = {
     MOTION_TYPE: "glide",
 }
 let makeshottrapTurretProps = () => ({
-    SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, {speed: 0.7, maxSpeed: 0.2, damage: 1.5}]),
+    SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, { speed: 0.7, maxSpeed: 0.2, damage: 1.5 }]),
     AUTOFIRE: true,
     TYPE: "shotTrapBox",
     STAT_CALCULATOR: gunCalcNames.block,
@@ -577,7 +577,7 @@ Class.sentrySwarm = {
         {
             POSITION: [7, 14, 0.6, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.morerecoil]),
+                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -629,7 +629,7 @@ Class.shinySentrySwarm = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.morerecoil, g.mach, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }, g.mach, { reload: 0.25 }]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -858,7 +858,7 @@ Class.sentinelCrossbow = {
                     g.rifle,
                     g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },
@@ -872,7 +872,7 @@ Class.sentinelCrossbow = {
                     g.rifle,
                     g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },
@@ -886,7 +886,7 @@ Class.sentinelCrossbow = {
                     g.rifle,
                     g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },
@@ -900,7 +900,7 @@ Class.sentinelCrossbow = {
                     g.rifle,
                     g.slow,
                     g.crossbow,
-                    g.halfrecoil,
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },
@@ -913,8 +913,8 @@ Class.sentinelCrossbow = {
                     g.sniper,
                     g.rifle,
                     g.slow,
-                    g.halfreload,
-                    g.halfrecoil,
+                    { reload: 2 },
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },

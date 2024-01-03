@@ -129,7 +129,7 @@ Class.supermissile = {
 			POSITION: [14, 6, 1, 0, -2, 130, 0],
 			PROPERTIES: {
 				AUTOFIRE: true,
-				SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, { recoil: 1.35 }, g.morespeed, g.morespeed]),
 				TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
 				STAT_CALCULATOR: gunCalcNames.thruster,
 			},
@@ -138,7 +138,7 @@ Class.supermissile = {
 			POSITION: [14, 6, 1, 0, 2, 230, 0],
 			PROPERTIES: {
 				AUTOFIRE: true,
-				SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, g.muchmorerecoil, g.morespeed, g.morespeed]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.skim, g.doublereload, g.lowpower, { recoil: 1.35 }, g.morespeed, g.morespeed]),
 				TYPE: ["bullet", {PERSISTS_AFTER_DEATH: true}],
 				STAT_CALCULATOR: gunCalcNames.thruster,
 			},

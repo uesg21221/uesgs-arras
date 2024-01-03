@@ -39,7 +39,7 @@ Class.mechanismMainTurret = {
 	GUNS: [{
 		POSITION: [22, 10, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, g.pound, g.morespeed, g.morereload, g.doublereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, { recoil: 1.15 }, g.turret, g.pound, g.morespeed, g.morereload, g.doublereload]),
 			TYPE: "bullet"
 		}
 	}]
@@ -56,7 +56,7 @@ Class.automationMainTurret = {
 	GUNS: [{
 		POSITION: [22, 10, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, g.morereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, { recoil: 1.15 }, g.turret, g.morereload]),
 			TYPE: "bullet"
 		}
 	}]
@@ -73,7 +73,7 @@ Class.automationSecondaryTurret = {
 	GUNS: [{
 		POSITION: [22, 10, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.morerecoil, g.turret, g.morereload]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, { recoil: 1.15 }, g.turret, g.morereload]),
 			TYPE: "bullet"
 		}
 	}]

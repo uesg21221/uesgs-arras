@@ -166,13 +166,13 @@ exports.addBackGunner = (type, name = -1) => {
     let cannons = [{
         POSITION: [19, 2, 1, 0, -2.5, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.basic, g.gunner, g.power, g.twin, g.tonsmorrecoil, g.lotsmorrecoil]),
+            SHOOT_SETTINGS: exports.combineStats([g.basic, g.gunner, g.power, g.twin, { recoil: 4 }, { recoil: 1.8 }]),
             TYPE: "bullet",
         },
     }, {
         POSITION: [19, 2, 1, 0, 2.5, 180, 0.5],
         PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.basic, g.gunner, g.power, g.twin, g.tonsmorrecoil, g.lotsmorrecoil]),
+            SHOOT_SETTINGS: exports.combineStats([g.basic, g.gunner, g.power, g.twin, { recoil: 4 }, { recoil: 1.8 }]),
             TYPE: "bullet",
         },
     }, {
@@ -205,13 +205,13 @@ exports.makeBird = (type, name = -1, color) => {
     let output = exports.dereference(type),
         shootyBois = [{
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, g.halfrecoil]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
         },{
             POSITION: [16, 8, 1, 0, 0, 210, 0.1],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, g.halfrecoil]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
         },{
             POSITION: [18, 8, 1, 0, 0, 180, 0.6],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, g.halfrecoil]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flank, g.tri, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
         }];
     if (color) for (let i = 0; i < 3; i++) shootyBois[i].PROPERTIES.TYPE = [shootyBois[i].PROPERTIES.TYPE, { COLOR: color, KEEP_OWN_COLOR: true }];
     for (let i in output.GUNS) if (output.GUNS[i].PROPERTIES) output.GUNS[i].PROPERTIES.ALT_FIRE = true;
