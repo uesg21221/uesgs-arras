@@ -93,7 +93,7 @@ Class.spectator = {
     },
     GUNS: [],
 };
-exports.fastSpectator = {
+Class.fastSpectator = {
     PARENT: ["menu"],
     LABEL: "Fast Spectator",
     ALPHA: 0,
@@ -114,7 +114,7 @@ exports.fastSpectator = {
     },
     GUNS: [],
 };
-exports.superFastSpectator = {
+Class.superFastSpectator = {
     PARENT: ["menu"],
     LABEL: "Super Fast Spectator",
     ALPHA: 0,
