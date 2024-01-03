@@ -42,7 +42,6 @@ Class.developer = {
         DENSITY: 20,
         FOV: 2,
     },
-    ACCEPTS_SCORE: true,
     RESET_CHILDREN: true,
     ACCEPTS_SCORE: true,
     CAN_BE_ON_LEADERBOARD: true,
@@ -516,7 +515,7 @@ Class.miscTestHelper2 = {
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.noRandom]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.noSpread]),
                 TYPE: "bullet",
                 COLOR: -1,
             },
@@ -535,7 +534,7 @@ Class.miscTestHelper = {
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.noRandom]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.noSpread]),
                 TYPE: "bullet",
                 COLOR: -1,
             },
@@ -556,7 +555,7 @@ Class.miscTest = {
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.noRandom]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.noSpread]),
                 TYPE: "bullet",
             },
         },
@@ -850,7 +849,7 @@ Class.ghoster = {
         POSITION: {WIDTH: 20, LENGTH: 20},
         PROPERTIES: {
             TYPE: 'bullet',
-            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.anni]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.annihilator]),
         }
     }],
     ALPHA: 1,
@@ -896,7 +895,7 @@ Class.vanquisher = {
     GUNS: [{
         POSITION: [21, 14, 1, 0, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer]),
             TYPE: "bullet"
         }
 
@@ -906,7 +905,7 @@ Class.vanquisher = {
     },{
         POSITION: [2, 12, 1.1, 18, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.trap, g.block]),
+            SHOOT_SETTINGS: combineStats([g.trap, g.setTrap]),
             TYPE: "setTrap",
             STAT_CALCULATOR: gunCalcNames.block
         }
@@ -916,39 +915,39 @@ Class.vanquisher = {
         POSITION: [10, 9, 1, 9, 0, 90, 0],
     },{
         POSITION: [17, 13, 1, 0, 0, 90, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, g.arty]), TYPE: "minimissile", STAT_CALCULATOR: gunCalcNames.sustained }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery]), TYPE: "minimissile", STAT_CALCULATOR: gunCalcNames.sustained }
 
     //shotgun
     },{
         POSITION: [4, 3, 1, 11, -3, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]), TYPE: "bullet" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun]), TYPE: "bullet" }
     },{
         POSITION: [4, 3, 1, 11, 3, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]), TYPE: "bullet" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun]), TYPE: "bullet" }
     },{
         POSITION: [4, 4, 1, 13, 0, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]), TYPE: "casing" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun]), TYPE: "casing" }
     },{
         POSITION: [1, 4, 1, 12, -1, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]), TYPE: "casing" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun]), TYPE: "casing" }
     },{
         POSITION: [1, 4, 1, 11, 1, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]), TYPE: "casing" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun]), TYPE: "casing" }
     },{
         POSITION: [1, 3, 1, 13, -1, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]), TYPE: "bullet" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun]), TYPE: "bullet" }
     },{
         POSITION: [1, 3, 1, 13, 1, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]), TYPE: "bullet" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun]), TYPE: "bullet" }
     },{
         POSITION: [1, 2, 1, 13, 2, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]), TYPE: "casing" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun]), TYPE: "casing" }
     }, {
         POSITION: [1, 2, 1, 13, -2, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun]), TYPE: "casing" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun]), TYPE: "casing" }
     }, {
         POSITION: [15, 14, 1, 6, 0, 270, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.mach, g.shotgun, g.fake]), TYPE: "casing" }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, g.fake]), TYPE: "casing" }
     }, {
         POSITION: [8, 14, -1.3, 4, 0, 270, 0],
     }]
@@ -981,13 +980,13 @@ Class.armyOfOne = {
         {
             POSITION: [21, 19, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.destroy, g.destroy, g.destroy, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.doublereload, g.doublereload, g.doublereload, g.doublereload]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, { reload: 0.5 }, { reload: 0.5 }, { reload: 0.5 }, { reload: 0.5 }]),
                 TYPE: "armyOfOneBullet",
             },
         },{
             POSITION: [21, 11, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy, g.destroy, g.destroy, g.destroy, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.doublereload, g.doublereload, g.doublereload, g.doublereload, g.fake]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, g.sniper, { reload: 0.5 }, { reload: 0.5 }, { reload: 0.5 }, { reload: 0.5 }, g.fake]),
                 TYPE: "bullet",
             },
         }
