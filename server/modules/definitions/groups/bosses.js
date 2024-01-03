@@ -1879,7 +1879,7 @@ Class.tinyMinion = {
         {
             POSITION: [17, 9, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.lowpower]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.lowpower]),
                 WAIT_TO_CYCLE: true,
                 TYPE: "bullet",
             }, 

@@ -506,7 +506,7 @@ for (let i = 0; i < 4; i++) {
 		{
 			POSITION: [15, 7.5, 1, 0, 0, 90*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.assass, g.minion]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.assass, g.minionGun]),
 				WAIT_TO_CYCLE: true,
 				TYPE: "bullet",
 			},
@@ -929,7 +929,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [16, 8.5, 1, 0, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.bitlessspeed, g.minion]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.bitlessspeed, g.minionGun]),
 				WAIT_TO_CYCLE: true,
 				TYPE: "bullet",
 			},
@@ -1641,7 +1641,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [15, 8.5, 1, 0, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.slow, g.minion]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assass, g.slow, g.minionGun]),
 				WAIT_TO_CYCLE: true,
 				TYPE: ["bullet", {COLOR: 5}],
 			},
@@ -1654,7 +1654,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [3, 7, 1.7, 13, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.flank, g.minion]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.flank, g.minionGun]),
 				TYPE: "trap",
 				STAT_CALCULATOR: gunCalcNames.trap,
 			},

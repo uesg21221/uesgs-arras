@@ -403,7 +403,7 @@ Class.minion = {
         {
             POSITION: [17, 9, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.minion]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.minionGun]),
                 WAIT_TO_CYCLE: true,
                 TYPE: "bullet",
             },
@@ -628,7 +628,7 @@ Class.pillboxTurret = {
         {
             POSITION: [22, 11, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.minion, g.turret, g.power, g.auto, { density: 0.1 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.auto, { density: 0.1 }]),
                 TYPE: "bullet",
             },
         },
