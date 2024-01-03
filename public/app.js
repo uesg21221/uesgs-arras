@@ -510,7 +510,7 @@ function isImageURL(url) {
 }
 // Sub-drawing functions
 const drawPolyImgs = [];
-function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation, borderFirst = false, heightScale = 1) {
+function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation) {
     // Start drawing
     context.beginPath();
     if (sides instanceof Array) {
@@ -580,10 +580,9 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 context.scale(radius, radius);
                 context.lineWidth /= radius;
                 context.rotate(angle);
-                context.lineWidth *= fill && !borderFirst ? 1 : 0.5; // Maintain constant border width
-                if (!borderless && !borderFirst) context.stroke(path);
+                context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+                if (!borderless) context.stroke(path);
                 if (fill) context.fill(path);
-                if (!borderless && borderFirst) context.stroke(path);
                 context.restore();
                 return;
             }
@@ -634,44 +633,9 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
         angle += (sides % 1) * Math.PI * 2;
         sides = Math.floor(sides);
         context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-        let bottomPoints = [];
-        let topPoints = [];
         for (let i = 0; i < sides; i++) {
             let theta = (i / sides) * 2 * Math.PI + angle;
             context.lineTo(centerX + radius * Math.cos(theta), centerY + radius * Math.sin(theta));
-            bottomPoints.push([centerX + radius * Math.cos(theta), centerY + radius * Math.sin(theta)]);
-        }
-        if (heightScale != 1) {
-            context.closePath();
-            if (!borderless) context.stroke();
-            if (fill) context.fill();
-            context.beginPath();
-            for (let i = 0; i < sides; i++) {
-                let theta = (i / sides) * 2 * Math.PI + angle;
-                topPoints.push([
-                    (centerX + radius * Math.cos(theta) - global.screenWidth / 2) * heightScale + global.screenWidth / 2, 
-                    (centerY + radius * Math.sin(theta) - global.screenHeight / 2) * heightScale + global.screenHeight / 2
-                ]);
-            }
-            let wallToggles = Array(4).fill(true);
-            if (centerY < (global.screenHeight / 2 + radius * Math.SQRT1_2)) wallToggles[2] = false;
-            if (centerY > (global.screenHeight / 2 - radius * Math.SQRT1_2)) wallToggles[0] = false;
-            if (centerX < (global.screenWidth / 2 + radius * Math.SQRT1_2)) wallToggles[1] = false;
-            if (centerX > (global.screenWidth / 2 - radius * Math.SQRT1_2)) wallToggles[3] = false;
-            for (let i = 0; i < sides; i++) {
-                if (!wallToggles[i]) continue;
-                context.lineTo(...bottomPoints[i]);
-                context.lineTo(...bottomPoints[(i + 1) % sides]);
-                context.lineTo(...topPoints[(i + 1) % sides]);
-                context.lineTo(...topPoints[i]);
-                context.closePath();
-                if (!borderless) context.stroke();
-                if (fill) context.fill();
-                context.beginPath();
-            }
-            for (let i = 0; i < sides; i++) {
-                context.lineTo(...topPoints[i]);
-            }
         }
     }
     context.closePath();
@@ -803,7 +767,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
 
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, instance.borderless, instance.drawFill, m.imageInterpolation, m.borderFirst, m.heightScale);
+    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, instance.borderless, instance.drawFill, m.imageInterpolation);
     
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {
