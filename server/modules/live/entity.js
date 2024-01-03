@@ -844,6 +844,7 @@ class Entity extends EventEmitter {
             allowBrightnessInvert: false,
         };
         this.color = '16 0 1 0 false';
+        this.heightScale = 1;
         this.glow = {radius: null, color: null, alpha: 1, recursion: 1}
         this.invisible = [0, 0];
         this.alphaRange = [0, 1];
@@ -1048,6 +1049,7 @@ class Entity extends EventEmitter {
             this.shape = typeof set.SHAPE === "number" ? set.SHAPE : 0;
             this.shapeData = set.SHAPE;
         }
+        if (set.HEIGHT_SCALE != null) this.heightScale = set.HEIGHT_SCALE;
         this.imageInterpolation = set.IMAGE_INTERPOLATION != null ? set.IMAGE_INTERPOLATION : 'bilinear'
         if (set.COLOR != null) {
             if (typeof set.COLOR === "number" || typeof set.COLOR === 'string')
@@ -1141,6 +1143,7 @@ class Entity extends EventEmitter {
         if (set.DANGER != null) this.dangerValue = set.DANGER;
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
+        if (set.BORDER_FIRST != null) this.borderFirst = set.BORDER_FIRST;
         if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
         if (set.TEAM != null) {
             this.team = set.TEAM;
@@ -1890,6 +1893,9 @@ class Entity extends EventEmitter {
             case "autospin":
                 this.facing += (args.speed ?? 0.02) / c.runSpeed;
                 break;
+            case "auraspin":
+                this.facing -= 0.04 / c.runSpeed;
+                break;
             case "turnWithSpeed":
                 this.facing += ((this.velocity.length / 90) * Math.PI) / c.runSpeed;
                 break;
@@ -2026,7 +2032,7 @@ class Entity extends EventEmitter {
                     this.y = lerp(this.y, centerPoint.y, strength);
                 }
             } else {
-                let padding = this.realSize - 50;
+                let padding = this.realSize;
                 this.accel.x -= Math.max(this.x + padding - room.width, Math.min(this.x - padding, 0)) * c.ROOM_BOUND_FORCE / c.runSpeed;
                 this.accel.y -= Math.max(this.y + padding - room.height, Math.min(this.y - padding, 0)) * c.ROOM_BOUND_FORCE / c.runSpeed;
             }
