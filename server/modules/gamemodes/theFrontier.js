@@ -180,7 +180,7 @@ function generateFrontierMaze(width, height) {
                     x: d.x + scale + UNDERGROUND_START * c.TILE_WIDTH,
                     y: d.y
                 });
-                o.define(Class.wall);
+                o.define(Class.towerMedium);
                 o.SIZE = d.s * 0.5;
                 o.team = TEAM_ENEMIES;
                 o.protect();
