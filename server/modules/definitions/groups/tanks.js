@@ -2109,7 +2109,7 @@ Class.fighter = {
                 TYPE: "bullet",
                 LABEL: "Side",
             },
-        }
+        },
         {
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
             PROPERTIES: {
