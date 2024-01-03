@@ -620,6 +620,7 @@ const convert = {
                     d2 = (b.render.x - global.player.renderx) ** 2 + (b.render.y - global.player.rendery) ** 2;
                 sort = d2 - d1;
             }
+            if (!sort) sort = b.id - a.id;
             if (!sort) throw new Error('tha fuq is up now');
             return sort;
         });
