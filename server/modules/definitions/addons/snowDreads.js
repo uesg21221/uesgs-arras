@@ -1108,7 +1108,7 @@ for(let i = 0; i < 6; i++) {
 Class.auraSmall = {
 	PARENT: ["auraBase"],
 	LAYER: 30,
-	FACING_TYPE: "auraspin",
+	FACING_TYPE: ["spin", {speed: -0.04}],
 	LABEL: "Aura",
 	COLOR: 0,
 	BODY: { DAMAGE: 0.5 },
@@ -1127,7 +1127,7 @@ Class.healAuraSmall = {
 Class.auraMedium = {
 	PARENT: ["auraBase"],
 	LAYER: 30,
-	FACING_TYPE: "auraspin",
+	FACING_TYPE: ["spin", {speed: -0.04}],
 	LABEL: "Aura",
 	COLOR: 0,
 	BODY: { DAMAGE: 0.5 },
@@ -1148,7 +1148,7 @@ Class.healAuraMedium = {
 Class.auraLarge = {
 	PARENT: ["auraBase"],
 	LAYER: 30,
-	FACING_TYPE: "auraspin",
+	FACING_TYPE: ["spin", {speed: -0.04}],
 	LABEL: "Aura",
 	COLOR: 0,
 	BODY: { DAMAGE: 0.5 },

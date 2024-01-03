@@ -1894,7 +1894,7 @@ class Entity extends EventEmitter {
                 this.facing += (args.speed ?? 0.02) / c.runSpeed;
                 break;
             case "auraspin":
-                this.facing -= 0.04 / c.runSpeed;
+                this.facing += (args.speed ?? -0.04) / c.runSpeed;
                 break;
             case "turnWithSpeed":
                 this.facing += ((this.velocity.length / 90) * Math.PI) / c.runSpeed;
