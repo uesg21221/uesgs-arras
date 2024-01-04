@@ -200,7 +200,7 @@ module.exports = {
         amount: [1], chance: 0.1,
         message: "The world tremors as the celestials are reborn anew!",
     },{
-        bosses: ["julius", "ghengis", "napoleon"],
+        bosses: ["julius", "genghis", "napoleon"],
         amount: [1], chance: 0.1,
         message: "The darkness arrives as the realms are torn apart!",
     }],

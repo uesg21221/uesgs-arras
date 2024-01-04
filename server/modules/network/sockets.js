@@ -253,7 +253,7 @@ function incoming(message, socket) {
             break;
         case "C":
             // command packet
-            if (m.length !== 3) {
+            if (m.length !== 4) {
                 socket.kick("Ill-sized command packet.");
                 return 1;
             }
@@ -262,7 +262,8 @@ function incoming(message, socket) {
                     x: m[0],
                     y: m[1],
                 },
-                commands = m[2];
+                reverseTank = m[2],
+                commands = m[3];
             // Verify data
             if (
                 typeof target.x !== "number" ||
@@ -291,6 +292,7 @@ function incoming(message, socket) {
             // }
             // Put the new target in
             player.target = target;
+            if (player.body) player.body.reverseTank = reverseTank;
             // Process the commands
             if (player.command != null && player.body != null) {
                 player.command.up = commands & 1;
@@ -964,15 +966,16 @@ function flatten(data) {
             /*  2 */ data.layer,
             /*  3 */ data.index,
             /*  4 */ data.color,
-            /*  5 */ data.borderless,
-            /*  6 */ data.drawFill,
-            /*  7 */ data.size,
-            /*  8 */ data.realSize,
-            /*  9 */ data.sizeFactor,
-            /* 10 */ data.angle,
-            /* 11 */ data.direction,
-            /* 12 */ data.offset,
-            /* 13 */ data.mirrorMasterAngle,
+            /*  5 */ data.strokeWidth,
+            /*  6 */ data.borderless,
+            /*  7 */ data.drawFill,
+            /*  8 */ data.size,
+            /*  9 */ data.realSize,
+            /* 10 */ data.sizeFactor,
+            /* 11 */ data.angle,
+            /* 12 */ data.direction,
+            /* 13 */ data.offset,
+            /* 14 */ data.mirrorMasterAngle,
         );
     } else {
         output.push(

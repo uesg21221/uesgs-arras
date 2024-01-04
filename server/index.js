@@ -65,6 +65,7 @@ function collide(collision) {
         case instance.type === "wall" || other.type === "wall":
             if (instance.type === "wall" && other.type === "wall") return;
             if (instance.type === "aura" || other.type === "aura") return;
+            if (instance.type === "satellite" || other.type === "satellite") return;
             let wall = instance.type === "wall" ? instance : other;
             let entity = instance.type === "wall" ? other : instance;
             if (entity.ac || entity.master.ac) return;

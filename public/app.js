@@ -124,7 +124,6 @@ function getMockups() {
     global.mockupLoading = new Promise(Resolve => {
         util.pullJSON("mockups").then(data => {
             global.mockups = data;
-            generateTankTree(global.mockups.find((r) => r.name === "Basic").index);
             console.log('Mockups loading complete.');
             Resolve();
         });
@@ -266,12 +265,10 @@ global.player = {
     nameColor: "#ffffff",
 };
 function calculateTarget() {
-    global.target.x = global.mouse.x * global.ratio - (global.player.screenx / global.screenWidth * window.canvas.width + window.canvas.width / 2);
-    global.target.y = global.mouse.y * global.ratio - (global.player.screeny / global.screenHeight * window.canvas.height + window.canvas.height / 2);
-    if (window.canvas.reverseDirection) {
-        global.target.x *= -1;
-        global.target.y *= -1;
-    }
+    global.target.x = global.mouse.x - (global.player.screenx / global.screenWidth * window.canvas.width + window.canvas.width / 2);
+    global.target.y = global.mouse.y - (global.player.screeny / global.screenHeight * window.canvas.height + window.canvas.height / 2);
+    if (window.canvas.reverseDirection) global.reverseTank = -1;
+    else global.reverseTank = 1;
     global.target.x *= global.screenWidth / window.canvas.width;
     global.target.y *= global.screenHeight / window.canvas.height;
     if (settings.graphical.screenshotMode && Math.abs(Math.atan2(global.target.y, global.target.x) + Math.PI/2) < 0.035) global.target.x = 0; 
@@ -646,7 +643,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
     if (fill) context.fill();
     context.lineJoin = "round";
 }
-function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha, position) {
+function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha, strokeWidth, position) {
     let h = [];
     h = aspect > 0 ? [height * aspect, height] : [height, -height * aspect];
 
@@ -668,6 +665,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
         context.lineTo(newX, newY);
     }
     context.closePath();
+    context.lineWidth *= strokeWidth
     context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
     if (!borderless) context.stroke();
     context.lineWidth /= fill ? 1 : 0.5; // Maintain constant border width
@@ -683,7 +681,8 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         xx = x,
         yy = y,
         source = turretInfo === false ? instance : turretInfo,
-        blend = render.status.getBlend();
+        blend = render.status.getBlend(),
+        initStrokeWidth = lineWidthMult * Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
     source.guns.update();
     if (fade === 0 || alpha === 0) return;
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
@@ -698,43 +697,54 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     }
     context.lineCap = "round";
     context.lineJoin = "round";
-    context.lineWidth = lineWidthMult * Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
+    context.lineWidth = initStrokeWidth
+
+    let upperTurretsIndex = source.turrets.length;
     // Draw turrets beneath us
     for (let i = 0; i < source.turrets.length; i++) {
         let t = source.turrets[i];
+        context.lineWidth = initStrokeWidth * t.strokeWidth
         t.lerpedFacing == undefined
             ? (t.lerpedFacing = t.facing)
             : (t.lerpedFacing = util.lerpAngle(t.lerpedFacing, t.facing, 0.1, true));
-        if (!t.layer) {
-            let ang = t.direction + t.angle + rot,
-                len = t.offset * drawSize,
-                facing = 0;
-            if (t.mirrorMasterAngle || turretsObeyRot) {
-                facing = rot + t.angle;
-            } else {
-                facing = t.lerpedFacing;
-            }
-            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
+        
+        // Break condition
+        if (t.layer > 0) {
+            upperTurretsIndex = i;
+            break;
         }
+
+        let ang = t.direction + t.angle + rot,
+            len = t.offset * drawSize,
+            facing;
+        if (t.mirrorMasterAngle || turretsObeyRot) {
+            facing = rot + t.angle;
+        } else {
+            facing = t.lerpedFacing;
+        }
+        drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
     }
     // Draw guns below us
     let positions = source.guns.getPositions(),
         gunConfig = source.guns.getConfig();
     for (let i = 0; i < source.guns.length; i++) {
+        context.lineWidth = initStrokeWidth
         let g = gunConfig[i];
         if (!g.drawAbove) {
             let gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
                 alpha = g.alpha,
+                strokeWidth = g.strokeWidth,
                 borderless = g.borderless,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, drawSize * positions[i]);
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, strokeWidth, drawSize * positions[i]);
         }
     }
     // Draw body
     context.globalAlpha = 1;
+    context.lineWidth = initStrokeWidth * m.strokeWidth
     gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), blend));
     
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
@@ -761,32 +771,36 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {
+        context.lineWidth = initStrokeWidth
         let g = gunConfig[i];
         if (g.drawAbove) {
             let gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
                 gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
                 alpha = g.alpha,
+                strokeWidth = g.strokeWidth,
                 borderless = g.borderless,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, drawSize * positions[i]);
+            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, strokeWidth, drawSize * positions[i]);
         }
     }
     // Draw turrets above us
-    for (let i = 0; i < source.turrets.length; i++) {
+    for (let i = upperTurretsIndex; i < source.turrets.length; i++) {
         let t = source.turrets[i];
-        if (t.layer) {
-            let ang = t.direction + t.angle + rot,
-                len = t.offset * drawSize,
-                facing = 0;
-            if (t.mirrorMasterAngle || turretsObeyRot) {
-                facing = rot + t.angle;
-            } else {
-                facing = t.lerpedFacing;
-            }
-            drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
+        context.lineWidth = initStrokeWidth * t.strokeWidth
+        t.lerpedFacing == undefined
+            ? (t.lerpedFacing = t.facing)
+            : (t.lerpedFacing = util.lerpAngle(t.lerpedFacing, t.facing, 0.1, true));
+        let ang = t.direction + t.angle + rot,
+            len = t.offset * drawSize,
+            facing;
+        if (t.mirrorMasterAngle || turretsObeyRot) {
+            facing = rot + t.angle;
+        } else {
+            facing = t.lerpedFacing;
         }
+        drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
     }
     if (assignedContext == false && context != ctx && context.canvas.width > 0 && context.canvas.height > 0) {
         ctx.save();
@@ -853,7 +867,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
 }
 
 function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, colorIndex, upgradeKey) {
-    let picture = util.getEntityImageFromMockup(model, gui.color),
+    let picture = (typeof model == "object") ? model : util.getEntityImageFromMockup(model, gui.color),
         position = picture.position,
         scale = (0.6 * len) / position.axis,
         entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(angle),
@@ -1139,7 +1153,7 @@ function drawEntities(px, py, ratio) {
         }
         instance.render.x = util.lerp(instance.render.x, Math.round(instance.x + instance.vx), 0.1, true);
         instance.render.y = util.lerp(instance.render.y, Math.round(instance.y + instance.vy), 0.1, true);
-        instance.render.f = instance.id === gui.playerid && !global.autoSpin && !instance.twiggle && !global.died ? Math.atan2(global.target.y, global.target.x) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
+        instance.render.f = instance.id === gui.playerid && !global.autoSpin && !instance.twiggle && !global.died ? Math.atan2(global.target.y * global.reverseTank, global.target.x * global.reverseTank) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
         let x = ratio * instance.render.x - px,
             y = ratio * instance.render.y - py,
             baseColor = instance.color;
@@ -1446,7 +1460,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
 
 function drawMinimapAndDebug(spacing, alcoveSize) {
     // Draw minimap and FPS monitors
-    //minimap stuff stards here
+    //minimap stuff starts here
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
@@ -1522,14 +1536,14 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
     if (!global.showDebug) y += 14 * 3;
     // Text
     if (global.showDebug) {
-        drawText("APS++", x + len, y - 50 - 5 * 14 - 2, 15, "#B6E57C", "right");
+        drawText("Open Source Arras", x + len, y - 50 - 5 * 14 - 2, 15, "#B6E57C", "right");
         drawText("Prediction: " + Math.round(GRAPHDATA) + "ms", x + len, y - 50 - 4 * 14, 10, color.guiwhite, "right");
         drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
         drawText("Update Rate: " + global.metrics.updatetime + "Hz", x + len, y - 50 - 2 * 14, 10, color.guiwhite, "right");
         drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, global.metrics.rendertime > 10 ? color.guiwhite : color.orange, "right");
         drawText(global.metrics.latency + " ms - " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
     } else {
-        drawText("APS++", x + len, y - 50 - 2 * 14 - 2, 15, "#B6E57C", "right");
+        drawText("Open Source Arras", x + len, y - 50 - 2 * 14 - 2, 15, "#B6E57C", "right");
         drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, global.metrics.rendertime > 10 ? color.guiwhite : color.orange, "right");
         drawText(global.metrics.latency + " ms : " + global.metrics.updatetime + "Hz", x + len, y - 50, 10, color.guiwhite, "right");
     }
@@ -1634,6 +1648,35 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
         drawText(msg, buttonX, buttonY + h / 2, h - 2, color.guiwhite, "center", true);
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
+
+        // Upgrade tooltip
+        let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
+        if (upgradeHoverIndex > -1) {
+            let picture = gui.upgrades[upgradeHoverIndex][2];
+            if (picture.upgradeTooltip.length > 0) {
+                let boxWidth = measureText(picture.name, alcoveSize / 10),
+                    boxX = global.mouse.x * global.screenWidth / window.canvas.width + 2,
+                    boxY = global.mouse.y * global.screenHeight / window.canvas.height + 2,
+                    boxPadding = 6,
+                    splitTooltip = picture.upgradeTooltip.split("\n"),
+                    textY = boxY + boxPadding + alcoveSize / 10;
+                
+                // Tooltip box width
+                for (let line of splitTooltip) boxWidth = Math.max(boxWidth, measureText(line, alcoveSize / 15));
+
+                // Draw tooltip box
+                gameDraw.setColor(ctx, color.dgrey);
+                ctx.lineWidth /= 1.5;
+                drawGuiRect(boxX, boxY, boxWidth + boxPadding * 3, alcoveSize * (splitTooltip.length + 1) / 10 + boxPadding * 3, false);
+                drawGuiRect(boxX, boxY, boxWidth + boxPadding * 3, alcoveSize * (splitTooltip.length + 1) / 10 + boxPadding * 3, true);
+                ctx.lineWidth *= 1.5;
+                drawText(picture.name, boxX + boxPadding * 1.5, textY, alcoveSize / 10, color.guiwhite);
+                for (let t of splitTooltip) {
+                    textY += boxPadding + alcoveSize / 15
+                    drawText(t, boxX + boxPadding * 1.5, textY, alcoveSize / 15, color.guiwhite);
+                }
+            }
+        }
     } else {
         global.canUpgrade = false;
         global.clickables.upgrade.hide();
@@ -1746,7 +1789,7 @@ const gameDrawDead = () => {
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
-    drawText("That pond it seems me many multiplied of fishes. Let us amuse rather to the fishing.", x, y - 80, 8, color.guiwhite, "center");
+    drawText("If you need instructions on how to get through the hotels, check out the enclosed instruction book.", x, y - 80, 8, color.guiwhite, "center");
     drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);

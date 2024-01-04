@@ -9,7 +9,7 @@ portal = new Tile({
     init: tile => portals.push(tile),
     tick: tile => {
         for (let entity of tile.entities) {
-            if (entity.passive || entity.settings.goThruObstacle || entity.facingType === "bound") continue;
+            if (entity.passive || entity.settings.goThruObstacle || entity.facingType[0] === "bound") continue;
             let dx = entity.x - tile.loc.x,
                 dy = entity.y - tile.loc.y,
                 dist2 = dx ** 2 + dy ** 2,
@@ -53,7 +53,7 @@ portal = new Tile({
 
             //also don't forget to bring her kids along the ride
             for (let o of entities) {
-                if (o.id !== entity.id && o.master.master.id === entity.id && (o.type === "drone" || o.type === "minion")) {
+                if (o.id !== entity.id && o.master.master.id === entity.id && (o.type === "drone" || o.type === "minion" || o.type === "satellite")) {
                     o.velocity.x += entity.velocity.x;
                     o.velocity.y += entity.velocity.y;
                     o.x = entity.x;

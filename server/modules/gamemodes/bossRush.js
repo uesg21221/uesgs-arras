@@ -49,9 +49,9 @@ class BossRush {
             //eternals
             [ 99, "legionaryCrasher" /*fucking mid*/],
             [100, "kronos"],
-            [100, "ragnarok"],
+            [100, "odin"],
         ];
-        this.friendlyBossChoices = ["roguePalisade", "rogueArmada", "julius", "ghengis", "napoleon"];
+        this.friendlyBossChoices = ["roguePalisade", "rogueArmada", "julius", "genghis", "napoleon"];
         this.bigFodderChoices = ["sentryGun", "sentrySwarm", "sentryTrap", "shinySentryGun"];
         this.smallFodderChoices = ["crasher"];
         this.waves = this.generateWaves();

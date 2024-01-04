@@ -16,8 +16,8 @@ makeRelic = (type, scale = 1, gem, SIZE) => {
         MIRROR_MASTER_ANGLE: true,
         SHAPE: type.SHAPE
     };
-    exports[Math.random().toString(36)] = relicCasing;
-    exports[Math.random().toString(36)] = relicBody;
+    Class[Math.random().toString(36)] = relicCasing;
+    Class[Math.random().toString(36)] = relicBody;
     let width = 6 * scale,
         y = 8.25 + ((scale % 1) * 5),
         isEgg = type.SHAPE == 0,
@@ -135,7 +135,7 @@ makeLaby = (type, level) => {
 };
 
 // EGGS
-exports.egg = {
+Class.egg = {
     PARENT: ["food"],
     LABEL: "Egg",
     VALUE: 10,
@@ -152,7 +152,7 @@ exports.egg = {
     },
     DRAW_HEALTH: false,
 };
-exports.gem = {
+Class.gem = {
     PARENT: ["food"],
     LABEL: "Gem",
     VALUE: 2e3,
@@ -170,8 +170,9 @@ exports.gem = {
     },
     DRAW_HEALTH: true,
     INTANGIBLE: false,
+    GIVE_KILL_MESSAGE: true,
 };
-exports.jewel = {
+Class.jewel = {
     PARENT: ["food"],
     LABEL: "Jewel",
     VALUE: 1e5,
@@ -191,14 +192,14 @@ exports.jewel = {
     INTANGIBLE: false,
     GIVE_KILL_MESSAGE: true,
 };
-exports.shinyEgg = makeRare(exports.egg, 0);
-exports.legendaryEgg = makeRare(exports.egg, 1);
-exports.shadowEgg = makeRare(exports.egg, 2);
-exports.rainbowEgg = makeRare(exports.egg, 3);
-exports.transEgg = makeRare(exports.egg, 4); //ironic
+Class.shinyEgg = makeRare(Class.egg, 0);
+Class.legendaryEgg = makeRare(Class.egg, 1);
+Class.shadowEgg = makeRare(Class.egg, 2);
+Class.rainbowEgg = makeRare(Class.egg, 3);
+Class.transEgg = makeRare(Class.egg, 4); //ironic
 
 // SQUARES
-exports.square = {
+Class.square = {
     PARENT: ["food"],
     LABEL: "Square",
     VALUE: 30,
@@ -215,14 +216,14 @@ exports.square = {
     DRAW_HEALTH: true,
     INTANGIBLE: false,
 };
-exports.shinySquare = makeRare(exports.square, 0);
-exports.legendarySquare = makeRare(exports.square, 1);
-exports.shadowSquare = makeRare(exports.square, 2);
-exports.rainbowSquare = makeRare(exports.square, 3);
-exports.transSquare = makeRare(exports.square, 4);
+Class.shinySquare = makeRare(Class.square, 0);
+Class.legendarySquare = makeRare(Class.square, 1);
+Class.shadowSquare = makeRare(Class.square, 2);
+Class.rainbowSquare = makeRare(Class.square, 3);
+Class.transSquare = makeRare(Class.square, 4);
 
 // TRIANGLES
-exports.triangle = {
+Class.triangle = {
     PARENT: ["food"],
     LABEL: "Triangle",
     VALUE: 120,
@@ -239,14 +240,14 @@ exports.triangle = {
     },
     DRAW_HEALTH: true,
 };
-exports.shinyTriangle = makeRare(exports.triangle, 0);
-exports.legendaryTriangle = makeRare(exports.triangle, 1);
-exports.shadowTriangle = makeRare(exports.triangle, 2);
-exports.rainbowTriangle = makeRare(exports.triangle, 3);
-exports.transTriangle = makeRare(exports.triangle, 4);
+Class.shinyTriangle = makeRare(Class.triangle, 0);
+Class.legendaryTriangle = makeRare(Class.triangle, 1);
+Class.shadowTriangle = makeRare(Class.triangle, 2);
+Class.rainbowTriangle = makeRare(Class.triangle, 3);
+Class.transTriangle = makeRare(Class.triangle, 4);
 
 // PENTAGONS
-exports.pentagon = {
+Class.pentagon = {
     PARENT: ["food"],
     LABEL: "Pentagon",
     VALUE: 400,
@@ -263,14 +264,14 @@ exports.pentagon = {
     },
     DRAW_HEALTH: true,
 };
-exports.shinyPentagon = makeRare(exports.pentagon, 0);
-exports.legendaryPentagon = makeRare(exports.pentagon, 1);
-exports.shadowPentagon = makeRare(exports.pentagon, 2);
-exports.rainbowPentagon = makeRare(exports.pentagon, 3);
-exports.transPentagon = makeRare(exports.pentagon, 4);
+Class.shinyPentagon = makeRare(Class.pentagon, 0);
+Class.legendaryPentagon = makeRare(Class.pentagon, 1);
+Class.shadowPentagon = makeRare(Class.pentagon, 2);
+Class.rainbowPentagon = makeRare(Class.pentagon, 3);
+Class.transPentagon = makeRare(Class.pentagon, 4);
 
 // BETA PENTAGONS
-exports.betaPentagon = {
+Class.betaPentagon = {
     PARENT: ["food"],
     LABEL: "Beta Pentagon",
     VALUE: 2500,
@@ -290,14 +291,14 @@ exports.betaPentagon = {
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
-exports.shinyBetaPentagon = makeRare(exports.betaPentagon, 0);
-exports.legendaryBetaPentagon = makeRare(exports.betaPentagon, 1);
-exports.shadowBetaPentagon = makeRare(exports.betaPentagon, 2);
-exports.rainbowBetaPentagon = makeRare(exports.betaPentagon, 3);
-exports.transBetaPentagon = makeRare(exports.betaPentagon, 4);
+Class.shinyBetaPentagon = makeRare(Class.betaPentagon, 0);
+Class.legendaryBetaPentagon = makeRare(Class.betaPentagon, 1);
+Class.shadowBetaPentagon = makeRare(Class.betaPentagon, 2);
+Class.rainbowBetaPentagon = makeRare(Class.betaPentagon, 3);
+Class.transBetaPentagon = makeRare(Class.betaPentagon, 4);
 
 // ALPHA PENTAGONS
-exports.alphaPentagon = {
+Class.alphaPentagon = {
     PARENT: ["food"],
     LABEL: "Alpha Pentagon",
     VALUE: 15e3,
@@ -317,14 +318,14 @@ exports.alphaPentagon = {
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
-exports.shinyAlphaPentagon = makeRare(exports.alphaPentagon, 0);
-exports.legendaryAlphaPentagon = makeRare(exports.alphaPentagon, 1);
-exports.shadowAlphaPentagon = makeRare(exports.alphaPentagon, 2);
-exports.rainbowAlphaPentagon = makeRare(exports.alphaPentagon, 3);
-exports.transAlphaPentagon = makeRare(exports.alphaPentagon, 4);
+Class.shinyAlphaPentagon = makeRare(Class.alphaPentagon, 0);
+Class.legendaryAlphaPentagon = makeRare(Class.alphaPentagon, 1);
+Class.shadowAlphaPentagon = makeRare(Class.alphaPentagon, 2);
+Class.rainbowAlphaPentagon = makeRare(Class.alphaPentagon, 3);
+Class.transAlphaPentagon = makeRare(Class.alphaPentagon, 4);
 
 // HEXAGONS
-exports.hexagon = {
+Class.hexagon = {
     PARENT: ["food"],
     LABEL: "Hexagon",
     VALUE: 500,
@@ -341,14 +342,14 @@ exports.hexagon = {
     },
     DRAW_HEALTH: true,
 };
-exports.shinyHexagon = makeRare(exports.hexagon, 0);
-exports.legendaryHexagon = makeRare(exports.hexagon, 1);
-exports.shadowHexagon = makeRare(exports.hexagon, 2);
-exports.rainbowHexagon = makeRare(exports.hexagon, 3);
-exports.transHexagon = makeRare(exports.hexagon, 4);
+Class.shinyHexagon = makeRare(Class.hexagon, 0);
+Class.legendaryHexagon = makeRare(Class.hexagon, 1);
+Class.shadowHexagon = makeRare(Class.hexagon, 2);
+Class.rainbowHexagon = makeRare(Class.hexagon, 3);
+Class.transHexagon = makeRare(Class.hexagon, 4);
 
 // 3D POLYGONS
-exports.sphere = {
+Class.sphere = {
     PARENT: ["food"],
     LABEL: "The Sphere",
     FACING_TYPE: "noFacing",
@@ -361,8 +362,9 @@ exports.sphere = {
     },
     BODY: {
         DAMAGE: 10,
-        DENSITY: 15,
+        DENSITY: 16,
         HEALTH: 300,
+        RESIST: 2.5,
         PENETRATION: 15,
         ACCELERATION: 0.002
     },
@@ -388,7 +390,7 @@ exports.sphere = {
         TYPE: ["egg", { COLOR: { BASE: "white", BRIGHTNESS_SHIFT: 9 }, BORDERLESS: true }]
     }]
 };
-exports.cube = {
+Class.cube = {
     PARENT: ["food"],
     LABEL: "The Cube",
     VALUE: 2e7,
@@ -398,7 +400,8 @@ exports.cube = {
     BODY: {
         DAMAGE: 12,
         DENSITY: 20,
-        HEALTH: 500,
+        HEALTH: 400,
+        RESIST: 3,
         PENETRATION: 17.5,
         ACCELERATION: 0.002
     },
@@ -406,7 +409,7 @@ exports.cube = {
     INTANGIBLE: false,
     GIVE_KILL_MESSAGE: true,
 };
-exports.tetrahedron = {
+Class.tetrahedron = {
     PARENT: ["food"],
     LABEL: "The Tetrahedron",
     VALUE: 3e7,
@@ -416,14 +419,15 @@ exports.tetrahedron = {
     BODY: {
         DAMAGE: 15,
         DENSITY: 23,
-        HEALTH: 666,
+        HEALTH: 500,
+        RESIST: 3.5,
         PENETRATION: 22.5,
         ACCELERATION: 0.002
     },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true
 };
-exports.octahedron = {
+Class.octahedron = {
     PARENT: ["food"],
     LABEL: "The Octahedron",
     VALUE: 4e7,
@@ -433,14 +437,15 @@ exports.octahedron = {
     BODY: {
         DAMAGE: 18,
         DENSITY: 26,
-        HEALTH: 866,
+        HEALTH: 600,
+        RESIST: 4,
         PENETRATION: 30,
         ACCELERATION: 0.002
     },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true
 };
-exports.dodecahedron = {
+Class.dodecahedron = {
     PARENT: ["food"],
     LABEL: "The Dodecahedron",
     VALUE: 5e7,
@@ -448,29 +453,29 @@ exports.dodecahedron = {
     COLOR: "white",
     SHAPE: "M -0.3273 -0.4318 H 0.3045 L 0.5068 0.1727 L -0.0091 0.5455 L -0.5227 0.1727 L -0.3273 -0.4318 Z M -0.6068 0.2682 L -0.0773 0.6545 V 0.9591 L -0.5955 0.7977 L -0.9136 0.3545 L -0.6068 0.2682 Z M 0.5909 0.2682 L 0.0523 0.6591 V 0.9636 L 0.5773 0.7955 L 0.8955 0.3545 L 0.5909 0.2682 Z M -0.65 0.1455 L -0.4477 -0.4818 L -0.6318 -0.7505 L -0.9545 -0.3182 V 0.2318 L -0.65 0.1455 Z M 0.4273 -0.4841 L 0.6318 0.1455 L 0.9341 0.2341 V -0.3136 L 0.6145 -0.7591 L 0.4273 -0.4841 Z M -0.0091 -1 L -0.5318 -0.8341 L -0.3455 -0.5609 H 0.3227 L 0.5159 -0.8314 L -0.0091 -1",
     BODY: {
-        DAMAGE: 22.5,
-        DENSITY: 30,
-        HEALTH: 1000,
-        RESIST: 10,
-        PENETRATION: 35,
+        DAMAGE: 17.5,
+        DENSITY: 28,
+        HEALTH: 700,
+        RESIST: 4.5,
+        PENETRATION: 32.5,
         ACCELERATION: 0.002
     },
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
-exports.icosahedron = {
+Class.icosahedron = {
     PARENT: ["food"],
     LABEL: "The Icosahedron",
     VALUE: 1e8,
     SIZE: 20,
     COLOR: "white",
-    SHAPE: "M -0.39 -0.245 L 0.392 -0.245 L 0 0.47 L -0.39 -0.245 Z M -0.465 -0.2 L -0.893 0.475 L -0.073 0.51 L -0.465 -0.2 Z M 0.4636 -0.2 L 0.073 0.509 L 0.891 0.4736 L 0.4636 -0.2 Z M 0 -1 L -0.39 -0.33 L 0.389 -0.328 L 0 -1 Z M -0.142 -0.925 L -0.875 -0.506 L -0.48 -0.339 L -0.142 -0.925 Z M -0.925 0.366 L -0.925 -0.431 L -0.525 -0.266 L -0.925 0.366 Z M -0.042 0.595 L -0.808 0.562 L -0.042 1 L -0.042 0.595 Z M 0.042 0.595 L 0.808 0.562 L 0.042 1 L 0.042 0.595 Z M 0.142 -0.925 L 0.858 -0.516 L 0.48 -0.339 L 0.142 -0.925 Z M 0.925 0.366 L 0.925 -0.452 L 0.523 -0.269 L 0.925 0.366 Z",
+    SHAPE: "M 0 0.65 L -0.563 -0.325 L 0.563 -0.325 Z M -0.866 0.5 L -0.108 0.653 L -0.619 -0.233 Z M 0.679 -0.332 L 0.906 0.331 L 0.892 -0.455 Z M 0.627 -0.422 L 0.166 -0.95 L 0.84 -0.545 Z M 0.866 0.5 L 0.619 -0.233 L 0.108 0.653 Z M -0.627 -0.422 L -0.166 -0.95 L -0.84 -0.545 Z M -0.679 -0.332 L -0.906 0.331 L -0.892 -0.455 Z M 0 -1 L -0.511 -0.42 L 0.511 -0.42 Z M -0.052 0.754 L -0.74 0.619 L -0.052 1 Z M 0.052 0.754 L 0.74 0.619 L 0.052 1 Z",
     BODY: {
-        DAMAGE: 17.5,
-        DENSITY: 25,
-        HEALTH: 1200,
-        RESIST: 7.5,
-        PENETRATION: 22.5,
+        DAMAGE: 22.5,
+        DENSITY: 30,
+        HEALTH: 800,
+        RESIST: 5,
+        PENETRATION: 35,
         ACCELERATION: 0.002
     },
     DRAW_HEALTH: true,
@@ -489,7 +494,7 @@ for (let [gemColor, name] of [
 ]) {
     let gem;
     if (gemColor) {
-        gem = exports[name + "Gem"] = {
+        gem = Class[name + "Gem"] = {
             PARENT: ['gem'],
             LABEL: name + ' Gem',
             SHAPE: 6,
@@ -497,16 +502,16 @@ for (let [gemColor, name] of [
         }
     }
 
-    exports[name + "EggRelic"] = makeRelic(exports.egg, 0.5, gem, 7);
-    exports[name + "SquareRelic"] = makeRelic(exports.square, 1, gem);
-    exports[name + "TriangleRelic"] = makeRelic(exports.triangle, 1.45, gem);
-    exports[name + "PentagonRelic"] = makeRelic(exports.pentagon, -0.6, gem);
-    exports[name + "BetaPentagonRelic"] = makeRelic(exports.betaPentagon, -0.6, gem);
-    exports[name + "AlphaPentagonRelic"] = makeRelic(exports.alphaPentagon, -0.6, gem);
+    Class[name + "EggRelic"] = makeRelic(Class.egg, 0.5, gem, 7);
+    Class[name + "SquareRelic"] = makeRelic(Class.square, 1, gem);
+    Class[name + "TriangleRelic"] = makeRelic(Class.triangle, 1.45, gem);
+    Class[name + "PentagonRelic"] = makeRelic(Class.pentagon, -0.6, gem);
+    Class[name + "BetaPentagonRelic"] = makeRelic(Class.betaPentagon, -0.6, gem);
+    Class[name + "AlphaPentagonRelic"] = makeRelic(Class.alphaPentagon, -0.6, gem);
 }
 
 // 4D
-exports.tesseract = {
+Class.tesseract = {
     PARENT: ["food"],
     LABEL: "The Tesseract",
     VALUE: 42e7,
@@ -530,7 +535,7 @@ for (let tier = 0; tier < 6; tier++) {
         for (let shiny of [ "", "shiny", "legendary", "shadow", "rainbow", "trans" ]) {
             let food = shiny + poly[0].toUpperCase() + poly.slice(1);
             food = food[0].toLowerCase() + food.slice(1);
-            exports[`laby${tier}${food[0].toUpperCase() + food.slice(1)}`] = makeLaby(exports[food], tier);
+            Class[`laby${tier}${food[0].toUpperCase() + food.slice(1)}`] = makeLaby(Class[food], tier);
         }
     }
 }
