@@ -130,24 +130,22 @@ function generateFrontierMaze(width, height) {
     }
 
     // Spawn the maze
+    let checkMazeForBlocks = (initX, initY, size) => {
+        for (let x = 0; x < size; x++) {
+            for (let y = 0; y < size; y++) {
+                if (!maze[initY + y] || !maze[initY + y][initX + x]) return;
+            }
+        }
+        for (let x = 0; x < size; x++) {
+            for (let y = 0; y < size; y++) {
+                maze[initY + y][initX + x] = false;
+            }
+        }
+        maze[initY][initX] = size;
+    };
     for (let x = 0; x < width - 1; x++) {
         for (let y = 0; y < height - 1; y++) {
-            if (maze[y][x] && maze[y + 1][x] && maze[y + 2][x] && maze[y][x + 1] && maze[y][x + 2] && maze[y + 1][x + 2] && maze[y + 2][x + 1] && maze[y + 1][x + 1] && maze[y + 2][x + 2]) {
-                maze[y][x] = 3;
-                maze[y + 1][x] = false;
-                maze[y][x + 1] = false;
-                maze[y + 2][x] = false;
-                maze[y][x + 2] = false;
-                maze[y + 2][x + 1] = false;
-                maze[y + 1][x + 2] = false;
-                maze[y + 1][x + 1] = false;
-                maze[y + 2][x + 2] = false;
-            } else if (maze[y][x] && maze[y + 1][x] && maze[y][x + 1] && maze[y + 1][x + 1]) {
-                maze[y][x] = 2;
-                maze[y + 1][x] = false;
-                maze[y][x + 1] = false;
-                maze[y + 1][x + 1] = false;
-            }
+            for (s = 5; s >= 2; s--) checkMazeForBlocks(x, y, s);
         }
     }
     for (let x = 0; x < width; x++) {
@@ -155,27 +153,33 @@ function generateFrontierMaze(width, height) {
             let spawnWall = true;
             let d = {};
             let scale = room.height / height;
-            let loc = {x, y}
-            if (maze[y][x] === 3) d = {
+            if (maze[y][x] === 5) d = {
+                x: (x * scale) + (scale * 2.5),
+                y: (y * scale) + (scale * 2.5),
+                s: scale * 5,
+            };
+            else if (maze[y][x] === 4) d = {
+                x: (x * scale) + (scale * 2),
+                y: (y * scale) + (scale * 2),
+                s: scale * 4,
+            };
+            else if (maze[y][x] === 3) d = {
                 x: (x * scale) + (scale * 1.5),
                 y: (y * scale) + (scale * 1.5),
                 s: scale * 3,
-                sS: 5
             };
             else if (maze[y][x] === 2) d = {
                 x: (x * scale) + scale,
                 y: (y * scale) + scale,
                 s: scale * 2,
-                sS: 2.5
             };
             else if (maze[y][x]) d = {
                 x: (x * scale) + (scale * 0.5),
                 y: (y * scale) + (scale * 0.5),
                 s: scale,
-                sS: 1
             };
             else spawnWall = false;
-            if (spawnWall /*&& room.getAt(loc).data.allowMazeWallSpawn*/) {
+            if (spawnWall) {
                 let o = new Entity({
                     x: d.x + scale + UNDERGROUND_START * c.TILE_WIDTH,
                     y: d.y
@@ -189,13 +193,6 @@ function generateFrontierMaze(width, height) {
             }
         }
     }
-    let towerTop = new Entity({
-        x: c.TILE_WIDTH * 9,
-        y: c.TILE_HEIGHT * 9,
-    });
-    towerTop.define(Class.towerMedium);
-    towerTop.protect();
-    towerTop.life();
 };
 
 module.exports = { generateFrontierMaze };

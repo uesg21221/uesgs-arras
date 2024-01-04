@@ -658,7 +658,7 @@ class antiNaN {
         if (this.amNaN(this.me)) {
             this.nansInARow++;
             if (this.nansInARow > 50) {
-                console.log("NaN instance found. (Repeated)\nDebug:", [
+                console.log("NaN instance found with entity labeled " + this.me.label + " with type " + this.me.type + ". (Repeated)\nDebug:", [
                     ["x"         , isNaN(this.me.x)],
                     ["y"         , isNaN(this.me.y)],
                     ["velocity.x", isNaN(this.me.velocity.x)],
