@@ -150,35 +150,21 @@ function generateFrontierMaze(width, height) {
     }
     for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {
-            let spawnWall = true;
+            let spawnWall = false;
             let d = {};
             let scale = room.height / height;
-            if (maze[y][x] === 5) d = {
-                x: (x * scale) + (scale * 2.5),
-                y: (y * scale) + (scale * 2.5),
-                s: scale * 5,
-            };
-            else if (maze[y][x] === 4) d = {
-                x: (x * scale) + (scale * 2),
-                y: (y * scale) + (scale * 2),
-                s: scale * 4,
-            };
-            else if (maze[y][x] === 3) d = {
-                x: (x * scale) + (scale * 1.5),
-                y: (y * scale) + (scale * 1.5),
-                s: scale * 3,
-            };
-            else if (maze[y][x] === 2) d = {
-                x: (x * scale) + scale,
-                y: (y * scale) + scale,
-                s: scale * 2,
-            };
-            else if (maze[y][x]) d = {
-                x: (x * scale) + (scale * 0.5),
-                y: (y * scale) + (scale * 0.5),
-                s: scale,
-            };
-            else spawnWall = false;
+            // Convert to big walls
+            for (let size = 5; size >= 1; size--) {
+                if (maze[y][x] === size) {
+                    d = {
+                        x: (x * scale) + (scale * size / 2),
+                        y: (y * scale) + (scale * size / 2),
+                        s: scale * size,
+                    };
+                    spawnWall = true;
+                    break
+                }
+            }
             if (spawnWall) {
                 let o = new Entity({
                     x: d.x + scale + UNDERGROUND_START * c.TILE_WIDTH,

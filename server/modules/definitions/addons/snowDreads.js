@@ -391,7 +391,7 @@ function addNormal({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0,
 	if (drawTop) {
 		output.push(
 			{
-				POSITION: [length - 2, width * 0.85, aspect * 0.9, x, y, angle, delay],
+				POSITION: [length - 1.5, width * 0.85, aspect * 0.9, x, y, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 					TYPE: "bullet",
@@ -399,7 +399,7 @@ function addNormal({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0,
 					BORDERLESS: true,
 				},
 			}, {
-				POSITION: [length - 2, width * 0.5, aspect * -0.7, x, y, angle, delay],
+				POSITION: [length - 1.5, width * 0.5, aspect * -0.7, x, y, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 					TYPE: "bullet",
