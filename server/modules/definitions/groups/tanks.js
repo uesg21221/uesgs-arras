@@ -318,7 +318,7 @@ Class.surgeonPillbox = {
 }
 
 // Drones
-Class.turretedDrone = makeAuto('drone')
+Class.turretedDrone = makeAuto('drone', "Auto-Drone", {type: 'droneAutoTurret'})
 
 // Sunchips
 Class.sunchip = {
@@ -574,6 +574,25 @@ Class.autoTurret = {
             POSITION: [22, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 1.15 }, g.turret]),
+                TYPE: "bullet",
+            },
+        },
+    ],
+}
+Class.droneAutoTurret = {
+    PARENT: "genericTank",
+    LABEL: "Turret",
+    COLOR: "grey",
+    INDEPENDENT: true,
+    CONTROLLERS: ['nearestDifferentMaster'],
+    BODY: {
+        FOV: 0.8,
+    },
+    GUNS: [
+        {
+            POSITION: [22, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 1.15 }, g.turret, g.overdrive]),
                 TYPE: "bullet",
             },
         },
