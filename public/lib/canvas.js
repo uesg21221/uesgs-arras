@@ -74,7 +74,7 @@ class Canvas {
                 }
 
                 // or to talk instead
-                if (this.chatInput.hidden) {
+                if (this.chatInput.hidden && !global.gameStart) {
                     this.chatInput.hidden = false;
                     this.chatInput.focus();
                     break;

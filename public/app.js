@@ -200,7 +200,7 @@ window.onload = async () => {
     document.getElementById("startButton").onclick = () => startGame();
     document.onkeydown = (e) => {
         var key = e.which || e.keyCode;
-        if (key === global.KEY_ENTER && (global.dead || !global.gameStart)) {
+        if (key === global.KEY_ENTER && (global.dead || !global.gameLoading)) {
             startGame();
         }
     };
@@ -276,6 +276,9 @@ function calculateTarget() {
 }
 // This starts the game and sets up the websocket
 function startGame() {
+    // Set flag
+    global.gameLoading = true;
+    console.log('Started connecting.')
     // Get options
     util.submitToLocalStorage("optFancy");
     util.submitToLocalStorage("centerTank");
