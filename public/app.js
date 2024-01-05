@@ -1205,7 +1205,7 @@ function drawEntities(px, py, ratio) {
         }
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
-        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, 1, instance.render.f);
+        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1, 1, instance.render.f);
     }
 
     //dont draw healthbars and chat messages in screenshot mode
@@ -1499,7 +1499,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
 
 function drawMinimapAndDebug(spacing, alcoveSize) {
     // Draw minimap and FPS monitors
-    //minimap stuff stards here
+    //minimap stuff starts here
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
