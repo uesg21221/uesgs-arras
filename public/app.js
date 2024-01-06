@@ -75,6 +75,7 @@ let animations = window.animations = {
     connecting: new Animation(1, 0),
     disconnected: new Animation(1, 0),
     deathScreen: new Animation(1, 0),
+    error: new Animation(1, 0),
     upgradeMenu: new Animation(0, 1, 0.01),
     skillMenu: new Animation(0, 1, 0.01),
     optionsMenu: new Animation(1, 0),
@@ -1773,12 +1774,6 @@ let getDeath = () => {
 const gameDrawDead = () => {
     clearScreen(color.black, 0.25);
     let ratio = util.getScreenRatio();
-    let scaleScreenRatio = (by, unset) => {
-        global.screenWidth /= by;
-        global.screenHeight /= by;
-        ctx.scale(by, by);
-        if (!unset) ratio *= by;
-    };
     scaleScreenRatio(ratio, true);
     let shift = animations.deathScreen.get();
     ctx.translate(0, -shift * global.screenHeight);
@@ -1803,12 +1798,6 @@ const gameDrawDead = () => {
 };
 const gameDrawBeforeStart = () => {
     let ratio = util.getScreenRatio();
-    let scaleScreenRatio = (by, unset) => {
-        global.screenWidth /= by;
-        global.screenHeight /= by;
-        ctx.scale(by, by);
-        if (!unset) ratio *= by;
-    };
     scaleScreenRatio(ratio, true);
     clearScreen(color.white, 0.5);
     let shift = animations.connecting.get();
@@ -1819,17 +1808,22 @@ const gameDrawBeforeStart = () => {
 };
 const gameDrawDisconnected = () => {
     let ratio = util.getScreenRatio();
-    let scaleScreenRatio = (by, unset) => {
-        global.screenWidth /= by;
-        global.screenHeight /= by;
-        ctx.scale(by, by);
-        if (!unset) ratio *= by;
-    };
     scaleScreenRatio(ratio, true);
     clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.3), 0.25);
     let shift = animations.disconnected.get();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("Disconnected", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
+    drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
+    ctx.translate(0, shift * global.screenHeight);
+};
+const gameDrawError = () => {
+    let ratio = util.getScreenRatio();
+    scaleScreenRatio(ratio, true);
+    clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.2), 0.35);
+    let shift = animations.error.get();
+    ctx.translate(0, -shift * global.screenHeight);
+    drawText("There has been an error!", global.screenWidth / 2, global.screenHeight / 2 - 50, 50, color.red, "center");
+    drawText("Check the browser console for details.", global.screenWidth / 2, global.screenHeight / 2, 30, color.red, "center");
     drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
@@ -1860,18 +1854,24 @@ function animloop() {
         global.metrics.lag = global.time - global.player.time;
     }
     ctx.translate(0.5, 0.5);
-    if (global.gameStart) {
-        gameDrawAlive(ratio, util.getScreenRatio());
-    } else if (!global.disconnected) {
-        gameDrawBeforeStart();
+    try {
+        if (global.gameStart) {
+            gameDrawAlive(ratio, util.getScreenRatio());
+        } else if (!global.disconnected) {
+            gameDrawBeforeStart();
+        }
+        if (global.died) {
+            gameDrawDead();
+        }
+        if (global.disconnected) {
+            gameDrawDisconnected();
+        }
+        ctx.translate(-0.5, -0.5);
+    } catch (e) {
+        gameDrawError();
+        ctx.translate(-0.5, -0.5);
+        throw Error(e);
     }
-    if (global.died) {
-        gameDrawDead();
-    }
-    if (global.disconnected) {
-        gameDrawDisconnected();
-    }
-    ctx.translate(-0.5, -0.5);
 }
 
 })(util, global, settings, Canvas, color, gameDraw, socketStuff);
