@@ -1822,8 +1822,8 @@ const gameDrawError = () => {
     clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.2), 0.35);
     let shift = animations.error.get();
     ctx.translate(0, -shift * global.screenHeight);
-    drawText("There has been an error!", global.screenWidth / 2, global.screenHeight / 2 - 50, 50, color.red, "center");
-    drawText("Check the browser console for details.", global.screenWidth / 2, global.screenHeight / 2, 30, color.red, "center");
+    drawText("There has been an error!", global.screenWidth / 2, global.screenHeight / 2 - 50, 50, color.guiwhite, "center");
+    drawText("Check the browser console for details.", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
     drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
