@@ -1595,7 +1595,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         let len = alcoveSize / 2;
         let height = len;
         let x = glide * 2 * spacing - spacing;
-        let y = spacing - height - internalSpacing;
+        let y = spacing - height - 2.5 * internalSpacing;
         let xStart = x;
         let initialX = x;
         let rowWidth = 0;
@@ -1620,8 +1620,9 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
                 if (upgradeBranch != lastBranch) {
                     if (upgradeBranchLabel.length > 0) {
                         drawText(" " + upgradeBranchLabel, xStart, y + internalSpacing * 2, internalSpacing * 2.3, color.guiwhite, "left", false);
-                        y += 3 * internalSpacing;
+                        y += 1.5 * internalSpacing;
                     }
+                    y += 1.5 * internalSpacing;
                     colorIndex = 10;
                 }
                 lastBranch = upgradeBranch;
