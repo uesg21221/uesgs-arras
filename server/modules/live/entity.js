@@ -1696,6 +1696,7 @@ class Entity extends EventEmitter {
                 this.ON(this.onDef, "upgrade", { oldEntity: old })
             }
             if (c.MODE == 'ffa' || c.GROUPS) this.define({COLOR: 12});
+            if (this.colorUnboxed.base == '-1' || this.colorUnboxed.base == 'mirror') this.define({COLOR: getTeamColor(this.team)});
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
                 def = ensureIsClass(def);
