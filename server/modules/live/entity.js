@@ -660,7 +660,7 @@ class antiNaN {
         if (this.amNaN(this.me)) {
             this.nansInARow++;
             if (this.nansInARow > 50) {
-                console.log("NaN instance found. (Repeated)\nDebug:", [
+                console.log("NaN instance found with entity labeled " + this.me.label + " with type " + this.me.type + ". (Repeated)\nDebug:", [
                     ["x"         , isNaN(this.me.x)],
                     ["y"         , isNaN(this.me.y)],
                     ["velocity.x", isNaN(this.me.velocity.x)],
@@ -1050,6 +1050,7 @@ class Entity extends EventEmitter {
             this.shape = typeof set.SHAPE === "number" ? set.SHAPE : 0;
             this.shapeData = set.SHAPE;
         }
+        if (set.HEIGHT_SCALE != null) this.heightScale = set.HEIGHT_SCALE;
         this.imageInterpolation = set.IMAGE_INTERPOLATION != null ? set.IMAGE_INTERPOLATION : 'bilinear'
         if (set.COLOR != null) {
             if (typeof set.COLOR === "number" || typeof set.COLOR === 'string')
@@ -1142,6 +1143,7 @@ class Entity extends EventEmitter {
         if (set.DANGER != null) this.dangerValue = set.DANGER;
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
+        if (set.BORDER_FIRST != null) this.borderFirst = set.BORDER_FIRST;
         if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
         if (set.TEAM != null) {
             this.team = set.TEAM;
@@ -1892,6 +1894,9 @@ class Entity extends EventEmitter {
             case "autospin":
                 this.facing += (args.speed ?? 0.02) / c.runSpeed;
                 break;
+            case "auraspin":
+                this.facing += (args.speed ?? -0.04) / c.runSpeed;
+                break;
             case "turnWithSpeed":
                 this.facing += ((this.velocity.length / 90) * Math.PI) / c.runSpeed;
                 break;
@@ -2028,7 +2033,7 @@ class Entity extends EventEmitter {
                     this.y = lerp(this.y, centerPoint.y, strength);
                 }
             } else {
-                let padding = this.realSize - 50;
+                let padding = this.realSize;
                 this.accel.x -= Math.max(this.x + padding - room.width, Math.min(this.x - padding, 0)) * c.ROOM_BOUND_FORCE / c.runSpeed;
                 this.accel.y -= Math.max(this.y + padding - room.height, Math.min(this.y - padding, 0)) * c.ROOM_BOUND_FORCE / c.runSpeed;
             }

@@ -196,6 +196,7 @@ const util = {
             },
             facing: mainMockup.facing,
             shape: mainMockup.shape,
+            heightScale: 1,
             name: name.substring(1),
             upgradeTooltip: upgradeTooltip.substring(1),
             upgradeName: mainMockup.upgradeName,

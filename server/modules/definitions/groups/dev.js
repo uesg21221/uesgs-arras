@@ -92,6 +92,48 @@ Class.spectator = {
     },
     GUNS: [],
 };
+Class.fastSpectator = {
+    PARENT: ["menu"],
+    LABEL: "Fast Spectator",
+    ALPHA: 0,
+    CAN_BE_ON_LEADERBOARD: false,
+    ACCEPTS_SCORE: false,
+    DRAW_HEALTH: false,
+    HITS_OWN_TYPE: "never",
+    ARENA_CLOSER: true,
+    SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    BODY: {
+        SPEED: 25,
+        ACCELERATION: base.ACCEL * 3,
+        FOV: 5,
+        DAMAGE: 0,
+        HEALTH: 1e100,
+        SHIELD: 1e100,
+        REGEN: 1e100,
+    },
+    GUNS: [],
+};
+Class.superFastSpectator = {
+    PARENT: ["menu"],
+    LABEL: "Super Fast Spectator",
+    ALPHA: 0,
+    CAN_BE_ON_LEADERBOARD: false,
+    ACCEPTS_SCORE: false,
+    DRAW_HEALTH: false,
+    HITS_OWN_TYPE: "never",
+    ARENA_CLOSER: true,
+    SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    BODY: {
+        SPEED: 75,
+        ACCELERATION: base.ACCEL * 5,
+        FOV: 10,
+        DAMAGE: 0,
+        HEALTH: 1e100,
+        SHIELD: 1e100,
+        REGEN: 1e100,
+    },
+    GUNS: [],
+};
 
 Class.bosses = {
     PARENT: ["menu"],
@@ -1119,6 +1161,9 @@ Class.whirlwind = {
 Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
     Class.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "spectator", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"];
         Class.unavailable.UPGRADES_TIER_0 = ["healer"];
+        Class.spectator.UPGRADES_TIER_0 = ["spectator", "fastSpectator", "superFastSpectator"];
+        Class.fastSpectator.UPGRADES_TIER_0 = ["spectator", "fastSpectator", "superFastSpectator"];
+        Class.superFastSpectator.UPGRADES_TIER_0 = ["spectator", "fastSpectator", "superFastSpectator"];
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
 
