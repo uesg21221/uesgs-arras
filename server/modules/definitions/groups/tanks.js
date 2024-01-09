@@ -3398,6 +3398,7 @@ Class.triTrapper = makeMulti({
 }, 3, "Tri-Trapper")
 Class.trapGuard = makeGuard({
     PARENT: "genericTank",
+    LABEL: "Trap",
     STAT_NAMES: statnames.mixed,
     GUNS: [
         {
@@ -3408,7 +3409,7 @@ Class.trapGuard = makeGuard({
             }
         }
     ]
-}, "Trap Guard")
+})
 
 // Builder upgrades
 Class.construct = {
