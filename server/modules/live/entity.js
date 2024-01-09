@@ -412,7 +412,9 @@ class Gun {
     bulletInit(o) {
         // Define it by its natural properties
         o.color = undefined;
-        for (let type of this.bulletTypes) o.define(type);
+        for (let type of this.bulletTypes) {
+            o.define(type);
+        }
         // Pass the gun attributes
         o.define({
             BODY: this.interpret(),
@@ -420,7 +422,7 @@ class Gun {
             SIZE: (this.body.size * this.width * this.settings.size) / 2,
             LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + o.label
         });
-        o.color = o.color ?? this.body.master.color;
+        if (!o.color || o.colorUnboxed.base == '-1' || o.colorUnboxed.base == 'mirror') o.define({COLOR: this.body.master.colorUnboxed.base});
         // Keep track of it and give it the function it needs to deutil.log itself upon death
         if (this.countsOwnKids) {
             o.parent = this;
@@ -808,6 +810,17 @@ class Entity extends EventEmitter {
         this.aiSettings = {};
         this.children = [];
         this.statusEffects = [];
+        this.colorUnboxed = {
+            base: 16,
+            hueShift: 0,
+            saturationShift: 1,
+            brightnessShift: 0,
+            allowBrightnessInvert: false,
+        };
+        this.color = '16 0 1 0 false';
+        this.glow = {radius: null, color: null, alpha: 1, recursion: 1}
+        this.invisible = [0, 0];
+        this.alphaRange = [0, 1];
         // Define it
         this.SIZE = 1;
         this.sizeMultiplier = 1;
@@ -836,17 +849,6 @@ class Entity extends EventEmitter {
         this.invuln = false;
         this.alpha = 1;
         this.strokeWidth = 1;
-        this.colorUnboxed = {
-            base: 16,
-            hueShift: 0,
-            saturationShift: 1,
-            brightnessShift: 0,
-            allowBrightnessInvert: false,
-        };
-        this.color = '16 0 1 0 false';
-        this.glow = {radius: null, color: null, alpha: 1, recursion: 1}
-        this.invisible = [0, 0];
-        this.alphaRange = [0, 1];
         this.levelCap = undefined;
         this.autospinBoost = 0;
         this.antiNaN = new antiNaN(this);
@@ -1052,14 +1054,13 @@ class Entity extends EventEmitter {
         if (set.COLOR != null) {
             if (typeof set.COLOR === "number" || typeof set.COLOR === 'string')
                 this.colorUnboxed.base = set.COLOR;
-            else if (typeof set.COLOR === "object")
-                this.colorUnboxed = {
-                    base: set.COLOR.BASE ?? 16,
-                    hueShift: set.COLOR.HUE_SHIFT ?? 0,
-                    saturationShift: set.COLOR.SATURATION_SHIFT ?? 1,
-                    brightnessShift: set.COLOR.BRIGHTNESS_SHIFT ?? 0,
-                    allowBrightnessInvert: set.COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
-                };
+            else if (typeof set.COLOR === "object") {
+                if (set.COLOR.BASE != null) this.colorUnboxed.base = set.COLOR.BASE;
+                if (set.COLOR.HUE_SHIFT != null) this.colorUnboxed.hueShift = set.COLOR.HUE_SHIFT;
+                if (set.COLOR.SATURATION_SHIFT != null) this.colorUnboxed.saturationShift = set.COLOR.SATURATION_SHIFT;
+                if (set.COLOR.BRIGHTNESS_SHIFT != null) this.colorUnboxed.brightnessShift = set.COLOR.BRIGHTNESS_SHIFT;
+                if (set.COLOR.ALLOW_BRIGHTNESS_INVERT != null) this.colorUnboxed.allowBrightnessInvert = set.COLOR.ALLOW_BRIGHTNESS_INVERT;
+            }
             this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
         }
         this.upgradeColor = set.UPGRADE_COLOR == null ? null : set.UPGRADE_COLOR;
@@ -1694,6 +1695,7 @@ class Entity extends EventEmitter {
                 this.define(this.defs);
                 this.ON(this.onDef, "upgrade", { oldEntity: old })
             }
+            if (c.MODE == 'ffa' || c.GROUPS) this.define({COLOR: 12});
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
                 def = ensureIsClass(def);

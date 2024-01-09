@@ -438,10 +438,6 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
             if (str === "reset") {
                 context.fillStyle = defaultFillStyle;
             } else {
-                // try your best to get a valid color out of it
-                if (!isNaN(str)) {
-                    str = parseInt(str);
-                }
                 str = gameDraw.getColor(str) ?? str;
             }
             context.fillStyle = str;
@@ -827,18 +823,9 @@ function drawHealth(x, y, instance, ratio, alpha) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
         if (health < 0.99 || shield < 0.99) {
-            let instanceColor = null;
+            let instanceColor = instance.color.split(' ')[0];
             let getColor = true;
-            if (typeof instance.color == 'string') {
-                instanceColor = instance.color.split(' ')[0];
-                if (instanceColor[0] == '#') {
-                    getColor = false;
-                } else if (!isNaN(parseInt(instanceColor))) {
-                    instanceColor = parseInt(instanceColor);
-                }
-            } else {
-                instanceColor = instance.color;
-            }
+            if (instanceColor[0] == '#') getColor = false;
             let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(instanceColor) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
             let yy = y + realSize + 15 * ratio;
             let barWidth = 3 * ratio;
@@ -880,10 +867,10 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 
     // Draw box
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor((colorIndex > 18 ? colorIndex - 19 : colorIndex).toString());
     drawGuiRect(x, y, len, height);
     ctx.globalAlpha = 0.1;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex - 9);
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor((colorIndex - 9).toString());
     drawGuiRect(x, y, len, height * 0.6);
     ctx.fillStyle = color.black;
     drawGuiRect(x, y + height * 0.6, len, height * 0.4);
@@ -1577,7 +1564,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         let scale = height / entry.position.axis,
             xx = x - 1.5 * height - scale * entry.position.middle.x * 0.707,
             yy = y + 0.5 * height + scale * entry.position.middle.x * 0.707,
-            baseColor = entry.image.color;
+            baseColor = entry.color;
         drawEntity(baseColor, xx, yy, entry.image, 1 / scale, 1, (scale * scale) / entry.image.size, 1, -Math.PI / 4, true);
         // Move down
         y += vspacing + height;
@@ -1871,7 +1858,8 @@ function animloop() {
     } catch (e) {
         gameDrawError();
         ctx.translate(-0.5, -0.5);
-        throw Error(e);
+        console.log(e);
+        throw Error('Something has gone wrong!');
     }
 }
 
