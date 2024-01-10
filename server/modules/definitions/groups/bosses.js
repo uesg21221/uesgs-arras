@@ -1741,6 +1741,7 @@ atlas.addLayer({turret: {
 // RHEA
 Class.crowbarTurret = {
     PARENT: ["genericTank"],
+    COLOR: "grey",
     LABEL: "Crowbar",
     BODY: { FOV: 2 },
     CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
@@ -1768,6 +1769,7 @@ Class.crowbarTurret = {
 };
 Class.wrenchTurret = {
     PARENT: ["genericTank"],
+    COLOR: "grey",
     LABEL: "Wrench",
     BODY: { FOV: 2 },
     CONTROLLERS: [ "canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster" ],
@@ -2258,6 +2260,7 @@ Class.taureonStar = {
 };
 Class.taureonRailgunTurret = {
     PARENT: "genericTank",
+    COLOR: "grey",
     LABEL: "Railgun Turret",
     CONTROLLERS: ["nearestDifferentMaster", "onlyAcceptInArc"],
     INDEPENDENT: true,
@@ -2275,6 +2278,7 @@ Class.taureonRailgunTurret = {
 };
 Class.taureonThruster = {
     PARENT: "genericTank",
+    COLOR: "grey",
     LABEL: "Thruster",
     CONTROLLERS: ["onlyAcceptInArc"],
     GUNS: [{
@@ -2304,7 +2308,7 @@ Class.taureonMissile = {
     },
     TURRETS: [{/** SIZE     X       Y     ANGLE    ARC */
         POSITION: [10, 0, 0, 0, 360, 1],
-        TYPE: "genericTank",
+        TYPE: ["genericTank", {COLOR: "grey"}],
     }],
     GUNS: [{/* LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
         POSITION: [6, 12, 1.4, 8, 0, 180, 0],
@@ -2512,10 +2516,12 @@ Class.zenphiaBoss = {
 
 Class.dogeiscutBody = {
     PARENT: "genericTank",
+    COLOR: "grey",
     SHAPE: [[1,0],[-0.7,0.7],[-0.35,0],[-0.7,-0.7]]
 }
 Class.dogeiscutTurret = {
     PARENT: "genericTank",
+    COLOR: "grey",
     GUNS: [ {
             POSITION: [ 50, 5, 2.5, 0, 0, 0, 0, ],
             PROPERTIES: {
@@ -2540,6 +2546,7 @@ Class.dogeiscutTurret = {
 function createDogeiscutMissileTurret(color) {
     return {
         PARENT: "genericTank",
+        COLOR: "grey",
         GUNS: [ {
                 POSITION: [ 15, 8, 2.5, 0, 0, 180, 0, ],
                 PROPERTIES: {
@@ -2585,7 +2592,7 @@ function createDogeiscutMissile(color) {
             },
             {
                 POSITION: [12, 0, 0, 0, 360, 1],
-                TYPE: ["genericTank"],
+                TYPE: ["genericTank", {COLOR: "grey"}],
             }
         ]
     }
@@ -2633,7 +2640,7 @@ Class.dogeiscutBomb = {
         TURRETS: [
             {
                 POSITION: [8, 0, 0, 0, 360, 1],
-                TYPE: ["genericTank"],
+                TYPE: ["genericTank", {COLOR: "grey"}],
             }
         ]
     }
@@ -2817,7 +2824,7 @@ Class.trplnrBossAuraBullet = {
     COLOR: '#F49EFF',
     GLOW: {
         STRENGTH: 25,
-        COLOR: -1,
+        COLOR: '-1 0 1 0 false',
         ALPHA: 1
     },
     DRAW_HEALTH: true,
@@ -2854,7 +2861,7 @@ const trplnrBossDecor = {
     DANGER: 10,
     GLOW: {
         RADIUS: 15,
-        COLOR: -1,
+        COLOR: '-1 0 1 0 false',
         ALPHA: 1,
         RECURSION: 5
     },

@@ -50,6 +50,7 @@ Class.wall = {
     LABEL: "Wall",
     SIZE: 25,
     SHAPE: 4,
+    VARIES_IN_SIZE: false,
 };
 
 // DOMINATORS
@@ -1223,6 +1224,7 @@ Class.arenaCloser = {
 
 Class.antiTankMachineGunArm = {
     PARENT: ["genericTank"],
+    COLOR: "grey",
     CONTROLLERS: ["mapTargetToGoal"],
     SKILL_CAP: Array(10).fill(255),
     SKILL: Array(10).fill(255),
@@ -1331,6 +1333,7 @@ Class.tracker3gun = {
     "mapAltToFire",
     "nearestDifferentMaster",
   ],
+  COLOR: "grey",
   GUNS: [
     {
       /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */

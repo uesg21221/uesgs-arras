@@ -54,6 +54,9 @@ return console.log('--- Dreadnoughts v2 addon [dreadv2.js] is disabled. See line
 // Set the below variable to true to enable hex dreadnought building.
 const buildHexnoughts = true;
 
+// Set the below variable to true to enable photosphere with 10 auras instead of 6.
+const useOldPhotosphere = false;
+
 // For hexnought merging
 const hexnoughtScaleFactor = 0.9;
 
@@ -1940,8 +1943,10 @@ Class.softwareOfficialV2.TURRETS.push(
 		TYPE: "megabyteTurretOfficialV2",
 	},
 )
-Class.photosphereSmallAuraOfficialV2 = addAura(1, 1.85, 0.15);
-Class.photosphereBigAuraOfficialV2 = addAura(1.5, 4);
+if (useOldPhotosphere) {
+	Class.photosphereSmallAuraOfficialV2 = addAura(1, 1.85, 0.15);
+	Class.photosphereBigAuraOfficialV2 = addAura(1.5, 4);
+}
 Class.photosphereOfficialV2 = {
 	PARENT: ["genericPentanought"],
 	LABEL: "Photosphere",
@@ -1952,19 +1957,36 @@ Class.photosphereOfficialV2 = {
 		},
 	],
 }
-for (let i = 0; i < 5; i++) {
+if (useOldPhotosphere) {
+	for (let i = 0; i < 5; i++) {
+		Class.photosphereOfficialV2.TURRETS.push(
+			{
+				POSITION: [3.5, 8.75, 0, 72*i+36, 360, 1],
+				TYPE: "photosphereSmallAuraOfficialV2",
+			},
+		)
+	}
+	for (let i = 0; i < 5; i++) {
+		Class.photosphereOfficialV2.TURRETS.push(
+			{
+				POSITION: [3, 4, 0, 72*i, 360, 1],
+				TYPE: "photosphereBigAuraOfficialV2",
+			},
+		)
+	}
+} else {
+	for (let i = 0; i < 5; i++) {
+		Class.photosphereOfficialV2.TURRETS.push(
+			{
+				POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
+				TYPE: "pentanoughtSmallAura",
+			},
+		)
+	}
 	Class.photosphereOfficialV2.TURRETS.push(
 		{
-			POSITION: [3.5, 8.75, 0, 72*i+36, 360, 1],
-			TYPE: "photosphereSmallAuraOfficialV2",
-		},
-	)
-}
-for (let i = 0; i < 5; i++) {
-	Class.photosphereOfficialV2.TURRETS.push(
-		{
-			POSITION: [3, 4, 0, 72*i, 360, 1],
-			TYPE: "photosphereBigAuraOfficialV2",
+			POSITION: [9, 0, 0, 0, 360, 1],
+			TYPE: "pentanoughtBigAura",
 		},
 	)
 }
