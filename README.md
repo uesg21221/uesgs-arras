@@ -36,6 +36,7 @@ After doing that, your server should be ready!
   - [WIP update to this tool](https://github.com/DogeisCut/Arras.io-Entity-Designer-v2)
 - [Create a custom theme](https://codepen.io/road-to-100k/full/GRpvMzb)
 - [Random Tank Generator](https://perchance.org/chomp-arras-gen)
+- [Addon list](https://github.com/Taureon/aps-plus-plus-addons)
 
 ## Other Links
 - [Our Discord server](https://discord.gg/kvCAZfUCjy)
