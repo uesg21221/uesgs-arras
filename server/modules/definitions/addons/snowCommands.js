@@ -27,9 +27,13 @@ module.exports = ({ Events }) => {
             commandOpts;
         switch (commandPlaintext.length) {
             case 0:
-            case 1:
                 socket.talk('m', 'Invalid command.');
                 return;
+            case 1:
+                commandCode = commandPlaintext[0];
+                commandTarget = body;
+                commandOpts = '';
+                break;
             case 2:
                 commandCode = commandPlaintext[0];
                 commandTarget = body;
@@ -43,11 +47,12 @@ module.exports = ({ Events }) => {
                     return;
                 }
                 commandTarget = commandTarget[0];
-                commandOpts = commandPlaintext[2];
+                commandOpts = commandPlaintext.subarray(2).join(' ');
                 break;
         }
+        commandCode = commandCode.toLowerCase();
 
-        let parseToNum = (s) => {
+        const parseToNum = (s) => {
             let num;
             try {
                 num = JSON.parse(s);
@@ -58,9 +63,34 @@ module.exports = ({ Events }) => {
             return num;
         }
 
+        const validatePerms = (minimumOp) => {
+            if (!perms || perms.operator < minimumOp) {
+                socket.talk('m', 'You cannot execute this command.');
+                return false;
+            }
+            return true;
+        }
+
+        const validateLength = (length) => {
+            if (commandPlaintext.length < length) {
+                socket.talk('m', 'Invalid command.');
+                return false;
+            }
+            return true;
+        }
+
         // Process command
         switch (commandCode) {
+            case 'id':
+            case 'getid':
+                if (!validatePerms(1)) return;
+
+                socket.talk('m', 'ID: ' + commandTarget.id);
+                break;
             case 'score':
+                if (!validatePerms(1)) return;
+                if (!validateLength(2)) return;
+
                 let setScore = parseToNum(commandOpts)
                 if (setScore === 'invalid') {
                     socket.talk('m', 'Invalid score.');
@@ -69,6 +99,19 @@ module.exports = ({ Events }) => {
                 commandTarget.skill.reset();
                 commandTarget.skill.score = setScore;
                 commandTarget.refreshBodyAttributes();
+                break;
+            case 'define':
+                if (!validatePerms(2)) return;
+                if (!validateLength(2)) return;
+
+                let type = commandOpts;
+                if (type in Class) {
+                    commandTarget.define({ RESET_UPGRADES: true, BATCH_UPGRADES: false });
+                    commandTarget.define(type);
+                } else {
+                    socket.talk('m', 'Invalid class.');
+                    return;
+                }
                 break;
         }
         

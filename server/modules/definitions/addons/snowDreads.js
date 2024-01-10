@@ -62,6 +62,9 @@ const hexnoughtBody = {
 // Set the below variable to true to enable hex dreadnought building (WARNING: increases load time by approximately 10x)
 const buildHexnoughts = true;
 
+// Set the below variable to true to enable photosphere with 10 auras instead of 6
+const useOldPhotosphere = false;
+
 // For hexnought merging
 const hexnoughtScaleFactor = 0.9;
 
@@ -2417,7 +2420,7 @@ Class.automationSnowdread = {
 for (let i = 0; i < 4; i++) {
 	Class.automationSnowdread.TURRETS.push(
 		{
-			POSITION: [4, 9, 0, 90*i+45, 180, 1],
+			POSITION: [4, 9, 0, 90*i+45, 200, 1],
 			TYPE: "spamAutoTurret",
 		},
 	)
@@ -3428,10 +3431,10 @@ Class.mechanismSnowdread = {
 for (let i = 0; i < 3; i++) {
 	Class.mechanismSnowdread.TURRETS.push(
 		{
-			POSITION: [3.5, 6, 0, 120*i, 180, 1],
+			POSITION: [3.5, 6, 0, 120*i, 200, 1],
 			TYPE: "spamAutoTurret",
 		}, {
-			POSITION: [3.5, 10, 0, 120*i+60, 180, 1],
+			POSITION: [3.5, 10, 0, 120*i+60, 200, 1],
 			TYPE: "spamAutoTurret",
 		},
 	)
@@ -4431,8 +4434,8 @@ Class.diplomatSnowdread = {
 }
 for (let i = 0; i < 5; i++) {
 	Class.diplomatSnowdread.GUNS.push(
-		...addNormal({length: 13, width: 7, y: 3.25, angle: 72*i, delay: 0.5}, 10, [g.basic, g.spam, g.spam, {size: 0.85}]),
-		...addNormal({length: 13, width: 7, y: -3.25, angle: 72*i, delay: 0.5}, 10, [g.basic, g.spam, g.spam, {size: 0.85}]),
+		...addNormal({length: 13, width: 7, y: 3.15, angle: 72*i, delay: 0.5}, 10, [g.basic, g.spam, g.spam, {size: 0.85}]),
+		...addNormal({length: 13, width: 7, y: -3.15, angle: 72*i, delay: 0.5}, 10, [g.basic, g.spam, g.spam, {size: 0.85}]),
 		...addNormal({length: 15, width: 7, angle: 72*i}, 10, [g.basic, g.spam, g.spam, {size: 0.85}]),
 	)
 }
@@ -4556,7 +4559,7 @@ Class.retardantSnowdread = {
 }
 for (let i = 0; i < 5; i++) {
 	Class.retardantSnowdread.GUNS.push(
-		...addHeavy({length: 17, width: 12, angle: 72*i}, 0, [g.basic, g.pounder, g.destroyer, g.annihilator, {reload: 0.9, health: 1.5}])
+		...addHeavy({length: 17, width: 11, angle: 72*i}, 0, [g.basic, g.pounder, g.destroyer, g.annihilator, {reload: 0.9, health: 1.5}])
 	)
 }
 Class.tyrantSnowdread = {
@@ -4825,8 +4828,8 @@ Class.cerberusSnowdread = {
 }
 for (let i = 0; i < 5; i++) {
 	Class.cerberusSnowdread.GUNS.push(
-		...addTrap({length: 13, length2: 1.5, width: 4, y: 2.5, angle: 72*i+10, delay: 0.5}, 0, [g.trap, g.pounder, {speed: 1.2, reload: 1.09}]),
-		...addTrap({length: 13, length2: 1.5, width: 4, y: -2.5, angle: 72*i-10, delay: 0.5}, 0, [g.trap, g.pounder, {speed: 1.2, reload: 1.09}]),
+		...addTrap({length: 13, length2: 1.5, width: 4, y: 2.2, angle: 72*i+10, delay: 0.5}, 0, [g.trap, g.pounder, {speed: 1.2, reload: 1.09}]),
+		...addTrap({length: 13, length2: 1.5, width: 4, y: -2.2, angle: 72*i-10, delay: 0.5}, 0, [g.trap, g.pounder, {speed: 1.2, reload: 1.09}]),
 		...addTrap({length: 15, length2: 2, width: 5.5, aspect: 1.7, angle: 72*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.2, reload: 1.09}], true),
 	)
 }
@@ -4894,7 +4897,7 @@ Class.skynetSnowdread = {
 for (let i = 0; i < 5; i++) {
 	Class.skynetSnowdread.TURRETS.push(
 		{
-			POSITION: [3.25, 4.5, 0, 72*i, 180, 1],
+			POSITION: [3.25, 4.5, 0, 72*i, 200, 1],
 			TYPE: "spamAutoTurret",
 		},
 	)
@@ -4902,7 +4905,7 @@ for (let i = 0; i < 5; i++) {
 for (let i = 0; i < 5; i++) {
 	Class.skynetSnowdread.TURRETS.push(
 		{
-			POSITION: [3.25, 8, 0, 72*i+36, 180, 1],
+			POSITION: [3.25, 8, 0, 72*i+36, 200, 1],
 			TYPE: "spamAutoTurret",
 		},
 	)
@@ -5202,8 +5205,10 @@ Class.monsoonSnowdread = { // Drones
 		},
 	],
 }
-Class.photosphereSmallAuraSnowdread = addAura(1, 1.85, 0.1, 0, "Small");
-Class.photosphereBigAuraSnowdread = addAura(1.5, 4, 0.15);
+if (useOldPhotosphere) {
+	Class.photosphereSmallAuraSnowdread = addAura(1, 1.85, 0.1, 0, "Small");
+	Class.photosphereBigAuraSnowdread = addAura(1.5, 4, 0.15);
+}
 Class.photosphereSnowdread = {
 	PARENT: ["genericPentanought"],
 	LABEL: "Photosphere",
@@ -5218,19 +5223,29 @@ Class.photosphereSnowdread = {
 		},
 	],
 }
-for (let i = 0; i < 5; i++) {
+if (useOldPhotosphere) {
+	for (let i = 0; i < 5; i++) {
+		Class.photosphereSnowdread.TURRETS.push(
+			{
+				POSITION: [3.5, 8.75, 0, 72*i+36, 360, 1],
+				TYPE: "photosphereSmallAuraSnowdread",
+			},
+		)
+	}
+	for (let i = 0; i < 5; i++) {
+		Class.photosphereSnowdread.TURRETS.push(
+			{
+				POSITION: [3, 4, 0, 72*i, 360, 1],
+				TYPE: "photosphereBigAuraSnowdread",
+			},
+		)
+	}
+} else {
 	Class.photosphereSnowdread.TURRETS.push(
+		...addPentanoughtAuraRing(),
 		{
-			POSITION: [3.5, 8.75, 0, 72*i+36, 360, 1],
-			TYPE: "photosphereSmallAuraSnowdread",
-		},
-	)
-}
-for (let i = 0; i < 5; i++) {
-	Class.photosphereSnowdread.TURRETS.push(
-		{
-			POSITION: [3, 4, 0, 72*i, 360, 1],
-			TYPE: "photosphereBigAuraSnowdread",
+			POSITION: [9, 0, 0, 0, 360, 1],
+			TYPE: "pentanoughtBigAura",
 		},
 	)
 }
