@@ -32,7 +32,6 @@ After doing that, your server should be ready!
 
 ## Useful Tools
 - [Create a custom shape](https://arras.io/ext/custom-shape)
-- [Create a custom tank](https://dogeiscut.github.io/arras-tank-builder) (by DogeisCut)
 - [Create a custom theme](https://codepen.io/road-to-100k/full/GRpvMzb)
 - [Random Tank Generator](https://perchance.org/chomp-arras-gen)
 - [Addon list](https://github.com/Taureon/aps-plus-plus-addons)
