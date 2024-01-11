@@ -32,7 +32,7 @@ After doing that, your server should be ready!
 
 ## Useful Tools
 - [Create a custom shape](https://arras.io/ext/custom-shape)
-- [Create a custom tank](https://zyrafak.com/arras-tank-builder) (by DogeisCut & Zyrafak)
+- [Create a custom tank](https://zyrafak.com/arras-tank-builder) (by DogeisCut & Zyrafaq)
   - [WIP update to this tool](https://github.com/DogeisCut/Arras.io-Entity-Designer-v2) (by DogeisCut)
 - [Create a custom theme](https://codepen.io/road-to-100k/full/GRpvMzb)
 - [Random Tank Generator](https://perchance.org/chomp-arras-gen)
