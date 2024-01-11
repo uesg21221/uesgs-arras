@@ -94,7 +94,7 @@ class BossRush {
         let o = new Entity(tile.loc);
         o.define(type);
         o.team = team;
-        o.color = getTeamColor(team);
+        o.define({COLOR: getTeamColor(team)});
         o.skill.score = 111069;
         o.name = 'Sanctuary';
         o.SIZE = room.tileWidth / 10;

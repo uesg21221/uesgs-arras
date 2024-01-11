@@ -9,14 +9,14 @@ spawn = (tile, team, color, type = false) => {
     let o = new Entity(tile.loc);
     o.define(type);
     o.team = team;
-    o.color = color;
+    o.define({COLOR: color});
     o.skill.score = 111069;
     o.name = "Dominator";
     o.SIZE = room.tileWidth / 10;
     o.isDominator = true;
     o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: true })];
 
-    tile.color = o.color;
+    tile.color = color;
 
     if (!teamcounts[team]) {
         teamcounts[team] = 0;

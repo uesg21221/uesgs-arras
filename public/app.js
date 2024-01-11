@@ -75,6 +75,7 @@ let animations = window.animations = {
     connecting: new Animation(1, 0),
     disconnected: new Animation(1, 0),
     deathScreen: new Animation(1, 0),
+    error: new Animation(1, 0),
     upgradeMenu: new Animation(0, 1, 0.01),
     skillMenu: new Animation(0, 1, 0.01),
     optionsMenu: new Animation(1, 0),
@@ -200,7 +201,7 @@ window.onload = async () => {
     document.getElementById("startButton").onclick = () => startGame();
     document.onkeydown = (e) => {
         var key = e.which || e.keyCode;
-        if (key === global.KEY_ENTER && (global.dead || !global.gameStart)) {
+        if (key === global.KEY_ENTER && (global.dead || !global.gameLoading)) {
             startGame();
         }
     };
@@ -276,6 +277,9 @@ function calculateTarget() {
 }
 // This starts the game and sets up the websocket
 function startGame() {
+    // Set flag
+    global.gameLoading = true;
+    console.log('Started connecting.')
     // Get options
     util.submitToLocalStorage("optFancy");
     util.submitToLocalStorage("centerTank");
@@ -434,10 +438,6 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
             if (str === "reset") {
                 context.fillStyle = defaultFillStyle;
             } else {
-                // try your best to get a valid color out of it
-                if (!isNaN(str)) {
-                    str = parseInt(str);
-                }
                 str = gameDraw.getColor(str) ?? str;
             }
             context.fillStyle = str;
@@ -823,18 +823,9 @@ function drawHealth(x, y, instance, ratio, alpha) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
         if (health < 0.99 || shield < 0.99) {
-            let instanceColor = null;
+            let instanceColor = instance.color.split(' ')[0];
             let getColor = true;
-            if (typeof instance.color == 'string') {
-                instanceColor = instance.color.split(' ')[0];
-                if (instanceColor[0] == '#') {
-                    getColor = false;
-                } else if (!isNaN(parseInt(instanceColor))) {
-                    instanceColor = parseInt(instanceColor);
-                }
-            } else {
-                instanceColor = instance.color;
-            }
+            if (instanceColor[0] == '#') getColor = false;
             let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(instanceColor) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
             let yy = y + realSize + 15 * ratio;
             let barWidth = 3 * ratio;
@@ -876,10 +867,10 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 
     // Draw box
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor((colorIndex > 18 ? colorIndex - 19 : colorIndex).toString());
     drawGuiRect(x, y, len, height);
     ctx.globalAlpha = 0.1;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex - 9);
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor((colorIndex - 9).toString());
     drawGuiRect(x, y, len, height * 0.6);
     ctx.fillStyle = color.black;
     drawGuiRect(x, y + height * 0.6, len, height * 0.4);
@@ -1166,7 +1157,7 @@ function drawEntities(px, py, ratio) {
         }
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
-        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, 1, instance.render.f);
+        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1, 1, instance.render.f);
     }
 
     //dont draw healthbars and chat messages in screenshot mode
@@ -1460,7 +1451,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
 
 function drawMinimapAndDebug(spacing, alcoveSize) {
     // Draw minimap and FPS monitors
-    //minimap stuff stards here
+    //minimap stuff starts here
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
@@ -1573,7 +1564,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         let scale = height / entry.position.axis,
             xx = x - 1.5 * height - scale * entry.position.middle.x * 0.707,
             yy = y + 0.5 * height + scale * entry.position.middle.x * 0.707,
-            baseColor = entry.image.color;
+            baseColor = entry.color;
         drawEntity(baseColor, xx, yy, entry.image, 1 / scale, 1, (scale * scale) / entry.image.size, 1, -Math.PI / 4, true);
         // Move down
         y += vspacing + height;
@@ -1591,7 +1582,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         let len = alcoveSize / 2;
         let height = len;
         let x = glide * 2 * spacing - spacing;
-        let y = spacing - height - internalSpacing;
+        let y = spacing - height - 2.5 * internalSpacing;
         let xStart = x;
         let initialX = x;
         let rowWidth = 0;
@@ -1616,8 +1607,9 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
                 if (upgradeBranch != lastBranch) {
                     if (upgradeBranchLabel.length > 0) {
                         drawText(" " + upgradeBranchLabel, xStart, y + internalSpacing * 2, internalSpacing * 2.3, color.guiwhite, "left", false);
-                        y += 3 * internalSpacing;
+                        y += 1.5 * internalSpacing;
                     }
+                    y += 1.5 * internalSpacing;
                     colorIndex = 10;
                 }
                 lastBranch = upgradeBranch;
@@ -1770,12 +1762,6 @@ let getDeath = () => {
 const gameDrawDead = () => {
     clearScreen(color.black, 0.25);
     let ratio = util.getScreenRatio();
-    let scaleScreenRatio = (by, unset) => {
-        global.screenWidth /= by;
-        global.screenHeight /= by;
-        ctx.scale(by, by);
-        if (!unset) ratio *= by;
-    };
     scaleScreenRatio(ratio, true);
     let shift = animations.deathScreen.get();
     ctx.translate(0, -shift * global.screenHeight);
@@ -1800,12 +1786,6 @@ const gameDrawDead = () => {
 };
 const gameDrawBeforeStart = () => {
     let ratio = util.getScreenRatio();
-    let scaleScreenRatio = (by, unset) => {
-        global.screenWidth /= by;
-        global.screenHeight /= by;
-        ctx.scale(by, by);
-        if (!unset) ratio *= by;
-    };
     scaleScreenRatio(ratio, true);
     clearScreen(color.white, 0.5);
     let shift = animations.connecting.get();
@@ -1816,17 +1796,22 @@ const gameDrawBeforeStart = () => {
 };
 const gameDrawDisconnected = () => {
     let ratio = util.getScreenRatio();
-    let scaleScreenRatio = (by, unset) => {
-        global.screenWidth /= by;
-        global.screenHeight /= by;
-        ctx.scale(by, by);
-        if (!unset) ratio *= by;
-    };
     scaleScreenRatio(ratio, true);
     clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.3), 0.25);
     let shift = animations.disconnected.get();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("Disconnected", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
+    drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
+    ctx.translate(0, shift * global.screenHeight);
+};
+const gameDrawError = () => {
+    let ratio = util.getScreenRatio();
+    scaleScreenRatio(ratio, true);
+    clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.2), 0.35);
+    let shift = animations.error.get();
+    ctx.translate(0, -shift * global.screenHeight);
+    drawText("There has been an error!", global.screenWidth / 2, global.screenHeight / 2 - 50, 50, color.guiwhite, "center");
+    drawText("Check the browser console for details.", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
     drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
@@ -1857,18 +1842,25 @@ function animloop() {
         global.metrics.lag = global.time - global.player.time;
     }
     ctx.translate(0.5, 0.5);
-    if (global.gameStart) {
-        gameDrawAlive(ratio, util.getScreenRatio());
-    } else if (!global.disconnected) {
-        gameDrawBeforeStart();
+    try {
+        if (global.gameStart) {
+            gameDrawAlive(ratio, util.getScreenRatio());
+        } else if (!global.disconnected) {
+            gameDrawBeforeStart();
+        }
+        if (global.died) {
+            gameDrawDead();
+        }
+        if (global.disconnected) {
+            gameDrawDisconnected();
+        }
+        ctx.translate(-0.5, -0.5);
+    } catch (e) {
+        gameDrawError();
+        ctx.translate(-0.5, -0.5);
+        console.log(e);
+        throw Error('Something has gone wrong!');
     }
-    if (global.died) {
-        gameDrawDead();
-    }
-    if (global.disconnected) {
-        gameDrawDisconnected();
-    }
-    ctx.translate(-0.5, -0.5);
 }
 
 })(util, global, settings, Canvas, color, gameDraw, socketStuff);

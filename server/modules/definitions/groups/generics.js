@@ -1,6 +1,6 @@
 const { base, statnames, dfltskl, smshskl } = require('../constants.js');
 
-exports.genericEntity = {
+Class.genericEntity = {
     NAME: "",
     LABEL: "Unknown Entity",
     TYPE: "unknown",
@@ -84,14 +84,21 @@ exports.genericEntity = {
         LEVEL: -1
     }
 }
-exports.genericTank = {
+Class.genericTank = {
     LABEL: "Unknown Class",
     TYPE: "tank",
     DAMAGE_CLASS: 2,
     DANGER: 5,
+    COLOR: {
+        BASE: "mirror",
+        HUE_SHIFT: 0,
+        SATURATION_SHIFT: 1,
+        BRIGHTNESS_SHIFT: 0,
+        ALLOW_BRIGHTNESS_INVERT: true,
+    },
     MOTION_TYPE: "motor",
     FACING_TYPE: "toTarget",
-    SIZE: 11,
+    SIZE: 12,
     MAX_CHILDREN: 0,
     DAMAGE_EFFECTS: false,
     IGNORED_BY_AI: false,
@@ -116,7 +123,7 @@ exports.genericTank = {
     DRAW_HEALTH: true,
     HITS_OWN_TYPE: "hardOnlyTanks"
 }
-exports.genericSmasher = {
+Class.genericSmasher = {
     PARENT: "genericTank",
     DANGER: 7,
     IS_SMASHER: true,
@@ -128,7 +135,7 @@ exports.genericSmasher = {
     }
 }
 
-exports.food = {
+Class.food = {
     TYPE: "food",
     DAMAGE_CLASS: 1,
     CONTROLLERS: ["moveInCircles"],
@@ -145,7 +152,7 @@ exports.food = {
     HEALTH_WITH_LEVEL: false,
 };
 
-exports.bullet = {
+Class.bullet = {
     LABEL: "Bullet",
     TYPE: "bullet",
     ACCEPTS_SCORE: false,
@@ -158,35 +165,36 @@ exports.bullet = {
         DAMAGE: 6,
         PUSHABILITY: 0.3,
     },
+    COLOR: 'mirror',
     FACING_TYPE: "smoothWithMotion",
     CAN_GO_OUTSIDE_ROOM: true,
     HITS_OWN_TYPE: "never",
     DIE_AT_RANGE: true,
 };
-exports.speedBullet = {
+Class.speedBullet = {
     PARENT: ["bullet"],
     MOTION_TYPE: "accel",
 };
-exports.growBullet = {
+Class.growBullet = {
     PARENT: ["bullet"],
     MOTION_TYPE: "grow",
 };
-exports.flare = {
+Class.flare = {
     PARENT: ["growBullet"],
     LABEL: "Flare",
     SHAPE: 4,
 };
-exports.developerBullet = {
+Class.developerBullet = {
     PARENT: ["bullet"],
     SHAPE: [[-1, -1], [1, -1], [2, 0], [1, 1], [-1, 1]],
 };
-exports.casing = {
+Class.casing = {
     PARENT: ["bullet"],
     LABEL: "Shell",
     TYPE: "swarm",
 };
 
-exports.drone = {
+Class.drone = {
     LABEL: "Drone",
     TYPE: "drone",
     ACCEPTS_SCORE: false,
@@ -204,6 +212,7 @@ exports.drone = {
     AI: {
         BLIND: true,
     },
+    COLOR: 'mirror',
     BODY: {
         PENETRATION: 1.2,
         PUSHABILITY: 0.6,
@@ -222,7 +231,7 @@ exports.drone = {
     BUFF_VS_FOOD: true,
 };
 
-exports.trap = {
+Class.trap = {
     LABEL: "Thrown Trap",
     TYPE: "trap",
     ACCEPTS_SCORE: false,
@@ -239,9 +248,10 @@ exports.trap = {
         RESIST: 2.5,
         SPEED: 0,
     },
+    COLOR: 'mirror',
 };
 
-exports.satellite = { 
+Class.satellite = { 
     LABEL: "Satellite",
     TYPE: "satellite",
     ACCEPTS_SCORE: false,
@@ -262,31 +272,32 @@ exports.satellite = {
         RESIST: 1.5,
         FOV: 0.5,
     },
+    COLOR: 'mirror',
     DRAW_HEALTH: false,
     CLEAR_ON_MASTER_UPGRADE: true,
     BUFF_VS_FOOD: true,
     MOTION_TYPE: 'motor'
 }
 
-exports.mendersymbol = {
+Class.mendersymbol = {
     PARENT: ["genericTank"],
     COLOR: "grey",
     LABEL: "",
     SHAPE: 3,
 };
-exports.healerBullet = {
+Class.healerBullet = {
     PARENT: ["bullet"],
     HEALER: true,
     HITS_OWN_TYPE: "normal",
 };
-exports.healerSymbol = {
+Class.healerSymbol = {
     PARENT: ["genericEntity"],
     SHAPE: [[0.3, -0.3],[1,-0.3],[1,0.3],[0.3,0.3],[0.3,1],[-0.3,1],[-0.3,0.3],[-1,0.3],[-1,-0.3],[-0.3,-0.3],[-0.3,-1],[0.3,-1]],
     SIZE: 13,
     COLOR: "red",
 };
 
-exports.auraBase = {
+Class.auraBase = {
     TYPE: "aura",
     ACCEPTS_SCORE: false,
     FACING_TYPE: "smoothWithMotion",
@@ -308,7 +319,7 @@ exports.auraBase = {
         PUSHABILITY: 0,
     }
 };
-exports.aura = {
+Class.aura = {
     PARENT: ["auraBase"],
     LABEL: "Aura",
     COLOR: "teal",
@@ -316,7 +327,7 @@ exports.aura = {
         DAMAGE: 0.5,
     },
 };
-exports.healAura = {
+Class.healAura = {
     PARENT: ["auraBase"],
     LABEL: "Heal Aura",
     HEALER: true,
@@ -325,7 +336,7 @@ exports.healAura = {
         DAMAGE: 0.1,
     },
 };
-exports.auraSymbol = {
+Class.auraSymbol = {
     PARENT: ["genericTank"],
     CONTROLLERS: [["spin", {speed: -0.04}]],
     INDEPENDENT: true,

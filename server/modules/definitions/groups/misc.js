@@ -1,16 +1,17 @@
 const { combineStats, skillSet, makeAuto, makeDeco, makeMulti } = require('../facilitators.js');
 const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js');
-const { genericTank } = require('./generics.js')
-const { trapper, healer } = require('./tanks.js');
+require('./generics.js')
+require('./tanks.js');
 const g = require('../gunvals.js');
 
 // OBSTACLES
-exports.rock = {
+Class.rock = {
     TYPE: "wall",
     DAMAGE_CLASS: 1,
     LABEL: "Rock",
     FACING_TYPE: "turnWithSpeed",
     SHAPE: -9,
+    CAN_GO_OUTSIDE_ROOM: true,
     BODY: {
         PUSHABILITY: 0,
         HEALTH: 10000,
@@ -26,40 +27,41 @@ exports.rock = {
     VARIES_IN_SIZE: true,
     ACCEPTS_SCORE: false,
 };
-exports.stone = {
+Class.stone = {
     PARENT: ["rock"],
     LABEL: "Stone",
     SIZE: 32,
     SHAPE: -7,
 };
-exports.moon = {
+Class.moon = {
     PARENT: ["rock"],
     LABEL: "Moon",
     SIZE: 60,
     SHAPE: 0,
 };
-exports.gravel = {
+Class.gravel = {
     PARENT: ["rock"],
     LABEL: "Gravel",
     SIZE: 16,
     SHAPE: -7,
 };
-exports.wall = {
+Class.wall = {
     PARENT: ["rock"],
     LABEL: "Wall",
     SIZE: 25,
     SHAPE: 4,
+    VARIES_IN_SIZE: false,
 };
 
 // DOMINATORS
-exports.dominationBody = {
+Class.dominationBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { startAngle: Math.PI / 2, speed: 0, independent: true }]],
     COLOR: "black",
     SHAPE: 6,
     INDEPENDENT: true,
 };
-exports.dominator = {
+Class.dominator = {
     PARENT: ["genericTank"],
     LABEL: "Dominator",
     UPGRADE_LABEL: 'Unknown',
@@ -98,7 +100,7 @@ exports.dominator = {
     ACCEPTS_SCORE: false,
     HITS_OWN_TYPE: "pushOnlyTeam",
 };
-exports.destroyerDominator = {
+Class.destroyerDominator = {
     PARENT: ["dominator"],
     UPGRADE_LABEL: 'Destroyer',
     GUNS: [
@@ -114,7 +116,7 @@ exports.destroyerDominator = {
         },
     ],
 };
-exports.gunnerDominator = {
+Class.gunnerDominator = {
     PARENT: ["dominator"],
     UPGRADE_LABEL: 'Gunner',
     GUNS: [
@@ -144,7 +146,7 @@ exports.gunnerDominator = {
         },
     ],
 };
-exports.trapperDominator = {
+Class.trapperDominator = {
     PARENT: ["dominator"],
     UPGRADE_LABEL: 'Trapper',
     FACING_TYPE: ["spin", {speed: 0.02}],
@@ -242,7 +244,7 @@ exports.trapperDominator = {
 };
 
 // SANCTUARIES
-exports.sanctuaryHealer = {
+Class.sanctuaryHealer = {
     PARENT: "genericTank",
     LABEL: "",
     BODY: {
@@ -258,7 +260,7 @@ exports.sanctuaryHealer = {
 let sancTiers =       [3, 6, 8, 9, 10, 12]
 let sancHealerTiers = [2, 3, 4]
 for (let tier of sancHealerTiers) {
-    exports['sanctuaryHealerTier' + (sancHealerTiers.indexOf(tier) + 1)] = {
+    Class['sanctuaryHealerTier' + (sancHealerTiers.indexOf(tier) + 1)] = {
         PARENT: "sanctuaryHealer",
         GUNS: (() => {
             let output = []
@@ -279,7 +281,7 @@ for (let tier of sancHealerTiers) {
     }
 }
 
-exports.sanctuary = {
+Class.sanctuary = {
     PARENT: "dominator",
     LABEL: "Sanctuary",
     LEVEL: 45,
@@ -304,7 +306,7 @@ exports.sanctuary = {
 
 for (let tier of sancTiers) {
     let sancIndex = sancTiers.indexOf(tier)
-    exports['sanctuaryTier' + (sancIndex + 1)] = {
+    Class['sanctuaryTier' + (sancIndex + 1)] = {
         PARENT: "sanctuary",
         TURRETS: [],
         UPGRADE_LABEL: 'Tier ' + (sancIndex + 1),
@@ -326,7 +328,7 @@ for (let tier of sancTiers) {
             return output
         })()
     }
-    exports['sanctuaryTier' + (sancIndex + 1)].TURRETS.push({
+    Class['sanctuaryTier' + (sancIndex + 1)].TURRETS.push({
         POSITION: { SIZE: 22 },
         TYPE: "dominationBody",
     }, {
@@ -336,7 +338,7 @@ for (let tier of sancTiers) {
 }
 
 // CRASHERS
-exports.crasher = {
+Class.crasher = {
     TYPE: "crasher",
     LABEL: "Crasher",
     COLOR: "pink",
@@ -363,7 +365,7 @@ exports.crasher = {
     HAS_NO_MASTER: true,
     DRAW_HEALTH: true,
 };
-exports.crasherSpawner = {
+Class.crasherSpawner = {
     PARENT: ["genericTank"],
     LABEL: "Spawned",
     STAT_NAMES: statnames.drone,
@@ -396,7 +398,7 @@ exports.crasherSpawner = {
 };
 
 // SENTRIES
-exports.sentry = {
+Class.sentry = {
     PARENT: ["genericTank"],
     TYPE: "crasher",
     LABEL: "Sentry",
@@ -437,7 +439,7 @@ exports.sentry = {
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
-exports.trapTurret = {
+Class.trapTurret = {
     PARENT: ["genericTank"],
     LABEL: "Turret",
     BODY: {
@@ -457,7 +459,7 @@ exports.trapTurret = {
         {
             POSITION: [4, 14, 1.8, 16, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.lowpower, g.fast, g.halfreload]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.lowPower, { speed: 1.2 }, { reload: 2 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -465,17 +467,17 @@ exports.trapTurret = {
     ],
 };
 
-exports.shotTrapBox = {
+Class.shotTrapBox = {
     PARENT: 'unsetTrap',
     MOTION_TYPE: "glide",
 }
 let makeshottrapTurretProps = () => ({
-    SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, {speed: 0.7, maxSpeed: 0.2, damage: 1.5}]),
+    SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, { speed: 0.7, maxSpeed: 0.2, damage: 1.5 }]),
     AUTOFIRE: true,
     TYPE: "shotTrapBox",
     STAT_CALCULATOR: gunCalcNames.block,
 });
-exports.shottrapTurret = {
+Class.shottrapTurret = {
     PARENT: ["genericTank"],
     LABEL: 'Turret',
     BODY: {
@@ -518,13 +520,13 @@ exports.shottrapTurret = {
             POSITION: [ 16, 14, -1.4,  0, 0, 0, 0 ], 
     }, {
             POSITION: [  6, 14,  1.6, 16, 0, 0, 0 ], PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.shotgun, g.mach, g.fake]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, g.fake]),
                 AUTOFIRE: true,
                 TYPE: "bullet"
             }
     } ]
 };
-exports.barricadeTurret = {
+Class.barricadeTurret = {
     PARENT: ["genericTank"],
     LABEL: "Turret",
     BODY: {
@@ -544,7 +546,7 @@ exports.barricadeTurret = {
         {
             POSITION: [4, 8, 1.3, 22, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -552,7 +554,7 @@ exports.barricadeTurret = {
         {
             POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -560,7 +562,7 @@ exports.barricadeTurret = {
         {
             POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -568,7 +570,7 @@ exports.barricadeTurret = {
     ],
 };
 
-exports.sentrySwarm = {
+Class.sentrySwarm = {
     PARENT: ["sentry"],
     UPGRADE_LABEL: "Swarm Sentry",
     UPGRADE_COLOR: "pink",
@@ -576,14 +578,14 @@ exports.sentrySwarm = {
         {
             POSITION: [7, 14, 0.6, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.morerecoil]),
+                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
 };
-exports.megaAutoTurret = {
+Class.megaAutoTurret = {
   PARENT: ["autoTurret"],
   BODY: {
     FOV: 2,
@@ -593,22 +595,22 @@ exports.megaAutoTurret = {
   GUNS: [{
     POSITION: [22, 14, 1, 0, 0, 0, 0],
     PROPERTIES: {
-      SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.auto]),
+      SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.autoTurret]),
       TYPE: "bullet"
     }
   }]
 }
-exports.sentryGun = makeAuto(exports.sentry, "Sentry", {
-    type: exports.megaAutoTurret,
+Class.sentryGun = makeAuto(Class.sentry, "Sentry", {
+    type: Class.megaAutoTurret,
     size: 12,
 });
-exports.sentryGun.UPGRADE_LABEL = "Gun Sentry";
-exports.sentryTrap = makeAuto(exports.sentry, "Sentry", {
-    type: exports.trapTurret,
+Class.sentryGun.UPGRADE_LABEL = "Gun Sentry";
+Class.sentryTrap = makeAuto(Class.sentry, "Sentry", {
+    type: Class.trapTurret,
     size: 12,
 });
-exports.sentryTrap.UPGRADE_LABEL = "Trap Sentry";
-exports.shinySentry = {
+Class.sentryTrap.UPGRADE_LABEL = "Trap Sentry";
+Class.shinySentry = {
     PARENT: ["sentry"],
     COLOR: "lightGreen",
     UPGRADE_COLOR: "lightGreen",
@@ -620,7 +622,7 @@ exports.shinySentry = {
         HEALTH: 0.6 * base.HEALTH
     },
 };
-exports.shinySentrySwarm = {
+Class.shinySentrySwarm = {
     PARENT: ["shinySentry"],
     UPGRADE_LABEL: "Shiny Swarm Sentry",
     UPGRADE_COLOR: "lightGreen",
@@ -628,14 +630,14 @@ exports.shinySentrySwarm = {
         {
             POSITION: [6, 11, 1.3, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.morerecoil, g.mach, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }, g.machineGun, { reload: 0.25 }]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
 };
-exports.artilleryAutoTankgun = {
+Class.artilleryAutoTankgun = {
     PARENT: ["genericTank"],
     LABEL: "Artillery",
     BODY: {
@@ -651,7 +653,7 @@ exports.artilleryAutoTankgun = {
     GUNS: [{
         POSITION: [17, 3, 1, 0, -6, -7, 0.25],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, { reload: 0.25 }]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, { reload: 0.25 }]),
             TYPE: "bullet",
             LABEL: "Secondary",
         },
@@ -659,7 +661,7 @@ exports.artilleryAutoTankgun = {
         {
             POSITION: [17, 3, 1, 0, 6, 7, 0.75],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, { reload: 0.25 }]),
                 TYPE: "bullet",
                 LABEL: "Secondary",
             },
@@ -667,19 +669,19 @@ exports.artilleryAutoTankgun = {
         {
             POSITION: [19, 12, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, { reload: 0.25 }]),
                 TYPE: "bullet",
                 LABEL: "Heavy",
             },
         },
     ],
 };
-exports.shinySentryGun = makeAuto(exports.shinySentry, "Sentry", {
-    type: exports.artilleryAutoTankgun,
+Class.shinySentryGun = makeAuto(Class.shinySentry, "Sentry", {
+    type: Class.artilleryAutoTankgun,
     size: 12,
 });
-exports.shinySentryGun.UPGRADE_LABEL = "Shiny Gun Sentry";
-exports.barricadeAutoTankGun = {
+Class.shinySentryGun.UPGRADE_LABEL = "Shiny Gun Sentry";
+Class.barricadeAutoTankGun = {
     PARENT: ["genericTank"],
     LABEL: "Turret",
     BODY: {
@@ -699,7 +701,7 @@ exports.barricadeAutoTankGun = {
         {
             POSITION: [4, 8, 1.3, 22, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -707,7 +709,7 @@ exports.barricadeAutoTankGun = {
         {
             POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -715,21 +717,21 @@ exports.barricadeAutoTankGun = {
         {
             POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange, { reload: 0.25 }]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
         },
     ],
 };
-exports.shinySentryTrap = makeAuto(exports.shinySentry, "Sentry", {
-    type: exports.barricadeAutoTankGun,
+Class.shinySentryTrap = makeAuto(Class.shinySentry, "Sentry", {
+    type: Class.barricadeAutoTankGun,
     size: 12,
 });
-exports.shinySentryTrap.UPGRADE_LABEL = "Shiny Trap Sentry";
+Class.shinySentryTrap.UPGRADE_LABEL = "Shiny Trap Sentry";
 
 // SENTINELS (by ranar)
-exports.sentinel = {
+Class.sentinel = {
   PARENT: ["genericTank"],
   TYPE: "crasher",
   LABEL: "Sentinel",
@@ -766,7 +768,7 @@ exports.sentinel = {
   FACING_TYPE: "smoothToTarget",
   HITS_OWN_TYPE: "hard",
 };
-exports.sentinelMissile = {
+Class.sentinelMissile = {
   PARENT: ["bullet"],
   LABEL: "Missile",
   INDEPENDENT: true,
@@ -783,8 +785,8 @@ exports.sentinelMissile = {
         AUTOFIRE: true,
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.pound,
-          g.destroy, 
+          g.pounder,
+          g.destroyer, 
         ]),
         TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
         STAT_CALCULATOR: gunCalcNames.thruster,
@@ -796,7 +798,7 @@ exports.sentinelMissile = {
         AUTOFIRE: true,
         SHOOT_SETTINGS: combineStats([
           g.basic,
-                    g.skim,
+                    g.skimmer,
         ]),
         TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
         STAT_CALCULATOR: gunCalcNames.thruster,
@@ -808,7 +810,7 @@ exports.sentinelMissile = {
         AUTOFIRE: true,
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.skim,
+          g.skimmer,
         ]),
         TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
         STAT_CALCULATOR: gunCalcNames.thruster,
@@ -816,7 +818,7 @@ exports.sentinelMissile = {
     },
   ],
 };
-exports.sentinelLauncher = {
+Class.sentinelLauncher = {
   PARENT: ["sentinel"],
   UPGRADE_LABEL: "Missile Sentinel",
   UPGRADE_COLOR: "purple",
@@ -826,8 +828,8 @@ exports.sentinelLauncher = {
             PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.gunner,
-          g.pound,
+          g.pelleter,
+          g.pounder,
           g.launcher,
         ]),
         TYPE: "sentinelMissile",
@@ -843,7 +845,7 @@ exports.sentinelLauncher = {
     },
   ],
 };
-exports.sentinelCrossbow = {
+Class.sentinelCrossbow = {
   PARENT: ["sentinel"],
   UPGRADE_LABEL: "Crossbow Sentinel",
   UPGRADE_COLOR: "purple",
@@ -855,9 +857,9 @@ exports.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
+                    { speed: 0.7, maxSpeed: 0.7 },
                     g.crossbow,
-                    g.halfrecoil,
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },
@@ -869,9 +871,9 @@ exports.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
+                    { speed: 0.7, maxSpeed: 0.7 },
                     g.crossbow,
-                    g.halfrecoil,
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },
@@ -883,9 +885,9 @@ exports.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
+                    { speed: 0.7, maxSpeed: 0.7 },
                     g.crossbow,
-                    g.halfrecoil,
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },
@@ -897,9 +899,9 @@ exports.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
+                    { speed: 0.7, maxSpeed: 0.7 },
                     g.crossbow,
-                    g.halfrecoil,
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },
@@ -911,16 +913,16 @@ exports.sentinelCrossbow = {
                     g.basic,
                     g.sniper,
                     g.rifle,
-                    g.slow,
-                    g.halfreload,
-                    g.halfrecoil,
+                    { speed: 0.7, maxSpeed: 0.7 },
+                    { reload: 2 },
+                    { recoil: 0.5 },
                 ]),
                 TYPE: "bullet",
             },
         },
     ],
 };
-exports.sentinelMinigun = {
+Class.sentinelMinigun = {
   PARENT: ["sentinel"],
   UPGRADE_LABEL: "Minigun Sentinel",
   UPGRADE_COLOR: "purple",
@@ -930,7 +932,7 @@ exports.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -941,7 +943,7 @@ exports.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -952,7 +954,7 @@ exports.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -963,7 +965,7 @@ exports.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -975,7 +977,7 @@ exports.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -986,7 +988,7 @@ exports.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -997,7 +999,7 @@ exports.sentinelMinigun = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([
           g.basic,
-          g.mini,
+          g.minigun,
           g.spam,
         ]),
         TYPE: "bullet",
@@ -1007,7 +1009,7 @@ exports.sentinelMinigun = {
 };
 
 // MISCELLANEOUS TANKS
-exports.baseSwarmTurret = {
+Class.baseSwarmTurret = {
     PARENT: ["genericTank"],
     LABEL: "Protector",
     COLOR: "grey",
@@ -1024,7 +1026,7 @@ exports.baseSwarmTurret = {
         {
             POSITION: [5, 4.5, 0.6, 7, 2, 0, 0.15],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.protectorswarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -1032,7 +1034,7 @@ exports.baseSwarmTurret = {
         {
             POSITION: [5, 4.5, 0.6, 7, -2, 0, 0.15],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.protectorswarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -1040,14 +1042,14 @@ exports.baseSwarmTurret = {
         {
             POSITION: [5, 4.5, 0.6, 7.5, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.protectorswarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
                 TYPE: ["swarm", { INDEPENDENT: true, AI: { LIKES_SHAPES: true }}],
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
 };
-exports.baseProtector = {
+Class.baseProtector = {
     PARENT: ["genericTank"],
     LABEL: "Base",
     UPGRADE_LABEL: "Base Protector",
@@ -1128,11 +1130,11 @@ exports.baseProtector = {
     ],
 };
 
-exports.mothership = {
+Class.mothership = {
     PARENT: ["genericTank"],
     LABEL: "Mothership",
     DANGER: 10,
-    SIZE: genericTank.SIZE * (7 / 3),
+    SIZE: Class.genericTank.SIZE * (7 / 3),
     SHAPE: 16,
     STAT_NAMES: statnames.drone,
     VALUE: 5e5,
@@ -1160,7 +1162,7 @@ exports.mothership = {
             let S = 22.5 * (t + 1),
                 E = {
                     MAX_CHILDREN: 2,
-                    SHOOT_SETTINGS: combineStats([g.drone, g.over, g.mothership]),
+                    SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
                     TYPE: "drone",
                     AUTOFIRE: true,
                     SYNCS_SKILLS: true,
@@ -1190,7 +1192,7 @@ exports.mothership = {
         return e;
     })(),
 };
-exports.arenaCloser = {
+Class.arenaCloser = {
     PARENT: ["genericTank"],
     LABEL: "Arena Closer",
     NAME: "Arena Closer",
@@ -1214,14 +1216,15 @@ exports.arenaCloser = {
     GUNS: [{
         POSITION: [14, 10, 1, 0, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.closer]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.arenaCloser]),
             TYPE: [ "bullet", { LAYER: 12 } ]
         }
     }]
 };
 
-exports.antiTankMachineGunArm = {
+Class.antiTankMachineGunArm = {
     PARENT: ["genericTank"],
+    COLOR: "grey",
     CONTROLLERS: ["mapTargetToGoal"],
     SKILL_CAP: Array(10).fill(255),
     SKILL: Array(10).fill(255),
@@ -1252,7 +1255,7 @@ exports.antiTankMachineGunArm = {
         },
     ],
 }
-exports.antiTankMachineGun = {
+Class.antiTankMachineGun = {
     PARENT: ["dominator"],
     LABEL: "Anti-Tank Machine Gun",
     UPGRADE_LABEL: "A.T.M.G.",
@@ -1317,7 +1320,7 @@ exports.antiTankMachineGun = {
 }
 
 // TRACKER-3
-exports.tracker3gun = {
+Class.tracker3gun = {
   PARENT: ["genericTank"],
   LABEL: "",
   COLOR: "timeGem",
@@ -1330,6 +1333,7 @@ exports.tracker3gun = {
     "mapAltToFire",
     "nearestDifferentMaster",
   ],
+  COLOR: "grey",
   GUNS: [
     {
       /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
@@ -1340,7 +1344,7 @@ exports.tracker3gun = {
     },
   ],
 };
-exports.tracker3 = {
+Class.tracker3 = {
   PARENT: ["genericTank"],
   LABEL: "Tracker-3",
   FACING_TYPE: ["spin", {speed: 0.02}],
@@ -1363,14 +1367,14 @@ exports.tracker3 = {
 };
 
 // BOTS
-exports.bot = {
+Class.bot = {
     FACING_TYPE: "looseToTarget",
     NAME: "[AI] ",
     CONTROLLERS: ["nearestDifferentMaster", "mapAltToFire", "minion", "fleeAtLowHealth", ["mapFireToAlt", { onlyIfHasAltFireGun: true }], ["wanderAroundMap", { immitatePlayerMovement: true, lookAtGoal: true }]],
 };
 
 // SCORE KEEPING
-exports.tagMode = {
+Class.tagMode = {
     PARENT: ["bullet"],
     LABEL: "Players",
 };

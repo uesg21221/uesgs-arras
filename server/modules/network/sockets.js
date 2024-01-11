@@ -185,7 +185,7 @@ function incoming(message, socket) {
                 util.remove(views, views.indexOf(socket.view));
                 socket.makeView();
             }
-            socket.party = m[1];
+            socket.party = m[4];
             socket.player = socket.spawn(name);
 
             if (autoLVLup) {
@@ -770,7 +770,7 @@ function publish(gui) {
     if (o.label != null) {
         oo[0] += 0x0002;
         oo.push(o.label);
-        oo.push(o.color || gui.master.teamColor);
+        oo.push(gui.master.teamColor);
         oo.push(gui.bodyid);
     }
     if (o.score != null) {
@@ -907,13 +907,14 @@ const spawn = (socket, name) => {
     body.socket = socket;
     switch (c.MODE) {
         case "tdm":
-            if (body.color == "16 0 1 0 false") body.color = getTeamColor(body.team);
+            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') body.define({COLOR: getTeamColor(body.team)});
             break;
         default: 
-            if (body.color == "16 0 1 0 false") body.color = (c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12) + ' 0 1 0 false';
+            let color = c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12;
+            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') body.define({COLOR: color});
     }
     // Decide what to do about colors when sending updates and stuff
-    player.teamColor = !c.RANDOM_COLORS && c.MODE === "ffa" ? 10 : body.color; // blue
+    player.teamColor = (!c.RANDOM_COLORS && (c.MODE === "ffa" || c.GROUPS) ? 10 : getTeamColor(body.team)) + ' 0 1 0 false'; // blue
     player.target = { x: 0, y: 0 };
     player.command = {
         up: false,
@@ -1029,10 +1030,10 @@ function perspective(e, player, data) {
                 data[10] = 1;
             }
         }
-        if (player.body.team === e.source.team && c.GROUPS) {
+        if (player.body.team === e.source.team && (c.GROUPS || c.MODE == 'ffa')) {
             // GROUPS
             data = data.slice();
-            data[13] = player.body.color;
+            data[13] = player.teamColor;
         }
     }
     return data;
@@ -1184,28 +1185,8 @@ const eyes = (socket) => {
 // Util
 let getBarColor = (entry) => {
     // What even is the purpose of all of this?
-    //if (c.GROUPS) return 11;
-    //switch (entry.team) {
-    //    case TEAM_ENEMIES:
-    //        return entry.color;
-    //    case -1:
-    //        return 10;
-    //    case -2:
-    //        return 11;
-    //    case -3:
-    //        return 12;
-    //    case -4:
-    //        return 15;
-    //    default:
-    //        if (
-    //            c.MODE[0] === "2" ||
-    //            c.MODE[0] === "3" ||
-    //            c.MODE[0] === "4"
-    //        ) {
-                return entry.color;
-    //        }
-    //        return 11;
-    //}
+    if (c.GROUPS || c.MODE == 'ffa') return '11 0 1 0 false';
+    return entry.color;
 };
 
 // Delta Calculator
@@ -1305,7 +1286,7 @@ let minimapTeams = teamIDs.map((team) =>
                     data: [
                         util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
                         util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
-                        my.color,
+                        (c.MODE == 'ffa' || c.GROUPS) ? '10 0 1 0 false' : my.color,
                     ],
                 });
             }

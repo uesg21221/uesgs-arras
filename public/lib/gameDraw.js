@@ -1,6 +1,6 @@
 
 import { settings } from "./settings.js";
-import { color } from "./color.js";
+import { gui } from "./socketInit.js";
 
 var gameDraw = {
     color: null,
@@ -94,41 +94,25 @@ var gameDraw = {
     //TODO: somehow move the calculation to these in reanimateColors to improve performance
     colorCache: {},
     modifyColor: (color, base = "16 0 1 0 false") => {
-        // Edge cases because spaghetti
-        if (typeof color == 'number') {
-            color = color + " 0 1 0 false";
-        }
-        if (typeof base == 'number') {
-            base = base + " 0 1 0 false";
-        }
         // Split into array
         let colorDetails = color.split(" "),
             baseDetails = base.split(" ");
 
         // Color mirroring
-        if (colorDetails[0] == "-1") {
+        if (colorDetails[0] == "-1" || colorDetails[0] == "mirror") {
             colorDetails[0] = baseDetails[0];
         }
-        if (colorDetails[0] == "-1") {
-            colorDetails[0] = gui.color;
-        }
-
-        let colorId = "";
-        for (let i in colorDetails) {
-            colorId += colorDetails[i] + " ";
+        if (colorDetails[0] == "-1" || colorDetails[0] == "mirror") {
+            colorDetails[0] = gui.color.split(" ")[0];
         }
 
         // Exit if calculated already
+        let colorId = colorDetails.join(' ');
         let cachedColor = gameDraw.colorCache[colorId];
         if (cachedColor != undefined) return cachedColor;
 
         // Get HSL values
-        let baseColor = colorDetails[0];
-        // check if color.base is not a word.
-        if (!isNaN(baseColor)) {
-            baseColor = parseInt(baseColor);
-        }
-        baseColor = gameDraw.rgbToHsl(gameDraw.getColor(baseColor) ?? baseColor);
+        let baseColor = gameDraw.rgbToHsl(gameDraw.getColor(colorDetails[0]) ?? colorDetails[0]);
         
         // Get color config
         let hueShift = parseFloat(colorDetails[1]) / 360,
@@ -148,7 +132,7 @@ var gameDraw = {
 
         // Gaming.
         let finalColor = gameDraw.hslToRgb(finalHue, finalSaturation, finalBrightness);
-        if (!gameDraw.animatedColors[colorDetails[0]]) gameDraw.colorCache[colorId] = finalColor
+        if (!gameDraw.animatedColors[colorDetails[0]]) gameDraw.colorCache[colorId] = finalColor;
         return finalColor;
     },
     getRainbow: (a, b, c = 0.5) => {
@@ -252,147 +236,147 @@ var gameDraw = {
     },
     getColor: (colorNumber) => {
         switch (colorNumber) {
-            case 0:
+            case "0":
             case "teal":
             case "aqua":
                 return gameDraw.color.teal;
-            case 1:
+            case "1":
             case "lightGreen":
                 return gameDraw.color.lgreen;
-            case 2:
+            case "2":
             case "orange":
                 return gameDraw.color.orange;
-            case 3:
+            case "3":
             case "yellow":
                 return gameDraw.color.yellow;
-            case 4:
+            case "4":
             case "lavender":
                 return gameDraw.color.lavender;
-            case 5:
+            case "5":
             case "pink":
                 return gameDraw.color.pink;
-            case 6:
+            case "6":
             case "veryLightGrey":
             case "veryLightGray":
                 return gameDraw.color.vlgrey;
-            case 7:
+            case "7":
             case "lightGrey":
             case "lightGray":
                 return gameDraw.color.lgrey;
-            case 8:
+            case "8":
             case "pureWhite":
                 return gameDraw.color.guiwhite;
-            case 9:
+            case "9":
             case "black":
                 return gameDraw.color.black;
-            case 10:
+            case "10":
             case "blue":
                 return gameDraw.color.blue;
-            case 11:
+            case "11":
             case "green":
                 return gameDraw.color.green;
-            case 12:
+            case "12":
             case "red":
                 return gameDraw.color.red;
-            case 13:
+            case "13":
             case "gold":
                 return gameDraw.color.gold;
-            case 14:
+            case "14":
             case "purple":
                 return gameDraw.color.purple;
-            case 15:
+            case "15":
             case "magenta":
                 return gameDraw.color.magenta;
-            case 16:
+            case "16":
             case "grey":
             case "gray":
                 return gameDraw.color.grey;
-            case 17:
+            case "17":
             case "darkGrey":
             case "darkGray":
                 return gameDraw.color.dgrey;
-            case 18:
+            case "18":
             case "white":
                 return gameDraw.color.white;
-            case 19:
+            case "19":
             case "pureBlack":
                 return gameDraw.color.guiblack;
-            case 20:
+            case "20":
             case "animatedBlueRed":
                 return gameDraw.animatedColor.blue_red;
-            case 21:
+            case "21":
             case "animatedBlueGrey":
             case "animatedBlueGray":
                 return gameDraw.animatedColor.blue_grey;
-            case 22:
+            case "22":
             case "animatedGreyBlue":
             case "animatedGrayBlue":
                 return gameDraw.animatedColor.grey_blue;
-            case 23:
+            case "23":
             case "animatedRedGrey":
             case "animatedRedGray":
                 return gameDraw.animatedColor.red_grey;
-            case 24:
+            case "24":
             case "animatedGreyRed":
             case "animatedGrayRed":
                 return gameDraw.animatedColor.grey_red;
-            case 25:
+            case "25":
             case "mustard":
                 return gameDraw.color.mustard;
-            case 26:
+            case "26":
             case "darkOrange":
             case "tangerine":
                 return gameDraw.color.tangerine;
-            case 27:
+            case "27":
             case "brown":
                 return gameDraw.color.brown;
-            case 28:
+            case "28":
             case "cyan":
             case "turquoise":
                 return gameDraw.color.cyan;
-            case 29:
+            case "29":
             case "animatedLesbian":
                 return gameDraw.animatedColor.lesbian;
-            case 30:
+            case "30":
             case "powerGem":
             case "powerStone":
                 return "#a913cf";
-            case 31:
+            case "31":
             case "spaceGem":
             case "spaceStone":
                 return "#226ef6";
-            case 32:
+            case "32":
             case "realityGem":
             case "realityStone":
                 return "#ff1000";
-            case 33:
+            case "33":
             case "soulGem":
             case "soulStone":
                 return "#ff9000";
-            case 34:
+            case "34":
             case "timeGem":
             case "timeStone":
                 return "#00e00b";
-            case 35:
+            case "35":
             case "mindGem":
             case "mindStone":
                 return "#ffd300";
-            case 36:
+            case "36":
             case "rainbow":
                 return gameDraw.animatedColor.gay;
-            case 37:
+            case "37":
             case "animatedTrans":
                 return gameDraw.animatedColor.trans;
-            case 38:
+            case "38":
             case "animatedBi":
                 return gameDraw.animatedColor.bi;
-            case 39:
+            case "39":
             case "pumpkinStem":
                 return "#654321";
-            case 40:
+            case "40":
             case "pumpkinBody":
                 return "#e58100";
-            case 41:
+            case "41":
             case "tree":
                 return "#267524";
         }
