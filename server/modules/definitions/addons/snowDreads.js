@@ -56,13 +56,13 @@ const hexnoughtBody = {
 	DENSITY: base.DENSITY * 3.5,
 };
 
-// Comment out the line below to enable this addon, uncomment it to disable this addon (WARNING: Increases load time by approximately 3x).
+// Comment out the line below to enable this addon, uncomment it to disable this addon.
 // return console.log('--- Snowdreads addon [snowdreads.js] is disabled. ---');
 
-// Set the below variable to true to enable hex dreadnought building (WARNING: increases load time by approximately 10x)
+// Set the below variable to true to enable hex dreadnought building.
 const buildHexnoughts = true;
 
-// Set the below variable to true to enable photosphere with 10 auras instead of 6
+// Set the below variable to true to enable photosphere with 10 auras instead of 6.
 const useOldPhotosphere = false;
 
 // For hexnought merging
@@ -1285,7 +1285,7 @@ Class.genericEggnought = {
 	BODY: eggnoughtBody,
 	SHAPE: 0,
 	COLOR: 6,
-	SIZE: 14,
+	SIZE: 16,
 	DANGER: 8,
 }
 Class.genericSquarenought = {
@@ -1293,7 +1293,7 @@ Class.genericSquarenought = {
 	BODY: squarenoughtBody,
 	SHAPE: 4,
 	COLOR: 13,
-	SIZE: 18,
+	SIZE: 20,
 	DANGER: 9,
 }
 Class.genericTrinought = {
@@ -1301,7 +1301,7 @@ Class.genericTrinought = {
 	BODY: trinoughtBody,
 	SHAPE: 3.5,
 	COLOR: 2,
-	SIZE: 21,
+	SIZE: 23,
 	DANGER: 10,
 }
 Class.genericPentanought = {
@@ -1309,7 +1309,7 @@ Class.genericPentanought = {
 	BODY: pentanoughtBody,
 	SHAPE: 5.5,
 	COLOR: 14,
-	SIZE: 23,
+	SIZE: 25,
 	DANGER: 11,
 }
 Class.genericHexnought = {
@@ -1317,7 +1317,7 @@ Class.genericHexnought = {
 	BODY: hexnoughtBody,
 	SHAPE: 6,
 	COLOR: 0,
-	SIZE: 24,
+	SIZE: 26,
 	DANGER: 12,
 }
 
@@ -4910,7 +4910,7 @@ for (let i = 0; i < 5; i++) {
 		},
 	)
 }
-Class.pentanoughtBigAura = addAura(2.5, 1.5, 0.3, 0, "Large");
+Class.pentanoughtBigAura = addAura(2.5, 1.45, 0.3, 0, "Large");
 Class.supernovaSnowdread = {
 	PARENT: ["genericPentanought"],
 	LABEL: "Supernova",
