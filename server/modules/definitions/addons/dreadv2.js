@@ -71,7 +71,7 @@ Class.genericEggnought = {
 	BODY: eggnoughtBody,
 	SHAPE: 0,
 	COLOR: 6,
-	SIZE: 14,
+	SIZE: 16,
 	DANGER: 8,
 }
 Class.genericSquarenought = {
@@ -79,7 +79,7 @@ Class.genericSquarenought = {
 	BODY: squarenoughtBody,
 	SHAPE: 4,
 	COLOR: 13,
-	SIZE: 18,
+	SIZE: 20,
 	DANGER: 9,
 }
 Class.genericTrinought = {
@@ -87,7 +87,7 @@ Class.genericTrinought = {
 	BODY: trinoughtBody,
 	SHAPE: 3.5,
 	COLOR: 2,
-	SIZE: 21,
+	SIZE: 23,
 	DANGER: 10,
 }
 Class.genericPentanought = {
@@ -95,7 +95,7 @@ Class.genericPentanought = {
 	BODY: pentanoughtBody,
 	SHAPE: 5.5,
 	COLOR: 14,
-	SIZE: 23,
+	SIZE: 25,
 	DANGER: 11,
 }
 Class.genericHexnought = {
@@ -103,7 +103,7 @@ Class.genericHexnought = {
 	BODY: hexnoughtBody,
 	SHAPE: 6,
 	COLOR: 0,
-	SIZE: 24,
+	SIZE: 26,
 	DANGER: 12,
 }
 
@@ -1796,7 +1796,7 @@ for (let i = 0; i < 5; i++) {
 		},
 	)
 }
-Class.pentanoughtBigAura = addAura(2.5, 1.5);
+Class.pentanoughtBigAura = addAura(2.5, 1.45);
 Class.supernovaOfficialV2 = {
 	PARENT: ["genericPentanought"],
 	LABEL: "Supernova",
