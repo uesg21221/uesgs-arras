@@ -4,7 +4,7 @@ require('./generics.js');
 const g = require('../gunvals.js');
 
 // Missiles
-Class.missile = { 
+Class.missile = {
     PARENT: "bullet",
     LABEL: "Missile",
     INDEPENDENT: true,
@@ -1651,14 +1651,14 @@ Class.minigun = {
             }
         },
         {
-            POSITION: [19, 8, 1, 0, 0, 0, 1 / 3],
+            POSITION: [19, 8, 1, 0, 0, 0, 1/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.minigun]),
                 TYPE: "bullet"
             }
         },
         {
-            POSITION: [17, 8, 1, 0, 0, 0, 2 / 3],
+            POSITION: [17, 8, 1, 0, 0, 0, 2/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.minigun]),
                 TYPE: "bullet"
@@ -2990,10 +2990,10 @@ Class.artillery = {
 Class.launcher = {
     PARENT: "genericTank",
     LABEL: "Launcher",
+    DANGER: 6,
     BODY: {
         FOV: base.FOV * 1.1,
     },
-    DANGER: 6,
     GUNS: [
         {
             POSITION: [10, 9, 1, 9, 0, 0, 0],
@@ -3010,8 +3010,8 @@ Class.launcher = {
 }
 Class.shotgun = {
     PARENT: "genericTank",
-    DANGER: 7,
     LABEL: "Shotgun",
+    DANGER: 7,
     GUNS: [
         {
             POSITION: [4, 3, 1, 11, -3, 0, 0],
@@ -3357,8 +3357,8 @@ Class.rocketeer = {
 // Trapper upgrades
 Class.builder = {
     PARENT: "genericTank",
-    DANGER: 6,
     LABEL: "Builder",
+    DANGER: 6,
     STAT_NAMES: statnames.trap,
     BODY: {
         SPEED: 0.8 * base.SPEED,
@@ -4145,7 +4145,7 @@ Class.medic = {
         {
             POSITION: [22, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.healer]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.healer, { reload: 1.2 }]),
                 TYPE: "healerBullet",
             },
         },
