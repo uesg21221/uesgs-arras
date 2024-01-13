@@ -186,6 +186,7 @@ window.onload = async () => {
     util.retrieveFromLocalStorage("coloredHealthbars");
     util.retrieveFromLocalStorage("centerTank");
     util.retrieveFromLocalStorage("optColors");
+    util.retrieveFromLocalStorage("optCustom");
     util.retrieveFromLocalStorage("optNoPointy");
     util.retrieveFromLocalStorage("optBorders");
     util.retrieveFromLocalStorage("seperatedHealthbars");
@@ -275,6 +276,109 @@ function calculateTarget() {
     if (settings.graphical.screenshotMode && Math.abs(Math.atan2(global.target.y, global.target.x) + Math.PI/2) < 0.035) global.target.x = 0; 
     return global.target;
 }
+function parseTheme(string){
+    // Decode from base64
+    try {
+        let stripped = string.replace(/\s+/g, '');
+        if (stripped.length % 4 == 2)
+            stripped += '==';
+        else if (stripped.length % 4 == 3)
+            stripped += '=';
+        let data = atob(stripped);
+    
+        let name = 'Unknown Theme', 
+            author = '';
+        let index = data.indexOf('\x00');
+        if (index === -1) return null;
+        name = data.slice(0, index) || name;
+        data = data.slice(index + 1);
+        index = data.indexOf('\x00');
+        if (index === -1) return null;
+        author = data.slice(0, index) || author;
+        data = data.slice(index + 1);
+        let border = data.charCodeAt(0) / 0xff;
+        data = data.slice(1);
+        let paletteSize = Math.floor(data.length / 3);
+        if (paletteSize < 2) return null;
+        let colorArray = [];
+        for (let i = 0; i < paletteSize; i++) {
+            let red = data.charCodeAt(i * 3)
+            let green = data.charCodeAt(i * 3 + 1)
+            let blue = data.charCodeAt(i * 3 + 2)
+            let color = (red << 16) | (green << 8) | blue
+            colorArray.push('#' + color.toString(16).padStart(6, '0'))
+        }
+        let content = {
+            teal:     colorArray[0],
+            lgreen:   colorArray[1],
+            orange:   colorArray[2],
+            yellow:   colorArray[3],
+            lavender: colorArray[4],
+            pink:     colorArray[5],
+            vlgrey:   colorArray[6],
+            lgrey:    colorArray[7],
+            guiwhite: colorArray[8],
+            black:    colorArray[9],
+    
+            blue:     colorArray[10],
+            green:    colorArray[11],
+            red:      colorArray[12],
+            gold:     colorArray[13],
+            purple:   colorArray[14],
+            magenta:  colorArray[15],
+            grey:     colorArray[16],
+            dgrey:    colorArray[17],
+            white:    colorArray[18],
+            guiblack: colorArray[19],
+    
+            paletteSize,
+            border,
+        }
+        return { name, author, content };
+    } catch (e) {}
+
+    // Decode from JSON
+    try {
+        let output = JSON.parse(string);
+        if (typeof output !== 'object')
+            return null;
+        let { name = 'Unknown Theme', author = '', content } = output;
+    
+        for (let colorHex of [
+            content.teal,
+            content.lgreen,
+            content.orange,
+            content.yellow,
+            content.lavender,
+            content.pink,
+            content.vlgrey,
+            content.lgrey,
+            content.guiwhite,
+            content.black,
+    
+            content.blue,
+            content.green,
+            content.red,
+            content.gold,
+            content.purple,
+            content.magenta,
+            content.grey,
+            content.dgrey,
+            content.white,
+            content.guiblack,
+        ]) {
+            if (!/^#[0-9a-fA-F]{6}$/.test(colorHex)) return null;
+        }
+    
+        return {
+            name: (typeof name === 'string' && name) || 'Unknown Theme',
+            author: (typeof author === 'string' && author) || '',
+            content,
+        }
+    } catch (e) {}
+    
+    return null;
+}
 // This starts the game and sets up the websocket
 function startGame() {
     // Set flag
@@ -317,6 +421,11 @@ function startGame() {
     util.submitToLocalStorage("optColors");
     let a = document.getElementById("optColors").value;
     color = color[a === "" ? "normal" : a];
+    if (a == "custom") {
+        let customTheme = document.getElementById("optCustom").value;
+        color = parseTheme(customTheme).content;
+        util.submitToLocalStorage("optCustom");
+    }
     gameDraw.color = color;
     // Other more important stuff
     let playerNameInput = document.getElementById("playerNameInput");
