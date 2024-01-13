@@ -1061,6 +1061,7 @@ class Entity extends EventEmitter {
                 if (set.COLOR.BRIGHTNESS_SHIFT != null) this.colorUnboxed.brightnessShift = set.COLOR.BRIGHTNESS_SHIFT;
                 if (set.COLOR.ALLOW_BRIGHTNESS_INVERT != null) this.colorUnboxed.allowBrightnessInvert = set.COLOR.ALLOW_BRIGHTNESS_INVERT;
             }
+            if ((this.colorUnboxed.base == '-1' || this.colorUnboxed.base == 'mirror') && mockupsLoaded) this.colorUnboxed.base = getTeamColor(this.team);
             this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
         }
         this.upgradeColor = set.UPGRADE_COLOR == null ? null : set.UPGRADE_COLOR;
@@ -1696,7 +1697,6 @@ class Entity extends EventEmitter {
                 this.ON(this.onDef, "upgrade", { oldEntity: old })
             }
             if (c.MODE == 'ffa' || c.GROUPS) this.define({COLOR: 12});
-            if (this.colorUnboxed.base == '-1' || this.colorUnboxed.base == 'mirror') this.define({COLOR: getTeamColor(this.team)});
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
                 def = ensureIsClass(def);
