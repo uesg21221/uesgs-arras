@@ -144,8 +144,6 @@ class Canvas {
                     break;
                 case global.KEY_REVERSE_TANK: //client side only, no server effects except message
                     this.reverseDirection = !this.reverseDirection;
-                    this.target.x *= -1;
-                    this.target.y *= -1;
                     this.socket.talk('t', 4);
                     break;
                 case global.KEY_AUTO_ALT:
