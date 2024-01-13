@@ -1331,6 +1331,8 @@ class Entity extends EventEmitter {
                 }
             }
             if (set.LABEL != null && set.LABEL.length > 0) this.label = this.label + "-" + set.LABEL;
+            if (set.MAX_CHILDREN != null) this.maxChildren += set.MAX_CHILDREN;
+            else this.maxChildren = null; // For bullet and drone combos so all parts remain functional
             if (set.BODY != null) {
                 if (set.BODY.ACCELERATION != null) this.ACCELERATION *= set.BODY.ACCELERATION;
                 if (set.BODY.SPEED != null) this.SPEED *= set.BODY.SPEED;
@@ -1407,7 +1409,6 @@ class Entity extends EventEmitter {
                 for (let root of this.rerootUpgradeTree) finalRoot += root + "\\/";
                 this.rerootUpgradeTree += finalRoot.substring(0, finalRoot.length - 2);
             }
-            this.maxChildren = null; // Required because it just doesn't work out otherwise - overlord-triplet would make the triplet inoperable at 8 drones, etc
         }
         // Turret layer ordering
         this.turrets.sort(this.turretSort);
