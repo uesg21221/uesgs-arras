@@ -885,13 +885,13 @@ const spawn = (socket, name) => {
         body = new Entity(loc);
         body.protect();
         body.isPlayer = true;
-        body.define(c.SPAWN_CLASS);
         body.name = name;
         if (player.team != null) {
             body.team = player.team;
         } else {
             player.team = body.team;
         }
+        body.define(c.SPAWN_CLASS);
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);

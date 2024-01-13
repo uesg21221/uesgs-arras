@@ -49,7 +49,7 @@ Class.wall = {
     PARENT: ["rock"],
     LABEL: "Wall",
     SIZE: 25,
-    SHAPE: 4,
+    SHAPE: "M 1 1 L -1 1 L -1 -1 L 1 -1 Z",
     VARIES_IN_SIZE: false,
 };
 

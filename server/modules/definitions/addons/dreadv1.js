@@ -557,7 +557,7 @@ for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_1) {
 	primary = ensureIsClass(primary);
 	primary.UPGRADES_TIER_1 = [];
 
-	for (let secondary of [ "swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1", "automationOfficialV1", "juggernautOfficialV1", "medicareOfficialV1" ]) {
+	for (let secondary of [ "swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1", "medicareOfficialV1", "automationOfficialV1", "juggernautOfficialV1" ]) {
 		let secondaryName = secondary;
 		secondary = ensureIsClass(secondary);
 

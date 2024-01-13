@@ -69,11 +69,12 @@ function collide(collision) {
             let wall = instance.type === "wall" ? instance : other;
             let entity = instance.type === "wall" ? other : instance;
             if (entity.ac || entity.master.ac) return;
-            switch (wall.shape) {
-                case 4:
+            switch (true) {
+                case (wall.shape == 4):
+                case (wall.shapeData == "M 1 1 L -1 1 L -1 -1 L 1 -1 Z"):
                     mazewallcollide(wall, entity);
                     break;
-                case 0:
+                case (wall.shape == 0):
                     mooncollide(wall, entity);
                     break;
                 default:
