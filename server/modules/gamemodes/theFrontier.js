@@ -171,7 +171,7 @@ function generateFrontierMaze(width, height) {
                     y: d.y
                 });
                 o.define(Class.towerMedium);
-                o.SIZE = d.s * 0.5;
+                o.SIZE = d.s * 0.5 - 2;
                 o.team = TEAM_ENEMIES;
                 o.protect();
                 o.life();

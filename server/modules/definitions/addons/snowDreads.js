@@ -4668,7 +4668,7 @@ Class.gladiatorAutoMinionTurretSnowdread = {
 		}, { // Main gun
 			POSITION: [22, 10, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, {range: 0.5}]),
 				TYPE: "bullet",
 				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.5 },
 			},
@@ -4732,7 +4732,7 @@ for (let i = 0; i < 3; i++) {
 		{
 			POSITION: [15, 8.5, 1, 0, 0, 120*i, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.minionGun, {speed: 0.7, maxSpeed: 0.7}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.minionGun, {speed: 0.7, maxSpeed: 0.7, range: 0.6}]),
 				WAIT_TO_CYCLE: true,
 				COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 },
 				TYPE: 'bullet',
@@ -4748,7 +4748,7 @@ for (let i = 0; i < 3; i++) {
 		},
 	);
 	Class.gladiatorTritrapMinionSnowdread.GUNS.push(
-		...addTrap({length: 13, length2: 3, width: 7, aspect: 1.7, angle: 120*i}, 2.5, [g.trap, g.flankGuard, g.minionGun])
+		...addTrap({length: 13, length2: 3, width: 7, aspect: 1.7, angle: 120*i}, 5, [g.trap, g.flankGuard, g.minionGun, {reload: 1.6, shudder: 0.2}])
 	);
 	Class.gladiatorTriswarmMinionSnowdread.GUNS.push(
 		{
