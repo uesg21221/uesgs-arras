@@ -302,7 +302,7 @@ function mooncollide(moon, n) {
     n.accel.y -= dy * n.pushability * 0.05 * sink * 2;
 }
 
-function reflectCollide(wall, bounce) {
+function mazewallcollide(wall, bounce) {
     if (bounce.god === true || bounce.passive === true || bounce.ac || bounce.master.ac) return;
     if (bounce.store.noWallCollision) return;
     if (bounce.team === wall.team && bounce.type === "tank") return;
@@ -393,5 +393,5 @@ module.exports = {
     reflectcollide,
     advancedcollide,
     mooncollide,
-    reflectCollide
+    mazewallcollide
 };
