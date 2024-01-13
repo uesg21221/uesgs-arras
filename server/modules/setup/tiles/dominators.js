@@ -9,7 +9,8 @@ spawn = (tile, team, color, type = false) => {
     let o = new Entity(tile.loc);
     o.define(type);
     o.team = team;
-    o.define({COLOR: color});
+    o.colorUnboxed.base = color;
+    o.compressColor();
     o.skill.score = 111069;
     o.name = "Dominator";
     o.SIZE = room.tileWidth / 10;

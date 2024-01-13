@@ -335,7 +335,8 @@ let maintainloop = () => {
         o.name += ran.chooseBotName();
         o.leftoverUpgrades = ran.chooseChance(...c.BOT_CLASS_UPGRADE_CHANCES);
         let color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
-        o.define({COLOR: color});
+        o.colorUnboxed.base = color;
+        o.compressColor();
         if (team) o.team = team;
         bots.push(o);
         o.on('dead', () => util.remove(bots, bots.indexOf(o)));
