@@ -422,7 +422,10 @@ class Gun {
             SIZE: (this.body.size * this.width * this.settings.size) / 2,
             LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + o.label
         });
-        if (!o.color || o.colorUnboxed.base == '-1' || o.colorUnboxed.base == 'mirror') o.define({COLOR: this.body.master.colorUnboxed.base});
+        if (!o.color || o.colorUnboxed.base == '-1' || o.colorUnboxed.base == 'mirror') {
+            o.colorUnboxed.base = this.body.master.colorUnboxed.base
+            o.compressColor();
+        }
         // Keep track of it and give it the function it needs to deutil.log itself upon death
         if (this.countsOwnKids) {
             o.parent = this;
@@ -1020,6 +1023,9 @@ class Entity extends EventEmitter {
         player.body = fakeBody;
         player.body.kill();
     }
+    compressColor() {
+        this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+    }
     define(defs, emitEvent = true) {
         if (!Array.isArray(defs)) defs = [defs];
         
@@ -1061,8 +1067,7 @@ class Entity extends EventEmitter {
                 if (set.COLOR.BRIGHTNESS_SHIFT != null) this.colorUnboxed.brightnessShift = set.COLOR.BRIGHTNESS_SHIFT;
                 if (set.COLOR.ALLOW_BRIGHTNESS_INVERT != null) this.colorUnboxed.allowBrightnessInvert = set.COLOR.ALLOW_BRIGHTNESS_INVERT;
             }
-            if ((this.colorUnboxed.base == '-1' || this.colorUnboxed.base == 'mirror') && mockupsLoaded) this.colorUnboxed.base = getTeamColor(this.team);
-            this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+            this.compressColor();
         }
         this.upgradeColor = set.UPGRADE_COLOR == null ? null : set.UPGRADE_COLOR;
         if (set.GLOW != null) {
@@ -1696,7 +1701,10 @@ class Entity extends EventEmitter {
                 this.define(this.defs);
                 this.ON(this.onDef, "upgrade", { oldEntity: old })
             }
-            if (c.MODE == 'ffa' || c.GROUPS) this.define({COLOR: 12});
+            if (this.colorUnboxed.base == '-1' || this.colorUnboxed.base == 'mirror') {
+                this.colorUnboxed.base = getTeamColor((c.MODE == 'ffa' || c.GROUPS) ? TEAM_RED : this.team);
+                this.compressColor();
+            }
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
                 def = ensureIsClass(def);

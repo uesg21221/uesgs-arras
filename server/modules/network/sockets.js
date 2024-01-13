@@ -420,6 +420,10 @@ function incoming(message, socket) {
             if (player.body != null && socket.permissions && socket.permissions.class) {
                 player.body.define({ RESET_UPGRADES: true, BATCH_UPGRADES: false });
                 player.body.define(Class[socket.permissions.class]);
+                if (player.body.colorUnboxed.base == '-1' || player.body.colorUnboxed.base == 'mirror') {
+                    player.body.colorUnboxed.base = getTeamColor((c.MODE == 'ffa' || c.GROUPS) ? TEAM_RED : player.body.team);
+                    player.body.compressColor();
+                }
             }
             break;
         case "1":
@@ -907,11 +911,17 @@ const spawn = (socket, name) => {
     body.socket = socket;
     switch (c.MODE) {
         case "tdm":
-            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') body.define({COLOR: getTeamColor(body.team)});
+            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
+                body.colorUnboxed.base = getTeamColor(body.team);
+                body.compressColor();
+            }
             break;
         default: 
             let color = c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12;
-            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') body.define({COLOR: color});
+            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
+                body.colorUnboxed.base = color;
+                body.compressColor();
+            }
     }
     // Decide what to do about colors when sending updates and stuff
     player.teamColor = (!c.RANDOM_COLORS && (c.MODE === "ffa" || c.GROUPS) ? 10 : getTeamColor(body.team)) + ' 0 1 0 false'; // blue

@@ -34,7 +34,8 @@ function spawn() {
             team = -i - 1;
         o.define(ran.choose(choices));
         o.define({ ACCEPTS_SCORE: false, VALUE: 643890 });
-        o.define({COLOR: getTeamColor(team)});
+        o.colorUnboxed.base = getTeamColor(team);
+        o.compressColor();
         o.team = team;
         o.name = "Mothership";
         o.isMothership = true;
