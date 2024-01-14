@@ -870,17 +870,17 @@ Class.exorcistor = {
     }))
 };
 Class.realchip = {
-    PARENT: ["sunchip"],
+    PARENT: "sunchip",
     NECRO: [6],
     SHAPE: 6
 };
 Class.shaman = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Shaman",
     DANGER: 8,
     SHAPE: 6,
-    COLOR: "teal",
-    UPGRADE_COLOR: "teal",
+    COLOR: "magenta",
+    UPGRADE_COLOR: "magenta",
     SIZE: 26,
     MAX_CHILDREN: 20,
     VALUE: 6e5,
