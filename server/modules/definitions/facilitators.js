@@ -192,6 +192,7 @@ exports.makeMulti = (type, count, name = -1, startRotation = 0) => {
         for (let i = 0; i < count; i++) {
             let newgun = exports.dereference(gun);
             newgun.POSITION[5] += startRotation + fraction * i;
+            newgun.POSITION.ANGLE += startRotation + fraction * i;
             if (gun.PROPERTIES) newgun.PROPERTIES.TYPE = gun.PROPERTIES.TYPE;
             output.GUNS.push(newgun);
         };
