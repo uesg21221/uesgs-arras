@@ -206,26 +206,25 @@ class Gun {
         };
     }
     spawnBullets(useWhile, shootPermission) {
-
-        //find out some intermediate values
+        // Find out some intermediate values
         let angle1 = this.direction + this.angle + this.body.facing,
             angle2 = this.angle + this.body.facing,
-            gunlength = 1.5 * this.length - this.width * this.settings.size / 2,
+            gunlength = 1.5 * this.length - this.width * this.settings.size,
 
-            //calculate offsets based on lengths and directions
-            offset_base_x = this.offset * Math.cos(angle1),
-            offset_base_y = this.offset * Math.sin(angle1),
-            offset_end_x = gunlength * Math.cos(angle2),
-            offset_end_y = gunlength * Math.sin(angle2),
+            // Calculate offsets based on lengths and directions
+            offsetBaseX = this.offset * Math.cos(angle1),
+            offsetBaseY = this.offset * Math.sin(angle1),
+            offsetEndX = gunlength * Math.cos(angle2),
+            offsetEndY = gunlength * Math.sin(angle2),
 
-            //finally get the final bullet offset
-            offset_final_x = offset_base_x + offset_end_x,
-            offset_final_y = offset_base_y + offset_end_y,
+            // Finally get the final bullet offset
+            offsetFinalX = offsetBaseX + offsetEndX,
+            offsetFinalY = offsetBaseY + offsetEndY,
             skill = this.bulletStats === "master" ? this.body.skill : this.bulletStats;
 
         // Shoot, multiple times in a tick if needed
         do {
-            this.fire(offset_final_x, offset_final_y, skill);
+            this.fire(offsetFinalX, offsetFinalY, skill);
             this.cycle--;
             shootPermission =
                   this.countsOwnKids    ? this.countsOwnKids    > this.children.length

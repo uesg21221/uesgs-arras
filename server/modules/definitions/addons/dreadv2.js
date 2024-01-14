@@ -324,7 +324,7 @@ Class.byteOfficialV2 = {
 		},
 	],
 }
-Class.atmosphereAuraOfficialV2 = addAura();
+Class.atmosphereAuraOfficialV2 = addAura(1, 1, 0.15);
 Class.atmosphereOfficialV2 = {
 	PARENT: ["genericEggnought"],
 	LABEL: "Atmosphere",
@@ -641,7 +641,7 @@ Class.kilobyteOfficialV2 = {
 		},
 	],
 }
-Class.coronaAuraOfficialV2 = addAura(1.5, 0.8);
+Class.coronaAuraOfficialV2 = addAura(1.5, 0.8, 0.15);
 Class.coronaOfficialV2 = {
 	PARENT: ["genericSquarenought"],
 	LABEL: "Corona",
