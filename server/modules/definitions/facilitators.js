@@ -765,3 +765,17 @@ exports.makeLabyrinthShape = (type) => {
     let downscale = Math.max(output.SHAPE, 3);
     return output;
 }
+exports.menu = (name = -1) => {
+    let gun = {
+        POSITION: [18, 10, -1.4, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: exports.combineStats([g.basic]),
+            TYPE: "bullet",
+        },
+    };
+    return {
+        PARENT: "genericTank",
+        LABEL: name,
+        GUNS: [gun],
+    };
+}

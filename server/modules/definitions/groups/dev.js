@@ -1,11 +1,19 @@
-const { combineStats, addAura, makeDeco } = require('../facilitators.js');
+const { combineStats, menu, addAura, makeDeco } = require('../facilitators.js');
 const { base, gunCalcNames, basePolygonDamage, basePolygonHealth, dfltskl, statnames } = require('../constants.js');
 const g = require('../gunvals.js');
 
 // Menus
-Class.menu = {
-    PARENT: ["genericTank"],
-    LABEL: "",
+Class.developer = {
+    PARENT: "genericTank",
+    LABEL: "Developer",
+    BODY: {
+        SHIELD: 1000,
+        REGEN: 10,
+        HEALTH: 100,
+        DAMAGE: 10,
+        DENSITY: 20,
+        FOV: 2,
+    },
     SKILL_CAP: [
         dfltskl,
         dfltskl,
@@ -19,37 +27,7 @@ Class.menu = {
         dfltskl,
     ],
     IGNORED_BY_AI: true,
-    TURRETS: [],
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [18, 10, -1.4, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: "bullet",
-            },
-        },
-    ],
-};
-Class.developer = {
-    PARENT: ["menu"],
-    LABEL: "Developer",
-    BODY: {
-        SHIELD: 1000,
-        REGEN: 10,
-        HEALTH: 100,
-        DAMAGE: 10,
-        DENSITY: 20,
-        FOV: 2,
-    },
     RESET_CHILDREN: true,
-    ACCEPTS_SCORE: true,
-    CAN_BE_ON_LEADERBOARD: true,
-    DRAW_HEALTH: true,
-    ARENA_CLOSER: false,
-    INVISIBLE: [0, 0],
-    ALPHA: [0, 1],
-    HITS_OWN_TYPE: "hardOnlyTanks",
     SHAPE: [
         [-1, -0.8],
         [-0.8, -1],
@@ -63,19 +41,19 @@ Class.developer = {
     ],
     GUNS: [
         {
-            /*** LENGTH WIDTH     ASPECT        X             Y         ANGLE     DELAY */
             POSITION: [18, 10, -1.4, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.op]),
-                TYPE: "developerBullet",
-            },
-        },
-    ],
-};
+                TYPE: "developerBullet"
+            }
+        }
+    ]
+}
 Class.spectator = {
-    PARENT: ["menu"],
+    PARENT: "genericTank",
     LABEL: "Spectator",
     ALPHA: 0,
+    IGNORED_BY_AI: true,
     CAN_BE_ON_LEADERBOARD: false,
     ACCEPTS_SCORE: false,
     DRAW_HEALTH: false,
@@ -89,140 +67,98 @@ Class.spectator = {
         HEALTH: 1e100,
         SHIELD: 1e100,
         REGEN: 1e100,
+    }
+}
+
+Class.bosses = menu("Bosses")
+
+Class.sentries = menu("Sentries")
+Class.sentries.COLOR = "pink"
+Class.sentries.UPGRADE_COLOR = "pink"
+Class.sentries.SHAPE = 3.5
+Class.sentries.TURRETS = [
+    {
+        POSITION: [9, 0, 0, 0, 360, 1],
+        TYPE: "genericEntity"
+    }
+]
+
+Class.elites = menu("Elites")
+Class.elites.COLOR = "pink"
+Class.elites.UPGRADE_COLOR = "pink"
+Class.elites.SHAPE = 3.5
+
+Class.mysticals = menu("Mysticals")
+Class.mysticals.COLOR = "gold"
+Class.mysticals.UPGRADE_COLOR = "gold"
+Class.mysticals.SHAPE = 4
+
+Class.nesters = menu("Nesters")
+Class.nesters.COLOR = "purple"
+Class.nesters.UPGRADE_COLOR = "purple"
+Class.nesters.SHAPE = 5.5
+
+Class.rogues = menu("Rogues")
+Class.rogues.COLOR = "darkGrey"
+Class.rogues.UPGRADE_COLOR = "darkGrey"
+Class.rogues.SHAPE = 6
+
+Class.rammers = menu("Sentries")
+Class.rammers.COLOR = "teal"
+Class.rammers.UPGRADE_COLOR = "teal"
+Class.rammers.TURRETS = [
+    {
+        POSITION: [21.5, 0, 0, 0, 360, 0],
+        TYPE: "smasherBody",
+    }
+]
+
+Class.terrestrials = menu("Terrestrials")
+Class.terrestrials.COLOR = "orange"
+Class.terrestrials.UPGRADE_COLOR = "orange"
+Class.terrestrials.SHAPE = 7
+
+Class.celestials = menu("Celestials")
+Class.celestials.COLOR = "lightGreen"
+Class.celestials.UPGRADE_COLOR = "lightGreen"
+Class.celestials.SHAPE = 9
+
+Class.eternals = menu("Eternals")
+Class.eternals.COLOR = "teal"
+Class.eternals.UPGRADE_COLOR = "teal"
+Class.eternals.SHAPE = 11
+
+Class.devBosses = menu("Developers")
+Class.devBosses.COLOR = "lightGreen"
+Class.devBosses.UPGRADE_COLOR = "rainbow"
+Class.devBosses.SHAPE = 4
+
+Class.tanks = menu("Tanks")
+Class.unavailable = menu("Unavailable")
+
+Class.dominators = menu("Dominators")
+Class.dominators.TURRETS = [
+    {
+        POSITION: [22, 0, 0, 0, 360, 0],
+        TYPE: "dominationBody",
+    }
+]
+
+Class.sanctuaries = menu("Sanctuaries")
+Class.sanctuaries.TURRETS = [
+    {
+        POSITION: [22, 0, 0, 0, 360, 0],
+        TYPE: "dominationBody",
     },
-    GUNS: [],
-};
-
-Class.bosses = {
-    PARENT: ["menu"],
-    LABEL: "Bosses",
-};
-Class.sentries = {
-    PARENT: ["menu"],
-    LABEL: "Sentries",
-    COLOR: "pink",
-    UPGRADE_COLOR: "pink",
-    SHAPE: 3.5,
-    TURRETS: [
-        {
-            POSITION: [9, 0, 0, 0, 360, 1],
-            TYPE: "genericEntity",
-        },
-    ],
-};
-Class.elites = {
-    PARENT: ["menu"],
-    LABEL: "Elites",
-    COLOR: "pink",
-    UPGRADE_COLOR: "pink",
-    SHAPE: 3.5,
-};
-Class.mysticals = {
-    PARENT: ["menu"],
-    LABEL: "Mysticals",
-    COLOR: "gold",
-    UPGRADE_COLOR: "gold",
-    SHAPE: 4,
-};
-Class.nesters = {
-    PARENT: ["menu"],
-    LABEL: "Nesters",
-    COLOR: "purple",
-    UPGRADE_COLOR: "purple",
-    SHAPE: 5.5,
-};
-Class.rogues = {
-    PARENT: ["menu"],
-    LABEL: "Rogues",
-    COLOR: "darkGrey",
-    UPGRADE_COLOR: "darkGrey",
-    SHAPE: 6,
-};
-Class.rammers = {
-    PARENT: ["menu"],
-    LABEL: "Rammers",
-    COLOR: "teal",
-    UPGRADE_COLOR: "teal",
-    TURRETS: [
-        {
-            POSITION: [21.5, 0, 0, 0, 360, 0],
-            TYPE: "smasherBody",
-        },
-    ],
-};
-Class.terrestrials = {
-    PARENT: ["menu"],
-    LABEL: "Terrestrials",
-    COLOR: "orange",
-    UPGRADE_COLOR: "orange",
-    SHAPE: 7,
-};
-Class.celestials = {
-    PARENT: ["menu"],
-    LABEL: "Celestials",
-    COLOR: "lightGreen",
-    UPGRADE_COLOR: "lightGreen",
-    SHAPE: 9,
-};
-Class.eternals = {
-    PARENT: ["menu"],
-    LABEL: "Eternals",
-    COLOR: "teal",
-    UPGRADE_COLOR: "teal",
-    SHAPE: 11,
-};
-Class.devBosses = {
-    PARENT: ["menu"],
-    LABEL: "Developers",
-    COLOR: "lightGreen",
-    UPGRADE_COLOR: "rainbow",
-    SHAPE: 4,
-};
-
-Class.tanks = {
-    PARENT: ["menu"],
-    LABEL: "Tanks",
-};
-Class.unavailable = {
-    PARENT: ["menu"],
-    LABEL: "Unavailable",
-};
-Class.dominators = {
-    PARENT: ["menu"],
-    LABEL: "Dominators",
-    TURRETS: [
-        {
-            POSITION: [22, 0, 0, 0, 360, 0],
-            TYPE: "dominationBody",
-        },
-    ],
-};
-Class.sanctuaries = {
-    PARENT: ["menu"],
-    LABEL: "Sanctuaries",
-    TURRETS: [
-        {
-            POSITION: [22, 0, 0, 0, 360, 0],
-            TYPE: "dominationBody",
-        },
         {
             POSITION: [13, 0, 0, 0, 360, 1],
             TYPE: "healerSymbol",
-        },
-    ],
-};
-Class.funTanks = {
-    PARENT: ["menu"],
-    LABEL: "Fun Tanks",
-};
-Class.features = {
-    PARENT: "menu",
-    LABEL: "Features"
-}
-Class.overpowered = {
-    PARENT: "menu",
-    LABEL: "Overpowered"
-}
+        }
+]
+
+Class.funTanks = menu("Fun Tanks")
+Class.features = menu("Features")
+Class.overpowered = menu("Overpowered")
 
 // Generators
 function compileMatrix(matrix, matrix2Entrance) {
@@ -816,7 +752,7 @@ Class.ghoster = {
 }
 
 Class.switcheroo = {
-    PARENT: ['basic'],
+    PARENT: "basic",
     LABEL: 'Switcheroo',
     UPGRADES_TIER_0: [],
     RESET_UPGRADE_MENU: true,
@@ -1039,11 +975,8 @@ Class.bulletSpawnTest = {
     }]
 }
 
-Class.levels = {
-    PARENT: ["menu"],
-    LABEL: "Level Switcher",
-    UPGRADES_TIER_0: []
-};
+Class.levels = menu("Level Switcher")
+Class.levels.UPGRADES_TIER_0 = []
 for (let i = 0; i < 12; i++) {
     let LEVEL = i * c.TIER_MULTIPLIER;
     Class["level" + LEVEL] = {
@@ -1054,11 +987,8 @@ for (let i = 0; i < 12; i++) {
     Class.levels.UPGRADES_TIER_0.push("level" + LEVEL);
 }
 
-Class.teams = {
-    PARENT: ["menu"],
-    LABEL: "Team Switcher",
-    UPGRADES_TIER_0: []
-};
+Class.teams = menu("Team Switcher")
+Class.teams.UPGRADES_TIER_0 = []
 for (let i = 1; i <= 8; i++) {
     let TEAM = i;
     Class["Team" + TEAM] = {
@@ -1083,16 +1013,10 @@ Class['Team' + TEAM_ENEMIES] = {
 };
 Class.teams.UPGRADES_TIER_0.push('Team' + TEAM_ROOM, 'Team' + TEAM_ENEMIES);
 
-Class.testing = {
-    PARENT: ["menu"],
-    LABEL: "Testing"
-};
+Class.testing = menu("Testing")
 
-Class.addons = {
-    PARENT: "menu",
-    LABEL: "Addon Entities",
-    UPGRADES_TIER_0: []
-};
+Class.addons = menu("Addon Entities")
+Class.addons.UPGRADES_TIER_0 = []
 
 Class.whirlwindDeco = makeDeco(6)
 Class.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
