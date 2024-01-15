@@ -777,5 +777,7 @@ exports.menu = (name = -1) => {
         PARENT: "genericTank",
         LABEL: name,
         GUNS: [gun],
+        IGNORED_BY_AI: true,
+        SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl],
     };
 }
