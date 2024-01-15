@@ -1,4 +1,4 @@
-const { gunCalcNames, dflkskl } = require('./constants.js');
+const { gunCalcNames } = require('./constants.js');
 const { MAX_SKILL } = require("../../config.js");
 const g = require('./gunvals.js');
 
@@ -778,6 +778,5 @@ exports.menu = (name = -1) => {
         LABEL: name,
         GUNS: [gun],
         IGNORED_BY_AI: true,
-        SKILL_CAP: [dflkskl, dflkskl, dflkskl, dflkskl, dflkskl, dflkskl, dflkskl, dflkskl, dflkskl, dflkskl],
     };
 }
