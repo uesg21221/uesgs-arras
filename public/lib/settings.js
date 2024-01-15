@@ -1,13 +1,13 @@
-const config = {
+const settings = {
     graphical: {
         screenshotMode: false,
-        borderChunk: 5,
+        borderChunk: 6,
         barChunk: 4,
         mininumBorderChunk: 3,
         deathBlurAmount: 3,
         darkBorders: false,
         fancyAnimations: true,
-        colors: 'normal',
+        colors: 'nero',
         pointy: true,
         fontSizeBoost: 1.4,
         fontStrokeRatio: 4.5,
@@ -23,6 +23,4 @@ const config = {
         autoLevelUp: false
     }
 };
-export {
-    config
-}
+export { settings }

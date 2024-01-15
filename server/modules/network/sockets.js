@@ -41,7 +41,7 @@ function close(socket) {
             }
         }
         // Disconnect everything
-        util.log("[INFO] " + (player.body ? "User " + player.body.name : "An User without an entity") + " disconnected!");
+        util.log("[INFO] " + (player.body ? "User " + player.body.name : "A user without an entity") + " disconnected!");
         util.remove(players, index);
     } else {
         util.log("[INFO] A player disconnected before entering the game.");
@@ -185,7 +185,7 @@ function incoming(message, socket) {
                 util.remove(views, views.indexOf(socket.view));
                 socket.makeView();
             }
-            socket.party = m[1];
+            socket.party = m[4];
             socket.player = socket.spawn(name);
 
             if (autoLVLup) {
@@ -198,9 +198,9 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            socket.talk("R", room.width, room.height, JSON.stringify(c.ROOM_SETUP), JSON.stringify(util.serverStartTime), roomSpeed, c.ARENA_TYPE);
+            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))), JSON.stringify(util.serverStartTime), c.runSpeed, c.ARENA_TYPE);
             // Log it
-            util.log("[INFO] " + m[0] + (needsRoom ? " joined" : " rejoined") + " the game! Players: " + players.length);
+            util.log(`[INFO] ${m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
             break;
         case "S":
             // clock syncing
@@ -253,7 +253,7 @@ function incoming(message, socket) {
             break;
         case "C":
             // command packet
-            if (m.length !== 3) {
+            if (m.length !== 4) {
                 socket.kick("Ill-sized command packet.");
                 return 1;
             }
@@ -262,7 +262,8 @@ function incoming(message, socket) {
                     x: m[0],
                     y: m[1],
                 },
-                commands = m[2];
+                reverseTank = m[2],
+                commands = m[3];
             // Verify data
             if (
                 typeof target.x !== "number" ||
@@ -291,6 +292,7 @@ function incoming(message, socket) {
             // }
             // Put the new target in
             player.target = target;
+            if (player.body) player.body.reverseTank = reverseTank;
             // Process the commands
             if (player.command != null && player.body != null) {
                 player.command.up = commands & 1;
@@ -388,9 +390,10 @@ function incoming(message, socket) {
             }
 
             if (player.body != null) {
+                let limit = 256;
                 do {
                     player.body.skillUp(stat);
-                } while (max && player.body.skill.points && player.body.skill.amount(stat) < player.body.skill.cap(stat))
+                } while (limit-- && max && player.body.skill.points && player.body.skill.amount(stat) < player.body.skill.cap(stat))
             }
             break;
         case "L":
@@ -415,13 +418,17 @@ function incoming(message, socket) {
             }
             // cheatingbois
             if (player.body != null && socket.permissions && socket.permissions.class) {
-                player.body.define({ RESET_UPGRADES: true });
+                player.body.define({ RESET_UPGRADES: true, BATCH_UPGRADES: false });
                 player.body.define(Class[socket.permissions.class]);
+                if (player.body.colorUnboxed.base == '-1' || player.body.colorUnboxed.base == 'mirror') {
+                    player.body.colorUnboxed.base = getTeamColor((c.MODE == 'ffa' || c.GROUPS) ? TEAM_RED : player.body.team);
+                    player.body.compressColor();
+                }
             }
             break;
         case "1":
             //suicide squad
-            if (player.body != null) {
+            if (player.body != null && !player.body.underControl) {
                 for (let i = 0; i < entities.length; i++) {
                     let instance = entities[i];
                     if (instance.settings.clearOnMasterUpgrade && instance.master.id === player.body.id) {
@@ -431,6 +438,171 @@ function incoming(message, socket) {
                 player.body.destroy();
             }
             break;
+        case "testTeleport":
+              if (player.body != null && socket.permissions) {
+                player.body.x = player.body.x + player.target.x; 
+                player.body.y = player.body.y + player.target.y;
+                }
+            break;
+        case "smallerTank":
+                if (player.body != null && socket.permissions) {
+             player.body.SIZE *= 4/5;
+             player.body.RECOIL_MULTIPLIER *= 4/5;
+                }
+            break;
+        case "biggerTank":
+                if (player.body != null && socket.permissions) {
+             player.body.SIZE *= 5/4;
+             player.body.RECOIL_MULTIPLIER *= 5/4;
+                }
+            break;
+        case "smallerFOV":
+                if (player.body != null && socket.permissions) {
+             player.body.FOV *= 4/5
+                }
+            break;
+        case "biggerFOV":
+                if (player.body != null && socket.permissions) {
+             player.body.FOV *= 5/4
+                }
+            break;
+        case "godmodeButton":
+                if (player.body != null && socket.permissions) {
+              player.body.godmode =  !player.body.godmode;
+              player.body.sendMessage((player.body.godmode ? "Godmode enabled." : "Godmode disabled."));
+                }
+            break;
+        case "invisibility":
+                if (player.body != null && socket.permissions) {
+              player.body.alpha =  !player.body.alpha;
+              player.body.invisible = [player.body.alpha, !player.body.alpha]
+                }
+            break;
+        case "canBeOnLeaderboard":
+                if (player.body != null && socket.permissions) {
+              player.body.settings.leaderboardable = !player.body.settings.leaderboardable;
+              player.body.sendMessage((player.body.settings.leaderboardable ? "You have been added to the leaderboard" : "You have been removed from the leaderboard."));
+                }
+            break;
+        case "keyStrong"://keyStrong
+                if (player.body != null && socket.permissions) {
+              player.body.skill.raw = Array(10).fill(12);
+              player.body.define({ 
+                SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
+                });
+                }
+            break;
+                case "drag": { // drag
+                   if (player.body != null && socket.permissions) {
+                                if (!player.pickedUpInterval) {
+                                    let tx = player.body.x + player.target.x;
+                                    let ty = player.body.y + player.target.y;
+                                    let pickedUp = [];
+                                    entities.forEach(e => {
+                                        if (!(e.type === "mazeWall" && e.shape === 4) && (e.x - tx) * (e.x - tx) + (e.y - ty) * (e.y - ty) < e.size * e.size * 1.5) {
+                                            pickedUp.push({ e, dx: e.x - tx, dy: e.y - ty });
+                                        }
+                                    });
+                                    if (pickedUp.length === 0) {
+                                        player.body.sendMessage('No entities found to pick up!');
+                                    } else {
+                                        player.pickedUpInterval = setInterval(() => {
+                                            if (!player.body) {
+                                                clearInterval(player.pickedUpInterval);
+                                                player.pickedUpInterval = null;
+                                                return;
+                                            }
+                                            let tx = player.body.x + player.target.x;
+                                            let ty = player.body.y + player.target.y;
+                                            for (let { e: entity, dx, dy } of pickedUp)
+                                                if (!entity.isGhost) {
+                                                    entity.x = dx + tx;
+                                                    entity.y = dy + ty;
+                                                }
+                                        }, 25);
+                                    }
+                                } else {
+                                    clearInterval(player.pickedUpInterval);
+                                    player.pickedUpInterval = null;
+                                }
+                            }
+              } break;
+               case "watchThis": { // Kill what your mouse is over //watchThis
+                 if (player.body != null && socket.permissions) {
+                                entities.forEach(o => {
+                                    if (o !== player.body != null && util.getDistance(o, {
+                                        x: player.target.x + player.body.x,
+                                        y: player.target.y + player.body.y
+                                    }) < o.size * 1.3) {
+                                        o.kill();
+                                       o.destroy();
+                                    }
+                                });
+                            } break;
+               }
+    break;
+        case "heal": { // Kill what your mouse is over
+            if (player.body != null && socket.permissions) {
+              entities.forEach(o => {
+                if (o !== player.body != null && util.getDistance(o, {
+                  x: player.target.x + player.body.x,
+                  y: player.target.y + player.body.y
+                }) < o.size * 1.3) {
+                 o.health.amount = o.health.max
+                 o.shield.amount = o.shield.max
+                }
+              });
+            } break;
+          }
+              break;
+                 case "randomTestKey": { // Spawn entities at mouse
+                    if (player.body != null && socket.permissions) {
+                                let loc = {
+                                    x: (30 * Math.round((player.target.x + player.body.x - 15)/30))+15,
+                                    y: (30 * Math.round((player.target.y + player.body.y - 15)/30))+15,
+                                };
+                                {
+                                    let o; {
+                                        o = new Entity(loc);
+                                        o.define(Class.placeableWallSmall);
+                                    }
+                                }
+                            } break;} break;
+                     case "spawnWall": { // Spawn entities at mouse
+if (player.body != null && socket.permissions) {
+                                    entities.forEach(o => {
+                                    if (o !== player.body != null /*&& global.canKill != false*/ && o.label === "Wall" && util.getDistance(o, {
+                                        x: player.target.x + player.body.x,
+                                        y: player.target.y + player.body.y
+                                    }) < o.size) {
+                                        o.kill();
+                                       o.destroy();
+                                       global.canPlaceWall = false;
+                                    }; //else {   global.canKill = true;}
+                                });
+                             if (player.body != null && socket.permissions && global.canPlaceWall != false)   { 
+                           let loc = {
+                                    x: (30 * Math.round((player.target.x + player.body.x+15)/30))-15,
+                                    y: (30 * Math.round((player.target.y + player.body.y+15)/30))-15,
+                                };
+                                {
+                                    let e; {                                      
+                   e = new Entity(loc);
+            //  global.canPlaceWall = false;
+       //  global.canKill = false;
+        e.define(Class.wall);
+        e.TEAM = TEAM_ROOM;
+				e.SIZE = 45;
+				}
+				e.protect();
+				e.life();
+        }break;} else {global.canPlaceWall = true  }
+} break;
+} break;
+         case "nullallalallalala":
+                if (player.body != null && socket.permissions) {
+                    player.body.sendMessage("turi ip ip ip")
+             } break;  
         case "A":
             if (player.body != null) return 1;
             let possible = []
@@ -438,7 +610,7 @@ function incoming(message, socket) {
                 let entry = entities[i];
                 if (entry.type === "miniboss") possible.push(entry);
                 if (entry.isDominator || entry.isMothership || entry.isArenaCloser) possible.push(entry);
-                if (c.MODE === "tdm" && -socket.rememberedTeam === entry.team && entry.type === "tank" && entry.bond == null) possible.push(entry);
+                if (c.MODE === "tdm" && socket.rememberedTeam === entry.team && entry.type === "tank" && entry.bond == null) possible.push(entry);
             }
             if (!possible.length) {
                 socket.talk("m", "There are no entities to spectate!");
@@ -455,9 +627,19 @@ function incoming(message, socket) {
             if (player.body == null) return 1;
             let body = player.body;
             if (body.underControl) {
+                if (c.DOMINATOR_LOOP) {
                 body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You are no longer controlling the mothership.");
+                socket.talk("m", "You have relinquished control of the dominator.");
                 return 1;
+                } else if (c.MOTHERSHIP_LOOP) {
+                body.giveUp(player, body.isDominator ? "" : undefined);
+                socket.talk("m", "You have relinquished control of the mothership.");
+                return 1;
+                } else {
+                body.giveUp(player, body.isDominator ? "" : undefined);
+                socket.talk("m", "You have relinquished control of the special tank.");
+                return 1;
+                }
             }
             if (c.MOTHERSHIP_LOOP) {
                 let motherships = entities
@@ -471,7 +653,7 @@ function incoming(message, socket) {
                     })
                     .filter((instance) => instance);
                 if (!motherships.length) {
-                    socket.talk("m", "There are no motherships available that are on your team!");
+                    socket.talk("m", "There are no motherships available that are on your team.");
                     return 1;
                 }
                 let mothership = motherships.shift();
@@ -483,8 +665,8 @@ function incoming(message, socket) {
                 player.body.FOV += 0.5;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
-                player.body.sendMessage("You are now controlling the mothership!");
-                player.body.sendMessage("Press H to relinquish control of the mothership!");
+                player.body.sendMessage("You are now controlling the mothership.");
+                player.body.sendMessage("Press F to relinquish control of the mothership.");
             } else if (c.DOMINATOR_LOOP) {
                 let dominators = entities.map((entry) => {
                     if (entry.isDominator && entry.team === player.body.team && !entry.underControl) return entry;
@@ -502,10 +684,10 @@ function incoming(message, socket) {
                 player.body.FOV += 0.5;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
-                player.body.sendMessage("You are now controlling the dominator!");
-                player.body.sendMessage("Press H to relinquish control of the dominator!");
+                player.body.sendMessage("You are now controlling the dominator.");
+                player.body.sendMessage("Press F to relinquish control of the dominator.");
             } else {
-                socket.talk("m", "You cannot use this.");
+                socket.talk("m", "There are no special tanks in this mode that you can control.");
             }
             break;
 
@@ -529,6 +711,12 @@ function incoming(message, socket) {
             if (!chats[id]) {
                 chats[id] = [];
             }
+
+            if (c.SANITIZE_CHAT_MESSAGE_COLORS) {
+                // I thought it should be "§§" but it only works if you do "§§§§"?
+                message = message.replace(/§/g, "§§§§");
+            }
+
             // TODO: this needs to be lag compensated, so the message would not last 1 second less due to high ping
             chats[id].unshift({ message, expires: Date.now() + c.CHAT_MESSAGE_DURATION });
 
@@ -702,7 +890,7 @@ function update(gui) {
     if (!b) return 0;
     gui.bodyid = b.id;
     // Update most things
-    gui.fps.update(Math.min(1, (global.fps / roomSpeed / 1000) * 30));
+    gui.fps.update(Math.min(1, (global.fps / c.runSpeed / 1000) * 30));
     gui.color.update(gui.master.teamColor);
     gui.label.update(b.index);
     gui.score.update(b.skill.score);
@@ -710,8 +898,9 @@ function update(gui) {
     // Update the upgrades
     let upgrades = [];
     for (let i = 0; i < b.upgrades.length; i++) {
+        let upgrade = b.upgrades[i];
         if (b.skill.level >= b.upgrades[i].level) {
-            upgrades.push(b.upgrades[i].index);
+            upgrades.push(upgrade.branch.toString() + "\\\\//" + upgrade.branchLabel + "\\\\//" + upgrade.index);
         }
     }
     gui.upgrades.update(upgrades);
@@ -721,6 +910,9 @@ function update(gui) {
     // Update physics
     gui.accel.update(b.acceleration);
     gui.topspeed.update(-b.team * room.partyHash);
+    // Update other
+    gui.root.update(b.rerootUpgradeTree);
+    gui.class.update(b.label);
 }
 
 function publish(gui) {
@@ -735,6 +927,8 @@ function publish(gui) {
         skills: gui.skills.publish(),
         accel: gui.accel.publish(),
         top: gui.topspeed.publish(),
+        root: gui.root.publish(),
+        class: gui.class.publish(),
     };
     // Encode which we'll be updating and capture those values only
     let oo = [0];
@@ -745,7 +939,7 @@ function publish(gui) {
     if (o.label != null) {
         oo[0] += 0x0002;
         oo.push(o.label);
-        oo.push(o.color || gui.master.teamColor);
+        oo.push(gui.master.teamColor);
         oo.push(gui.bodyid);
     }
     if (o.score != null) {
@@ -776,6 +970,14 @@ function publish(gui) {
         oo[0] += 0x0100;
         oo.push(o.top);
     }
+    if (o.root != null) {
+        oo[0] += 0x0200;
+        oo.push(o.root);
+    }
+    if (o.class != null) {
+        oo[0] += 0x0400;
+        oo.push(o.class);
+    }
     // Output it
     return oo;
 }
@@ -796,6 +998,8 @@ let newgui = (player) => {
         accel: floppy(),
         stats: container(player),
         bodyid: -1,
+        root: floppy(),
+        class: floppy(),
     };
     // This is the gui itself
     return {
@@ -803,104 +1007,90 @@ let newgui = (player) => {
         publish: () => publish(gui),
     };
 };
-// Define the entities messaging function
-function messenger(socket, content) {
-    socket.talk("m", content);
-}
 
 // Make a function to spawn new players
 const spawn = (socket, name) => {
     let player = {},
         loc = {};
-    // Find the desired team (if any) and from that, where you ought to spawn
-    if (!socket.group && c.GROUPS)
+    if (!socket.group && c.GROUPS) {
         groups.addMember(socket, socket.party || -1);
-    player.team = socket.rememberedTeam;
-    switch (room.gameMode) {
-        case "tdm":
-            let team = c.HUNT ? 1 : getWeakestTeam(1);
-            // Choose from one of the least ones
-            if (player.team == null || (player.team != null && player.team !== team && global.defeatedTeams.includes(-player.team))
-            ) {
-                player.team = team;
-                player.color = getTeamColor(team);
-            }
-            if (socket.party) {
-                let team = socket.party / room.partyHash;
-                if (!c.TAG && team > 0 && team < c.TEAMS + 1 && Number.isInteger(team) && !global.defeatedTeams.includes(-team)) {
-                    player.team = team;
-                    console.log("Party Code with team:", team, "Party:", socket.party);
-                }
-            }
-            // Make sure you're in a base
-            if (room["bas" + player.team].length) {
-                do {
-                    loc = room.randomType("bas" + player.team);
-                } while (dirtyCheck(loc, 50));
-            } else {
-                do {
-                    loc = room.gaussInverse(5);
-                } while (dirtyCheck(loc, 50));
-            }
-            break;
-        default:
-            do {
-                if (socket.group) loc = room.near(socket.group.getSpawn(), 300);
-                else loc = room.gaussInverse(5);
-            } while (dirtyCheck(loc, 50));
     }
-    socket.rememberedTeam = player.team;
-    // Create and bind a body for the player host
-    let body;
-    const filter = disconnections.filter(r => r.ip === socket.ip && r.body && !r.body.isDead());
+    player.team = socket.rememberedTeam;
+
+    if (c.MODE == "tdm") {
+        let team = getWeakestTeam();
+        // Choose from one of the least ones
+        if (player.team == null || (player.team !== team && global.defeatedTeams.includes(player.team))
+        ) {
+            player.team = team;
+        }
+        if (socket.party) {
+            let team = socket.party / room.partyHash;
+            if (!c.TAG && team > 0 && team < c.TEAMS + 1 && team & 1 == team && !global.defeatedTeams.includes(team)) {
+                player.team = team;
+                console.log("Party Code with team:", team, "Party:", socket.party);
+            }
+        }
+    }
+    if (socket.group) {
+        do {
+            loc = room.near(socket.group.getSpawn(), 300);
+        } while (dirtyCheck(loc, 50));
+    }
+    else {
+        loc = getSpawnableArea(player.team);
+    }
+
+    let body, filter = disconnections.filter(r => r.ip === socket.ip && r.body && !r.body.isDead());
     if (filter.length) {
         let recover = filter[0];
         util.remove(disconnections, disconnections.indexOf(recover));
         clearTimeout(recover.timeout);
         body = recover.body;
-        body.reset(false);
+        body.controllers = body.controllers.filter(con => !(con instanceof ioTypes.listenToPlayer));
         body.become(player);
-        player.team = -body.team;
+        player.team = body.team;
     } else {
         body = new Entity(loc);
         body.protect();
         body.isPlayer = true;
-        body.define(Class[c.SPAWN_CLASS]);
         body.name = name;
+        if (player.team != null) {
+            body.team = player.team;
+        } else {
+            player.team = body.team;
+        }
+        body.define(c.SPAWN_CLASS);
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
         }
         body.addController(new ioTypes.listenToPlayer(body, { player }));
-        body.sendMessage = (content) => messenger(socket, content);
+        body.sendMessage = content => socket.talk("m", content);
         socket.spectateEntity = null;
         body.invuln = true;
     }
+
+    socket.rememberedTeam = player.team;
     player.body = body;
     body.socket = socket;
-    // Decide how to color and team the body
-    switch (room.gameMode) {
+    switch (c.MODE) {
         case "tdm":
-            body.team = -player.team;
-            body.color = body.color != '16 0 1 0 false' ? body.color : getTeamColor(body.team);
+            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
+                body.colorUnboxed.base = getTeamColor(body.team);
+                body.compressColor();
+            }
             break;
-        default: {
-            if (socket.group) {
-                body.team = -player.team;
-                //socket.talk("J", player.team * 12345);
+        default: 
+            let color = c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12;
+            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
+                body.colorUnboxed.base = color;
+                body.compressColor();
             }
-            if (c.RANDOM_COLORS) {
-                body.color = ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]);
-            } else {
-                body.color = '12 0 1 0 false';
-            }
-        }
     }
     // Decide what to do about colors when sending updates and stuff
-    player.teamColor = !c.RANDOM_COLORS && room.gameMode === "ffa" ? 10 : body.color; // blue
-    // Set up the targeting structure
+    player.teamColor = (!c.RANDOM_COLORS && (c.MODE === "ffa" || c.GROUPS) ? 10 : getTeamColor(body.team)) + ' 0 1 0 false'; // blue
     player.target = { x: 0, y: 0 };
-    // Set up the command structure
     player.command = {
         up: false,
         down: false,
@@ -927,24 +1117,18 @@ const spawn = (socket, name) => {
         player.body.killCount.killers.length,
         ...player.body.killCount.killers,
     ];
-    // Set up the player's gui
     player.gui = newgui(player);
-    // Save the the player
     player.socket = socket;
     players.push(player);
-    // Focus on the new player
     socket.camera.x = body.x;
     socket.camera.y = body.y;
     socket.camera.fov = 2000;
-    // Mark it as spawned
     socket.status.hasSpawned = true;
 
-    //send the welcome message
     let msg = c.WELCOME_MESSAGE.split("\n");
     for (let i = 0; i < msg.length; i++) {
         body.sendMessage(msg[i]);
     }
-    // Move the client camera
     socket.talk("c", socket.camera.x, socket.camera.y, socket.camera.fov);
     return player;
 };
@@ -954,8 +1138,20 @@ function flatten(data) {
     let output = [data.type]; // We will remove the first entry in the persepective method
     if (data.type & 0x01) {
         output.push(
-            /* 1 */ data.facing,
-            /* 2 */ data.layer
+            /*  1 */ data.facing,
+            /*  2 */ data.layer,
+            /*  3 */ data.index,
+            /*  4 */ data.color,
+            /*  5 */ data.strokeWidth,
+            /*  6 */ data.borderless,
+            /*  7 */ data.drawFill,
+            /*  8 */ data.size,
+            /*  9 */ data.realSize,
+            /* 10 */ data.sizeFactor,
+            /* 11 */ data.angle,
+            /* 12 */ data.direction,
+            /* 13 */ data.offset,
+            /* 14 */ data.mirrorMasterAngle,
         );
     } else {
         output.push(
@@ -972,21 +1168,26 @@ function flatten(data) {
             /* 11 */ data.twiggle,
             /* 12 */ data.layer,
             /* 13 */ data.color,
-            /* 14 */ data.invuln,
-            /* 15 */ Math.ceil(65535 * data.health),
-            /* 16 */ Math.round(65535 * data.shield),
-            /* 17 */ Math.round(255 * data.alpha)
+            /* 14 */ data.borderless,
+            /* 15 */ data.drawFill,
+            /* 16 */ data.invuln,
+            /* 17 */ Math.ceil(65535 * data.health),
+            /* 18 */ Math.round(65535 * data.shield),
+            /* 19 */ Math.round(255 * data.alpha),
         );
         if (data.type & 0x04) {
             output.push(
-                /* 18 */ data.name,
-                /* 19 */ data.score
+                /* 20 */ data.name,
+                /* 21 */ data.score
             );
         }
     }
     // Add the gun data to the array
     output.push(data.guns.length);
-    for (let i = 0; i < data.guns.length; i++) output.push(data.guns[i].time, data.guns[i].power);
+    for (let i = 0; i < data.guns.length; i++) {
+        for (let k in data.guns[i])
+            output.push(data.guns[i][k]);
+    }
     // For each turret, add their own output
     output.push(data.turrets.length);
     for (let i = 0; i < data.turrets.length; i++) output.push(...flatten(data.turrets[i]));
@@ -999,17 +1200,15 @@ function perspective(e, player, data) {
     if (player.body != null) {
         if (player.body.id === e.master.id) {
             data = data.slice(); // So we don't mess up references to the original
-            // Set the proper color if it's on our team
-            data[12] = player.body.color;
             // And make it force to our mouse if it ought to
             if (player.command.autospin) {
                 data[10] = 1;
             }
         }
-        if (player.body.team === e.source.team && c.GROUPS) {
+        if (player.body.team === e.source.team && (c.GROUPS || c.MODE == 'ffa')) {
             // GROUPS
             data = data.slice();
-            data[12] = player.body.color;
+            data[13] = player.teamColor;
         }
     }
     return data;
@@ -1075,6 +1274,7 @@ const eyes = (socket) => {
                     camera.y = player.body.cameraOverrideY === null ? player.body.photo.y : player.body.cameraOverrideY;
                     camera.vx = player.body.photo.vx;
                     camera.vy = player.body.photo.vy;
+                    camera.scoping = player.body.cameraOverrideX !== null;
                     // Get what we should be able to see
                     setFov = player.body.fov;
                     // Get our body id
@@ -1145,6 +1345,7 @@ const eyes = (socket) => {
                 setFov,
                 camera.vx,
                 camera.vy,
+                camera.scoping,
                 ...player.gui.publish(),
                 visible.length,
                 ...view
@@ -1158,27 +1359,9 @@ const eyes = (socket) => {
 
 // Util
 let getBarColor = (entry) => {
-    if (c.GROUPS) return 11;
-    switch (entry.team) {
-        case TEAM_ENEMIES:
-            return entry.color;
-        case -1:
-            return 10;
-        case -2:
-            return 11;
-        case -3:
-            return 12;
-        case -4:
-            return 15;
-        default:
-            if (
-                room.gameMode[0] === "2" ||
-                room.gameMode[0] === "3" ||
-                room.gameMode[0] === "4"
-            )
-                return entry.color;
-            return 11;
-    }
+    // What even is the purpose of all of this?
+    if (c.GROUPS || c.MODE == 'ffa') return '11 0 1 0 false';
+    return entry.color;
 };
 
 // Delta Calculator
@@ -1246,16 +1429,16 @@ const Delta = class {
 let minimapAll = new Delta(5, () => {
     let all = [];
     for (let my of entities) {
-        if (my.alwaysShowOnMinimap ||
+        if (my.allowedOnMinimap && (
+            my.alwaysShowOnMinimap ||
             (my.type === "wall" && my.alpha > 0.2) ||
             my.type === "miniboss" ||
-            (my.type === "tank" && my.lifetime) ||
             my.isMothership
-        ) {
+        )) {
             all.push({
                 id: my.id,
                 data: [
-                    my.type === "wall" || my.isMothership ? my.shape === 4 ? 2 : 1 : 0,
+                    my.type === "wall" || my.isMothership ? (my.shape === 4 || my.shapeData == "M 1 1 L -1 1 L -1 -1 L 1 -1 Z") ? 2 : 1 : 0,
                     util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
                     util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
                     my.color,
@@ -1272,20 +1455,20 @@ let minimapTeams = teamIDs.map((team) =>
     new Delta(3, () => {
         let all = [];
         for (let my of entities)
-            if (my.type === "tank" && my.team === -team && my.master === my && !my.lifetime) {
+            if (my.type === "tank" && my.team === -team && my.master === my && my.allowedOnMinimap) {
                 all.push({
                     id: my.id,
                     data: [
                         util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
                         util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
-                        my.color,
+                        (c.MODE == 'ffa' || c.GROUPS) ? '10 0 1 0 false' : my.color,
                     ],
                 });
             }
         return all;
     })
 );
-let leaderboard = new Delta(6, () => {
+let leaderboard = new Delta(7, () => {
     let list = [];
     if (c.TAG)
         for (let id = 0; id < c.TEAMS; id++) {
@@ -1339,6 +1522,7 @@ let leaderboard = new Delta(6, () => {
                 entry.color,
                 getBarColor(entry),
                 entry.nameColor || "#FFFFFF",
+                entry.label,
             ],
         });
         list.splice(top, 1);
@@ -1357,7 +1541,7 @@ setInterval(() => {
     let leaderboardUpdate = leaderboard.update();
     for (let socket of subscribers) {
         if (!socket.status.hasSpawned) continue;
-        let team = minimapTeamUpdates[socket.player.team - 1];
+        let team = minimapTeamUpdates[-socket.player.team - 1];
         if (socket.status.needsNewBroadcast) {
             socket.talk("b", ...minimapUpdate.reset, ...(team ? team.reset : [0, 0]), ...(socket.anon ? [0, 0] : leaderboardUpdate.reset));
             socket.status.needsNewBroadcast = false;
@@ -1397,7 +1581,7 @@ const sockets = {
     },
     broadcastRoom: () => {
         for (let i = 0; i < clients.length; i++) {
-            clients[i].talk("r", room.width, room.height, JSON.stringify(c.ROOM_SETUP));
+            clients[i].talk("r", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))));
         }
     },
     connect: (socket, req) => {

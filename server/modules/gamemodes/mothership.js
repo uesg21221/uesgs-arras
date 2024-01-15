@@ -1,7 +1,7 @@
 global.defeatedTeams = [];
 let motherships = [];
 let teamWon = false;
-let choices = [Class.mothership];
+let choices = ['mothership'];
 
 function spawn() {
     let locs = [{
@@ -30,19 +30,18 @@ function spawn() {
         y: c.HEIGHT * 0.1
     }].sort(() => 0.5 - Math.random());
     for (let i = 0; i < c.TEAMS; i++) {
-        let o = new Entity(locs[i]);
+        let o = new Entity(locs[i]),
+            team = -i - 1;
         o.define(ran.choose(choices));
-        o.define({
-            ACCEPTS_SCORE: false,
-            VALUE: 643890
-        });
-        o.color = getTeamColor(-i - 1);
-        o.team = -i - 1;
+        o.define({ ACCEPTS_SCORE: false, VALUE: 643890 });
+        o.colorUnboxed.base = getTeamColor(team);
+        o.compressColor();
+        o.team = team;
         o.name = "Mothership";
         o.isMothership = true;
         o.controllers.push(new ioTypes.nearestDifferentMaster(o), new ioTypes.mapTargetToGoal(o));
         o.refreshBodyAttributes();
-        motherships.push([o.id, i]);
+        motherships.push([o.id, team]);
     }
 };
 
@@ -68,8 +67,7 @@ function loop() {
     if (teamWon) return;
     let aliveNow = motherships.map(entry => [...entry, entities.find(entity => entity.id === entry[0])]);
     aliveNow = aliveNow.filter(entry => {
-        if (!entry[2]) return death(entry);
-        if (entry[2].isDead()) return death(entry);
+        if (!entry[2] || entry[2].isDead()) return death(entry);
         return true;
     });
     if (aliveNow.length === 1) {

@@ -1,13 +1,13 @@
 function simplecollide(my, n) {
-    let difference = (1 + util.getDistance(my, n) / 2) * roomSpeed;
-    let a = (my.intangibility) ? 1 : my.pushability,
-        b = (n.intangibility) ? 1 : n.pushability,
-        c = 0.05 * (my.x - n.x) / difference,
-        d = 0.05 * (my.y - n.y) / difference;
-    my.accel.x += a / (b + 0.3) * c;
-    my.accel.y += a / (b + 0.3) * d;
-    n.accel.x -= b / (a + 0.3) * c;
-    n.accel.y -= b / (a + 0.3) * d;
+    let difference = (1 + util.getDistance(my, n) / 2) * c.runSpeed;
+    let pushability1 = (my.intangibility) ? 1 : my.pushability,
+        pushability2 = (n.intangibility) ? 1 : n.pushability,
+        differenceX = 0.05 * (my.x - n.x) / difference,
+        differenceY = 0.05 * (my.y - n.y) / difference;
+    my.accel.x += pushability1 / (pushability2 + 0.3) * differenceX;
+    my.accel.y += pushability1 / (pushability2 + 0.3) * differenceY;
+    n.accel.x -= pushability1 / (pushability2 + 0.3) * differenceX;
+    n.accel.y -= pushability1 / (pushability2 + 0.3) * differenceY;
 }
 
 function firmcollide(my, n, buffer = 0) {
@@ -24,7 +24,7 @@ function firmcollide(my, n, buffer = 0) {
     let s2 = Math.max(n.velocity.length, n.topSpeed);
     let strike1, strike2;
     if (buffer > 0 && dist <= my.realSize + n.realSize + buffer) {
-        let repel = (my.acceleration + n.acceleration) * (my.realSize + n.realSize + buffer - dist) / buffer / roomSpeed;
+        let repel = (my.acceleration + n.acceleration) * (my.realSize + n.realSize + buffer - dist) / buffer / c.runSpeed;
         my.accel.x += repel * (item1.x - item2.x) / dist;
         my.accel.y += repel * (item1.y - item2.y) / dist;
         n.accel.x -= repel * (item1.x - item2.x) / dist;
@@ -34,14 +34,14 @@ function firmcollide(my, n, buffer = 0) {
         strike1 = false;
         strike2 = false;
         if (my.velocity.length <= s1) {
-            my.velocity.x -= 0.05 * (item2.x - item1.x) / dist / roomSpeed;
-            my.velocity.y -= 0.05 * (item2.y - item1.y) / dist / roomSpeed;
+            my.velocity.x -= 0.05 * (item2.x - item1.x) / dist / c.runSpeed;
+            my.velocity.y -= 0.05 * (item2.y - item1.y) / dist / c.runSpeed;
         } else {
             strike1 = true;
         }
         if (n.velocity.length <= s2) {
-            n.velocity.x += 0.05 * (item2.x - item1.x) / dist / roomSpeed;
-            n.velocity.y += 0.05 * (item2.y - item1.y) / dist / roomSpeed;
+            n.velocity.x += 0.05 * (item2.x - item1.x) / dist / c.runSpeed;
+            n.velocity.y += 0.05 * (item2.y - item1.y) / dist / c.runSpeed;
         } else {
             strike2 = true;
         }
@@ -231,17 +231,19 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
             // Now apply it
             // my.damageRecieved += damage._n * deathFactor._n;
             // n.damageRecieved += damage._me * deathFactor._me;
-            const __n = damage._n * deathFactor._n;
-            const __m = damage._me * deathFactor._me;
-            my.damageRecieved += __n * (__n > 0
+            const __my = damage._n * deathFactor._n;
+            const __n = damage._me * deathFactor._me;
+            my.damageRecieved += __my * Number(__my > 0
                 ? my.team != n.team
                 : n.healer && n.team == my.team && my.type == "tank" && n.master.id != my.id);
-            n.damageRecieved += __m * (__m > 0
+            n.damageRecieved += __n * Number(__n > 0
                 ? my.team != n.team
                 : my.healer && n.team == my.team && n.type == "tank" && my.master.id != n.id);
-
         }
     }
+    // Exit if healer (healers don't push on collide)
+    if (n.healer && n.team == my.team && my.type == "tank" && n.master.id != my.id) return;
+    if (my.healer && n.team == my.team && n.type == "tank" && my.master.id != n.id) return;
     /************* DO MOTION ***********/
     if (nIsFirmCollide < 0) {
         nIsFirmCollide *= -0.5;
@@ -260,7 +262,7 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
         } else {
             elasticity *= 2;
         }
-        let spring = 2 * Math.sqrt(savedHealthRatio._me * savedHealthRatio._n) / roomSpeed,
+        let spring = 2 * Math.sqrt(savedHealthRatio._me * savedHealthRatio._n) / c.runSpeed,
             elasticImpulse =
             Math.pow(combinedDepth.down, 2) *
             elasticity * component *
@@ -300,23 +302,25 @@ function mooncollide(moon, n) {
     n.accel.y -= dy * n.pushability * 0.05 * sink * 2;
 }
 
-function reflectCollide(wall, bounce) {
+function mazewallcollide(wall, bounce) {
     if (bounce.god === true || bounce.passive === true || bounce.ac || bounce.master.ac) return;
+    if (bounce.store.noWallCollision) return;
     if (bounce.team === wall.team && bounce.type === "tank") return;
-    if (bounce.x + bounce.size < wall.x - wall.size ||
-        bounce.x - bounce.size > wall.x + wall.size ||
-        bounce.y + bounce.size < wall.y - wall.size ||
-        bounce.y - bounce.size > wall.y + wall.size) return 0;
+    let trueWallSize = wall.size + 2;
+    if (bounce.x + bounce.size < wall.x - trueWallSize ||
+        bounce.x - bounce.size > wall.x + trueWallSize ||
+        bounce.y + bounce.size < wall.y - trueWallSize ||
+        bounce.y - bounce.size > wall.y + trueWallSize) return 0;
     if (wall.intangibility) return 0
     let bounceBy = bounce.type === 'tank' ? 1.0 : bounce.type === 'miniboss' ? 2.5 : 0.1
-    let left = bounce.x < wall.x - wall.size
-    let right = bounce.x > wall.x + wall.size
-    let top = bounce.y < wall.y - wall.size
-    let bottom = bounce.y > wall.y + wall.size
-    let leftExposed = bounce.x - bounce.size < wall.x - wall.size
-    let rightExposed = bounce.x + bounce.size > wall.x + wall.size
-    let topExposed = bounce.y - bounce.size < wall.y - wall.size
-    let bottomExposed = bounce.y + bounce.size > wall.y + wall.size
+    let left = bounce.x < wall.x - trueWallSize
+    let right = bounce.x > wall.x + trueWallSize
+    let top = bounce.y < wall.y - trueWallSize
+    let bottom = bounce.y > wall.y + trueWallSize
+    let leftExposed = bounce.x - bounce.size < wall.x - trueWallSize
+    let rightExposed = bounce.x + bounce.size > wall.x + trueWallSize
+    let topExposed = bounce.y - bounce.size < wall.y - trueWallSize
+    let bottomExposed = bounce.y + bounce.size > wall.y + trueWallSize
 
     let intersected = true
 
@@ -333,31 +337,31 @@ function reflectCollide(wall, bounce) {
         topExposed = bottomExposed = false
     }
     if ((left && !top && !bottom) || (leftExposed && !topExposed && !bottomExposed)) {
-        bounce.accel.x -= (bounce.x + bounce.size - wall.x + wall.size) * bounceBy
+        bounce.accel.x -= (bounce.x + bounce.size - wall.x + trueWallSize) * bounceBy
     } else if ((right && !top && !bottom) || (rightExposed && !topExposed && !bottomExposed)) {
-        bounce.accel.x -= (bounce.x - bounce.size - wall.x - wall.size) * bounceBy
+        bounce.accel.x -= (bounce.x - bounce.size - wall.x - trueWallSize) * bounceBy
     } else if ((top && !left && !right) || (topExposed && !leftExposed && !rightExposed)) {
-        bounce.accel.y -= (bounce.y + bounce.size - wall.y + wall.size) * bounceBy
+        bounce.accel.y -= (bounce.y + bounce.size - wall.y + trueWallSize) * bounceBy
     } else if ((bottom && !left && !right) || (bottomExposed && !leftExposed && !rightExposed)) {
-        bounce.accel.y -= (bounce.y - bounce.size - wall.y - wall.size) * bounceBy
+        bounce.accel.y -= (bounce.y - bounce.size - wall.y - trueWallSize) * bounceBy
     } else {
-        let x = leftExposed ? -wall.size : rightExposed ? wall.size : 0
-        let y = topExposed ? -wall.size : bottomExposed ? wall.size : 0
+        let x = leftExposed ? -trueWallSize : rightExposed ? trueWallSize : 0
+        let y = topExposed ? -trueWallSize : bottomExposed ? trueWallSize : 0
 
         let point = new Vector(wall.x + x - bounce.x, wall.y + y - bounce.y)
 
         if (!x || !y) {
             if (bounce.x + bounce.y < wall.x + wall.y) { // top left
                 if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
-                    bounce.accel.x -= (bounce.x + bounce.size - wall.x + wall.size) * bounceBy
+                    bounce.accel.x -= (bounce.x + bounce.size - wall.x + trueWallSize) * bounceBy
                 } else { // top right
-                    bounce.accel.y -= (bounce.y + bounce.size - wall.y + wall.size) * bounceBy
+                    bounce.accel.y -= (bounce.y + bounce.size - wall.y + trueWallSize) * bounceBy
                 }
             } else { // bottom right
                 if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
-                    bounce.accel.y -= (bounce.y - bounce.size - wall.y - wall.size) * bounceBy
+                    bounce.accel.y -= (bounce.y - bounce.size - wall.y - trueWallSize) * bounceBy
                 } else { // top right
-                    bounce.accel.x -= (bounce.x - bounce.size - wall.x - wall.size) * bounceBy
+                    bounce.accel.x -= (bounce.x - bounce.size - wall.x - trueWallSize) * bounceBy
                 }
             }
         } else if (!(left || right || top || bottom)) {
@@ -376,7 +380,7 @@ function reflectCollide(wall, bounce) {
     }
 
     if (intersected) {
-        if (bounce.type !== 'tank' && bounce.type !== 'miniboss') {
+        if (bounce.type !== 'tank' && bounce.type !== 'miniboss' && bounce.type !== 'food') {
             bounce.kill();
         } else {
             bounce.collisionArray.push(wall);
@@ -390,5 +394,5 @@ module.exports = {
     reflectcollide,
     advancedcollide,
     mooncollide,
-    reflectCollide
+    mazewallcollide
 };

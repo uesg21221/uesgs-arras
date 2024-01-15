@@ -8,6 +8,7 @@ function close() {
 function closeArena() {
     if (arenaClosed) return;
     sockets.broadcast("Arena closed: No players may join!");
+    util.log('Arena Closing initiated');
     global.arenaClosed = true;
     for (let i = 0; i < entities.length; i++) {
         if (entities[i].isBot) {
@@ -20,7 +21,7 @@ function closeArena() {
             x: room.width / 2 + (room.width / 1.5) * Math.cos(angle),
             y: room.width / 2 + (room.width / 1.5) * Math.sin(angle),
         });
-        o.define(Class.arenaCloser);
+        o.define('arenaCloser');
         o.define({
             AI: {
                 FULL_VIEW: true,
@@ -34,7 +35,8 @@ function closeArena() {
             CAN_BE_ON_LEADERBOARD: false,
             VALUE: 100000,
         });
-        o.color = 3;
+        o.colorUnboxed.base = 3;
+        o.compressColor();
         o.team = TEAM_ROOM;
         o.name = "Arena Closer";
     }

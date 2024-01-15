@@ -1,12 +1,12 @@
 class ManHunt {
     constructor () {
-        this.leaderIDs = [];
+        this.leaderIDs = [null];
     }
 
     //calculate leader by going through each player/bot and getting the one with the highest score
     getLeader() {
         let highestScore = -Infinity,
-            leader;
+            leader = { id: null };
         for (let entity of entities) {
             if (!entity.isPlayer && !entity.isBot) continue;
             if (entity.skill.score <= highestScore) continue;
@@ -21,9 +21,11 @@ class ManHunt {
         // get new leader
         let leader = this.getLeader();
         if (this.leaderIDs.includes(leader.id)) return;
+        this.leaderIDs.push(leader.id);
 
         // apply buffs to them
         leader.color = getTeamColor(TEAM_GREEN);
+        leader.compressColor();
         leader.skill.points += 18;
         leader.alwaysShowOnMinimap = true;
 

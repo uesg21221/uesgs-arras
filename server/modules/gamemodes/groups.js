@@ -1,8 +1,7 @@
 let activeGroups = [];
 const getID = () => {
-    let i = 0;
-    for (let i = 0; i < 1e3; i++) {
-        if (!activeGroups.find(e => e.teamID === i)) return i;
+    for (let i = 1; i < 1e3; i++) {
+        if (!activeGroups.find(e => e.teamID === -i)) return -i;
     }
     return -Number(Math.random().toString().replace("0.", ""));
 };
@@ -39,14 +38,8 @@ class Group {
     getSpawn() {
         let validMembers = this.members.map(entry => entry).filter(a => !!a.player).filter(b => !!b.player.body);
         if (!validMembers.length) return room.random();
-        let {
-            x,
-            y
-        } = ran.choose(validMembers).player.body;
-        return {
-            x,
-            y
-        };
+        let { x, y } = ran.choose(validMembers).player.body;
+        return { x, y };
     }
 }
 

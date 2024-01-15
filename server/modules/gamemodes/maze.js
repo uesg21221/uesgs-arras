@@ -1,18 +1,6 @@
-let locsToAvoid = ["nest", "port"];
-for (let i = 1; i < c.TEAMS + 1; i++) {
-    locsToAvoid.push("bas" + i);
-    locsToAvoid.push("bap" + i);
-}
-if (c.DOMINATOR_LOOP) locsToAvoid.push("dom0");
-let activeLocsThatWeCantPlaceIn = 0;
-for (let loc of locsToAvoid) {
-    if (room[loc].length) {
-        activeLocsThatWeCantPlaceIn += room[loc].length;
-    }
-}
-
 function generateMaze(size) {
     let maze = JSON.parse(JSON.stringify(Array(size).fill(Array(size).fill(true))));
+    let activeLocsThatWeCantPlaceIn = 0;
     maze[0] = Array(size).fill(false);
     maze[size - 1] = Array(size).fill(false);
     maze[Math.floor(size * 0.15)] = [true, true, true, true, true, true, ...Array(size - 12).fill(false), true, true, true, true, true, true];
@@ -76,65 +64,54 @@ function generateMaze(size) {
         }
     }
     if (eroded) {
-        for (let x = 0; x < size - 1; x++)
-            for (let y = 0; y < size - 1; y++)
-                if (maze[x][y] && maze[x + 1][y] && maze[x + 2][y] && maze[x][y + 1] && maze[x][y + 2] && maze[x + 1][y + 2] && maze[x + 2][y + 1] && maze[x + 1][y + 1] && maze[x + 2][y + 2]) {
-                    maze[x][y] = 3;
-                    maze[x + 1][y] = false;
-                    maze[x][y + 1] = false;
-                    maze[x + 2][y] = false;
-                    maze[x][y + 2] = false;
-                    maze[x + 2][y + 1] = false;
-                    maze[x + 1][y + 2] = false;
-                    maze[x + 1][y + 1] = false;
-                    maze[x + 2][y + 2] = false;
-                } else if (maze[x][y] && maze[x + 1][y] && maze[x][y + 1] && maze[x + 1][y + 1]) {
-            maze[x][y] = 2;
-            maze[x + 1][y] = false;
-            maze[x][y + 1] = false;
-            maze[x + 1][y + 1] = false;
+        // Convert to big walls
+        let checkMazeForBlocks = (initX, initY, size) => {
+            for (let x = 0; x < size; x++) {
+                for (let y = 0; y < size; y++) {
+                    if (!maze[initY + y] || !maze[initY + y][initX + x]) return;
+                }
+            }
+            for (let x = 0; x < size; x++) {
+                for (let y = 0; y < size; y++) {
+                    maze[initY + y][initX + x] = false;
+                }
+            }
+            maze[initY][initX] = size;
+        };
+        for (let x = 0; x < size - 1; x++) {
+            for (let y = 0; y < size - 1; y++) {
+                for (s = 5; s >= 2; s--) checkMazeForBlocks(x, y, s);
+            }
         }
         for (let x = 0; x < size; x++) {
             for (let y = 0; y < size; y++) {
-                let spawnWall = true;
+                let spawnWall = false;
                 let d = {};
                 let scale = room.width / size;
-                if (maze[x][y] === 3) d = {
-                    x: (x * scale) + (scale * 1.5),
-                    y: (y * scale) + (scale * 1.5),
-                    s: scale * 3,
-                    sS: 5
-                };
-                else if (maze[x][y] === 2) d = {
-                    x: (x * scale) + scale,
-                    y: (y * scale) + scale,
-                    s: scale * 2,
-                    sS: 2.5
-                };
-                else if (maze[x][y]) d = {
-                    x: (x * scale) + (scale * 0.5),
-                    y: (y * scale) + (scale * 0.5),
-                    s: scale,
-                    sS: 1
-                };
-                else spawnWall = false;
-                if (spawnWall) {
+                let loc = {x, y}
+
+                // Find spawn location and size
+                for (let s = 5; s >= 1; s--) {
+                    if (maze[x][y] == s) {
+                        d = {
+                            x: (x * scale) + (scale * s / 2),
+                            y: (y * scale) + (scale * s / 2),
+                            s: scale * s,
+                        };
+                        spawnWall = true;
+                        break
+                    }
+                }
+                if (spawnWall && room.getAt(loc).data.allowMazeWallSpawn) {
                     let o = new Entity({
                         x: d.x,
                         y: d.y
                     });
                     o.define(Class.wall);
-                    o.SIZE = (d.s * 0.5) + d.sS;
+                    o.SIZE = d.s * 0.5 - 2;
                     o.team = TEAM_ENEMIES;
                     o.protect();
                     o.life();
-                    let validSpawn = true;
-                    for (let loc of locsToAvoid)
-                        if (room.isIn(loc, {
-                                x: d.x,
-                                y: d.y
-                            }, true)) validSpawn = false;
-                    if (!validSpawn) o.kill();
                 }
             }
         }

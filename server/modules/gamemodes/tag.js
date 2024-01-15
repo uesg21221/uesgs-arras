@@ -1,65 +1,79 @@
-function countPlayers() {
-    let teams = [];
-    for (let i = 1; i < c.TEAMS + 1; i++) teams.push([-i, 0]);
-    let all = 0;
+global.defeatedTeams = [];
+let motherships = [];
+let teamWon = false;
+let choices = ['mothership'];
+
+function spawn() {
+    let locs = [{
+        x: c.WIDTH * 0.1,
+        y: c.HEIGHT * 0.1
+    }, {
+        x: c.WIDTH * 0.9,
+        y: c.HEIGHT * 0.9
+    }, {
+        x: c.WIDTH * 0.9,
+        y: c.HEIGHT * 0.1
+    }, {
+        x: c.WIDTH * 0.1,
+        y: c.HEIGHT * 0.9
+    }, {
+        x: c.WIDTH * 0.9,
+        y: c.HEIGHT * 0.5
+    }, {
+        x: c.WIDTH * 0.1,
+        y: c.HEIGHT * 0.5
+    }, {
+        x: c.WIDTH * 0.5,
+        y: c.HEIGHT * 0.9
+    }, {
+        x: c.WIDTH * 0.5,
+        y: c.HEIGHT * 0.1
+    }].sort(() => 0.5 - Math.random());
+    for (let i = 0; i < c.TEAMS; i++) {
+        let o = new Entity(locs[i]),
+            team = -i - 1;
+        o.define(ran.choose(choices));
+        o.define({ ACCEPTS_SCORE: false, VALUE: 643890 });
+        o.color = getTeamColor(team);
+        o.team = team;
+        o.name = "Mothership";
+        o.isMothership = true;
+        o.controllers.push(new ioTypes.nearestDifferentMaster(o), new ioTypes.mapTargetToGoal(o));
+        o.refreshBodyAttributes();
+        motherships.push([o.id, team]);
+    }
+};
+
+function death(entry) {
+    sockets.broadcast(getTeamName(entry[1]) + "'s mothership has been killed!");
+    global.defeatedTeams.push(-entry[1] - 1);
     for (let i = 0; i < entities.length; i++) {
         let o = entities[i];
-        if (!o.isPlayer && !o.isBot) continue;
-        if (![-1, -2, -3, -4].includes(o.team)) continue;
-        teams.find(entry => entry[0] === o.team)[1]++;
-        all++;
+        if (o.team === -entry[1] - 1) {
+            o.sendMessage("Your team has been eliminated.");
+            o.kill();
+        }
     }
-    let team = teams.find(entry => entry[1] === all);
-    if (team) winner(-team[0] - 1);
+    return false;
 };
-
-let won = false;
 
 function winner(teamId) {
-    if (won) return;
-    won = true;
-    let team = getTeamName(-teamId - 1);
-    sockets.broadcast(team + " has won the game!");
-    setTimeout(closeArena, 3e3);
+    sockets.broadcast(getTeamName(teamId) + " has won the game!");
+    setTimeout(closeArena, 3000);
 };
 
-function init(g) {
-    g.events.on('spawn', entity => {
-        entity.on('death', () => {
-            if (!this.isPlayer && !this.isBot) return;
-            let killers = [];
-            for (let entry of entity.collisionArray) {
-                // TODO: fix arbitrary/magic team numbers
-                if (entry.team > -5 && entry.team < 0 && entity.team !== entry.team) {
-                    killers.push(entry);
-                }
-            }
-            if (!killers.length) return;
-            let killer = ran.choose(killers);
-            if (entity.socket) entity.socket.rememberedTeam = -killer.team;
-            /*if (room.width > 1500) {
-              room.width -= 10;
-              room.height -= 10;
-              sockets.broadcastRoom();
-            }*/
-            setTimeout(countPlayers, 1000);
-        });
+function loop() {
+    if (teamWon) return;
+    let aliveNow = motherships.map(entry => [...entry, entities.find(entity => entity.id === entry[0])]);
+    aliveNow = aliveNow.filter(entry => {
+        if (!entry[2] || entry[2].isDead()) return death(entry);
+        return true;
     });
-}
+    if (aliveNow.length === 1) {
+        teamWon = true;
+        setTimeout(winner, 2500, aliveNow[0][1]);
+    }
+    motherships = aliveNow;
+};
 
-function tagDeathEvent(instance) {
-    let killers = [];
-    for (let entry of instance.collisionArray)
-        if (entry.team > -5 && entry.team < 0 && instance.team !== entry.team) killers.push(entry);
-    if (!killers.length) return;
-    let killer = ran.choose(killers);
-    if (instance.socket) instance.socket.rememberedTeam = -killer.team;
-    /*if (room.width > 1500) {
-      room.width -= 10;
-      room.height -= 10;
-      sockets.broadcastRoom();
-    }*/
-    setTimeout(countPlayers, 1000);
-}
-
-module.exports = { init, countPlayers, tagDeathEvent };
+module.exports = { mothershipLoop:  { spawn, loop, motherships } };

@@ -1,16 +1,17 @@
-const { combineStats, skillSet, makeAuto, makeDeco } = require('../facilitators.js');
-const { base, statnames, gunCalcNames, smshskl } = require('../constants.js');
-const { genericTank } = require('./generics.js')
-const { trapper } = require('./tanks.js');
+const { combineStats, skillSet, makeAuto, makeDeco, makeMulti } = require('../facilitators.js');
+const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js');
+require('./generics.js')
+require('./tanks.js');
 const g = require('../gunvals.js');
 
 // OBSTACLES
-exports.rock = {
+Class.rock = {
     TYPE: "wall",
     DAMAGE_CLASS: 1,
     LABEL: "Rock",
     FACING_TYPE: "turnWithSpeed",
     SHAPE: -9,
+    CAN_GO_OUTSIDE_ROOM: true,
     BODY: {
         PUSHABILITY: 0,
         HEALTH: 10000,
@@ -22,46 +23,49 @@ exports.rock = {
     },
     VALUE: 0,
     SIZE: 60,
-    COLOR: 16,
+    COLOR: "grey",
     VARIES_IN_SIZE: true,
     ACCEPTS_SCORE: false,
 };
-exports.stone = {
+Class.stone = {
     PARENT: ["rock"],
     LABEL: "Stone",
     SIZE: 32,
     SHAPE: -7,
 };
-exports.moon = {
+Class.moon = {
     PARENT: ["rock"],
     LABEL: "Moon",
     SIZE: 60,
     SHAPE: 0,
 };
-exports.gravel = {
+Class.gravel = {
     PARENT: ["rock"],
     LABEL: "Gravel",
     SIZE: 16,
     SHAPE: -7,
 };
-exports.wall = {
+Class.wall = {
     PARENT: ["rock"],
     LABEL: "Wall",
     SIZE: 25,
-    SHAPE: 4,
+    SHAPE: "M 1 1 L -1 1 L -1 -1 L 1 -1 Z",
+    VARIES_IN_SIZE: false,
 };
 
 // DOMINATORS
-exports.dominationBody = {
+Class.dominationBody = {
     LABEL: "",
     CONTROLLERS: [["spin", { startAngle: Math.PI / 2, speed: 0, independent: true }]],
-    COLOR: 9,
+    COLOR: "black",
     SHAPE: 6,
     INDEPENDENT: true,
 };
-exports.dominator = {
+Class.dominator = {
     PARENT: ["genericTank"],
     LABEL: "Dominator",
+    UPGRADE_LABEL: 'Unknown',
+    ON_MINIMAP: false,
     DANGER: 7,
     SKILL: skillSet({
         rld: 1,
@@ -96,8 +100,9 @@ exports.dominator = {
     ACCEPTS_SCORE: false,
     HITS_OWN_TYPE: "pushOnlyTeam",
 };
-exports.destroyerDominator = {
+Class.destroyerDominator = {
     PARENT: ["dominator"],
+    UPGRADE_LABEL: 'Destroyer',
     GUNS: [
         {
             POSITION: [15.25, 6.75, 1, 0, 0, 0, 0],
@@ -111,8 +116,9 @@ exports.destroyerDominator = {
         },
     ],
 };
-exports.gunnerDominator = {
+Class.gunnerDominator = {
     PARENT: ["dominator"],
+    UPGRADE_LABEL: 'Gunner',
     GUNS: [
         {
             POSITION: [14.25, 3, 1, 0, -2, 0, 0.5],
@@ -140,9 +146,10 @@ exports.gunnerDominator = {
         },
     ],
 };
-exports.trapperDominator = {
+Class.trapperDominator = {
     PARENT: ["dominator"],
-    FACING_TYPE: "autospin",
+    UPGRADE_LABEL: 'Trapper',
+    FACING_TYPE: ["spin", {speed: 0.02}],
     CONTROLLERS: ["alwaysFire"],
     GUNS: [
         {
@@ -153,6 +160,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -163,6 +171,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -173,6 +182,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -183,6 +193,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -193,6 +204,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -203,6 +215,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -213,6 +226,7 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
         {
@@ -223,16 +237,111 @@ exports.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap
             },
         },
     ],
 };
 
+// SANCTUARIES
+Class.sanctuaryHealer = {
+    PARENT: "genericTank",
+    LABEL: "",
+    BODY: {
+        FOV: base.FOV * 1.2,
+    },
+    CONTROLLERS: [["spin", { independent: true, speed: -0.05 }]],
+    TURRETS: [{ 
+        POSITION: { SIZE: 13, LAYER: 1 },
+        TYPE: ['healerSymbol', { CONTROLLERS: [["spin", { startAngle: Math.PI / 2, speed: 0, independent: true }]] }]
+    }],
+};
+
+let sancTiers =       [3, 6, 8, 9, 10, 12]
+let sancHealerTiers = [2, 3, 4]
+for (let tier of sancHealerTiers) {
+    Class['sanctuaryHealerTier' + (sancHealerTiers.indexOf(tier) + 1)] = {
+        PARENT: "sanctuaryHealer",
+        GUNS: (() => {
+            let output = []
+            for (let i = 0; i < tier; i++) {
+                output.push({
+                    POSITION: { LENGTH: 8, WIDTH: 9, ASPECT: -0.5, X: 12.5, ANGLE: (360 / tier) * i },
+                }, {
+                    POSITION: { LENGTH: 8, WIDTH: 10, X: 10, ANGLE: (360 / tier) * i },
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.healer, {shudder: 0.1, spray: 0.1, speed: 0.8, reload: 1.2}]),
+                        TYPE: "healerBullet",
+                        AUTOFIRE: true,
+                    }
+                })
+            }
+            return output
+        })()
+    }
+}
+
+Class.sanctuary = {
+    PARENT: "dominator",
+    LABEL: "Sanctuary",
+    LEVEL: 45,
+    SIZE: 20,
+    FACING_TYPE: ["spin", {speed: 0.02}],
+    CONTROLLERS: ["alwaysFire"],
+    SKILL: skillSet({
+        rld: 1.25,
+        dam: 1.25,
+        str: 1.25,
+    }),
+    BODY: {
+        HEALTH: 750,
+        DAMAGE: 7.5,
+        SHIELD: base.SHIELD * 1.5,
+    },
+    TURRETS: [{
+        POSITION: { SIZE: 22 },
+        TYPE: "dominationBody",
+    }]
+};
+
+for (let tier of sancTiers) {
+    let sancIndex = sancTiers.indexOf(tier)
+    Class['sanctuaryTier' + (sancIndex + 1)] = {
+        PARENT: "sanctuary",
+        TURRETS: [],
+        UPGRADE_LABEL: 'Tier ' + (sancIndex + 1),
+        GUNS: (() => {
+            let output = []
+            for (let i = 0; i < tier; i++) {
+                output.push({
+                    POSITION: {LENGTH: 12, WIDTH: 4, ANGLE: (360/tier)*i}
+                }, {
+                    POSITION: {LENGTH: 1.5, WIDTH: 4, ASPECT: 1.7, X: 12, ANGLE: (360/tier)*i},
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.trap, {shudder: 2, spray: 1.2, speed: 0.8, reload: 1.5}]),
+                        TYPE: "trap",
+                        STAT_CALCULATOR: gunCalcNames.trap,
+                        AUTOFIRE: true,
+                    },
+                })
+            }
+            return output
+        })()
+    }
+    Class['sanctuaryTier' + (sancIndex + 1)].TURRETS.push({
+        POSITION: { SIZE: 22 },
+        TYPE: "dominationBody",
+    }, {
+        POSITION: { SIZE: 8.5, LAYER: 1 },
+        TYPE: "sanctuaryHealerTier" + (sancIndex < 2 ? 1 : sancIndex < 4 ? 2 : sancIndex < 6 ? 3 : 3),
+    })
+}
+
 // CRASHERS
-exports.crasher = {
+Class.crasher = {
     TYPE: "crasher",
     LABEL: "Crasher",
-    COLOR: 5,
+    COLOR: "pink",
     SHAPE: 3,
     SIZE: 5,
     VARIES_IN_SIZE: true,
@@ -256,12 +365,12 @@ exports.crasher = {
     HAS_NO_MASTER: true,
     DRAW_HEALTH: true,
 };
-exports.crasherSpawner = {
+Class.crasherSpawner = {
     PARENT: ["genericTank"],
     LABEL: "Spawned",
     STAT_NAMES: statnames.drone,
     CONTROLLERS: ["nearestDifferentMaster"],
-    COLOR: 5,
+    COLOR: "pink",
     INDEPENDENT: true,
     AI: {
         chase: true,
@@ -289,12 +398,13 @@ exports.crasherSpawner = {
 };
 
 // SENTRIES
-exports.sentry = {
+Class.sentry = {
     PARENT: ["genericTank"],
     TYPE: "crasher",
     LABEL: "Sentry",
     DANGER: 3,
-    COLOR: 5,
+    COLOR: "pink",
+    UPGRADE_COLOR: "pink",
     SHAPE: 3,
     SIZE: 10,
     SKILL: skillSet({
@@ -329,7 +439,7 @@ exports.sentry = {
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
-exports.trapTurret = {
+Class.trapTurret = {
     PARENT: ["genericTank"],
     LABEL: "Turret",
     BODY: {
@@ -337,7 +447,7 @@ exports.trapTurret = {
     },
     INDEPENDENT: true,
     CONTROLLERS: ["nearestDifferentMaster", 'onlyAcceptInArc'],
-    COLOR: 16,
+    COLOR: "grey",
     AI: {
         SKYNET: true,
         FULL_VIEW: true,
@@ -349,7 +459,7 @@ exports.trapTurret = {
         {
             POSITION: [4, 14, 1.8, 16, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.lowpower, g.fast, g.halfreload]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.lowPower, { speed: 1.2 }, { reload: 2 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -357,12 +467,17 @@ exports.trapTurret = {
     ],
 };
 
+Class.shotTrapBox = {
+    PARENT: 'unsetTrap',
+    MOTION_TYPE: "glide",
+}
 let makeshottrapTurretProps = () => ({
-    SHOOT_SETTINGS: combineStats([g.trap, g.weak, g.lowpower, g.shotgun, g.acc, g.mach]),
+    SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, { speed: 0.7, maxSpeed: 0.2, damage: 1.5 }]),
     AUTOFIRE: true,
-    TYPE: "trap"
+    TYPE: "shotTrapBox",
+    STAT_CALCULATOR: gunCalcNames.block,
 });
-exports.shottrapTurret = {
+Class.shottrapTurret = {
     PARENT: ["genericTank"],
     LABEL: 'Turret',
     BODY: {
@@ -370,46 +485,48 @@ exports.shottrapTurret = {
     },
     INDEPENDENT: true,
     CONTROLLERS: ['nearestDifferentMaster', 'onlyAcceptInArc'], 
-    COLOR: 16,
+    COLOR: "grey",
     AI: {
         SKYNET: true,
         FULL_VIEW: true,
     },
     GUNS: [ {
-            POSITION: [ 4, 3, 1, 11, -3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 4, 1.5, 1, 11, -3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 4, 3, 1, 11,  3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 4, 2,   1, 11,  3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 4, 3, 1, 13,  0, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 4, 1.5, 1, 13,  0, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 12, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 12, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 1.5, 1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 13, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 13, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 13,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,5, 1, 13,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2.5, 1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2.5, 1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 1, 3, 1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
+            POSITION: [ 1, 2,   1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
     }, {
-            POSITION: [ 16, 14,  1  ,  0, 0, 0, 0 ]
+            POSITION: [ 16, 14, -1.4,  0, 0, 0, 0 ], 
     }, {
-            POSITION: [  4, 14,  1.8, 16, 0, 0, 0 ],
-    }, {
-            POSITION: [  8, 16, -1.1,  4, 0, 0, 0 ], 
+            POSITION: [  6, 14,  1.6, 16, 0, 0, 0 ], PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, g.fake]),
+                AUTOFIRE: true,
+                TYPE: "bullet"
+            }
     } ]
 };
-exports.barricadeTurret = {
+Class.barricadeTurret = {
     PARENT: ["genericTank"],
     LABEL: "Turret",
     BODY: {
@@ -417,7 +534,7 @@ exports.barricadeTurret = {
     },
     INDEPENDENT: true,
     CONTROLLERS: ["nearestDifferentMaster"],
-    COLOR: 16,
+    COLOR: "grey",
     AI: {
         SKYNET: true,
         FULL_VIEW: true,
@@ -429,7 +546,7 @@ exports.barricadeTurret = {
         {
             POSITION: [4, 8, 1.3, 22, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -437,7 +554,7 @@ exports.barricadeTurret = {
         {
             POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -445,7 +562,7 @@ exports.barricadeTurret = {
         {
             POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.mini, g.halfrange]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
@@ -453,65 +570,449 @@ exports.barricadeTurret = {
     ],
 };
 
-exports.sentrySwarm = {
+Class.sentrySwarm = {
     PARENT: ["sentry"],
+    UPGRADE_LABEL: "Swarm Sentry",
+    UPGRADE_COLOR: "pink",
     GUNS: [
         {
             POSITION: [7, 14, 0.6, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.morerecoil]),
+                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
 };
-exports.sentryGun = makeAuto(exports.sentry, "Sentry", {
-    type: exports.megaAutoTankgun,
+Class.megaAutoTurret = {
+  PARENT: ["autoTurret"],
+  BODY: {
+    FOV: 2,
+    SPEED: 0.9
+  },
+  CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"],
+  GUNS: [{
+    POSITION: [22, 14, 1, 0, 0, 0, 0],
+    PROPERTIES: {
+      SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.autoTurret]),
+      TYPE: "bullet"
+    }
+  }]
+}
+Class.sentryGun = makeAuto(Class.sentry, "Sentry", {
+    type: Class.megaAutoTurret,
     size: 12,
 });
-exports.sentryTrap = makeAuto(exports.sentry, "Sentry", {
-    type: exports.trapTurret,
+Class.sentryGun.UPGRADE_LABEL = "Gun Sentry";
+Class.sentryTrap = makeAuto(Class.sentry, "Sentry", {
+    type: Class.trapTurret,
     size: 12,
 });
-
-exports.shinySentry = {
+Class.sentryTrap.UPGRADE_LABEL = "Trap Sentry";
+Class.shinySentry = {
     PARENT: ["sentry"],
-    COLOR: 1,
+    COLOR: "lightGreen",
+    UPGRADE_COLOR: "lightGreen",
     DANGER: 4,
     SIZE: 12,
     VALUE: 50000,
+    SHAPE: 3,
     BODY: {
         HEALTH: 0.6 * base.HEALTH
     },
 };
-exports.shinySentrySwarm = {
+Class.shinySentrySwarm = {
     PARENT: ["shinySentry"],
+    UPGRADE_LABEL: "Shiny Swarm Sentry",
+    UPGRADE_COLOR: "lightGreen",
     GUNS: [
         {
             POSITION: [6, 11, 1.3, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.morerecoil]),
+                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }, g.machineGun, { reload: 0.25 }]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
 };
-exports.shinySentryGun = makeAuto(exports.shinySentry, "Sentry", {
-    type: exports.artilleryAutoTankgun,
+Class.artilleryAutoTankgun = {
+    PARENT: ["genericTank"],
+    LABEL: "Artillery",
+    BODY: {
+        FOV: 2,
+    },
+    CONTROLLERS: [
+        "canRepel",
+        "onlyAcceptInArc",
+        "mapAltToFire",
+        "nearestDifferentMaster",
+    ],
+    COLOR: "grey",
+    GUNS: [{
+        POSITION: [17, 3, 1, 0, -6, -7, 0.25],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, { reload: 0.25 }]),
+            TYPE: "bullet",
+            LABEL: "Secondary",
+        },
+    },
+        {
+            POSITION: [17, 3, 1, 0, 6, 7, 0.75],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, { reload: 0.25 }]),
+                TYPE: "bullet",
+                LABEL: "Secondary",
+            },
+        },
+        {
+            POSITION: [19, 12, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, { reload: 0.25 }]),
+                TYPE: "bullet",
+                LABEL: "Heavy",
+            },
+        },
+    ],
+};
+Class.shinySentryGun = makeAuto(Class.shinySentry, "Sentry", {
+    type: Class.artilleryAutoTankgun,
     size: 12,
 });
-exports.shinySentryTrap = makeAuto(exports.shinySentry, "Sentry", {
-    type: exports.barricadeTurret,
+Class.shinySentryGun.UPGRADE_LABEL = "Shiny Gun Sentry";
+Class.barricadeAutoTankGun = {
+    PARENT: ["genericTank"],
+    LABEL: "Turret",
+    BODY: {
+        FOV: 0.5,
+    },
+    INDEPENDENT: true,
+    CONTROLLERS: ["nearestDifferentMaster"],
+    COLOR: "grey",
+    AI: {
+        SKYNET: true,
+        FULL_VIEW: true,
+    },
+    GUNS: [
+        {
+            POSITION: [24, 8, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [4, 8, 1.3, 22, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
+                TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
+                TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+        {
+            POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
+                TYPE: "trap",
+                STAT_CALCULATOR: gunCalcNames.trap,
+            },
+        },
+    ],
+};
+Class.shinySentryTrap = makeAuto(Class.shinySentry, "Sentry", {
+    type: Class.barricadeAutoTankGun,
     size: 12,
 });
+Class.shinySentryTrap.UPGRADE_LABEL = "Shiny Trap Sentry";
+
+// SENTINELS (by ranar)
+Class.sentinel = {
+  PARENT: ["genericTank"],
+  TYPE: "crasher",
+  LABEL: "Sentinel",
+  DANGER: 7,
+  COLOR: "purple",
+  SHAPE: 5,
+  SIZE: 13,
+  SKILL: skillSet({
+    rld: 0.7, //reload
+    dam: 0.45, //bullet damage
+    pen: 0.6, //bullet penetration
+    str: 0.6, //bullet health
+    atk: 0.5, //bullet speed
+    spd: 0.6, //body damage
+    hlt: 0.85, //max health
+    shi: 0.45, //shield capacity
+    rgn: 0.35, //shield regeneration
+    mob: 0, //movement speed
+  }),
+  VALUE: 26668,
+  VARIES_IN_SIZE: true,
+  CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal", "minion"],
+  AI: { NO_LEAD: true },
+  BODY: {
+    FOV: 0.8,
+    ACCEL: 0.003,
+    DAMAGE: base.DAMAGE * 2.1,
+    SPEED: base.SPEED * 0.4,
+    HEALTH: base.HEALTH * 2.1,
+    SHIELD: base.SHIELD * 2.1,
+    REGEN: base.REGEN * 0.15,
+  },
+  MOTION_TYPE: "motor",
+  FACING_TYPE: "smoothToTarget",
+  HITS_OWN_TYPE: "hard",
+};
+Class.sentinelMissile = {
+  PARENT: ["bullet"],
+  LABEL: "Missile",
+  INDEPENDENT: true,
+  BODY: {
+    RANGE: 120,
+    DENSITY: 3,
+  },
+  GUNS: [
+    {
+      /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+
+      POSITION: [12, 10, 0, 0, 0, 180, 0],
+      PROPERTIES: {
+        AUTOFIRE: true,
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.pounder,
+          g.destroyer, 
+        ]),
+        TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+        STAT_CALCULATOR: gunCalcNames.thruster,
+      },
+    },
+    {
+      POSITION: [14, 6, 1, 0, -2, 130, 0],
+      PROPERTIES: {
+        AUTOFIRE: true,
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+                    g.skimmer,
+        ]),
+        TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+        STAT_CALCULATOR: gunCalcNames.thruster,
+      },
+    },
+    {
+      POSITION: [14, 6, 1, 0, 2, 230, 0],
+      PROPERTIES: {
+        AUTOFIRE: true,
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.skimmer,
+        ]),
+        TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+        STAT_CALCULATOR: gunCalcNames.thruster,
+      },
+    },
+  ],
+};
+Class.sentinelLauncher = {
+  PARENT: ["sentinel"],
+  UPGRADE_LABEL: "Missile Sentinel",
+  UPGRADE_COLOR: "purple",
+  GUNS: [
+    {
+      POSITION: [3, 12.45, -1.35, 17.2, 0, 0, 0],
+            PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.pelleter,
+          g.pounder,
+          g.launcher,
+        ]),
+        TYPE: "sentinelMissile",
+      },
+    },
+    {
+      /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+      POSITION: [17.5, 13, 1.25, 0, 0, 0, 0],
+
+    },
+    {
+      POSITION: [18.55, 20.25, 0.25, 1, 0, 0, 0],
+    },
+  ],
+};
+Class.sentinelCrossbow = {
+  PARENT: ["sentinel"],
+  UPGRADE_LABEL: "Crossbow Sentinel",
+  UPGRADE_COLOR: "purple",
+    GUNS: [
+        {
+            POSITION: [15, 2.5, 1, 0, 3.5, 35/2, 2/3],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([
+                    g.basic,
+                    g.sniper,
+                    g.rifle,
+                    { speed: 0.7, maxSpeed: 0.7 },
+                    g.crossbow,
+                    { recoil: 0.5 },
+                ]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [15, 2.5, 1, 0, -3.5, -35/2, 2/3],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([
+                    g.basic,
+                    g.sniper,
+                    g.rifle,
+                    { speed: 0.7, maxSpeed: 0.7 },
+                    g.crossbow,
+                    { recoil: 0.5 },
+                ]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [20, 3.5, 1, 0, 4, 0, 1/3],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([
+                    g.basic,
+                    g.sniper,
+                    g.rifle,
+                    { speed: 0.7, maxSpeed: 0.7 },
+                    g.crossbow,
+                    { recoil: 0.5 },
+                ]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [20, 3.5, 1, 0, -4, 0, 1/3],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([
+                    g.basic,
+                    g.sniper,
+                    g.rifle,
+                    { speed: 0.7, maxSpeed: 0.7 },
+                    g.crossbow,
+                    { recoil: 0.5 },
+                ]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [24, 7, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([
+                    g.basic,
+                    g.sniper,
+                    g.rifle,
+                    { speed: 0.7, maxSpeed: 0.7 },
+                    { reload: 2 },
+                    { recoil: 0.5 },
+                ]),
+                TYPE: "bullet",
+            },
+        },
+    ],
+};
+Class.sentinelMinigun = {
+  PARENT: ["sentinel"],
+  UPGRADE_LABEL: "Minigun Sentinel",
+  UPGRADE_COLOR: "purple",
+  GUNS: [
+  {
+      POSITION: [16, 7.5, 1, 0, 4.5, 0, 0.2],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.minigun,
+          g.spam,
+        ]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [12.5, 7.5, -1.35, 0, 4.5, 0, 0.4],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.minigun,
+          g.spam,
+        ]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [16, 7.5, 1, 0, -4.5, 0, 0.2],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.minigun,
+          g.spam,
+        ]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [12.5, 7.5, -1.35, 0, -4.5, 0, 0.4],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.minigun,
+          g.spam,
+        ]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+      POSITION: [22.5, 9, 1, 0, 0, 0, 0.2],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.minigun,
+          g.spam,
+        ]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [20.4, 9, 1, 0, 0, 0, 0.4],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.minigun,
+          g.spam,
+        ]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [18.3, 9, 1, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([
+          g.basic,
+          g.minigun,
+          g.spam,
+        ]),
+        TYPE: "bullet",
+      },
+    },
+  ],
+};
 
 // MISCELLANEOUS TANKS
-exports.baseSwarmTurret = {
+Class.baseSwarmTurret = {
     PARENT: ["genericTank"],
     LABEL: "Protector",
-    COLOR: 16,
+    COLOR: "grey",
     BODY: {
         FOV: 2,
     },
@@ -525,7 +1026,7 @@ exports.baseSwarmTurret = {
         {
             POSITION: [5, 4.5, 0.6, 7, 2, 0, 0.15],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.protectorswarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -533,7 +1034,7 @@ exports.baseSwarmTurret = {
         {
             POSITION: [5, 4.5, 0.6, 7, -2, 0, 0.15],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.protectorswarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
@@ -541,16 +1042,18 @@ exports.baseSwarmTurret = {
         {
             POSITION: [5, 4.5, 0.6, 7.5, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.protectorswarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
                 TYPE: ["swarm", { INDEPENDENT: true, AI: { LIKES_SHAPES: true }}],
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
         },
     ],
 };
-exports.baseProtector = {
+Class.baseProtector = {
     PARENT: ["genericTank"],
     LABEL: "Base",
+    UPGRADE_LABEL: "Base Protector",
+    ON_MINIMAP: false,
     SIZE: 64,
     DAMAGE_CLASS: 0,
     ACCEPTS_SCORE: false,
@@ -576,7 +1079,7 @@ exports.baseProtector = {
         RESIST: 10000,
         HETERO: 0,
     },
-    FACING_TYPE: "autospin",
+    FACING_TYPE: ["spin", {speed: 0.02}],
     TURRETS: [
         {
             POSITION: [25, 0, 0, 0, 360, 0],
@@ -626,11 +1129,12 @@ exports.baseProtector = {
         },
     ],
 };
-exports.mothership = {
+
+Class.mothership = {
     PARENT: ["genericTank"],
     LABEL: "Mothership",
     DANGER: 10,
-    SIZE: genericTank.SIZE * (7 / 3),
+    SIZE: Class.genericTank.SIZE * (7 / 3),
     SHAPE: 16,
     STAT_NAMES: statnames.drone,
     VALUE: 5e5,
@@ -658,7 +1162,7 @@ exports.mothership = {
             let S = 22.5 * (t + 1),
                 E = {
                     MAX_CHILDREN: 2,
-                    SHOOT_SETTINGS: combineStats([g.drone, g.over, g.mothership]),
+                    SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
                     TYPE: "drone",
                     AUTOFIRE: true,
                     SYNCS_SKILLS: true,
@@ -688,13 +1192,14 @@ exports.mothership = {
         return e;
     })(),
 };
-exports.arenaCloser = {
+Class.arenaCloser = {
     PARENT: ["genericTank"],
     LABEL: "Arena Closer",
     NAME: "Arena Closer",
     DANGER: 10,
     SIZE: 34,
-    COLOR: 3,
+    COLOR: "yellow",
+    UPGRADE_COLOR: "yellow",
     LAYER: 13,
     BODY: {
         REGEN: 1e5,
@@ -711,14 +1216,15 @@ exports.arenaCloser = {
     GUNS: [{
         POSITION: [14, 10, 1, 0, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.closer]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.arenaCloser]),
             TYPE: [ "bullet", { LAYER: 12 } ]
         }
     }]
 };
 
-exports.antiTankMachineGunArm = {
+Class.antiTankMachineGunArm = {
     PARENT: ["genericTank"],
+    COLOR: "grey",
     CONTROLLERS: ["mapTargetToGoal"],
     SKILL_CAP: Array(10).fill(255),
     SKILL: Array(10).fill(255),
@@ -749,9 +1255,10 @@ exports.antiTankMachineGunArm = {
         },
     ],
 }
-exports.antiTankMachineGun = {
+Class.antiTankMachineGun = {
     PARENT: ["dominator"],
-    LABEL: "Anti Tank Machine Gun",
+    LABEL: "Anti-Tank Machine Gun",
+    UPGRADE_LABEL: "A.T.M.G.",
     CONTROLLERS: [['spin', {onlyWhenIdle: true}], 'nearestDifferentMaster'],
     LEVEL: 45,
     BODY: {
@@ -812,672 +1319,62 @@ exports.antiTankMachineGun = {
     }]
 }
 
-// OLD TANKS
-exports.oldSpreadshot = {
-    PARENT: ["genericTank"],
-    LABEL: "Old Spreadshot",
-    DANGER: 7,
-    GUNS: [
-        {
-            POSITION: [13, 4, 1, 0, -0.8, -75, 5 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [14.5, 4, 1, 0, -1.0, -60, 4 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [16, 4, 1, 0, -1.6, -45, 3 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [17.5, 4, 1, 0, -2.4, -30, 2 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [19, 4, 1, 0, -3.0, -15, 1 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [13, 4, 1, 0, 0.8, 75, 5 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [14.5, 4, 1, 0, 1.0, 60, 4 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [16, 4, 1, 0, 1.6, 45, 3 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [17.5, 4, 1, 0, 2.4, 30, 2 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [19, 4, 1, 0, 3.0, 15, 1 / 6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.gunner,
-                    g.arty,
-                    g.twin,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Spread",
-            },
-        },
-        {
-            POSITION: [13, 10, 1.3, 8, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.pound,
-                    g.spreadmain,
-                    g.spread,
-                ]),
-                TYPE: "bullet",
-                LABEL: "Pounder",
-            },
-        },
-    ],
-};
-exports.oldBentBoomer = {
-    PARENT: ["genericTank"],
-    DANGER: 7,
-    LABEL: "Old Bent Boomer",
-    STAT_NAMES: statnames.trap,
-    BODY: {
-        SPEED: 0.8 * base.SPEED,
-        FOV: 1.15 * base.FOV,
+// TRACKER-3
+Class.tracker3gun = {
+  PARENT: ["genericTank"],
+  LABEL: "",
+  COLOR: "timeGem",
+  BODY: {
+    FOV: 3,
+  },
+  CONTROLLERS: [
+    "canRepel",
+    "onlyAcceptInArc",
+    "mapAltToFire",
+    "nearestDifferentMaster",
+  ],
+  COLOR: "grey",
+  GUNS: [
+    {
+      /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+      POSITION: [22, 10, 1, 0, 0, 0, 0],
     },
-    GUNS: [
-        {
-            POSITION: [8, 10, 1, 8, -2, -35, 0],
-        },
-        {
-            POSITION: [8, 10, 1, 8, 2, 35, 0],
-        },
-        {
-            POSITION: [2, 10, 1.3, 16, -2, -35, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.fast, g.twin]),
-                TYPE: "boomerang",
-            },
-        },
-        {
-            POSITION: [2, 10, 1.3, 16, 2, 35, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.fast, g.twin]),
-                TYPE: "boomerang",
-            },
-        },
-    ],
-};
-exports.quadBuilder = {
-    PARENT: ["genericTank"],
-    DANGER: 7,
-    LABEL: "Quad Builder",
-    STAT_NAMES: statnames.trap,
-    BODY: {
-        SPEED: 0.8 * base.SPEED,
-        FOV: 1.15 * base.FOV,
+    {
+      POSITION: [10, 10, -2, 20, 0, 0, 0],
     },
-    GUNS: [
-        {
-            POSITION: [14, 6, 1, 0, 0, 45, 0],
-        },
-        {
-            POSITION: [2, 6, 1.1, 14, 0, 45, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.weak]),
-                TYPE: "setTrap",
-            },
-        },
-        {
-            POSITION: [14, 6, 1, 0, 0, 135, 0],
-        },
-        {
-            POSITION: [2, 6, 1.1, 14, 0, 135, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.weak]),
-                TYPE: "setTrap",
-            },
-        },
-        {
-            POSITION: [14, 6, 1, 0, 0, 225, 0],
-        },
-        {
-            POSITION: [2, 6, 1.1, 14, 0, 225, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.weak]),
-                TYPE: "setTrap",
-            },
-        },
-        {
-            POSITION: [14, 6, 1, 0, 0, 315, 0],
-        },
-        {
-            POSITION: [2, 6, 1.1, 14, 0, 315, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.block, g.weak]),
-                TYPE: "setTrap",
-            },
-        },
-    ],
+  ],
 };
-exports.weirdSpike = {
-    PARENT: ["genericTank"],
-    LABEL: "Weird Spike",
-    DANGER: 7,
-    BODY: {
-        DAMAGE: 1.15 * base.DAMAGE,
-        FOV: 1.05 * base.FOV,
-        DENSITY: 1.5 * base.DENSITY,
+Class.tracker3 = {
+  PARENT: ["genericTank"],
+  LABEL: "Tracker-3",
+  FACING_TYPE: ["spin", {speed: 0.02}],
+  SKILL_CAP: [0, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
+  TURRETS: [
+    {
+      /*  SIZE     X       Y     ANGLE    ARC */
+      POSITION: [11, 8, 0, 0, 190, 0],
+      TYPE: ["tracker3gun", { INDEPENDENT: true }],
     },
-    IS_SMASHER: true,
-    SKILL_CAP: [smshskl, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
-    STAT_NAMES: statnames.smasher,
-    TURRETS: [
-        {
-            POSITION: [20.5, 0, 0, 0, 360, 0],
-            TYPE: "weirdSpikeBody1",
-        },
-        {
-            POSITION: [20.5, 0, 0, 180, 360, 0],
-            TYPE: "weirdSpikeBody2",
-        },
-    ],
-};
-exports.master = {
-    PARENT: ["genericTank"],
-    LABEL: "Master",
-    STAT_NAMES: statnames.drone,
-    BODY: {
-        HEALTH: base.HEALTH * 0.4,
-        SHIELD: base.SHIELD * 0.4,
-        DENSITY: base.DENSITY * 0.3,
+    {
+      POSITION: [11, 8, 0, 120, 190, 0],
+      TYPE: ["tracker3gun", { INDEPENDENT: true }],
     },
-    MAX_CHILDREN: 6,
-    GUNS: [
-        {
-            /*** LENGTH    WIDTH     ASPECT        X             Y         ANGLE     DELAY */
-            POSITION: [18, 16, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: "masterBullet",
-            },
-        },
-        {
-            POSITION: [13, 8, 1, 0, -1, 140, 0.6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
-                TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
-            },
-        },
-        {
-            POSITION: [13, 8, 1, 0, 1, 220, 0.6],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
-                TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
-            },
-        },
-        {
-            POSITION: [16, 8, 1, 0, 0, 150, 0.1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
-                TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
-            },
-        },
-        {
-            POSITION: [16, 8, 1, 0, 0, 210, 0.1],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flank, g.tri, g.thruster]),
-                TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
-            },
-        },
-    ],
-};
-exports.oldCommanderGun = {
-    PARENT: ["genericTank"],
-    LABEL: "",
-    BODY: {
-        FOV: 3,
+    {
+      POSITION: [11, 8, 0, 240, 190, 0],
+      TYPE: ["tracker3gun", { INDEPENDENT: true }],
     },
-    CONTROLLERS: ["nearestDifferentMaster"],
-    COLOR: 16,
-    MAX_CHILDREN: 6,
-    AI: {
-        NO_LEAD: true,
-        SKYNET: true,
-        FULL_VIEW: true,
-    },
-    GUNS: [
-        {
-            POSITION: [8, 14, 1.3, 8, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.commander]),
-                TYPE: "drone",
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-            },
-        },
-    ],
-};
-exports.oldCommander = {
-    PARENT: ["genericTank"],
-    LABEL: "Old Commander",
-    STAT_NAMES: statnames.drone,
-    DANGER: 7,
-    BODY: {
-        FOV: 1.15 * base.FOV,
-    },
-    FACING_TYPE: "autospin",
-    TURRETS: [
-        {
-            POSITION: [16, 1, 0, 0, 0, 0],
-            TYPE: "oldCommanderGun",
-        },
-        {
-            POSITION: [16, 1, 0, 120, 0, 0],
-            TYPE: ["oldCommanderGun", { INDEPENDENT: true }],
-        },
-        {
-            POSITION: [16, 1, 0, 240, 0, 0],
-            TYPE: ["oldCommanderGun", { INDEPENDENT: true }],
-        },
-    ],
-};
-exports.blunderbuss = {
-    PARENT: ["genericTank"],
-    LABEL: "Blunderbuss",
-    DANGER: 7,
-    BODY: {
-        FOV: base.FOV * 1.225,
-    },
-    GUNS: [
-        {
-            POSITION: [13, 4, 1, 0, -3, -9, 0.3],
-            PROPERTIES: {
-                TYPE: "bullet",
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.blunderbuss]),
-            },
-        },
-        {
-            POSITION: [15, 4, 1, 0, -2.5, -6, 0.2],
-            PROPERTIES: {
-                TYPE: "bullet",
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.blunderbuss]),
-            },
-        },
-        {
-            POSITION: [16, 4, 1, 0, -2, -3, 0.1],
-            PROPERTIES: {
-                TYPE: "bullet",
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.blunderbuss]),
-            },
-        },
-        {
-            POSITION: [13, 4, 1, 0, 3, 9, 0.3],
-            PROPERTIES: {
-                TYPE: "bullet",
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.blunderbuss]),
-            },
-        },
-        {
-            POSITION: [15, 4, 1, 0, 2.5, 6, 0.2],
-            PROPERTIES: {
-                TYPE: "bullet",
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.blunderbuss]),
-            },
-        },
-        {
-            POSITION: [16, 4, 1, 0, 2, 3, 0.1],
-            PROPERTIES: {
-                TYPE: "bullet",
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.blunderbuss]),
-            },
-        },
-        {
-            POSITION: [25, 7, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                TYPE: "bullet",
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle]),
-            },
-        },
-        {
-            POSITION: [14, 10.5, 1, 0, 0, 0, 0],
-        },
-    ],
-};
-exports.oldRimfire = {
-    PARENT: ["genericTank"],
-    LABEL: "Old Rimfire",
-    GUNS: [
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [12, 5, 1, 0, 7.25, 15, 0.8],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.gunner, g.fast]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [12, 5, 1, 0, -7.25, -15, 0.8],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.gunner, g.fast]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [16, 5, 1, 0, 3.75, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.gunner, g.fast]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [16, 5, 1, 0, -3.75, -0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.gunner, g.fast]),
-                TYPE: "bullet",
-            },
-        },
-    ],
-};
-
-// SCRAPPED TANKS
-exports.autoTrapper = makeAuto(trapper);
-exports.oldDreadnought = {
-    PARENT: ["genericTank"],
-    LABEL: "Old Dreadnought",
-    DANGER: 7,
-    FACING_TYPE: "locksFacing",
-    STAT_NAMES: statnames.swarm,
-    BODY: {
-        FOV: base.FOV * 1.2,
-    },
-    TURRETS: [
-        {
-            /*  SIZE     X       Y     ANGLE    ARC */
-            POSITION: [20, -4, 0, 0, 0, 0],
-            TYPE: "genericEntity",
-        },
-    ],
-    GUNS: [
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [18, 8, 1, 0, 0, 0, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm]),
-                TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [6, 16, 1, 16, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.fake]),
-                TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [1, 3, 1, 3, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.twin,
-                    g.puregunner,
-                    g.machgun,
-                    g.thruster,
-                    [0.1, 3, 1, 1, 1, 1, 1, 1, 1, 0.075, 1, 2, 1],
-                ]),
-                TYPE: "bullet",
-            },
-        },
-    ],
-};
-exports.menderDeco = makeDeco(3);
-exports.mender = {
-    PARENT: ["genericTank"],
-    LABEL: "Mender",
-    DANGER: 7,
-    TOOLTIP: "Right click to heal yourself (use sparingly, has a long cooldown once used!)",
-    GUNS: [
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [17, 3, 1, 0, -6, -7, 0.25],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
-                TYPE: "bullet",
-                LABEL: "Secondary",
-            },
-        },
-        {
-            POSITION: [17, 3, 1, 0, 6, 7, 0.75],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.arty]),
-                TYPE: "bullet",
-                LABEL: "Secondary",
-            },
-        },
-        {
-            POSITION: [19, 12, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.arty]),
-                TYPE: "bullet",
-                LABEL: "Heavy",
-            },
-        },
-        { POSITION: [17, 10, 1, 0, 0, 180, 0] },
-        {
-            POSITION: [5, 18, 1, -19, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([
-                    g.basic,
-                    g.pound,
-                    g.destroy,
-                    [2, 0, 1, 1, 1, -1, 1, 1, 1, 0.1, 1, 1, 1],
-                ]),
-                TYPE: ["bullet", { HEAL_MYSELF: true }],
-                ALT_FIRE: true,
-            },
-        },
-    ],
-    TURRETS: [
-        {
-            POSITION: [7, 0, 0, 0, 0, 1],
-            TYPE: "menderDeco",
-        },
-    ],
-};
-exports.prodigy = {
-    PARENT: ["genericTank"],
-    LABEL: "Prodigy",
-    DANGER: 7,
-    STAT_NAMES: statnames.generic,
-    SHAPE: 6,
-    MAX_CHILDREN: 14,
-    BODY: {
-        FOV: base.FOV * 1.15,
-    },
-    GUNS: [
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [8, 11, 1.3, 6, 0, 60, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
-                TYPE: "sunchip",
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-            },
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [8, 11, 1.3, 6, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
-                TYPE: "sunchip",
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-            },
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [8, 11, 1.3, 6, 0, 300, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
-                TYPE: "sunchip",
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
-            },
-        },
-        {
-            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [14, 9, 1, 0, 0, 0, 0],
-        },
-        {
-            POSITION: [4, 9, 1.5, 14, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.halfrange, g.slow]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [14, 9, 1, 0, 0, 120, 0],
-        },
-        {
-            POSITION: [4, 9, 1.5, 14, 0, 120, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.halfrange, g.slow]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [14, 9, 1, 0, 0, 240, 0],
-        },
-        {
-            POSITION: [4, 9, 1.5, 14, 0, 240, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.halfrange, g.slow]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-    ],
+  ],
 };
 
 // BOTS
-exports.bot = {
+Class.bot = {
     FACING_TYPE: "looseToTarget",
     NAME: "[AI] ",
     CONTROLLERS: ["nearestDifferentMaster", "mapAltToFire", "minion", "fleeAtLowHealth", ["mapFireToAlt", { onlyIfHasAltFireGun: true }], ["wanderAroundMap", { immitatePlayerMovement: true, lookAtGoal: true }]],
 };
 
 // SCORE KEEPING
-exports.tagMode = {
+Class.tagMode = {
     PARENT: ["bullet"],
     LABEL: "Players",
 };

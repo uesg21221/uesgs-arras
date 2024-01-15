@@ -3,19 +3,125 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <meta name="description" content="Arras.io is a fan-made sequel of diep.io. Survive and shoot at others while keeping your own tank alive! Play the game at https://arras.io/.">
+    <meta name="description" content="Nero.io is an unofficial spinoff of arras.io, here we have more tanks, (hopefully) frequent updates, stupid humor and a fun place, so come and join the fun! (This is an extremely dumb fucking game)">
     <meta name="robots" content="index, follow">
-    <meta property="og:image" content="//arras.io/favicon/96x96.png">
+     <meta name="author" content="DeltaFyrex">
+    <meta name="keywords" content="arras.io, arras, game, arras mayhem, arras moe, arrasio, neroio, nero.io, nero, io, .io, arras spinoff, woomyarras, woomyarrasio, woomyarras.io, woomy arras">
+  <meta property="og:site_name" content="DeltaFyrex">  
+  <meta property="og:image" content="https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/2023_02_09_0w9_Kleki.png?v=1675988557263">
     <meta property="og:image:width" content="54">
     <meta property="og:image:height" content="54">
-    <title>Arras.io APS++</title>
+    <title>Nero.io 2.8</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,700">
     <link rel="stylesheet" href="/main.css" />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!-- Favicons -->
+    <link rel="icon" href="https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2023_12_06_0yt_Kleki.png?v=1701908687196">
     <link rel="manifest" href="/lib/json/manifest.json">
-    <meta name="msapplication-TileColor" content="#8abc3f">
-    <meta name="theme-color" content="#8abc3f">
+    <meta name="msapplication-TileColor" content="#b493d3">
+    <meta name="theme-color" content="#b493d3">
+      <!-- Apple Web App stuff -->
+  <link rel="apple-touch-icon" href="https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/2023_02_09_0t4_Kleki.png?v=1675981715684" />
+  <link rel="apple-touch-startup-image" href="https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/2023_02_09_0sv_Kleki.png?v=1675981194335">
+  <meta name="apple-mobile-web-app-capable" content="no">
+<link rel="apple-touch-startup-image" media="(device-width: 768px)" href="https://cloud-cube.s3.amazonaws.com/m660o440l0wv/public/splashtablet.png">
+   <link rel="apple-touch-startup-image" media="(device-width: 1536px)" href="https://cloud-cube.s3.amazonaws.com/m660o440l0wv/public/splashtablet.png">
+ <link href="https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/2023_02_09_0sv_Kleki.png?v=1675981194335" media="(device-width: 375px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+    <!-- Windows App Pin -->
+    <meta name="msapplication-TileImage" content="https://cloud-cube.s3.amazonaws.com/m660o440l0wv/public/appicon.png">
 </head>
+    <!-- Music and Audio -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+var hover = new Audio();
+hover.src = ("https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/Water.wav?v=1675463658042");
+function PlaySound1() {
+  hover.load();   
+    hover.play();
+}
+  </script>
+  <script>
+    function openPopup() {
+window.open("https://msfart.glitch.me/popup.html", "myWindow", 'blankmenubar=yes,status=no,toolbar=no,resizable=no,height=350,width=375');
+window.close(); 
+}
+  </script>
+    <script>
+var slap = new Audio();
+slap.src = ("https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/(Audio)%20videoplayback.m4a?v=1675999054321");
+function PlaySound68() {
+  slap.load();   
+    slap.play();
+}
+  </script>
+    <script>
+var animevoice = new Audio();
+animevoice.src = ("https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/destroids%20rise.wav?v=1675463027422");
+function PlaySound5() {
+  animevoice.load();   
+   animevoice.play();
+}
+</script>
+    <script>
+var grubhub = new Audio();
+grubhub.src = ("https://cdn.glitch.global/68f0db33-c86d-4aa5-9a35-a6750a92eae7/d318bd1e-5162-4fae-a757-5c350b16ccc9.mp3?v=1700153738394");
+function PlaySound169() {
+  grubhub.load();   
+   grubhub.play();
+}
+</script>
+    <script>
+var fard = new Audio();
+fard.src = ("https://cdn.glitch.global/68f0db33-c86d-4aa5-9a35-a6750a92eae7/62640b13-df2b-47d8-a06e-fb63b7fbb06e.mp3?v=1699272890577");
+function PlaySound170() {
+  fard.load();   
+   fard.play();
+}
+</script>
+      <script>
+var music2 = new Audio();
+ const pmusic = ["https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/oioioi.mp3?v=1705286830033", "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/4Miklipi%20(Dejected)%20Preview.mp3?v=1705287022417", "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/World's%20End.wav?v=1705286889038", "https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/Meloncholy.mp3?v=1675465750213","https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Depredation.mp3?v=1705286866890"];
+var rand = pmusic[~~(Math.random() * pmusic.length)];
+music2.src = (rand);
+function PlayMusic() {
+  music2.load();   
+    music2.play();
+}
+  </script>
+    <script>   
+   function switchAudio() {
+      if (document.getElementById("optSound").checked === true) {
+           music2.play()
+    music2.addEventListener('ended', function() {this.currentTime = 0; this.play();}, false);
+     } else if (document.getElementById("optSound").checked === false) {
+          music2.pause()
+            }
+         return; } 
+  </script>
+       <script>
+var gears = new Audio();
+gears.src = ("https://cloud-cube.s3.amazonaws.com/m660o440l0wv/public/gear.wav");
+function PlaySound3() {
+    gears.play();
+}
+</script> 
+    <script>
+var click = new Audio();
+click.src = ("https://cloud-cube.s3.amazonaws.com/m660o440l0wv/public/sysse_ok.ogg");
+function PlaySound() {
+  click.load();   
+    click.play();
+}
+</script>
+    <script>
+var startloadsound = new Audio();
+startloadsound.src = ("https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/op1.wav?v=1675463613542");
+function PlaySound69() {
+  startloadsound.load();   
+    startloadsound.play();
+}
+</script>
+      <audio id ="bflat" src="https://cloud-cube.s3.amazonaws.com/m660o440l0wv/public/sysse_ok.ogg"></audio>
+    <!-- Main Code-->       
 <body oncontextmenu="return false" id="mainBody">
     <div id="gameAreaWrapper">
         <canvas id="gameCanvas" tabindex="1"></canvas>
@@ -23,49 +129,120 @@
     </div>
     <div id="mainWrapper">
         <div id="startMenuWrapper">
+          <div class="menuTabs">
+        <a class="menuTab discord" onclick="PlaySound()" onmouseover="PlaySound1()" title="Join the Nero.io Discord server!" href="https://discord.gg/jeDnGsj4MM" target="_blank" rel="noopener noreferrer">Nero.io Discord</a>
+        <a class="menuTab catto" onclick="PlaySound()" onmouseover="PlaySound1()" title="View the game's source code" href="https://glitch.com/neroio2" target="_blank" rel="noopener noreferrer">View Source Code</a>
+        <a class="menuTab stat" onclick="PlaySound()" onmouseover="PlaySound1()" title="Old Nero.io (Nero.io 1)" href="https://neroio.glitch.me" target="_blank" rel="noopener noreferrer">Old Nero.io</a>
+          </div>
             <div id="startMenu">
                 <div class="startMenuHolder">
-                  <center>This Arras Private Server runs on APS++.<br>For more info, visit <a href="https://github.com/Taureon/aps-plus-plus">the APS++ GitHub Repository by Taureon</a></center>
+<script type="text/javascript">
+<!--
+ var currentdate = 0;
+ var image_number = 0;
+ function ImageArray (n) {
+   this.length = n;
+   for (var i =1; i <= n; i++) {
+     this[i] = ' '
+   }
+ }
+ image = new ImageArray(20)
+ image[0] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/girb.jpg?v=1698237916390' //girb
+ image[1] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/othergirb.jpg?v=1698238869623' //girb2
+ image[2] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/84812d435b246f4edffe887c5f755008.jpg?v=1698318627584' //girat
+ image[3] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/lratio?v=1698318622958' //lratio
+ image[4] = 'https://cdn.glitch.global/68f0db33-c86d-4aa5-9a35-a6750a92eae7/dancing-rainbow-neon-stickman-rainbow.gif?v=1699014596160' //stickman
+ image[5] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/nerd-emoji.gif?v=1701691845734' //nerd
+ image[6] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/videoplayback%20(5).mp4?v=1701374946159' //congregation
+ image[7] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/131107152744-mona-lisa.jpg?v=1698318616817' //secret
+ image[8] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2023_12_08_0g8_Kleki.png?v=1702041313341' //i hate glitch
+ image[9] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/devil%20vortex.jpg?v=1698319411448' //devilvortex
+ image[10] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/mqdefault.jpg?v=1698335465241' //spong
+ image[11] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/e4b3f8d2-72dd-4995-87ad-633e8c5e5754.image.png?v=1698335568829' //petah
+ image[12] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/4703606e-9aeb-4893-aad3-b9788cccfc9b.image.png?v=1698335812346' //helloo everybody
+ image[13] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2023_10_26_0ml_Kleki.png?v=1698336267088' //bulletkisser
+ image[14] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/freddy.gif?v=1698336453397' //freddy default dance
+ image[15] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/asda.gif?v=1698336433205' //synthwave
+ image[16] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Screen_Shot_2021-06-25_at_8.06.28_PM_1400x.webp?v=1701104133660' //avacado
+ image[17] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/poop-emoji.jpg?v=1701104126682' //shart
+ image[18] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/videoplayback%20(6).mp4?v=1701691279895' //i beleive i made myself clear
+ image[19] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/nero%20shitpost.png?v=1705290370363' //shitpost
+ var rand = 60/image.length
+ function randomimage() {
+ 	currentdate = new Date()
+ 	image_number = currentdate.getSeconds()
+ 	image_number = Math.floor(image_number/rand)
+ 	return(image[image_number])
+ }
+var save = randomimage()
+imgsizething = 'style="width: 100%; height: 88%;", title="the funny"'
+popup = ' onclick="openPopup()" '
+    if (save === 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/videoplayback%20(5).mp4?v=1701374946159') {
+    document.write("<video src='" + save + "'" + imgsizething + " controls></video>");
+   } else if (save === 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/videoplayback%20(6).mp4?v=1701691279895') {
+    document.write("<video src='" + save + "'" + imgsizething + " controls></video>");
+   } else if (save === 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/131107152744-mona-lisa.jpg?v=1698318616817') {
+    document.write("<img src='" + save + "'" + popup + imgsizething + ">");
+   } else {
+     document.write("<img src='" + save + "'" + imgsizething + ">");
+ }
+//-->
+</script>         
+                  <center>Nero.io runs on Open Source Arras. For more info, <br>visit <a href="https://github.com/Taureon/aps-plus-plus">the APS++ GitHub Repository by Taureon</a> Or Join The Discord With The Widget In The Top Right</center>
                 </div>
                 <div class="startMenuHolder">
                     <div class="sliderHolder">
                         <div class="slider" id="startMenuSlidingContent">
-                            <center><img width=92 height=92 src="/round.png" /></center>
-                            <h1 id="gameName">APS++</h1>
-                            <div id="serverName">
-                                <h4 class="nopadding">Connecting...</h4>
-                            </div>
+                          <script>
+                    if (save === 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/131107152744-mona-lisa.jpg?v=1698318616817') {
+                      document.write('<center><img width=92 height=92 src="https://cdn.glitch.global/68f0db33-c86d-4aa5-9a35-a6750a92eae7/1200px-Icon-round-Question_mark.svg.png?v=1699273933044" onmouseover="PlaySound1()" onclick="PlaySound169()" title="Nero.io 2 aaaaabbbbbccccccccddddddd" class="icon" alt="arras icon"></center><h1 onclick="PlaySound170()", onhover="PlaySound1()", id="gameName"> Piss.io 69 </h1><div id="serverName"><h4 class="nopadding">Pissing...</h4></div>');
+                       } else {
+                      document.write('<center><img width=92 height=92 src="https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2023_12_06_0za_Kleki.png?v=1701910145704" onmouseover="PlaySound1()" onclick="PlaySound()" title="Nero.io 2 aaaaabbbbb" class="icon" alt="arras icon"></center><h1 onclick="PlaySound5()", id="gameName"> Nero.io 2 </h1><div id="serverName"><h4 class="nopadding">Loading...</h4></div>');
+                      }
+                          </script>
                             <table id="serverSelector" style="display:none;"></table>
                             <input type="text" autofocus tabindex="1" spellcheck="false" placeholder="This is the tale of" id="playerNameInput" maxlength="24" />
                             <input type="text" class="conceal" tabindex="3" placeholder="Insert token here" id="playerKeyInput" maxlength="64" />
                         </div>
                         <div class="slider" id="startMenuSlidingTrigger">
-                            <h3 class="nopadding">view options/help 🡲</h3>
+                            <h3 class="nopadding">view options ▸</h3>
                         </div>
                         <div class="slider">
                             <br>
-                            <options_header>Advanced Controls:</options_header><br>
+                              <options_header>Advanced Controls:</options_header><br>
                             <table>
                                 <tr> <td><b>E</b> - auto-fire</td>     <td><b>C</b> - auto-spin</td> </tr>
                                 <tr> <td><b>R</b> - disable AI</td>    <td><b>N</b> - level up</td> </tr>
-                                <tr> <td><b>V</b> - reverse tank</td>  <td><b>F</b> - auto-alt</td> </tr>
+                                <tr> <td><b>V</b> - reverse tank</td>  <td><b>V</b> - auto-alt</td> </tr>
                                 <tr> <td><b>B</b> - reverse mouse</td> <td><b>O</b> - self-destruct</td> </tr>
                                 <tr> <td><b>T</b> - show tank tree</td><td><b>M</b> - maximize stat</td> </tr>
-                                <tr> <td><b>X</b> - spin lock</td>     <td><b>P</b> - developer tank*</td> </tr>
-                                <tfoot> <td><b>*</b> = requires valid token</td> </tfoot>
+                                <tr> <td><b>X</b> - spin lock</td>     <td><b>H</b> - take control</td> </tr>
                             </table>
                             <options_header>Options:</options_header>
                             <select id="optColors" tabindex="-1">
-                                <option value="normal">Light Colors</option>
-                                <option value="dark">Dark Colors</option>
-                                <option value="natural">Natural</option>
-                                <option value="classic">Classic</option>
-                                <option value="forest">Forest (Fan-made)</option>
-                                <option value="midnight">Midnight (Fan-made)</option>
-                                <option value="pastel">Snow (Fan-made)</option>
-                                <option value="ocean">Coral Reef (Fan-made)</option>
-                                <option value="badlands">Badlands (Fan-made)</option>
-                                <option value="bleach">Bleach (Fan-made)</option>
+                                <option value="nero">Nero Default (by Deltafyrex)</option>
+                                <option value="normal">Light Colors (by Neph)</option>
+                                <option value="dark">Dark Colors (by Neph)</option>
+                                <option value="natural">Natural (by Neph)</option>
+                                <option value="classic">Classic (by Neph)</option>
+                                <option value="forest">Forest (by Sterlon)</option>
+                                <option value="midnight">Midnight (by uoiea)</option>
+                                <option value="snow">Snow (by Deolveopoler)</option>
+                                <option value="coralReef">Coral Reef (by Celestea)</option>
+                                <option value="badlands">Badlands (by Incognious)</option>
+                                <option value="bleach">Bleach (by definitelynot.)</option>
+                                <option value="pumpkinSkeleton">Pumpkin Skeleton (by Road)</option>
+                                <option value="retro">Retro (by Damocles)</option>
+                                <option value="pastel">Pastel (by Damocles)</option>
+                                <option value="discord">Discord (by Damocles)</option>
+                                <option value="wrSheetTheme">WR Sheet Theme (by alettera)</option>
+                                <option value="descent">Descent (by Rog456)</option>
+                                <option value="solarizedDark">Solarized Dark (by Road)</option>
+                                <option value="eggplant">Eggplant (by Road)</option>
+                                <option value="gruvbox">Gruvbox (by Road)</option>
+                                <option value="lyric">Lyric (by evil isopod)</option>
+                                <option value="blindness">Blindness (by Damocles)</option>
+                                <option value="custom">Custom</option>
                             </select>
                             <select id="optBorders" tabindex="-1">
                                 <option value="normal">Soft Borders</option>
@@ -73,6 +250,7 @@
                                 <option value="neon">Neon Mode</option>
                                 <option value="glass">Glass Mode</option>
                             </select>
+                            <input type="hidden" placeholder="Insert Custom Theme" id="optCustom" />
                             <table>
                                 <tr>
                                     <td><div><label><input id="optScreenshotMode"   tabindex="-1" class="checkbox" type="checkbox"> Screenshot Mode</label></div></td>
@@ -94,9 +272,10 @@
                         </div>
                     </div>
                     <div style="position: relative; bottom: -10px;">
-                        <button id="startButton" tabindex="2">Play</button>
+                        <button id="startButton" onmouseover="PlaySound()" title="Load Into The Game" tabindex="2">Play</button>
                     </div>
                 </div>
+                      
                 <div class="startMenuHolder shrinkable">
                     <span class="titleSpan">Changelog</span>
                     <div id="patchNotes" class="shadowScroll"></div>
@@ -104,36 +283,43 @@
                         <!--<a class="link youtube"   href="https://www.youtube.com/arrasio">Arras.io YouTube</a>
                         <a class="link reddit"    href="https://reddit.com/r/arrasio">Arras.io Subreddit</a>
                         <a class="link original"  href="https://arras.io/">Arras.io Game</a>-->
-                        <a class="link discord"   href="https://discord.gg/kvCAZfUCjy">APS++ Discord</a>
-                        <a class="link developer" href="https://github.com/Taureon/">APS++ Developer</a>
-                        <a class="link github"    href="https://github.com/Taureon/aps-plus-plus">Template Source</a>
-                        <a class="link discord"   href="https://discord.gg/yqBWVnj">Arras.io Discord</a>
-                        <a class="link developer" href="https://momentumstudios.games/">Arras.io Developers</a>
-                        <a class="link github"    href="https://github.com/Taureon/aps-plus-plus/issues">Submit Suggestions</a>
+                        <a class="link discord"   href="https://discord.gg/kvCAZfUCjy" title="Join the APS++ Discord server! (this is not the nero.io discord server)" onclick="PlaySound()" onmouseover="PlaySound1()">APS++ Discord</a>
+                        <a class="link developer" href="https://drive.google.com/drive/folders/1JehdLrkZxvyr5cMFgH2MpSnS5caI-Bf5?usp=sharing" title="funny google drive folder" onclick="PlaySound()" onmouseover="PlaySound1()">Gallery</a>
+                        <a class="link github"    href="https://sites.google.com/view/deltafyrex/home" title="the developer of this game" onclick="PlaySound()" onmouseover="PlaySound1()">The Shithead Dev</a>
+                        <a class="link discord"   href="https://arras.io" title="arras.io" onclick="PlaySound()" onmouseover="PlaySound1()">Arras.io</a>
+                        <a class="link developer" href="https://youtube.com/@deltafyrex" title="the devs youtube page (subscribe pls)" onclick="PlaySound()" onmouseover="PlaySound1()">Youtube</a>
+                        <a class="link github"    href="https://github.com/Taureon/aps-plus-plus/issues" title="Report bugs (we do not have a website for this yet)" onclick="PlaySound()" onmouseover="PlaySound1()">Report Bugs</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <td><div><label><input id="optSound" tabindex="-1" class="checkbox" type="checkbox" title="im too lazy to make a button right now just sit there, cry and fucking deal with it wahh wahh wahh" onclick="switchAudio()"> [beta] MUSIC</label></div></td>
     <!-- JS -->
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script type="module" src="./lib/config.js"></script>
+    <script type="module" src="./lib/settings.js"></script>
     <script type="module" src="./lib/color.js"></script>
     <script type="module" src="./lib/global.js"></script>
     <script type="module" src="./lib/util.js"></script>
     <script type="module" src="./lib/canvas.js"></script>
+    <script type="module" src="./lib/gameDraw.js"></script>
     <script type="module" src="./lib/protocol.js"></script>
     <script type="module" src="./lib/socketInit.js"></script>
     <script type="module" src="./app.js"></script>
     <script>
+   $("#optColors").change( function () {
+            if ($(this).val() == "custom") document.getElementById("optCustom").type = "text";
+            else document.getElementById("optCustom").type = "hidden";
+        });
         var clicked = false;
         $("#startMenuSlidingTrigger").on('click', function() {
             clicked = !clicked;
+            if ($("#optColors").val() == "custom") document.getElementById("optCustom").type = "text";
             if (clicked) {
-                $(this).html('<h3 class="nopadding">close options/help 🡶</h3>');
+                $(this).html('<h3 class="nopadding">close options ▾</h3>');
                 $(".slider").css({ "top": "-265px" })
             } else {
-                $(this).html('<h3 class="nopadding">view options/help 🡲</h3>');
+                $(this).html('<h3 class="nopadding">view options ▸</h3>');
                 $(".slider").css({ "top": 0 });
             }
         });

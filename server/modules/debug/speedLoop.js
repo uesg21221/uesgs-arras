@@ -12,9 +12,9 @@ const speedcheckloop = () => {
     let loops = logs.loops.count(),
         active = logs.entities.count();
     global.fps = (1000 / sum).toFixed(2);
-    if (sum > 1000 / roomSpeed / 30) {
+    if (sum > 1000 / c.runSpeed / 30) {
         //fails++;
-        util.warn('~~ LOOPS: ' + loops + '. ENTITY #: ' + entities.length + '//' + Math.round(active / loops) + '. VIEW #: ' + views.length + '. BACKLOGGED :: ' + (sum * roomSpeed * 3)
+        util.warn('~~ LOOPS: ' + loops + '. ENTITY #: ' + entities.length + '//' + Math.round(active / loops) + '. VIEW #: ' + views.length + '. BACKLOGGED :: ' + (sum * c.runSpeed * 3)
             .toFixed(3) + '%! ~~');
         util.warn('Total activation time: ' + activationtime);
         util.warn('Total collision time: ' + collidetime);

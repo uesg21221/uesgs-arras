@@ -1,5 +1,5 @@
 {
-  "name": "arras",
+  "name": "Open Source Arras",
   "version": "1.0.0",
   "main": "server/index.js",
   "scripts": {
@@ -16,5 +16,5 @@
   "engines": {
     "node": "16.x"
   },
-  "license": "MIT"
+  "license": "GPL-3.0"
 }

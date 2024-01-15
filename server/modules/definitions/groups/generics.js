@@ -1,6 +1,6 @@
-const { base, dfltskl, smshskl } = require('../constants.js');
+const { base, statnames, dfltskl, smshskl } = require('../constants.js');
 
-exports.genericEntity = {
+Class.genericEntity = {
     NAME: "",
     LABEL: "Unknown Entity",
     TYPE: "unknown",
@@ -9,7 +9,7 @@ exports.genericEntity = {
     VALUE: 0,
     SHAPE: 0,
     COLOR: {
-        BASE: 16, // ID
+        BASE: "grey", // ID
         HUE_SHIFT: 0, // Additive, degrees
         SATURATION_SHIFT: 1, // Multiplicative
         BRIGHTNESS_SHIFT: 0, // Additive, ranges from -100 to 100
@@ -54,13 +54,14 @@ exports.genericEntity = {
     UPGRADES_TIER_9: [],
     SKILL: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     LEVEL: 0,
-    BORDERLESS: false,
-    DRAW_FILL: true,
     SKILL_CAP: Array(10).fill(dfltskl),
     GUNS: [],
     MAX_CHILDREN: 0,
     BORDERLESS: false,
     DRAW_FILL: true,
+    REROOT_UPGRADE_TREE: null,
+    DISPLAY_NAME: true,
+    ON: [],
     BODY: {
         ACCELERATION: 1,
         SPEED: 0,
@@ -72,26 +73,36 @@ exports.genericEntity = {
         PENETRATION: 1,
         RANGE: 0,
         FOV: 1,
+        SHOCK_ABSORB: 1,
+        RECOIL_MULTIPLIER: 1,
         DENSITY: 1,
         STEALTH: 1,
         PUSHABILITY: 1,
-        HETERO: 2,
+        HETERO: 2
     },
     FOOD: {
-        LEVEL: -1,
-    },
-};
-exports.genericTank = {
+        LEVEL: -1
+    }
+}
+Class.genericTank = {
     LABEL: "Unknown Class",
     TYPE: "tank",
     DAMAGE_CLASS: 2,
     DANGER: 5,
+    COLOR: {
+        BASE: "mirror",
+        HUE_SHIFT: 0,
+        SATURATION_SHIFT: 1,
+        BRIGHTNESS_SHIFT: 0,
+        ALLOW_BRIGHTNESS_INVERT: true,
+    },
     MOTION_TYPE: "motor",
     FACING_TYPE: "toTarget",
     SIZE: 12,
     MAX_CHILDREN: 0,
     DAMAGE_EFFECTS: false,
     IGNORED_BY_AI: false,
+    REROOT_UPGRADE_TREE: "basic",
     BODY: {
         ACCELERATION: base.ACCEL,
         SPEED: base.SPEED,
@@ -107,12 +118,24 @@ exports.genericTank = {
     },
     GUNS: [],
     TURRETS: [],
+    ON: [],
     GIVE_KILL_MESSAGE: true,
     DRAW_HEALTH: true,
-    HITS_OWN_TYPE: "hardOnlyTanks",
-};
+    HITS_OWN_TYPE: "hardOnlyTanks"
+}
+Class.genericSmasher = {
+    PARENT: "genericTank",
+    DANGER: 7,
+    IS_SMASHER: true,
+    SKILL_CAP: [smshskl, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
+    STAT_NAMES: statnames.smasher,
+    BODY: {
+        FOV: 1.05 * base.FOV,
+        DENSITY: 2 * base.DENSITY
+    }
+}
 
-exports.food = {
+Class.food = {
     TYPE: "food",
     DAMAGE_CLASS: 1,
     CONTROLLERS: ["moveInCircles"],
@@ -129,7 +152,7 @@ exports.food = {
     HEALTH_WITH_LEVEL: false,
 };
 
-exports.bullet = {
+Class.bullet = {
     LABEL: "Bullet",
     TYPE: "bullet",
     ACCEPTS_SCORE: false,
@@ -142,35 +165,50 @@ exports.bullet = {
         DAMAGE: 6,
         PUSHABILITY: 0.3,
     },
+    COLOR: 'mirror',
     FACING_TYPE: "smoothWithMotion",
     CAN_GO_OUTSIDE_ROOM: true,
     HITS_OWN_TYPE: "never",
     DIE_AT_RANGE: true,
 };
-exports.speedBullet = {
+Class.speedBullet = {
     PARENT: ["bullet"],
     MOTION_TYPE: "accel",
 };
-exports.growBullet = {
+Class.growBullet = {
     PARENT: ["bullet"],
     MOTION_TYPE: "grow",
 };
-exports.flare = {
+Class.flare = {
     PARENT: ["growBullet"],
     LABEL: "Flare",
     SHAPE: 4,
 };
-exports.developerBullet = {
+Class.nuke = {
+    PARENT: ["growBullet"],
+    LABEL: "Nuke",
+    MOTION_TYPE: "fuckingnuclearbomb",
+    BODY: {
+        PENETRATION: 100,
+        SPEED: 7,
+        RANGE: 600,
+        DENSITY: 99999999999,
+        HEALTH: 99999,
+        DAMAGE: 999999,
+        PUSHABILITY: -99999999,
+    },
+};
+Class.developerBullet = {
     PARENT: ["bullet"],
     SHAPE: [[-1, -1], [1, -1], [2, 0], [1, 1], [-1, 1]],
 };
-exports.casing = {
+Class.casing = {
     PARENT: ["bullet"],
     LABEL: "Shell",
     TYPE: "swarm",
 };
 
-exports.drone = {
+Class.drone = {
     LABEL: "Drone",
     TYPE: "drone",
     ACCEPTS_SCORE: false,
@@ -188,6 +226,7 @@ exports.drone = {
     AI: {
         BLIND: true,
     },
+    COLOR: 'mirror',
     BODY: {
         PENETRATION: 1.2,
         PUSHABILITY: 0.6,
@@ -206,7 +245,7 @@ exports.drone = {
     BUFF_VS_FOOD: true,
 };
 
-exports.trap = {
+Class.trap = {
     LABEL: "Thrown Trap",
     TYPE: "trap",
     ACCEPTS_SCORE: false,
@@ -223,27 +262,56 @@ exports.trap = {
         RESIST: 2.5,
         SPEED: 0,
     },
+    COLOR: 'mirror',
 };
 
-exports.mendersymbol = {
+Class.satellite = { 
+    LABEL: "Satellite",
+    TYPE: "satellite",
+    ACCEPTS_SCORE: false,
+    DANGER: 2,
+    SHAPE: 0,
+    LAYER: 13,
+    CONTROLLERS: ['orbit'],
+    FACING_TYPE: "spin",
+    BODY: {
+        PENETRATION: 1.2,
+        PUSHABILITY: 0.6,
+        ACCELERATION: 0.75,
+        HEALTH: 0.3,
+        DAMAGE: 3.375,
+        SPEED: 10,
+        RANGE: 200,
+        DENSITY: 0.03,
+        RESIST: 1.5,
+        FOV: 0.5,
+    },
+    COLOR: 'mirror',
+    DRAW_HEALTH: false,
+    CLEAR_ON_MASTER_UPGRADE: true,
+    BUFF_VS_FOOD: true,
+    MOTION_TYPE: 'motor'
+}
+
+Class.mendersymbol = {
     PARENT: ["genericTank"],
-    COLOR: 16,
+    COLOR: "grey",
     LABEL: "",
     SHAPE: 3,
 };
-exports.healerBullet = {
+Class.healerBullet = {
     PARENT: ["bullet"],
     HEALER: true,
     HITS_OWN_TYPE: "normal",
 };
-exports.healerSymbol = {
+Class.healerSymbol = {
     PARENT: ["genericEntity"],
     SHAPE: [[0.3, -0.3],[1,-0.3],[1,0.3],[0.3,0.3],[0.3,1],[-0.3,1],[-0.3,0.3],[-1,0.3],[-1,-0.3],[-0.3,-0.3],[-0.3,-1],[0.3,-1]],
     SIZE: 13,
-    COLOR: 12,
+    COLOR: "red",
 };
 
-exports.auraBase = {
+Class.auraBase = {
     TYPE: "aura",
     ACCEPTS_SCORE: false,
     FACING_TYPE: "smoothWithMotion",
@@ -255,36 +323,37 @@ exports.auraBase = {
     ALPHA: 0.3,
     CLEAR_ON_MASTER_UPGRADE: true,
     CAN_GO_OUTSIDE_ROOM: true,
+    CONTROLLERS: ["disableOnOverride"],
     BODY: {
-        SHIELD: 1000000,
-        REGEN: 100000,
-        HEALTH: 1000000,
+        SHIELD: 1e9,
+        REGEN: 1e6,
+        HEALTH: 1e9,
         DENSITY: 0,
         SPEED: 0,
         PUSHABILITY: 0,
     }
 };
-exports.aura = {
+Class.aura = {
     PARENT: ["auraBase"],
     LABEL: "Aura",
-    COLOR: 0,
+    COLOR: "teal",
     BODY: {
-        DAMAGE: 0.25,
+        DAMAGE: 0.5,
     },
 };
-exports.healAura = {
+Class.healAura = {
     PARENT: ["auraBase"],
     LABEL: "Heal Aura",
     HEALER: true,
-    COLOR: 12,
+    COLOR: "red",
     BODY: {
-        DAMAGE: 0.25/3,
+        DAMAGE: 0.1,
     },
 };
-exports.auraSymbol = {
+Class.auraSymbol = {
     PARENT: ["genericTank"],
     CONTROLLERS: [["spin", {speed: -0.04}]],
     INDEPENDENT: true,
-    COLOR: 0,
+    COLOR: "teal",
     SHAPE: [[-0.598,-0.7796],[-0.3817,-0.9053],[0.9688,-0.1275],[0.97,0.125],[-0.3732,0.9116],[-0.593,0.785]]
 };
