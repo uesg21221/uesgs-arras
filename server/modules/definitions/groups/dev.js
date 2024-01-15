@@ -103,7 +103,7 @@ Class.rogues.COLOR = "darkGrey"
 Class.rogues.UPGRADE_COLOR = "darkGrey"
 Class.rogues.SHAPE = 6
 
-Class.rammers = menu("Sentries")
+Class.rammers = menu("Rammers")
 Class.rammers.COLOR = "teal"
 Class.rammers.UPGRADE_COLOR = "teal"
 Class.rammers.TURRETS = [
