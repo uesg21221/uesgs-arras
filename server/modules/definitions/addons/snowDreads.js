@@ -1785,7 +1785,7 @@ Class.showerSnowdread = { // Drones
 		},
 	],
 }
-Class.atmosphereAuraSnowdread = addAura();
+Class.atmosphereAuraSnowdread = addAura(1, 1, 0.15);
 Class.atmosphereSnowdread = {
 	PARENT: ["genericEggnought"],
 	LABEL: "Atmosphere",
@@ -2606,7 +2606,7 @@ Class.stormSnowdread = { // Drones
 		}
 	],
 }
-Class.coronaAuraSnowdread = addAura(1.5, 0.8);
+Class.coronaAuraSnowdread = addAura(1.5, 0.8, 0.15);
 Class.coronaSnowdread = {
 	PARENT: ["genericSquarenought"],
 	LABEL: "Corona",

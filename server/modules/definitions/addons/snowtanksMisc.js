@@ -1,7 +1,10 @@
 Class.towerBase = {
     PARENT: 'wall',
     LABEL: "Tower",
+    SHAPE: 4,
+    COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 7.5},
     LAYER: 100,
+    BORDER_FIRST: true,
 }
 Class.towerShort = {
     PARENT: 'towerBase',
