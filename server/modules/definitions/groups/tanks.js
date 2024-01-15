@@ -3527,7 +3527,7 @@ Class.assembler = {
 }
 
 // Tri-Trapper upgrades
-Class.hexaTrapper = makeAuto({
+Class.hexaTrapper = makeAuto(makeMulti({
     PARENT: "genericTank",
     DANGER: 7,
     BODY: {
@@ -3548,28 +3548,6 @@ Class.hexaTrapper = makeAuto({
             },
         },
         {
-            POSITION: [15, 7, 1, 0, 0, 60, 0.5],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, 60, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [15, 7, 1, 0, 0, 120, 0],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, 120, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
             POSITION: [15, 7, 1, 0, 0, 180, 0.5],
         },
         {
@@ -3580,30 +3558,8 @@ Class.hexaTrapper = makeAuto({
                 STAT_CALCULATOR: gunCalcNames.trap,
             },
         },
-        {
-            POSITION: [15, 7, 1, 0, 0, 240, 0],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, 240, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [15, 7, 1, 0, 0, 300, 0.5],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, 300, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
     ],
-}, "Hexa-Trapper")
+}, 3), "Hexa-Trapper")
 Class.septaTrapper = (() => {
     let a = 360 / 7,
         d = 1 / 7;

@@ -206,26 +206,25 @@ class Gun {
         };
     }
     spawnBullets(useWhile, shootPermission) {
-
-        //find out some intermediate values
+        // Find out some intermediate values
         let angle1 = this.direction + this.angle + this.body.facing,
             angle2 = this.angle + this.body.facing,
-            gunlength = 1.5 * this.length - this.width * this.settings.size / 2,
+            gunlength = 1.5 * this.length - this.width * this.settings.size,
 
-            //calculate offsets based on lengths and directions
-            offset_base_x = this.offset * Math.cos(angle1),
-            offset_base_y = this.offset * Math.sin(angle1),
-            offset_end_x = gunlength * Math.cos(angle2),
-            offset_end_y = gunlength * Math.sin(angle2),
+            // Calculate offsets based on lengths and directions
+            offsetBaseX = this.offset * Math.cos(angle1),
+            offsetBaseY = this.offset * Math.sin(angle1),
+            offsetEndX = gunlength * Math.cos(angle2),
+            offsetEndY = gunlength * Math.sin(angle2),
 
-            //finally get the final bullet offset
-            offset_final_x = offset_base_x + offset_end_x,
-            offset_final_y = offset_base_y + offset_end_y,
+            // Finally get the final bullet offset
+            offsetFinalX = offsetBaseX + offsetEndX,
+            offsetFinalY = offsetBaseY + offsetEndY,
             skill = this.bulletStats === "master" ? this.body.skill : this.bulletStats;
 
         // Shoot, multiple times in a tick if needed
         do {
-            this.fire(offset_final_x, offset_final_y, skill);
+            this.fire(offsetFinalX, offsetFinalY, skill);
             this.cycle--;
             shootPermission =
                   this.countsOwnKids    ? this.countsOwnKids    > this.children.length
@@ -1333,6 +1332,8 @@ class Entity extends EventEmitter {
                 }
             }
             if (set.LABEL != null && set.LABEL.length > 0) this.label = this.label + "-" + set.LABEL;
+            if (set.MAX_CHILDREN != null) this.maxChildren += set.MAX_CHILDREN;
+            else this.maxChildren = null; // For bullet and drone combos so all parts remain functional
             if (set.BODY != null) {
                 if (set.BODY.ACCELERATION != null) this.ACCELERATION *= set.BODY.ACCELERATION;
                 if (set.BODY.SPEED != null) this.SPEED *= set.BODY.SPEED;
@@ -1409,7 +1410,6 @@ class Entity extends EventEmitter {
                 for (let root of this.rerootUpgradeTree) finalRoot += root + "\\/";
                 this.rerootUpgradeTree += finalRoot.substring(0, finalRoot.length - 2);
             }
-            this.maxChildren = null; // Required because it just doesn't work out otherwise - overlord-triplet would make the triplet inoperable at 8 drones, etc
         }
         // Turret layer ordering
         this.turrets.sort(this.turretSort);
