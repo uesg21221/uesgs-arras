@@ -152,10 +152,6 @@ Class.sanctuaries.TURRETS = [
         }
 ]
 
-Class.funTanks = menu("Fun Tanks")
-Class.features = menu("Features")
-Class.overpowered = menu("Overpowered")
-
 // Generators
 function compileMatrix(matrix, matrix2Entrance) {
     let matrixWidth = matrix[0].length,
@@ -971,7 +967,7 @@ Class.bulletSpawnTest = {
     }]
 }
 
-Class.levels = menu("Level Switcher")
+Class.levels = menu("Levels")
 Class.levels.UPGRADES_TIER_0 = []
 for (let i = 0; i < 12; i++) {
     let LEVEL = i * c.TIER_MULTIPLIER;
@@ -983,7 +979,7 @@ for (let i = 0; i < 12; i++) {
     Class.levels.UPGRADES_TIER_0.push("level" + LEVEL);
 }
 
-Class.teams = menu("Team Switcher")
+Class.teams = menu("Teams")
 Class.teams.UPGRADES_TIER_0 = []
 for (let i = 1; i <= 8; i++) {
     let TEAM = i;
@@ -1010,6 +1006,8 @@ Class['Team' + TEAM_ENEMIES] = {
 Class.teams.UPGRADES_TIER_0.push('Team' + TEAM_ROOM, 'Team' + TEAM_ENEMIES);
 
 Class.testing = menu("Testing")
+Class.features = menu("Features")
+Class.overpowered = menu("Overpowered")
 
 Class.addons = menu("Addon Entities")
 Class.addons.UPGRADES_TIER_0 = []
