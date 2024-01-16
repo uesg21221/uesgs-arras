@@ -749,7 +749,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
         context.lineWidth *= fill && !borderFirst ? 1 : 0.5; // Maintain constant border width
         for (let i = 0; i < sides; i++) {
             let theta = (i / sides) * 2 * Math.PI + angle;
-            context.lineTo(centerX + radius * Math.cos(theta) * fourSidedScale, centerY + radius * Math.sin(theta) * fourSidedScale);
+            context.lineTo(centerX + radius * Math.cos(theta) * (heightScale != 1 ? fourSidedScale : 1), centerY + radius * Math.sin(theta) * (heightScale != 1 ? fourSidedScale : 1));
             bottomPoints.push([centerX + radius * Math.cos(theta) * fourSidedScale, centerY + radius * Math.sin(theta) * fourSidedScale]);
         }
         if (heightScale != 1 && sides == 4) {
