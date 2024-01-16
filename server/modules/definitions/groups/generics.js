@@ -1,3 +1,4 @@
+const { skillSet } = require('../facilitators.js');
 const { base, statnames, dfltskl, smshskl } = require('../constants.js');
 
 Class.genericEntity = {
@@ -133,6 +134,29 @@ Class.genericSmasher = {
         FOV: 1.05 * base.FOV,
         DENSITY: 2 * base.DENSITY
     }
+}
+Class.genericBoss = {
+    PARENT: "genericTank",
+    TYPE: "miniboss",
+    DANGER: 6,
+    SKILL: skillSet({
+        rld: 0.7,
+        dam: 0.5,
+        pen: 0.8,
+        str: 0.8,
+        spd: 0.2,
+        atk: 0.3,
+        hlt: 1,
+        shi: 0.7,
+        rgn: 0.7,
+        mob: 0,
+    }),
+    LEVEL: 45,
+    CONTROLLERS: ["nearestDifferentMaster", "canRepel"],
+    FACING_TYPE: ['spin', {speed: 0.02}],
+    HITS_OWN_TYPE: "hardOnlyBosses",
+    BROADCAST_MESSAGE: "A visitor has left!",
+    BODY: { PUSHABILITY: 0.05 }
 }
 
 Class.food = {
