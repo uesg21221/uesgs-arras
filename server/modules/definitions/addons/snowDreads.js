@@ -2664,12 +2664,12 @@ Class.jumboSnowdread = {
 		},
 	],
 }
-Class.colossalTopSnowdread = {
+Class.colossusTopSnowdread = {
 	PARENT: ["genericSquarenought"],
 	GUNS: [],
 }
 for (let i = 0; i < 4; i++) {
-	Class.colossalTopSnowdread.GUNS.push(
+	Class.colossusTopSnowdread.GUNS.push(
 		{
 			POSITION: [3.5, 17.5, 0.001, 9, 0, 90*i, 0],
 			PROPERTIES: {COLOR: 9},
@@ -2679,12 +2679,12 @@ for (let i = 0; i < 4; i++) {
 		},
 	)
 }
-Class.colossalBottomSnowdread = {
+Class.colossusBottomSnowdread = {
 	PARENT: ["genericSquarenought"],
 	GUNS: [],
 }
 for (let i = 0; i < 4; i++) {
-	Class.colossalTopSnowdread.GUNS.push(
+	Class.colossusTopSnowdread.GUNS.push(
 		{
 			POSITION: [3.5, 17.5, 0.001, 9, 0, 90*i, 0],
 			PROPERTIES: {COLOR: 9},
@@ -2692,29 +2692,29 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 for (let i = 0; i < 4; i++) {
-	Class.colossalBottomSnowdread.GUNS.push(
+	Class.colossusBottomSnowdread.GUNS.push(
 		{
 			POSITION: [4, 17.5, 0.001, 9, 0, 90*i, 0],
 			PROPERTIES: {COLOR: 9},
 		},
 	)
 }
-Class.colossalSnowdread = {
+Class.colossusSnowdread = {
 	PARENT: ["genericSquarenought"],
-	LABEL: "Colossal",
+	LABEL: "colossus",
 	UPGRADE_TOOLTIP: "Speed Buff",
 	BODY: speedBuffBodyStats[0],
 	GUNS: [],
 	TURRETS: [
 		{
 			POSITION: [13, 0, 0, 0, 0, 1],
-			TYPE: ['colossalTopSnowdread', {MIRROR_MASTER_ANGLE: true}]
+			TYPE: ['colossusTopSnowdread', {MIRROR_MASTER_ANGLE: true}]
 		}, {
 			POSITION: [20, 0, 0, 0, 0, 1],
 			TYPE: ["squareBaseDeco"],
 		}, {
 			POSITION: [20, 0, 0, 0, 0, -1],
-			TYPE: ['colossalBottomSnowdread', {MIRROR_MASTER_ANGLE: true}]
+			TYPE: ['colossusBottomSnowdread', {MIRROR_MASTER_ANGLE: true}]
 		},
 	],
 }
@@ -6226,7 +6226,7 @@ Class.addons.UPGRADES_TIER_0.push("dreadSnowdread");
 				Class.creatureSnowdread.UPGRADES_TIER_0 = ["beastSnowdread"];
 					Class.beastSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("beastSnowdread")];
 
-		Class.juggernautSnowdread.UPGRADES_TIER_0 = ["jumboSnowdread", "colossalSnowdread", "cottonSnowdread", "ironSnowdread"];
+		Class.juggernautSnowdread.UPGRADES_TIER_0 = ["jumboSnowdread", "colossusSnowdread", "cottonSnowdread", "ironSnowdread"];
 
 			Class.jumboSnowdread.UPGRADES_TIER_0 = ["goliathSnowdread", "planetSnowdread", "moonSnowdread", "burgSnowdread", "siloSnowdread", "armadaSnowdread"];
 				Class.goliathSnowdread.UPGRADES_TIER_0 = ["behemothSnowdread"];
@@ -6238,7 +6238,7 @@ Class.addons.UPGRADES_TIER_0.push("dreadSnowdread");
 				Class.armadaSnowdread.UPGRADES_TIER_0 = ["battalionSnowdread"];
 					Class.battalionSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("battalionSnowdread")];
 
-			Class.colossalSnowdread.UPGRADES_TIER_0 = ["titanSnowdread", "sirenSnowdread", "harpySnowdread", "batonSnowdread", "fireworkSnowdread", "armadaSnowdread"];
+			Class.colossusSnowdread.UPGRADES_TIER_0 = ["titanSnowdread", "sirenSnowdread", "harpySnowdread", "batonSnowdread", "fireworkSnowdread", "armadaSnowdread"];
 				Class.titanSnowdread.UPGRADES_TIER_0 = ["leviathanSnowdread"];
 					Class.leviathanSnowdread.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("leviathanSnowdread")];
 				// Class.sirenSnowdread.UPGRADES_TIER_0 = ["valrayvnSnowdread"];

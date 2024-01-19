@@ -18,3 +18,10 @@ Class.towerTall = {
     PARENT: 'towerBase',
     HEIGHT_SCALE: 2.5,
 }
+
+Class.barrier = {
+    PARENT: 'wall',
+    COLOR: 'pureBlack',
+    ALPHA: 0.1,
+    BORDERLESS: true,
+}

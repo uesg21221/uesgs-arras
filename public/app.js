@@ -746,10 +746,11 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
         context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
         let bottomPoints = [];
         let topPoints = [];
+        let ratio = heightScale != 1 ? fourSidedScale : 1;
         context.lineWidth *= fill && !borderFirst ? 1 : 0.5; // Maintain constant border width
         for (let i = 0; i < sides; i++) {
             let theta = (i / sides) * 2 * Math.PI + angle;
-            context.lineTo(centerX + radius * Math.cos(theta) * (heightScale != 1 ? fourSidedScale : 1), centerY + radius * Math.sin(theta) * (heightScale != 1 ? fourSidedScale : 1));
+            context.lineTo(centerX + radius * Math.cos(theta) * ratio, centerY + radius * Math.sin(theta) * ratio);
             bottomPoints.push([centerX + radius * Math.cos(theta) * fourSidedScale, centerY + radius * Math.sin(theta) * fourSidedScale]);
         }
         if (heightScale != 1 && sides == 4) {
@@ -916,7 +917,6 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     context.shadowBlur = 0;
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
-    console.log(1 / m.size * m.realSize);
     drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, instance.borderless, instance.drawFill, m.imageInterpolation, m.borderFirst, m.heightScale);
     
     // Draw guns above us

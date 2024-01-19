@@ -53,6 +53,18 @@ ink = new Tile({
         enemySpawnCooldown: -c.FOOD_SPAWN_COOLDOWN_INK, enemyCount: 0
     },
     tick: inkTick
+}),
+
+barrier = new Tile({
+    color: 'white',
+    init: tile => {
+	    let o = new Entity(tile.loc);
+	    o.define("barrier");
+	    o.team = TEAM_ROOM;
+	    o.SIZE = room.tileWidth / 2;
+	    o.protect();
+	    o.life();
+    }
 });
 
-module.exports = {underground, ink}
+module.exports = {underground, ink, barrier}
