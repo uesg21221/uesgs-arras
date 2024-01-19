@@ -3,36 +3,13 @@ const { base, gunCalcNames } = require('../constants.js');
 const g = require('../gunvals.js');
 require('./generics.js');
 
-Class.minibossBase = {
-    PARENT: ["genericTank"],
-    TYPE: "miniboss",
-    DANGER: 6,
-    SKILL: skillSet({
-        rld: 0.7,
-        dam: 0.5,
-        pen: 0.8,
-        str: 0.8,
-        spd: 0.2,
-        atk: 0.3,
-        hlt: 1,
-        shi: 0.7,
-        rgn: 0.7,
-        mob: 0,
-    }),
-    LEVEL: 45,
-    CONTROLLERS: ["nearestDifferentMaster", "canRepel"],
-    FACING_TYPE: ['spin', {speed: 0.02}],
-    HITS_OWN_TYPE: "hardOnlyBosses",
-    BROADCAST_MESSAGE: "A visitor has left!",
-    BODY: { PUSHABILITY: 0.05 }
-}
 Class.miniboss = {
-    PARENT: ["minibossBase"],
+    PARENT: "genericBoss",
     CONTROLLERS: ["nearestDifferentMaster", "minion", "canRepel"],
     AI: { NO_LEAD: true },
 };
 Class.ramMiniboss = {
-    PARENT: ["minibossBase"],
+    PARENT: "genericBoss",
     CONTROLLERS: ["nearestDifferentMaster", "canRepel", "mapTargetToGoal"],
 };
 
