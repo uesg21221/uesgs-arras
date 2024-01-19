@@ -1,4 +1,4 @@
-let { UNDERGROUND_START, UNDERGROUND_INTERCONNECT_RATE, UNDERGROUND_CHANNEL_SIZE_CHANGE_RATE, UNDERGROUND_CHANNEL_ISLAND_RATE, INK_EROSION_STRENGTH, INK_EROSION_DROPOFF, INK_EROSION_MINIMUM_STRENGTH } = require('../setup/gamemodeconfigs/theFrontier');
+let { UNDERGROUND_START, UNDERGROUND_INTERCONNECT_RATE, UNDERGROUND_CHANNEL_SIZE_CHANGE_RATE, UNDERGROUND_CHANNEL_ISLAND_RATE, INK_EROSION_STRENGTH, INK_EROSION_DROPOFF, INK_EROSION_MINIMUM_STRENGTH, TDM_END } = require('../setup/gamemodeconfigs/theFrontier');
 const offset = [0, 1, 0, -1, 0];
 const stamps = [
     ['000',
@@ -167,7 +167,7 @@ function generateFrontierMaze(width, height) {
             }
             if (spawnWall) {
                 let o = new Entity({
-                    x: d.x + scale + UNDERGROUND_START * c.TILE_WIDTH,
+                    x: d.x + UNDERGROUND_START * c.TILE_WIDTH,
                     y: d.y
                 });
                 o.define(Class.towerMedium);
@@ -180,5 +180,7 @@ function generateFrontierMaze(width, height) {
         }
     }
 };
+c.UNDERGROUND_START = UNDERGROUND_START;
+c.TDM_END = TDM_END;
 
 module.exports = { generateFrontierMaze };

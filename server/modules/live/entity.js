@@ -2043,7 +2043,13 @@ class Entity extends EventEmitter {
                 }
             } else {
                 let padding = this.realSize;
-                this.accel.x -= Math.max(this.x + padding - room.width, Math.min(this.x - padding, 0)) * c.ROOM_BOUND_FORCE / c.runSpeed;
+                // Frontier middle barrier
+                let leftEdge = 0, 
+                    rightEdge = room.width,
+                    dividerX = (c.UNDERGROUND_START + c.TDM_END) / 2 * c.TILE_WIDTH;
+                if (c.UNDERGROUND_START && this.x < dividerX) rightEdge = c.TDM_END * c.TILE_WIDTH;
+                else if (c.UNDERGROUND_START && this.x > dividerX) leftEdge = c.UNDERGROUND_START * c.TILE_WIDTH;
+                this.accel.x -= Math.max(this.x + padding - rightEdge, Math.min(this.x - padding - leftEdge, 0)) * c.ROOM_BOUND_FORCE / c.runSpeed;
                 this.accel.y -= Math.max(this.y + padding - room.height, Math.min(this.y - padding, 0)) * c.ROOM_BOUND_FORCE / c.runSpeed;
             }
         }

@@ -1634,6 +1634,7 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
         for (let xcell = 0; xcell < W; xcell++) {
             let cell = global.roomSetup[ycell][xcell];
             ctx.fillStyle = gameDraw.modifyColor(cell);
+            if (cell.split(' ')[0] == 'none') ctx.fillStyle = color.white;
             if (gameDraw.modifyColor(cell) !== color.white) {
                 drawGuiRect(x + (j * len) / W, y + (i * height) / H, len / W, height / H);
             }

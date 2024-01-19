@@ -2,7 +2,7 @@ module.exports = {
     MODE: "tdm",
     TEAMS: 4,
     TDM_END: 17,
-    UNDERGROUND_START: 20,
+    UNDERGROUND_START: 21,
     UNDERGROUND_END: 51,
     UNDERGROUND_WIDTH: 39,
     UNDERGROUND_HEIGHT: 21,

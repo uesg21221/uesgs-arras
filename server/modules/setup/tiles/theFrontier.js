@@ -37,7 +37,7 @@ inkTick = tile => {
 },
 
 underground = new Tile({
-    color: "darkGrey",
+    color: "grey",
     data: {
         allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,
@@ -57,14 +57,7 @@ ink = new Tile({
 
 barrier = new Tile({
     color: 'none',
-    init: tile => {
-	    let o = new Entity(tile.loc);
-	    o.define("barrier");
-	    o.team = TEAM_ROOM;
-	    o.SIZE = room.tileWidth / 2;
-	    o.protect();
-	    o.life();
-    }
+    init: tile => {}
 });
 
 module.exports = {underground, ink, barrier}

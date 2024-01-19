@@ -63,47 +63,26 @@ Class.spectator = {
         HEALTH: 1e100,
         SHIELD: 1e100,
         REGEN: 1e100,
-    }
+    },
+    CAN_GO_OUTSIDE_ROOM: true,
 }
 Class.fastSpectator = {
-    PARENT: "genericTank",
+    PARENT: "spectator",
     LABEL: "Fast Spectator",
-    ALPHA: 0,
-    CAN_BE_ON_LEADERBOARD: false,
-    ACCEPTS_SCORE: false,
-    DRAW_HEALTH: false,
-    HITS_OWN_TYPE: "never",
-    ARENA_CLOSER: true,
-    SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
         SPEED: 25,
         ACCELERATION: base.ACCEL * 5,
         FOV: 5,
-        DAMAGE: 0,
-        HEALTH: 1e100,
-        SHIELD: 1e100,
-        REGEN: 1e100,
-    }
+    },
 }
 Class.superFastSpectator = {
     PARENT: "genericTank",
     LABEL: "Super Fast Spectator",
-    ALPHA: 0,
-    CAN_BE_ON_LEADERBOARD: false,
-    ACCEPTS_SCORE: false,
-    DRAW_HEALTH: false,
-    HITS_OWN_TYPE: "never",
-    ARENA_CLOSER: true,
-    SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
         SPEED: 75,
         ACCELERATION: base.ACCEL * 10,
         FOV: 10,
-        DAMAGE: 0,
-        HEALTH: 1e100,
-        SHIELD: 1e100,
-        REGEN: 1e100,
-    }
+    },
 }
 
 Class.bosses = menu("Bosses")
