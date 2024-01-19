@@ -56,7 +56,7 @@ ink = new Tile({
 }),
 
 barrier = new Tile({
-    color: 'white',
+    color: 'none',
     init: tile => {
 	    let o = new Entity(tile.loc);
 	    o.define("barrier");

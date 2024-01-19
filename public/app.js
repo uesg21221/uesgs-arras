@@ -1255,6 +1255,7 @@ function drawFloor(px, py, ratio) {
 
             //draw it
             let tile = row[j];
+            if (tile.split(' ')[0] == 'none') continue;
             ctx.globalAlpha = 1;
             ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : color.white;
             ctx.fillRect(left, top, right - left, bottom - top);

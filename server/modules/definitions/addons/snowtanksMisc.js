@@ -21,7 +21,6 @@ Class.towerTall = {
 
 Class.barrier = {
     PARENT: 'wall',
-    COLOR: 'pureBlack',
-    ALPHA: 0.1,
+    ALPHA: 0,
     BORDERLESS: true,
 }
