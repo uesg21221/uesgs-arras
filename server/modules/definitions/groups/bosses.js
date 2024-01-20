@@ -2429,10 +2429,10 @@ Class.shinybetawaferbread = {
         TYPE: "shinyEggDummy"
     },]
 };;
-Class.zenphiaBoss = {
+Class.zephiBoss = {
     PARENT: "miniboss",
     LABEL: "Shiny Omega Thaumaturge",
-    NAME: "Zenphia",
+    NAME: "Zephi",
     DANGER: 10,
     SHAPE: 4,
     COLOR: "lightGreen",
