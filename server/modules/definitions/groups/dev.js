@@ -19,6 +19,7 @@ Class.developer = {
     RESET_CHILDREN: true,
     ACCEPTS_SCORE: true,
     CAN_BE_ON_LEADERBOARD: true,
+    CAN_GO_OUTSIDE_ROOM: false,
     DRAW_HEALTH: true,
     ARENA_CLOSER: false,
     INVISIBLE: [0, 0],
