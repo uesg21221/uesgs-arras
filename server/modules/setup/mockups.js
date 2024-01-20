@@ -17,6 +17,7 @@ function getMockup(e, positionInfo) {
         strokeWidth: e.strokeWidth,
         upgradeColor: e.upgradeColor,
         glow: e.glow,
+        particleEmitter: e.particleEmitter,
         borderless: e.borderless,
         borderFirst: e.borderFirst,
         drawFill: e.drawFill,

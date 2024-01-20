@@ -83,6 +83,59 @@ let animations = window.animations = {
     leaderboard: new Animation(-1, 1, 0.025)
 };
 
+let particles = [];
+class Particle {
+    constructor(color, strokeWidth, x, y, size, speed, angle, lifetime, alpha = 1, friction = 0) {
+        this.color = color;
+        this.strokeWidth = strokeWidth;
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.speed = speed;
+        this.angle = angle;
+        this.lifetime = lifetime;
+        this.alpha = alpha;
+        this.friction = friction;
+        this.index = particles.length;
+        this.active = true;
+
+        particles.push(this);
+    }
+    iterate () {
+        let xShift = this.speed * Math.cos(this.angle);
+        let yShift = this.speed * Math.sin(this.angle);
+        xShift = util.lerp(xShift, 0, this.friction);
+        yShift = util.lerp(yShift, 0, this.friction);
+
+        this.x += xShift - global.player.vx;
+        this.y += yShift - global.player.vy;
+        this.lifetime--;
+        if (this.lifetime < 0) this.alpha -= 0.086
+        if (this.alpha <= 0) this.delete();
+    }
+    draw (context) {
+        gameDraw.setColor(context, this.color);
+        context.lineWidth = this.strokeWidth / 2;
+        let fillcolor = context.fillStyle;
+        let strokecolor = context.strokeStyle;
+        context.globalAlpha = Math.max(0, this.alpha);
+        context.beginPath();
+        context.arc(this.x, this.y, this.size + context.lineWidth / 2, 0, 2 * Math.PI);
+        context.fillStyle = strokecolor;
+        context.stroke();
+        context.closePath();
+        
+        context.beginPath();
+        context.fillStyle = fillcolor;
+        context.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        context.fill();
+        context.closePath();
+    }
+    delete () {
+        this.active = false;
+    }
+}
+
 // Mockup functions
 // Prepare stuff
 global.player = {
@@ -897,6 +950,12 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     context.globalAlpha = 1;
     context.lineWidth = initStrokeWidth * m.strokeWidth
     gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), blend));
+
+    // Spawn particles
+    if (!global.disconnected && m.particleEmitter && !turretsObeyRot && (Date.now() % (1000 / m.particleEmitter.rate)) <= 25) {
+        let color = gameDraw.modifyColor(instance.color, baseColor);
+        new Particle(color, initStrokeWidth, xx, yy, drawSize / m.size * m.realSize * m.particleEmitter.size, m.particleEmitter.speed, Math.random() * Math.PI * 2, m.particleEmitter.range, m.particleEmitter.alpha, 0.1);
+    }
     
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
     context.shadowColor = m.glow.color!=null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
@@ -1282,6 +1341,18 @@ function drawFloor(px, py, ratio) {
 }
 
 function drawEntities(px, py, ratio) {
+    // Iterate particles
+    if (global.disconnected) {
+        for (let p of particles) {
+            p.delete();
+        }
+    }
+    for (let p of particles) {
+        p.iterate();
+        p.draw(ctx);
+    }
+    particles = particles.filter(p => p.active);
+
     // Draw things
     for (let instance of global.entities) {
         if (!instance.render.draws) {

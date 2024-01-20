@@ -64,26 +64,7 @@ Class.spectator = {
         HEALTH: 1e100,
         SHIELD: 1e100,
         REGEN: 1e100,
-    },
-    CAN_GO_OUTSIDE_ROOM: true,
-}
-Class.fastSpectator = {
-    PARENT: "spectator",
-    LABEL: "Fast Spectator",
-    BODY: {
-        SPEED: 25,
-        ACCELERATION: base.ACCEL * 5,
-        FOV: 5,
-    },
-}
-Class.superFastSpectator = {
-    PARENT: "genericTank",
-    LABEL: "Super Fast Spectator",
-    BODY: {
-        SPEED: 75,
-        ACCELERATION: base.ACCEL * 10,
-        FOV: 10,
-    },
+    }
 }
 
 Class.bosses = menu("Bosses")
@@ -1072,9 +1053,6 @@ Class.whirlwind = {
 Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
     Class.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "spectator", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"];
         Class.unavailable.UPGRADES_TIER_0 = ["healer"];
-        Class.spectator.UPGRADES_TIER_0 = ["spectator", "fastSpectator", "superFastSpectator"];
-        Class.fastSpectator.UPGRADES_TIER_0 = ["spectator", "fastSpectator", "superFastSpectator"];
-        Class.superFastSpectator.UPGRADES_TIER_0 = ["spectator", "fastSpectator", "superFastSpectator"];
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
 

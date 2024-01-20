@@ -1077,6 +1077,20 @@ class Entity extends EventEmitter {
                 recursion: set.GLOW.RECURSION ?? 1
             };
         }
+        if (set.PARTICLE_EMITTER != null) {
+            this.particleEmitter = {
+                rate: set.PARTICLE_EMITTER.RATE ?? 1,
+                rateVariance: set.PARTICLE_EMITTER.RATE_VARIANCE ?? 0,
+                size: (set.PARTICLE_EMITTER.SIZE ?? 10) / 20,
+                sizeVariance: set.PARTICLE_EMITTER.SIZE_VARIANCE ?? 0,
+                alpha: set.PARTICLE_EMITTER.ALPHA ?? 0.7,
+                alphaVariance: set.PARTICLE_EMITTER.ALPHA_VARIANCE ?? 0,
+                speed: set.PARTICLE_EMITTER.SPEED ?? 7.5,
+                speedVariance: set.PARTICLE_EMITTER.SPEED_VARIANCE ?? 0,
+                range: set.PARTICLE_EMITTER.RANGE ?? 50,
+                rangeVariance: set.PARTICLE_EMITTER.RANGE_VARIANCE ?? 0,
+            }
+        }
         if (set.CONTROLLERS != null) {
             let toAdd = [];
             for (let i = 0; i < set.CONTROLLERS.length; i++) {
