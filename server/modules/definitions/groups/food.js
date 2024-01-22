@@ -333,10 +333,11 @@ Class.hexagon = {
     SIZE: 22,
     COLOR: "magenta",
     BODY: {
-        DAMAGE: 1.7 * basePolygonDamage,
+        DAMAGE: 3 * basePolygonDamage,
         DENSITY: 8,
-        HEALTH: 12 * basePolygonHealth,
+        HEALTH: 500 * basePolygonHealth,
         RESIST: 1.3,
+        SHIELD: 50 * basePolygonHealth,
         PENETRATION: 1.1,
         ACCELERATION: 0.003
     },

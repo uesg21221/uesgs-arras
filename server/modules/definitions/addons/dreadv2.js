@@ -102,7 +102,7 @@ Class.genericHexnought = {
 	PARENT: ["genericDreadnoughtOfficialV2"],
 	BODY: hexnoughtBody,
 	SHAPE: 6,
-	COLOR: 0,
+	COLOR: 'magenta',
 	SIZE: 26,
 	DANGER: 12,
 }

@@ -1,4 +1,4 @@
-const { combineStats, skillSet, makeAuto, addAura, LayeredBoss } = require('../facilitators.js');
+const { combineStats, skillSet, makeAuto, addAura, LayeredBoss, makeDeco } = require('../facilitators.js');
 const { base, gunCalcNames } = require('../constants.js');
 const g = require('../gunvals.js');
 require('./generics.js');
@@ -2387,8 +2387,9 @@ Class.taureonBoss = {
     }]
 };
 
-Class.shinyomegasunchip = {
-    PARENT: ["drone"],
+Class.zephiMiscDeco = makeDeco(4, "black")
+Class.zephiSunchip = makeAuto({
+    PARENT: "drone",
     SHAPE: 4,
     HITS_OWN_TYPE: "hard",
     BODY: {
@@ -2400,21 +2401,15 @@ Class.shinyomegasunchip = {
     },
     TURRETS: [{
         POSITION: [20 * Math.SQRT1_2, 0, 0, 45, 0, 1],
-        TYPE: ["shinySquare", { MIRROR_MASTER_ANGLE: true }]
+        TYPE: ["overdriveDeco", { MIRROR_MASTER_ANGLE: true }]
     },{
         POSITION: [20 * Math.SQRT1_2 ** 2, 0, 0, 0, 0, 1],
         TYPE: ["shinySquare", { MIRROR_MASTER_ANGLE: true }]
-    },{
-        POSITION: [20 * Math.SQRT1_2 ** 3, 0, 0, 45, 0, 1],
-        TYPE: ["shinySquare", { MIRROR_MASTER_ANGLE: true }]
     }]
-};
-Class.shinyEggDummy = {
-    SHAPE: 0,
-    COLOR: "lightGreen"
-}
-Class.shinybetawaferbread = {
-    PARENT: ["drone"],
+}, "Robo-Sunchip", {type: 'autoSmasherTurret', size: 6})
+Class.zephiEggchip = {
+    PARENT: "drone",
+    LABEL: "Guided Missile",
     SHAPE: 0,
     HITS_OWN_TYPE: "hard",
     BODY: {
@@ -2424,14 +2419,40 @@ Class.shinybetawaferbread = {
         BLIND: true,
         FARMER: true,
     },
+    GUNS: [
+        {
+            POSITION: [14, 6, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                AUTOFIRE: true,
+                SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, { reload: 0.5 }, g.lowPower, { recoil: 1.35 }, { speed: 1.3, maxSpeed: 1.3 }]),
+                TYPE: ["bullet", { COLOR: "black", PERSISTS_AFTER_DEATH: true }],
+                STAT_CALCULATOR: gunCalcNames.thruster,
+            },
+        },
+    ],
     TURRETS: [{
         POSITION: [10, 0, 0, 45, 0, 1],
-        TYPE: "shinyEggDummy"
-    },]
-};;
+        TYPE: "gem"
+    }]
+}
+Class.zephiGearOuter = makeDeco('M 0.5 0.0929 V -0.0908 L 0.3875 -0.1096 C 0.3792 -0.1409 0.3667 -0.1701 0.3521 -0.1952 L 0.4187 -0.2871 L 0.2896 -0.4186 L 0.1958 -0.3539 C 0.1687 -0.3685 0.1396 -0.381 0.1104 -0.3894 L 0.0917 -0.5 H -0.0917 L -0.1104 -0.3873 C -0.1417 -0.3789 -0.1688 -0.3664 -0.1958 -0.3518 L -0.2875 -0.4165 L -0.4188 -0.2871 L -0.3521 -0.1952 C -0.3667 -0.1681 -0.3792 -0.1388 -0.3875 -0.1075 L -0.5 -0.0908 V 0.0929 L -0.3875 0.1117 C -0.3792 0.143 -0.3667 0.1701 -0.3521 0.1973 L -0.4188 0.2912 L -0.2896 0.4207 L -0.1958 0.3539 C -0.1688 0.3685 -0.1396 0.381 -0.1083 0.3894 L -0.0896 0.5 H 0.0938 L 0.1125 0.3873 C 0.1417 0.3789 0.1708 0.3664 0.1979 0.3518 L 0.2917 0.4186 L 0.4208 0.2891 L 0.3542 0.1952 C 0.3688 0.1681 0.3812 0.1409 0.3896 0.1096 L 0.5 0.0929 Z M 0.3333 0 C 0.3333 0.1841 0.1841 0.3333 0 0.3333 C -0.1841 0.3333 -0.3333 0.1841 -0.3333 0 C -0.3333 -0.1841 -0.1841 -0.3333 0 -0.3333 C 0.1841 -0.3333 0.3333 -0.1841 0.3333 0 Z', '#7F7F7F')
+Class.zephiGearOuter.CONTROLLERS = [["spin", { independent: true }]]
+Class.zephiGearOuter.BORDERLESS = true
+Class.zephiGearCentre = makeDeco(0, '#1F1F1F')
+Class.zephiGearCentre.CONTROLLERS = [["spin", { independent: true }]]
+Class.zephiGearCentre.BORDERLESS = true
+Class.zephiGearRed = makeDeco('M -0.2667 0 C -0.2667 0.0074 -0.2664 0.0147 -0.2658 0.022 C -0.2651 0.0293 -0.2642 0.0366 -0.263 0.0439 C -0.2618 0.0511 -0.2603 0.0583 -0.2585 0.0655 C -0.2567 0.0726 -0.2546 0.0796 -0.2522 0.0866 C -0.2498 0.0935 -0.2472 0.1004 -0.2442 0.1071 C -0.2412 0.1139 -0.238 0.1205 -0.2345 0.1269 C -0.231 0.1334 -0.2273 0.1397 -0.2232 0.1459 C -0.2192 0.152 -0.2149 0.158 -0.2104 0.1638 C -0.2059 0.1696 -0.2012 0.1752 -0.1962 0.1806 C -0.1912 0.186 -0.186 0.1912 -0.1806 0.1962 C -0.1752 0.2012 -0.1696 0.2059 -0.1638 0.2104 C -0.158 0.215 -0.152 0.2192 -0.1458 0.2232 C -0.1397 0.2273 -0.1334 0.231 -0.1269 0.2345 C -0.1204 0.238 -0.1138 0.2413 -0.1071 0.2442 C -0.1032 0.2458 -0.1 0.2436 -0.1 0.2393 V -0.2393 C -0.1 -0.2436 -0.1032 -0.2458 -0.1071 -0.2442 C -0.1138 -0.2413 -0.1204 -0.238 -0.1269 -0.2345 C -0.1334 -0.231 -0.1397 -0.2273 -0.1458 -0.2232 C -0.152 -0.2192 -0.158 -0.215 -0.1638 -0.2104 C -0.1696 -0.2059 -0.1752 -0.2012 -0.1806 -0.1962 C -0.186 -0.1912 -0.1912 -0.186 -0.1962 -0.1806 C -0.2012 -0.1752 -0.2059 -0.1696 -0.2104 -0.1638 C -0.2149 -0.158 -0.2192 -0.152 -0.2232 -0.1458 C -0.2273 -0.1397 -0.231 -0.1334 -0.2345 -0.1269 C -0.238 -0.1205 -0.2412 -0.1138 -0.2442 -0.1071 C -0.2472 -0.1004 -0.2498 -0.0935 -0.2522 -0.0866 C -0.2546 -0.0796 -0.2567 -0.0726 -0.2585 -0.0655 C -0.2603 -0.0583 -0.2618 -0.0511 -0.263 -0.0439 C -0.2642 -0.0366 -0.2651 -0.0293 -0.2658 -0.022 C -0.2664 -0.0147 -0.2667 -0.0073 -0.2667 0 Z', '#FF1F1F')
+Class.zephiGearRed.CONTROLLERS = [["spin", { independent: true }]]
+Class.zephiGearRed.BORDERLESS = true
+Class.zephiGearGreen = makeDeco('M 0.0771 -0.2552 C 0.0743 -0.2561 0.0691 -0.2576 0.0657 -0.2585 L 0.0607 -0.2597 C 0.0571 -0.2605 0.0514 -0.2617 0.0479 -0.2623 L 0.0428 -0.2632 C 0.0392 -0.2638 0.0334 -0.2646 0.0299 -0.265 L 0.0247 -0.2655 C 0.0211 -0.2659 0.0153 -0.2662 0.0117 -0.2664 L 0.0066 -0.2666 C 0.003 -0.2667 -0.0029 -0.2667 -0.0065 -0.2666 L -0.0116 -0.2664 C -0.0153 -0.2662 -0.0211 -0.2659 -0.0247 -0.2655 L -0.0298 -0.265 C -0.0334 -0.2646 -0.0392 -0.2638 -0.0427 -0.2632 L -0.0478 -0.2623 C -0.0514 -0.2617 -0.0571 -0.2605 -0.0606 -0.2597 L -0.0656 -0.2585 C -0.0691 -0.2576 -0.0747 -0.256 -0.0782 -0.2549 C -0.081 -0.254 -0.0833 -0.2502 -0.0833 -0.2466 V 0.2466 C -0.0833 0.2502 -0.0805 0.2541 -0.0771 0.2552 C -0.0743 0.2561 -0.0691 0.2576 -0.0656 0.2585 L -0.0606 0.2597 C -0.0571 0.2605 -0.0514 0.2617 -0.0478 0.2623 L -0.0427 0.2632 C -0.0392 0.2638 -0.0334 0.2646 -0.0298 0.265 L -0.0247 0.2655 C -0.0211 0.2659 -0.0153 0.2663 -0.0116 0.2664 L -0.0065 0.2666 C -0.0029 0.2667 0.003 0.2667 0.0066 0.2666 L 0.0117 0.2664 C 0.0153 0.2663 0.0211 0.2659 0.0247 0.2655 L 0.0299 0.265 C 0.0334 0.2646 0.0392 0.2638 0.0428 0.2632 L 0.0479 0.2623 C 0.0514 0.2617 0.0571 0.2605 0.0607 0.2597 L 0.0657 0.2585 C 0.0691 0.2576 0.0748 0.256 0.0782 0.2549 C 0.0811 0.254 0.0834 0.2502 0.0834 0.2466 V -0.2466 C 0.0834 -0.2502 0.0806 -0.2541 0.0771 -0.2552 Z', '#1FDF1F')
+Class.zephiGearGreen.CONTROLLERS = [["spin", { independent: true }]]
+Class.zephiGearGreen.BORDERLESS = true
+Class.zephiGearBlue = makeDeco('M -0.2667 0 C -0.2667 0.0074 -0.2664 0.0147 -0.2658 0.022 C -0.2651 0.0293 -0.2642 0.0366 -0.263 0.0439 C -0.2618 0.0511 -0.2603 0.0583 -0.2585 0.0655 C -0.2567 0.0726 -0.2546 0.0796 -0.2522 0.0866 C -0.2498 0.0935 -0.2472 0.1004 -0.2442 0.1071 C -0.2412 0.1139 -0.238 0.1205 -0.2345 0.1269 C -0.231 0.1334 -0.2273 0.1397 -0.2232 0.1459 C -0.2192 0.152 -0.2149 0.158 -0.2104 0.1638 C -0.2059 0.1696 -0.2012 0.1752 -0.1962 0.1806 C -0.1912 0.186 -0.186 0.1912 -0.1806 0.1962 C -0.1752 0.2012 -0.1696 0.2059 -0.1638 0.2104 C -0.158 0.215 -0.152 0.2192 -0.1458 0.2232 C -0.1397 0.2273 -0.1334 0.231 -0.1269 0.2345 C -0.1204 0.238 -0.1138 0.2413 -0.1071 0.2442 C -0.1032 0.2458 -0.1 0.2436 -0.1 0.2393 V -0.2393 C -0.1 -0.2436 -0.1032 -0.2458 -0.1071 -0.2442 C -0.1138 -0.2413 -0.1204 -0.238 -0.1269 -0.2345 C -0.1334 -0.231 -0.1397 -0.2273 -0.1458 -0.2232 C -0.152 -0.2192 -0.158 -0.215 -0.1638 -0.2104 C -0.1696 -0.2059 -0.1752 -0.2012 -0.1806 -0.1962 C -0.186 -0.1912 -0.1912 -0.186 -0.1962 -0.1806 C -0.2012 -0.1752 -0.2059 -0.1696 -0.2104 -0.1638 C -0.2149 -0.158 -0.2192 -0.152 -0.2232 -0.1458 C -0.2273 -0.1397 -0.231 -0.1334 -0.2345 -0.1269 C -0.238 -0.1205 -0.2412 -0.1138 -0.2442 -0.1071 C -0.2472 -0.1004 -0.2498 -0.0935 -0.2522 -0.0866 C -0.2546 -0.0796 -0.2567 -0.0726 -0.2585 -0.0655 C -0.2603 -0.0583 -0.2618 -0.0511 -0.263 -0.0439 C -0.2642 -0.0366 -0.2651 -0.0293 -0.2658 -0.022 C -0.2664 -0.0147 -0.2667 -0.0073 -0.2667 0 Z', '#1F7FDF')
+Class.zephiGearBlue.CONTROLLERS = [["spin", { independent: true }]]
+Class.zephiGearBlue.BORDERLESS = true
 Class.zephiBoss = {
     PARENT: "miniboss",
-    LABEL: "Shiny Omega Thaumaturge",
+    LABEL: "Shiny Mecha-Thaumaturge",
     NAME: "Zephi",
     DANGER: 10,
     SHAPE: 4,
@@ -2449,29 +2470,31 @@ Class.zephiBoss = {
         POSITION: [2.5, 3, 1.2, 8, 5, i * 90, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.pounder, { speed: 2.5 }, g.machineGun, { spray: 50, speed: 1.25, shudder: 1.25 }]),
-            TYPE: "shinybetawaferbread",
+            TYPE: ["zephiEggchip", {COLOR: "black"}],
             MAX_CHILDREN: 8,
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
             STAT_CALCULATOR: gunCalcNames.necro,
-            WAIT_TO_CYCLE: true
+            WAIT_TO_CYCLE: true,
+            COLOR: "black",
         }
     },{
         POSITION: [2.5, 3, 1.2, 8, -5, i * 90, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.pounder, { speed: 2.5 }, g.machineGun, { spray: 150, speed: 1.25, shudder: 1.25 }]),
-            TYPE: "shinybetawaferbread",
+            TYPE: ["zephiEggchip", {COLOR: "black"}],
             MAX_CHILDREN: 8,
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
             STAT_CALCULATOR: gunCalcNames.necro,
-            WAIT_TO_CYCLE: true
+            WAIT_TO_CYCLE: true,
+            COLOR: "black",
         }
     },{
         POSITION: [3.5, 8.65, 1.2, 8, 0, i * 90, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, g.destroyer, { speed: 2.5 }, { maxSpeed: 3 }]),
-            TYPE: "shinyomegasunchip",
+            TYPE: ["zephiSunchip", {COLOR: "black"}],
             MAX_CHILDREN: 4,
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
@@ -2480,11 +2503,26 @@ Class.zephiBoss = {
         }
     }])).flat(),
     TURRETS: [{
+        POSITION: [16 * Math.SQRT1_2, 0, 0, 0, 360, 2],
+        TYPE: "zephiGearOuter"
+    },{
+        POSITION: [5.375 * Math.SQRT1_2, 0, 0, 0, 360, 2],
+        TYPE: "zephiGearCentre"
+    },{
+        POSITION: [16 * Math.SQRT1_2, 0, 0, 0, 360, 2],
+        TYPE: "zephiGearRed"
+    },{
+        POSITION: [16 * Math.SQRT1_2, 0, 0, 0, 360, 2],
+        TYPE: "zephiGearGreen"
+    },{
+        POSITION: [16 * Math.SQRT1_2, 0, 0, 180, 360, 2],
+        TYPE: "zephiGearBlue"
+    },{
         POSITION: [20 * Math.SQRT1_2, 0, 0, 45, 0, 1],
-        TYPE: "shinySquare"
+        TYPE: "overdriveDeco"
     },{
         POSITION: [20 * Math.SQRT1_2 ** 2, 0, 0, 0, 0, 1],
-        TYPE: "shinySquare"
+        TYPE: "zephiMiscDeco"
     },{
         POSITION: [20 * Math.SQRT1_2 ** 3, 0, 0, 45, 0, 1],
         TYPE: "shinySquare"
@@ -3089,17 +3127,276 @@ Class.trplnrBossVulnerableForm = {
     }]
 }
 
-let testLayeredBoss = new LayeredBoss("testLayeredBoss", "Test Layered Boss", "terrestrial", 7, 3, "terrestrialTrapTurret", 5, 7, {SPEED: 10});
-testLayeredBoss.addLayer({gun: {
-    POSITION: [3.6, 7, -1.4, 8, 0, null, 0],
-    PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.factory, { size: 0.5 }]),
-        TYPE: ["minion", {INDEPENDENT: true}],
-        AUTOFIRE: true,
-        SYNCS_SKILLS: true,
+Class.frostAuraSmall = {
+	PARENT: "aura",
+	LAYER: 30,
+	FACING_TYPE: ["spin", {speed: -0.04}],
+    BORDERLESS: true,
+	SHAPE: "M 1 0 L 0.715 0.519 L 0.309 0.951 L -0.273 0.84 L -0.809 0.588 L -0.883 0 L -0.809 -0.588 L -0.273 -0.84 L 0.309 -0.951 L 0.715 -0.519 L 1 0",
+    TURRETS: [{
+        POSITION: [20, 0, 0, 0, 0, 1],
+        TYPE: 'frostAuraSmallOutline'
+    }]
+}
+Class.frostAuraSmallOutline = {
+    PARENT: "aura",
+	MIRROR_MASTER_ANGLE: true,
+    DRAW_FILL: false,
+	SHAPE: "M 1 0 L 0.715 0.519 L 0.309 0.951 L -0.273 0.84 L -0.809 0.588 L -0.883 0 L -0.809 -0.588 L -0.273 -0.84 L 0.309 -0.951 L 0.715 -0.519 L 1 0" + 
+		"L 0.309 0.951 L -0.809 0.588 L -0.809 -0.588 L 0.309 -0.951 L 1 0" + 
+		"L 0 0 L 0.309 0.951 M 0 0 L -0.809 0.588 M 0 0 L -0.809 -0.588 M 0 0 L 0.309 -0.951",
+}
+Class.frostAuraLarge = {
+	PARENT: "aura",
+	LAYER: 30,
+	FACING_TYPE: ["spin", {speed: -0.04}],
+	BORDERLESS: true,
+	SHAPE: "M 1 0 L 0.988 0.156 L 0.951 0.309 L 0.891 0.454 L 0.809 0.588 L 0.707 0.707 L 0.588 0.809 L 0.454 0.891 L 0.309 0.951 L 0.156 0.988 L 0 1 L -0.156 0.988 L -0.309 0.951 L -0.454 0.891 L -0.588 0.809 L -0.707 0.707 L -0.809 0.588 L -0.891 0.454 L -0.951 0.309 L -0.988 0.156 L -1 0 L -0.988 -0.156 L -0.951 -0.309 L -0.891 -0.454 L -0.809 -0.588 L -0.707 -0.707 L -0.588 -0.809 L -0.454 -0.891 L -0.309 -0.951 L -0.156 -0.988 L 0 -1 L 0.156 -0.988 L 0.309 -0.951 L 0.454 -0.891 L 0.588 -0.809 L 0.707 -0.707 L 0.809 -0.588 L 0.891 -0.454 L 0.951 -0.309 L 0.988 -0.156 L 1 0",
+    TURRETS: [{
+        POSITION: [20, 0, 0, 0, 0, 1],
+        TYPE: 'frostAuraLargeOutline'
+    }]
+}
+Class.frostAuraLargeOutline = {
+    PARENT: "aura",
+	MIRROR_MASTER_ANGLE: true,
+    DRAW_FILL: false,
+	SHAPE: "M 1 0 L 0.988 0.156 L 0.951 0.309 L 0.891 0.454 L 0.809 0.588 L 0.707 0.707 L 0.588 0.809 L 0.454 0.891 L 0.309 0.951 L 0.156 0.988 L 0 1 L -0.156 0.988 L -0.309 0.951 L -0.454 0.891 L -0.588 0.809 L -0.707 0.707 L -0.809 0.588 L -0.891 0.454 L -0.951 0.309 L -0.988 0.156 L -1 0 L -0.988 -0.156 L -0.951 -0.309 L -0.891 -0.454 L -0.809 -0.588 L -0.707 -0.707 L -0.588 -0.809 L -0.454 -0.891 L -0.309 -0.951 L -0.156 -0.988 L 0 -1 L 0.156 -0.988 L 0.309 -0.951 L 0.454 -0.891 L 0.588 -0.809 L 0.707 -0.707 L 0.809 -0.588 L 0.891 -0.454 L 0.951 -0.309 L 0.988 -0.156 L 1 0" + 
+        "M 0.988 -0.156 L 0.988 0.156 L 0.891 0.454 L 0.707 0.707 L 0.454 0.891 L 0.156 0.988 L -0.156 0.988 L -0.454 0.891 L -0.707 0.707 L -0.891 0.454 L -0.988 0.156 L -0.988 -0.156 L -0.891 -0.454 L -0.707 -0.707 L -0.454 -0.891 L -0.156 -0.988 L 0.156 -0.988 L 0.454 -0.891 L 0.707 -0.707 L 0.891 -0.454 L 0.988 -0.156 L 0.949 0" + 
+        "L 0.988 0.156 L 0.891 0.256 L 0.891 0.454 L 0.739 0.537 L 0.707 0.707 L 0.519 0.769 L 0.454 0.891 L 0.293 0.902 L 0.156 0.988 L 0.032 0.927 L -0.156 0.988 L -0.282 0.869 L -0.454 0.891 L -0.571 0.731 L -0.707 0.707 L -0.768 0.558 L -0.891 0.454 L -0.871 0.317 L -0.988 0.156 L -0.914 0 L -0.988 -0.156 L -0.871 -0.317 L -0.891 -0.454 L -0.768 -0.558 L -0.707 -0.707 L -0.571 -0.731 L -0.454 -0.891 L -0.282 -0.869 L -0.156 -0.988 L 0.032 -0.927 L 0.156 -0.988 L 0.293 -0.902 L 0.454 -0.891 L 0.519 -0.769 L 0.707 -0.707 L 0.739 -0.537 L 0.891 -0.454 L 0.891 -0.256 L 0.988 -0.156 L 0.949 0" + 
+        "L 0.891 0.256 L 0.739 0.537 L 0.519 0.769 L 0.293 0.902 L 0.032 0.927 L -0.282 0.869 L -0.571 0.731 L -0.768 0.558 L -0.871 0.317 L -0.914 0 L -0.871 -0.317 L -0.768 -0.558 L -0.571 -0.731 L -0.282 -0.869 L 0.032 -0.927 L 0.293 -0.902 L 0.519 -0.769 L 0.739 -0.537 L 0.891 -0.256 L 0.949 0" + 
+        "M 0.834 0 L 0.891 0.256 L 0.704 0.291 L 0.739 0.537 L 0.495 0.579 L 0.519 0.769 L 0.258 0.793 L 0.032 0.927 L -0.06 0.759 L -0.282 0.869 L -0.398 0.649 L -0.571 0.731 L -0.674 0.49 L -0.871 0.317 L -0.741 0.178 L -0.914 0 L -0.741 -0.178 L -0.871 -0.317 L -0.674 -0.49 L -0.571 -0.731 L -0.398 -0.649 L -0.282 -0.869 L -0.06 -0.759 L 0.032 -0.927 L 0.258 -0.793 L 0.519 -0.769 L 0.495 -0.579 L 0.739 -0.537 L 0.704 -0.291 L 0.891 -0.256 L 0.834 0" + 
+        "L 0.704 0.291 L 0.495 0.579 L 0.258 0.793 L -0.06 0.759 L -0.398 0.649 L -0.674 0.49 L -0.741 0.178 L -0.741 -0.178 L -0.674 -0.49 L -0.398 -0.649 L -0.06 -0.759 L 0.258 -0.793 L 0.495 -0.579 L 0.704 -0.291 L 0.834 0" + 
+        "M 0.592 0 L 0.704 0.291 L 0.413 0.3 L 0.495 0.579 L 0.183 0.563 L -0.06 0.759 L -0.158 0.485 L -0.398 0.649 L -0.479 0.348 L -0.741 0.178 L -0.51 0 L -0.741 -0.178 L -0.479 -0.348 L -0.398 -0.649 L -0.158 -0.485 L -0.06 -0.759 L 0.183 -0.563 L 0.495 -0.579 L 0.413 -0.3 L 0.704 -0.291 L 0.592 0" + 
+        "L 0.413 0.3 L 0.183 0.563 L -0.158 0.485 L -0.479 0.348 L -0.51 0 L -0.479 -0.348 L -0.158 -0.485 L 0.183 -0.563 L 0.413 -0.3 L 0.592 0" + 
+        "M 0.292 0 L 0.413 0.3 L 0.09 0.277 L -0.158 0.485 L -0.236 0.171 L -0.51 0 L -0.236 -0.171 L -0.158 -0.485 L 0.09 -0.277 L 0.413 -0.3 L 0.292 0 L 0.09 0.277" + 
+        "L -0.236 0.171 L -0.236 -0.171 L 0.09 -0.277 L 0.292 0 M 0 0 L 0.949 0" + 
+        "M 0 0 L 0.293 0.902 M 0 0 L -0.768 0.558 M 0 0 L -0.768 -0.558 M 0 0 L 0.293 -0.902",
+}
+Class.frostAuraSymbol = {
+	PARENT: ["genericTank"],
+	CONTROLLERS: [["spin", { speed: -0.04 }]],
+	INDEPENDENT: true,
+    BORDERLESS: true,
+	COLOR: 'teal',
+	SHAPE: "M 1 0 L 0.797 0.46 L 0.5 0.866 L 0 0.92 L -0.5 0.866 L -0.797 0.46 L -1 0 L -0.797 -0.46 L -0.5 -0.866 L 0 -0.92 L 0.5 -0.866 L 0.797 -0.46 L 1 0 Z",
+    TURRETS: [{
+        POSITION: [20, 0, 0, 0, 0, 1],
+        TYPE: 'frostAuraSymbolOutline'
+    }]
+}
+Class.frostAuraSymbolOutline = {
+    PARENT: "genericTank",
+	MIRROR_MASTER_ANGLE: true,
+    DRAW_FILL: false,
+	SHAPE: "M 1 0 L 0.797 0.46 L 0.5 0.866 L 0 0.92 L -0.5 0.866 L -0.797 0.46 L -1 0 L -0.797 -0.46 L -0.5 -0.866 L 0 -0.92 L 0.5 -0.866 L 0.797 -0.46 L 1 0 Z" +
+	    "M 0.52 0.3 L 0.52 -0.3 L 0.797 -0.46 M 0.52 -0.3 L 0 -0.6 L 0 -0.92 M 0 -0.6 L -0.52 -0.3 L -0.797 -0.46 M -0.52 -0.3 L -0.52 0.3 L -0.797 0.46 M -0.52 0.3 L 0 0.6 L 0 0.92 M 0 0.6 L 0.52 0.3 L 0.797 0.46"
+}
+
+function addIcosphereAura(damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraSize = "Medium") {
+	let auraType = "frostAura" + auraSize;
+	return {
+		PARENT: "genericTank",
+		INDEPENDENT: true,
+		LABEL: "",
+		COLOR: 17,
+		GUNS: [
+			{
+				POSITION: [0, 20, 1, 0, 0, 0, 0,],
+				PROPERTIES: {
+					SHOOT_SETTINGS: combineStats([g.aura, { size: sizeFactor, damage: damageFactor }]),
+					TYPE: [auraType, {ALPHA: opacity}],
+					MAX_CHILDREN: 1,
+					AUTOFIRE: true,
+					SYNCS_SKILLS: true,
+				}, 
+			}, 
+		],
+		TURRETS: [
+			{
+				POSITION: [20, 0, 0, 0, 360, 1],
+				TYPE: "frostAuraSymbol"
+			},
+		]
+	};
+}
+Class.frostAuraBlockTop = {
+	SHAPE: "M -1.3 -0.15 L -1.3 0.15 L -0.3 0.3 L -0.15 1.3 L 0.15 1.3 L 0.3 0.3 L 1.3 0.15 L 1.3 -0.15 L 0.3 -0.3 L 0.15 -1.3 L -0.15 -1.3 L -0.3 -0.3 Z",
+	COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 5 },
+	MIRROR_MASTER_ANGLE: true,
+}
+Class.frostAuraBlockAura = addIcosphereAura(0.25, 1.6, 0.15, "Small");
+Class.frostAuraBlock = {
+	PARENT: 'unsetTrap',
+	TURRETS: [
+		{
+			POSITION: [20, 0, 0, 45, 0, 1],
+			TYPE: 'frostAuraBlockTop'
+		}, {
+			POSITION: [10, 0, 0, 0, 360, 1],
+			TYPE: 'frostAuraBlockAura'
+		}
+	]
+}
+Class.frostBossBigAura = addIcosphereAura(1.5, 1.45, 0.3, "Large");
+
+Class.frostBossAutoTurret = {
+	PARENT: "autoTankGun",
+	INDEPENDENT: true,
+	COLOR: 17,
+	GUNS: [
+		{
+			POSITION: [17, 14, 1, 0, 0, 0, 0],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.basic, g.autoTurret, g.fake]),
+				TYPE: "bullet",
+				COLOR: {BASE: 17, BRIGHTNESS_SHIFT: -7.5}
+			},
+		}, {
+			POSITION: [22, 10, 1, 0, 0, 0, 0],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.basic, g.autoTurret, {recoil: 0.2}]),
+				TYPE: "bullet",
+				COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.6}
+			},
+		}, {
+			POSITION: [14, 12, 1, 0, 0, 0, 0],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.basic, g.autoTurret, g.fake]),
+				TYPE: "bullet",
+				COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}
+			},
+		},
+	],
+	TURRETS: [
+		{
+			POSITION: [13, 0, 0, 0, 0, 1],
+			TYPE: ["egg", {COLOR: -1, BORDERLESS: true}],
+		},
+	],
+}
+
+Class.frostBossBaseDeco = {
+	SHAPE: "M -1.1 0 L -0.956 0.292 L -0.669 0.205 L -0.669 -0.205 L -0.956 -0.292 Z" +
+		"M -0.55 0.952 L -0.225 0.974 L -0.157 0.682 L -0.512 0.477 L -0.731 0.682 Z" +
+		"M -0.55 -0.952 L -0.225 -0.974 L -0.157 -0.682 L -0.512 -0.477 L -0.731 -0.682 Z" +
+		"M 0.55 0.952 L 0.225 0.974 L 0.157 0.682 L 0.512 0.477 L 0.731 0.682 Z" +
+		"M 0.55 -0.952 L 0.225 -0.974 L 0.157 -0.682 L 0.512 -0.477 L 0.731 -0.682 Z" +
+		"M 1.1 0 L 0.956 0.292 L 0.669 0.205 L 0.669 -0.205 L 0.956 -0.292 Z",
+	COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 2.5 },
+	MIRROR_MASTER_ANGLE: true,
+	GUNS: Array(6).fill().flatMap((_, i) => ([
+        {
+			POSITION: [1.75, 3, -0.75, 7.5, 0, 60 * i, 0],
+			PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: 2.5, SATURATION_SHIFT: 0.9 }, DRAW_ABOVE: true },
+		}, {
+			POSITION: [1, 9, 0, 8.5, 0, 60 * i + 30, 0],
+			PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: 10, SATURATION_SHIFT: 1.15 } },
+		},
+    ]))
+}
+
+const trebuchetStats = [g.basic, g.sniper, g.predator, g.predator, g.predator, g.predator, {speed: 0.93, maxSpeed: 0.93, reload: 1.7, health: 1.4, damage: 1.4, size: 2}];
+const hielamanStats = [g.trap, g.setTrap, g.hexaTrapper, {reload: 2.4, health: 3.2}];
+Class.frostBoss = {
+    PARENT: 'miniboss',
+    LABEL: 'Extrasolar',
+    NAME: 'Frostbyte',
+    FACING_TYPE: 'toTarget',
+    SHAPE: 6,
+    COLOR: 'teal',
+    SIZE: 31,
+	DANGER: 12,
+    VALUE: 888888,
+    UPGRADE_TOOLTIP: "\"When the golden rays of sun shine through this world's\n" +
+                    "darkened skies and looming clouds, the legend of the warrior\n" +
+                    "and his eternal blade will finally come to fruition.\"",
+    BODY: {
+        SPEED: base.SPEED * 0.6,
+        HEALTH: base.HEALTH * 11,
+        SHIELD: base.SHIELD * 7,
+        REGEN: base.REGEN * 2.5,
+        FOV: base.FOV * 1.4,
+        RESIST: base.RESIST * 1.2,
+        DENSITY: base.DENSITY * 7.5,
     },
-}}, true, null, 16);
-testLayeredBoss.addLayer({turret: {
-    POSITION: [10, 7.5, 0, null, 160, 0],
-    TYPE: "crowbarTurret",
-}}, true);
+    GUNS: Array(3).fill().flatMap((_, i) => ([
+            { // Heavy Snipers
+                POSITION: [24, 9.5, 1, 0, 0, 120 * i, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats(trebuchetStats),
+                    TYPE: "bullet",
+                    COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.6 },
+                },
+            }, {
+                POSITION: [22.5, 6.65, -1.3, 0, 0, 120 * i, 0],
+                PROPERTIES: { 
+                    SHOOT_SETTINGS: combineStats([...trebuchetStats, g.fake]),
+                    TYPE: "bullet",
+                    COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -5, SATURATION_SHIFT: 0.6 }, 
+                    BORDERLESS: true
+                },
+            }, {
+                POSITION: [17, 3.8, -1.4, 0, 0, 120 * i, 0],
+                PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 } },
+            }, {
+                POSITION: [4, 11.5, 1, 17, 0, 120 * i, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([...trebuchetStats, g.fake]),
+                    TYPE: "bullet",
+                    COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -5, SATURATION_SHIFT: 0.6 },
+                },
+            }, {
+                POSITION: [2, 12, 1, 18, 0, 120 * i, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([...trebuchetStats, g.fake]),
+                    TYPE: "bullet",
+                    COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 2.5 },
+                },
+            },
+            { // Aura Blocks
+                POSITION: [15, 9, 1, 0, 0, 120 * i + 60, 0],
+                PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.6}}
+            }, {
+                POSITION: [4, 7.5, -1.6, 9, 0, 120 * i + 60, 0],
+                PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}}
+            }, {
+                POSITION: [15, 5.4, -0.1, 0, 0, 120 * i + 60, 0],
+                PROPERTIES: {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -5, SATURATION_SHIFT: 0.75}}
+            }, {
+                POSITION: [3, 9, 1.6, 15, 0, 120 * i + 60, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats(hielamanStats),
+                    TYPE: 'frostAuraBlock',
+                    STAT_CALCULATOR: gunCalcNames.trap,
+                    COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.6}
+                },
+            }, {
+                POSITION: [2, 7, 1.6, 16, 0, 120 * i + 60, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([...hielamanStats, g.fake]),
+                    TYPE: 'bullet',
+                    COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}
+                },
+            }
+        ])),
+    TURRETS: [
+        {
+			POSITION: [12, 0, 0, 180, 0, 1],
+			TYPE: ["hexagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
+		}, {
+			POSITION: [20, 0, 0, 0, 0, 1],
+			TYPE: ["frostBossBaseDeco"],
+		},
+		...Array(6).fill().flatMap((_, i) => ([
+            {
+				POSITION: [2.95, 8.55, 0, 60 * i + 30, 180, 1],
+				TYPE: "frostBossAutoTurret",
+			},
+        ])),
+		{
+			POSITION: [8.55, 0, 0, 0, 360, 1],
+			TYPE: "frostBossBigAura",
+		},
+    ],
+}

@@ -208,7 +208,7 @@ class Gun {
         // Find out some intermediate values
         let angle1 = this.direction + this.angle + this.body.facing,
             angle2 = this.angle + this.body.facing,
-            gunlength = 1.5 * this.length - this.width * this.settings.size,
+            gunlength = this.length - this.width * this.settings.size / 2,
 
             // Calculate offsets based on lengths and directions
             offsetBaseX = this.offset * Math.cos(angle1),
