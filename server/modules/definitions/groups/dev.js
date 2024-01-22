@@ -958,14 +958,23 @@ Class.tooltipTank = {
 Class.bulletSpawnTest = {
     PARENT: 'genericTank',
     LABEL: "Bullet Spawn Position",
-    GUNS: [{
-        POSITION: [20, 10, 1, 0, 0, 0, 0],
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, {speed: 0, maxSpeed: 0, shudder: 0, spray: 0, recoil: 0}]),
-            TYPE: ['bullet', {BORDERLESS: true}],
-            BORDERLESS: true,
+    GUNS: [
+        {
+            POSITION: [20, 10, 1, 0, -5, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, {speed: 0, maxSpeed: 0, shudder: 0, spray: 0, recoil: 0}]),
+                TYPE: ['bullet', {BORDERLESS: true}],
+                BORDERLESS: true,
+            }
+        }, {
+            POSITION: [50, 10, 1, 0, 5, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, {speed: 0, maxSpeed: 0, shudder: 0, spray: 0, recoil: 0}]),
+                TYPE: ['bullet', {BORDERLESS: true}],
+                BORDERLESS: true,
+            }
         }
-    }]
+    ]
 }
 
 Class.levels = menu("Levels")
