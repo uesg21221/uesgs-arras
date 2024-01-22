@@ -1283,7 +1283,7 @@ Class.genericDreadnoughtSnowdread = {
 	SKILL_CAP: Array(10).fill(smshskl),
 	REROOT_UPGRADE_TREE: ["dreadWeaponSnowdread", "dreadBodySnowdread"],
 }
-Class.genericEggnought = {
+Class.genericEggnoughtSnowdread = {
 	PARENT: ["genericDreadnoughtSnowdread"],
 	BODY: eggnoughtBody,
 	SHAPE: 0,
@@ -1291,7 +1291,7 @@ Class.genericEggnought = {
 	SIZE: 16,
 	DANGER: 8,
 }
-Class.genericSquarenought = {
+Class.genericSquarenoughtSnowdread = {
 	PARENT: ["genericDreadnoughtSnowdread"],
 	BODY: squarenoughtBody,
 	SHAPE: 4,
@@ -1299,7 +1299,7 @@ Class.genericSquarenought = {
 	SIZE: 20,
 	DANGER: 9,
 }
-Class.genericTrinought = {
+Class.genericTrinoughtSnowdread = {
 	PARENT: ["genericDreadnoughtSnowdread"],
 	BODY: trinoughtBody,
 	SHAPE: 3.5,
@@ -1307,7 +1307,7 @@ Class.genericTrinought = {
 	SIZE: 23,
 	DANGER: 10,
 }
-Class.genericPentanought = {
+Class.genericPentanoughtSnowdread = {
 	PARENT: ["genericDreadnoughtSnowdread"],
 	BODY: pentanoughtBody,
 	SHAPE: 5.5,
@@ -1315,7 +1315,7 @@ Class.genericPentanought = {
 	SIZE: 25,
 	DANGER: 11,
 }
-Class.genericHexnought = {
+Class.genericHexnoughtSnowdread = {
 	PARENT: ["genericDreadnoughtSnowdread"],
 	BODY: hexnoughtBody,
 	SHAPE: 6,
@@ -1559,7 +1559,7 @@ Class.unsetPillboxSnowdread = {
 
 // T0
 Class.dreadSnowdread = {
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Dreadnought",
 	UPGRADE_LABEL: "Snowdreads",
 	UPGRADE_TOOLTIP: "The explosions of gunfire pierce\nthrough the quiet drifting of snow.",
@@ -1567,19 +1567,19 @@ Class.dreadSnowdread = {
 	EXTRA_SKILL: 18,
 }
 Class.dreadWeaponSnowdread = {
-	LABEL: "",
+	LABEL: "Weapons",
 	COLOR: 6,
 	REROOT_UPGRADE_TREE: "dreadWeaponSnowdread",
 }
 Class.dreadBodySnowdread = {
-	LABEL: "",
+	LABEL: "Bodies",
 	COLOR: 6,
 	REROOT_UPGRADE_TREE: "dreadBodySnowdread",
 }
 
 // T1 Weapons
 Class.swordSnowdread = {
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Sword",
 	UPGRADE_TOOLTIP: "Snipers",
 	GUNS: [],
@@ -1594,7 +1594,7 @@ Class.sword2Snowdread = {
 	BATCH_UPGRADES: true,
 }
 Class.pacifierSnowdread = {
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Pacifier",
 	UPGRADE_TOOLTIP: "Bullet Spam",
 	GUNS: [],
@@ -1609,7 +1609,7 @@ Class.pacifier2Snowdread = {
 	BATCH_UPGRADES: true,
 }
 Class.peacekeeperSnowdread = {
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Peacekeeper",
 	UPGRADE_TOOLTIP: "Heavy Bullets",
 	GUNS: [],
@@ -1624,7 +1624,7 @@ Class.peacekeeper2Snowdread = {
 	BATCH_UPGRADES: true,
 }
 Class.invaderSnowdread = {
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Invader",
 	UPGRADE_TOOLTIP: "Drones",
 	GUNS: [],
@@ -1639,7 +1639,7 @@ Class.invader2Snowdread = {
 	BATCH_UPGRADES: true,
 }
 Class.centaurSnowdread = {
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Centaur",
 	UPGRADE_TOOLTIP: "Traps",
 	GUNS: [],
@@ -1726,7 +1726,7 @@ Class.byteTurretSnowdread = {
 	]
 }
 Class.byteSnowdread = {
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Byte",
 	UPGRADE_TOOLTIP: "Auto Turret",
 	TURRETS: [
@@ -1768,7 +1768,7 @@ Class.showerTurretSnowdread = {
 	]
 }
 Class.showerSnowdread = { // Drones
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Shower",
 	UPGRADE_TOOLTIP: "Drone Turret",
 	BODY: {
@@ -1790,7 +1790,7 @@ Class.showerSnowdread = { // Drones
 }
 Class.atmosphereAuraSnowdread = addAura(1, 1, 0.15);
 Class.atmosphereSnowdread = {
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Atmosphere",
 	UPGRADE_TOOLTIP: "Damage Aura",
 	TURRETS: [
@@ -1807,7 +1807,7 @@ Class.atmosphereSnowdread = {
 	],
 }
 Class.juggernautSnowdread = {
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Juggernaut",
 	UPGRADE_TOOLTIP: "Health Buff",
 	BODY: {
@@ -1857,7 +1857,7 @@ for(let i = 0; i < 2; i++) {
 	)
 }
 Class.stomperSnowdread = { // Size increase
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Stomper",
 	UPGRADE_TOOLTIP: "Size Increase",
 	SIZE: 1.2,
@@ -1901,7 +1901,7 @@ Class.dropperTurretSnowdread = {
 	]
 }
 Class.dropperSnowdread = { // Minelayer
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Dropper",
 	UPGRADE_TOOLTIP: "Trap Setter",	
 	GUNS: [
@@ -1944,7 +1944,7 @@ Class.spotterRadarSnowdread = {
 	]
 };
 Class.spotterSnowdread = { // FOV
-	PARENT: ["genericEggnought"],
+	PARENT: ["genericEggnoughtSnowdread"],
 	LABEL: "Spotter",
 	UPGRADE_TOOLTIP: "FOV Boost",
 	BODY: {
@@ -1969,7 +1969,7 @@ Class.spotterSnowdread = { // FOV
 
 // T2 Weapons
 Class.sabreSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Sabre",
 	UPGRADE_TOOLTIP: "Assassins",
 	GUNS: [],
@@ -1980,7 +1980,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.gladiusSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Gladius",
 	UPGRADE_TOOLTIP: "Rifles",
 	GUNS: [],
@@ -1991,7 +1991,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.slingSnowdread = { // hunter
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Sling",
 	UPGRADE_TOOLTIP: "Hunters",
 	CONTROLLERS: [["zoom", { distance: 300 }]],
@@ -2004,7 +2004,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.catapultSnowdread = { // mega-sniper
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Catapult",
 	UPGRADE_TOOLTIP: "Mega-Snipers",
 	GUNS: [],
@@ -2015,7 +2015,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.dartSnowdread = { // railgun
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Dart",
 	UPGRADE_TOOLTIP: "Railguns",
 	GUNS: [],
@@ -2026,7 +2026,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.mediatorSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Mediator",
 	UPGRADE_TOOLTIP: "Twins",
 	GUNS: [],
@@ -2038,7 +2038,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.negotiatorSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Negotiator",
 	UPGRADE_TOOLTIP: "Machine Guns",
 	GUNS: [],
@@ -2100,7 +2100,7 @@ Class.melderAutoSnowdread = {
 	]
 }
 Class.melderSnowdread = { // all auto
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Melder",
 	UPGRADE_TOOLTIP: "All Autos",
 	TURRETS: [],
@@ -2114,7 +2114,7 @@ for(let i = 0; i < 4; i++) {
 	)
 	}
 Class.crackerSnowdread = { // ultra bullet spam
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Cracker",
 	UPGRADE_TOOLTIP: "Miniguns",
 	GUNS: [],
@@ -2154,7 +2154,7 @@ Class.grabberTurretSnowdread = {
 	],
 };
 Class.grabberSnowdread = { // crowbar
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Grabber",
 	UPGRADE_TOOLTIP: "Crowbars",
 	GUNS: [],
@@ -2176,7 +2176,7 @@ for(let i = 0; i < 4; i++) {
 	)
 }
 Class.enforcerSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Enforcer",
 	UPGRADE_TOOLTIP: "Heavy Bullets",
 	GUNS: [],
@@ -2187,7 +2187,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.executorSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Executor",
 	UPGRADE_TOOLTIP: "Launchers",
 	GUNS: [],
@@ -2198,7 +2198,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.doserSnowdread = { // shotgun
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Doser",
 	UPGRADE_TOOLTIP: "Shotguns",
 	GUNS: [],
@@ -2237,7 +2237,7 @@ Class.swirlMissileSnowdread = {
 	],
 }
 Class.swirlSnowdread = { // twister
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Swirl",
 	UPGRADE_TOOLTIP: "Twisters",
 	GUNS: [],
@@ -2248,7 +2248,7 @@ for(let i = 0; i < 4; i++) {
 	)
 }
 Class.pelterSnowdread = { // artillery
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Pelter",
 	UPGRADE_TOOLTIP: "Artillery",
 	GUNS: [],
@@ -2261,7 +2261,7 @@ for(let i = 0; i < 4; i++) {
 	)
 }
 Class.inquisitorSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Inquisitor",
 	UPGRADE_TOOLTIP: "Drones",
 	GUNS: [],
@@ -2298,7 +2298,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.assailantSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Assailant",
 	UPGRADE_TOOLTIP: "Minions",
 	GUNS: [],
@@ -2309,7 +2309,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.radiationSnowdread = { // auto-drones
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Radiation",
 	UPGRADE_TOOLTIP: "Auto-Drones",
 	GUNS: [],
@@ -2320,7 +2320,7 @@ for(let i = 0; i < 4; i++) {
 	)
 };
 Class.boxerSnowdread = { // honcho
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Boxer",
 	UPGRADE_TOOLTIP: "Heavy Drones",
 	GUNS: [],
@@ -2331,7 +2331,7 @@ for(let i = 0; i < 4; i++) {
 	)
 };
 Class.disablerSnowdread = { // swarms
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Disabler",
 	UPGRADE_TOOLTIP: "Swarms",
 	GUNS: [],
@@ -2343,7 +2343,7 @@ for(let i = 0; i < 4; i++) {
 	)
 };
 Class.daemonSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Daemon",
 	UPGRADE_TOOLTIP: "Trap Spam",
 	GUNS: [],
@@ -2355,7 +2355,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.minotaurSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Minotaur",
 	UPGRADE_TOOLTIP: "Blocks",
 	GUNS: [],
@@ -2366,7 +2366,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.cleanerSnowdread = { // auto-traps
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Cleaner",
 	UPGRADE_TOOLTIP: "Auto-Traps",
 	GUNS: [],
@@ -2379,7 +2379,7 @@ for(let i = 0; i < 4; i++) {
 Class.auraTrapAura = addAura(1/3, 2, 0.15, 0, "Small");
 Class.auraTrap = makeAuto(Class.trap, "", {type: 'auraTrapAura'});
 Class.shadeSnowdread = { // aura-traps
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Shade",
 	UPGRADE_TOOLTIP: "Aura-Traps",
 	GUNS: [],
@@ -2390,7 +2390,7 @@ for(let i = 0; i < 4; i++) {
 	)
 }
 Class.screwdriverSnowdread = { // trap + gun
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Screwdriver",
 	UPGRADE_TOOLTIP: "Traps + Bullets",
 	GUNS: [],
@@ -2404,7 +2404,7 @@ for(let i = 0; i < 4; i++) {
 
 // T2 Bodies
 Class.automationSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Automation",
 	UPGRADE_TOOLTIP: "Small Auto Turrets",
 	TURRETS: [
@@ -2492,7 +2492,7 @@ Class.kilobyteTurretSnowdread = {
 	]
 }
 Class.kilobyteSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Kilobyte",
 	UPGRADE_TOOLTIP: "Heavy Auto Turret",
 	TURRETS: [
@@ -2550,7 +2550,7 @@ Class.lighterTurretSnowdread = {
 	]
 };
 Class.lighterSnowdread = { // Flamethrower
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Lighter",
 	UPGRADE_TOOLTIP: "Flamethrower",
 	TURRETS: [
@@ -2589,7 +2589,7 @@ Class.stormTurretSnowdread = {
 	]
 };
 Class.stormSnowdread = { // Drones
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Storm",
 	UPGRADE_TOOLTIP: "Drone Turret",
 	BODY: {
@@ -2611,7 +2611,7 @@ Class.stormSnowdread = { // Drones
 }
 Class.coronaAuraSnowdread = addAura(1.5, 0.8, 0.15);
 Class.coronaSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Corona",
 	UPGRADE_TOOLTIP: "Damage Aura",
 	TURRETS: [
@@ -2629,7 +2629,7 @@ Class.coronaSnowdread = {
 }
 Class.thermosphereAuraSnowdread = addAura(-1, 1.5);
 Class.thermosphereSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Thermosphere",
 	UPGRADE_TOOLTIP: "Healing Aura",
 	TURRETS: [
@@ -2647,7 +2647,7 @@ Class.thermosphereSnowdread = {
 }
 Class.octogon = { SHAPE: 8 }
 Class.jumboSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Jumbo",
 	UPGRADE_TOOLTIP: "Health Buff",
 	BODY: hpBuffBodyStats[0],
@@ -2668,7 +2668,7 @@ Class.jumboSnowdread = {
 	],
 }
 Class.colossusTopSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	GUNS: [],
 }
 for (let i = 0; i < 4; i++) {
@@ -2683,7 +2683,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.colossusBottomSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	GUNS: [],
 }
 for (let i = 0; i < 4; i++) {
@@ -2703,7 +2703,7 @@ for (let i = 0; i < 4; i++) {
 	)
 }
 Class.colossusSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "colossus",
 	UPGRADE_TOOLTIP: "Speed Buff",
 	BODY: speedBuffBodyStats[0],
@@ -2722,7 +2722,7 @@ Class.colossusSnowdread = {
 	],
 }
 Class.cottonTurretSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	SHAPE: [[1, 0], [0, 1], [-1, 0], [0, -1]],
 	GUNS: [],
@@ -2744,7 +2744,7 @@ for(let i = 0; i < 4; i++) { // layering issues
 	)
 }
 Class.cottonSnowdread = { // Drifter
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Cotton",
 	UPGRADE_TOOLTIP: "Icy Movement",
 	BODY: {
@@ -2762,7 +2762,7 @@ Class.cottonSnowdread = { // Drifter
 	],
 }
 Class.ironTopSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	SHAPE: 0,
 	MIRROR_MASTER_ANGLE: true,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
@@ -2780,7 +2780,7 @@ for(let i = 0; i < 8; i++) {
 	)
 }
 Class.ironBottomSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
 }
@@ -2796,7 +2796,7 @@ for(let i = 0; i < 4; i++) {
 	)
 }
 Class.ironSnowdread = { // Body damage increase
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Iron",
 	UPGRADE_TOOLTIP: "Body Damage Buff",
 	BODY: {
@@ -2818,7 +2818,7 @@ Class.ironSnowdread = { // Body damage increase
 	],
 }
 Class.rollerTurretSnowdread = {
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
 }
@@ -2834,7 +2834,7 @@ for(let i = 0; i < 4; i++) {
 	)
 }
 Class.rollerSnowdread = { // Size increase
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Roller",
 	UPGRADE_TOOLTIP: "Size Increase",
 	SIZE: 1.3,
@@ -2853,7 +2853,7 @@ Class.rollerSnowdread = { // Size increase
 	],
 }
 Class.owlSnowdread = { // Size decrease
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Owl",
 	UPGRADE_TOOLTIP: "Size Decrease",
 	SIZE: 0.85,
@@ -2907,7 +2907,7 @@ Class.baiterTurretSnowdread = {
 	]
 }
 Class.baiterSnowdread = { // Minelayer
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Baiter",
 	UPGRADE_TOOLTIP: "Trap Setter",
 	GUNS: [
@@ -2950,7 +2950,7 @@ Class.spyRadarSnowdread = {
 	]
 }
 Class.spySnowdread = { // FOV
-	PARENT: ["genericSquarenought"],
+	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Spy",
 	UPGRADE_TOOLTIP: "FOV Boost",
 	BODY: {
@@ -2979,7 +2979,7 @@ Class.spySnowdread = { // FOV
 
 // T3 Weapons
 Class.bayonetSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Bayonet",
 	UPGRADE_TOOLTIP: "Assassins",
 	GUNS: [],
@@ -2990,7 +2990,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.bladeSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Blade",
 	UPGRADE_TOOLTIP: "Muskets",
 	GUNS: [],
@@ -3001,7 +3001,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.atlatlSnowdread = { // hunter
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Atlatl",
 	UPGRADE_TOOLTIP: "X-Hunters",
 	CONTROLLERS: [["zoom", { distance: 500 }]],
@@ -3021,7 +3021,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.ballistaSnowdread = { // mega-sniper
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Ballista",
 	UPGRADE_TOOLTIP: "Mega-Snipers",
 	GUNS: [],
@@ -3032,7 +3032,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.barbSnowdread = { // railgun
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Barb",
 	UPGRADE_TOOLTIP: "Railguns",
 	GUNS: [],
@@ -3043,7 +3043,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.mitigatorSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Mitigator",
 	UPGRADE_TOOLTIP: "Twins",
 	GUNS: [],
@@ -3055,7 +3055,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.appeaserSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Appeaser",
 	UPGRADE_TOOLTIP: "Machine Guns",
 	GUNS: [],
@@ -3092,7 +3092,7 @@ Class.amalgamAutoSnowdread = {
 	]
 }
 Class.amalgamSnowdread = { // all auto
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Amalgam",
 	UPGRADE_TOOLTIP: "All Autos",
 	TOOLTIP: "Reverse tank to focus more fire.",
@@ -3107,7 +3107,7 @@ for(let i = 0; i < 3; i++) {
 	)
 };
 Class.breakerSnowdread = { // ultra bullet spam
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Breaker",
 	UPGRADE_TOOLTIP: "Nailguns",
 	GUNS: [],
@@ -3148,7 +3148,7 @@ Class.clasperTurretSnowdread = {
 	],
 };
 Class.clasperSnowdread = { // crowbar
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Clasper",
 	UPGRADE_TOOLTIP: "Crowbars",
 	GUNS: [],
@@ -3172,7 +3172,7 @@ for(let i = 0; i < 3; i++) {
 	)
 }
 Class.suppressorSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Suppressor",
 	UPGRADE_TOOLTIP: "Destroyers",
 	GUNS: [],
@@ -3183,7 +3183,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.inhibitorSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Inhibitor",
 	UPGRADE_TOOLTIP: "Skimmers",
 	GUNS: [],
@@ -3194,7 +3194,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.tranquilizerSnowdread = { // shotgun
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Tranquilizer",
 	UPGRADE_TOOLTIP: "Shotguns",
 	GUNS: [],
@@ -3234,7 +3234,7 @@ Class.spiralMissileSnowdread = {
 	],
 }
 Class.spiralSnowdread = { // twister
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Spiral",
 	UPGRADE_TOOLTIP: "Twisters",
 	GUNS: [],
@@ -3245,7 +3245,7 @@ for(let i = 0; i < 3; i++) {
 	)
 }
 Class.shellerSnowdread = { // artillery
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Sheller",
 	UPGRADE_TOOLTIP: "Mortars",
 	GUNS: [],
@@ -3260,7 +3260,7 @@ for(let i = 0; i < 3; i++) {
 	)
 }
 Class.infiltratorSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Infiltrator",
 	UPGRADE_TOOLTIP: "Drones",
 	GUNS: [],
@@ -3296,7 +3296,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.aggressorSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Aggressor",
 	UPGRADE_TOOLTIP: "Minions",
 	GUNS: [],
@@ -3307,7 +3307,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.haloSnowdread = { // auto-drones
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Halo",
 	UPGRADE_TOOLTIP: "Auto-Drones",
 	GUNS: [],
@@ -3318,7 +3318,7 @@ for(let i = 0; i < 3; i++) {
 	)
 }
 Class.sluggerSnowdread = { // honcho
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Slugger",
 	UPGRADE_TOOLTIP: "Heavy Drones",
 	GUNS: [],
@@ -3329,7 +3329,7 @@ for(let i = 0; i < 3; i++) {
 	)
 };
 Class.debilitatorSnowdread = { // swarms
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Debilitator",
 	UPGRADE_TOOLTIP: "Swarms",
 	GUNS: [],
@@ -3345,7 +3345,7 @@ for(let i = 0; i < 3; i++) {
 	)
 };
 Class.hydraSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Hydra",
 	UPGRADE_TOOLTIP: "Trap Spam",
 	GUNS: [],
@@ -3358,7 +3358,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.beelzebubSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Beelzebub",
 	UPGRADE_TOOLTIP: "Blocks",
 	GUNS: [],
@@ -3369,7 +3369,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.sweeperSnowdread = { // auto-traps
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Sweeper",
 	UPGRADE_TOOLTIP: "Auto-Boxes",
 	GUNS: [],
@@ -3393,7 +3393,7 @@ Class.auraBlock = {
 	]
 }
 Class.aegisSnowdread = { // aura-traps
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Aegis",
 	UPGRADE_TOOLTIP: "Aura-Boxes",
 	GUNS: [],
@@ -3404,7 +3404,7 @@ for(let i = 0; i < 3; i++) {
 	)
 }
 Class.drillSnowdread = { // trap + gun
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Drill",
 	UPGRADE_TOOLTIP: "Blocks + Bullets",
 	GUNS: [],
@@ -3418,7 +3418,7 @@ for(let i = 0; i < 3; i++) {
 
 // T3 Bodies
 Class.mechanismSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Mechanism",
 	UPGRADE_TOOLTIP: "Small Auto Spam",
 	TURRETS: [
@@ -3444,7 +3444,7 @@ for (let i = 0; i < 3; i++) {
 }
 Class.trinoughtBigAura = addAura(2, 1.5);
 Class.fusionSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Fusion",
 	UPGRADE_TOOLTIP: "Damage Aura + Small Autos",
 	TURRETS: [
@@ -3463,7 +3463,7 @@ Class.fusionSnowdread = {
 	],
 }
 Class.binarySnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Binary",
 	UPGRADE_TOOLTIP: "Heavy Auto + Small Autos",
 	TURRETS: [
@@ -3483,7 +3483,7 @@ Class.binarySnowdread = {
 }
 Class.trinoughtBigHealAura = addAura(-1.5, 1.5);
 Class.exosphereSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Exosphere",
 	UPGRADE_TOOLTIP: "Healing Aura + Small Autos",
 	TURRETS: [
@@ -3567,7 +3567,7 @@ Class.megabyteTurretSnowdread = {
 	]
 }
 Class.megabyteSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Megabyte",
 	UPGRADE_TOOLTIP: "Heavy Auto Turret",
 	TURRETS: [
@@ -3585,7 +3585,7 @@ Class.megabyteSnowdread = {
 }
 Class.trinoughtSmallAura = addAura(1, 2.1, 0.15, 0, "Small");
 Class.trojanSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Trojan",
 	UPGRADE_TOOLTIP: "Heavy Auto + Damage Auras",
 	TURRETS: [
@@ -3605,7 +3605,7 @@ Class.trojanSnowdread = {
 }
 Class.trinoughtSmallHealAura = addAura(-2/3, 2.1, 0.15, "red", "Small");
 Class.hardwareSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Hardware",
 	UPGRADE_TOOLTIP: "Heavy Auto + Healing Auras",
 	TURRETS: [
@@ -3678,7 +3678,7 @@ Class.burnerTurretSnowdread = {
 	]
 };
 Class.burnerSnowdread = { // Flamethrower
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Burner",
 	UPGRADE_TOOLTIP: "Flamethrower",
 	TURRETS: [
@@ -3719,7 +3719,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.tempestSnowdread = { // Drones
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Tempest",
 	UPGRADE_TOOLTIP: "Drone Turret",
 	BODY: {
@@ -3740,7 +3740,7 @@ Class.tempestSnowdread = { // Drones
 	]
 }
 Class.chromosphereSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Chromosphere",
 	UPGRADE_TOOLTIP: "Damage Auras",
 	TURRETS: [
@@ -3759,7 +3759,7 @@ Class.chromosphereSnowdread = {
 	],
 }
 Class.mesosphereSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Mesosphere",
 	UPGRADE_TOOLTIP: "Healing Auras",
 	TURRETS: [
@@ -3778,7 +3778,7 @@ Class.mesosphereSnowdread = {
 	],
 }
 Class.goliathSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Goliath",
 	UPGRADE_TOOLTIP: "Health Buff",
 	BODY: hpBuffBodyStats[1],
@@ -3796,7 +3796,7 @@ Class.goliathSnowdread = {
 	],
 }
 Class.planetSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Planet",
 	UPGRADE_TOOLTIP: "Health Buff + Damage Auras",
 	BODY: hpBuffBodyStats[0],
@@ -3815,7 +3815,7 @@ Class.planetSnowdread = {
 	],
 }
 Class.moonSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Moon",
 	UPGRADE_TOOLTIP: "Health Buff + Healing Auras",
 	BODY: hpBuffBodyStats[0],
@@ -3834,7 +3834,7 @@ Class.moonSnowdread = {
 	],
 }
 Class.burgSnowdread = { // HP + auto spam
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Burg",
 	UPGRADE_TOOLTIP: "Health Buff + Small Autos",
 	BODY: hpBuffBodyStats[0],
@@ -3853,7 +3853,7 @@ Class.burgSnowdread = { // HP + auto spam
 	],
 }
 Class.siloSnowdread = { // HP + big auto
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Silo",
 	UPGRADE_TOOLTIP: "Health Buff + Heavy Auto",
 	BODY: hpBuffBodyStats[0],
@@ -3875,7 +3875,7 @@ Class.siloSnowdread = { // HP + big auto
 	],
 }
 Class.titanTopSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	GUNS: [],
 }
 for (let i = 0; i < 3; i++) {
@@ -3887,7 +3887,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.titanSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Titan",
 	UPGRADE_TOOLTIP: "Speed Buff",
 	BODY: speedBuffBodyStats[1],
@@ -3906,7 +3906,7 @@ Class.titanSnowdread = {
 	],
 }
 Class.sirenSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Siren",
 	UPGRADE_TOOLTIP: "Speed Buff + Damage Auras",
 	BODY: speedBuffBodyStats[0],
@@ -3926,7 +3926,7 @@ Class.sirenSnowdread = {
 	],
 }
 Class.harpySnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Harpy",
 	UPGRADE_TOOLTIP: "Speed Buff + Healing Auras",
 	BODY: speedBuffBodyStats[0],
@@ -3946,7 +3946,7 @@ Class.harpySnowdread = {
 	],
 }
 Class.batonSnowdread = { // Speed + auto spam
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Baton",
 	UPGRADE_TOOLTIP: "Speed Buff + Small Autos",
 	BODY: speedBuffBodyStats[0],
@@ -3965,7 +3965,7 @@ Class.batonSnowdread = { // Speed + auto spam
 	],
 }
 Class.fireworkSnowdread = { // Speed + big auto
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Firework",
 	UPGRADE_TOOLTIP: "Speed Buff + Heavy Auto",
 	BODY: speedBuffBodyStats[0],
@@ -3986,7 +3986,7 @@ Class.fireworkSnowdread = { // Speed + big auto
 	],
 }
 Class.armadaSnowdread = { // Speed + HP
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Armada",
 	UPGRADE_TOOLTIP: "Speed Buff + Health Buff",
 	BODY: {
@@ -4009,7 +4009,7 @@ Class.armadaSnowdread = { // Speed + HP
 	],
 }
 Class.featherTurretSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
 }
@@ -4025,7 +4025,7 @@ for(let i = 0; i < 3; i++) {
 	)
 }
 Class.featherSnowdread = { // Drifter
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Feather",
 	UPGRADE_TOOLTIP: "Icy Movement",
 	BODY: {
@@ -4043,7 +4043,7 @@ Class.featherSnowdread = { // Drifter
 	],
 }
 Class.steelTopSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	SHAPE: 0,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	MIRROR_MASTER_ANGLE: true,
@@ -4061,7 +4061,7 @@ for(let i = 0; i < 9; i++) {
 	)
 }
 Class.steelBottomSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
 }
@@ -4080,7 +4080,7 @@ for(let i = 0; i < 3; i++) {
 	)
 }
 Class.steelSnowdread = { // Body damage increase
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Steel",
 	UPGRADE_TOOLTIP: "Body Damage Buff",
 	BODY: {
@@ -4102,13 +4102,13 @@ Class.steelSnowdread = { // Body damage increase
 	],
 }
 Class.flattenerTurretSnowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	SHAPE: "",
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
 }
 Class.flattenerTurret2Snowdread = {
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	SHAPE: "",
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
@@ -4134,7 +4134,7 @@ for(let i = 0; i < 3; i++) {
 	)
 }
 Class.flattenerSnowdread = { // Size increase
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Flattener",
 	UPGRADE_TOOLTIP: "Size Increase",
 	SIZE: 1.4,
@@ -4150,7 +4150,7 @@ Class.flattenerSnowdread = { // Size increase
 	],
 }
 Class.towerSnowdread = { // Size increase + auras
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Tower",
 	UPGRADE_TOOLTIP: "Size Increase + Damage Auras",
 	SIZE: 1.3,
@@ -4167,7 +4167,7 @@ Class.towerSnowdread = { // Size increase + auras
 	],
 }
 Class.creatureSnowdread = { // Size increase + heal auras
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Creature",
 	UPGRADE_TOOLTIP: "Size Increase + Healing Auras",
 	SIZE: 1.3,
@@ -4184,7 +4184,7 @@ Class.creatureSnowdread = { // Size increase + heal auras
 	],
 }
 Class.spotlightSnowdread = { // Size increase + big aura
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Spotlight",
 	UPGRADE_TOOLTIP: "Size Increase + Large Damage Aura",
 	SIZE: 1.3,
@@ -4203,7 +4203,7 @@ Class.spotlightSnowdread = { // Size increase + big aura
 	],
 }
 Class.furnaceSnowdread = { // Size increase + big heal aura
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Furnace",
 	UPGRADE_TOOLTIP: "Size Increase + Large Healing Aura",
 	SIZE: 1.3,
@@ -4222,7 +4222,7 @@ Class.furnaceSnowdread = { // Size increase + big heal aura
 	],
 }
 Class.asteroidSnowdread = { // Size increase + big auto
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Asteroid",
 	UPGRADE_TOOLTIP: "Size Increase + Heavy Auto",
 	SIZE: 1.3,
@@ -4241,7 +4241,7 @@ Class.asteroidSnowdread = { // Size increase + big auto
 	],
 }
 Class.cardinalSnowdread = { // Size decrease
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Cardinal",
 	UPGRADE_TOOLTIP: "Size Decrease",
 	SIZE: 0.75,
@@ -4292,7 +4292,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.cagerSnowdread = { // Minelayer
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Cager",
 	UPGRADE_TOOLTIP: "Auto-Block Layer",
 	GUNS: [
@@ -4338,7 +4338,7 @@ Class.monitorRadarSnowdread = {
 	]
 };
 Class.monitorSnowdread = { // FOV
-	PARENT: ["genericTrinought"],
+	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Monitor",
 	UPGRADE_TOOLTIP: "FOV Boost",
 	BODY: {
@@ -4367,7 +4367,7 @@ Class.monitorSnowdread = { // FOV
 
 // T4 Weapons
 Class.javelinSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Javelin",
 	UPGRADE_TOOLTIP: "Assassins",
 	GUNS: [],
@@ -4378,7 +4378,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.rapierSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Rapier",
 	UPGRADE_TOOLTIP: "Muskets",
 	GUNS: [],
@@ -4389,7 +4389,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.woomeraSnowdread = { // hunter
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Woomera",
 	UPGRADE_TOOLTIP: "X-Predators",
 	CONTROLLERS: [["zoom", { distance: 450 }]],
@@ -4408,7 +4408,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.trebuchetSnowdread = { // mega-sniper
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Trebuchet",
 	UPGRADE_TOOLTIP: "Mega-Snipers",
 	GUNS: [],
@@ -4419,7 +4419,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.boltSnowdread = { // railgun
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Bolt",
 	UPGRADE_TOOLTIP: "Railgums",
 	GUNS: [],
@@ -4430,7 +4430,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.diplomatSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Diplomat",
 	UPGRADE_TOOLTIP: "Triplets",
 	GUNS: [],
@@ -4443,7 +4443,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.arbitratorSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Arbitrator",
 	UPGRADE_TOOLTIP: "Machine Guns",
 	GUNS: [],
@@ -4480,7 +4480,7 @@ Class.dissolverAutoSnowdread = {
 	]
 }
 Class.dissolverSnowdread = { // all auto
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Dissolver",
 	UPGRADE_TOOLTIP: "All Autos",
 	TURRETS: [],
@@ -4494,7 +4494,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.eroderSnowdread = { // ultra bullet spam
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Eroder",
 	UPGRADE_TOOLTIP: "Rimflaks",
 	GUNS: [],
@@ -4534,7 +4534,7 @@ Class.gripperTurretSnowdread = {
 	],
 };
 Class.gripperSnowdread = { // crowbar
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Gripper",
 	UPGRADE_TOOLTIP: "Crowbars",
 	GUNS: [],
@@ -4555,7 +4555,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.retardantSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Retardant",
 	UPGRADE_TOOLTIP: "Destroyers",
 	GUNS: [],
@@ -4566,7 +4566,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.tyrantSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Tyrant",
 	UPGRADE_TOOLTIP: "Skimmers",
 	GUNS: [],
@@ -4577,7 +4577,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.anesthesiologistSnowdread = { // shotgun
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Anesthesiologist",
 	UPGRADE_TOOLTIP: "Shotguns",
 	GUNS: [],
@@ -4596,7 +4596,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.helixSnowdread = { // twister
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Helix",
 	UPGRADE_TOOLTIP: "Twisters",
 	GUNS: [],
@@ -4607,7 +4607,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.bombardmentSnowdread = { // artillery
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Bombardment",
 	UPGRADE_TOOLTIP: "Mortars",
 	GUNS: [],
@@ -4622,7 +4622,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.raiderSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Raider",
 	UPGRADE_TOOLTIP: "Drones",
 	GUNS: [],
@@ -4774,7 +4774,7 @@ for (let i = 0; i < 3; i++) {
 	);
 }
 Class.gladiatorSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Gladiator",
 	UPGRADE_TOOLTIP: "Minions",
 	GUNS: [
@@ -4786,7 +4786,7 @@ Class.gladiatorSnowdread = {
 	],
 }
 Class.starlightSnowdread = { // auto-drones
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Starlight",
 	UPGRADE_TOOLTIP: "Auto-Drones",
 	GUNS: [],
@@ -4797,7 +4797,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.bruiserSnowdread = { // honcho
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Bruiser",
 	UPGRADE_TOOLTIP: "Heavy Drones",
 	GUNS: [],
@@ -4808,7 +4808,7 @@ for(let i = 0; i < 5; i++) {
 	)
 };
 Class.incapacitatorSnowdread = { // swarms
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Incapacitator",
 	UPGRADE_TOOLTIP: "Swarms",
 	GUNS: [],
@@ -4824,7 +4824,7 @@ for(let i = 0; i < 5; i++) {
 	)
 };
 Class.cerberusSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Cerberus",
 	UPGRADE_TOOLTIP: "Trap Spam",
 	GUNS: [],
@@ -4837,7 +4837,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.luciferSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Lucifer",
 	UPGRADE_TOOLTIP: "Blocks",
 	GUNS: [],
@@ -4848,7 +4848,7 @@ for (let i = 0; i < 5; i++) {
 	)
 }
 Class.sterilizerSnowdread = { // auto-traps
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Sterilizer",
 	UPGRADE_TOOLTIP: "Auto-Blocks",
 	GUNS: [],
@@ -4859,7 +4859,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.hielamanSnowdread = { // aura-traps
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Hielaman",
 	UPGRADE_TOOLTIP: "Aura-Traps",
 	GUNS: [],
@@ -4870,7 +4870,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.jackhammerSnowdread = { // trap + gun
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Jackhammer",
 	UPGRADE_TOOLTIP: "Blocks + Bullets",
 	GUNS: [],
@@ -4884,7 +4884,7 @@ for(let i = 0; i < 5; i++) {
 
 // T4 Bodies
 Class.skynetSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Skynet",
 	UPGRADE_TOOLTIP: "Small Auto Spam",
 	TURRETS: [
@@ -4915,7 +4915,7 @@ for (let i = 0; i < 5; i++) {
 }
 Class.pentanoughtBigAura = addAura(2.5, 1.45, 0.3, 0, "Large");
 Class.supernovaSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Supernova",
 	UPGRADE_TOOLTIP: "Damage Aura + Small Autos",
 	TURRETS: [
@@ -4934,7 +4934,7 @@ Class.supernovaSnowdread = {
 	],
 }
 Class.cipherSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Cipher",
 	UPGRADE_TOOLTIP: "Heavy Auto + Small Autos",
 	TURRETS: [
@@ -4954,7 +4954,7 @@ Class.cipherSnowdread = {
 }
 Class.pentanoughtBigHealAura = addAura(-2, 1.45, 0.3, "red", "Large");
 Class.interstellarSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Interstellar",
 	UPGRADE_TOOLTIP: "Healing Aura + Small Autos",
 	TURRETS: [
@@ -5043,7 +5043,7 @@ Class.gigabyteTurretSnowdread = {
 	]
 }
 Class.gigabyteSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Gigabyte",
 	UPGRADE_TOOLTIP: "Heavy Auto Turret",
 	TURRETS: [
@@ -5061,7 +5061,7 @@ Class.gigabyteSnowdread = {
 }
 Class.pentanoughtSmallAura = addAura(1, 1.6, 0.15, 0, "Small");
 Class.malwareSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Malware",
 	UPGRADE_TOOLTIP: "Heavy Auto + Damage Auras",
 	TURRETS: [
@@ -5081,7 +5081,7 @@ Class.malwareSnowdread = {
 }
 Class.pentanoughtSmallHealAura = addAura(-2/3, 1.6, 0.15, "red", "Small");
 Class.softwareSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Software",
 	UPGRADE_TOOLTIP: "Heavy Auto + Healing Auras",
 	TURRETS: [
@@ -5147,7 +5147,7 @@ Class.roasterTurretSnowdread = {
 	]
 };
 Class.roasterSnowdread = { // Flamethrower
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Roaster",
 	UPGRADE_TOOLTIP: "Flamethrower",
 	TURRETS: [
@@ -5188,7 +5188,7 @@ for (let i = 0; i < 3; i++) {
 	)
 }
 Class.monsoonSnowdread = { // Drones
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Monsoon",
 	UPGRADE_TOOLTIP: "Drone Turret",
 	BODY: {
@@ -5213,7 +5213,7 @@ if (useOldPhotosphere) {
 	Class.photosphereBigAuraSnowdread = addAura(1.5, 4, 0.15);
 }
 Class.photosphereSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Photosphere",
 	UPGRADE_TOOLTIP: "Damage Auras",
 	TURRETS: [
@@ -5253,7 +5253,7 @@ if (useOldPhotosphere) {
 	)
 }
 Class.stratosphereSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Stratosphere",
 	UPGRADE_TOOLTIP: "Healing Auras",
 	TURRETS: [
@@ -5272,7 +5272,7 @@ Class.stratosphereSnowdread = {
 	],
 }
 Class.behemothSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Behemoth",
 	UPGRADE_TOOLTIP: "Health Buff",
 	BODY: hpBuffBodyStats[2],
@@ -5293,7 +5293,7 @@ Class.behemothSnowdread = {
 	],
 }
 Class.astronomicSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Astronomic",
 	UPGRADE_TOOLTIP: "Health Buff + Damage Auras",
 	BODY: hpBuffBodyStats[1],
@@ -5312,7 +5312,7 @@ Class.astronomicSnowdread = {
 	],
 }
 Class.grandioseSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Grandiose",
 	UPGRADE_TOOLTIP: "Health Buff + Healing Auras",
 	BODY: hpBuffBodyStats[1],
@@ -5331,7 +5331,7 @@ Class.grandioseSnowdread = {
 	],
 }
 Class.bunkerSnowdread = { // HP + auto spam
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Bunker",
 	UPGRADE_TOOLTIP: "Health Buff + Small Autos",
 	BODY: hpBuffBodyStats[1],
@@ -5350,7 +5350,7 @@ Class.bunkerSnowdread = { // HP + auto spam
 	],
 }
 Class.arsenalSnowdread = { // HP + big auto
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Arsenal",
 	UPGRADE_TOOLTIP: "Health Buff + Heavy Auto",
 	BODY: hpBuffBodyStats[1],
@@ -5371,14 +5371,14 @@ Class.arsenalSnowdread = { // HP + big auto
 	],
 }
 Class.pentagonLeviathanTopSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Leviathan",
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
 }
 Class.pentagonLeviathanBottomSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Leviathan",
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
@@ -5401,14 +5401,14 @@ for (let i = 0; i < 5; i++) {
 	);
 }
 Class.hexagonLeviathanTopSnowdread = {
-	PARENT: ["genericHexnought"],
+	PARENT: ["genericHexnoughtSnowdread"],
 	LABEL: "Leviathan",
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
 }
 Class.hexagonLeviathanBottomSnowdread = {
-	PARENT: ["genericHexnought"],
+	PARENT: ["genericHexnoughtSnowdread"],
 	LABEL: "Leviathan",
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
@@ -5431,7 +5431,7 @@ for (let i = 0; i < 6; i++) {
 	)
 }
 Class.leviathanSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Leviathan",
 	UPGRADE_TOOLTIP: "Speed Buff",
 	BODY: speedBuffBodyStats[2],
@@ -5449,7 +5449,7 @@ Class.leviathanSnowdread = {
 	],
 }
 Class.valrayvnSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Valrayvn",
 	UPGRADE_TOOLTIP: "Speed Buff + Damage Auras",
 	BODY: speedBuffBodyStats[1],
@@ -5468,7 +5468,7 @@ Class.valrayvnSnowdread = {
 	],
 }
 Class.pegasusSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Pegasus",
 	UPGRADE_TOOLTIP: "Speed Buff + Healing Auras",
 	BODY: speedBuffBodyStats[1],
@@ -5487,7 +5487,7 @@ Class.pegasusSnowdread = {
 	],
 }
 Class.maceSnowdread = { // Speed + auto spam
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Mace",
 	UPGRADE_TOOLTIP: "Speed Buff + Small Autos",
 	BODY: speedBuffBodyStats[1],
@@ -5506,7 +5506,7 @@ Class.maceSnowdread = { // Speed + auto spam
 	],
 }
 Class.missileSnowdread = { // Speed + big auto
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Missile",
 	UPGRADE_TOOLTIP: "Speed Buff + Heavy Auto",
 	BODY: speedBuffBodyStats[1],
@@ -5527,7 +5527,7 @@ Class.missileSnowdread = { // Speed + big auto
 	],
 }
 Class.battalionSnowdread = { // Speed + HP
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Battalion",
 	UPGRADE_TOOLTIP: "Speed Buff + Health Buff",
 	BODY: {
@@ -5550,7 +5550,7 @@ Class.battalionSnowdread = { // Speed + HP
 	],
 }
 Class.pentagonWispTurretSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	SHAPE: 5,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	MIRROR_MASTER_ANGLE: true,
@@ -5568,7 +5568,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.hexagonWispTurretSnowdread = {
-	PARENT: ["genericHexnought"],
+	PARENT: ["genericHexnoughtSnowdread"],
 	SHAPE: 6,
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
@@ -5585,7 +5585,7 @@ for(let i = 0; i < 6; i++) {
 	)
 }
 Class.wispSnowdread = { // Drifter
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Wisp",
 	UPGRADE_TOOLTIP: "Icy Movement",
 	BODY: {
@@ -5603,7 +5603,7 @@ Class.wispSnowdread = { // Drifter
 	],
 }
 Class.pentagonTitaniumTopSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	SHAPE: 0,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	MIRROR_MASTER_ANGLE: true,
@@ -5621,7 +5621,7 @@ for(let i = 0; i < 10; i++) {
 	)
 }
 Class.pentagonTitaniumBottomSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
 }
@@ -5637,7 +5637,7 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.hexagonTitaniumTopSnowdread = {
-	PARENT: ["genericHexnought"],
+	PARENT: ["genericHexnoughtSnowdread"],
 	SHAPE: 0,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	MIRROR_MASTER_ANGLE: true,
@@ -5655,7 +5655,7 @@ for(let i = 0; i < 12; i++) {
 	)
 }
 Class.hexagonTitaniumBottomSnowdread = {
-	PARENT: ["genericHexnought"],
+	PARENT: ["genericHexnoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	GUNS: [],
 }
@@ -5671,7 +5671,7 @@ for(let i = 0; i < 6; i++) {
 	)
 }
 Class.titaniumSnowdread = { // Body damage increase
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Titanium",
 	UPGRADE_TOOLTIP: "Body Damage Buff",
 	BODY: {
@@ -5695,19 +5695,19 @@ Class.titaniumSnowdread = { // Body damage increase
 	],
 }
 Class.pentagonCrusherTurretSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	GUNS: [],
 }
 Class.pentagonCrusherTurret2Snowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	GUNS: [],
 }
 Class.pentagonCrusherTurret3Snowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	GUNS: [],
@@ -5742,19 +5742,19 @@ for(let i = 0; i < 5; i++) {
 	)
 }
 Class.hexagonCrusherTurretSnowdread = {
-	PARENT: ["genericHexnought"],
+	PARENT: ["genericHexnoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	GUNS: [],
 }
 Class.hexagonCrusherTurret2Snowdread = {
-	PARENT: ["genericHexnought"],
+	PARENT: ["genericHexnoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	GUNS: [],
 }
 Class.hexagonCrusherTurret3Snowdread = {
-	PARENT: ["genericHexnought"],
+	PARENT: ["genericHexnoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
 	GUNS: [],
@@ -5789,7 +5789,7 @@ for(let i = 0; i < 6; i++) {
 	)
 }
 Class.crusherSnowdread = { // Size increase
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Crusher",
 	UPGRADE_TOOLTIP: "Size Increase",
 	SIZE: 1.5,
@@ -5805,7 +5805,7 @@ Class.crusherSnowdread = { // Size increase
 	],
 }
 Class.mountainSnowdread = { // Size increase + auras
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Mountain",
 	UPGRADE_TOOLTIP: "Size Increase + Damage Auras",
 	SIZE: 1.4,
@@ -5822,7 +5822,7 @@ Class.mountainSnowdread = { // Size increase + auras
 	],
 }
 Class.beastSnowdread = { // Size increase + heal auras
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Beast",
 	UPGRADE_TOOLTIP: "Size Increase + Healing Auras",
 	SIZE: 1.4,
@@ -5839,7 +5839,7 @@ Class.beastSnowdread = { // Size increase + heal auras
 	],
 }
 Class.luminanceSnowdread = { // Size increase + big aura
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Luminance",
 	UPGRADE_TOOLTIP: "Size Increase + Large Damage Aura",
 	SIZE: 1.4,
@@ -5858,7 +5858,7 @@ Class.luminanceSnowdread = { // Size increase + big aura
 	],
 }
 Class.foundrySnowdread = { // Size increase + big heal aura
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Foundry",
 	UPGRADE_TOOLTIP: "Size Increase + Large Healing Aura",
 	SIZE: 1.4,
@@ -5877,7 +5877,7 @@ Class.foundrySnowdread = { // Size increase + big heal aura
 	],
 }
 Class.planetoidSnowdread = { // Size increase + big auto
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Planetoid",
 	UPGRADE_TOOLTIP: "Size Increase + Heavy Auto",
 	SIZE: 1.4,
@@ -5896,7 +5896,7 @@ Class.planetoidSnowdread = { // Size increase + big auto
 	],
 }
 Class.pentagonFinchTurretSnowdread = {
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	COLOR: 9,
 	TURRETS: [
@@ -5907,7 +5907,7 @@ Class.pentagonFinchTurretSnowdread = {
 	]
 }
 Class.hexagonFinchTurretSnowdread = {
-	PARENT: ["genericHexnought"],
+	PARENT: ["genericHexnoughtSnowdread"],
 	MIRROR_MASTER_ANGLE: true,
 	COLOR: 9,
 	TURRETS: [
@@ -5918,7 +5918,7 @@ Class.hexagonFinchTurretSnowdread = {
 	]
 }
 Class.finchSnowdread = { // Size decrease
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Finch",
 	UPGRADE_TOOLTIP: "Size Decrease",
 	SIZE: 0.65,
@@ -5988,7 +5988,7 @@ for(let i = 0; i < 6; i++) {
 	)
 }
 Class.hoarderSnowdread = { // Minelayer
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Hoarder",
 	UPGRADE_TOOLTIP: "Auto-Block Layer",
 	GUNS: [
@@ -6034,7 +6034,7 @@ Class.trackerRadarSnowdread = {
 	]
 };
 Class.trackerSnowdread = { // FOV
-	PARENT: ["genericPentanought"],
+	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Tracker",
 	UPGRADE_TOOLTIP: "FOV Boost",
 	BODY: {
@@ -6668,7 +6668,7 @@ function mergeHexnoughtWeaponV2(weapon1, weapon2) {
 	weapon1 = ensureIsClass(Class, weapon1);
 	weapon2 = ensureIsClass(Class, weapon2);
 
-	let PARENT = Class.genericHexnought,
+	let PARENT = Class.genericHexnoughtSnowdread,
 		BODY = JSON.parse(JSON.stringify(PARENT.BODY)),
 		GUNS = [],
 		gunsOnOneSide = [],
@@ -6777,7 +6777,7 @@ function makeHexnoughtBodyV2(body) {
 	
 	body = ensureIsClass(Class, body);
 
-	let PARENT = Class.genericHexnought,
+	let PARENT = Class.genericHexnoughtSnowdread,
 		SIZE = body.SIZE ?? 1,
 		BODY = {},
 		GUNS = body.GUNS ?? [],
