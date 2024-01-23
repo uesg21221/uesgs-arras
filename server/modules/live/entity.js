@@ -99,6 +99,34 @@ class Gun {
                     };
                 this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
             }
+            if (info.PROPERTIES.BLINKER != null) {
+                this.blinker = {
+                    repeat: info.PROPERTIES.BLINKER.REPEAT ?? 1000,
+                    start: info.PROPERTIES.BLINKER.START ?? 0,
+                    end: info.PROPERTIES.BLINKER.END ?? 500,
+                    offColor: "17 0 1 0 false",
+                }
+                // Color defining
+                let blinkerOffUnboxed = {
+                    base: 17,
+                    hueShift: 0,
+                    saturationShift: 1,
+                    brightnessShift: 0,
+                    allowBrightnessInvert: false,
+                }
+                if (typeof info.PROPERTIES.BLINKER.OFF_COLOR === "number" || typeof info.PROPERTIES.BLINKER.OFF_COLOR === "string") {
+                    blinkerOffUnboxed.base = info.PROPERTIES.BLINKER.OFF_COLOR;
+                }
+                else if (typeof info.PROPERTIES.COLOR === "object")
+                    blinkerOffUnboxed = {
+                        base: info.PROPERTIES.BLINKER.OFF_COLOR.BASE ?? 17,
+                        hueShift: info.PROPERTIES.BLINKER.OFF_COLOR.HUE_SHIFT ?? 0,
+                        saturationShift: info.PROPERTIES.BLINKER.OFF_COLOR.SATURATION_SHIFT ?? 1,
+                        brightnessShift: info.PROPERTIES.BLINKER.OFF_COLOR.BRIGHTNESS_SHIFT ?? 0,
+                        allowBrightnessInvert: info.PROPERTIES.BLINKER.OFF_COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
+                    };
+                this.blinker.offColor = blinkerOffUnboxed.base + " " + blinkerOffUnboxed.hueShift + " " + blinkerOffUnboxed.saturationShift + " " + blinkerOffUnboxed.brightnessShift + " " + blinkerOffUnboxed.allowBrightnessInvert;
+            }
             this.alpha = info.PROPERTIES.ALPHA == null ? 1 : info.PROPERTIES.ALPHA
             this.strokeWidth = info.PROPERTIES.STROKE_WIDTH == null ? 1 : info.PROPERTIES.STROKE_WIDTH
             this.borderless = info.PROPERTIES.BORDERLESS == null ? false : info.PROPERTIES.BORDERLESS;
@@ -195,6 +223,7 @@ class Gun {
             strokeWidth: this.strokeWidth,
             borderless: this.borderless, 
             drawFill: this.drawFill, 
+            blinker: this.blinker ? JSON.stringify(this.blinker) : 0,
             drawAbove: this.drawAbove,
             length: this.length,
             width: this.width,

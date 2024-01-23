@@ -50,6 +50,7 @@ function getMockup(e, positionInfo) {
                 alpha: gun.alpha,
                 borderless: gun.borderless,
                 drawFill: gun.drawFill,
+                blinker: gun.blinker,
                 drawAbove: gun.drawAbove,
             };
         }),

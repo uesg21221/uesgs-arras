@@ -353,6 +353,7 @@ const GunContainer = n => {
                 strokeWidth: g.strokeWidth,
                 borderless: g.borderless, 
                 drawFill: g.drawFill,
+                blinker: g.blinker,
                 drawAbove: g.drawAbove,
                 length: g.length,
                 width: g.width,
@@ -371,6 +372,7 @@ const GunContainer = n => {
                 g.strokeWidth = c.strokeWidth
                 g.borderless = c.borderless; 
                 g.drawFill = c.drawFill;
+                g.blinker = c.blinker;
                 g.drawAbove = c.drawAbove;
                 g.length = c.length;
                 g.width = c.width;
@@ -554,6 +556,7 @@ const process = (z = {}) => {
             strokeWidth = get.next(),
             borderless = get.next(),
             drawFill = get.next(),
+            blinker = JSON.parse(get.next()),
             drawAbove = get.next(),
             length = get.next(),
             width = get.next(),
@@ -561,7 +564,7 @@ const process = (z = {}) => {
             angle = get.next(),
             direction = get.next(),
             offset = get.next();
-        z.guns.setConfig(i, {color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
+        z.guns.setConfig(i, {color, alpha, strokeWidth, borderless, drawFill, blinker, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
         if (time > global.player.lastUpdate - global.metrics.rendergap) z.guns.fire(i, power); // Shoot it
     }
     // Update turrets

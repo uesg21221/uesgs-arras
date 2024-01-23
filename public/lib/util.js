@@ -215,6 +215,7 @@ const util = {
                         strokeWidth: g.strokeWidth,
                         borderless: g.borderless, 
                         drawFill: g.drawFill,
+                        blinker: g.blinker,
                         drawAbove: g.drawAbove,
                         length: g.length,
                         width: g.width,

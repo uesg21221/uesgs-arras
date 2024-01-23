@@ -937,7 +937,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         if (!g.drawAbove) {
             let gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
-                gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
+                gunColor = g.color == null ? color.grey : gameDraw.modifyColor(gameDraw.evalBlinker(g.color, g.blinker), baseColor),
                 alpha = g.alpha,
                 strokeWidth = g.strokeWidth,
                 borderless = g.borderless,
@@ -985,7 +985,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         if (g.drawAbove) {
             let gx = g.offset * Math.cos(g.direction + g.angle + rot),
                 gy = g.offset * Math.sin(g.direction + g.angle + rot),
-                gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
+                gunColor = g.color == null ? color.grey : gameDraw.modifyColor(gameDraw.evalBlinker(g.color, g.blinker), baseColor),
                 alpha = g.alpha,
                 strokeWidth = g.strokeWidth,
                 borderless = g.borderless,
