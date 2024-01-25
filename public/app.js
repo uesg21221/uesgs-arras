@@ -857,27 +857,42 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), blend));
     
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
-    context.shadowColor = m.glow.color!=null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
-        gameDraw.modifyColor(instance.color),
-        render.status.getColor(),
-        render.status.getBlend()
-    );
-    if (m.glow.radius && m.glow.radius>0){
-      context.shadowBlur = m.glow.radius * ((drawSize / m.size) * m.realSize);
-      context.shadowOffsetX = 0;
-      context.shadowOffsetY = 0;
-      context.globalAlpha = m.glow.alpha;
-      for (var i = 0; i < m.glow.recursion; i++) {
-        drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, true, m.drawFill);
-      }
-      context.globalAlpha = 1;
-    }
-    context.shadowBlur = 0;
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
+  if (m.glow.radius && m.glow.radius > 0) {
+  const auraRadius = m.glow.radius * ((drawSize / m.size) * m.realSize);
+  const auraDiameter = auraRadius * 2;
 
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, instance.borderless, instance.drawFill, m.imageInterpolation);
-    
+  context.save();
+  context.beginPath();
+  context.arc(xx, yy, auraRadius, 0, 2 * Math.PI, false);
+  context.fillStyle = glowColor;
+
+  // Adjust alpha based on the aura radius
+  const minAlpha = 0.2; // Set your desired minimum alpha
+  const maxAlpha = m.glow.alpha; // Set your maximum alpha
+  const normalizedRadius = Math.min(1, auraRadius / m.glow.radius);
+  const adjustedAlpha = minAlpha + (maxAlpha - minAlpha) * normalizedRadius;
+
+  context.globalAlpha = adjustedAlpha;
+  context.shadowColor = glowColor;
+  context.shadowBlur = auraRadius;
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 0;
+  context.fill();
+  context.globalAlpha = 1;
+  context.restore();
+}
+
+drawPoly(
+  context,
+  xx,
+  yy,
+  (drawSize / m.size) * m.realSize,
+  m.shape,
+  rot,
+  instance.borderless,
+  instance.drawFill,
+  m.imageInterpolation
+);
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {
         context.lineWidth = initStrokeWidth
