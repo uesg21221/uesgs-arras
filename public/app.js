@@ -857,43 +857,50 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), blend));
     
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
-    context.shadowColor = m.glow.color!=null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
-        gameDraw.modifyColor(instance.color),
-        render.status.getColor(),
-        render.status.getBlend()
+  const glowColor = m.glow.color != null
+  ? gameDraw.modifyColor(m.glow.color)
+  : gameDraw.mixColors(
+      gameDraw.modifyColor(instance.color),
+      render.status.getColor(),
+      render.status.getBlend()
     );
-    if (m.glow.radius && m.glow.radius>0){
-      context.shadowBlur = m.glow.radius * ((drawSize / m.size) * m.realSize);
-      context.shadowOffsetX = 0;
-      context.shadowOffsetY = 0;
-      context.globalAlpha = m.glow.alpha;
-      for (var i = 0; i < m.glow.recursion; i++) {
-        drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, true, m.drawFill);
-      }
-      context.globalAlpha = 1;
-    }
-    context.shadowBlur = 0;
-    context.shadowOffsetX = 0;
-    context.shadowOffsetY = 0;
 
-    drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, instance.borderless, instance.drawFill, m.imageInterpolation);
-    
-    // Draw guns above us
-    for (let i = 0; i < source.guns.length; i++) {
-        context.lineWidth = initStrokeWidth
-        let g = gunConfig[i];
-        if (g.drawAbove) {
-            let gx = g.offset * Math.cos(g.direction + g.angle + rot),
-                gy = g.offset * Math.sin(g.direction + g.angle + rot),
-                gunColor = g.color == null ? color.grey : gameDraw.modifyColor(g.color, baseColor),
-                alpha = g.alpha,
-                strokeWidth = g.strokeWidth,
-                borderless = g.borderless,
-                fill = g.drawFill;
-            gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend));
-            drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, strokeWidth, drawSize * positions[i]);
-        }
-    }
+if (m.glow.radius && m.glow.radius > 0) {
+  const auraRadius = m.glow.radius * ((drawSize / m.size) * m.realSize);
+  const auraDiameter = auraRadius * 2;
+
+  context.save();
+  context.beginPath();
+  context.arc(xx, yy, auraRadius, 0, 2 * Math.PI, false);
+  context.fillStyle = glowColor;
+
+  // Adjust alpha based on the aura radius
+  const minAlpha = 0.2; // Set your desired minimum alpha
+  const maxAlpha = m.glow.alpha; // Set your maximum alpha
+  const normalizedRadius = Math.min(1, auraRadius / m.glow.radius);
+  const adjustedAlpha = minAlpha + (maxAlpha - minAlpha) * normalizedRadius;
+
+  context.globalAlpha = adjustedAlpha;
+  context.shadowColor = glowColor;
+  context.shadowBlur = auraRadius;
+  context.shadowOffsetX = 0;
+  context.shadowOffsetY = 0;
+  context.fill();
+  context.globalAlpha = 1;
+  context.restore();
+}
+
+drawPoly(
+  context,
+  xx,
+  yy,
+  (drawSize / m.size) * m.realSize,
+  m.shape,
+  rot,
+  instance.borderless,
+  instance.drawFill,
+  m.imageInterpolation
+);
     // Draw turrets above us
     for (let i = upperTurretsIndex; i < source.turrets.length; i++) {
         let t = source.turrets[i];
