@@ -46,7 +46,7 @@ Class.genericVoidling = {
     }),
     CONTROLLERS: ["nearestDifferentMaster", "canRepel"],
     HITS_OWN_TYPE: "hardOnlyBosses",
-    SIZE: 32,
+    SIZE: 40,
     BODY: {
         PUSHABILITY: 0.7,
         HEALTH: base.HEALTH * 8,
@@ -56,7 +56,7 @@ Class.genericVoidling = {
         REGEN: base.REGEN * 0.3,
         SPEED: base.SPEED * 0.85,
         ACCELERATION: base.ACCEL * 0.7,
-        FOV: base.FOV * 1.4,
+        FOV: base.FOV * 0.7,
         DENSITY: base.DENSITY * 8,
     }
 }
@@ -95,34 +95,87 @@ Class.relativity = {
         }
     ]
 }
+function shadingProperties(color = bright1) {
+    return {
+        COLOR: color,
+        BORDERLESS: true,
+        DRAW_ABOVE: true,
+    }
+}
 for (let a = 0; a < 3; a++) {
+    Class.relativity.GUNS.push(
+    { // Body shading
+        POSITION: [1.5, 6, 1.4, 4.4, 6, 120 * a, 0],
+        PROPERTIES: shadingProperties()
+    }, {
+        POSITION: [1.5, 6, 1.4, 4.4, -6, 120 * a, 0],
+        PROPERTIES: shadingProperties()
+    }, {
+        POSITION: [1, 4, 0.8, 5.8, 3.5, 120 * a, 0],
+        PROPERTIES: shadingProperties()
+    }, {
+        POSITION: [1, 4, 0.8, 5.8, -3.5, 120 * a, 0],
+        PROPERTIES: shadingProperties()
+    }, {
+        POSITION: [0.65, 4.5, 0.7, 5, 4.5, 120 * a, 0],
+        PROPERTIES: shadingProperties(trim)
+    }, {
+        POSITION: [0.65, 4.5, 0.7, 5, -4.5, 120 * a, 0],
+        PROPERTIES: shadingProperties(trim)
+    }, { // Bracing
+        POSITION: [0.6, 4.5, 1, 5, 0, 120 * a + 60, 0],
+        PROPERTIES: {COLOR: bright1}
+    }, {
+        POSITION: [0.6, 4.5, 1, 6.5, 0, 120 * a + 60, 0],
+        PROPERTIES: {COLOR: bright1}
+    }, { // Guns
+        POSITION: [2.7, 10, -1.2, 8, 0, 120 * a, 0],
+        PROPERTIES: {COLOR: trim}
+    }, {
+        POSITION: [2.7, 8.5, 1, 8, 0, 120 * a, 0],
+        PROPERTIES: {COLOR: baseColor}
+    }, {
+        POSITION: [1.1, 11.5, 1, 10.7, 0, 120 * a, 0],
+        PROPERTIES: {COLOR: baseColor}
+    }, {
+        POSITION: [1.1, 11.5, 0.75, 11.8, 0, 120 * a, 0],
+        PROPERTIES: {COLOR: baseColor}
+    }, {
+        POSITION: [2.2, 8.625, 1.35, 13.6, 0, 120 * a, 0],
+        PROPERTIES: {COLOR: baseColor}
+    }, {
+        POSITION: [1.2, 8.3, 0.8, 13.6, 0, 120 * a, 0],
+        PROPERTIES: {COLOR: dark1, BORDERLESS: true}
+    }, {
+        POSITION: [0.7, 10, 1, 12.9, 0, 120 * a, 0],
+        PROPERTIES: {COLOR: bright1}
+    }, {
+        POSITION: [6.3, 4.3, 0.7, 8, 0, 120 * a, 0],
+        PROPERTIES: {COLOR: bright2}
+    })
+}
+function blinkerProperties(i) {
+    return {
+        COLOR: trim,
+        BORDERLESS: true,
+        DRAW_ABOVE: true,
+        BLINKER: {
+            REPEAT: 800,
+            START: 125 * i,
+            END: 400 + 125 * i,
+            OFF_COLOR: dark1,
+        }
+    }
+}
+for (let a = 0; a < 3; a++) {
+    // Blinkers
     for (let i = 0; i < 3; i++) {
         Class.relativity.GUNS.push({
-            POSITION: [0.7, 1.6, 0.8, 6 + 1.4 * i, 3.7 - 0.9 * i, 120 * a + 60, 0],
-            PROPERTIES: {
-                COLOR: trim,
-                BORDERLESS: true,
-                DRAW_ABOVE: true,
-                BLINKER: {
-                    REPEAT: 800,
-                    START: 125 * i,
-                    END: 400 + 125 * i,
-                    OFF_COLOR: 17,
-                }
-            }
+            POSITION: [0.7, 1.2, 0.9, 6 + 1.4 * i, 4.3 - 0.9 * i, 120 * a + 60, 0],
+            PROPERTIES: blinkerProperties(i)
         }, {
-            POSITION: [0.7, 1.6, 0.8, 6 + 1.4 * i, -3.7 + 0.9 * i, 120 * a - 60, 0],
-            PROPERTIES: {
-                COLOR: trim,
-                BORDERLESS: true,
-                DRAW_ABOVE: true,
-                BLINKER: {
-                    REPEAT: 800,
-                    START: 125 * i,
-                    END: 400 + 125 * i,
-                    OFF_COLOR: 17,
-                }
-            }
+            POSITION: [0.7, 1.2, 0.9, 6 + 1.4 * i, -4.3 + 0.9 * i, 120 * a - 60, 0],
+            PROPERTIES: blinkerProperties(i)
         })
     }
 }

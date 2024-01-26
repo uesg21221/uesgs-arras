@@ -117,7 +117,7 @@ class Gun {
                 if (typeof info.PROPERTIES.BLINKER.OFF_COLOR === "number" || typeof info.PROPERTIES.BLINKER.OFF_COLOR === "string") {
                     blinkerOffUnboxed.base = info.PROPERTIES.BLINKER.OFF_COLOR;
                 }
-                else if (typeof info.PROPERTIES.COLOR === "object")
+                else if (typeof info.PROPERTIES.BLINKER.OFF_COLOR === "object")
                     blinkerOffUnboxed = {
                         base: info.PROPERTIES.BLINKER.OFF_COLOR.BASE ?? 17,
                         hueShift: info.PROPERTIES.BLINKER.OFF_COLOR.HUE_SHIFT ?? 0,
