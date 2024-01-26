@@ -3238,6 +3238,41 @@ Class.frostAuraBlockTop = {
 	COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 5 },
 	MIRROR_MASTER_ANGLE: true,
 }
+Class.frostAuraBlockTurret = {
+	PARENT: "genericTank",
+    INDEPENDENT: true,
+	COLOR: 17,
+    CONTROLLERS: ["nearestDifferentMaster"],
+	LABEL: "",
+	BODY: {
+		FOV: 2,
+	},
+	HAS_NO_RECOIL: true,
+	GUNS: [
+		{
+			POSITION: [18, 15, 1, 0, 0, 0, 0],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, g.fake]),
+				TYPE: "bullet",
+				COLOR: {BASE: 17, BRIGHTNESS_SHIFT: -7.5}
+			},
+		}, {
+			POSITION: [23, 11, 1, 0, 0, 0, 0],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, {density: 0.2}]),
+				TYPE: "bullet",
+				COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.6}
+			},
+		}, {
+			POSITION: [15, 13, 1, 0, 0, 0, 0],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, g.fake]),
+				TYPE: "bullet",
+				COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}
+			},
+		},
+	],
+}
 Class.frostAuraBlockAura = addIcosphereAura(0.25, 1.6, 0.15, "Small");
 Class.frostAuraBlock = {
 	PARENT: 'unsetTrap',
@@ -3245,6 +3280,9 @@ Class.frostAuraBlock = {
 		{
 			POSITION: [20, 0, 0, 45, 0, 1],
 			TYPE: 'frostAuraBlockTop'
+		}, {
+			POSITION: [11, 0, 0, 0, 360, 1],
+			TYPE: 'frostAuraBlockTurret'
 		}, {
 			POSITION: [10, 0, 0, 0, 360, 1],
 			TYPE: 'frostAuraBlockAura'
@@ -3309,7 +3347,7 @@ Class.frostBossBaseDeco = {
     ]))
 }
 
-const trebuchetStats = [g.basic, g.sniper, g.predator, g.predator, g.predator, g.predator, {speed: 0.93, maxSpeed: 0.93, reload: 1.7, health: 1.4, damage: 1.4, size: 2}];
+const trebuchetStats = [g.basic, g.sniper, g.predator, g.predator, g.predator, g.predator, {speed: 0.93, maxSpeed: 0.93, reload: 1.7, health: 1.7, damage: 1.4, size: 2}];
 const hielamanStats = [g.trap, g.setTrap, g.hexaTrapper, {reload: 2.4, health: 3.2}];
 Class.frostBoss = {
     PARENT: 'miniboss',
@@ -3335,15 +3373,22 @@ Class.frostBoss = {
         DENSITY: base.DENSITY * 7.5,
     },
     GUNS: Array(3).fill().flatMap((_, i) => ([
+            { // Speed
+                POSITION: [7, 13.5, 0.001, 9.5, 0, 120*i, 0],
+                PROPERTIES: {COLOR: 9},
+            }, {
+                POSITION: [7, 13.5, 0.001, 9.5, 0, 120*i+60, 0],
+                PROPERTIES: {COLOR: 9},
+            },
             { // Heavy Snipers
-                POSITION: [24, 9.5, 1, 0, 0, 120 * i, 0],
+                POSITION: [26.5, 9.5, 1, 0, 0, 120 * i, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats(trebuchetStats),
                     TYPE: "bullet",
                     COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.6 },
                 },
             }, {
-                POSITION: [22.5, 6.65, -1.3, 0, 0, 120 * i, 0],
+                POSITION: [24, 6.65, -1.3, 0, 0, 120 * i, 0],
                 PROPERTIES: { 
                     SHOOT_SETTINGS: combineStats([...trebuchetStats, g.fake]),
                     TYPE: "bullet",
@@ -3351,17 +3396,17 @@ Class.frostBoss = {
                     BORDERLESS: true
                 },
             }, {
-                POSITION: [17, 3.8, -1.4, 0, 0, 120 * i, 0],
+                POSITION: [19.5, 3.8, -1.4, 0, 0, 120 * i, 0],
                 PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 } },
             }, {
-                POSITION: [4, 11.5, 1, 17, 0, 120 * i, 0],
+                POSITION: [4, 11.5, 1, 19.5, 0, 120 * i, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([...trebuchetStats, g.fake]),
                     TYPE: "bullet",
                     COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -5, SATURATION_SHIFT: 0.6 },
                 },
             }, {
-                POSITION: [2, 12, 1, 18, 0, 120 * i, 0],
+                POSITION: [2, 12, 1, 20.5, 0, 120 * i, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([...trebuchetStats, g.fake]),
                     TYPE: "bullet",
@@ -3392,7 +3437,7 @@ Class.frostBoss = {
                     TYPE: 'bullet',
                     COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}
                 },
-            }
+            },
         ])),
     TURRETS: [
         {
