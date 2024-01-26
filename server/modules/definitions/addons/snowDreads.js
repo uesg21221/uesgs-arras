@@ -1567,12 +1567,12 @@ Class.dreadSnowdread = {
 	EXTRA_SKILL: 18,
 }
 Class.dreadWeaponSnowdread = {
-	LABEL: "Weapons",
+	LABEL: "",
 	COLOR: 6,
 	REROOT_UPGRADE_TREE: "dreadWeaponSnowdread",
 }
 Class.dreadBodySnowdread = {
-	LABEL: "Bodies",
+	LABEL: "",
 	COLOR: 6,
 	REROOT_UPGRADE_TREE: "dreadBodySnowdread",
 }
