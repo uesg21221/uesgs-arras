@@ -2246,7 +2246,7 @@ Class.taureonRailgunTurret = {
     },{
         POSITION: [24, 5, 1, 0, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.destroyer, { speed: 2.5 }, { speed: 2.5 }]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.destroyer, { speed: 5, penetration: 0.8 }]),
             TYPE: "bullet"
         }
     },{
@@ -2261,26 +2261,25 @@ Class.taureonThruster = {
     GUNS: [{
         POSITION: [14, 12, 1, 4, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { speed: 0.5, maxSpeed: 0.5 }, { speed: 0.5, maxSpeed: 0.5 }, g.fake]),
-            TYPE: "bullet"
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.175, reload: 0.25, recoil: 0.25 }]),
+            TYPE: ["bullet", { ALPHA: 0.5 }]
         }
     }, {
         POSITION: [12, 12, 1.4, 4, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { speed: 0.5, maxSpeed: 0.5 }, { speed: 0.5, maxSpeed: 0.5 }]),
-            TYPE: "bullet"
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.175, reload: 0.25, recoil: 0.25 }]),
+            TYPE: ["bullet", { ALPHA: 0.5 }]
         },
     }]
 };
 Class.taureonMissile = {
-    PARENT: ["bullet"],
+    PARENT: "bullet",
     LABEL: "Missile",
-    TYPE: "swarm",
-    MOTION_TYPE: "swarm",
-    FACING_TYPE: "smoothWithMotion",
-    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal"],
+    FACING_TYPE: "smoothToTarget",
+    CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     BODY: {
+        ACCELERATION: 10,
         FOV: base.FOV * 2
     },
     TURRETS: [{/** SIZE     X       Y     ANGLE    ARC */
@@ -2292,22 +2291,21 @@ Class.taureonMissile = {
         PROPERTIES: {
             AUTOFIRE: true,
             STAT_CALCULATOR: gunCalcNames.thruster,
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, { range: 0.1 }]),
-            TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, { reload: 0.25, range: 0.075 }]),
+            TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true, ALPHA: 0.5 }]
         }
     },{
-        POSITION: [10, 12, 0.8, 8, 0, 180, 0.5],
+        POSITION: [10, 12, 0.8, 8, 0, 180, 0],
         PROPERTIES: {
             AUTOFIRE: true,
-            NEGATIVE_RECOIL: true,
             STAT_CALCULATOR: gunCalcNames.thruster,
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, { range: 0.1 }]),
-            TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }]
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, { reload: 0.25, range: 0.075 }]),
+            TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true, ALPHA: 0.5 }]
         }
-    },...Array(16).fill().map((_, i)=>({
+    },...Array(32).fill().map((_, i)=>({
         POSITION: [0, (i % 4) + 1, 0, 0, 0, 0, 9999],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, { spray: 1e6, recoil: 0, range: 0.5 }]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, { spray: 1e6, range: 0.5, shudder: 1.5, damage: 1 + (i % 4) }]),
             TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
             SHOOT_ON_DEATH: true
         },
@@ -2323,7 +2321,7 @@ Class.taureonBoss = {
     SHAPE: 4.5,
     SIZE: 50,
     FACING_TYPE: "smoothToTarget",
-    VALUE: 5e6,
+    VALUE: 9e6,
     BODY: {
         FOV: 1,
         SPEED: 0.5 * base.SPEED,
@@ -2340,10 +2338,10 @@ Class.taureonBoss = {
         POSITION: [5, 10, 0, 45, 180, 0],
         TYPE: "taureonRailgunTurret"
     },{
-        POSITION: [5, -10, 0, -45, 90, 0],
+        POSITION: [5, -10, -2, -45, 90, 0],
         TYPE: "taureonThruster"
     },{
-        POSITION: [5, -10, 0, 45, 90, 0],
+        POSITION: [5, -10, 2, 45, 90, 0],
         TYPE: "taureonThruster"
     },{
         POSITION: [25, 0, 0, 0, 0, 1],
@@ -2355,7 +2353,7 @@ Class.taureonBoss = {
     GUNS: [...Array(6).fill().map((_, i) => ({
         POSITION: [18, 1.75, 1, 0, Math.cos(Math.PI * i / 3) * 2, 0, i / 6],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.twin]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.twin, { speed: 2, maxSpeed: 2, damage: 0.75, size: 0.8 }]),
             TYPE: "bullet"
         }
     })),{
@@ -2363,7 +2361,7 @@ Class.taureonBoss = {
     },{
         POSITION: [10, 5, -1.2, 5, 0, -90, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, g.destroyer, { shudder: 0.1, reload: 0.6, speed: 5, range: 2 }]),
             TYPE: "taureonMissile",
             STAT_CALCULATOR: gunCalcNames.sustained
         }
@@ -2372,7 +2370,7 @@ Class.taureonBoss = {
     },{
         POSITION: [10, 5, -1.2, 5, 0, 90, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, g.destroyer, { shudder: 0.1, reload: 0.6, speed: 5, range: 2 }]),
             TYPE: "taureonMissile",
             STAT_CALCULATOR: gunCalcNames.sustained
         }
@@ -2425,7 +2423,7 @@ Class.zephiEggchip = {
             POSITION: [14, 6, 1, 0, 0, 180, 0],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, { reload: 0.5 }, g.lowPower, { recoil: 1.35 }, { speed: 1.3, maxSpeed: 1.3 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, g.lowPower, { reload: 0.5, recoil: 1.35, speed: 1.3, maxSpeed: 1.3 }]),
                 TYPE: ["bullet", { COLOR: "black", PERSISTS_AFTER_DEATH: true }],
                 STAT_CALCULATOR: gunCalcNames.thruster,
             },
