@@ -226,7 +226,7 @@ var c = window.canvas.cv;
 var ctx = c.getContext("2d");
 var c2 = document.createElement("canvas");
 var ctx2 = c2.getContext("2d");
-ctx2.imageSmoothingEnabled = false;
+ctx2.imageSmoothingEnabled = true;
 // Animation things
 function Smoothbar(value, speed, sharpness = 3, lerpValue = 0.025) {
     let time = Date.now();
@@ -914,7 +914,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     if (assignedContext == false && context != ctx && context.canvas.width > 0 && context.canvas.height > 0) {
         ctx.save();
         ctx.globalAlpha = alpha * fade;
-        ctx.imageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = true;
         //ctx.globalCompositeOperation = "overlay";
         ctx.drawImage(context.canvas, x - xx, y - yy);
         ctx.restore();
