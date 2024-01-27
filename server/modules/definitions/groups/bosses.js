@@ -2246,7 +2246,7 @@ Class.taureonRailgunTurret = {
     },{
         POSITION: [24, 5, 1, 0, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.destroyer, { speed: 2.5 }, { speed: 2.5 }]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.destroyer, { speed: 5, penetration: 0.8 }]),
             TYPE: "bullet"
         }
     },{
@@ -2261,26 +2261,25 @@ Class.taureonThruster = {
     GUNS: [{
         POSITION: [14, 12, 1, 4, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { speed: 0.5, maxSpeed: 0.5 }, { speed: 0.5, maxSpeed: 0.5 }, g.fake]),
-            TYPE: "bullet"
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.175, reload: 0.25, recoil: 0.25 }]),
+            TYPE: ["bullet", { ALPHA: 0.5 }]
         }
     }, {
         POSITION: [12, 12, 1.4, 4, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { speed: 0.5, maxSpeed: 0.5 }, { speed: 0.5, maxSpeed: 0.5 }]),
-            TYPE: "bullet"
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.175, reload: 0.25, recoil: 0.25 }]),
+            TYPE: ["bullet", { ALPHA: 0.5 }]
         },
     }]
 };
 Class.taureonMissile = {
-    PARENT: ["bullet"],
+    PARENT: "bullet",
     LABEL: "Missile",
-    TYPE: "swarm",
-    MOTION_TYPE: "swarm",
-    FACING_TYPE: "smoothWithMotion",
-    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal"],
+    FACING_TYPE: "smoothToTarget",
+    CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     BODY: {
+        ACCELERATION: 10,
         FOV: base.FOV * 2
     },
     TURRETS: [{/** SIZE     X       Y     ANGLE    ARC */
@@ -2292,22 +2291,21 @@ Class.taureonMissile = {
         PROPERTIES: {
             AUTOFIRE: true,
             STAT_CALCULATOR: gunCalcNames.thruster,
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, { range: 0.1 }]),
-            TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, { reload: 0.25, range: 0.075 }]),
+            TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true, ALPHA: 0.5 }]
         }
     },{
-        POSITION: [10, 12, 0.8, 8, 0, 180, 0.5],
+        POSITION: [10, 12, 0.8, 8, 0, 180, 0],
         PROPERTIES: {
             AUTOFIRE: true,
-            NEGATIVE_RECOIL: true,
             STAT_CALCULATOR: gunCalcNames.thruster,
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, { range: 0.1 }]),
-            TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }]
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, { reload: 0.25, range: 0.075 }]),
+            TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true, ALPHA: 0.5 }]
         }
-    },...Array(16).fill().map((_, i)=>({
+    },...Array(32).fill().map((_, i)=>({
         POSITION: [0, (i % 4) + 1, 0, 0, 0, 0, 9999],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, { spray: 1e6, recoil: 0, range: 0.5 }]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, { spray: 1e6, range: 0.5, shudder: 1.5, damage: 1 + (i % 4) }]),
             TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
             SHOOT_ON_DEATH: true
         },
@@ -2323,7 +2321,7 @@ Class.taureonBoss = {
     SHAPE: 4.5,
     SIZE: 50,
     FACING_TYPE: "smoothToTarget",
-    VALUE: 5e6,
+    VALUE: 9e6,
     BODY: {
         FOV: 1,
         SPEED: 0.5 * base.SPEED,
@@ -2340,10 +2338,10 @@ Class.taureonBoss = {
         POSITION: [5, 10, 0, 45, 180, 0],
         TYPE: "taureonRailgunTurret"
     },{
-        POSITION: [5, -10, 0, -45, 90, 0],
+        POSITION: [5, -10, -2, -45, 90, 0],
         TYPE: "taureonThruster"
     },{
-        POSITION: [5, -10, 0, 45, 90, 0],
+        POSITION: [5, -10, 2, 45, 90, 0],
         TYPE: "taureonThruster"
     },{
         POSITION: [25, 0, 0, 0, 0, 1],
@@ -2355,7 +2353,7 @@ Class.taureonBoss = {
     GUNS: [...Array(6).fill().map((_, i) => ({
         POSITION: [18, 1.75, 1, 0, Math.cos(Math.PI * i / 3) * 2, 0, i / 6],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.twin]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.twin, { speed: 2, maxSpeed: 2, damage: 0.75, size: 0.8 }]),
             TYPE: "bullet"
         }
     })),{
@@ -2363,7 +2361,7 @@ Class.taureonBoss = {
     },{
         POSITION: [10, 5, -1.2, 5, 0, -90, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, g.destroyer, { shudder: 0.1, reload: 0.6, speed: 5, range: 2 }]),
             TYPE: "taureonMissile",
             STAT_CALCULATOR: gunCalcNames.sustained
         }
@@ -2372,7 +2370,7 @@ Class.taureonBoss = {
     },{
         POSITION: [10, 5, -1.2, 5, 0, 90, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, g.destroyer, { shudder: 0.1, reload: 0.6, speed: 5, range: 2 }]),
             TYPE: "taureonMissile",
             STAT_CALCULATOR: gunCalcNames.sustained
         }
@@ -2387,7 +2385,8 @@ Class.taureonBoss = {
     }]
 };
 
-Class.zephiMiscDeco = makeDeco(4, "black")
+Class.zephiMiscDeco = makeDeco(4, "white")
+Class.zephiMiscDeco2 = makeDeco(4, "black")
 Class.zephiSunchip = makeAuto({
     PARENT: "drone",
     SHAPE: 4,
@@ -2424,7 +2423,7 @@ Class.zephiEggchip = {
             POSITION: [14, 6, 1, 0, 0, 180, 0],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, { reload: 0.5 }, g.lowPower, { recoil: 1.35 }, { speed: 1.3, maxSpeed: 1.3 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, g.lowPower, { reload: 0.5, recoil: 1.35, speed: 1.3, maxSpeed: 1.3 }]),
                 TYPE: ["bullet", { COLOR: "black", PERSISTS_AFTER_DEATH: true }],
                 STAT_CALCULATOR: gunCalcNames.thruster,
             },
@@ -2460,6 +2459,18 @@ Class.zephiBoss = {
     UPGRADE_COLOR: "lightGreen",
     SIZE: 50,
     VALUE: 5e6,
+    SKILL: skillSet({
+        rld: 1,
+        dam: 1,
+        pen: 1,
+        str: 1,
+        spd: 1,
+        atk: 1,
+        hlt: 1,
+        shi: 1,
+        rgn: 1,
+        mob: 1,
+    }),
     BODY: {
         FOV: 0.75,
         SPEED: 0.05 * base.SPEED,
@@ -2522,10 +2533,10 @@ Class.zephiBoss = {
         TYPE: "overdriveDeco"
     },{
         POSITION: [20 * Math.SQRT1_2 ** 2, 0, 0, 0, 0, 1],
-        TYPE: "zephiMiscDeco"
+        TYPE: "zephiMiscDeco2"
     },{
         POSITION: [20 * Math.SQRT1_2 ** 3, 0, 0, 45, 0, 1],
-        TYPE: "shinySquare"
+        TYPE: "zephiMiscDeco"
     }]
 };
 
@@ -3225,6 +3236,41 @@ Class.frostAuraBlockTop = {
 	COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 5 },
 	MIRROR_MASTER_ANGLE: true,
 }
+Class.frostAuraBlockTurret = {
+	PARENT: "genericTank",
+    INDEPENDENT: true,
+	COLOR: 17,
+    CONTROLLERS: ["nearestDifferentMaster"],
+	LABEL: "",
+	BODY: {
+		FOV: 2,
+	},
+	HAS_NO_RECOIL: true,
+	GUNS: [
+		{
+			POSITION: [18, 15, 1, 0, 0, 0, 0],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, g.fake]),
+				TYPE: "bullet",
+				COLOR: {BASE: 17, BRIGHTNESS_SHIFT: -7.5}
+			},
+		}, {
+			POSITION: [23, 11, 1, 0, 0, 0, 0],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, {density: 0.2}]),
+				TYPE: "bullet",
+				COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -10, SATURATION_SHIFT: 0.6}
+			},
+		}, {
+			POSITION: [15, 13, 1, 0, 0, 0, 0],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, g.fake]),
+				TYPE: "bullet",
+				COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}
+			},
+		},
+	],
+}
 Class.frostAuraBlockAura = addIcosphereAura(0.25, 1.6, 0.15, "Small");
 Class.frostAuraBlock = {
 	PARENT: 'unsetTrap',
@@ -3232,6 +3278,9 @@ Class.frostAuraBlock = {
 		{
 			POSITION: [20, 0, 0, 45, 0, 1],
 			TYPE: 'frostAuraBlockTop'
+		}, {
+			POSITION: [11, 0, 0, 0, 360, 1],
+			TYPE: 'frostAuraBlockTurret'
 		}, {
 			POSITION: [10, 0, 0, 0, 360, 1],
 			TYPE: 'frostAuraBlockAura'
@@ -3296,7 +3345,7 @@ Class.frostBossBaseDeco = {
     ]))
 }
 
-const trebuchetStats = [g.basic, g.sniper, g.predator, g.predator, g.predator, g.predator, {speed: 0.93, maxSpeed: 0.93, reload: 1.7, health: 1.4, damage: 1.4, size: 2}];
+const trebuchetStats = [g.basic, g.sniper, g.predator, g.predator, g.predator, g.predator, {speed: 0.93, maxSpeed: 0.93, reload: 1.7, health: 1.7, damage: 1.4, size: 2}];
 const hielamanStats = [g.trap, g.setTrap, g.hexaTrapper, {reload: 2.4, health: 3.2}];
 Class.frostBoss = {
     PARENT: 'miniboss',
@@ -3304,7 +3353,8 @@ Class.frostBoss = {
     NAME: 'Frostbyte',
     FACING_TYPE: 'toTarget',
     SHAPE: 6,
-    COLOR: 'teal',
+    COLOR: "teal",
+    UPGRADE_COLOR: "teal",
     SIZE: 31,
 	DANGER: 12,
     VALUE: 888888,
@@ -3321,15 +3371,22 @@ Class.frostBoss = {
         DENSITY: base.DENSITY * 7.5,
     },
     GUNS: Array(3).fill().flatMap((_, i) => ([
+            { // Speed
+                POSITION: [7, 13.5, 0.001, 9.5, 0, 120*i, 0],
+                PROPERTIES: {COLOR: 9},
+            }, {
+                POSITION: [7, 13.5, 0.001, 9.5, 0, 120*i+60, 0],
+                PROPERTIES: {COLOR: 9},
+            },
             { // Heavy Snipers
-                POSITION: [24, 9.5, 1, 0, 0, 120 * i, 0],
+                POSITION: [26.5, 9.5, 1, 0, 0, 120 * i, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats(trebuchetStats),
                     TYPE: "bullet",
                     COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.6 },
                 },
             }, {
-                POSITION: [22.5, 6.65, -1.3, 0, 0, 120 * i, 0],
+                POSITION: [24, 6.65, -1.3, 0, 0, 120 * i, 0],
                 PROPERTIES: { 
                     SHOOT_SETTINGS: combineStats([...trebuchetStats, g.fake]),
                     TYPE: "bullet",
@@ -3337,17 +3394,17 @@ Class.frostBoss = {
                     BORDERLESS: true
                 },
             }, {
-                POSITION: [17, 3.8, -1.4, 0, 0, 120 * i, 0],
+                POSITION: [19.5, 3.8, -1.4, 0, 0, 120 * i, 0],
                 PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: 10 } },
             }, {
-                POSITION: [4, 11.5, 1, 17, 0, 120 * i, 0],
+                POSITION: [4, 11.5, 1, 19.5, 0, 120 * i, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([...trebuchetStats, g.fake]),
                     TYPE: "bullet",
                     COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -5, SATURATION_SHIFT: 0.6 },
                 },
             }, {
-                POSITION: [2, 12, 1, 18, 0, 120 * i, 0],
+                POSITION: [2, 12, 1, 20.5, 0, 120 * i, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([...trebuchetStats, g.fake]),
                     TYPE: "bullet",
@@ -3378,7 +3435,7 @@ Class.frostBoss = {
                     TYPE: 'bullet',
                     COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 7.5}
                 },
-            }
+            },
         ])),
     TURRETS: [
         {

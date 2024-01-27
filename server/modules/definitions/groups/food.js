@@ -121,6 +121,7 @@ makeLaby = (type, level) => {
             DENSITY: type.BODY.DENSITY,
             HEALTH: type.BODY.HEALTH * strenghtMultiplier,
             PENETRATION: type.BODY.PENETRATION,
+            PUSHABILITY: (type.BODY.PUSHABILITY / (level + 1)) || 0,
             ACCELERATION: type.BODY.ACCELERATION
         },
         VARIES_IN_SIZE: false,

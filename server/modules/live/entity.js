@@ -376,25 +376,7 @@ class Gun {
             o.team = this.body.team;
             o.refreshBodyAttributes();
             o.life();
-            this.altFire ? this.master.ON(
-                undefined,
-                'altFire',
-                {
-                    gun: this,
-                    store: this.store,
-                    globalStore: this.globalStore,
-                    child: o
-                }
-            ) : this.master.ON(
-                undefined,
-                'fire',
-                {
-                    gun: this,
-                    store: this.store,
-                    globalStore: this.globalStore,
-                    child: o
-                }
-            )
+            this.master.ON(undefined, this.altFire ? 'altFire' : 'fire', { gun: this, store: this.store, globalStore: this.globalStore, child: o });
             return;
         }
 
@@ -414,27 +396,7 @@ class Gun {
         this.bulletInit(o);
         o.coreSize = o.SIZE;
 
-        this.altFire ? this.master.ON(
-            undefined, 
-            'altFire',   
-                {   
-                    gun: this, 
-                    store: this.store, 
-                    globalStore: this.
-                    globalStore, 
-                    child: o 
-                }
-            ) : this.master.ON(
-                undefined, 
-                'fire', 
-                { 
-                    gun: this, 
-                    store: this.store, 
-                    globalStore: 
-                    this.globalStore, 
-                    child: o 
-                }
-            )
+        this.master.ON(undefined, this.altFire ? 'altFire' : 'fire', { gun: this, store: this.store, globalStore: this.globalStore, child: o });
     }
     bulletInit(o) {
         // Define it by its natural properties
@@ -955,8 +917,8 @@ class Entity extends EventEmitter {
                 needsBodyAttribRefresh = true;
                 this.emit('expiredStatusEffect', entry.effect);
             }
-            if (entry.effect.tick && entry.effect.tick(this, entry.effect)) {
-                needsBodyAttribRefresh = true
+            if (entry.effect.tick && entry.effect.tick(this, entry.effect, entry.durationLeftover)) {
+                needsBodyAttribRefresh = true;
             }
         }
         this.statusEffects = lastingEffects;
@@ -1812,7 +1774,7 @@ class Entity extends EventEmitter {
             case "motor":
                 this.maxSpeed = 0;
                 if (this.topSpeed) {
-                    this.damp = a / this.topSpeed;
+                    this.damp = Math.abs(a) / this.topSpeed;
                 }
                 if (gactive) {
                     let len = Math.sqrt(g.x * g.x + g.y * g.y);
