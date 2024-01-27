@@ -20,8 +20,21 @@ Class.voidlingInsert3 = {
     MIRROR_MASTER_ANGLE: true,
 }
 
-Class.voidlingCore = {
+Class.voidlingCore1 = {
     PARENT: 'auraBase',
+    FACING_TYPE: ["spin", {speed: -1.3}],
+    SHAPE: 6,
+    COLOR: 6,
+    ALPHA: 0.7,
+    PARTICLE_EMITTER: {
+        RATE: 20,
+        SIZE: 10,
+        ALPHA: 0.6,
+    }
+}
+Class.voidlingCore2 = {
+    PARENT: 'auraBase',
+    FACING_TYPE: ["spin", {speed: 0.9}],
     SHAPE: 6,
     COLOR: 6,
     ALPHA: 0.7,
@@ -47,6 +60,7 @@ Class.genericVoidling = {
     CONTROLLERS: ["nearestDifferentMaster", "canRepel"],
     HITS_OWN_TYPE: "hardOnlyBosses",
     SIZE: 40,
+    VALUE: 1e6,
     BODY: {
         PUSHABILITY: 0.7,
         HEALTH: base.HEALTH * 8,
@@ -70,7 +84,7 @@ Class.relativity = {
             POSITION: [0, 5.5, 1, 0, 0, 0, 0,],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([]),
-                TYPE: ['voidlingCore', { FACING_TYPE: ["spin", {speed: -1.3}], }],
+                TYPE: 'voidlingCore1',
                 MAX_CHILDREN: 1,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -80,7 +94,7 @@ Class.relativity = {
             POSITION: [0, 6.5, 1, 0, 0, 0, 0,],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([]),
-                TYPE: ['voidlingCore', { FACING_TYPE: ["spin", {speed: 0.9}], }],
+                TYPE: 'voidlingCore2',
                 MAX_CHILDREN: 1,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -128,9 +142,15 @@ for (let a = 0; a < 3; a++) {
     }, {
         POSITION: [0.6, 4.5, 1, 6.5, 0, 120 * a + 60, 0],
         PROPERTIES: {COLOR: bright1}
+    }, { // Shards
+        POSITION: [9, 5, 0.001, 6, -4.5, 120 * a + 68, 0],
+        PROPERTIES: {COLOR: trim},
+    }, {
+        POSITION: [9, 5, 0.001, 6, 4.5, 120 * a - 68, 0],
+        PROPERTIES: {COLOR: trim},
     }, { // Guns
         POSITION: [2.7, 10, -1.2, 8, 0, 120 * a, 0],
-        PROPERTIES: {COLOR: trim}
+        PROPERTIES: {COLOR: bright2}
     }, {
         POSITION: [2.7, 8.5, 1, 8, 0, 120 * a, 0],
         PROPERTIES: {COLOR: baseColor}
@@ -148,7 +168,7 @@ for (let a = 0; a < 3; a++) {
         PROPERTIES: {COLOR: dark1, BORDERLESS: true}
     }, {
         POSITION: [0.7, 10, 1, 12.9, 0, 120 * a, 0],
-        PROPERTIES: {COLOR: bright1}
+        PROPERTIES: {COLOR: trim}
     }, {
         POSITION: [6.3, 4.3, 0.7, 8, 0, 120 * a, 0],
         PROPERTIES: {COLOR: bright2}

@@ -91,8 +91,8 @@ class Particle {
         this.x = x;
         this.y = y;
         this.size = size;
-        this.speed = speed;
-        this.angle = angle;
+        this.speedX = speed * Math.cos(angle) + global.player.vx;
+        this.speedY = speed * Math.sin(angle) + global.player.vy;
         this.lifetime = lifetime;
         this.alpha = alpha;
         this.friction = friction;
@@ -102,13 +102,11 @@ class Particle {
         particles.push(this);
     }
     iterate () {
-        let xShift = this.speed * Math.cos(this.angle);
-        let yShift = this.speed * Math.sin(this.angle);
-        xShift = util.lerp(xShift, 0, this.friction);
-        yShift = util.lerp(yShift, 0, this.friction);
+        this.speedX = util.lerp(this.speedX, 0, this.friction);
+        this.speedY = util.lerp(this.speedY, 0, this.friction);
 
-        this.x += xShift - global.player.vx;
-        this.y += yShift - global.player.vy;
+        this.x += this.speedX - global.player.vx;
+        this.y += this.speedY - global.player.vy;
         this.lifetime--;
         if (this.lifetime < 0) this.alpha -= 0.086
         if (this.alpha <= 0) this.delete();
@@ -954,7 +952,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     // Spawn particles
     if (!global.disconnected && m.particleEmitter && !turretsObeyRot && (Date.now() % (1000 / m.particleEmitter.rate)) <= 25) {
         let color = gameDraw.modifyColor(instance.color, baseColor);
-        new Particle(color, initStrokeWidth, xx, yy, drawSize / m.size * m.realSize * m.particleEmitter.size, m.particleEmitter.speed, Math.random() * Math.PI * 2, m.particleEmitter.range, m.particleEmitter.alpha, 0.1);
+        new Particle(color, initStrokeWidth, x, y, drawSize / m.size * m.realSize * m.particleEmitter.size, m.particleEmitter.speed, Math.random() * Math.PI * 2, m.particleEmitter.range, m.particleEmitter.alpha, 0.01);
     }
     
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
