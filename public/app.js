@@ -800,7 +800,6 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         context.canvas.width = context.canvas.height = drawSize * m.position.axis + ratio * 20;
         xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
         yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.sin(rot)) / 4;
-        context.translate(0.5, 0.5);
     } else {
         if (fade * alpha < 0.5) return;
     }
