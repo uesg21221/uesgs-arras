@@ -2277,56 +2277,56 @@ Class.addons.UPGRADES_TIER_0.push("dreadOfficialV2");
 
 			Class.automationOfficialV2.UPGRADES_TIER_0 = ["mechanismOfficialV2", "fusionOfficialV2", "binaryOfficialV2", "exosphereOfficialV2"];
 				Class.mechanismOfficialV2.UPGRADES_TIER_0 = ["skynetOfficialV2"];
-					Class.skynetOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("skynetOfficialV2")];
+					Class.skynetOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("skynetOfficialV2");
 				Class.fusionOfficialV2.UPGRADES_TIER_0 = ["supernovaOfficialV2"];
-					Class.supernovaOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("supernovaOfficialV2")];
+					Class.supernovaOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("supernovaOfficialV2");
 				Class.binaryOfficialV2.UPGRADES_TIER_0 = ["cipherOfficialV2"];
-					Class.cipherOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("cipherOfficialV2")];
+					Class.cipherOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("cipherOfficialV2");
 				Class.exosphereOfficialV2.UPGRADES_TIER_0 = ["interstellarOfficialV2"];
-					Class.interstellarOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("interstellarOfficialV2")];
+					Class.interstellarOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("interstellarOfficialV2");
 
 			Class.kilobyteOfficialV2.UPGRADES_TIER_0 = ["megabyteOfficialV2", "binaryOfficialV2", "trojanOfficialV2", "hardwareOfficialV2"];
 				Class.megabyteOfficialV2.UPGRADES_TIER_0 = ["gigabyteOfficialV2"];
-					Class.gigabyteOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("gigabyteOfficialV2")];
+					Class.gigabyteOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("gigabyteOfficialV2");
 				// Class.binaryOfficialV2.UPGRADES_TIER_0 = ["cipherOfficialV2"];
 				Class.trojanOfficialV2.UPGRADES_TIER_0 = ["malwareOfficialV2"];
-					Class.malwareOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("malwareOfficialV2")];
+					Class.malwareOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("malwareOfficialV2");
 				Class.hardwareOfficialV2.UPGRADES_TIER_0 = ["softwareOfficialV2"];
-					Class.softwareOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("softwareOfficialV2")];
+					Class.softwareOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("softwareOfficialV2");
 
 		Class.atmosphereOfficialV2.UPGRADES_TIER_0 = ["coronaOfficialV2", "thermosphereOfficialV2"];
 
 			Class.coronaOfficialV2.UPGRADES_TIER_0 = ["chromosphereOfficialV2", "fusionOfficialV2", "trojanOfficialV2", "planetOfficialV2"];
 				Class.chromosphereOfficialV2.UPGRADES_TIER_0 = ["photosphereOfficialV2"];
-					Class.photosphereOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("photosphereOfficialV2")];
+					Class.photosphereOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("photosphereOfficialV2");
 				// Class.fusionOfficialV2.UPGRADES_TIER_0 = ["supernovaOfficialV2"];
 				// Class.trojanOfficialV2.UPGRADES_TIER_0 = ["malwareOfficialV2"];
 				Class.planetOfficialV2.UPGRADES_TIER_0 = ["astronomicOfficialV2"];
-					Class.astronomicOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("astronomicOfficialV2")];
+					Class.astronomicOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("astronomicOfficialV2");
 
 			Class.thermosphereOfficialV2.UPGRADES_TIER_0 = ["mesosphereOfficialV2", "exosphereOfficialV2", "hardwareOfficialV2", "moonOfficialV2"];
 				Class.mesosphereOfficialV2.UPGRADES_TIER_0 = ["stratosphereOfficialV2"];
-					Class.stratosphereOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("stratosphereOfficialV2")];
+					Class.stratosphereOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("stratosphereOfficialV2");
 				// Class.exosphereOfficialV2.UPGRADES_TIER_0 = ["interstellarOfficialV2"];
 				// Class.hardwareOfficialV2.UPGRADES_TIER_0 = ["softwareOfficialV2"];
 				Class.moonOfficialV2.UPGRADES_TIER_0 = ["grandioseOfficialV2"];
-					Class.grandioseOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("grandioseOfficialV2")];
+					Class.grandioseOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("grandioseOfficialV2");
 
 		Class.juggernautOfficialV2.UPGRADES_TIER_0 = ["jumboOfficialV2", "colossusOfficialV2"];
 
 			Class.jumboOfficialV2.UPGRADES_TIER_0 = ["goliathOfficialV2", "planetOfficialV2", "moonOfficialV2"];
 				Class.goliathOfficialV2.UPGRADES_TIER_0 = ["behemothOfficialV2"];
-					Class.behemothOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("behemothOfficialV2")];
+					Class.behemothOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("behemothOfficialV2");
 				// Class.planetOfficialV2.UPGRADES_TIER_0 = ["astronomicOfficialV2"];
 				// Class.moonOfficialV2.UPGRADES_TIER_0 = ["grandioseOfficialV2"];
 
 			Class.colossusOfficialV2.UPGRADES_TIER_0 = ["titanOfficialV2", "sirenOfficialV2", "harpyOfficialV2"];
 				Class.titanOfficialV2.UPGRADES_TIER_0 = ["leviathanOfficialV2"];
-					Class.leviathanOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("leviathanOfficialV2")];
+					Class.leviathanOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("leviathanOfficialV2");
 				Class.sirenOfficialV2.UPGRADES_TIER_0 = ["valrayvnOfficialV2"];
-					Class.valrayvnOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("valrayvnOfficialV2")];
+					Class.valrayvnOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("valrayvnOfficialV2");
 				Class.harpyOfficialV2.UPGRADES_TIER_0 = ["pegasusOfficialV2"];
-					Class.pegasusOfficialV2.UPGRADES_TIER_0 = [makeHexnoughtBodyV2("pegasusOfficialV2")];
+					Class.pegasusOfficialV2.UPGRADES_TIER_0 = makeHexnoughtBodyV2("pegasusOfficialV2");
 
 const hexDreadNames = {
 	Javelin: {
@@ -2491,7 +2491,7 @@ function mergeHexnoughtWeaponV2(weapon1, weapon2) {
 	return className;
 }
 function makeHexnoughtBodyV2(body) {
-	if (!buildHexnoughts) return;
+	if (!buildHexnoughts) return [];
 	
 	body = ensureIsClass(body);
 
@@ -2564,7 +2564,7 @@ function makeHexnoughtBodyV2(body) {
 	Class[className] = {
 		PARENT, BODY, LABEL, GUNS, TURRETS,
 	};
-	return className;
+	return [className];
 }
 
 // Merge hexdreads
