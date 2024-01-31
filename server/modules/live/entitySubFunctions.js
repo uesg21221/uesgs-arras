@@ -121,7 +121,6 @@ class Skill {
             this.level += 1;
             this.points += this.levelPoints;
             this.update();
-            }
         }
     }
     get levelScore() {
