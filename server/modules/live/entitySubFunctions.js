@@ -59,6 +59,7 @@ class Skill {
         this.score = 0;
         this.deduction = 0;
         this.level = 0;
+        this.canUpgrade = false;
         this.LSPF = null;
         this.set([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         this.maintain();
@@ -120,8 +121,15 @@ class Skill {
             this.deduction += this.levelScore;
             this.level += 1;
             this.points += this.levelPoints;
-            this.update();
+            if (this.level < c.LEVEL_CAP) {
+                if (this.level % c.TIER_MULTIPLIER && this.level <= c.MAX_UPGRADE_TIER * c.TIER_MULTIPLIER) {
+                    this.canUpgrade = true;
+                }
+                this.update();
+                return true;
+            }
         }
+        return false;
     }
     get levelScore() {
         return Math.ceil(1.8 * Math.pow(this.level + 1, 1.8) - 2 * this.level + 1);
