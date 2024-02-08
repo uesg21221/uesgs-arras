@@ -186,7 +186,6 @@ function compileMatrix(matrix, matrix2Entrance) {
         };
     }
 }
-
 function connectMatrix(matrix, matrix2Entrance) {
     let matrixWidth = matrix[0].length,
         matrixHeight = matrix.length;
@@ -218,7 +217,6 @@ let generatorMatrix = [
     [ "alphaPentagon" , "shinyAlphaPentagon" , "legendaryAlphaPentagon" , "shadowAlphaPentagon" , "rainbowAlphaPentagon" , "transAlphaPentagon" , "AlphaPentagonRelic" ],
     [ "sphere"        , "cube"               , "tetrahedron"            , "octahedron"          , "dodecahedron"         , "icosahedron"        , "tesseract"          ],
 ],
-
 gemRelicMatrix = [];
 for (let tier of [ "", "Egg", "Square", "Triangle", "Pentagon", "BetaPentagon", "AlphaPentagon" ]) {
     let row = [];
@@ -305,12 +303,6 @@ Class.diamondShape = {
     PARENT: ["basic"],
     LABEL: "Rotated Body",
     SHAPE: 4.5
-};
-
-Class.rotatedTrap = {
-    PARENT: ["basic"],
-    LABEL: "Rotated Inverted Body",
-    SHAPE: -3.5
 };
 
 Class.mummyHat = {
@@ -695,7 +687,7 @@ Class.auraHealer = {
 
 Class.ghoster_ghostForm = {
     PARENT: ['genericTank'],
-    TOOLTIP: 'You are now in ghost form, roam around and find your next target. Will turn back in 5 seconds',
+    TOOLTIP: 'You are now hidden, roam around and find your next target. You will be visible again in 5 seconds',
     LABEL: 'Ghoster',
     BODY: {
         SPEED: 20,
@@ -711,7 +703,7 @@ Class.ghoster_ghostForm = {
 Class.ghoster = {
     PARENT: ['genericTank'],
     LABEL: 'Ghoster',
-    TOOLTIP: 'Shooting will turn you into a ghost for 5 seconds',
+    TOOLTIP: 'Shooting will hide you for 5 seconds',
     BODY: {
         SPEED: base.SPEED,
         ACCELERATION: base.ACCEL,
@@ -1073,9 +1065,9 @@ testLayeredBoss.addLayer({turret: {
     TYPE: "crowbarTurret",
 }}, true);
 
-Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
-    Class.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "spectator", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"];
-        Class.unavailable.UPGRADES_TIER_0 = ["healer"];
+Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "overpowered", "addons"];
+    Class.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "arenaCloser", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "turkey"];
+        Class.unavailable.UPGRADES_TIER_0 = ["healer", "whirlwind"];
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
 
@@ -1091,6 +1083,5 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss"];
 
-    Class.testing.UPGRADES_TIER_0 = ["features", "overpowered", "whirlwind", "vanquisher", "mummifier", "tracker3"];
-        Class.features.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
-        Class.overpowered.UPGRADES_TIER_0 = ["armyOfOne", "godbasic", "maximumOverdrive"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
+    Class.overpowered.UPGRADES_TIER_0 = ["armyOfOne", "godbasic", "maximumOverdrive", "vanquisher", "mummifier"]
