@@ -121,8 +121,8 @@ Class.celestials.UPGRADE_COLOR = "lightGreen"
 Class.celestials.SHAPE = 9
 
 Class.eternals = menu("Eternals")
-Class.eternals.COLOR = "teal"
-Class.eternals.UPGRADE_COLOR = "teal"
+Class.eternals.COLOR = "veryLightGrey"
+Class.eternals.UPGRADE_COLOR = "veryLightGrey"
 Class.eternals.SHAPE = 11
 
 Class.devBosses = menu("Developers")
@@ -965,8 +965,6 @@ Class['Team' + TEAM_ENEMIES] = {
 Class.teams.UPGRADES_TIER_0.push('Team' + TEAM_ROOM, 'Team' + TEAM_ENEMIES);
 
 Class.testing = menu("Testing")
-Class.features = menu("Features")
-Class.overpowered = menu("Overpowered")
 
 Class.addons = menu("Addon Entities")
 Class.addons.UPGRADES_TIER_0 = []
@@ -1022,7 +1020,7 @@ testLayeredBoss.addLayer({turret: {
     TYPE: "crowbarTurret",
 }}, true);
 
-Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "overpowered", "addons"];
+Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
     Class.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "arenaCloser", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "turkey"];
         Class.unavailable.UPGRADES_TIER_0 = ["healer", "whirlwind"];
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
@@ -1040,5 +1038,4 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"];
 
-    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
-    Class.overpowered.UPGRADES_TIER_0 = ["armyOfOne", "vanquisher", "mummifier"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
