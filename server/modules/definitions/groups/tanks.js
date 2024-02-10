@@ -3937,6 +3937,27 @@ Class.helix = {
         },
     ],
 }
+Class.undertow = {
+    PARENT: "genericTank",
+    LABEL: "Undertow",
+    DANGER: 6,
+    TOOLTIP: "[DEV NOTE] The Undertow does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: [14, 12, 0.8, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, { reload: 1.2 }]),
+                TYPE: "bullet"
+            }
+        },
+        {
+            POSITION: [11.25, 8, 0.15, 4.25, 4, 13.5, 0]
+        },
+        {
+            POSITION: [11.25, 8, 0.15, 4.25, -4, -13.5, 0]
+        }
+    ]
+}
 Class.repeater = {
     PARENT: "genericTank",
     LABEL: "Repeater",
@@ -4088,6 +4109,32 @@ Class.quadruplex = {
             POSITION: [3.75, 10, 2.125, 1.25, 6.25, 135, 0]
         },
     ],
+}
+
+// Undertow upgrades
+Class.riptide = {
+    PARENT: "genericTank",
+    LABEL: "Riptide",
+    DANGER: 7,
+    TOOLTIP: "[DEV NOTE] The Riptide does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: [6.5, 23.5, 0.25, 3, 0, 180, 0],
+        },
+        {
+            POSITION: [18, 16, 0.75, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, { size: 0.9, reload: 1.2 }]),
+                TYPE: "bullet"
+            }
+        },
+        {
+            POSITION: [17, 16, 0.1, 0.25, 4, 13.5, 0]
+        },
+        {
+            POSITION: [17, 16, 0.1, 0.25, -4, -13.5, 0]
+        }
+    ]
 }
 
 // Repeater upgrades
@@ -4595,7 +4642,8 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
         Class.triTrapper.UPGRADES_TIER_3 = ["fortress", "hexaTrapper", "septaTrapper", "architect"]
         Class.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark"]
 
-    Class.desmos.UPGRADES_TIER_2 = ["volute", "helix", "repeater"]
-        Class.volute.UPGRADES_TIER_3 = ["sidewinder"]
+    Class.desmos.UPGRADES_TIER_2 = ["volute", "helix", "undertow", "repeater"]
+        Class.volute.UPGRADES_TIER_3 = ["sidewinder", "riptide"]
         Class.helix.UPGRADES_TIER_3 = ["triplex", "quadruplex", "duplicator"]
+        Class.undertow.UPGRADES_TIER_3 = ["riptide"]
         Class.repeater.UPGRADES_TIER_3 = ["iterator", "duplicator"]
