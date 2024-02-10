@@ -352,39 +352,6 @@ Class.mummifier = {
         TYPE: ["mummyHat"]
     }]
 };
-
-Class.colorMan = {
-    PARENT: ["genericTank"],
-    LABEL: "Testing Animated Colors",
-    SHAPE: 4,
-    COLOR: "rainbow",
-    TURRETS: [{
-        POSITION: [20, -20, -20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedBlueRed" }
-    },{
-        POSITION: [20,  0 , -20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedBlueGrey" }
-    },{
-        POSITION: [20,  20, -20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedGreyBlue" }
-    },{
-        POSITION: [20, -20,  0 , 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedRedGrey" }
-    },{
-        POSITION: [20,  20,  0 , 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedGreyRed" }
-    },{
-        POSITION: [20,  20,  20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedLesbian" }
-    },{
-        POSITION: [20,  0 ,  20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedTrans" }
-    },{
-        POSITION: [20,  20,  20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedBi" }
-    }]
-};
-
 Class.miscTestHelper2 = {
     PARENT: ["genericTank"],
     LABEL: "Turret Reload 3",
@@ -1038,4 +1005,4 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"];
 
-    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
