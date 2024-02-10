@@ -873,49 +873,6 @@ Class.armyOfOne = {
         }
     ],
 };
-Class.godbasic = {
-    PARENT: ["genericTank"],
-    LABEL: "God Basic",
-    SKILL_CAP: [31, 31, 31, 31, 31, 31, 31, 31, 31, 31],
-    SKILL: [ 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 ],
-    BODY: {
-        ACCELERATION: base.ACCEL * 1,
-        SPEED: base.SPEED * 1,
-        HEALTH: base.HEALTH * 1,
-        DAMAGE: base.DAMAGE * 1,
-        PENETRATION: base.PENETRATION * 1,
-        SHIELD: base.SHIELD * 1,
-        REGEN: base.REGEN * 1,
-        FOV: base.FOV * 1,
-        DENSITY: base.DENSITY * 1,
-        PUSHABILITY: 1,
-        HETERO: 3,
-    },
-    GUNS: [
-        {
-            POSITION: [18, 8, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: "bullet",
-                COLOR: "grey",
-                LABEL: "",
-                STAT_CALCULATOR: 0,
-                WAIT_TO_CYCLE: false,
-                AUTOFIRE: false,
-                SYNCS_SKILLS: false,
-                MAX_CHILDREN: 0,
-                ALT_FIRE: false,
-                NEGATIVE_RECOIL: false,
-            },
-        },
-    ],
-};
-Class.maximumOverdrive = {
-    PARENT: ["overdrive"],
-    LABEL: "Maximum Overdrive",
-    SKILL_CAP: Array(10).fill(255),
-    SKILL: Array(10).fill(255),
-};
 Class.weirdAutoBasic = {
     PARENT: "genericTank",
     LABEL: "Weirdly defined Auto-Basic",
@@ -1084,4 +1041,4 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"];
 
     Class.testing.UPGRADES_TIER_0 = ["diamondShape", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
-    Class.overpowered.UPGRADES_TIER_0 = ["armyOfOne", "godbasic", "maximumOverdrive", "vanquisher", "mummifier"]
+    Class.overpowered.UPGRADES_TIER_0 = ["armyOfOne", "vanquisher", "mummifier"]
