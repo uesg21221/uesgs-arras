@@ -1080,7 +1080,10 @@ class Entity extends EventEmitter {
                 speedVariance: set.PARTICLE_EMITTER.SPEED_VARIANCE ?? 0,
                 range: set.PARTICLE_EMITTER.RANGE ?? 50,
                 rangeVariance: set.PARTICLE_EMITTER.RANGE_VARIANCE ?? 0,
+                angle: set.PARTICLE_EMITTER.ANGLE ? {min: set.PARTICLE_EMITTER.ANGLE.MIN ?? -180, max: set.PARTICLE_EMITTER.ANGLE.MAX ?? 180} : {min: -180, max: 180},
             }
+            this.particleEmitter.angle.min *= Math.PI / 180;
+            this.particleEmitter.angle.max *= Math.PI / 180;
         }
         if (set.CONTROLLERS != null) {
             let toAdd = [];

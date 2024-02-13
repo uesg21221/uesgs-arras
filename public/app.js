@@ -82,12 +82,16 @@ let particles = [];
 class Particle {
     constructor(color, strokeWidth, x, y, size, speed, angle, lifetime, alpha = 1, friction = 0) {
         this.color = color;
+        this.initFov = 2000;
         this.strokeWidth = strokeWidth;
         this.x = x;
         this.y = y;
-        this.size = size;
-        this.speedX = speed * Math.cos(angle) + global.player.vx;
-        this.speedY = speed * Math.sin(angle) + global.player.vy;
+        this.initSize = size;
+        this.size = this.initSize;
+        this.initSpeedX = speed * Math.cos(angle) + global.player.vx;
+        this.initSpeedY = speed * Math.sin(angle) + global.player.vy;
+        this.speedX = this.initSpeedX;
+        this.speedY = this.initSpeedY;
         this.lifetime = lifetime;
         this.alpha = alpha;
         this.friction = friction;
@@ -97,11 +101,15 @@ class Particle {
         particles.push(this);
     }
     iterate () {
+        let scaleFactor = this.initFov / global.player.renderv;
+        this.size = this.initSize * scaleFactor;
+        this.speedX = this.initSpeedX * scaleFactor;
+        this.speedY = this.initSpeedY * scaleFactor;
         this.speedX = util.lerp(this.speedX, 0, this.friction);
         this.speedY = util.lerp(this.speedY, 0, this.friction);
 
-        this.x += this.speedX - global.player.vx;
-        this.y += this.speedY - global.player.vy;
+        this.x += this.speedX - global.player.vx * scaleFactor;
+        this.y += this.speedY - global.player.vy * scaleFactor;
         this.lifetime--;
         if (this.lifetime < 0) this.alpha -= 0.086
         if (this.alpha <= 0) this.delete();
@@ -947,9 +955,11 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), blend));
 
     // Spawn particles
-    if (!global.disconnected && m.particleEmitter && !turretsObeyRot && (Date.now() % (1000 / m.particleEmitter.rate)) <= 25) {
+    if (render.status.getFade() === 1 && !global.disconnected && m.particleEmitter && !turretsObeyRot && (Date.now() % (1000 / m.particleEmitter.rate)) <= 25) {
         let color = gameDraw.modifyColor(instance.color, baseColor);
-        new Particle(color, initStrokeWidth, x, y, drawSize / m.size * m.realSize * m.particleEmitter.size, m.particleEmitter.speed, Math.random() * Math.PI * 2, m.particleEmitter.range, m.particleEmitter.alpha, 0.01);
+        let angleMin = m.particleEmitter.angle.min;
+        let angleMax = m.particleEmitter.angle.max;
+        new Particle(color, initStrokeWidth, x, y, drawSize / m.size * m.realSize * m.particleEmitter.size, m.particleEmitter.speed, rot + Math.random() * (angleMax - angleMin) + angleMin, m.particleEmitter.range, m.particleEmitter.alpha, 0.01);
     }
     
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
