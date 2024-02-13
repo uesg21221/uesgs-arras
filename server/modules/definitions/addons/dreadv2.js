@@ -57,6 +57,9 @@ const buildHexnoughts = true;
 // Set the below variable to true to enable photosphere with 10 auras instead of 6.
 const useOldPhotosphere = false;
 
+// Set the below variable to true to enable the old teal hexagon color.
+const useTealHexdreads = false;
+
 // For hexnought merging
 const hexnoughtScaleFactor = 0.9;
 
@@ -102,7 +105,7 @@ Class.genericHexnought = {
 	PARENT: ["genericDreadnoughtOfficialV2"],
 	BODY: hexnoughtBody,
 	SHAPE: 6,
-	COLOR: 'magenta',
+	COLOR: useTealHexdreads ? 0 : 'magenta',
 	SIZE: 26,
 	DANGER: 12,
 }
@@ -1776,7 +1779,7 @@ Class.skynetOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [12, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		}
 	],
 }
@@ -1803,7 +1806,7 @@ Class.supernovaOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [13, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 		{
 			POSITION: [9, 0, 0, 0, 360, 1],
@@ -1825,7 +1828,7 @@ Class.cipherOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [13, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 	],
 }
@@ -1850,7 +1853,7 @@ Class.interstellarOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [13, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 		{
 			POSITION: [9.5, 0, 0, 0, 360, 1],
@@ -1885,7 +1888,7 @@ Class.gigabyteOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [14.5, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 		{
 			POSITION: [13, 0, 0, 0, 360, 1],
@@ -1899,7 +1902,7 @@ Class.malwareOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [13, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 	],
 }
@@ -1925,7 +1928,7 @@ Class.softwareOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [13, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 	],
 }
@@ -1953,7 +1956,7 @@ Class.photosphereOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [12, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 	],
 }
@@ -1996,7 +1999,7 @@ Class.stratosphereOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [13, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 		{
 			POSITION: [9.5, 0, 0, 0, 360, 1],
@@ -2044,11 +2047,11 @@ Class.astronomicOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [13, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 		{
 			POSITION: [24, 0, 0, 180, 0, 0],
-			TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
 		},
 	],
 }
@@ -2072,11 +2075,11 @@ Class.grandioseOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [13, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 		{
 			POSITION: [24, 0, 0, 180, 0, 0],
-			TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
 		},
 	],
 }
@@ -2151,11 +2154,11 @@ Class.leviathanOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [12, 0, 0, 0, 0, 1],
-			TYPE: ["pentagonLeviathanTopOfficialV2", {MIRROR_MASTER_ANGLE: true}]
+			TYPE: ["pentagonLeviathanTopOfficialV2", {COLOR: -1, MIRROR_MASTER_ANGLE: true}]
 		},
 		{
 			POSITION: [20, 0, 0, 0, 0, 0],
-			TYPE: ["pentagonLeviathanBottomOfficialV2", {MIRROR_MASTER_ANGLE: true}]
+			TYPE: ["pentagonLeviathanBottomOfficialV2", {COLOR: -1, MIRROR_MASTER_ANGLE: true}]
 		},
 	],
 }
@@ -2170,11 +2173,11 @@ Class.valrayvnOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [12, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 		{
 			POSITION: [20, 0, 0, 0, 0, 0],
-			TYPE: ["pentagonLeviathanBottomOfficialV2", {MIRROR_MASTER_ANGLE: true}]
+			TYPE: ["pentagonLeviathanBottomOfficialV2", {COLOR: -1, MIRROR_MASTER_ANGLE: true}]
 		},
 	],
 }
@@ -2197,11 +2200,11 @@ Class.pegasusOfficialV2 = {
 	TURRETS: [
 		{
 			POSITION: [12, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: -1, MIRROR_MASTER_ANGLE: true}],
 		},
 		{
 			POSITION: [20, 0, 0, 0, 0, 0],
-			TYPE: ["pentagonLeviathanBottomOfficialV2", {MIRROR_MASTER_ANGLE: true}]
+			TYPE: ["pentagonLeviathanBottomOfficialV2", {COLOR: -1, MIRROR_MASTER_ANGLE: true}]
 		},
 	],
 }

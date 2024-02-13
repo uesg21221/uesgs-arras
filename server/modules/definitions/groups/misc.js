@@ -1097,7 +1097,12 @@ Class.mothership = {
         }
         return e;
     })(),
-};
+}
+Class.turkey = {
+    PARENT: "mothership",
+    LABEL: "Turkey",
+    UPGRADE_TOOLTIP: "This is currently a placeholder. Expect something more bird-like later."
+}
 Class.arenaCloser = {
     PARENT: ["genericTank"],
     LABEL: "Arena Closer",

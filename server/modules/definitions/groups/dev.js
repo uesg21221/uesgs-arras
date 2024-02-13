@@ -121,8 +121,8 @@ Class.celestials.UPGRADE_COLOR = "lightGreen"
 Class.celestials.SHAPE = 9
 
 Class.eternals = menu("Eternals")
-Class.eternals.COLOR = "teal"
-Class.eternals.UPGRADE_COLOR = "teal"
+Class.eternals.COLOR = "veryLightGrey"
+Class.eternals.UPGRADE_COLOR = "veryLightGrey"
 Class.eternals.SHAPE = 11
 
 Class.devBosses = menu("Developers")
@@ -186,7 +186,6 @@ function compileMatrix(matrix, matrix2Entrance) {
         };
     }
 }
-
 function connectMatrix(matrix, matrix2Entrance) {
     let matrixWidth = matrix[0].length,
         matrixHeight = matrix.length;
@@ -218,7 +217,6 @@ let generatorMatrix = [
     [ "alphaPentagon" , "shinyAlphaPentagon" , "legendaryAlphaPentagon" , "shadowAlphaPentagon" , "rainbowAlphaPentagon" , "transAlphaPentagon" , "AlphaPentagonRelic" ],
     [ "sphere"        , "cube"               , "tetrahedron"            , "octahedron"          , "dodecahedron"         , "icosahedron"        , "tesseract"          ],
 ],
-
 gemRelicMatrix = [];
 for (let tier of [ "", "Egg", "Square", "Triangle", "Pentagon", "BetaPentagon", "AlphaPentagon" ]) {
     let row = [];
@@ -307,12 +305,6 @@ Class.diamondShape = {
     SHAPE: 4.5
 };
 
-Class.rotatedTrap = {
-    PARENT: ["basic"],
-    LABEL: "Rotated Inverted Body",
-    SHAPE: -3.5
-};
-
 Class.mummyHat = {
     SHAPE: 4.5,
     COLOR: -1
@@ -360,39 +352,6 @@ Class.mummifier = {
         TYPE: ["mummyHat"]
     }]
 };
-
-Class.colorMan = {
-    PARENT: ["genericTank"],
-    LABEL: "Testing Animated Colors",
-    SHAPE: 4,
-    COLOR: "rainbow",
-    TURRETS: [{
-        POSITION: [20, -20, -20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedBlueRed" }
-    },{
-        POSITION: [20,  0 , -20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedBlueGrey" }
-    },{
-        POSITION: [20,  20, -20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedGreyBlue" }
-    },{
-        POSITION: [20, -20,  0 , 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedRedGrey" }
-    },{
-        POSITION: [20,  20,  0 , 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedGreyRed" }
-    },{
-        POSITION: [20,  20,  20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedLesbian" }
-    },{
-        POSITION: [20,  0 ,  20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedTrans" }
-    },{
-        POSITION: [20,  20,  20, 0, 0, 1],
-        TYPE: { SHAPE: 4, COLOR: "animatedBi" }
-    }]
-};
-
 Class.miscTestHelper2 = {
     PARENT: ["genericTank"],
     LABEL: "Turret Reload 3",
@@ -695,7 +654,7 @@ Class.auraHealer = {
 
 Class.ghoster_ghostForm = {
     PARENT: ['genericTank'],
-    TOOLTIP: 'You are now in ghost form, roam around and find your next target. Will turn back in 5 seconds',
+    TOOLTIP: 'You are now hidden, roam around and find your next target. You will be visible again in 5 seconds',
     LABEL: 'Ghoster',
     BODY: {
         SPEED: 20,
@@ -711,7 +670,7 @@ Class.ghoster_ghostForm = {
 Class.ghoster = {
     PARENT: ['genericTank'],
     LABEL: 'Ghoster',
-    TOOLTIP: 'Shooting will turn you into a ghost for 5 seconds',
+    TOOLTIP: 'Shooting will hide you for 5 seconds',
     BODY: {
         SPEED: base.SPEED,
         ACCELERATION: base.ACCEL,
@@ -881,49 +840,6 @@ Class.armyOfOne = {
         }
     ],
 };
-Class.godbasic = {
-    PARENT: ["genericTank"],
-    LABEL: "God Basic",
-    SKILL_CAP: [31, 31, 31, 31, 31, 31, 31, 31, 31, 31],
-    SKILL: [ 31, 31, 31, 31, 31, 31, 31, 31, 31, 31 ],
-    BODY: {
-        ACCELERATION: base.ACCEL * 1,
-        SPEED: base.SPEED * 1,
-        HEALTH: base.HEALTH * 1,
-        DAMAGE: base.DAMAGE * 1,
-        PENETRATION: base.PENETRATION * 1,
-        SHIELD: base.SHIELD * 1,
-        REGEN: base.REGEN * 1,
-        FOV: base.FOV * 1,
-        DENSITY: base.DENSITY * 1,
-        PUSHABILITY: 1,
-        HETERO: 3,
-    },
-    GUNS: [
-        {
-            POSITION: [18, 8, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: "bullet",
-                COLOR: "grey",
-                LABEL: "",
-                STAT_CALCULATOR: 0,
-                WAIT_TO_CYCLE: false,
-                AUTOFIRE: false,
-                SYNCS_SKILLS: false,
-                MAX_CHILDREN: 0,
-                ALT_FIRE: false,
-                NEGATIVE_RECOIL: false,
-            },
-        },
-    ],
-};
-Class.maximumOverdrive = {
-    PARENT: ["overdrive"],
-    LABEL: "Maximum Overdrive",
-    SKILL_CAP: Array(10).fill(255),
-    SKILL: Array(10).fill(255),
-};
 Class.weirdAutoBasic = {
     PARENT: "genericTank",
     LABEL: "Weirdly defined Auto-Basic",
@@ -1016,8 +932,6 @@ Class['Team' + TEAM_ENEMIES] = {
 Class.teams.UPGRADES_TIER_0.push('Team' + TEAM_ROOM, 'Team' + TEAM_ENEMIES);
 
 Class.testing = menu("Testing")
-Class.features = menu("Features")
-Class.overpowered = menu("Overpowered")
 
 Class.addons = menu("Addon Entities")
 Class.addons.UPGRADES_TIER_0 = []
@@ -1074,8 +988,8 @@ testLayeredBoss.addLayer({turret: {
 }}, true);
 
 Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
-    Class.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "spectator", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"];
-        Class.unavailable.UPGRADES_TIER_0 = ["healer"];
+    Class.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "arenaCloser", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "turkey"];
+        Class.unavailable.UPGRADES_TIER_0 = ["healer", "whirlwind"];
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
 
@@ -1089,8 +1003,6 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"];
         Class.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "julius", "genghis", "napoleon"];
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
-        Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss"];
+        Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"];
 
-    Class.testing.UPGRADES_TIER_0 = ["features", "overpowered", "whirlwind", "vanquisher", "mummifier", "tracker3"];
-        Class.features.UPGRADES_TIER_0 = ["diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
-        Class.overpowered.UPGRADES_TIER_0 = ["armyOfOne", "godbasic", "maximumOverdrive"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
