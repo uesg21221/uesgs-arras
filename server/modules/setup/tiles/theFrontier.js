@@ -22,7 +22,7 @@ spawnUndergroundNatural = (tile, layeredSet, kind) => {
 undergroundTick = tile => {
     if (++tile.data.foodSpawnCooldown > c.FOOD_SPAWN_COOLDOWN_UNDERGROUND) {
         if (tile.data.foodCount < c.FOOD_CAP_UNDERGROUND && Math.random() < c.FOOD_SPAWN_CHANCE_UNDERGROUND) {
-            spawnUndergroundNatural(tile, c.FOOD_TYPES_UNDERGROUND, 'food');
+            // spawnUndergroundNatural(tile, c.FOOD_TYPES_UNDERGROUND, 'food');
         }
     }
 },

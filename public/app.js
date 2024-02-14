@@ -80,16 +80,16 @@ let animations = window.animations = {
 
 let particles = [];
 class Particle {
-    constructor(color, strokeWidth, x, y, size, speed, angle, lifetime, alpha = 1, friction = 0) {
+    constructor(color, initFov, strokeWidth, x, y, size, speedX, speedY, lifetime, alpha = 1, friction = 0) {
         this.color = color;
-        this.initFov = 2000;
+        this.initFov = initFov;
         this.strokeWidth = strokeWidth;
         this.x = x;
         this.y = y;
         this.initSize = size;
         this.size = this.initSize;
-        this.initSpeedX = speed * Math.cos(angle) + global.player.vx;
-        this.initSpeedY = speed * Math.sin(angle) + global.player.vy;
+        this.initSpeedX = speedX;
+        this.initSpeedY = speedY;
         this.speedX = this.initSpeedX;
         this.speedY = this.initSpeedY;
         this.lifetime = lifetime;
@@ -100,16 +100,15 @@ class Particle {
 
         particles.push(this);
     }
-    iterate () {
-        let scaleFactor = this.initFov / global.player.renderv;
-        this.size = this.initSize * scaleFactor;
-        this.speedX = this.initSpeedX * scaleFactor;
-        this.speedY = this.initSpeedY * scaleFactor;
+    iterate (ratio, vx, vy) {
+        this.size = this.initSize * this.initFov / global.player.renderv;
+        this.speedX = this.initSpeedX * ratio;
+        this.speedY = this.initSpeedY * ratio;
         this.speedX = util.lerp(this.speedX, 0, this.friction);
         this.speedY = util.lerp(this.speedY, 0, this.friction);
 
-        this.x += this.speedX - global.player.vx * scaleFactor;
-        this.y += this.speedY - global.player.vy * scaleFactor;
+        this.x += this.speedX - vx;
+        this.y += this.speedY - vy;
         this.lifetime--;
         if (this.lifetime < 0) this.alpha -= 0.086
         if (this.alpha <= 0) this.delete();
@@ -959,7 +958,11 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         let color = gameDraw.modifyColor(instance.color, baseColor);
         let angleMin = m.particleEmitter.angle.min;
         let angleMax = m.particleEmitter.angle.max;
-        new Particle(color, initStrokeWidth, x, y, drawSize / m.size * m.realSize * m.particleEmitter.size, m.particleEmitter.speed, rot + Math.random() * (angleMax - angleMin) + angleMin, m.particleEmitter.range, m.particleEmitter.alpha, 0.01);
+        let angle = rot + Math.random() * (angleMax - angleMin) + angleMin;
+        let speedX = m.particleEmitter.speed * Math.cos(angle);
+        let speedY = m.particleEmitter.speed * Math.sin(angle);
+
+        new Particle(color, global.player.renderv, initStrokeWidth, x, y, drawSize / m.size * m.realSize * m.particleEmitter.size, speedX, speedY, m.particleEmitter.range, m.particleEmitter.alpha, 0.01);
     }
     
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
@@ -1345,6 +1348,8 @@ function drawFloor(px, py, ratio) {
     ctx.globalAlpha = 1;
 }
 
+let oldpx = 0;
+let oldpy = 0;
 function drawEntities(px, py, ratio) {
     // Iterate particles
     if (global.disconnected) {
@@ -1353,10 +1358,12 @@ function drawEntities(px, py, ratio) {
         }
     }
     for (let p of particles) {
-        p.iterate();
+        p.iterate(ratio, px - oldpx, py - oldpy);
         p.draw(ctx);
     }
     particles = particles.filter(p => p.active);
+    oldpx = px;
+    oldpy = py;
 
     // Draw things
     for (let instance of global.entities) {
