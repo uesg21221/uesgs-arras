@@ -844,6 +844,7 @@ const socketInit = port => {
             case 'info': // info
                 global.message = m[0];
                 console.log(m[0]);
+                break;
             case 'c': // force camera move
                 global.player.renderx = global.player.cx = m[0];
                 global.player.rendery = global.player.cy = m[1];
