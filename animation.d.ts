@@ -23,42 +23,15 @@ type AnimationKeyframe = {
   MOTION: AnimationMotion;
 };
 
-type AnimationMotion = AnimationMotionBody | AnimationMotionGun | AnimationMotionTurret
-
-type AnimationMotionGun = {
-    TYPE: Omit<AnimationTypeValues, 'body' | 'turret' >;
-    MOTION: {
-        MOVE?: [number, number];
-        SCALE?: [number, number];
-        ROTATE?: number; // In Degrees
-        COLOR?: TankColor;
-        ASPECT?: number;
-        ALPHA?: number;
-    }
+type AnimationMotion = {
+    MOVE?: [number, number];
+    SCALE?: [number, number] | number; // 2D Vector for guns, 1 number for Turrets and Bodies.
+    ROTATE?: number; // In Degrees
+    COLOR?: TankColor;
+    ASPECT?: number; // Errors if used for any other types except 'gun'
+    SHAPE?: TankShape; // Errors if used for type 'gun'
+    ALPHA?: number;
 }
-type AnimationMotionTurret = {
-  TYPE: Omit<AnimationTypeValues, "body" | "gun">;
-  MOTION: {
-    MOVE?: [number, number];
-    SCALE?: number;
-    ROTATE?: number; // In Degrees
-    COLOR?: TankColor;
-    SHAPE?: TankShape
-    ALPHA?: number;
-  };
-};
-
-type AnimationMotionBody = {
-  TYPE: Omit<AnimationTypeValues, "turret" | "gun">;
-  MOTION: {
-    MOVE?: [number, number];
-    SCALE?: number;
-    ROTATE?: number; // In Degrees
-    COLOR?: TankColor;
-    SHAPE?: TankShape;
-    ALPHA?: number;
-  };
-};
 
 // -------------------------------
 
