@@ -347,7 +347,7 @@ class Gun {
             o.team = this.body.team;
             o.refreshBodyAttributes();
             o.life();
-            this.master.ON(undefined, this.altFire ? 'altFire' : 'fire', { gun: this, store: this.store, globalStore: this.globalStore, child: o });
+            this.master.triggerOn(undefined, this.altFire ? 'altFire' : 'fire', { gun: this, store: this.store, globalStore: this.globalStore, child: o });
             return;
         }
 
@@ -367,7 +367,7 @@ class Gun {
         this.bulletInit(o);
         o.coreSize = o.SIZE;
 
-        this.master.ON(undefined, this.altFire ? 'altFire' : 'fire', { gun: this, store: this.store, globalStore: this.globalStore, child: o });
+        this.master.triggerOn(undefined, this.altFire ? 'altFire' : 'fire', { gun: this, store: this.store, globalStore: this.globalStore, child: o });
     }
     bulletInit(o) {
         // Define it by its natural properties
@@ -1270,7 +1270,7 @@ class Entity extends EventEmitter {
         }
 
         if (this.onDef != null) {
-            this.ON(this.onDef, 'define')
+            this.triggerOn(this.onDef, 'define')
         }
 
         this.defs = [];
@@ -1422,48 +1422,93 @@ class Entity extends EventEmitter {
             });
         }
     }
-    ON(on = this.onDef, eventName, value) {
-        if (on == null) return
-        for (let onPairs of on) {
+    triggerOn(onDef = this.onDef, eventTriggered, value) {
+        if (onDef == null) return
+        const commonValues = {
+            body: this,
+            masterStore: this.store,
+            globalMasterStore: this.globalStore,
+            gunStore: value.store,
+            globalGunStore: value.globalStore
+        }
+        for (let onPairs of onDef) {
             switch (onPairs.event) {
                 case 'fire':
-                    if (eventName == 'fire') onPairs.handler({
-                        body: this,
+                    if (eventTriggered == 'fire') onPairs.handler({
+                        ...commonValues,
                         gun: value.gun,
                         child: value.child,
-                        masterStore: this.store,
-                        globalMasterStore: this.globalStore,
-                        gunStore: value.store,
-                        globalGunStore: value.globalStore
                      })
                     break;
                 case 'altFire':
-                    if (eventName == 'altFire') onPairs.handler({
-                        body: this,
+                    if (eventTriggered == 'altFire') onPairs.handler({
+                        ...commonValues,
                         gun: value.gun,
                         child: value.child,
-                        masterStore: this.store,
-                        globalMasterStore: this.globalStore,
-                        gunStore: value.store,
-                        globalGunStore: value.globalStore
                      })
                 case 'death':
-                    if (eventName == 'death') onPairs.handler({ body: this, killers: value.killers, killTools: value.killTools })
+                    if (eventTriggered == 'death') onPairs.handler({ 
+                        ...commonValues,
+                        killers: value.killers, 
+                        killTools: value.killTools 
+                    })
                     break;
                 case 'collide':
-                    if (eventName == 'collide') onPairs.handler({ instance: value.instance, other: value.other })
+                    if (eventTriggered == 'collide') onPairs.handler({ 
+                        ...commonValues,
+                        instance: value.instance, 
+                        other: value.other 
+                    })
                     break;
                 case 'damage':
-                    if (eventName == 'damage') onPairs.handler({ body: this, damageInflictor: value.damageInflictor, damageTool: value.damageTool })
+                    if (eventTriggered == 'damage') onPairs.handler({ 
+                        ...commonValues,
+                        damageInflictor: value.damageInflictor, 
+                        damageTool: value.damageTool 
+                    })
                     break;
                 case 'upgrade':
-                    if (eventName == 'upgrade') onPairs.handler({ body: this, oldEntity: value.oldEntity })
+                    if (eventTriggered == 'upgrade') onPairs.handler({ 
+                        ...commonValues,
+                        oldEntity: value.oldEntity 
+                    })
                     break;
                 case 'tick':
-                    if (eventName == 'tick') onPairs.handler({ body: this })
+                    if (eventTriggered == 'tick') onPairs.handler({ 
+                        ...commonValues
+                    })
                     break;
                 case 'define':
-                    if (eventName == 'define') onPairs.handler({ body: this })
+                    if (eventTriggered == 'define') onPairs.handler({ 
+                        ...commonValues
+                     })
+                    break;
+                case 'trigger':
+                    if (eventTriggered == 'trigger') onPairs.handler({
+                        ...commonValues,
+                        info: value.info
+                    })
+                    break;
+                case 'animationStart':
+                    if (eventTriggered == 'animationStart') onPairs.handler({
+                        ...commonValues,
+                        animationName: value.animationName,
+                        time: value.time
+                    })
+                    break;
+                case 'animationIteration':
+                    if (eventTriggered == 'animationStart') onPairs.handler({
+                        ...commonValues,
+                        animationName: value.animationName,
+                        time: value.time
+                    })
+                    break;
+                case 'animationEnd':
+                    if (eventTriggered == 'animationStart') onPairs.handler({
+                        ...commonValues,
+                        animationName: value.animationName,
+                        time: value.time
+                    })
                     break;
             }
         }
@@ -1655,12 +1700,12 @@ class Entity extends EventEmitter {
                 }
                 this.upgrades = [];
                 this.define(upgradeClass);
-                this.ON(this.onDef, "upgrade", { oldEntity: old })
+                this.triggerOn(this.onDef, "upgrade", { oldEntity: old })
             } else {
                 this.defs.splice(upgradeBranch, 1, ...upgradeClass);
                 this.upgrades = [];
                 this.define(this.defs);
-                this.ON(this.onDef, "upgrade", { oldEntity: old })
+                this.triggerOn(this.onDef, "upgrade", { oldEntity: old })
             }
             if (this.colorUnboxed.base == '-1' || this.colorUnboxed.base == 'mirror') {
                 this.colorUnboxed.base = getTeamColor((c.MODE == 'ffa' || c.GROUPS) ? TEAM_RED : this.team);
@@ -2019,7 +2064,7 @@ class Entity extends EventEmitter {
                 damageInflictor.push(instance.master)
                 damageTool.push(instance)
             }
-            this.onDef != null ? this.ON(undefined, 'damage', { damageInflictor, damageTool }) : null
+            this.onDef != null ? this.triggerOn(undefined, 'damage', { damageInflictor, damageTool }) : null
             // TODO: find out how to fix 'collide' and 'damage'
         }
         // Life-limiting effects
@@ -2101,7 +2146,7 @@ class Entity extends EventEmitter {
             }
             // Remove duplicates
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));
-            this.onDef != null ? this.ON(this.onDef, 'death', { killers, killTools }) : null
+            this.onDef != null ? this.triggerOn(this.onDef, 'death', { killers, killTools }) : null
             // If there's no valid killers (you were killed by food), change the message to be more passive
             let killText = notJustFood ? "" : "You have been killed by ",
                 dothISendAText = this.settings.givesKillMessage;
