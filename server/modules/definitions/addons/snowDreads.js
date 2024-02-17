@@ -1230,9 +1230,10 @@ function addTrinoughtAuraRing(heal = false) {
 	let output = [],
 		TYPE = heal ? "trinoughtSmallHealAura" : "trinoughtSmallAura";
 	for (let i = 0; i < 3; i++) {
+		let theta = (120 * i + 60) * Math.PI / 180;
 		output.push(
 			{
-				POSITION: [3.5, 10.5, 0, 120*i+60, 360, 1],
+				POSITION: [3.5, 10.5 * Math.cos(theta), 10.5 * Math.sin(theta), 0, 360, 1],
 				TYPE,
 			},
 		);
@@ -6805,9 +6806,11 @@ function makeHexnoughtBodyV2(body) {
 			for (let i = 0; i < turretRingLoopLength; i++) {
 				for (let j = 0; j < 6; j++) {
 					turret = body.TURRETS[t + i * 5];
+					let theta = (turret.POSITION[3] / 6 * 5 + 60 * j) * Math.PI / 180;
+					let displacement = turret.POSITION[1] * hexnoughtScaleFactor ** 0.5;
 					TURRETS.push(
 						{
-							POSITION: [turret.POSITION[0] * hexnoughtScaleFactor, turret.POSITION[1] * hexnoughtScaleFactor ** 0.5, turret.POSITION[2], turret.POSITION[3] / 6 * 5 + 60 * j, turret.POSITION[4], turret.POSITION[5]],
+							POSITION: [turret.POSITION[0] * hexnoughtScaleFactor, displacement * Math.cos(theta), displacement * Math.sin(theta), 0, turret.POSITION[4], turret.POSITION[5]],
 							TYPE: turret.TYPE,
 						}
 					)

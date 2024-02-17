@@ -3,19 +3,18 @@ let { pickFromChanceSet, spawnNatural } = require('./misc.js'),
 spawnUndergroundNatural = (tile, layeredSet, kind) => {
     let o = new Entity(tile.randomInside());
     o.define(pickFromChanceSet(pickFromChanceSet(layeredSet)));
-    // Abort if colliding
-    for (let entity of frontierMazeWalls) {
-        if (entity.type == 'wall' && Math.abs(o.x - entity.x) < (entity.size + o.size) && Math.abs(o.y - entity.y) < (entity.size + o.size)) {
-            o.kill();
-            return;
-        }
-    }
     
     tile.data.foodSpawnCooldown = 0;
     o.facing = ran.randomAngle();
     o.team = TEAM_ENEMIES;
     o.on('dead', () => tile.data[kind + 'Count']--);
     tile.data[kind + 'Count']++;
+    // Abort if colliding
+    for (let entity of frontierMazeWalls) {
+        if (entity.type == 'wall' && Math.abs(o.x - entity.x) < (entity.size + o.size) && Math.abs(o.y - entity.y) < (entity.size + o.size)) {
+            o.kill();
+        }
+    }
     return o;
 },
 
