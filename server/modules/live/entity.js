@@ -1513,6 +1513,9 @@ class Entity extends EventEmitter {
             }
         }
     }
+    triggerAnimation() {
+        // TODO
+    }
     refreshBodyAttributes() {
         let accelerationMultiplier = 1,
             topSpeedMultiplier = 1,
