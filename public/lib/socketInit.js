@@ -841,6 +841,9 @@ const socketInit = port => {
                 global.gameHeight = m[1];
                 global.roomSetup = JSON.parse(m[2]);
                 break;
+            case 'info': // info
+                global.message = m[0];
+                console.log(m[0]);
             case 'c': // force camera move
                 global.player.renderx = global.player.cx = m[0];
                 global.player.rendery = global.player.cy = m[1];
