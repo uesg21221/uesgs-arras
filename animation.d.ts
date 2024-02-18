@@ -47,18 +47,20 @@ interface CommonOnEventHandlerTriggerValues {
     body?: Entity;
     masterStore?: Entity['store'];
     gunStore?: Gun['store'];
-    globalGunStore?: Gun['globalStore'];
-    globalMasterStore?: Entity['globalStore'];
 }
 
 interface FireTriggerValues extends CommonOnEventHandlerTriggerValues {
-    gun?: Gun;
-    child?: Entity;
+  gun?: Gun;
+  child?: Entity;
+  globalGunStore?: Gun["globalStore"];
+  globalMasterStore?: Entity["globalStore"];
 }
 
 interface AltFireTriggerValues extends CommonOnEventHandlerTriggerValues {
-    gun?: Gun;
-    child?: Entity;
+  gun?: Gun;
+  child?: Entity;
+  globalGunStore?: Gun["globalStore"];
+  globalMasterStore?: Entity["globalStore"];
 }
 
 interface DeathTriggerValues extends CommonOnEventHandlerTriggerValues {

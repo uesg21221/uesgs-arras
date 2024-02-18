@@ -1428,8 +1428,6 @@ class Entity extends EventEmitter {
             body: this,
             masterStore: this.store,
             globalMasterStore: this.globalStore,
-            gunStore: value.store,
-            globalGunStore: value.globalStore
         }
         for (let onPairs of onDef) {
             switch (onPairs.event) {
@@ -1438,6 +1436,8 @@ class Entity extends EventEmitter {
                         ...commonValues,
                         gun: value.gun,
                         child: value.child,
+                        gunStore: value.store,
+                        globalGunStore: value.store
                      })
                     break;
                 case 'altFire':
@@ -1445,6 +1445,8 @@ class Entity extends EventEmitter {
                         ...commonValues,
                         gun: value.gun,
                         child: value.child,
+                        gunStore: value.store,
+                        globalGunStore: value.store
                      })
                 case 'death':
                     if (eventTriggered == 'death') onPairs.handler({ 
