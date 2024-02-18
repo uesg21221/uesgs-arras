@@ -11,7 +11,6 @@ type TankColor = number | string | {
     }
 
 type AnimationEasingValues = 'linear' | 'easeIn' | 'easeOut' | 'easeInOut' | 'step' | ((x: number) => number)
-type AnimationTypeValues = 'body' | 'gun' | 'turret'
 
 type AnimationSpec = Record<string, AnimationPreset>
 type AnimationPreset = Array<AnimationKeyframe>
@@ -19,7 +18,6 @@ type AnimationPreset = Array<AnimationKeyframe>
 type AnimationKeyframe = {
   TIME: number; // Percentage
   EASING: AnimationEasingValues;
-  TYPE: AnimationTypeValues;
   MOTION: AnimationMotion;
 };
 

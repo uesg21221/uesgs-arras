@@ -784,6 +784,7 @@ class Entity extends EventEmitter {
         this.glow = {radius: null, color: null, alpha: 1, recursion: 1}
         this.invisible = [0, 0];
         this.alphaRange = [0, 1];
+        this.animationPresets = {}
         // Define it
         this.SIZE = 1;
         this.sizeMultiplier = 1;
@@ -1109,6 +1110,7 @@ class Entity extends EventEmitter {
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
         if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
+        if (set.ANIMATION != null) this.animationPresets = set.ANIMATION
         if (set.TEAM != null) {
             this.team = set.TEAM;
             if (!sockets.players.length) {
@@ -1515,8 +1517,15 @@ class Entity extends EventEmitter {
             }
         }
     }
-    triggerAnimation() {
-        // TODO
+    triggerAnimation(animationPreset, {type, identifier}, duration) {
+        let preset = animationPreset.sort((a, b) => a.TIME - b.TIME)
+        console.log(preset)
+
+        setSyncedTimeout(() => {
+            this.SIZE = preset[preset.length - 1].MOTION.SCALE
+
+            console.log('animationEnd')
+        }, duration * 22)
     }
     refreshBodyAttributes() {
         let accelerationMultiplier = 1,

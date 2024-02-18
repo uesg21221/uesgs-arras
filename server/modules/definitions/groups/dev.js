@@ -893,6 +893,57 @@ Class.bulletSpawnTest = {
     ]
 }
 
+Class.animationTest = {
+    PARENT: 'genericTank',
+    LABEL: "Animation System Testing",
+    GUNS: [{
+        POSITION: {},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic]),
+            TYPE: 'bullet',
+            IDENTIFIER: 'mainGun'
+        }
+    }, {
+        POSITION: {LENGTH: 0, WIDTH: 0},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+            TYPE: ['bullet', {ALPHA: 0}],
+            ALPHA: 0,
+            ALT_FIRE: true
+        }
+    }],
+    ANIMATION: {
+        gunOut: [{
+            TIME: 0,
+            EASING: 'linear',
+            MOTION: {
+                MOVE: [0, 0]
+            }
+        }, {
+            TIME: 1,
+            EASING: 'linear',
+            MOTION: {
+                MOVE: [0, 10]
+            }
+        }],
+        grow: [{
+            TIME: 1,
+            EASING: 'linear',
+            MOTION: {
+                SCALE: 30
+            }
+        }]
+    },
+
+    ON: [{
+        event: 'altFire',
+        handler: ({ body }) => {
+            body.sendMessage('alt fire')
+            body.triggerAnimation(body.animationPresets.grow, {type: 'gun', identifier: 'mainGun'}, 2)
+        }
+    }]
+}
+
 Class.levels = menu("Levels")
 Class.levels.UPGRADES_TIER_0 = []
 for (let i = 0; i < 12; i++) {
@@ -1005,4 +1056,4 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"];
 
-    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "animationTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
