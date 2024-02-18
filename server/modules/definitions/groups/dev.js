@@ -927,10 +927,16 @@ Class.animationTest = {
             }
         }],
         grow: [{
-            TIME: 1,
+            TIME: 0,
             EASING: 'linear',
             MOTION: {
-                SCALE: 30
+                SCALE: 20
+            }
+        }, {
+            TIME: 5,
+            EASING: 'linear',
+            MOTION: {
+                SCALE: 50
             }
         }]
     },
