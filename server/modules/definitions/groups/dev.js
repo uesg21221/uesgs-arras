@@ -933,7 +933,7 @@ Class.animationTest = {
                 SCALE: 20
             }
         }, {
-            TIME: 5,
+            TIME: 1,
             EASING: 'linear',
             MOTION: {
                 SCALE: 50

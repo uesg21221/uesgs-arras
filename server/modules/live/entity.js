@@ -785,6 +785,14 @@ class Entity extends EventEmitter {
         this.invisible = [0, 0];
         this.alphaRange = [0, 1];
         this.animationPresets = {}
+        this.currentAnimation = {
+            time: 0,
+            preset: null,
+            name: null,
+            duration: 0,
+            keyframe: 0
+        }
+        this.isPlayingAnimation = false
         // Define it
         this.SIZE = 1;
         this.sizeMultiplier = 1;
@@ -1110,7 +1118,14 @@ class Entity extends EventEmitter {
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
         if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
-        if (set.ANIMATION != null) this.animationPresets = set.ANIMATION
+        if (set.ANIMATION != null) {
+            this.animationPresets = set.ANIMATION
+            for (let preset in this.animationPresets) {
+                this.animationPresets[preset].name = preset
+                this.animationPresets[preset].isAnonymous = false
+                this.animationPresets[preset].sort((a, b) => a.TIME - b.TIME)
+            }
+        }
         if (set.TEAM != null) {
             this.team = set.TEAM;
             if (!sockets.players.length) {
@@ -1518,17 +1533,34 @@ class Entity extends EventEmitter {
         }
     }
     triggerAnimation(animationPreset, { type, identifier }, duration) {
-        
+        if (this.isPlayingAnimation) {
+            throw new Error('Cannot trigger animation while another animation is already playing.');
+        }
+        if (animationPreset.name == null) animationPreset.isAnonymous = true // For presets that gets written directly into the arguments.
+        this.isPlayingAnimation = true;
+        this.currentAnimation.preset = animationPreset;
+        this.currentAnimation.duration = duration;
+        this.currentAnimation.name = animationPreset.name;
+        this.currentAnimation.time = 0;
+        this.currentAnimation.keyframe = 0;
     }
-    animationIterate(animationPreset, time) {
-        
+    animationIterate() {
+        // how tf do i do this
+    }
+    calculateInterpoletedValuesBetweenKeyframes(currentKeyframe, nextKeyframe, progress) {
+        const interpolatedValues = {};
+        for (const prop in currentKeyframe.MOTION) {
+            const interpolatedValue = this.interpolate(currentKeyframe.MOTION[prop], nextKeyframe.MOTION[prop], progress, currentKeyframe.EASING);
+            interpolatedValues[prop] = interpolatedValue;
+        }
+        return interpolatedValues;
     }
     interpolate(start, end, progress, easing) {
         if (Array.isArray(start) && Array.isArray(end)) {
             if (start.length !== end.length) {
                 throw new SyntaxError('Start and end values must have the same length for array interpolation.');
             }
-            return start.map((startValue, index) => interpolate(startValue, end[index], progress, easing));
+            return start.map((startValue, index) => this.interpolate(startValue, end[index], progress, easing));
         } else {
             switch (easing) {
                 case 'linear':

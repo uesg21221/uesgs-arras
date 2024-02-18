@@ -242,6 +242,9 @@ const gameloop = () => {
         }
         // Update collisions.
         my.collisionArray = [];
+        if (my.isPlayingAnimation) {
+            my.animationIterate() // Play animations
+        }
         if (my.onDef != null) my.triggerOn(undefined, 'tick')
     }
     logs.entities.mark();
