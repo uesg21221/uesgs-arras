@@ -9,6 +9,17 @@ const dark1 = {BASE: baseColor, BRIGHTNESS_SHIFT: -7.5, SATURATION_SHIFT: 1.25};
 
 const trim = '#cb52f7';
 
+function decoAuraProperties(type) {
+    return {
+        SHOOT_SETTINGS: combineStats([]),
+        TYPE: type,
+        MAX_CHILDREN: 1,
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+        BORDERLESS: true,
+    }
+}
+
 const shape3 = "M 0.78 -1.35 L -1.56 0 L -0.9 0 L -0.44 -0.26 L -0.35 -0.61 L 0 -0.51 L 0.45 -0.78 Z" +
             "M -1.56 0 L 0.78 1.35 L 0.45 0.78 L 0 0.51 L -0.35 0.61 L -0.44 0.26 L -0.9 0 Z" + 
             "M 0.78 1.35 L 0.78 -1.35 L 0.45 -0.78 L 0.45 -0.25 L 0.7 0 L 0.45 0.25 L 0.45 0.78 Z";
@@ -23,6 +34,7 @@ Class.voidlingInsert3 = {
 
 Class.voidlingCore1 = {
     PARENT: 'auraBase',
+    BODY: {DAMAGE: 0},
     FACING_TYPE: ["spin", {speed: -1}],
     SHAPE: 6,
     COLOR: 6,
@@ -35,6 +47,7 @@ Class.voidlingCore1 = {
 }
 Class.voidlingCore2 = {
     PARENT: 'auraBase',
+    BODY: {DAMAGE: 0},
     FACING_TYPE: ["spin", {speed: 0.65}],
     SHAPE: 6,
     COLOR: 6,
@@ -91,15 +104,16 @@ Class.relativityMissileJet = {
 }
 Class.relativityMissile = {
     PARENT: 'swarm',
+    TYPE: 'bullet',
     BODY: {
         PENETRATION: 1,
-        SPEED: 3.75,
+        SPEED: 3,
         RANGE: 90,
         DENSITY: 1.25,
         HEALTH: 0.165,
         DAMAGE: 6,
         PUSHABILITY: 0.3,
-        ACCELERATION: 1,
+        ACCELERATION: 1.5,
     },
     SHAPE: "M 1.1 0 L -1.1 1 L -0.5 0 L -1.1 -1 Z",
     COLOR: baseColor,
@@ -134,7 +148,13 @@ Class.relativityMissile = {
         }, {
             POSITION: [6, 2.75, 0.001, -1, 0, 180, 0],
             PROPERTIES: {COLOR: dark1, DRAW_ABOVE: true}
-        }, { // Thruster
+        }, { // Thruster (functional)
+            POSITION: [0, 14, 0.001, 6.5, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.thruster, {recoil: 1.2, reload: 0.5, range: 0}]),
+                TYPE: 'bullet',
+            }
+        }, { // Thruster (decorative)
             POSITION: [5.75, 14, 0.001, 6.5, 0, 180, 0],
             PROPERTIES: {COLOR: baseColor}
         }, 
@@ -146,6 +166,76 @@ Class.relativityMissile = {
         }
     ]
 }
+Class.relativityBombFlare = {
+    PARENT: 'auraBase',
+    BODY: {DAMAGE: 0},
+    LAYER: -1,
+    FACING_TYPE: ["spin", {speed: -0.025}],
+    DIE_AT_RANGE: false,
+    SHAPE: "M 1 0 L 0.433 0.25 L 0.5 0.866 L 0 0.5 L -0.5 0.866 L -0.433 0.25 L -1 0 L -0.433 -0.25 L -0.5 -0.866 L 0 -0.5 L 0.5 -0.866 L 0.433 -0.25 Z",
+    COLOR: trim,
+    ALPHA: 0.75
+}
+Class.relativityBombShockwave = {
+    PARENT: 'bullet',
+    MOTION_TYPE: 'withMaster', 
+    HITS_OWN_TYPE: 'never', 
+    PERSISTS_AFTER_DEATH: true, 
+    ALPHA: 0.4,
+    COLOR: trim,
+}
+Class.relativityBomb = {
+    PARENT: 'bullet',
+    FACING_TYPE: ['spin', {speed: 0.04}],
+    SHAPE: 5, 
+    COLOR: baseColor,
+    GUNS: [
+        {
+            POSITION: [0, 85, 0, 0, 0, 0, 0],
+            PROPERTIES: decoAuraProperties(['relativityBombFlare', {
+                ALPHA: 0.45, 
+                COLOR: {BASE: trim, BRIGHTNESS_SHIFT: 10, SATURATION_SHIFT: 0.7}, 
+                FACING_TYPE: ["spin", {speed: 0.015}],
+            }])
+        }, {
+            POSITION: [0, 60, 0, 0, 0, 0, 0],
+            PROPERTIES: decoAuraProperties('relativityBombFlare')
+        }, {
+            POSITION: [0, 10, 0, 0, 0, 0, 999],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, {speed: 0, maxSpeed: 0, damage: 0.75, health: 1e6, size: 15, range: 0.06}]),
+                TYPE: 'relativityBombShockwave',
+                SHOOT_ON_DEATH: true,
+            }
+        }, {
+            POSITION: [0, 10, 0, 0, 0, 0, 999],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, {speed: 0, maxSpeed: 0, damage: 0.75, health: 1e6, size: 6.5, range: 0.06}]),
+                TYPE: ['relativityBombShockwave', {ALPHA: 0.5}],
+                SHOOT_ON_DEATH: true,
+            }
+        },
+        ...Array(5).fill().flatMap((_, i) => ([
+            {
+                POSITION: [14, 6, 0.001, 0, 0, 72 * i, 0],
+                PROPERTIES: {
+                    COLOR: dark1,
+                    DRAW_ABOVE: true
+                },
+            }, {
+                POSITION: [2, 4.5, 0, 9, 0, 72 * i + 36, 0],
+                PROPERTIES: {
+                    COLOR: trim,
+                    DRAW_ABOVE: true
+                },
+            }
+        ])),
+        ...Array(5).fill().map((_, i) => ({
+            POSITION: [14, 6, 0.001, 0, 0, 72 * i, 0],
+            PROPERTIES: shadingProperties(dark1)
+        }))
+    ],
+}
 
 Class.relativity = {
     PARENT: 'genericVoidling',
@@ -154,24 +244,10 @@ Class.relativity = {
     GUNS: [
         {
             POSITION: [0, 5.5, 1, 0, 0, 0, 0,],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([]),
-                TYPE: 'voidlingCore1',
-                MAX_CHILDREN: 1,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                BORDERLESS: true,
-            }, 
+            PROPERTIES: decoAuraProperties('voidlingCore1')
         }, {
             POSITION: [0, 6.5, 1, 0, 0, 0, 0,],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([]),
-                TYPE: 'voidlingCore2',
-                MAX_CHILDREN: 1,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                BORDERLESS: true,
-            }, 
+            PROPERTIES: decoAuraProperties('voidlingCore2')
         },
     ],
     TURRETS: [
@@ -193,11 +269,21 @@ for (let a = 0; a < 3; a++) {
     {
         POSITION: [2.2, 8.625, 1.35, 13.6, 0, 120 * a, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {damage: 0.7, health: 0.8, speed: 1.8, maxSpeed: 3.25, range: 2.2, size: 0.7}]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {damage: 0.6, speed: 1.8, maxSpeed: 3.25, range: 2.2, size: 0.7}]),
             TYPE: 'relativityMissile',
             STAT_CALCULATOR: gunCalcNames.swarm,
             BORDERLESS: true,
             DRAW_FILL: false,
+        }, 
+    }, {
+        POSITION: [2.2, 8.625, 1.35, 13.6, 0, 120 * a, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {damage: 0.2, health: 1.3, speed: 2.6, maxSpeed: 0.3, range: 0.6, size: 0.75}]),
+            TYPE: 'relativityBomb',
+            STAT_CALCULATOR: gunCalcNames.swarm,
+            BORDERLESS: true,
+            DRAW_FILL: false,
+            ALT_FIRE: true,
         }, 
     }, { // Body shading
         POSITION: [1.5, 6, 1.4, 4.4, 6, 120 * a, 0],
