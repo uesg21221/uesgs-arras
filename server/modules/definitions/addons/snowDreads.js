@@ -1256,9 +1256,10 @@ function addPentanoughtAuraRing(heal = false) {
 	let output = [],
 		TYPE = heal ? "pentanoughtSmallHealAura" : "pentanoughtSmallAura";
 	for (let i = 0; i < 5; i++) {
+		let theta = (72 * i + 36) * Math.PI / 180;
 		output.push(
 			{
-				POSITION: [4, 8.5, 0, 72*i+36, 360, 1],
+				POSITION: [4, 8.5 * Math.cos(theta), 8.5 * Math.sin(theta), 0, 360, 1],
 				TYPE,
 			},
 		)
@@ -6805,12 +6806,24 @@ function makeHexnoughtBodyV2(body) {
 		} else if (turret.POSITION[1]) { // Do whole turret loop at once
 			for (let i = 0; i < turretRingLoopLength; i++) {
 				for (let j = 0; j < 6; j++) {
-					turret = body.TURRETS[t + i * 5];
-					let theta = (turret.POSITION[3] / 6 * 5 + 60 * j) * Math.PI / 180;
-					let displacement = turret.POSITION[1] * hexnoughtScaleFactor ** 0.5;
+					turret = body.TURRETS[t + i * 5 + 1];
+					let displacement = (turret.POSITION[1] ** 2 + turret.POSITION[2] ** 2) ** 0.5 * hexnoughtScaleFactor ** 0.5;
+					
+					// Angle turrets but not auras
+					let x, y, angle;
+					if (turret.POSITION[3]) { 
+						x = displacement;
+						y = 0;
+						angle = turret.POSITION[3] / 6 * 5 + 60 * j;
+					} else {
+						let theta = (turret.POSITION[3] / 6 * 5 - 30 + 60 * j) * Math.PI / 180;
+						x = displacement * Math.cos(theta);
+						y = displacement * Math.sin(theta);
+						angle = 0;
+					}
 					TURRETS.push(
 						{
-							POSITION: [turret.POSITION[0] * hexnoughtScaleFactor, displacement * Math.cos(theta), displacement * Math.sin(theta), 0, turret.POSITION[4], turret.POSITION[5]],
+							POSITION: [turret.POSITION[0] * hexnoughtScaleFactor, x, y, angle, turret.POSITION[4], turret.POSITION[5]],
 							TYPE: turret.TYPE,
 						}
 					)
@@ -6836,6 +6849,8 @@ function makeHexnoughtBodyV2(body) {
 	};
 	return className;
 }
+console.log(Class.skynetHexSnowdread)
+console.log(Class.photosphereHexSnowdread)
 
 // Merge hexdreads
 const pentanoughtWeapons = [

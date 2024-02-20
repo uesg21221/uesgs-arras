@@ -113,7 +113,7 @@ Class.relativityMissile = {
         HEALTH: 0.165,
         DAMAGE: 6,
         PUSHABILITY: 0.3,
-        ACCELERATION: 1.5,
+        ACCELERATION: 2,
     },
     SHAPE: "M 1.1 0 L -1.1 1 L -0.5 0 L -1.1 -1 Z",
     COLOR: baseColor,
