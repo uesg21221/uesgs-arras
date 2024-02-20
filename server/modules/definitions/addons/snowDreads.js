@@ -873,7 +873,7 @@ function addAutoTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y 
 	}
 	return output;
 }
-function addAuraTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.trap], isBox = false) {
+function addAuraTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.trap], MAX_CHILDREN = 6, isBox = false) {
 	return [
 		{
 			POSITION: [length, width, 1, x, y, angle, 0],
@@ -890,7 +890,9 @@ function addAuraTrap({length = 18, length2 = 3, width = 8, aspect = 1, x = 0, y 
 				SHOOT_SETTINGS: combineStats(stats),
 				TYPE: isBox ? 'auraBlock' : 'auraTrap',
 				STAT_CALCULATOR: gunCalcNames.trap,
-				COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6}
+				COLOR: {BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6},
+				MAX_CHILDREN,
+				DESTROY_OLDEST_CHILD: true,
 			},
 		}, {
 			POSITION: [length2 - 1, width - 2, aspect, x + length + 1, y, angle, delay],
@@ -1117,7 +1119,7 @@ Class.auraSmall = {
 	FACING_TYPE: ["spin", {speed: -0.04}],
 	LABEL: "Aura",
 	COLOR: 0,
-	BODY: { DAMAGE: 0.5 },
+	BODY: { DAMAGE: 0.2 },
 	BORDER_FIRST: true,
 	SHAPE: "M 1 0 L 0.715 0.519 L 0.309 0.951 L -0.273 0.84 L -0.809 0.588 L -0.883 0 L -0.809 -0.588 L -0.273 -0.84 L 0.309 -0.951 L 0.715 -0.519 L 1 0" + 
 		"L 0.309 0.951 L -0.809 0.588 L -0.809 -0.588 L 0.309 -0.951 L 1 0" + 
@@ -1128,7 +1130,7 @@ Class.healAuraSmall = {
 	LABEL: "Heal Aura",
 	HEALER: true,
 	COLOR: 12,
-	BODY: { DAMAGE: 0.1 },
+	BODY: { DAMAGE: 0.05 },
 }
 Class.auraMedium = {
 	PARENT: ["auraBase"],
@@ -1136,7 +1138,7 @@ Class.auraMedium = {
 	FACING_TYPE: ["spin", {speed: -0.04}],
 	LABEL: "Aura",
 	COLOR: 0,
-	BODY: { DAMAGE: 0.5 },
+	BODY: { DAMAGE: 0.2 },
 	BORDER_FIRST: true,
 	SHAPE: "M 1 0 L 0.809 0.588 L 1 0 L 0.809 0.588 L 0.309 0.951 L -0.309 0.951 L -0.809 0.588 L -1 0 L -0.809 -0.588 L -0.309 -0.951 L 0.309 -0.951 L 0.809 -0.588 L 1 0" + 
 		"L 0.856 0.278 L 0.809 0.588 L 0.551 0.759 L 0.309 0.951 L 0 0.9 L -0.309 0.951 L -0.551 0.759 L -0.809 0.588 L -0.856 0.278 L -1 0 L -0.892 -0.29 L -0.809 -0.588 L -0.529 -0.728 L -0.309 -0.951 L 0 -0.938 L 0.309 -0.951 L 0.529 -0.728 L 0.809 -0.588 L 0.892 -0.29 L 1 0" + 
@@ -1149,7 +1151,7 @@ Class.healAuraMedium = {
 	LABEL: "Heal Aura",
 	HEALER: true,
 	COLOR: 12,
-	BODY: { DAMAGE: 0.1 },
+	BODY: { DAMAGE: 0.05 },
 }
 Class.auraLarge = {
 	PARENT: ["auraBase"],
@@ -1157,7 +1159,7 @@ Class.auraLarge = {
 	FACING_TYPE: ["spin", {speed: -0.04}],
 	LABEL: "Aura",
 	COLOR: 0,
-	BODY: { DAMAGE: 0.5 },
+	BODY: { DAMAGE: 0.2 },
 	BORDER_FIRST: true,
 	SHAPE: "M 1 0 L 0.988 0.156 L 0.951 0.309 L 0.891 0.454 L 0.809 0.588 L 0.707 0.707 L 0.588 0.809 L 0.454 0.891 L 0.309 0.951 L 0.156 0.988 L 0 1 L -0.156 0.988 L -0.309 0.951 L -0.454 0.891 L -0.588 0.809 L -0.707 0.707 L -0.809 0.588 L -0.891 0.454 L -0.951 0.309 L -0.988 0.156 L -1 0 L -0.988 -0.156 L -0.951 -0.309 L -0.891 -0.454 L -0.809 -0.588 L -0.707 -0.707 L -0.588 -0.809 L -0.454 -0.891 L -0.309 -0.951 L -0.156 -0.988 L 0 -1 L 0.156 -0.988 L 0.309 -0.951 L 0.454 -0.891 L 0.588 -0.809 L 0.707 -0.707 L 0.809 -0.588 L 0.891 -0.454 L 0.951 -0.309 L 0.988 -0.156 L 1 0" + 
 		"M 0.988 -0.156 L 0.988 0.156 L 0.891 0.454 L 0.707 0.707 L 0.454 0.891 L 0.156 0.988 L -0.156 0.988 L -0.454 0.891 L -0.707 0.707 L -0.891 0.454 L -0.988 0.156 L -0.988 -0.156 L -0.891 -0.454 L -0.707 -0.707 L -0.454 -0.891 L -0.156 -0.988 L 0.156 -0.988 L 0.454 -0.891 L 0.707 -0.707 L 0.891 -0.454 L 0.988 -0.156 L 0.949 0" + 
@@ -1176,7 +1178,7 @@ Class.healAuraLarge = {
 	LABEL: "Heal Aura",
 	HEALER: true,
 	COLOR: 12,
-	BODY: { DAMAGE: 0.1 },
+	BODY: { DAMAGE: 0.05 },
 }
 Class.auraSymbolSnowdreads = {
 	PARENT: ["genericTank"],
@@ -2378,7 +2380,7 @@ for(let i = 0; i < 4; i++) {
 		...addAutoTrap({length: 15, width: 6, aspect: 1.7, angle: 90*i}, -5, [g.trap, {health: 1.2, reload: 1.15, speed: 0.8}], 7)
 	)
 }
-Class.auraTrapAura = addAura(1/3, 2, 0.15, 0, "Small");
+Class.auraTrapAura = addAura(1/3, 2.5, 0.15, 0, "Small");
 Class.auraTrap = makeAuto(Class.trap, "", {type: 'auraTrapAura'});
 Class.shadeSnowdread = { // aura-traps
 	PARENT: ["genericSquarenoughtSnowdread"],
@@ -2388,7 +2390,7 @@ Class.shadeSnowdread = { // aura-traps
 }
 for(let i = 0; i < 4; i++) {
 	Class.shadeSnowdread.GUNS.push(
-		...addAuraTrap({length: 14, length2: 3, width: 7, aspect: 1.6, angle: 90*i}, -5, [g.trap, g.hexaTrapper, {range: 0.8, health: 1.2}])
+		...addAuraTrap({length: 14, length2: 3, width: 7, aspect: 1.6, angle: 90*i}, -5, [g.trap, g.hexaTrapper, {health: 1.25}], 100)
 	)
 }
 Class.screwdriverSnowdread = { // trap + gun
@@ -3402,7 +3404,7 @@ Class.aegisSnowdread = { // aura-traps
 }
 for(let i = 0; i < 3; i++) {
 	Class.aegisSnowdread.GUNS.push(
-		...addAuraTrap({length: 14, length2: 3, width: 10, aspect: 1.6, angle: 120*i}, 0, [g.trap, g.setTrap, g.hexaTrapper, {reload: 2, range: 0.8, health: 2.4}], true)
+		...addAuraTrap({length: 14, length2: 3, width: 10, aspect: 1.6, angle: 120*i}, 0, [g.trap, g.setTrap, g.hexaTrapper, {reload: 1.85, range: 1.4, health: 2.4}], 6, true)
 	)
 }
 Class.drillSnowdread = { // trap + gun
@@ -4868,7 +4870,7 @@ Class.hielamanSnowdread = { // aura-traps
 }
 for(let i = 0; i < 5; i++) {
 	Class.hielamanSnowdread.GUNS.push(
-		...addAuraTrap({length: 15, length2: 3, width: 9, aspect: 1.6, angle: 72*i}, 0, [g.trap, g.setTrap, g.hexaTrapper, {reload: 2.4, health: 2.4}], true)
+		...addAuraTrap({length: 15, length2: 3, width: 9, aspect: 1.6, angle: 72*i}, 0, [g.trap, g.setTrap, g.hexaTrapper, {reload: 2.4, range: 1.6, health: 2.4}], 5, true)
 	)
 }
 Class.jackhammerSnowdread = { // trap + gun
@@ -6849,8 +6851,6 @@ function makeHexnoughtBodyV2(body) {
 	};
 	return className;
 }
-console.log(Class.skynetHexSnowdread)
-console.log(Class.photosphereHexSnowdread)
 
 // Merge hexdreads
 const pentanoughtWeapons = [
