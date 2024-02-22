@@ -34,6 +34,7 @@ After doing that, your server should be ready!
 - [Create a custom theme](https://codepen.io/road-to-100k/full/GRpvMzb)
 - [Random Tank Generator](https://perchance.org/chomp-arras-gen)
 - [Addon list](https://github.com/Taureon/aps-plus-plus-addons)
+- [A 3rd-party Server list](https://zyrafaq.com/arras-server-list/)
 
 ## Other Links
 - [Our Discord server](https://discord.gg/kvCAZfUCjy)

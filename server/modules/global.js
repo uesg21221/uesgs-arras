@@ -81,6 +81,7 @@ global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.once(tick
 
 global.c = require("./setup/config.js");
 global.c.port = process.env.PORT || c.port;
+global.Config = global.c;
 
 global.Class = {};
 global.ensureIsClass = str => {
