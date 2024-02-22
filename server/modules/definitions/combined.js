@@ -30,6 +30,7 @@ for (let filename of addons) {
     if ('function' === typeof result) {
         result({ Config: c, Events: events });
     }
+        global.loadedAddons.push(filename);
 }
 
 let addonsLoadEnd = Date.now();
