@@ -1679,19 +1679,21 @@ function drawLeaderboard(spacing, alcoveSize, max) {
 
 function drawAvailableUpgrades(spacing, alcoveSize) {
     // Draw upgrade menu
-    global.clickables.upgrade.hide();
     if (gui.upgrades.length > 0) {
-        global.canUpgrade = true;
         let internalSpacing = 15;
         let len = alcoveSize / 2;
         let height = len;
 
         // Animation processing
         let columnCount = Math.max(3, Math.ceil(gui.upgrades.length / 4));
-        upgradeMenu.set(columnCount + 0.5);
+        upgradeMenu.set(0);
+        if (!global.canUpgrade) {
+            upgradeMenu.force(-columnCount * 3)
+            global.canUpgrade = true;
+        }
         let glide = upgradeMenu.get();
 
-        let x = (glide - columnCount - 0.5) * len + spacing;
+        let x = glide * 2 * spacing + spacing;
         let y = spacing - height - 2.5 * internalSpacing;
         let xStart = x;
         let initialX = x;
@@ -1753,7 +1755,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
 
         // Upgrade tooltip
         let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
-        if (upgradeHoverIndex > -1) {
+        if (upgradeHoverIndex > -1 && upgradeHoverIndex < gui.upgrades.length) {
             let picture = gui.upgrades[upgradeHoverIndex][2];
             if (picture.upgradeTooltip.length > 0) {
                 let boxWidth = measureText(picture.name, alcoveSize / 10),
