@@ -1533,54 +1533,7 @@ class Entity extends EventEmitter {
         }
     }
     triggerAnimation(animationPreset, { type, identifier }, duration) {
-        if (this.isPlayingAnimation) {
-            throw new Error('Cannot trigger animation while another animation is already playing.');
-        }
-        if (animationPreset.name == null) animationPreset.isAnonymous = true // For presets that gets written directly into the arguments.
-        this.isPlayingAnimation = true;
-        this.currentAnimation.preset = animationPreset;
-        this.currentAnimation.duration = duration;
-        this.currentAnimation.name = animationPreset.name;
-        this.currentAnimation.time = 0;
-        this.currentAnimation.keyframe = 0;
-    }
-    animationIterate() {
-        // how tf do i do this
-    }
-    calculateInterpoletedValuesBetweenKeyframes(currentKeyframe, nextKeyframe, progress) {
-        const interpolatedValues = {};
-        for (const prop in currentKeyframe.MOTION) {
-            const interpolatedValue = this.interpolate(currentKeyframe.MOTION[prop], nextKeyframe.MOTION[prop], progress, currentKeyframe.EASING);
-            interpolatedValues[prop] = interpolatedValue;
-        }
-        return interpolatedValues;
-    }
-    interpolate(start, end, progress, easing) {
-        if (Array.isArray(start) && Array.isArray(end)) {
-            if (start.length !== end.length) {
-                throw new SyntaxError('Start and end values must have the same length for array interpolation.');
-            }
-            return start.map((startValue, index) => this.interpolate(startValue, end[index], progress, easing));
-        } else {
-            switch (easing) {
-                case 'linear':
-                    return start + (end - start) * progress;
-                case 'easeIn':
-                    return start + (end - start) * Math.pow(progress, 2);
-                case 'easeOut':
-                    return start + (end - start) * (1 - Math.pow(1 - progress, 2));
-                case 'easeInOut':
-                    return start + (end - start) * ((progress < 0.5) ? 2 * Math.pow(progress, 2) : 1 - Math.pow(-2 * progress + 2, 2) / 2);
-                case 'step':
-                    return progress < 0.5 ? start : end;
-                default:
-                    if (typeof easing === 'function') {
-                        return easing(progress);
-                    } else {
-                        throw new SyntaxError('A keyframe needs to have an easing function.')
-                    }
-            }
-        }
+        // :troll:
     }
     refreshBodyAttributes() {
         let accelerationMultiplier = 1,
