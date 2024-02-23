@@ -119,6 +119,7 @@ Class.genericTank = {
     },
     GUNS: [],
     TURRETS: [],
+    PROPS: [],
     ON: [],
     GIVE_KILL_MESSAGE: true,
     DRAW_HEALTH: true,

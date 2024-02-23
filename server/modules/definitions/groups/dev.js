@@ -893,6 +893,40 @@ Class.bulletSpawnTest = {
     ]
 }
 
+Class.propTestProp = {
+    PARENT: 'genericTank',
+    SHAPE: 6,
+    COLOR: 0,
+    GUNS: [
+        {
+            POSITION: [20, 10, 1, 0, 0, 45, 0],
+            PROPERTIES: {COLOR: 13},
+        }, {
+            POSITION: [20, 10, 1, 0, 0, -45, 0],
+            PROPERTIES: {COLOR: 13},
+        }
+    ]
+}
+Class.propTest = {
+    PARENT: 'genericTank',
+    LABEL: 'Deco Prop Test',
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: "bullet",
+            }
+        }
+    ],
+    PROPS: [
+        {
+            POSITION: [10, 0, 0, 0, 1],
+            TYPE: 'propTestProp'
+        }
+    ]
+}
+
 Class.levels = menu("Levels")
 Class.levels.UPGRADES_TIER_0 = []
 for (let i = 0; i < 12; i++) {
@@ -1005,4 +1039,4 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"];
 
-    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]

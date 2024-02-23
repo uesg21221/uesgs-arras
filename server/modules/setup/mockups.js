@@ -6,6 +6,7 @@ function rounder(val) {
 }
 // Define mocking up functions
 function getMockup(e, positionInfo) {
+    let turretsAndProps = e.turrets.concat(e.props);
     return {
         index: e.index,
         name: e.label,
@@ -50,7 +51,7 @@ function getMockup(e, positionInfo) {
                 drawAbove: gun.drawAbove,
             };
         }),
-        turrets: e.turrets.map(function(t) {
+        turrets: turretsAndProps.map(function(t) {
             let out = getMockup(t, {});
             out.sizeFactor = rounder(t.bound.size);
             out.offset = rounder(t.bound.offset);
