@@ -24,7 +24,7 @@ Create a new project and choose to import one from GitHub. When prompted for the
 
 Navigate to `server/config.js` and replace `localhost:26301` with the URL for your project. (For Glitch users, it's `your-project.glitch.me` (replace `your-project` with the actual name of your project, it should be above settings)).
 
-If you're experiencing issues when trying to launch the project, go to `package.json` and replace `"node": "18.x"` with `"node": "16.x"`.
+For Glitch specifically, go to `package.json` and replace `"node": "18.x"` with `"node": "16.x"`. Glitch doesn't currently support Node 18.
 
 After doing that, your server should be ready!
 
@@ -34,6 +34,7 @@ After doing that, your server should be ready!
 - [Create a custom theme](https://codepen.io/road-to-100k/full/GRpvMzb)
 - [Random Tank Generator](https://perchance.org/chomp-arras-gen)
 - [Addon list](https://github.com/Taureon/aps-plus-plus-addons)
+- [A 3rd-party Server list](https://zyrafaq.com/arras-server-list/)
 
 ## Other Links
 - [Our Discord server](https://discord.gg/kvCAZfUCjy)
