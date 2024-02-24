@@ -84,7 +84,7 @@ Class.genericVoidling = {
         REGEN: base.REGEN * 0.3,
         SPEED: base.SPEED * 0.85,
         ACCELERATION: base.ACCEL * 0.7,
-        FOV: base.FOV * 0.7,
+        FOV: base.FOV * 1.7,
         DENSITY: base.DENSITY * 8,
     }
 }
@@ -236,6 +236,43 @@ Class.relativityBomb = {
         }))
     ],
 }
+Class.relativityShield = {
+    PARENT: 'unsetTrap',
+    FACING_TYPE: "withMotion",
+    MOTION_TYPE: ["glide", {damp: 0.2}],
+    COLOR: baseColor,
+    SHAPE: 3,
+    GUNS: [
+        {
+            POSITION: [9, 10.4, 0.001, 1, 0, 0, 0],
+            PROPERTIES: {COLOR: bright1, DRAW_ABOVE: true},
+        }, {
+            POSITION: [6, 6.9, 0.001, 0, 0, 0, 0],
+            PROPERTIES: {COLOR: trim, DRAW_ABOVE: true},
+        }, {
+            POSITION: [5, 18, 0.95, 5, 0, 180, 0],
+            PROPERTIES: {COLOR: bright1, DRAW_ABOVE: true},
+        }, {
+            POSITION: [14.5, 12.5, 0.8, 0, 0, 180, 0],
+            PROPERTIES: {COLOR: dark1, DRAW_ABOVE: true},
+        }, {
+            POSITION: [26, 14, 0.001, 0, 0, 0, 0],
+            PROPERTIES: {COLOR: dark1},
+        }, {
+            POSITION: [47, 17, 0.001, 0, 0, 93, 0],
+            PROPERTIES: {COLOR: trim, ALPHA: 0.75},
+        }, {
+            POSITION: [47, 17, 0.001, 0, 0, -93, 0],
+            PROPERTIES: {COLOR: trim, ALPHA: 0.75},
+        }, {
+            POSITION: [24, 13, 0.001, 0, 0, 93, 0],
+            PROPERTIES: {COLOR: bright1},
+        }, {
+            POSITION: [24, 13, 0.001, 0, 0, -93, 0],
+            PROPERTIES: {COLOR: bright1},
+        }, 
+    ]
+}
 
 Class.relativity = {
     PARENT: 'genericVoidling',
@@ -250,12 +287,12 @@ Class.relativity = {
             PROPERTIES: decoAuraProperties('voidlingCore2')
         },
     ],
-    TURRETS: [
+    PROPS: [
         {
-            POSITION: [20, 0, 0, 0, 0, 1],
+            POSITION: [20, 0, 0, 0, 1],
             TYPE: 'voidlingInsert3',
         }
-    ]
+    ],
 }
 function shadingProperties(color = bright1) {
     return {
@@ -270,7 +307,7 @@ for (let a = 0; a < 3; a++) {
         POSITION: [2.2, 8.625, 1.35, 13.6, 0, 120 * a, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {damage: 0.6, speed: 1.8, maxSpeed: 3.25, range: 2.2, size: 0.7}]),
-            TYPE: 'relativityMissile',
+            // TYPE: 'relativityMissile',
             STAT_CALCULATOR: gunCalcNames.swarm,
             BORDERLESS: true,
             DRAW_FILL: false,
@@ -280,10 +317,18 @@ for (let a = 0; a < 3; a++) {
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {damage: 0.2, health: 1.3, speed: 2.6, maxSpeed: 0.3, range: 0.6, size: 0.75}]),
             TYPE: 'relativityBomb',
-            STAT_CALCULATOR: gunCalcNames.swarm,
             BORDERLESS: true,
             DRAW_FILL: false,
             ALT_FIRE: true,
+        }, 
+    }, {
+        POSITION: [2.2, 8.625, 1.35, 13.6, 0, 120 * a, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.pounder, g.destroyer, {speed: 1.5, maxSpeed: 0, size: 0.85}]),
+            TYPE: 'relativityShield',
+            STAT_CALCULATOR: gunCalcNames.block,
+            BORDERLESS: true,
+            DRAW_FILL: false,
         }, 
     }, { // Body shading
         POSITION: [1.5, 6, 1.4, 4.4, 6, 120 * a, 0],
