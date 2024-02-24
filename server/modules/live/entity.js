@@ -1510,8 +1510,6 @@ class Entity extends EventEmitter {
                 this.rerootUpgradeTree += finalRoot.substring(0, finalRoot.length - 2);
             }
         }
-        // Turret layer ordering
-        this.turrets.sort(this.turretSort);
 
         // Batch upgrades
         if (this.batchUpgrades && emitEvent) {
@@ -1726,6 +1724,8 @@ class Entity extends EventEmitter {
     }
     camera(tur = false) {
         let turretsAndProps = this.turrets.concat(this.props);
+        // Turret layer ordering
+        turretsAndProps.sort(this.turretSort);
         return {
             type: 0 + tur * 0x01 + this.settings.drawHealth * 0x02 + (this.type === "tank" && this.displayName) * 0x04,
             invuln: this.invuln,

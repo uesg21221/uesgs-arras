@@ -3346,7 +3346,7 @@ Class.frostBossBaseDeco = {
 }
 
 const trebuchetStats = [g.basic, g.sniper, g.predator, g.predator, g.predator, g.predator, {speed: 0.93, maxSpeed: 0.93, reload: 1.7, health: 1.7, damage: 1.4, size: 2}];
-const hielamanStats = [g.trap, g.setTrap, g.hexaTrapper, {reload: 2.4, health: 3.2}];
+const hielamanStats = [g.trap, g.setTrap, g.hexaTrapper, {reload: 2.4, health: 3.2, range: 1.2}];
 Class.frostBoss = {
     PARENT: 'miniboss',
     LABEL: 'Extrasolar',
@@ -3370,14 +3370,13 @@ Class.frostBoss = {
         RESIST: base.RESIST * 1.2,
         DENSITY: base.DENSITY * 7.5,
     },
-    GUNS: Array(3).fill().flatMap((_, i) => ([
-            { // Speed
-                POSITION: [7, 13.5, 0.001, 9.5, 0, 120*i, 0],
-                PROPERTIES: {COLOR: 9},
-            }, {
-                POSITION: [7, 13.5, 0.001, 9.5, 0, 120*i+60, 0],
-                PROPERTIES: {COLOR: 9},
-            },
+    GUNS: [
+        ...Array(6).fill().flatMap((_, i) => ({
+            // Speed
+            POSITION: [8, 14.5, 0.001, 9.5, 0, 60*i, 0],
+            PROPERTIES: {COLOR: 9},
+        })),
+        ...Array(3).fill().flatMap((_, i) => ([
             { // Heavy Snipers
                 POSITION: [26.5, 9.5, 1, 0, 0, 120 * i, 0],
                 PROPERTIES: {
@@ -3437,25 +3436,28 @@ Class.frostBoss = {
                 },
             },
         ])),
+    ],
     TURRETS: [
-        {
-			POSITION: [12, 0, 0, 180, 0, 1],
-			TYPE: ["hexagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
-		}, {
-			POSITION: [20, 0, 0, 0, 0, 1],
-			TYPE: ["frostBossBaseDeco"],
-		},
 		...Array(6).fill().flatMap((_, i) => ([
             {
-				POSITION: [2.95, 8.55, 0, 60 * i + 30, 180, 1],
+				POSITION: [2.95, 8.55, 0, 60 * i + 30, 180, 2],
 				TYPE: "frostBossAutoTurret",
 			},
         ])),
 		{
-			POSITION: [8.55, 0, 0, 0, 360, 1],
+			POSITION: [8.55, 0, 0, 0, 360, 2],
 			TYPE: "frostBossBigAura",
 		},
     ],
+    PROPS: [
+        {
+			POSITION: [12, 0, 0, 180, 1],
+			TYPE: ["hexagon", {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
+		}, {
+			POSITION: [20, 0, 0, 0, 1],
+			TYPE: ["frostBossBaseDeco"],
+		},
+    ]
 }
 
 Class.toothlessGun = {
