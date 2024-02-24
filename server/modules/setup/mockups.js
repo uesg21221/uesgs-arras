@@ -129,9 +129,19 @@ function constructCircumcirle(point1, point2, point3) {
 }
 
 function sizeEntity(entity, x = 0, y = 0, angle = 0, scale = 1) {    
-    // Process body as octagon
-    for (let i = 0; i < 8; i++) {
-        endPoints.push([x + Math.cos(Math.PI / 4 * i) * scale, y + Math.sin(Math.PI / 4 * i) * scale]);
+    // Process body as octagon if shape < 3 or > 7
+    if (entity.shape < 3 || entity.shape > 7) {
+        for (let i = 0; i < 8; i++) {
+            endPoints.push([x + Math.cos(Math.PI / 4 * i) * scale, y + Math.sin(Math.PI / 4 * i) * scale]);
+        }
+    } else {
+        // Process body as true size and shape otherwise
+        let angleOffset = (entity.shape % 1) * 2 * Math.PI;
+        let numSides = Math.floor(entity.shape);
+        for (let i = 0; i < numSides; i++) {
+            let theta = 2 * Math.PI / numSides * i + angleOffset;
+            endPoints.push([x + Math.cos(theta) * scale * lazyRealSizes[numSides], y + Math.sin(theta) * scale * lazyRealSizes[numSides]]);
+        }
     }
     
     // Process guns
