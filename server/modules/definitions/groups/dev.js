@@ -497,7 +497,7 @@ Class.turretLayerTesting = {
             TYPE: ["basic", {COLOR: "lightGrey", MIRROR_MASTER_ANGLE: true}]
         },
         {
-            POSITION: [20, 10, 5, 0, 0, 2],
+            POSITION: [20, 15, 5, 0, 0, 2],
             TYPE: ["basic", {COLOR: "grey", MIRROR_MASTER_ANGLE: true}]
         },
         {
