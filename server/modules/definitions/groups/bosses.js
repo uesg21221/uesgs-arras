@@ -2208,6 +2208,7 @@ Class.taureonCore = {
     LABEL: "Core Turret",
     SHAPE: 4.5,
     COLOR: '#99D9EA',
+    CONTROLLERS: ["nearestDifferentMaster", "onlyAcceptInArc"],
     INDEPENDENT: true,
     GUNS: [{
         POSITION: [10, 14, -0.5, 14, 0, 0, 0]
@@ -2321,6 +2322,10 @@ Class.taureonBoss = {
     SHAPE: 4.5,
     SIZE: 50,
     FACING_TYPE: "smoothToTarget",
+    UPGRADE_TOOLTIP: "With a powerful Gatling Gun on the front, Rocket Launchers as wings, movable Thrusters on the back, " +
+                    "and equipped with Railgun Turrets, it perfectly excells at terminating those who feel its Wrath.\n" +
+                    "An octahedral carbon robot, exclusively designed to eradicate opponents with sheer brutality alone.\n" +
+                    '"NOW YOU FACE MY ULTIMATE CREATION."',
     VALUE: 9e6,
     BODY: {
         FOV: 1,
@@ -2347,7 +2352,7 @@ Class.taureonBoss = {
         POSITION: [25, 0, 0, 0, 0, 1],
         TYPE: "taureonStar"
     },{
-        POSITION: [5, 0, 0, 0, 0, 1],
+        POSITION: [5, 0, 0, 0, 360, 1],
         TYPE: "taureonCore"
     }],
     GUNS: [...Array(6).fill().map((_, i) => ({

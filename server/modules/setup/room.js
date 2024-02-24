@@ -70,7 +70,7 @@ class TileEntity {
     constructor (tile, loc) {
         if (!(tile instanceof Tile)) {
             throw new Error(`The cell at ${loc.x},${loc.y} in the room setup is not a Tile object!` +
-                ('string' == typeof tile ? ' But it is a string, which means you probably need to update your room setup!' : 'But it is of type ' + typeof tile)
+                ('string' == typeof tile ? ' But it is a string, which means you probably need to update your room setup!' : ' But it is of type ' + typeof tile)
             );
         }
         let gridLoc = this.gridLoc = { x: parseFloat(loc.x), y: parseFloat(loc.y) };
