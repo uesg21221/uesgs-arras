@@ -897,7 +897,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         context = ctx2;
         context.canvas.width = context.canvas.height = drawSize * m.position.axis + ratio * 20;
         xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
-        yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.sin(rot)) / 4;
+        yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.y * Math.sin(rot)) / 4;
     } else {
         if (fade * alpha < 0.5) return;
     }
@@ -1078,9 +1078,15 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
     let picture = (typeof model == "object") ? model : util.getEntityImageFromMockup(model, gui.color),
         position = picture.position,
         scale = (0.6 * len) / position.axis,
-        entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(angle),
-        entityY = y + 0.5 * height - scale * position.middle.x * Math.sin(angle),
+        entityX = x + 0.5 * len,
+        entityY = y + 0.5 * height,
         baseColor = picture.color;
+    
+    // Find x and y shift for the entity image
+    let xShift = position.middle.x * Math.cos(angle) - position.middle.y * Math.sin(angle),
+        yShift = position.middle.x * Math.sin(angle) + position.middle.y * Math.cos(angle);
+    entityX -= scale * xShift;
+    entityY -= scale * yShift;
 
     // Draw box
     ctx.globalAlpha = alpha;
@@ -1797,8 +1803,8 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor, "center", true);
         // Mini-image
         let scale = height / entry.position.axis,
-            xx = x - 1.5 * height - scale * entry.position.middle.x * 0.707,
-            yy = y + 0.5 * height + scale * entry.position.middle.x * 0.707,
+            xx = x - 1.5 * height - scale * entry.position.middle.x * Math.SQRT1_2,
+            yy = y + 0.5 * height - scale * entry.position.middle.y * Math.SQRT1_2,
             baseColor = entry.color;
         drawEntity(baseColor, xx, yy, entry.image, 1 / scale, 1, (scale * scale) / entry.image.size, 1, -Math.PI / 4, true);
         // Move down
@@ -1808,19 +1814,21 @@ function drawLeaderboard(spacing, alcoveSize, max) {
 
 function drawAvailableUpgrades(spacing, alcoveSize) {
     // Draw upgrade menu
-    global.clickables.upgrade.hide();
     if (gui.upgrades.length > 0) {
-        global.canUpgrade = true;
         let internalSpacing = 15;
         let len = alcoveSize / 2;
         let height = len;
 
         // Animation processing
         let columnCount = Math.max(3, Math.ceil(gui.upgrades.length / 4));
-        upgradeMenu.set(columnCount + 0.5);
+        upgradeMenu.set(0);
+        if (!global.canUpgrade) {
+            upgradeMenu.force(-columnCount * 3)
+            global.canUpgrade = true;
+        }
         let glide = upgradeMenu.get();
 
-        let x = (glide - columnCount - 0.5) * len + spacing;
+        let x = glide * 2 * spacing + spacing;
         let y = spacing - height - 2.5 * internalSpacing;
         let xStart = x;
         let initialX = x;
@@ -1882,7 +1890,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
 
         // Upgrade tooltip
         let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
-        if (upgradeHoverIndex > -1) {
+        if (upgradeHoverIndex > -1 && upgradeHoverIndex < gui.upgrades.length) {
             let picture = gui.upgrades[upgradeHoverIndex][2];
             if (picture.upgradeTooltip.length > 0) {
                 let boxWidth = measureText(picture.name, alcoveSize / 10),
@@ -2011,7 +2019,7 @@ const gameDrawDead = () => {
         position = global.mockups[parseInt(gui.type.split("-")[0])].position,
         scale = len / position.axis,
         xx = global.screenWidth / 2 - scale * position.middle.x * 0.707,
-        yy = global.screenHeight / 2 - 35 + scale * position.middle.x * 0.707,
+        yy = global.screenHeight / 2 - 35 + scale * position.middle.y * 0.707,
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);

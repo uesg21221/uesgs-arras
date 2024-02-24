@@ -710,6 +710,124 @@ class StatusEffect extends EventEmitter {
     }
 }
 
+class Prop {
+    constructor(position, bond) {
+        this.guns = [];
+        this.colorUnboxed = {
+            base: 16,
+            hueShift: 0,
+            saturationShift: 1,
+            brightnessShift: 0,
+            allowBrightnessInvert: false,
+        };
+        this.color = '16 0 1 0 false';
+        this.borderless = false;
+        this.drawFill = true;
+        this.strokeWidth = 1;
+
+        // Bind prop
+        this.bond = bond;
+        this.bond.props.push(this);
+        // Get my position.
+        if (Array.isArray(position)) {
+            position = {
+                SIZE: position[0],
+                X: position[1],
+                Y: position[2],
+                ANGLE: position[3],
+                LAYER: position[4]
+            };
+        }
+        position.SIZE ??= 10;
+        position.X ??= 0;
+        position.Y ??= 0;
+        position.ANGLE ??= 0;
+        position.LAYER ??= 0;
+        let _off = new Vector(position.X, position.Y);
+        this.bound = {
+            size: position.SIZE / 20,
+            angle: position.ANGLE * Math.PI / 180,
+            direction: _off.direction,
+            offset: _off.length / 10,
+            layer: position.LAYER
+        };
+        // Initalize.
+        this.facing = 0;
+        this.x = 0;
+        this.y = 0;
+        this.size = 1;
+        this.realSize = 1;
+        this.settings = {};
+        this.settings.mirrorMasterAngle = true;
+        this.upgrades = [];
+        this.turrets = [];
+        this.props = [];
+    }
+    define(def) {
+        let set = ensureIsClass(def);
+
+        if (set.PARENT != null) {
+            if (Array.isArray(set.PARENT)) {
+                for (let i = 0; i < set.PARENT.length; i++) {
+                    this.define(set.PARENT[i], false);
+                }
+            } else {
+                this.define(set.PARENT, false);
+            }
+        }
+        if (set.index != null) this.index = set.index.toString();
+        if (set.SHAPE != null) {
+            this.shape = typeof set.SHAPE === "number" ? set.SHAPE : 0;
+            this.shapeData = set.SHAPE;
+        }
+        this.imageInterpolation = set.IMAGE_INTERPOLATION != null ? set.IMAGE_INTERPOLATION : 'bilinear'
+        if (set.COLOR != null) {
+            if (typeof set.COLOR === "number" || typeof set.COLOR === 'string')
+                this.colorUnboxed.base = set.COLOR;
+            else if (typeof set.COLOR === "object") {
+                if (set.COLOR.BASE != null) this.colorUnboxed.base = set.COLOR.BASE;
+                if (set.COLOR.HUE_SHIFT != null) this.colorUnboxed.hueShift = set.COLOR.HUE_SHIFT;
+                if (set.COLOR.SATURATION_SHIFT != null) this.colorUnboxed.saturationShift = set.COLOR.SATURATION_SHIFT;
+                if (set.COLOR.BRIGHTNESS_SHIFT != null) this.colorUnboxed.brightnessShift = set.COLOR.BRIGHTNESS_SHIFT;
+                if (set.COLOR.ALLOW_BRIGHTNESS_INVERT != null) this.colorUnboxed.allowBrightnessInvert = set.COLOR.ALLOW_BRIGHTNESS_INVERT;
+            }
+            this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+        }
+        if (set.STROKE_WIDTH != null) this.strokeWidth = set.STROKE_WIDTH
+        if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
+        if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
+        if (set.GUNS != null) {
+            let newGuns = [];
+            for (let i = 0; i < set.GUNS.length; i++) {
+                newGuns.push(new Gun(this, set.GUNS[i]));
+            }
+            this.guns = newGuns;
+        }
+    }
+    camera() {
+        return {
+            type: 0x01,
+            id: this.id,
+            index: this.index,
+            size: this.size,
+            realSize: this.realSize,
+            facing: this.facing,
+            angle: this.bound.angle,
+            direction: this.bound.direction,
+            offset: this.bound.offset,
+            sizeFactor: this.bound.size,
+            mirrorMasterAngle: this.settings.mirrorMasterAngle,
+            layer: this.bound.layer,
+            color: this.color,
+            strokeWidth: this.strokeWidth,
+            borderless: this.borderless,
+            drawFill: this.drawFill,
+            guns: this.guns.map((gun) => gun.getPhotoInfo()),
+            turrets: this.turrets,
+        };
+    }
+}
+
 let entitiesIdLog = 0;
 const forceTwiggle = ["autospin", "turnWithSpeed", "spin", "fastspin", "veryfastspin", "withMotion", "smoothWithMotion", "looseWithMotion"];
 class Entity extends EventEmitter {
@@ -797,6 +915,7 @@ class Entity extends EventEmitter {
         this.shield = new HealthType(0, "dynamic");
         this.guns = [];
         this.turrets = [];
+        this.props = [];
         this.upgrades = [];
         this.settings = {};
         this.aiSettings = {};
@@ -1307,6 +1426,17 @@ class Entity extends EventEmitter {
                 o.bindToMaster(def.POSITION, this, def.VULNERABLE);
             }
         }
+        if (set.PROPS != null) {
+            this.props = [];
+            for (let i = 0; i < set.PROPS.length; i++) {
+                let def = set.PROPS[i],
+                    o = new Prop(def.POSITION, this),
+                    type = Array.isArray(def.TYPE) ? def.TYPE : [def.TYPE];
+                for (let j = 0; j < type.length; j++) {
+                    o.define(type[j]);
+                }
+            }
+        }
         if (set.ON != null) this.onDef = set.ON;
         this.reverseTargetWithTank = set.REVERSE_TARGET_WITH_TANK ?? false;
         if (set.mockup != null) {
@@ -1379,6 +1509,16 @@ class Entity extends EventEmitter {
                     }
                     if (!turretDanger) o.define({ DANGER: 0 });
                     o.bindToMaster(def.POSITION, this);
+                }
+            }
+            if (set.PROPS != null) {
+                for (let i = 0; i < set.PROPS.length; i++) {
+                    let def = set.PROPS[i],
+                        o = new Prop(def.POSITION, this),
+                        type = Array.isArray(def.TYPE) ? def.TYPE : [def.TYPE];
+                    for (let j = 0; j < type.length; j++) {
+                        o.define(type[j]);
+                    }
                 }
             }
             if (set.SIZE != null) {
@@ -1633,6 +1773,7 @@ class Entity extends EventEmitter {
         return (this.velocity.y + this.accel.y) / c.runSpeed;
     }
     camera(tur = false) {
+        let turretsAndProps = this.turrets.concat(this.props);
         return {
             type: 0 + tur * 0x01 + this.settings.drawHealth * 0x02 + (this.type === "tank" && this.displayName) * 0x04,
             invuln: this.invuln,
@@ -1666,7 +1807,7 @@ class Entity extends EventEmitter {
             name: (this.nameColor || "#FFFFFF") + this.name,
             score: this.skill.score,
             guns: this.guns.map((gun) => gun.getPhotoInfo()),
-            turrets: this.turrets.map((turret) => turret.camera(true)),
+            turrets: turretsAndProps.map((turret) => turret.camera(true)),
             glow: this.glow,
         };
     }
