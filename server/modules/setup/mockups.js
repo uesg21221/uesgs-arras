@@ -94,16 +94,26 @@ function getDimensions(entity) {
         avgY = (point1[1] + point2[1]) / 2,
         point3 = getFurthestFrom(avgX, avgY);
     
-    // Find circumcircle and circumcenter
-    let x1 = point1[0];
-    let y1 = point1[1];
-    let x2 = point2[0];
-    let y2 = point2[1];
-    let x3 = point3[0];
-    let y3 = point3[1];
+    let {x, y, r} = constructCircumcirle(point1, point2, point3);
 
-    // !!!!!!! Replace with iterative resizer like the old system
-    if (x3 == x1 || x3 == x2) x3 += 1e-4;
+    return {
+        axis: r * 2,
+        middle: {x, y},
+    };
+}
+
+// Find circumcircle and circumcenter
+function constructCircumcirle(point1, point2, point3) {
+    // Rounder to avoid floating point nonsense
+    let x1 = rounder(point1[0]);
+    let y1 = rounder(point1[1]);
+    let x2 = rounder(point2[0]);
+    let y2 = rounder(point2[1]);
+    let x3 = rounder(point3[0]);
+    let y3 = rounder(point3[1]);
+
+    // Divide by zero protection
+    if (x3 == x1 || x3 == x2) x3 += 1e-5;
     
     let numer1 = x3 ** 2 + y3 ** 2 - x1 ** 2 - y1 ** 2;
     let numer2 = x2 ** 2 + y2 ** 2 - x1 ** 2 - y1 ** 2;
@@ -115,10 +125,7 @@ function getDimensions(entity) {
     let x = ((y - y3) ** 2 - (y - y1) ** 2 - x1 ** 2 + x3 ** 2) / factorX2;
     let r = Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2));
 
-    return {
-        axis: r * 2,
-        middle: {x, y},
-    };
+    return {x, y, r};
 }
 
 function sizeEntity(entity, x = 0, y = 0, angle = 0, scale = 1) {    
