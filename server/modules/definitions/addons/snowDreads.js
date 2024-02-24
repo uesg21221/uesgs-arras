@@ -4412,7 +4412,7 @@ for (let i = 0; i < 5; i++) {
 Class.boltSnowdread = { // railgun
 	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Bolt",
-	UPGRADE_TOOLTIP: "Railgums",
+	UPGRADE_TOOLTIP: "Railguns",
 	GUNS: [],
 }
 for (let i = 0; i < 5; i++) {
