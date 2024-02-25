@@ -2208,24 +2208,18 @@ for(let i = 0; i < 4; i++) {
 Class.swirlMissileSnowdread = {
 	PARENT: 'spinmissile',
 	GUNS: [
-		{
-			POSITION: [14, 8, 1, 0, 0, 0, 0],
-			PROPERTIES: {
-				AUTOFIRE: !0,
-				SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, {speed: 1.3, maxSpeed: 1.3}]),
-				TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
-				STAT_CALCULATOR: gunCalcNames.thruster,
-			},
-		}, {
-			POSITION: [14, 8, 1, 0, 0, 180, 0],
-			PROPERTIES: {
-				AUTOFIRE: !0,
-				SHOOT_SETTINGS: combineStats([g.basic, g.skimmer, {speed: 1.3, maxSpeed: 1.3}]),
-				TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
-				STAT_CALCULATOR: gunCalcNames.thruster,
-			},
-		},
+		...addThruster({length: 14, width: 8, angle: 0}, -2.5, [g.basic, g.skimmer, {speed: 1.3, maxSpeed: 1.3}], false),
+		...addThruster({length: 14, width: 8, angle: 180}, -2.5, [g.basic, g.skimmer, {speed: 1.3, maxSpeed: 1.3}], false),
 	],
+	PROPS: [
+		{
+			POSITION: [13, 0, 0, 0, 1],
+			TYPE: ['egg', {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 5}}],
+		}, {
+			POSITION: [8, 0, 0, 0, 1],
+			TYPE: ['egg', {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 10, SATURATION_SHIFT: 0.7}}],
+		},
+	]
 }
 Class.swirlSnowdread = { // twister
 	PARENT: ["genericSquarenoughtSnowdread"],
@@ -3205,24 +3199,18 @@ for(let i = 0; i < 3; i++) {
 Class.spiralMissileSnowdread = {
 	PARENT: 'spinmissile',
 	GUNS: [
-		{
-			POSITION: [14, 8, 1, 0, 0, 0, 0],
-			PROPERTIES: {
-				AUTOFIRE: !0,
-				SHOOT_SETTINGS: combineStats([g.basic, g.rocketeer, {speed: 1.3, maxSpeed: 1.3}]),
-				TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
-				STAT_CALCULATOR: gunCalcNames.thruster,
-			},
-		}, {
-			POSITION: [14, 8, 1, 0, 0, 180, 0],
-			PROPERTIES: {
-				AUTOFIRE: !0,
-				SHOOT_SETTINGS: combineStats([g.basic, g.rocketeer, {speed: 1.3, maxSpeed: 1.3}]),
-				TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
-				STAT_CALCULATOR: gunCalcNames.thruster,
-			},
-		},
+		...addThruster({length: 14, width: 8, angle: 0}, -2.5, [g.basic, g.rocketeer, {speed: 1.3, maxSpeed: 1.3}], false),
+		...addThruster({length: 14, width: 8, angle: 180}, -2.5, [g.basic, g.rocketeer, {speed: 1.3, maxSpeed: 1.3}], false),
 	],
+	PROPS: [
+		{
+			POSITION: [13, 0, 0, 0, 1],
+			TYPE: ['egg', {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 5}}],
+		}, {
+			POSITION: [8, 0, 0, 0, 1],
+			TYPE: ['egg', {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 10, SATURATION_SHIFT: 0.7}}],
+		},
+	]
 }
 Class.spiralSnowdread = { // twister
 	PARENT: ["genericTrinoughtSnowdread"],
