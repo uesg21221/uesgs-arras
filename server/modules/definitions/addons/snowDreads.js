@@ -2213,10 +2213,10 @@ Class.swirlMissileSnowdread = {
 	],
 	PROPS: [
 		{
-			POSITION: [13, 0, 0, 0, 1],
+			POSITION: [14, 0, 0, 0, 1],
 			TYPE: ['egg', {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: 5}}],
 		}, {
-			POSITION: [8, 0, 0, 0, 1],
+			POSITION: [6, 0, 0, 0, 1],
 			TYPE: ['egg', {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 10, SATURATION_SHIFT: 0.7}}],
 		},
 	]
