@@ -1576,9 +1576,6 @@ class Entity extends EventEmitter {
             this.chooseUpgradeFromBranch(numBranches); // Recursively build upgrade options
         }
     }
-    turretSort(a, b) {
-        return a.bound.layer - b.bound.layer;
-    }
     chooseUpgradeFromBranch(remaining) {
         if (remaining > 0) { // If there's more to select
             let branchUgrades = this.tempUpgrades[this.defs.length - remaining];
@@ -1773,7 +1770,7 @@ class Entity extends EventEmitter {
     camera(tur = false) {
         let turretsAndProps = this.turrets.concat(this.props);
         // Turret layer ordering
-        turretsAndProps.sort(this.turretSort);
+        turretsAndProps.sort((a, b) => a.bound.layer - b.bound.layer);
         return {
             type: 0 + tur * 0x01 + this.settings.drawHealth * 0x02 + (this.type === "tank" && this.displayName) * 0x04,
             invuln: this.invuln,
