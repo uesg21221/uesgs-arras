@@ -9,15 +9,14 @@ spawn = (tile, team, color, type = false) => {
     let o = new Entity(tile.loc);
     o.define(type);
     o.team = team;
-    o.colorUnboxed.base = color;
-    o.compressColor();
+    o.color.base = color;
     o.skill.score = 111069;
     o.name = "Dominator";
     o.SIZE = room.tileWidth / 10;
     o.isDominator = true;
     o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: true })];
 
-    tile.color = color + ' 0 1 0 false';
+    tile.color.base = color;
 
     if (!teamcounts[team]) {
         teamcounts[team] = 0;
@@ -76,13 +75,12 @@ makeDefenderDominator = (tile, mainTeam, team, aliveDef) => {
     let o = new Entity(tile.loc);
     o.define(mainTeam == team ? aliveDef : "dominator");
     o.team = team;
-    o.colorUnboxed.base = getTeamColor(team);
-    o.compressColor();
+    o.color.base = getTeamColor(team);
     o.skill.score = 111069;
     o.SIZE = room.tileWidth / 10;
     o.isDominator = true;
 
-    tile.color = getTeamColor(team) + ' 0 1 0 false';
+    tile.color.base = getTeamColor(team);
 
     if (!teamcounts[team]) {
         teamcounts[team] = 0;

@@ -333,11 +333,10 @@ let maintainloop = () => {
         o.define(c.SPAWN_CLASS);
         o.refreshBodyAttributes();
         o.isBot = true;
-        o.name += ran.chooseBotName();
+        o.name = Config.BOT_NAME_PREFIX + ran.chooseBotName();
         o.leftoverUpgrades = ran.chooseChance(...c.BOT_CLASS_UPGRADE_CHANCES);
         let color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
-        o.colorUnboxed.base = color;
-        o.compressColor();
+        o.color.base = color;
         if (team) o.team = team;
         bots.push(o);
         o.on('dead', () => util.remove(bots, bots.indexOf(o)));

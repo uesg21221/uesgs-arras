@@ -4,13 +4,13 @@ const { basePolygonDamage, basePolygonHealth } = require('../constants.js'),
 // Albeit heavily modified because the math in the original didn't work LOL
 makeRelic = (type, scale = 1, gem, SIZE) => {
     let relicCasing = {
-        PARENT: ['genericEntity'],
+        PARENT: 'genericEntity',
         LABEL: 'Relic Casing',
         COLOR: type.COLOR,
         MIRROR_MASTER_ANGLE: true,
         SHAPE: [[-0.4,-1],[0.4,-0.25],[0.4,0.25],[-0.4,1]].map(r => r.map(s => s * scale))
     }, relicBody = {
-        PARENT: ['genericEntity'],
+        PARENT: 'genericEntity',
         LABEL: 'Relic Mantle',
         COLOR: type.COLOR,
         MIRROR_MASTER_ANGLE: true,
@@ -82,8 +82,26 @@ makeRelic = (type, scale = 1, gem, SIZE) => {
     };
 },
 
+makeCrasher = type => ({
+    PARENT: type,
+    COLOR: 'pink',
+    LABEL: 'Crasher ' + type.LABEL,
+    CONTROLLERS: ['nearestDifferentMaster', 'canRepel', 'mapTargetToGoal'],
+    MOTION_TYPE: "motor",
+    FACING_TYPE: "smoothWithMotion",
+    HITS_OWN_TYPE: "hard",
+    HAS_NO_MASTER: true,
+    DRAW_HEALTH: true,
+    AI: {
+        NO_LEAD: true,
+    },
+    BODY: {
+        DAMAGE: type.BODY.DAMAGE * 4
+    }
+}),
+
 makeRare = (type, level) => ({
-    PARENT: ["food"],
+    PARENT: "food",
     LABEL: ["Shiny", "Legendary", "Shadow", "Rainbow", "Transgender"][level] + " " + type.LABEL,
     VALUE: [100, 500, 2000, 4000, 5000][level] * type.VALUE,
     SHAPE: type.SHAPE,
@@ -130,7 +148,7 @@ makeLaby = (type, level) => {
         GUNS: type.GUNS,
         TURRETS: [...(type.TURRETS ? type.TURRETS : []), ...Array(level).fill().map((_, i) => ({
             POSITION: [20 * downscale ** (i + 1), 0, 0, !(i & 1) ? 180 / usableSHAPE : 0, 0, 1],
-            TYPE: [type, { MIRROR_MASTER_ANGLE: true }]
+            TYPE: [type, { COLOR: -1, MIRROR_MASTER_ANGLE: true }]
         }))]
     };
 };
@@ -539,5 +557,6 @@ for (let tier = 0; tier < 6; tier++) {
             food = food[0].toLowerCase() + food.slice(1);
             Class[`laby${tier}${food[0].toUpperCase() + food.slice(1)}`] = makeLaby(Class[food], tier);
         }
+        Class[`laby${tier}${poly[0].toUpperCase() + poly.slice(1)}Crasher`] = makeCrasher(Class[`laby${tier}${poly[0].toUpperCase() + poly.slice(1)}`]);
     }
 }

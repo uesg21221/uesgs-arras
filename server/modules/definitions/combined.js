@@ -38,14 +38,14 @@ console.log("Loaded addons in " + (addonsLoadEnd - definitionGroupsLoadEnd) + " 
 // "Flattening" refers to removing PARENT attributes and applying the parents' attributes to the definition themselves, if not overwritten later on.
 if (c.flattenDefintions) {
     console.log(`Flattening ${definitionCount} definitions...`);
-    let flatten = (output, definition) => {
+    let flattenDefinition = (output, definition) => {
         definition = ensureIsClass(definition);
 
         if (definition.PARENT) {
             if (!Array.isArray(definition.PARENT)) {
-                flatten(output, definition.PARENT);
+                flattenDefinition(output, definition.PARENT);
             } else for (let parent in definition.PARENT) {
-                flatten(output, definition.PARENT[parent]);
+                flattenDefinition(output, definition.PARENT[parent]);
             }
         }
 
@@ -61,7 +61,7 @@ if (c.flattenDefintions) {
     let flattened = {};
     for (let key in Class) {
         let output = {};
-        flatten(output, Class[key]);
+        flattenDefinition(output, Class[key]);
         flattened[key] = output;
     }
     Class = flattened;

@@ -1,7 +1,13 @@
 class Color {
-	constructor (isTile) {
+	#base = -1;
+	#hueShift = 0;
+	#saturationShift = 1;
+	#brightnessShift = 0;
+	#allowBrightnessInvert = false;
+	constructor (color, isTile) {
         this.isTile = isTile;
-        this.reset();
+        this.stack = new Error().stack;
+        this.interpret(color);
 	}
 
 	reset () {
@@ -32,11 +38,11 @@ class Color {
     			this.#base = color;
 	            break;
     		case 'object':
-	            this.#base = color.BASE ?? 16;
-	            this.#hueShift = color.HUE_SHIFT ?? 0;
-	            this.#saturationShift = color.SATURATION_SHIFT ?? 1;
-	            this.#brightnessShift = color.BRIGHTNESS_SHIFT ?? 0;
-	            this.#allowBrightnessInvert = color.ALLOW_BRIGHTNESS_INVERT ?? false;
+	            this.#base = color.BASE ?? color.base ?? 16;
+	            this.#hueShift = color.HUE_SHIFT ?? color.hueShift ?? 0;
+	            this.#saturationShift = color.SATURATION_SHIFT ?? color.saturationShift ?? 1;
+	            this.#brightnessShift = color.BRIGHTNESS_SHIFT ?? color.brightnessShift ?? 0;
+	            this.#allowBrightnessInvert = color.ALLOW_BRIGHTNESS_INVERT ?? color.allowBrightnessInvert ?? false;
 	            break;
     		case 'string':
     			if (!color.includes(" ")) {
@@ -57,7 +63,7 @@ class Color {
     recompile () {
         let oldColor = this.compiled;
         this.compiled = this.#base + " " + this.#hueShift + " " + this.#saturationShift + " " + this.#brightnessShift + " " + this.#allowBrightnessInvert;
-        if (isTile && this.compiled != oldColor) {
+        if (this.isTile && this.compiled != oldColor) {
             room.sendColorsToClient = true;
         }
         return this.compiled;

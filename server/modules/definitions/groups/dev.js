@@ -21,7 +21,7 @@ Class.developer = {
     CAN_BE_ON_LEADERBOARD: true,
     CAN_GO_OUTSIDE_ROOM: false,
     DRAW_HEALTH: true,
-    ARENA_CLOSER: false,
+    ARENA_CLOSER: true,
     INVISIBLE: [0, 0],
     ALPHA: [0, 1],
     HITS_OWN_TYPE: "hardOnlyTanks",
@@ -263,6 +263,32 @@ for (let tier = 0; tier < 6; tier++) {
                 }],
             });
         }
+        let str = `laby${tier}${poly}Crasher`,
+            LABEL = str[0].toUpperCase() + str.slice(1).replace(/\d/, d => ["", "Beta", "Alpha", "Omega", "Gamma", "Delta"][d]).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
+            code = str + 'Generator';
+        column.push(Class[code] = {
+            PARENT: "spectator",
+            LABEL,
+            SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
+            TURRETS: [{
+                POSITION: [5 + tier * 2, 0, 0, 0, 0, 1],
+                TYPE: str,
+            }],
+            GUNS: [{
+                POSITION: [14, 12, 1, 4, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+                    TYPE: "bullet"
+                }
+            }, {
+                POSITION: [12, 12, 1.4, 4, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+                    INDEPENDENT_CHILDREN: true,
+                    TYPE: str
+                },
+            }],
+        });
         row.push(column);
     }
     labyTensor.push(row);

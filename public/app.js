@@ -1974,11 +1974,16 @@ function animloop() {
             gameDrawDisconnected();
         }
         ctx.translate(-0.5, -0.5);
+
+    //oh no we need to throw an error!
     } catch (e) {
+
+        //hold on....
         gameDrawError();
         ctx.translate(-0.5, -0.5);
-        console.log(e);
-        throw Error('Something has gone wrong!');
+
+        //okay, NOW throw the error!
+        throw e;
     }
 }
 
