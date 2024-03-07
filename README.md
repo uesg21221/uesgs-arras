@@ -1,5 +1,7 @@
 # Open Source Arras
 
+![Discord](https://img.shields.io/discord/1004907608018264094)
+
 **Open Source Arras is beta software.** This build is **not** representative of the final product. Expect bugs and missing features.
 
 ## Setup Guide (Localhost)
