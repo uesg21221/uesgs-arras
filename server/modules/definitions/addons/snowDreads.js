@@ -101,7 +101,7 @@ function addSniper({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0,
 				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 20, SATURATION_SHIFT: 0.5 }
 			},
 		}, {
-			POSITION: [length - 3.2, width * 0.8, -0.65, x, y, angle, delay],
+			POSITION: [length - 3.3, width * 0.8, -0.65, x, y, angle, delay],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 				TYPE: "bullet",
@@ -109,7 +109,7 @@ function addSniper({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0,
 				BORDERLESS: true,
 			},
 		}, {
-			POSITION: [length - 1.5, width * 0.6, -0.65, x, y, angle, delay],
+			POSITION: [length - 1.6, width * 0.6, -0.65, x, y, angle, delay],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 				TYPE: "bullet",
@@ -125,7 +125,7 @@ function addSniper({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0,
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 					TYPE: "bullet",
-					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 32.5, SATURATION_SHIFT: 0.5 },
+					COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift - 12.5 },
 				},
 			},
 		)
@@ -204,7 +204,7 @@ function addRifle({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, 
 					TYPE: "bullet",
 				},
 			}, {
-				POSITION: [length - 1.5, width, aspect - 0.3, x, y + (width + 1) / 2, angle, delay],
+				POSITION: [length - 2.5, width, aspect - 0.3, x, y + (width + 1) / 2, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 					TYPE: "bullet",
@@ -212,13 +212,19 @@ function addRifle({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, 
 					BORDERLESS: true
 				}
 			}, {
-				POSITION: [length - 1.5, width, aspect - 0.3, x, y - (width + 1) / 2, angle, delay + 0.5],
+				POSITION: [length - 2.5, width, aspect - 0.3, x, y - (width + 1) / 2, angle, delay + 0.5],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 					TYPE: "bullet",
 					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 7.5, SATURATION_SHIFT: 0.65 },
 					BORDERLESS: true
 				}
+			}, {
+				POSITION: [length - 4.5, width * 1.5, aspect - 0.4, x, y, angle, delay],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 12.5 } }
+			}, {
+				POSITION: [length - 6.5, width * 1.3, aspect - 0.45, x, y, angle, delay],
+				PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 20 }, BORDERLESS: true }
 			},
 		];
 	}
@@ -285,7 +291,7 @@ function addHunter({length = 18, width = 8, dimensionDifference = 3, barrelCount
 					TYPE: "bullet",
 				},
 			}, {
-				POSITION: [length + i * dimensionDifference, width - i * dimensionDifference - 2.5, -aspect + 0.3, x, y, angle, delay + delayOffset * (barrelCount - i - 1)],
+				POSITION: [length + i * dimensionDifference, width - i * dimensionDifference - 3, -aspect + 0.3, x, y, angle, delay + delayOffset * (barrelCount - i - 1)],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 12.5, SATURATION_SHIFT: 0.75 },
@@ -297,7 +303,7 @@ function addHunter({length = 18, width = 8, dimensionDifference = 3, barrelCount
 	}
 	output.push(
 		{
-			POSITION: [length - 1.5, width - 3.5, -aspect + 0.3, x, y, angle, delay + delayOffset * (barrelCount - 1)],
+			POSITION: [length - 1.5, width - 4, -aspect + 0.3, x, y, angle, delay + delayOffset * (barrelCount - 1)],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.8 },
@@ -438,14 +444,14 @@ function addSpam({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, d
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 				TYPE: "bullet",
-				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.65 }
+				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.75 }
 			},
 		}, {
 			POSITION: [length - 2, width - 1, aspect - 0.3, x, y, angle, delay],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 				TYPE: "bullet",
-				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift, SATURATION_SHIFT: 0.65 },
+				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.75 },
 				BORDERLESS: true,
 			},
 		},
@@ -540,7 +546,7 @@ function addLauncher({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 
 				POSITION: [9.5, width - 3, -0.75, x + length - 8, y, angle, 0],
 				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true} 
 			}, {
-				POSITION: [length, width, 1, x, y, angle, delay],
+				POSITION: [length, width, 0.95, x, y, angle, delay],
 				PROPERTIES: {
 					SHOOT_SETTINGS: combineStats(stats),
 					TYPE,
@@ -555,31 +561,30 @@ function addLauncher({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 
 				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true}
 			},
 		];
-	} else {
-		return [
-			{
-				POSITION: [length - 6, width - 3, 1, x+8, y, angle, delay],
-				PROPERTIES: {
-					SHOOT_SETTINGS: combineStats(stats),
-					TYPE,
-					STAT_CALCULATOR: gunCalcNames.sustained,
-					COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6 },
-				},
-			}, {
-				POSITION: [length, width, 1, x, y, angle, 0],
-				PROPERTIES: {COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5 }} 
-			}, {
-				POSITION: [length, width - 2, 1, x, y, angle, 0],
-				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.6 }}
-			}, {
-				POSITION: [length, width - 2, 0.75, x - 1.5, y, angle, 0],
-				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true}
-			}, {
-				POSITION: [length, width - 2, 0.75, x - 4, y, angle, 0],
-				PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift + 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true}
-			},
-		];
 	}
+	return [
+		{
+			POSITION: [length - 6, width - 3, 1, x+8, y, angle, delay],
+			PROPERTIES: {
+				SHOOT_SETTINGS: combineStats(stats),
+				TYPE,
+				STAT_CALCULATOR: gunCalcNames.sustained,
+				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6 },
+			},
+		}, {
+			POSITION: [length, width, 1, x, y, angle, 0],
+			PROPERTIES: {COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5 }} 
+		}, {
+			POSITION: [length, width - 2, 1, x, y, angle, 0],
+			PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.6 }}
+		}, {
+			POSITION: [length, width - 2, 0.75, x - 1.5, y, angle, 0],
+			PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true}
+		}, {
+			POSITION: [length, width - 2, 0.75, x - 4, y, angle, 0],
+			PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift + 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true}
+		},
+	];
 }
 function addShotgun({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, realGuns = [], bigStats = [g.basic], smallStats = [g.basic]) {
 	let output = [
@@ -815,7 +820,7 @@ function addSwarm({length = 18, width = 8, aspect = 0.6, x = 0, y = 0, angle = 0
 function addTrap({length = 18, length2 = 3, width = 8, aspect = 1.6, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 6, stats = [g.trap], isBox = false) {
 	return [
 		{
-			POSITION: [length, width * 1.25, 1, x, y, angle, 0],
+			POSITION: [length + length2 * 0.5, width * 1.3, 1, x, y, angle, 0],
 			PROPERTIES: {COLOR: {BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10}}
 		}, {
 			POSITION: [length, width, 1, x, y, angle, 0],
@@ -2382,8 +2387,8 @@ Class.screwdriverSnowdread = { // trap + gun
 }
 for(let i = 0; i < 4; i++) {
 	Class.screwdriverSnowdread.GUNS.push(
-		...addNormal({length: 19, width: 7, angle: 90*i}, 0, [g.basic, g.flankGuard]),
-		...addTrap({length: 13, length2: 3.75, width: 7, aspect: 1.75, angle: 90*i}, 1.5, [g.trap, g.hexaTrapper]),
+		...addNormal({length: 19, width: 7, angle: 90*i}, 2.5, [g.basic, g.flankGuard]),
+		...addTrap({length: 13, length2: 3.75, width: 7, aspect: 1.75, angle: 90*i}, 3.5, [g.trap, g.hexaTrapper]),
 	)
 }
 
@@ -2995,7 +3000,7 @@ Class.atlatlSnowdread = { // hunter
 }
 for (let i = 0; i < 3; i++) {
 	Class.atlatlSnowdread.GUNS.push(
-		...addHunter({length: 18, width: 9, dimensionDifference: 3, angle: 120*i}, 0, [g.basic, g.sniper, g.assassin, g.hunter, {health: 1.1}]),
+		...addHunter({length: 18, width: 9, dimensionDifference: 3, angle: 120*i}, -10, [g.basic, g.sniper, g.assassin, g.hunter, {health: 1.1}]),
 		{
 			POSITION: [5, 9, -1.6, 6, 0, 120*i, 0],
 			PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -20, SATURATION_SHIFT: 0.5 } },
@@ -3344,7 +3349,7 @@ Class.beelzebubSnowdread = {
 }
 for (let i = 0; i < 3; i++) {
 	Class.beelzebubSnowdread.GUNS.push(
-		...addTrap({length: 13, length2: 3.5, width: 10, aspect: 1.6, angle: 120*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.3, maxSpeed: 1.3, size: 1.2, health: 2}], true)
+		...addTrap({length: 13.5, length2: 3.5, width: 9.5, aspect: 1.6, angle: 120*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.3, maxSpeed: 1.3, size: 1.2, health: 2}], true)
 	)
 }
 Class.sweeperSnowdread = { // auto-traps
@@ -3355,7 +3360,7 @@ Class.sweeperSnowdread = { // auto-traps
 }
 for(let i = 0; i < 3; i++) {
 	Class.sweeperSnowdread.GUNS.push(
-		...addAutoTrap({length: 15.5, length2: 2, width: 15, aspect: 1.3, angle: 120*i}, -2.5, [g.trap, g.setTrap, {reload: 2.5}], 4, true)
+		...addAutoTrap({length: 15.5, length2: 2, width: 11, aspect: 1.3, angle: 120*i}, -2.5, [g.trap, g.setTrap, {reload: 2.25}], 4, true)
 	)
 }
 Class.auraBlockAura = addAura(1/3, 1.6, 0.15, 0, "Small");
@@ -3390,8 +3395,8 @@ Class.drillSnowdread = { // trap + gun
 }
 for(let i = 0; i < 3; i++) {
 	Class.drillSnowdread.GUNS.push(
-		...addNormal({length: 20, width: 9, angle: 120*i}, 0, [g.basic, g.flankGuard]),
-		...addTrap({length: 13.5, length2: 3, width: 11, aspect: 1.4, angle: 120*i}, 0, [g.trap, g.setTrap, g.hexaTrapper], true)
+		...addNormal({length: 19, width: 7.5, angle: 120*i}, 0, [g.basic, g.flankGuard]),
+		...addTrap({length: 13.5, length2: 3, width: 9.5, aspect: 1.4, angle: 120*i}, 0, [g.trap, g.setTrap, g.hexaTrapper], true)
 	)
 }
 
@@ -4372,11 +4377,12 @@ Class.woomeraSnowdread = { // hunter
 	LABEL: "Woomera",
 	UPGRADE_TOOLTIP: "X-Predators",
 	CONTROLLERS: [["zoom", { distance: 450 }]],
+	TOOLTIP: "Hold right click to zoom.",
 	GUNS: [],
 }
 for (let i = 0; i < 5; i++) {
 	Class.woomeraSnowdread.GUNS.push(
-		...addHunter({length: 20, width: 10.5, dimensionDifference: 2.5, angle: 72*i, barrelCount: 3}, 2.5, [g.basic, g.sniper, g.assassin, g.hunter, g.predator, {health: 1.1}]),
+		...addHunter({length: 20, width: 10.5, dimensionDifference: 2.5, angle: 72*i, barrelCount: 3}, -5, [g.basic, g.sniper, g.assassin, g.hunter, g.predator, {health: 1.1}]),
 		{
 			POSITION: [5, 10.5, -1.6, 7.5, 0, 72*i, 0],
 			PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: -15, SATURATION_SHIFT: 0.5 }, },
@@ -4810,8 +4816,8 @@ Class.cerberusSnowdread = {
 }
 for (let i = 0; i < 5; i++) {
 	Class.cerberusSnowdread.GUNS.push(
-		...addTrap({length: 13, length2: 1.5, width: 4, y: 2.2, angle: 72*i+10, delay: 0.5}, 0, [g.trap, g.pounder, {speed: 1.2, reload: 1.09}]),
-		...addTrap({length: 13, length2: 1.5, width: 4, y: -2.2, angle: 72*i-10, delay: 0.5}, 0, [g.trap, g.pounder, {speed: 1.2, reload: 1.09}]),
+		...addTrap({length: 13, length2: 1.5, width: 4, y: 2.1, angle: 72*i+10, delay: 0.5}, 0, [g.trap, g.pounder, {speed: 1.2, reload: 1.09}]),
+		...addTrap({length: 13, length2: 1.5, width: 4, y: -2.1, angle: 72*i-10, delay: 0.5}, 0, [g.trap, g.pounder, {speed: 1.2, reload: 1.09}]),
 		...addTrap({length: 15, length2: 2, width: 5.5, aspect: 1.7, angle: 72*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.2, reload: 1.09}], true),
 	)
 }
@@ -4823,7 +4829,7 @@ Class.luciferSnowdread = {
 }
 for (let i = 0; i < 5; i++) {
 	Class.luciferSnowdread.GUNS.push(
-		...addTrap({length: 13, length2: 3.5, width: 10, angle: 72*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.3, maxSpeed: 1.3, size: 1.3, health: 2}], true),
+		...addTrap({length: 13, length2: 3.5, width: 9.5, angle: 72*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.3, maxSpeed: 1.3, size: 1.3, health: 2}], true),
 	)
 }
 Class.sterilizerSnowdread = { // auto-traps
@@ -4834,7 +4840,7 @@ Class.sterilizerSnowdread = { // auto-traps
 }
 for(let i = 0; i < 5; i++) {
 	Class.sterilizerSnowdread.GUNS.push(
-		...addAutoTrap({length: 16.5, length2: 2, width: 11, aspect: 1.3, angle: 72*i}, 0, [g.trap, g.setTrap, {reload: 2.667}], 4, true)
+		...addAutoTrap({length: 16.5, length2: 2, width: 9.5, aspect: 1.3, angle: 72*i}, 0, [g.trap, g.setTrap, {reload: 2.667}], 4, true)
 	)
 }
 Class.hielamanSnowdread = { // aura-traps
@@ -4856,8 +4862,8 @@ Class.jackhammerSnowdread = { // trap + gun
 }
 for(let i = 0; i < 5; i++) {
 	Class.jackhammerSnowdread.GUNS.push(
-		...addNormal({length: 21, width: 8, angle: 72*i}, 7.5),
-		...addTrap({length: 14.5, length2: 3, width: 10, aspect: 1.4, angle: 72*i}, 0, [g.trap, g.setTrap, g.hexaTrapper], true)
+		...addNormal({length: 19, width: 6.75, angle: 72*i}, 7.5),
+		...addTrap({length: 13.5, length2: 3, width: 8.5, aspect: 1.4, angle: 72*i}, 0, [g.trap, g.setTrap, g.hexaTrapper], true)
 	)
 }
 
@@ -6656,6 +6662,7 @@ function mergeHexnoughtWeaponV2(weapon1, weapon2) {
 		turretsOnOneSide = [],
 		weapon2TurretsOnOneSide = [],
 		CONTROLLERS = weapon2.CONTROLLERS,
+		TOOLTIP,
 		UPGRADE_TOOLTIP = weapon1.UPGRADE_TOOLTIP + " + " + weapon2.UPGRADE_TOOLTIP;
 
 	// Label
@@ -6671,6 +6678,10 @@ function mergeHexnoughtWeaponV2(weapon1, weapon2) {
 	}
 	let LABEL = weaponName,
 		className = weapon1.LABEL.toLowerCase() + weapon2.LABEL + orientationId + "Snowdread";
+	
+	// Tooltip
+	if (weapon1.TOOLTIP) TOOLTIP = weapon1.TOOLTIP + " ";
+	if (weapon2.TOOLTIP && weapon1.LABEL != weapon2.LABEL) TOOLTIP += weapon2.TOOLTIP;
 
 	// Upgrade Tooltip
 	if (weapon1.LABEL == weapon2.LABEL) UPGRADE_TOOLTIP = weapon1.UPGRADE_TOOLTIP;
@@ -6746,7 +6757,7 @@ function mergeHexnoughtWeaponV2(weapon1, weapon2) {
 
 	// Smash it together
 	Class[className] = {
-		PARENT, BODY, LABEL, UPGRADE_TOOLTIP, GUNS, TURRETS, CONTROLLERS
+		PARENT, BODY, LABEL, TOOLTIP, UPGRADE_TOOLTIP, GUNS, TURRETS, CONTROLLERS
 	};
 	return className;
 }
