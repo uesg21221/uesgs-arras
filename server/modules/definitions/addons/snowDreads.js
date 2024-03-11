@@ -506,34 +506,26 @@ function addHeavy({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, 
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats(stats),
 				TYPE: "bullet",
-				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 20, SATURATION_SHIFT: 0.5 },
-				BORDERLESS: true
+				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 17.5, SATURATION_SHIFT: 0.6 },
 			},
 		}, {
-			POSITION: [length, width * 0.8, -aspect + 0.175, x, y, angle, delay],
+			POSITION: [length - 2, width * 1.2, aspect - 0.35, x, y, angle, delay],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([...stats, g.fake]),
 				TYPE: "bullet",
-				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.8 },
-				BORDERLESS: true
+				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.7 },
+				BORDERLESS: true,
 			},
 		}, {
-			POSITION: [length, width * 0.55, -aspect + 0.35, x, y, angle, delay],
-			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([...stats, g.fake]),
-				TYPE: "bullet",
-				COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5 },
-				BORDERLESS: true
-			},
+			POSITION: [(length - 11.5) * 0.75, width * 0.65, aspect - 0.4, x + 11.5, y, angle, 0],
+			PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 2.5 } },
 		}, {
-			POSITION: [length, width, aspect, x, y, angle, delay],
-			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([...stats, g.fake]),
-				TYPE: "bullet",
-				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 20, SATURATION_SHIFT: 0.5 },
-				DRAW_FILL: false
-			},
-		},
+			POSITION: [11.5, width * 0.8, -aspect + 0.25, x, y, angle, 0],
+			PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 2.5 } },
+		}, {
+			POSITION: [length * 0.8, width * 0.8, aspect - 0.6, x, y, angle, 0],
+			PROPERTIES: { COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.75 } },
+		}, 
 	];
 }
 function addLauncher({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0, delay = 0}, brightShift = 0, stats = [g.basic], isSkimmer = false, TYPE = "missileProjectileSnowdread") {
