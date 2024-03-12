@@ -2021,8 +2021,8 @@ Class.mediatorSnowdread = {
 }
 for (let i = 0; i < 4; i++) {
 	Class.mediatorSnowdread.GUNS.push(
-		...addNormal({length: 15, width: 7, y: 4.25, angle: 90*i}, 5, [g.basic, g.twin, {reload: 0.85}]),
-		...addNormal({length: 15, width: 7, y: -4.25, angle: 90*i, delay: 0.5}, 5, [g.basic, g.twin, {reload: 0.85}]),
+		...addNormal({length: 15, width: 7, y: 4.25, angle: 90*i}, 7.5, [g.basic, g.twin, {reload: 0.85}]),
+		...addNormal({length: 15, width: 7, y: -4.25, angle: 90*i, delay: 0.5}, 7.5, [g.basic, g.twin, {reload: 0.85}]),
 	)
 }
 Class.negotiatorSnowdread = {
@@ -2033,7 +2033,7 @@ Class.negotiatorSnowdread = {
 }
 for (let i = 0; i < 4; i++) {
 	Class.negotiatorSnowdread.GUNS.push(
-		...addNormal({length: 9, width: 8, aspect: 1.4, x: 6, angle: 90*i}, 5, [g.basic, g.machineGun, {size: 0.8, health: 1.3}]),
+		...addNormal({length: 9, width: 8, aspect: 1.4, x: 6, angle: 90*i}, 7.5, [g.basic, g.machineGun, {size: 0.8, health: 1.3}]),
 	)
 }
 Class.melderAutoSnowdread = {
@@ -2141,26 +2141,17 @@ Class.grabberTurretSnowdread = {
 		},
 	],
 };
-Class.grabberSnowdread = { // crowbar
+Class.grabberSnowdread = { // spread
 	PARENT: ["genericSquarenoughtSnowdread"],
 	LABEL: "Grabber",
-	UPGRADE_TOOLTIP: "Crowbars",
+	UPGRADE_TOOLTIP: "Triple Shots",
 	GUNS: [],
-	TURRETS: [],
 }
 for(let i = 0; i < 4; i++) {
 	Class.grabberSnowdread.GUNS.push(
-		...addCrowbar({x: 8, angle: 90*i}, -2.5)
-	)
-	Class.grabberSnowdread.TURRETS.push(
-		{
-			POSITION: [6.5, 38, 0, 90*i, 200, 1],
-			TYPE: 'grabberTurretSnowdread',
-		},
-		{
-			POSITION: [6.5, 28, 0, 90*i, 200, 1],
-			TYPE: 'grabberTurretSnowdread',
-		},
+		...addNormal({length: 17, width: 7, y: -1.5, angle: 90 * i - 15, delay: 0.5}, 7.5, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 17, width: 7, y: 1.5, angle: 90 * i + 15, delay: 0.5}, 7.5, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 19, width: 7, angle: 90 * i, delay: 0}, 7.5, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
 	)
 }
 Class.enforcerSnowdread = {
@@ -3129,28 +3120,20 @@ Class.clasperTurretSnowdread = {
 		},
 	],
 };
-Class.clasperSnowdread = { // crowbar
+Class.clasperSnowdread = { // spread
 	PARENT: ["genericTrinoughtSnowdread"],
 	LABEL: "Clasper",
-	UPGRADE_TOOLTIP: "Crowbars",
+	UPGRADE_TOOLTIP: "Penta Shots",
 	GUNS: [],
 	TURRETS: [],
 }
 for(let i = 0; i < 3; i++) {
 	Class.clasperSnowdread.GUNS.push(
-		...addCrowbar({length: 38, width: 6.5, aspect: -1.5, x: 8, angle: 120*i}, 0)
-	)
-	Class.clasperSnowdread.TURRETS.push(
-		{
-			POSITION: [6.5, 38, 0, 120*i, 200, 1],
-			TYPE: 'clasperTurretSnowdread'
-		}, {
-			POSITION: [6.5, 28, 0, 120*i, 200, 1],
-			TYPE: 'clasperTurretSnowdread'
-		}, {
-			POSITION: [6.5, 18, 0, 120*i, 200, 1],
-			TYPE: 'clasperTurretSnowdread'
-		},
+		...addNormal({length: 15, width: 7, y: -2.5, angle: 120 * i - 22, delay: 2/3}, 7.5, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 15, width: 7, y: 2.5, angle: 120 * i + 22, delay: 2/3}, 7.5, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 17, width: 7, y: -1.25, angle: 120 * i - 11, delay: 1/3}, 7.5, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 17, width: 7, y: 1.25, angle: 120 * i + 11, delay: 1/3}, 7.5, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 19, width: 7, angle: 120 * i, delay: 0}, 7.5, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
 	)
 }
 Class.suppressorSnowdread = {
@@ -4510,7 +4493,7 @@ Class.gripperTurretSnowdread = {
 		},
 	],
 };
-Class.gripperSnowdread = { // crowbar
+Class.gripperSnowdread = { // spread
 	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Gripper",
 	UPGRADE_TOOLTIP: "Crowbars",
@@ -4519,16 +4502,11 @@ Class.gripperSnowdread = { // crowbar
 }
 for(let i = 0; i < 5; i++) {
 	Class.gripperSnowdread.GUNS.push(
-		...addCrowbar({length: 38, width: 7.5, x: 8, angle: 72*i}, 0)
-	)
-	Class.gripperSnowdread.TURRETS.push(
-		{
-			POSITION: [7.5, 38, 0, 72*i, 200, 1],
-			TYPE: 'gripperTurretSnowdread',
-		}, {
-			POSITION: [7.5, 28, 0, 72*i, 200, 1],
-			TYPE: 'gripperTurretSnowdread',
-		},
+		...addNormal({length: 15.5, width: 5.5, y: 1, angle: 72 * i - 22, delay: 2/3}, 10, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 15.5, width: 5.5, y: -1, angle: 72 * i + 22, delay: 2/3}, 10, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 17, width: 5.5, y: 0, angle: 72 * i - 11, delay: 1/3}, 10, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 17, width: 5.5, y: 0, angle: 72 * i + 11, delay: 1/3}, 10, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
+		...addNormal({length: 18.5, width: 5.5, angle: 72 * i, delay: 0}, 10, [g.basic, g.twin, g.tripleShot, {size: 0.95, reload: 0.95, health: 1.15}]),
 	)
 }
 Class.retardantSnowdread = {
@@ -5279,8 +5257,11 @@ Class.astronomicSnowdread = {
 			POSITION: [12, 0, 0, 180, 0, 1],
 			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
 		}, {
+			POSITION: [7.5, 0, 0, 180, 0, 1],
+			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 10}}],
+		}, {
 			POSITION: [24, 0, 0, 180, 0, -1],
-			TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
 		}, {
 			POSITION: [20, 0, 0, 0, 0, 1],
 			TYPE: ["pentagonBaseDeco"],
@@ -5298,11 +5279,14 @@ Class.grandioseSnowdread = {
 			POSITION: [12, 0, 0, 180, 0, 1],
 			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
 		}, {
+			POSITION: [7.5, 0, 0, 180, 0, 1],
+			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 10}}],
+		}, {
 			POSITION: [20, 0, 0, 0, 0, 1],
 			TYPE: ["pentagonBaseDeco"],
 		}, {
 			POSITION: [24, 0, 0, 180, 0, -1],
-			TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
 		},
 		...addPentanoughtAuraRing(true),
 	],
@@ -5317,11 +5301,14 @@ Class.bunkerSnowdread = { // HP + auto spam
 			POSITION: [12, 0, 0, 180, 0, 1],
 			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
 		}, {
+			POSITION: [7.5, 0, 0, 180, 0, 1],
+			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 10}}],
+		}, {
 			POSITION: [20, 0, 0, 0, 0, 1],
 			TYPE: ["pentagonBaseDeco"],
 		}, {
 			POSITION: [24, 0, 0, 180, 0, -1],
-			TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
 		},
 		...addPentanoughtTurretRing(),
 	],
@@ -5340,7 +5327,7 @@ Class.arsenalSnowdread = { // HP + big auto
 			TYPE: ["pentagonBaseDeco"],
 		}, {
 			POSITION: [24, 0, 0, 180, 0, -1],
-			TYPE: ["pentagon", {COLOR: 9,MIRROR_MASTER_ANGLE: true}],
+			TYPE: ["pentagon", {COLOR: 9, MIRROR_MASTER_ANGLE: true}],
 		}, {
 			POSITION: [11.5, 0, 0, 0, 360, 1],
 			TYPE: "megabyteTurretSnowdread",
@@ -5348,6 +5335,13 @@ Class.arsenalSnowdread = { // HP + big auto
 	],
 }
 Class.pentagonLeviathanTopSnowdread = {
+	PARENT: ["genericPentanoughtSnowdread"],
+	LABEL: "Leviathan",
+	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
+	MIRROR_MASTER_ANGLE: true,
+	GUNS: [],
+}
+Class.pentagonLeviathanTop2Snowdread = {
 	PARENT: ["genericPentanoughtSnowdread"],
 	LABEL: "Leviathan",
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
@@ -5370,6 +5364,15 @@ for (let i = 0; i < 5; i++) {
 			PROPERTIES: {COLOR: 9, DRAW_ABOVE: true},
 		},
 	);
+	Class.pentagonLeviathanTop2Snowdread.GUNS.push(
+		{
+			POSITION: [4.5, 13.5, 0.001, 9, 0, 72*i, 0],
+			PROPERTIES: {COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 10}},
+		}, {
+			POSITION: [3, 11.5, 0, 6.7, 0, 72*i, 0],
+			PROPERTIES: {COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 10}, DRAW_ABOVE: true},
+		},
+	);
 	Class.pentagonLeviathanBottomSnowdread.GUNS.push(
 		{
 			POSITION: [7, 17, 0.001, 9, 0, 72*i, 0],
@@ -5378,6 +5381,13 @@ for (let i = 0; i < 5; i++) {
 	);
 }
 Class.hexagonLeviathanTopSnowdread = {
+	PARENT: ["genericHexnoughtSnowdread"],
+	LABEL: "Leviathan",
+	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
+	MIRROR_MASTER_ANGLE: true,
+	GUNS: [],
+}
+Class.hexagonLeviathanTop2Snowdread = {
 	PARENT: ["genericHexnoughtSnowdread"],
 	LABEL: "Leviathan",
 	COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5},
@@ -5398,6 +5408,15 @@ for (let i = 0; i < 6; i++) {
 		}, {
 			POSITION: [3, 9, 0, 7, 0, 60*i, 0],
 			PROPERTIES: {COLOR: 9, DRAW_ABOVE: true},
+		},
+	)
+	Class.hexagonLeviathanTop2Snowdread.GUNS.push(
+		{
+			POSITION: [5, 10, 0.001, 9.5, 0, 60*i, 0],
+			PROPERTIES: {COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 10}},
+		}, {
+			POSITION: [2.5, 9, 0, 7.5, 0, 60*i, 0],
+			PROPERTIES: {COLOR: {BASE: 9, BRIGHTNESS_SHIFT: 10}, DRAW_ABOVE: true},
 		},
 	)
 	Class.hexagonLeviathanBottomSnowdread.GUNS.push(
@@ -5432,8 +5451,8 @@ Class.valrayvnSnowdread = {
 	BODY: speedBuffBodyStats[1],
 	TURRETS: [
 		{
-			POSITION: [12, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
+			POSITION: [12, 0, 0, 0, 0, 1],
+			TYPE: ["pentagonLeviathanTop2Snowdread", {MIRROR_MASTER_ANGLE: true}]
 		}, {
 			POSITION: [20, 0, 0, 0, 0, 1],
 			TYPE: ["pentagonBaseDeco"],
@@ -5451,8 +5470,8 @@ Class.pegasusSnowdread = {
 	BODY: speedBuffBodyStats[1],
 	TURRETS: [
 		{
-			POSITION: [12, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
+			POSITION: [12, 0, 0, 0, 0, 1],
+			TYPE: ["pentagonLeviathanTop2Snowdread", {MIRROR_MASTER_ANGLE: true}]
 		}, {
 			POSITION: [20, 0, 0, 0, 0, 1],
 			TYPE: ["pentagonBaseDeco"],
@@ -5470,8 +5489,8 @@ Class.maceSnowdread = { // Speed + auto spam
 	BODY: speedBuffBodyStats[1],
 	TURRETS: [
 		{
-			POSITION: [12, 0, 0, 180, 0, 1],
-			TYPE: ["pentagon", {MIRROR_MASTER_ANGLE: true, COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}}],
+			POSITION: [12, 0, 0, 0, 0, 1],
+			TYPE: ["pentagonLeviathanTop2Snowdread", {MIRROR_MASTER_ANGLE: true}]
 		}, {
 			POSITION: [20, 0, 0, 0, 0, 1],
 			TYPE: ["pentagonBaseDeco"],
