@@ -1,5 +1,9 @@
 # Open Source Arras
 
+![GitHub Release](https://img.shields.io/github/v/release/Taureon/aps-plus-plus)
+![Discord](https://img.shields.io/discord/1004907608018264094)
+![GitHub repo size](https://img.shields.io/github/repo-size/Taureon/aps-plus-plus)
+
 **Open Source Arras is beta software.** This build is **not** representative of the final product. Expect bugs and missing features.
 
 ## Setup Guide (Localhost)
@@ -24,7 +28,7 @@ Create a new project and choose to import one from GitHub. When prompted for the
 
 Navigate to `server/config.js` and replace `localhost:26301` with the URL for your project. (For Glitch users, it's `your-project.glitch.me` (replace `your-project` with the actual name of your project, it should be above settings)).
 
-For Glitch specifically, go to `package.json` and replace `"node": "18.x"` with `"node": "16.x"`. Glitch doesn't currently support Node 18.
+**For Glitch specifically, go to `package.json` and replace `"node": "18.x"` with `"node": "16.x"`. Glitch doesn't currently support Node 18.**
 
 After doing that, your server should be ready!
 
