@@ -564,17 +564,17 @@ function addLauncher({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 
 				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 15, SATURATION_SHIFT: 0.6 },
 			},
 		}, {
-			POSITION: [length, width, 1, x, y, angle, 0],
+			POSITION: [length, width, -1.15, x, y, angle, 0],
 			PROPERTIES: {COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5 }} 
 		}, {
-			POSITION: [length, width - 2, 1, x, y, angle, 0],
-			PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.6 }}
+			POSITION: [length, width - 2.5, -0.6, x, y, angle, 0],
+			PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 5, SATURATION_SHIFT: 0.7 }}
 		}, {
-			POSITION: [length, width - 2, 0.75, x - 1.5, y, angle, 0],
-			PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true}
-		}, {
-			POSITION: [length, width - 2, 0.75, x - 4, y, angle, 0],
+			POSITION: [length, width - 3, 0.7, x - 2, y, angle, 0],
 			PROPERTIES: {COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift + 2.5, SATURATION_SHIFT: 0.7 }, BORDERLESS: true}
+		}, {
+			POSITION: [length * 0.8, width * 0.45, 0.001, x, y, angle, 0],
+			PROPERTIES: {COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10 }} 
 		},
 	];
 }
@@ -607,6 +607,9 @@ function addShotgun({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0
 				COLOR: { BASE: -1, BRIGHTNESS_SHIFT: brightShift - 10, SATURATION_SHIFT: 0.7 },
 			},
 		}, {
+			POSITION: [length - x - 4, width * 0.5, 0.001, x, y, angle, 0],
+			PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 5 } },
+		}, {
 			POSITION: [6, width - 1.5, -1.3, x - 1.5, y, angle, 0],
 			PROPERTIES: { COLOR: { BASE: 17, BRIGHTNESS_SHIFT: brightShift + 10 } },
 		},
@@ -617,7 +620,7 @@ function addShotgun({length = 18, width = 8, aspect = 1, x = 0, y = 0, angle = 0
 			stats = gun.small ? smallStats : bigStats,
 			TYPE = i % 3 == 0 ? "casing" : "bullet";
 		if (gun.small) hasSmall = true;
-		output.push({
+		output.splice(0, 0, {
 			POSITION: [gun.l, gun.w, 0.001, 0, g.y, angle, delay],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats(stats),
@@ -2173,7 +2176,7 @@ Class.executorSnowdread = {
 }
 for (let i = 0; i < 4; i++) {
 	Class.executorSnowdread.GUNS.push(
-		...addLauncher({length: 17, width: 9, angle: 90*i}, -5, [g.basic, g.pounder, g.artillery, {speed: 0.5, maxSpeed: 0.4, reload: 0.8}])
+		...addLauncher({length: 17, width: 9, angle: 90*i}, -5, [g.basic, g.pounder, g.artillery, {size: 0.9, speed: 0.5, maxSpeed: 0.4, reload: 0.8}])
 	)
 }
 Class.doserSnowdread = { // shotgun
@@ -2184,7 +2187,7 @@ Class.doserSnowdread = { // shotgun
 }
 for(let i = 0; i < 4; i++) {
 	Class.doserSnowdread.GUNS.push(
-		...addShotgun({length: 21, width: 12, x: 6, angle: 90*i}, -2.5, [
+		...addShotgun({length: 21, width: 10.5, x: 6, angle: 90*i}, 2.5, [
 			{l: 15, w: 3, y: -3},
 			{l: 14, w: 3, y: 3},
 			{l: 17, w: 4, y: 0},
@@ -2217,7 +2220,7 @@ Class.swirlSnowdread = { // twister
 }
 for(let i = 0; i < 4; i++) {
 	Class.swirlSnowdread.GUNS.push(
-		...addTwister({length: 17, width: 10, angle: 90*i}, -5, [g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, {speed: 1.3, maxSpeed: 1.3, reload: 1.333}], "swirlMissileSnowdread")
+		...addTwister({length: 16, width: 8.5, angle: 90*i}, 0, [g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, {speed: 1.3, maxSpeed: 1.3, reload: 1.333}], "swirlMissileSnowdread")
 	)
 }
 Class.pelterSnowdread = { // artillery
@@ -2335,7 +2338,7 @@ Class.minotaurSnowdread = {
 }
 for (let i = 0; i < 4; i++) {
 	Class.minotaurSnowdread.GUNS.push(
-		...addTrap({length: 13, length2: 3.75, width: 7, aspect: 1.75, angle: 90*i}, 0, [g.trap, g.setTrap, {health: 2}], true),
+		...addTrap({length: 13, length2: 3.75, width: 7, aspect: 1.75, angle: 90*i}, 2.5, [g.trap, g.setTrap, {health: 2}], true),
 	)
 }
 Class.cleanerSnowdread = { // auto-traps
@@ -2346,7 +2349,7 @@ Class.cleanerSnowdread = { // auto-traps
 }
 for(let i = 0; i < 4; i++) {
 	Class.cleanerSnowdread.GUNS.push(
-		...addAutoTrap({length: 15, width: 6, aspect: 1.7, angle: 90*i}, -5, [g.trap, {health: 1.2, reload: 1.15, speed: 0.8}], 7)
+		...addAutoTrap({length: 15, width: 6, aspect: 1.7, angle: 90*i}, 0, [g.trap, {health: 1.2, reload: 1.15, speed: 0.8}], 7)
 	)
 }
 Class.auraTrapAura = addAura(1/3, 2.5, 0.15, 0, "Small");
@@ -3155,7 +3158,7 @@ Class.inhibitorSnowdread = {
 }
 for (let i = 0; i < 3; i++) {
 	Class.inhibitorSnowdread.GUNS.push(
-		...addLauncher({length: 15, width: 15, angle: 120*i}, -5, [g.basic, g.pounder, g.artillery, g.skimmer, {reload: 1.5}], true, "superMissileSnowdread")
+		...addLauncher({length: 15, width: 12.5, angle: 120*i}, -5, [g.basic, g.pounder, g.artillery, g.skimmer, {size: 0.9, reload: 1.5}], true, "superMissileSnowdread")
 	)
 }
 Class.tranquilizerSnowdread = { // shotgun
@@ -3166,7 +3169,7 @@ Class.tranquilizerSnowdread = { // shotgun
 }
 for(let i = 0; i < 3; i++) {
 	Class.tranquilizerSnowdread.GUNS.push(
-		...addShotgun({length: 21, width: 14, x: 5, angle: 120*i}, 0, [
+		...addShotgun({length: 20, width: 12, x: 5, angle: 120*i}, 0, [
 			{l: 15, w: 3, y: -3},
 			{l: 15, w: 3, y: 3},
 			{l: 17, w: 4, y: 0},
@@ -3200,7 +3203,7 @@ Class.spiralSnowdread = { // twister
 }
 for(let i = 0; i < 3; i++) {
 	Class.spiralSnowdread.GUNS.push(
-		...addTwister({length: 17, width: 11, aspect: -1.4, angle: 120*i}, -5, [g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, {speed: 1.55, maxSpeed: 1.3, reload: 1.333}], "spiralMissileSnowdread")
+		...addTwister({length: 14, width: 9.25, x: 2, aspect: -1.4, angle: 120*i}, -5, [g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, {speed: 1.55, maxSpeed: 1.3, reload: 1.333}], "spiralMissileSnowdread")
 	)
 }
 Class.shellerSnowdread = { // artillery
@@ -3324,7 +3327,7 @@ Class.beelzebubSnowdread = {
 }
 for (let i = 0; i < 3; i++) {
 	Class.beelzebubSnowdread.GUNS.push(
-		...addTrap({length: 13.5, length2: 3.5, width: 9.5, aspect: 1.6, angle: 120*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.3, maxSpeed: 1.3, size: 1.2, health: 2}], true)
+		...addTrap({length: 13.5, length2: 3.5, width: 9, aspect: 1.6, angle: 120*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.3, maxSpeed: 1.3, size: 1.2, health: 2}], true)
 	)
 }
 Class.sweeperSnowdread = { // auto-traps
@@ -3335,7 +3338,7 @@ Class.sweeperSnowdread = { // auto-traps
 }
 for(let i = 0; i < 3; i++) {
 	Class.sweeperSnowdread.GUNS.push(
-		...addAutoTrap({length: 15.5, length2: 2, width: 11, aspect: 1.3, angle: 120*i}, -2.5, [g.trap, g.setTrap, {reload: 2.25}], 4, true)
+		...addAutoTrap({length: 15.5, length2: 2, width: 10.5, aspect: 1.3, angle: 120*i}, -2.5, [g.trap, g.setTrap, {reload: 2.25}], 4, true)
 	)
 }
 Class.auraBlockAura = addAura(1/3, 1.6, 0.15, 0, "Small");
@@ -4528,7 +4531,7 @@ Class.tyrantSnowdread = {
 }
 for (let i = 0; i < 5; i++) {
 	Class.tyrantSnowdread.GUNS.push(
-		...addLauncher({length: 15, width: 12, angle: 72*i}, 0, [g.basic, g.pounder, g.artillery, g.skimmer, {damage: 1.2, reload: 1.5}], true, "superMissileSnowdread")
+		...addLauncher({length: 15, width: 11, angle: 72*i}, 0, [g.basic, g.pounder, g.artillery, g.skimmer, {size: 0.9, damage: 1.2, reload: 1.5}], true, "superMissileSnowdread")
 	)
 }
 Class.anesthesiologistSnowdread = { // shotgun
@@ -4558,7 +4561,7 @@ Class.helixSnowdread = { // twister
 }
 for(let i = 0; i < 5; i++) {
 	Class.helixSnowdread.GUNS.push(
-		...addTwister({length: 17, width: 9.5, angle: 72*i}, 0, [g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, {speed: 1.9, maxSpeed: 1.3, reload: 1.333}], "spiralMissileSnowdread")
+		...addTwister({length: 17, width: 8.5, angle: 72*i}, 0, [g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, {speed: 1.9, maxSpeed: 1.3, reload: 1.333}], "spiralMissileSnowdread")
 	)
 }
 Class.bombardmentSnowdread = { // artillery
@@ -4799,7 +4802,7 @@ Class.luciferSnowdread = {
 }
 for (let i = 0; i < 5; i++) {
 	Class.luciferSnowdread.GUNS.push(
-		...addTrap({length: 13, length2: 3.5, width: 9.5, angle: 72*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.3, maxSpeed: 1.3, size: 1.3, health: 2}], true),
+		...addTrap({length: 13.5, length2: 3.5, width: 8.5, angle: 72*i}, 0, [g.trap, g.setTrap, g.pounder, {speed: 1.3, maxSpeed: 1.3, size: 1.3, health: 2}], true),
 	)
 }
 Class.sterilizerSnowdread = { // auto-traps
