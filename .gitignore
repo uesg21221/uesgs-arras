@@ -1,2 +1,12 @@
 node_modules/
 package-lock.json
+server/modules/definitions/addons/basicChatModeration.js
+server/modules/definitions/addons/dreadv1.js
+server/modules/definitions/addons/dreadv2.js
+server/modules/definitions/addons/exampleAddon.js
+server/modules/definitions/addons/labyFood.js
+server/modules/definitions/addons/snowCommands.js
+server/modules/definitions/addons/snowDreads.js
+server/modules/definitions/addons/snowMisc.js
+server/modules/definitions/addons/snowTesting.js
+server/modules/definitions/addons/snowVoidlings.js
