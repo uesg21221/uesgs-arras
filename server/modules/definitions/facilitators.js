@@ -766,7 +766,7 @@ exports.makeLabyrinthShape = (type) => {
     let downscale = Math.max(output.SHAPE, 3);
     return output;
 }
-exports.menu = (name = -1) => {
+exports.menu = (name = -1, color = -1, shape = 0) => {
     let gun = {
         POSITION: [18, 10, -1.4, 0, 0, 0, 0],
         PROPERTIES: {
@@ -778,6 +778,9 @@ exports.menu = (name = -1) => {
         PARENT: "genericTank",
         LABEL: name,
         GUNS: [gun],
+        COLOR: color,
+        UPGRADE_COLOR: color == -1 ? undefined : color,
+        SHAPE: shape,
         IGNORED_BY_AI: true,
     };
 }
