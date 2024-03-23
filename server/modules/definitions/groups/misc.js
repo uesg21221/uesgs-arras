@@ -247,6 +247,7 @@ Class.trapperDominator = {
 Class.sanctuaryHealer = {
     PARENT: "genericTank",
     LABEL: "",
+    COLOR: "grey",
     BODY: {
         FOV: base.FOV * 1.2,
     },
