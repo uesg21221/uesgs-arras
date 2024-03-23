@@ -1,5 +1,7 @@
 # Open Source Arras
 
+<img alt="Logo" src="public/favicon.ico" width="120" />
+
 ![GitHub Release](https://img.shields.io/github/v/release/Taureon/aps-plus-plus)
 ![Discord](https://img.shields.io/discord/1004907608018264094)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Taureon/aps-plus-plus)
