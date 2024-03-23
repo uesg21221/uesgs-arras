@@ -45,4 +45,4 @@ After doing that, your server should be ready!
 ## Other Links
 - [Our Discord server](https://discord.gg/kvCAZfUCjy)
 
-*p.s. if something goes terribly wrong its not our fault*
+*p.s. if something goes terribly wrong it's not our fault*
