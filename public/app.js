@@ -1749,14 +1749,15 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         }
 
         // Draw dont upgrade button
-        let h = 14,
+        let h = 16,
+            textScale = h - 6,
             msg = "Don't Upgrade",
-            m = measureText(msg, h - 3) + 10;
-        let buttonX = initialX + (rowWidth + len + internalSpacing - initialX) / 2,
+            m = measureText(msg, textScale) + 10;
+        let buttonX = initialX + (rowWidth + len - initialX) / 2,
             buttonY = initialY + height + internalSpacing;
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h + settings.graphical.barChunk, color.black);
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
-        drawText(msg, buttonX, buttonY + h / 2, h - 2, color.guiwhite, "center", true);
+        drawText(msg, buttonX, buttonY + h / 2, textScale, color.guiwhite, "center", true);
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
 
         // Upgrade tooltip
