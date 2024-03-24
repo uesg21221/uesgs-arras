@@ -78,7 +78,11 @@ function getFurthestFrom(x, y) {
         }
     }
     endPoints.splice(furthestIndex, 1);
-    return furthestPoint;
+    return [rounder(furthestPoint[0]), rounder(furthestPoint[1])];
+}
+
+function checkIfSamePoint(p1, p2) {
+    return p1[0] == p2[0] && p1[1] == p2[1];
 }
 
 function getDimensions(entity) {
@@ -93,6 +97,11 @@ function getDimensions(entity) {
         avgX = (point1[0] + point2[0]) / 2,
         avgY = (point1[1] + point2[1]) / 2,
         point3 = getFurthestFrom(avgX, avgY);
+    
+    // Repeat selecting the third point until it's actually different from the other points
+    while (checkIfSamePoint(point3, point1) || checkIfSamePoint(point3, point2)) {
+        point3 = getFurthestFrom(avgX, avgY);
+    }
     
     let {x, y, r} = constructCircumcirle(point1, point2, point3);
 
@@ -202,10 +211,9 @@ for (let k in Class) {
         temptank.destroy();
     } catch (error) {
         util.error('[WARNING] An error has occured during mockup loading:');
-        util.error(error);
         util.error('When attempting to generate mockup "' + k + '":');
         for (let i in Class[k]) util.error("\t" + i + ": " + Class[k][i]);
-        throw Error("Mockups load aborted.");
+        throw error;
     }
 }
 
