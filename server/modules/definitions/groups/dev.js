@@ -69,88 +69,59 @@ Class.spectator = {
 
 Class.bosses = menu("Bosses")
 
-Class.sentries = menu("Sentries")
-Class.sentries.COLOR = "pink"
-Class.sentries.UPGRADE_COLOR = "pink"
-Class.sentries.SHAPE = 3.5
-Class.sentries.TURRETS = [
+Class.sentries = menu("Sentries", "pink", 3.5)
+Class.sentries.PROPS = [
     {
         POSITION: [9, 0, 0, 0, 360, 1],
         TYPE: "genericEntity"
     }
 ]
 
-Class.elites = menu("Elites")
-Class.elites.COLOR = "pink"
-Class.elites.UPGRADE_COLOR = "pink"
-Class.elites.SHAPE = 3.5
+Class.elites = menu("Elites", "pink", 3.5)
 
-Class.mysticals = menu("Mysticals")
-Class.mysticals.COLOR = "gold"
-Class.mysticals.UPGRADE_COLOR = "gold"
-Class.mysticals.SHAPE = 4
+Class.mysticals = menu("Mysticals", "gold", 4)
 
-Class.nesters = menu("Nesters")
-Class.nesters.COLOR = "purple"
-Class.nesters.UPGRADE_COLOR = "purple"
-Class.nesters.SHAPE = 5.5
+Class.nesters = menu("Nesters", "purple", 5.5)
 
-Class.rogues = menu("Rogues")
-Class.rogues.COLOR = "darkGrey"
-Class.rogues.UPGRADE_COLOR = "darkGrey"
-Class.rogues.SHAPE = 6
+Class.rogues = menu("Rogues", "darkGrey", 6)
 
-Class.rammers = menu("Rammers")
-Class.rammers.COLOR = "teal"
-Class.rammers.UPGRADE_COLOR = "teal"
-Class.rammers.TURRETS = [
+Class.rammers = menu("Rammers", "teal")
+Class.rammers.PROPS = [
     {
-        POSITION: [21.5, 0, 0, 0, 360, 0],
+        POSITION: [21.5, 0, 0, 360, -1],
         TYPE: "smasherBody",
     }
 ]
 
-Class.terrestrials = menu("Terrestrials")
-Class.terrestrials.COLOR = "orange"
-Class.terrestrials.UPGRADE_COLOR = "orange"
-Class.terrestrials.SHAPE = 7
+Class.terrestrials = menu("Terrestrials", "orange", 7)
 
-Class.celestials = menu("Celestials")
-Class.celestials.COLOR = "lightGreen"
-Class.celestials.UPGRADE_COLOR = "lightGreen"
-Class.celestials.SHAPE = 9
+Class.celestials = menu("Celestials", "lightGreen", 9)
 
-Class.eternals = menu("Eternals")
-Class.eternals.COLOR = "veryLightGrey"
-Class.eternals.UPGRADE_COLOR = "veryLightGrey"
-Class.eternals.SHAPE = 11
+Class.eternals = menu("Eternals", "veryLightGrey", 11)
 
-Class.devBosses = menu("Developers")
-Class.devBosses.COLOR = "lightGreen"
+Class.devBosses = menu("Developers", "lightGreen", 4)
 Class.devBosses.UPGRADE_COLOR = "rainbow"
-Class.devBosses.SHAPE = 4
 
 Class.tanks = menu("Tanks")
 Class.unavailable = menu("Unavailable")
 
 Class.dominators = menu("Dominators")
-Class.dominators.TURRETS = [
+Class.dominators.PROPS = [
     {
-        POSITION: [22, 0, 0, 0, 360, 0],
+        POSITION: [22, 0, 0, 360, 0],
         TYPE: "dominationBody",
     }
 ]
 
 Class.sanctuaries = menu("Sanctuaries")
-Class.sanctuaries.TURRETS = [
+Class.sanctuaries.PROPS = [
     {
-        POSITION: [22, 0, 0, 0, 360, 0],
+        POSITION: [22, 0, 0, 360, 0],
         TYPE: "dominationBody",
-    },
-        {
-            POSITION: [13, 0, 0, 0, 360, 1],
-            TYPE: "healerSymbol",
-        }
+    }, {
+        POSITION: [13, 0, 0, 360, 1],
+        TYPE: "healerSymbol",
+    }
 ]
 
 // Generators
@@ -497,7 +468,7 @@ Class.turretLayerTesting = {
             TYPE: ["basic", {COLOR: "lightGrey", MIRROR_MASTER_ANGLE: true}]
         },
         {
-            POSITION: [20, 10, 5, 0, 0, 2],
+            POSITION: [20, 15, 5, 0, 0, 2],
             TYPE: ["basic", {COLOR: "grey", MIRROR_MASTER_ANGLE: true}]
         },
         {
@@ -893,6 +864,40 @@ Class.bulletSpawnTest = {
     ]
 }
 
+Class.propTestProp = {
+    PARENT: 'genericTank',
+    SHAPE: 6,
+    COLOR: 0,
+    GUNS: [
+        {
+            POSITION: [20, 10, 1, 0, 0, 45, 0],
+            PROPERTIES: {COLOR: 13},
+        }, {
+            POSITION: [20, 10, 1, 0, 0, -45, 0],
+            PROPERTIES: {COLOR: 13},
+        }
+    ]
+}
+Class.propTest = {
+    PARENT: 'genericTank',
+    LABEL: 'Deco Prop Test',
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: "bullet",
+            }
+        }
+    ],
+    PROPS: [
+        {
+            POSITION: [10, 0, 0, 0, 1],
+            TYPE: 'propTestProp'
+        }
+    ]
+}
+
 Class.levels = menu("Levels")
 Class.levels.UPGRADES_TIER_0 = []
 for (let i = 0; i < 12; i++) {
@@ -1005,4 +1010,4 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"];
 
-    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]

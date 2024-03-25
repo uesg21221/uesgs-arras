@@ -119,6 +119,7 @@ Class.genericTank = {
     },
     GUNS: [],
     TURRETS: [],
+    PROPS: [],
     ON: [],
     GIVE_KILL_MESSAGE: true,
     DRAW_HEALTH: true,
@@ -348,7 +349,7 @@ Class.aura = {
     LABEL: "Aura",
     COLOR: "teal",
     BODY: {
-        DAMAGE: 0.5,
+        DAMAGE: 0.15,
     },
 };
 Class.healAura = {
@@ -357,7 +358,7 @@ Class.healAura = {
     HEALER: true,
     COLOR: "red",
     BODY: {
-        DAMAGE: 0.1,
+        DAMAGE: 0.05,
     },
 };
 Class.auraSymbol = {

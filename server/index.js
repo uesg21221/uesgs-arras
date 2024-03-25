@@ -25,6 +25,7 @@ process.stdout.write(String.fromCharCode(27) + "]0;" + c.WINDOW_NAME + String.fr
 util.log(room.width + " x " + room.height + " room initalized.");
 
 // Collision stuff
+const auraCollideTypes = ["miniboss", "tank", "food", "crasher"]
 function collide(collision) {
     // Pull the two objects from the collision grid
     let instance = collision[0],
@@ -108,11 +109,11 @@ function collide(collision) {
                 instance.healer ||
                 other.healer
             )):
-            // Exits if the aura is not hitting a boss or tank
+            // Exits if the aura is not hitting a boss, tank, food, or crasher
             if (instance.type === "aura") {
-                if (!(other.type === "tank" || other.type === "miniboss" || other.type == "food")) return;
+                if (!(auraCollideTypes.includes(other.type))) return;
             } else if (other.type === "aura") {
-                if (!(instance.type === "tank" || instance.type === "miniboss" || instance.type == "food")) return;
+                if (!(auraCollideTypes.includes(instance.type))) return;
             }
             advancedcollide(instance, other, true, true);
             break;
