@@ -996,7 +996,7 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 
     // Upgrade key
     if (upgradeKey) {
-        drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 3, color.guiwhite, "right");
+        drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 5, color.guiwhite, "right");
     }
     ctx.strokeStyle = color.black;
     ctx.lineWidth = 3 * lineWidthMult;
@@ -1112,17 +1112,17 @@ let scaleScreenRatio = (by, unset) => {
 var getClassUpgradeKey = function (number) {
     switch (number) {
         case 0:
-            return "y";
+            return "Y";
         case 1:
-            return "u";
+            return "U";
         case 2:
-            return "i";
+            return "I";
         case 3:
-            return "h";
+            return "H";
         case 4:
-            return "j";
+            return "J";
         case 5:
-            return "k";
+            return "K";
         default:
             return null;
     }
@@ -1895,7 +1895,7 @@ const gameDrawDead = () => {
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
-    drawText("If you need instructions on how to get through the hotels, check out the enclosed instruction book.", x, y - 80, 8, color.guiwhite, "center");
+    drawText("You died!", x, y - 80, 16, color.guiwhite, "center");
     drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);
