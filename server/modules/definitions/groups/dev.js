@@ -271,7 +271,7 @@ for (let x = 0; x < tensorWidth; x++) for (let y = 0; y < tensorHeight; y++) for
 
 // Testing tanks
 Class.diamondShape = {
-    PARENT: ["basic"],
+    PARENT: "basic",
     LABEL: "Rotated Body",
     SHAPE: 4.5
 };
@@ -281,7 +281,7 @@ Class.mummyHat = {
     COLOR: -1
 };
 Class.mummy = {
-    PARENT: ["drone"],
+    PARENT: "drone",
     SHAPE: 4,
     NECRO: [4],
     TURRETS: [{
@@ -290,7 +290,7 @@ Class.mummy = {
     }]
 };
 Class.mummifier = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Mummifier",
     DANGER: 6,
     STAT_NAMES: statnames.drone,
@@ -772,11 +772,10 @@ Class.vanquisher = {
     }]
 };
 Class.armyOfOneBullet = {
-    PARENT: ["bullet"],
+    PARENT: "bullet",
     LABEL: "Unstoppable",
     TURRETS: [
         {
-            /** SIZE         X             Y         ANGLE        ARC */
             POSITION: [18.5, 0, 0, 0, 360, 0],
             TYPE: ["spikeBody", { COLOR: null }],
         },
@@ -787,7 +786,7 @@ Class.armyOfOneBullet = {
     ],
 };
 Class.armyOfOne = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Army Of One",
     DANGER: 9,
     SKILL_CAP: [31, 31, 31, 31, 31, 31, 31, 31, 31, 31],
@@ -834,7 +833,7 @@ Class.weirdAutoBasic = {
             INDEPENDENT: true
         }]
     }]
-};
+}
 
 Class.tooltipTank = {
     PARENT: 'genericTank',
@@ -903,7 +902,7 @@ Class.levels.UPGRADES_TIER_0 = []
 for (let i = 0; i < 12; i++) {
     let LEVEL = i * c.TIER_MULTIPLIER;
     Class["level" + LEVEL] = {
-        PARENT: ["levels"],
+        PARENT: "levels",
         LEVEL,
         LABEL: "Level " + LEVEL
     };
@@ -915,7 +914,7 @@ Class.teams.UPGRADES_TIER_0 = []
 for (let i = 1; i <= 8; i++) {
     let TEAM = i;
     Class["Team" + TEAM] = {
-        PARENT: ["teams"],
+        PARENT: "teams",
         TEAM: -TEAM,
         COLOR: getTeamColor(-TEAM),
         LABEL: "Team " + TEAM
@@ -923,13 +922,13 @@ for (let i = 1; i <= 8; i++) {
     Class.teams.UPGRADES_TIER_0.push("Team" + TEAM);
 }
 Class['Team' + TEAM_ROOM] = {
-    PARENT: ["teams"],
+    PARENT: "teams",
     TEAM: TEAM_ROOM,
     COLOR: "yellow",
     LABEL: "Room Team"
 };
 Class['Team' + TEAM_ENEMIES] = {
-    PARENT: ["teams"],
+    PARENT: "teams",
     TEAM: TEAM_ENEMIES,
     COLOR: "yellow",
     LABEL: "Enemies Team"
@@ -992,22 +991,136 @@ testLayeredBoss.addLayer({turret: {
     TYPE: "crowbarTurret",
 }}, true);
 
-Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"];
-    Class.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "arenaCloser", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "turkey"];
-        Class.unavailable.UPGRADES_TIER_0 = ["healer", "whirlwind"];
-        Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"];
-        Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"];
+// FLAIL!!!
+Class.flailBallSpike = {
+    PARENT: "genericTank",
+    COLOR: "black",
+    SHAPE: 6,
+    INDEPENDENT: true,
+};
+Class.flailBall = {
+    PARENT: "genericTank",
+    COLOR: "grey",
+    HITS_OWN_TYPE: 'hard',
+    TURRETS: [{
+        POSITION: [21.5, 0, 0, 0, 360, 0],
+        TYPE: "flailBallSpike",
+    }, ],
+};
+Class.flailBolt1 = {
+    PARENT: "genericTank",
+    COLOR: "grey",
+    GUNS: [{
+        POSITION: [40, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        POSITION: [48, 56, 0, 0, 360, 1],
+        TYPE: ["flailBall", {
+            INDEPENDENT: true
+        }]
+        },
+    ],
+};
+Class.flailBolt2 = {
+    PARENT: "genericTank",
+    COLOR: "grey",
+    GUNS: [{
+        POSITION: [30, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        POSITION: [20, 36, 0, 0, 360, 1],
+        TYPE: ["flailBolt1", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+Class.flailBolt3 = {
+    PARENT: "genericTank",
+    COLOR: "grey",
+    GUNS: [{
+        POSITION: [30, 5, 1, 8, 0, 0, 0]
+    }],
+    TURRETS: [{
+        POSITION: [18, 36, 0, 0, 360, 1],
+        TYPE: ["flailBolt2", {
+            INDEPENDENT: true,
+        }]
+        },
+    ],
+};
+Class.genericFlail = {
+    PARENT: "genericTank",
+    STAT_NAMES: statnames.flail,
+    TOOLTIP: "[DEV NOTE] The Flail is not finished yet. This tank is currently just a mockup.",
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+}
+Class.flail = {
+    PARENT: "genericFlail",
+    LABEL: "Flail",
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }]
+}
+Class.doubleFlail = {
+    PARENT: "genericFlail",
+    LABEL: "Double Flail",
+    DANGER: 6,
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, {
+        POSITION: [6, 10, 0, 180, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }]
+}
+Class.tripleFlail = {
+    PARENT: "genericFlail",
+    LABEL: "Triple Flail",
+    DANGER: 7,
+    TURRETS: [{
+        POSITION: [6, 10, 0, 0, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, {
+        POSITION: [6, 10, 0, 120, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }, {
+        POSITION: [6, 10, 0, 240, 190, 0],
+        TYPE: ["flailBolt3", {
+            INDEPENDENT: true
+        }]
+    }]
+}
 
-    Class.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses"];
-        Class.sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap", "sentinelMinigun", "sentinelLauncher", "sentinelCrossbow"];
-        Class.elites.UPGRADES_TIER_0 = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "legionaryCrasher", "guardian", "defender", "sprayerLegion"];
-        Class.mysticals.UPGRADES_TIER_0 = ["sorcerer", "summoner", "enchantress", "exorcistor", "shaman"];
-        Class.nesters.UPGRADES_TIER_0 = ["nestKeeper", "nestWarden", "nestGuardian"];
-        Class.rogues.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "julius", "genghis", "napoleon"];
-	    Class.rammers.UPGRADES_TIER_0 = ["bob", "nemesis"];
-        Class.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"];
-        Class.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "julius", "genghis", "napoleon"];
-        Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"];
-        Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"];
+Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"]
+    Class.tanks.UPGRADES_TIER_0 = ["basic", "unavailable", "arenaCloser", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun"]
+        Class.unavailable.UPGRADES_TIER_0 = ["flail", "healer", "whirlwind"]
+            Class.flail.UPGRADES_TIER_2 = ["doubleFlail"]
+                Class.doubleFlail.UPGRADES_TIER_3 = ["tripleFlail"]
+        Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]
+        Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"]
+
+    Class.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses"]
+        Class.sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap", "sentinelMinigun", "sentinelLauncher", "sentinelCrossbow"]
+        Class.elites.UPGRADES_TIER_0 = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "legionaryCrasher", "guardian", "defender", "sprayerLegion"]
+        Class.mysticals.UPGRADES_TIER_0 = ["sorcerer", "summoner", "enchantress", "exorcistor", "shaman"]
+        Class.nesters.UPGRADES_TIER_0 = ["nestKeeper", "nestWarden", "nestGuardian"]
+        Class.rogues.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "julius", "genghis", "napoleon"]
+	    Class.rammers.UPGRADES_TIER_0 = ["bob", "nemesis"]
+        Class.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"]
+        Class.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "julius", "genghis", "napoleon"]
+        Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"]
+        Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"]
 
     Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
