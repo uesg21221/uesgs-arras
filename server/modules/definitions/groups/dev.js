@@ -68,7 +68,6 @@ Class.spectator = {
 }
 
 Class.bosses = menu("Bosses")
-
 Class.sentries = menu("Sentries", "pink", 3.5)
 Class.sentries.PROPS = [
     {
@@ -76,15 +75,10 @@ Class.sentries.PROPS = [
         TYPE: "genericEntity"
     }
 ]
-
 Class.elites = menu("Elites", "pink", 3.5)
-
 Class.mysticals = menu("Mysticals", "gold", 4)
-
 Class.nesters = menu("Nesters", "purple", 5.5)
-
 Class.rogues = menu("Rogues", "darkGrey", 6)
-
 Class.rammers = menu("Rammers", "teal")
 Class.rammers.PROPS = [
     {
@@ -92,19 +86,14 @@ Class.rammers.PROPS = [
         TYPE: "smasherBody",
     }
 ]
-
 Class.terrestrials = menu("Terrestrials", "orange", 7)
-
 Class.celestials = menu("Celestials", "lightGreen", 9)
-
 Class.eternals = menu("Eternals", "veryLightGrey", 11)
-
 Class.devBosses = menu("Developers", "lightGreen", 4)
 Class.devBosses.UPGRADE_COLOR = "rainbow"
 
 Class.tanks = menu("Tanks")
 Class.unavailable = menu("Unavailable")
-
 Class.dominators = menu("Dominators")
 Class.dominators.PROPS = [
     {
@@ -112,7 +101,6 @@ Class.dominators.PROPS = [
         TYPE: "dominationBody",
     }
 ]
-
 Class.sanctuaries = menu("Sanctuaries")
 Class.sanctuaries.PROPS = [
     {
@@ -324,7 +312,7 @@ Class.mummifier = {
     }]
 };
 Class.miscTestHelper2 = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Turret Reload 3",
     MIRROR_MASTER_ANGLE: true,
     COLOR: -1,
@@ -340,7 +328,7 @@ Class.miscTestHelper2 = {
     ],
 };
 Class.miscTestHelper = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Turret Reload 2",
     //MIRROR_MASTER_ANGLE: true,
     COLOR: {
@@ -365,7 +353,7 @@ Class.miscTestHelper = {
     ]
 };
 Class.miscTest = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Turret Reload",
     COLOR: "teal",
     GUNS: [
@@ -385,7 +373,7 @@ Class.miscTest = {
     ]
 };
 Class.mmaTest2 = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     MIRROR_MASTER_ANGLE: true,
     COLOR: "grey",
     GUNS: [{
@@ -393,7 +381,7 @@ Class.mmaTest2 = {
         }],
 }
 Class.mmaTest1 = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     COLOR: -1,
     // Somehow, removing the gun below causes a crash when the tank is chosen ??????
     GUNS: [
@@ -409,7 +397,7 @@ Class.mmaTest1 = {
     ]
 }
 Class.mmaTest = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Mirror Master Angle",
     TURRETS: [
         {
@@ -432,7 +420,7 @@ Class.vulnturrettest_turret = {
 }
 
 Class.vulnturrettest = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Vulnerable Turrets",
     TOOLTIP: "[DEV NOTE] Vulnerable turrets are still being worked on and may not function as intended!",
     BODY: {
@@ -581,7 +569,7 @@ Class.onTest = {
 
 Class.auraBasicGen = addAura();
 Class.auraBasic = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Aura Basic",
     TURRETS: [
         {
@@ -601,7 +589,7 @@ Class.auraBasic = {
 };
 Class.auraHealerGen = addAura(-1);
 Class.auraHealer = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Aura Healer",
     TURRETS: [
         {
@@ -623,8 +611,8 @@ Class.auraHealer = {
     ],
 };
 
-Class.ghoster_ghostForm = {
-    PARENT: ['genericTank'],
+Class.ghoster_ghosted = {
+    PARENT: "genericTank",
     TOOLTIP: 'You are now hidden, roam around and find your next target. You will be visible again in 5 seconds',
     LABEL: 'Ghoster',
     BODY: {
@@ -639,7 +627,7 @@ Class.ghoster_ghostForm = {
 }
 
 Class.ghoster = {
-    PARENT: ['genericTank'],
+    PARENT: "genericTank",
     LABEL: 'Ghoster',
     TOOLTIP: 'Shooting will hide you for 5 seconds',
     BODY: {
@@ -650,7 +638,7 @@ Class.ghoster = {
         {
             event: 'fire',
             handler: ({ body }) => {
-                body.define(Class.ghoster_ghostForm)
+                body.define(Class.ghoster_ghosted)
                 setTimeout(() => {
                     body.SPEED = 1e-99
                     body.ACCEL = 1e-99
@@ -703,7 +691,7 @@ Class.switcheroo = {
 }
 
 Class.vanquisher = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     DANGER: 8,
     LABEL: "Vanquisher",
     STAT_NAMES: statnames.generic,
@@ -768,23 +756,23 @@ Class.vanquisher = {
         POSITION: [15, 14, 1, 6, 0, 270, 0],
         PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, g.fake]), TYPE: "casing" }
     }, {
-        POSITION: [8, 14, -1.3, 4, 0, 270, 0],
+        POSITION: [8, 14, -1.3, 4, 0, 270, 0]
     }]
-};
+}
 Class.armyOfOneBullet = {
     PARENT: "bullet",
     LABEL: "Unstoppable",
     TURRETS: [
         {
             POSITION: [18.5, 0, 0, 0, 360, 0],
-            TYPE: ["spikeBody", { COLOR: null }],
+            TYPE: ["spikeBody", { COLOR: null }]
         },
         {
             POSITION: [18.5, 0, 0, 180, 360, 0],
-            TYPE: ["spikeBody", { COLOR: null }],
-        },
-    ],
-};
+            TYPE: ["spikeBody", { COLOR: null }]
+        }
+    ]
+}
 Class.armyOfOne = {
     PARENT: "genericTank",
     LABEL: "Army Of One",
