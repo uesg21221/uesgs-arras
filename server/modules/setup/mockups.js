@@ -137,11 +137,13 @@ function constructCircumcirle(point1, point2, point3) {
     return {x, y, r};
 }
 
+const sidesMax = 16;
 function sizeEntity(entity, x = 0, y = 0, angle = 0, scale = 1) {    
-    // Process body as octagon if shape < 3 or > 7
-    if (entity.shape < 3 || entity.shape > 7) {
-        for (let i = 0; i < 8; i++) {
-            endPoints.push([x + Math.cos(Math.PI / 4 * i) * scale, y + Math.sin(Math.PI / 4 * i) * scale]);
+    // Process body as a polygon with [sidesMax] sides if it has at least that many or less than three sides
+    if (entity.shape < 3 || entity.shape >= sidesMax) {
+        for (let i = 0; i < sidesMax; i++) {
+            let theta = Math.PI * 2 / sidesMax * i;
+            endPoints.push([x + Math.cos(theta) * scale, y + Math.sin(theta) * scale]);
         }
     } else {
         // Process body as true size and shape otherwise
