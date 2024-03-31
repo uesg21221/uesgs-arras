@@ -895,7 +895,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
     if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
         context = ctx2;
-        context.canvas.width = context.canvas.height = drawSize * m.position.axis + ratio * 20;
+        context.canvas.width = context.canvas.height = drawSize * m.position.axis * ratio * 2;
         xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
         yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.y * Math.sin(rot)) / 4;
     } else {
@@ -1107,7 +1107,7 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 
     // Upgrade key
     if (upgradeKey) {
-        drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 3, color.guiwhite, "right");
+        drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 5, color.guiwhite, "right");
     }
     ctx.strokeStyle = color.black;
     ctx.lineWidth = 3 * lineWidthMult;
@@ -1223,17 +1223,17 @@ let scaleScreenRatio = (by, unset) => {
 var getClassUpgradeKey = function (number) {
     switch (number) {
         case 0:
-            return "y";
+            return "Y";
         case 1:
-            return "u";
+            return "U";
         case 2:
-            return "i";
+            return "I";
         case 3:
-            return "h";
+            return "H";
         case 4:
-            return "j";
+            return "J";
         case 5:
-            return "k";
+            return "K";
         default:
             return null;
     }
@@ -1878,14 +1878,15 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         }
 
         // Draw dont upgrade button
-        let h = 14,
+        let h = 16,
+            textScale = h - 6,
             msg = "Don't Upgrade",
-            m = measureText(msg, h - 3) + 10;
-        let buttonX = initialX + (rowWidth + len + internalSpacing - initialX) / 2,
+            m = measureText(msg, textScale) + 10;
+        let buttonX = initialX + (rowWidth + len - initialX) / 2,
             buttonY = initialY + height + internalSpacing;
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h + settings.graphical.barChunk, color.black);
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
-        drawText(msg, buttonX, buttonY + h / 2, h - 2, color.guiwhite, "center", true);
+        drawText(msg, buttonX, buttonY + h / 2, textScale, color.guiwhite, "center", true);
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
 
         // Upgrade tooltip
@@ -2023,7 +2024,7 @@ const gameDrawDead = () => {
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
-    drawText("If you need instructions on how to get through the hotels, check out the enclosed instruction book.", x, y - 80, 8, color.guiwhite, "center");
+    drawText("You died!", x, y - 80, 16, color.guiwhite, "center");
     drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);

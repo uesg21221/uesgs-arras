@@ -90,6 +90,7 @@ global.ensureIsClass = str => {
     if (str in Class) {
         return Class[str];
     }
+    console.log('Definitions:');
     console.log(Class);
     throw Error(`Definition ${str} is attempted to be gotten but does not exist!`);
 }

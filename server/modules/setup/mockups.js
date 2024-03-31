@@ -82,7 +82,11 @@ function getFurthestFrom(x, y) {
         }
     }
     endPoints.splice(furthestIndex, 1);
-    return furthestPoint;
+    return [rounder(furthestPoint[0]), rounder(furthestPoint[1])];
+}
+
+function checkIfSamePoint(p1, p2) {
+    return p1[0] == p2[0] && p1[1] == p2[1];
 }
 
 function getDimensions(entity) {
@@ -97,6 +101,11 @@ function getDimensions(entity) {
         avgX = (point1[0] + point2[0]) / 2,
         avgY = (point1[1] + point2[1]) / 2,
         point3 = getFurthestFrom(avgX, avgY);
+    
+    // Repeat selecting the third point until it's actually different from the other points
+    while (checkIfSamePoint(point3, point1) || checkIfSamePoint(point3, point2)) {
+        point3 = getFurthestFrom(avgX, avgY);
+    }
     
     let {x, y, r} = constructCircumcirle(point1, point2, point3);
 
@@ -132,11 +141,13 @@ function constructCircumcirle(point1, point2, point3) {
     return {x, y, r};
 }
 
+const sidesMax = 16;
 function sizeEntity(entity, x = 0, y = 0, angle = 0, scale = 1) {    
-    // Process body as octagon if shape < 3 or > 7
-    if (entity.shape < 3 || entity.shape > 7) {
-        for (let i = 0; i < 8; i++) {
-            endPoints.push([x + Math.cos(Math.PI / 4 * i) * scale, y + Math.sin(Math.PI / 4 * i) * scale]);
+    // Process body as a polygon with [sidesMax] sides if it has at least that many or less than three sides
+    if (entity.shape < 3 || entity.shape >= sidesMax) {
+        for (let i = 0; i < sidesMax; i++) {
+            let theta = Math.PI * 2 / sidesMax * i;
+            endPoints.push([x + Math.cos(theta) * scale, y + Math.sin(theta) * scale]);
         }
     } else {
         // Process body as true size and shape otherwise
@@ -206,10 +217,9 @@ for (let k in Class) {
         temptank.destroy();
     } catch (error) {
         util.error('[WARNING] An error has occured during mockup loading:');
-        util.error(error);
         util.error('When attempting to generate mockup "' + k + '":');
         for (let i in Class[k]) util.error("\t" + i + ": " + Class[k][i]);
-        throw Error("Mockups load aborted.");
+        throw error;
     }
 }
 

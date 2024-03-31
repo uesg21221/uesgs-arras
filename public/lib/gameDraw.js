@@ -244,13 +244,16 @@ var gameDraw = {
     getColor: (colorNumber) => {
         switch (colorNumber) {
             case "0":
+            case "legendary":
             case "teal":
             case "aqua":
                 return gameDraw.color.teal;
             case "1":
+            case "shiny":
             case "lightGreen":
                 return gameDraw.color.lgreen;
             case "2":
+            case "triangle":
             case "orange":
                 return gameDraw.color.orange;
             case "3":
@@ -260,9 +263,11 @@ var gameDraw = {
             case "lavender":
                 return gameDraw.color.lavender;
             case "5":
+            case "crasher":
             case "pink":
                 return gameDraw.color.pink;
             case "6":
+            case "egg":
             case "veryLightGrey":
             case "veryLightGray":
                 return gameDraw.color.vlgrey;
@@ -286,12 +291,15 @@ var gameDraw = {
             case "red":
                 return gameDraw.color.red;
             case "13":
+            case "square":
             case "gold":
                 return gameDraw.color.gold;
             case "14":
+            case "pentagon":
             case "purple":
                 return gameDraw.color.purple;
             case "15":
+            case "hexagon":
             case "magenta":
                 return gameDraw.color.magenta;
             case "16":
@@ -331,7 +339,6 @@ var gameDraw = {
             case "mustard":
                 return gameDraw.color.mustard;
             case "26":
-            case "darkOrange":
             case "tangerine":
                 return gameDraw.color.tangerine;
             case "27":
@@ -342,6 +349,7 @@ var gameDraw = {
             case "turquoise":
                 return gameDraw.color.cyan;
             case "29":
+            case "lesbian":
             case "animatedLesbian":
                 return gameDraw.animatedColor.lesbian;
             case "30":
@@ -372,9 +380,11 @@ var gameDraw = {
             case "rainbow":
                 return gameDraw.animatedColor.gay;
             case "37":
+            case "trans":
             case "animatedTrans":
                 return gameDraw.animatedColor.trans;
             case "38":
+            case "bi":
             case "animatedBi":
                 return gameDraw.animatedColor.bi;
             case "39":

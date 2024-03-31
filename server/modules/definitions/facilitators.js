@@ -207,35 +207,55 @@ exports.makeMulti = (type, count, name = -1, startRotation = 0) => {
     type = ensureIsClass(type);
     let greekNumbers = ',Double ,Triple ,Quad ,Penta ,Hexa ,Septa ,Octo ,Nona ,Deca ,Hendeca ,Dodeca ,Trideca ,Tetradeca ,Pentadeca ,Hexadeca ,Septadeca ,Octadeca ,Nonadeca ,Icosa ,Henicosa ,Doicosa ,Triaicosa ,Tetraicosa ,Pentaicosa ,Hexaicosa ,Septaicosa ,Octoicosa ,Nonaicosa ,Triaconta '.split(','),
         output = exports.dereference(type),
-        shootyBois = output.GUNS,
         fraction = 360 / count;
     output.GUNS = [];
     for (let gun of type.GUNS) {
         for (let i = 0; i < count; i++) {
             let newgun = exports.dereference(gun);
-            newgun.POSITION[5] += startRotation + fraction * i;
-            if (gun.PROPERTIES) newgun.PROPERTIES.TYPE = gun.PROPERTIES.TYPE;
+            if (Array.isArray(newgun.POSITION)) {
+                newgun.POSITION[5] += startRotation + fraction * i;
+            } else {
+                newgun.POSITION.ANGLE = (newgun.POSITION.ANGLE ?? 0) + startRotation + fraction * i;
+            }
+            if (gun.PROPERTIES) newgun.PROPERTIES = gun.PROPERTIES;
             output.GUNS.push(newgun);
         };
     }
     output.LABEL = name == -1 ? (greekNumbers[count - 1] || (count + ' ')) + type.LABEL : name;
     return output;
 }
-exports.makeBird = (type, name = -1, color) => {
+exports.makeBird = (type, name = -1, frontRecoilFactor = 1, backRecoilFactor = 1, color) => {
     type = ensureIsClass(type);
-    let output = exports.dereference(type),
-        shootyBois = [{
+    let output = exports.dereference(type);
+    // Thrusters
+    let backRecoil = 0.5 * backRecoilFactor;
+    let thrusterProperties = { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: backRecoil }]), TYPE: "bullet", LABEL: gunCalcNames.thruster };
+    let shootyBois = [{
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
-        },{
+            PROPERTIES: thrusterProperties
+        }, {
             POSITION: [16, 8, 1, 0, 0, 210, 0.1],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
-        },{
+            PROPERTIES: thrusterProperties
+        }, {
             POSITION: [18, 8, 1, 0, 0, 180, 0.6],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+            PROPERTIES: thrusterProperties
         }];
-    if (color) for (let i = 0; i < 3; i++) shootyBois[i].PROPERTIES.TYPE = [shootyBois[i].PROPERTIES.TYPE, { COLOR: color, KEEP_OWN_COLOR: true }];
-    for (let i in output.GUNS) if (output.GUNS[i].PROPERTIES) output.GUNS[i].PROPERTIES.ALT_FIRE = true;
+    // Assign thruster color
+    if (color) for (let gun of shootyBois) {
+        gun.PROPERTIES.TYPE = [gun.PROPERTIES.TYPE, { COLOR: color }];
+    }
+
+    // Modify front barrels
+    for (let gun of output.GUNS) {
+        if (gun.PROPERTIES) {
+            gun.PROPERTIES.ALT_FIRE = true;
+            // Nerf front barrels
+            if (gun.PROPERTIES.SHOOT_SETTINGS) {
+                gun.PROPERTIES.SHOOT_SETTINGS = exports.combineStats([gun.PROPERTIES.SHOOT_SETTINGS, g.flankGuard, g.triAngle, g.triAngleFront, {recoil: frontRecoilFactor}]);
+            }
+        }
+    }
+    // Assign misc settings
     if (output.FACING_TYPE == "locksFacing") output.FACING_TYPE = "toTarget";
     output.GUNS = type.GUNS == null ? [...shootyBois] : [...output.GUNS, ...shootyBois];
     output.LABEL = name == -1 ? "Bird " + type.LABEL : name;
@@ -788,7 +808,7 @@ exports.makeLabyrinthShape = (type) => {
     let downscale = Math.max(output.SHAPE, 3);
     return output;
 }
-exports.menu = (name = -1) => {
+exports.menu = (name = -1, color = -1, shape = 0) => {
     let gun = {
         POSITION: [18, 10, -1.4, 0, 0, 0, 0],
         PROPERTIES: {
@@ -800,6 +820,9 @@ exports.menu = (name = -1) => {
         PARENT: "genericTank",
         LABEL: name,
         GUNS: [gun],
+        COLOR: color,
+        UPGRADE_COLOR: color == -1 ? undefined : color,
+        SHAPE: shape,
         IGNORED_BY_AI: true,
     };
 }
