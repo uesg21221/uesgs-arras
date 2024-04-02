@@ -30,7 +30,7 @@ for (let filename of addons) {
     if ('function' === typeof result) {
         result({ Config: c, Events: events });
     }
-        global.loadedAddons.push(filename);
+    global.loadedAddons.push(filename.replace(/\.[^/.]+$/, ""));
 }
 
 let addonsLoadEnd = Date.now();
