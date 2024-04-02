@@ -8,13 +8,15 @@
 
 **Open Source Arras is beta software.** This build is **not** representative of the final product. Expect bugs and missing features.
 
+Major updates may introduce breaking changes that alter how certain things work. It is **your responsibility** to keep your private server up-to-date and functioning.
+
 ## Setup Guide (Localhost)
 
 This guide covers setting up your server on your own hardware and only supports PCs running up-to-date versions of Windows/macOS/Linux.
 
 You'll first need to install [Node.js](https://nodejs.org). It doesn't matter if you pick the LTS or Latest version, they'll both work fine.
 
-Once `Node.js` is installed, run the command `npm i ws`. This will install the WebSocket library that Open Source Arras uses.
+Once `Node.js` is installed, open Terminal and run the command `npm i ws`. This will install the WebSocket library that Open Source Arras uses.
 
 After installing `ws`, [download the source code of the latest release of Open Source Arras](https://github.com/Taureon/aps-plus-plus/releases). Extract it once it's downloaded and open either `run.bat` (if you're on Windows) or `run.sh` (if you're not). If there aren't any errors, your server will start up. Go to `localhost:26301` in your favourite web browser (keep the terminal window open, closing it will shut down the server) to play.
 

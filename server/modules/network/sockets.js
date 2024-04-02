@@ -448,7 +448,7 @@ function incoming(message, socket) {
                 if (c.MODE === "tdm" && socket.rememberedTeam === entry.team && entry.type === "tank" && entry.bond == null) possible.push(entry);
             }
             if (!possible.length) {
-                socket.talk("m", "There are no entities to spectate!");
+                player.body.sendMessage("There are no entities to spectate!");
                 return 1;
             }
             let entity;
@@ -456,24 +456,24 @@ function incoming(message, socket) {
                 entity = ran.choose(possible);
             } while (entity === socket.spectateEntity && possible.length > 1);
             socket.spectateEntity = entity;
-            socket.talk("m", `You are now spectating ${entity.name.length ? entity.name : "An unnamed player"}! (${entity.label})`);
+            player.body.sendMessage(`You are now spectating ${entity.name.length ? entity.name : "An unnamed player"}! (${entity.label})`);
             break;
         case "H":
             if (player.body == null) return 1;
             let body = player.body;
             if (body.underControl) {
                 if (c.DOMINATOR_LOOP) {
-                body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You have relinquished control of the dominator.");
-                return 1;
+                    player.body.sendMessage("You have relinquished control of the dominator.");
+                    body.giveUp(player, body.isDominator ? "" : undefined);
+                    return 1;
                 } else if (c.MOTHERSHIP_LOOP) {
-                body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You have relinquished control of the mothership.");
-                return 1;
+                    player.body.sendMessage("You have relinquished control of the mothership.");
+                    body.giveUp(player, body.isDominator ? "" : undefined);
+                    return 1;
                 } else {
-                body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You have relinquished control of the special tank.");
-                return 1;
+                    player.body.sendMessage("You have relinquished control of the special tank.");
+                    body.giveUp(player, body.isDominator ? "" : undefined);
+                    return 1;
                 }
             }
             if (c.MOTHERSHIP_LOOP) {
@@ -488,7 +488,7 @@ function incoming(message, socket) {
                     })
                     .filter((instance) => instance);
                 if (!motherships.length) {
-                    socket.talk("m", "There are no motherships available that are on your team.");
+                    player.body.sendMessage("There are no motherships available that are on your team.");
                     return 1;
                 }
                 let mothership = motherships.shift();
@@ -507,7 +507,7 @@ function incoming(message, socket) {
                     if (entry.isDominator && entry.team === player.body.team && !entry.underControl) return entry;
                 }).filter(x=>x);
                 if (!dominators.length) {
-                    socket.talk("m", "There are no dominators available that are on your team!");
+                    player.body.sendMessage("There are no dominators available that are on your team!");
                     return 1;
                 }
                 let dominator = dominators.shift();
@@ -522,7 +522,7 @@ function incoming(message, socket) {
                 player.body.sendMessage("You are now controlling the dominator.");
                 player.body.sendMessage("Press F to relinquish control of the dominator.");
             } else {
-                socket.talk("m", "There are no special tanks in this mode that you can control.");
+                player.body.sendMessage("There are no special tanks in this mode that you can control.");
             }
             break;
 
@@ -885,6 +885,7 @@ const spawn = (socket, name) => {
         body.controllers = body.controllers.filter(con => !(con instanceof ioTypes.listenToPlayer));
         body.become(player);
         player.team = body.team;
+        console.log('RECONNECT ---', body)
     } else {
         body = new Entity(loc);
         body.protect();
@@ -901,10 +902,10 @@ const spawn = (socket, name) => {
             socket.talk("z", body.nameColor);
         }
         body.addController(new ioTypes.listenToPlayer(body, { player }));
-        body.sendMessage = content => socket.talk("m", content);
         socket.spectateEntity = null;
         body.invuln = true;
     }
+    body.sendMessage = (content, displayTime = c.MESSAGE_DISPLAY_TIME) => socket.talk("m", displayTime, content);
 
     socket.rememberedTeam = player.team;
     player.body = body;
@@ -1411,7 +1412,7 @@ const sockets = {
     disconnections: disconnections,
     broadcast: (message) => {
         for (let i = 0; i < clients.length; i++) {
-            clients[i].talk("m", message);
+            clients[i].talk("m", c.MESSAGE_DISPLAY_TIME, message);
         }
     },
     broadcastRoom: () => {

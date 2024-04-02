@@ -795,7 +795,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
     if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
         context = ctx2;
-        context.canvas.width = context.canvas.height = drawSize * m.position.axis * ratio * 2;
+        context.canvas.width = context.canvas.height = drawSize * m.position.axis / ratio * 2;
         xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
         yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.y * Math.sin(rot)) / 4;
     } else {
@@ -1437,7 +1437,7 @@ function drawMessages(spacing) {
             msg.alpha += 0.05;
         } else if (
             i === 0 &&
-            (global.messages.length > 5 || Date.now() - msg.time > 10000)
+            (global.messages.length > 5 || Date.now() - msg.time > 0)
         ) {
             msg.status -= 0.05;
             msg.alpha -= 0.05;
@@ -1978,8 +1978,7 @@ function animloop() {
     } catch (e) {
         gameDrawError();
         ctx.translate(-0.5, -0.5);
-        console.log(e);
-        throw Error('Something has gone wrong!');
+        throw e;
     }
 }
 

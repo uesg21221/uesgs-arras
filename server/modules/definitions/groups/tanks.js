@@ -4431,26 +4431,7 @@ Class.paramedic = {
 }
 
 // Bird tanks
-Class.falcon = makeBird({
-    PARENT: "genericTank",
-    DANGER: 7,
-    BODY: {
-        SPEED: 0.85 * base.SPEED,
-        FOV: 1.2 * base.FOV
-    },
-    GUNS: [
-        {
-            POSITION: [27, 8, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, g.sniper, g.assassin]),
-                TYPE: "bullet"
-            }
-        },
-        {
-            POSITION: [5, 8, -1.4, 8, 0, 0, 0]
-        }
-    ]
-}, "Falcon")
+Class.falcon = makeBird("assassin", "Falcon")
 Class.vulture = makeBird({
     PARENT: "genericTank",
     DANGER: 7,
@@ -4461,59 +4442,28 @@ Class.vulture = makeBird({
         {
             POSITION: [22, 7, -1.5, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, g.minigun]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.minigun]),
                 TYPE: "bullet"
             }
         },
         {
             POSITION: [20, 7.5, -1.5, 0, 0, 0, 0.333],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, g.minigun, {size: 7/7.5}]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.minigun, {size: 7/7.5}]),
                 TYPE: "bullet"
             }
         },
         {
             POSITION: [18, 8, -1.5, 0, 0, 0, 0.667],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, g.minigun, {size: 7/8}]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.minigun, {size: 7/8}]),
                 TYPE: "bullet"
             }
         }
     ]
 }, "Vulture")
-Class.phoenix = makeBird({
-    PARENT: "genericTank",
-    DANGER: 7,
-    GUNS: [
-        {
-            POSITION: [23, 7, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, g.pelleter, g.lowPower, g.machineGun, { recoil: 1.15 }]),
-                TYPE: "bullet"
-            }
-        },
-        {
-            POSITION: [12, 10, 1.4, 8, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, g.machineGun]),
-                TYPE: "bullet"
-            }
-        }
-    ]
-}, "Phoenix")
-Class.eagle = makeBird({
-    PARENT: "genericTank",
-    DANGER: 7,
-    GUNS: [
-        {
-            POSITION: [20.5, 12, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, g.pounder]),
-                TYPE: "bullet"
-            }
-        }
-    ]
-}, "Eagle")
+Class.phoenix = makeBird("sprayer", "Phoenix")
+Class.eagle = makeBird("pounder", "Eagle")
 
 // Hybrid tanks
 Class.bentHybrid = makeHybrid('tripleShot', "Bent Hybrid")

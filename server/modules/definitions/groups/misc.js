@@ -1038,7 +1038,7 @@ Class.baseProtector = {
 };
 
 Class.mothership = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Mothership",
     DANGER: 10,
     SIZE: Class.genericTank.SIZE * (7 / 3),
@@ -1099,13 +1099,8 @@ Class.mothership = {
         return e;
     })(),
 }
-Class.turkey = {
-    PARENT: "mothership",
-    LABEL: "Turkey",
-    UPGRADE_TOOLTIP: "This is currently a placeholder. Expect something more bird-like later."
-}
 Class.arenaCloser = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Arena Closer",
     NAME: "Arena Closer",
     DANGER: 10,
@@ -1135,7 +1130,7 @@ Class.arenaCloser = {
 };
 
 Class.antiTankMachineGunArm = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     COLOR: "grey",
     CONTROLLERS: ["mapTargetToGoal"],
     SKILL_CAP: Array(10).fill(255),
@@ -1168,7 +1163,7 @@ Class.antiTankMachineGunArm = {
     ],
 }
 Class.antiTankMachineGun = {
-    PARENT: ["dominator"],
+    PARENT: "dominator",
     LABEL: "Anti-Tank Machine Gun",
     UPGRADE_LABEL: "A.T.M.G.",
     CONTROLLERS: [['spin', {onlyWhenIdle: true}], 'nearestDifferentMaster'],
@@ -1233,31 +1228,30 @@ Class.antiTankMachineGun = {
 
 // TRACKER-3
 Class.tracker3gun = {
-  PARENT: ["genericTank"],
+  PARENT: "genericTank",
   LABEL: "",
   COLOR: "timeGem",
   BODY: {
-    FOV: 3,
+    FOV: 3
   },
   CONTROLLERS: [
     "canRepel",
     "onlyAcceptInArc",
     "mapAltToFire",
-    "nearestDifferentMaster",
+    "nearestDifferentMaster"
   ],
   COLOR: "grey",
   GUNS: [
     {
-      /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-      POSITION: [22, 10, 1, 0, 0, 0, 0],
+      POSITION: [22, 10, 1, 0, 0, 0, 0]
     },
     {
-      POSITION: [10, 10, -2, 20, 0, 0, 0],
-    },
-  ],
-};
+      POSITION: [10, 10, -2, 20, 0, 0, 0]
+    }
+  ]
+}
 Class.tracker3 = {
-  PARENT: ["genericTank"],
+  PARENT: "genericTank",
   LABEL: "Tracker-3",
   FACING_TYPE: ["spin", {speed: 0.02}],
   SKILL_CAP: [0, 0, 0, 0, 0, smshskl, smshskl, smshskl, smshskl, smshskl],
@@ -1287,6 +1281,6 @@ Class.bot = {
 
 // SCORE KEEPING
 Class.tagMode = {
-    PARENT: ["bullet"],
+    PARENT: "bullet",
     LABEL: "Players",
 };
