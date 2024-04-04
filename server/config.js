@@ -209,7 +209,7 @@ module.exports = {
 
 
 
-    // Gamemode related.
+    // Default values for gamemode related staff.
     // Do not change these, you'll likely break stuff.
     // Change GAME_MODES instead.
     GAMEMODE_NAME_PREFIXES: [],
