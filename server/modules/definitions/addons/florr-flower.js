@@ -1,5 +1,4 @@
-const { combineStats, makeDeco } = require('../facilitators.js');
-const { statnames } = require('../constants.js');
+const { combineStats } = require('../facilitators.js');
 const g = require('../gunvals.js');
 
 // This addon is disabled by default.
@@ -31,7 +30,7 @@ class petals extends IO {
     think(input) {
         this.body.angle += (this.body.skill.spd * 2 + this.body.aiSettings.SPEED) * Math.PI / 180;
 
-        // 1 - nor
+        // 1 - normal
         // 2 - max
         // 3 - min
         this.stage = 1;
