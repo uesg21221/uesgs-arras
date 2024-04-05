@@ -109,7 +109,7 @@ lerp = (a, b, t) => a + (b - a) * t,
 makeLaby = (type, level) => {
     let usableSHAPE = Math.max(type.SHAPE, 3),
         downscale = Math.cos(Math.PI / usableSHAPE),
-        strenghtMultiplier = 5 ** (level - 1);
+        strenghtMultiplier = 6 ** level;
     return {
         PARENT: "food",
         LABEL: ["", "Beta ", "Alpha ", "Omega ", "Gamma ", "Delta "][level] + type.LABEL,
