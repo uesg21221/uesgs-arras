@@ -3465,36 +3465,6 @@ Class.frostBoss = {
     ]
 }
 
-Class.toothlessGun = {
-    PARENT: "autoTankGun",
-    HAS_NO_RECOIL: true,
-    BODY: {
-        FOV: 1.4,
-    },
-    GUNS: [
-        {
-            POSITION: [14, 5, 1, 0, -4.5, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { reload: 0.2 }]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [14, 5, 1, 0, 4.5, 0, 0.33],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { reload: 0.2 }]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [16, 5, 1, 0, 0, 0, 0.67],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { reload: 0.2 }]),
-                TYPE: "bullet",
-            },
-        },
-    ],
-}
 Class.toohtlessBoss = {
     PARENT: "genericTank",
     LABEL: "toohtlessBoss",
@@ -3525,7 +3495,7 @@ Class.toohtlessBoss = {
     TURRETS: [
         {
             POSITION: [11, 0, 0, 0, 360, 1],
-            TYPE: ["toothlessGun", { INDEPENDENT: true, COLOR: "green" }],
+            TYPE: ["bigauto4gun", { INDEPENDENT: true }],
         },
     ],
     AI: {
@@ -3537,8 +3507,8 @@ Class.toohtlessBoss = {
             output.push({ 
                 POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.satellite, g.pounder, g.destroyer, g.annihilator, g.power]),
-                    TYPE: ["satellite", { ANGLE: i * 30, COLOR: "white" }],
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pounder, g.destroyer]),
+                    TYPE: ["satellite", { ANGLE: i * 30, COLOR: "green" }],
                     MAX_CHILDREN: 1,
                     AUTOFIRE: true,
                     SYNCS_SKILLS: false,
