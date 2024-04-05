@@ -17,6 +17,7 @@ global.grid = new hshg.HSHG();
 global.arenaClosed = false;
 global.mockupsLoaded = false;
 
+global.loadedAddons = [];
 global.TEAM_BLUE = -1;
 global.TEAM_GREEN = -2;
 global.TEAM_RED = -3;
@@ -90,6 +91,7 @@ global.ensureIsClass = str => {
     if (str in Class) {
         return Class[str];
     }
+    console.log('Definitions:');
     console.log(Class);
     throw Error(`Definition ${str} is attempted to be gotten but does not exist!`);
 }

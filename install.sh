@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Check if the "ws" package is installed globally using npm
-if npm list ws --depth=0 | grep -q 'ws@8.16.0'; then
+# Check if the "ws" package is installed using npm
+if npm list ws --depth=0 | grep -q 'ws@8.13.0'; then
     echo "Dependencies have already been installed!"
 else
     echo "ws package not found. Installing dependencies."
