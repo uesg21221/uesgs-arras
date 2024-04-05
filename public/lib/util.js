@@ -140,7 +140,7 @@ const util = {
             upgradeTooltip = "",
             rerootUpgradeTree = [],
             allRoots = [],
-            trueColor = mainMockup.color.split(' ');
+            trueColor = mainMockup.color.compiled ? mainMockup.color.compiled.split(" ") : mainMockup.color.split(" ");
         if ((trueColor[0] == '-1' || trueColor[0] == 'mirror') && color) trueColor[0] = color.split(' ')[0];
         let finalColor = trueColor.join(' ');
         

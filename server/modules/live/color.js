@@ -7,7 +7,6 @@ class Color {
 
 	constructor (color, isTile) {
         this.isTile = isTile;
-        this.stack = new Error().stack;
         this.interpret(color);
 	}
 
