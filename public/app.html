@@ -25,7 +25,7 @@
         <div id="startMenuWrapper">
             <div id="startMenu">
                 <div class="startMenuHolder">
-                  <center>This Arras.io Private Server runs on Open Source Arras.<br>For more info, visit <a href="https://github.com/Taureon/aps-plus-plus">the GitHub Repository</a></center>
+                  <center>This Arras.io Private Server runs on Open Source Arras.<br>For more info, visit <a href="https://github.com/Taureon/aps-plus-plus">the GitHub Repository</a>.<br><br>Open Source Arras is not associated with Arras.io or Momentum Studios.</center>
                 </div>
                 <div class="startMenuHolder">
                     <div class="sliderHolder">
@@ -77,6 +77,7 @@
                                 <option value="gruvbox">Gruvbox (by Road)</option>
                                 <option value="lyric">Lyric (by evil isopod)</option>
                                 <option value="blindness">Blindness (by Damocles)</option>
+                                <option value="custom">Custom</option>
                             </select>
                             <select id="optBorders" tabindex="-1">
                                 <option value="normal">Soft Borders</option>
@@ -84,6 +85,7 @@
                                 <option value="neon">Neon Mode</option>
                                 <option value="glass">Glass Mode</option>
                             </select>
+                            <input type="hidden" placeholder="Insert Custom Theme" id="optCustom" />
                             <table>
                                 <tr>
                                     <td><div><label><input id="optScreenshotMode"   tabindex="-1" class="checkbox" type="checkbox"> Screenshot Mode</label></div></td>
@@ -119,7 +121,7 @@
                         <a class="link developer" href="https://github.com/Taureon/">Main Developer</a>
                         <a class="link github"    href="https://github.com/Taureon/aps-plus-plus">Template Source</a>
                         <a class="link discord"   href="https://discord.gg/arras">Arras.io Discord</a>
-                        <a class="link developer" href="https://github.com/Zenphia/">Original Creator</a>
+                        <a class="link developer" href="https://github.com/Zephiii/">Original Creator</a>
                         <a class="link github"    href="https://github.com/Taureon/aps-plus-plus/issues">Report Bugs</a>
                     </div>
                 </div>
@@ -136,6 +138,9 @@
     <script type="module" src="./lib/protocol.js"></script>
     <script type="module" src="./lib/socketInit.js"></script>
     <script type="module" src="./app.js"></script>
+    <script>
+        if (navigator.serviceWorker) navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then(registration => console.log('Service Worker Registered'));
+    </script>
 </body>
 
 </html>

@@ -25,6 +25,7 @@ process.stdout.write(String.fromCharCode(27) + "]0;" + c.WINDOW_NAME + String.fr
 util.log(room.width + " x " + room.height + " room initalized.");
 
 // Collision stuff
+const auraCollideTypes = ["miniboss", "tank", "food", "crasher"]
 function collide(collision) {
     // Pull the two objects from the collision grid
     let instance = collision[0],
@@ -69,11 +70,12 @@ function collide(collision) {
             let wall = instance.type === "wall" ? instance : other;
             let entity = instance.type === "wall" ? other : instance;
             if (entity.ac || entity.master.ac) return;
-            switch (wall.shape) {
-                case 4:
-                    reflectCollide(wall, entity);
+            switch (true) {
+                case (wall.shape == 4):
+                case (wall.shapeData == "M 1 1 L -1 1 L -1 -1 L 1 -1 Z"):
+                    mazewallcollide(wall, entity);
                     break;
-                case 0:
+                case (wall.shape == 0):
                     mooncollide(wall, entity);
                     break;
                 default:
@@ -97,8 +99,8 @@ function collide(collision) {
                 advancedcollide(pusher, entity, false, false, a);
             }
             break;
-        case (instance.type === "crasher" && other.type === "food") ||
-            (other.type === "crasher" && instance.type === "food"):
+        case (instance.type === "crasher" && other.type === "food" && instance.team === other.team) ||
+            (other.type === "crasher" && instance.type === "food" && other.team === instance.team):
             firmcollide(instance, other);
             break;
         case instance.team !== other.team ||
@@ -107,11 +109,11 @@ function collide(collision) {
                 instance.healer ||
                 other.healer
             )):
-            // Exits if the aura is not hitting a boss or tank
+            // Exits if the aura is not hitting a boss, tank, food, or crasher
             if (instance.type === "aura") {
-                if (!(other.type === "tank" || other.type === "miniboss" || other.type == "food")) return;
+                if (!(auraCollideTypes.includes(other.type))) return;
             } else if (other.type === "aura") {
-                if (!(instance.type === "tank" || instance.type === "miniboss" || instance.type == "food")) return;
+                if (!(auraCollideTypes.includes(instance.type))) return;
             }
             advancedcollide(instance, other, true, true);
             break;
@@ -331,9 +333,10 @@ let maintainloop = () => {
         o.define(c.SPAWN_CLASS);
         o.refreshBodyAttributes();
         o.isBot = true;
-        o.name += ran.chooseBotName();
+        o.name = Config.BOT_NAME_PREFIX + ran.chooseBotName();
         o.leftoverUpgrades = ran.chooseChance(...c.BOT_CLASS_UPGRADE_CHANCES);
-        o.color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
+        let color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
+        o.color.base = color;
         if (team) o.team = team;
         bots.push(o);
         o.on('dead', () => util.remove(bots, bots.indexOf(o)));

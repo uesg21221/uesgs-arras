@@ -3,7 +3,7 @@ let spawnPermanentAntiTankMachineGun = (loc) => {
     o.define('antiTankMachineGun');
     o.controllers = [new ioTypes.nearestDifferentMaster(o)]
     o.team = TEAM_ROOM;
-    o.color = getTeamColor(TEAM_RED);
+    o.color.base = getTeamColor(TEAM_RED);
     o.on('dead', () => spawnPermanentAntiTankMachineGun(loc));
 },
 

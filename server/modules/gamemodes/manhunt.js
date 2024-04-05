@@ -24,7 +24,7 @@ class ManHunt {
         this.leaderIDs.push(leader.id);
 
         // apply buffs to them
-        leader.color = getTeamColor(TEAM_GREEN);
+        leader.color.base = getTeamColor(TEAM_GREEN);
         leader.skill.points += 18;
         leader.alwaysShowOnMinimap = true;
 

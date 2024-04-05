@@ -66,11 +66,7 @@ let animations = window.animations = {
     connecting: new Animation(1, 0),
     disconnected: new Animation(1, 0),
     deathScreen: new Animation(1, 0),
-    upgradeMenu: new Animation(0, 1, 0.01),
-    skillMenu: new Animation(0, 1, 0.01),
-    optionsMenu: new Animation(1, 0),
-    minimap: new Animation(-1, 1, 0.025),
-    leaderboard: new Animation(-1, 1, 0.025)
+    error: new Animation(1, 0),
 };
 
 // Mockup functions
@@ -133,6 +129,7 @@ window.onload = async () => {
     util.retrieveFromLocalStorage("coloredHealthbars");
     util.retrieveFromLocalStorage("centerTank");
     util.retrieveFromLocalStorage("optColors");
+    util.retrieveFromLocalStorage("optCustom");
     util.retrieveFromLocalStorage("optNoPointy");
     util.retrieveFromLocalStorage("optBorders");
     util.retrieveFromLocalStorage("seperatedHealthbars");
@@ -148,7 +145,7 @@ window.onload = async () => {
     document.getElementById("startButton").onclick = () => startGame();
     document.onkeydown = (e) => {
         var key = e.which || e.keyCode;
-        if (key === global.KEY_ENTER && (global.dead || !global.gameStart)) {
+        if (key === global.KEY_ENTER && (global.dead || !global.gameLoading)) {
             startGame();
         }
     };
@@ -172,7 +169,7 @@ var c = window.canvas.cv;
 var ctx = c.getContext("2d");
 var c2 = document.createElement("canvas");
 var ctx2 = c2.getContext("2d");
-ctx2.imageSmoothingEnabled = false;
+ctx2.imageSmoothingEnabled = true;
 // Animation things
 function Smoothbar(value, speed, sharpness = 3, lerpValue = 0.025) {
     let time = Date.now();
@@ -190,6 +187,9 @@ function Smoothbar(value, speed, sharpness = 3, lerpValue = 0.025) {
             display = util.lerp(display, value, lerpValue);
             if (Math.abs(value - display) < 0.1 && round) display = value;
             return display;
+        },
+        force: (val) => {
+            display = value = val;
         },
     };
 }
@@ -222,8 +222,114 @@ function calculateTarget() {
     if (settings.graphical.screenshotMode && Math.abs(Math.atan2(global.target.y, global.target.x) + Math.PI/2) < 0.035) global.target.x = 0; 
     return global.target;
 }
+function parseTheme(string){
+    // Decode from base64
+    try {
+        let stripped = string.replace(/\s+/g, '');
+        if (stripped.length % 4 == 2)
+            stripped += '==';
+        else if (stripped.length % 4 == 3)
+            stripped += '=';
+        let data = atob(stripped);
+    
+        let name = 'Unknown Theme', 
+            author = '';
+        let index = data.indexOf('\x00');
+        if (index === -1) return null;
+        name = data.slice(0, index) || name;
+        data = data.slice(index + 1);
+        index = data.indexOf('\x00');
+        if (index === -1) return null;
+        author = data.slice(0, index) || author;
+        data = data.slice(index + 1);
+        let border = data.charCodeAt(0) / 0xff;
+        data = data.slice(1);
+        let paletteSize = Math.floor(data.length / 3);
+        if (paletteSize < 2) return null;
+        let colorArray = [];
+        for (let i = 0; i < paletteSize; i++) {
+            let red = data.charCodeAt(i * 3)
+            let green = data.charCodeAt(i * 3 + 1)
+            let blue = data.charCodeAt(i * 3 + 2)
+            let color = (red << 16) | (green << 8) | blue
+            colorArray.push('#' + color.toString(16).padStart(6, '0'))
+        }
+        let content = {
+            teal:     colorArray[0],
+            lgreen:   colorArray[1],
+            orange:   colorArray[2],
+            yellow:   colorArray[3],
+            lavender: colorArray[4],
+            pink:     colorArray[5],
+            vlgrey:   colorArray[6],
+            lgrey:    colorArray[7],
+            guiwhite: colorArray[8],
+            black:    colorArray[9],
+    
+            blue:     colorArray[10],
+            green:    colorArray[11],
+            red:      colorArray[12],
+            gold:     colorArray[13],
+            purple:   colorArray[14],
+            magenta:  colorArray[15],
+            grey:     colorArray[16],
+            dgrey:    colorArray[17],
+            white:    colorArray[18],
+            guiblack: colorArray[19],
+    
+            paletteSize,
+            border,
+        }
+        return { name, author, content };
+    } catch (e) {}
+
+    // Decode from JSON
+    try {
+        let output = JSON.parse(string);
+        if (typeof output !== 'object')
+            return null;
+        let { name = 'Unknown Theme', author = '', content } = output;
+    
+        for (let colorHex of [
+            content.teal,
+            content.lgreen,
+            content.orange,
+            content.yellow,
+            content.lavender,
+            content.pink,
+            content.vlgrey,
+            content.lgrey,
+            content.guiwhite,
+            content.black,
+    
+            content.blue,
+            content.green,
+            content.red,
+            content.gold,
+            content.purple,
+            content.magenta,
+            content.grey,
+            content.dgrey,
+            content.white,
+            content.guiblack,
+        ]) {
+            if (!/^#[0-9a-fA-F]{6}$/.test(colorHex)) return null;
+        }
+    
+        return {
+            name: (typeof name === 'string' && name) || 'Unknown Theme',
+            author: (typeof author === 'string' && author) || '',
+            content,
+        }
+    } catch (e) {}
+    
+    return null;
+}
 // This starts the game and sets up the websocket
 function startGame() {
+    // Set flag
+    global.gameLoading = true;
+    console.log('Started connecting.')
     // Get options
     util.submitToLocalStorage("optFancy");
     util.submitToLocalStorage("centerTank");
@@ -261,6 +367,11 @@ function startGame() {
     util.submitToLocalStorage("optColors");
     let a = document.getElementById("optColors").value;
     color = color[a === "" ? "normal" : a];
+    if (a == "custom") {
+        let customTheme = document.getElementById("optCustom").value;
+        color = parseTheme(customTheme).content;
+        util.submitToLocalStorage("optCustom");
+    }
     gameDraw.color = color;
     // Other more important stuff
     let playerNameInput = document.getElementById("playerNameInput");
@@ -382,10 +493,6 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
             if (str === "reset") {
                 context.fillStyle = defaultFillStyle;
             } else {
-                // try your best to get a valid color out of it
-                if (!isNaN(str)) {
-                    str = parseInt(str);
-                }
                 str = gameDraw.getColor(str) ?? str;
             }
             context.fillStyle = str;
@@ -636,10 +743,9 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
     if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
         context = ctx2;
-        context.canvas.width = context.canvas.height = drawSize * m.position.axis + ratio * 20;
+        context.canvas.width = context.canvas.height = drawSize * m.position.axis / ratio * 2;
         xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
-        yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.sin(rot)) / 4;
-        context.translate(0.5, 0.5);
+        yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.y * Math.sin(rot)) / 4;
     } else {
         if (fade * alpha < 0.5) return;
     }
@@ -753,7 +859,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     if (assignedContext == false && context != ctx && context.canvas.width > 0 && context.canvas.height > 0) {
         ctx.save();
         ctx.globalAlpha = alpha * fade;
-        ctx.imageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = true;
         //ctx.globalCompositeOperation = "overlay";
         ctx.drawImage(context.canvas, x - xx, y - yy);
         ctx.restore();
@@ -771,18 +877,9 @@ function drawHealth(x, y, instance, ratio, alpha) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
         if (health < 0.99 || shield < 0.99) {
-            let instanceColor = null;
+            let instanceColor = instance.color.split(' ')[0];
             let getColor = true;
-            if (typeof instance.color == 'string') {
-                instanceColor = instance.color.split(' ')[0];
-                if (instanceColor[0] == '#') {
-                    getColor = false;
-                } else if (!isNaN(parseInt(instanceColor))) {
-                    instanceColor = parseInt(instanceColor);
-                }
-            } else {
-                instanceColor = instance.color;
-            }
+            if (instanceColor[0] == '#') getColor = false;
             let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(instanceColor) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
             let yy = y + realSize + 15 * ratio;
             let barWidth = 3 * ratio;
@@ -818,16 +915,22 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
     let picture = (typeof model == "object") ? model : util.getEntityImageFromMockup(model, gui.color),
         position = picture.position,
         scale = (0.6 * len) / position.axis,
-        entityX = x + 0.5 * len - scale * position.middle.x * Math.cos(angle),
-        entityY = y + 0.5 * height - scale * position.middle.x * Math.sin(angle),
+        entityX = x + 0.5 * len,
+        entityY = y + 0.5 * height,
         baseColor = picture.color;
+    
+    // Find x and y shift for the entity image
+    let xShift = position.middle.x * Math.cos(angle) - position.middle.y * Math.sin(angle),
+        yShift = position.middle.x * Math.sin(angle) + position.middle.y * Math.cos(angle);
+    entityX -= scale * xShift;
+    entityY -= scale * yShift;
 
     // Draw box
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex > 18 ? colorIndex - 19 : colorIndex);
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor((colorIndex > 18 ? colorIndex - 19 : colorIndex).toString());
     drawGuiRect(x, y, len, height);
     ctx.globalAlpha = 0.1;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(colorIndex - 9);
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor((colorIndex - 9).toString());
     drawGuiRect(x, y, len, height * 0.6);
     ctx.fillStyle = color.black;
     drawGuiRect(x, y + height * 0.6, len, height * 0.4);
@@ -841,7 +944,7 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 
     // Upgrade key
     if (upgradeKey) {
-        drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 3, color.guiwhite, "right");
+        drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 5, color.guiwhite, "right");
     }
     ctx.strokeStyle = color.black;
     ctx.lineWidth = 3 * lineWidthMult;
@@ -852,8 +955,8 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 window.requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
 window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 // Drawing states
-const statMenu = Smoothbar(0, 0.7, 1.5, 0.05);
-const upgradeMenu = Smoothbar(0, 2, 3, 0.05);
+const statMenu = Smoothbar(0, 0.7, 1.5, 0.1);
+const upgradeMenu = Smoothbar(0, 2, 3, 0.1);
 // Define the graph constructor
 function graph() {
     var data = [];
@@ -957,17 +1060,17 @@ let scaleScreenRatio = (by, unset) => {
 var getClassUpgradeKey = function (number) {
     switch (number) {
         case 0:
-            return "y";
+            return "Y";
         case 1:
-            return "u";
+            return "U";
         case 2:
-            return "i";
+            return "I";
         case 3:
-            return "h";
+            return "H";
         case 4:
-            return "j";
+            return "J";
         case 5:
-            return "k";
+            return "K";
         default:
             return null;
     }
@@ -1114,7 +1217,7 @@ function drawEntities(px, py, ratio) {
         }
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
-        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, 1, instance.render.f);
+        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1, 1, instance.render.f);
     }
 
     //dont draw healthbars and chat messages in screenshot mode
@@ -1282,7 +1385,7 @@ function drawMessages(spacing) {
             msg.alpha += 0.05;
         } else if (
             i === 0 &&
-            (global.messages.length > 5 || Date.now() - msg.time > 10000)
+            (global.messages.length > 5 || Date.now() - msg.time > 0)
         ) {
             msg.status -= 0.05;
             msg.alpha -= 0.05;
@@ -1408,7 +1511,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
 
 function drawMinimapAndDebug(spacing, alcoveSize) {
     // Draw minimap and FPS monitors
-    //minimap stuff stards here
+    //minimap stuff starts here
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
@@ -1519,9 +1622,9 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor, "center", true);
         // Mini-image
         let scale = height / entry.position.axis,
-            xx = x - 1.5 * height - scale * entry.position.middle.x * 0.707,
-            yy = y + 0.5 * height + scale * entry.position.middle.x * 0.707,
-            baseColor = entry.image.color;
+            xx = x - 1.5 * height - scale * entry.position.middle.x * Math.SQRT1_2,
+            yy = y + 0.5 * height - scale * entry.position.middle.y * Math.SQRT1_2,
+            baseColor = entry.color;
         drawEntity(baseColor, xx, yy, entry.image, 1 / scale, 1, (scale * scale) / entry.image.size, 1, -Math.PI / 4, true);
         // Move down
         y += vspacing + height;
@@ -1530,16 +1633,22 @@ function drawLeaderboard(spacing, alcoveSize, max) {
 
 function drawAvailableUpgrades(spacing, alcoveSize) {
     // Draw upgrade menu
-    upgradeMenu.set(0 + (global.canUpgrade || global.upgradeHover));
-    let glide = upgradeMenu.get();
-    global.clickables.upgrade.hide();
     if (gui.upgrades.length > 0) {
-        global.canUpgrade = true;
         let internalSpacing = 15;
         let len = alcoveSize / 2;
         let height = len;
-        let x = glide * 2 * spacing - spacing;
-        let y = spacing - height - internalSpacing;
+
+        // Animation processing
+        let columnCount = Math.max(3, Math.ceil(gui.upgrades.length / 4));
+        upgradeMenu.set(0);
+        if (!global.canUpgrade) {
+            upgradeMenu.force(-columnCount * 3)
+            global.canUpgrade = true;
+        }
+        let glide = upgradeMenu.get();
+
+        let x = glide * 2 * spacing + spacing;
+        let y = spacing - height - 2.5 * internalSpacing;
         let xStart = x;
         let initialX = x;
         let rowWidth = 0;
@@ -1547,10 +1656,10 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         let ticker = 0;
         let upgradeNum = 0;
         let colorIndex = 10;
-        let columnCount = Math.max(3, Math.ceil(gui.upgrades.length / 4));
         let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
         let lastBranch = -1;
         upgradeSpin += 0.01;
+
         for (let i = 0; i < gui.upgrades.length; i++) {
             let upgrade = gui.upgrades[i];
             let upgradeBranch = upgrade[0];
@@ -1564,14 +1673,15 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
                 if (upgradeBranch != lastBranch) {
                     if (upgradeBranchLabel.length > 0) {
                         drawText(" " + upgradeBranchLabel, xStart, y + internalSpacing * 2, internalSpacing * 2.3, color.guiwhite, "left", false);
-                        y += 3 * internalSpacing;
+                        y += 1.5 * internalSpacing;
                     }
+                    y += 1.5 * internalSpacing;
                     colorIndex = 10;
                 }
                 lastBranch = upgradeBranch;
                 ticker = 0;
             } else {
-                x += glide * (len + internalSpacing);
+                x += len + internalSpacing;
             }
 
             if (y > initialY) initialY = y;
@@ -1587,19 +1697,20 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         }
 
         // Draw dont upgrade button
-        let h = 14,
+        let h = 16,
+            textScale = h - 6,
             msg = "Don't Upgrade",
-            m = measureText(msg, h - 3) + 10;
-        let buttonX = initialX + (rowWidth + len + internalSpacing - initialX) / 2,
+            m = measureText(msg, textScale) + 10;
+        let buttonX = initialX + (rowWidth + len - initialX) / 2,
             buttonY = initialY + height + internalSpacing;
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h + settings.graphical.barChunk, color.black);
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
-        drawText(msg, buttonX, buttonY + h / 2, h - 2, color.guiwhite, "center", true);
+        drawText(msg, buttonX, buttonY + h / 2, textScale, color.guiwhite, "center", true);
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
 
         // Upgrade tooltip
         let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
-        if (upgradeHoverIndex > -1) {
+        if (upgradeHoverIndex > -1 && upgradeHoverIndex < gui.upgrades.length) {
             let picture = gui.upgrades[upgradeHoverIndex][2];
             if (picture.upgradeTooltip.length > 0) {
                 let boxWidth = measureText(picture.name, alcoveSize / 10),
@@ -1627,6 +1738,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         }
     } else {
         global.canUpgrade = false;
+        upgradeMenu.force(0);
         global.clickables.upgrade.hide();
         global.clickables.skipUpgrades.hide();
     }
@@ -1718,12 +1830,6 @@ let getDeath = () => {
 const gameDrawDead = () => {
     clearScreen(color.black, 0.25);
     let ratio = util.getScreenRatio();
-    let scaleScreenRatio = (by, unset) => {
-        global.screenWidth /= by;
-        global.screenHeight /= by;
-        ctx.scale(by, by);
-        if (!unset) ratio *= by;
-    };
     scaleScreenRatio(ratio, true);
     let shift = animations.deathScreen.get();
     ctx.translate(0, -shift * global.screenHeight);
@@ -1733,11 +1839,11 @@ const gameDrawDead = () => {
         position = global.mockups[parseInt(gui.type.split("-")[0])].position,
         scale = len / position.axis,
         xx = global.screenWidth / 2 - scale * position.middle.x * 0.707,
-        yy = global.screenHeight / 2 - 35 + scale * position.middle.x * 0.707,
+        yy = global.screenHeight / 2 - 35 + scale * position.middle.y * 0.707,
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
-    drawText("If you need instructions on how to get through the hotels, check out the enclosed instruction book.", x, y - 80, 8, color.guiwhite, "center");
+    drawText("You died!", x, y - 80, 16, color.guiwhite, "center");
     drawText("Level " + gui.__s.getLevel() + " " + picture.name, x - 170, y - 30, 24, color.guiwhite);
     drawText("Final score: " + util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
     drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);
@@ -1748,12 +1854,6 @@ const gameDrawDead = () => {
 };
 const gameDrawBeforeStart = () => {
     let ratio = util.getScreenRatio();
-    let scaleScreenRatio = (by, unset) => {
-        global.screenWidth /= by;
-        global.screenHeight /= by;
-        ctx.scale(by, by);
-        if (!unset) ratio *= by;
-    };
     scaleScreenRatio(ratio, true);
     clearScreen(color.white, 0.5);
     let shift = animations.connecting.get();
@@ -1764,17 +1864,22 @@ const gameDrawBeforeStart = () => {
 };
 const gameDrawDisconnected = () => {
     let ratio = util.getScreenRatio();
-    let scaleScreenRatio = (by, unset) => {
-        global.screenWidth /= by;
-        global.screenHeight /= by;
-        ctx.scale(by, by);
-        if (!unset) ratio *= by;
-    };
     scaleScreenRatio(ratio, true);
     clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.3), 0.25);
     let shift = animations.disconnected.get();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("Disconnected", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
+    drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
+    ctx.translate(0, shift * global.screenHeight);
+};
+const gameDrawError = () => {
+    let ratio = util.getScreenRatio();
+    scaleScreenRatio(ratio, true);
+    clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.2), 0.35);
+    let shift = animations.error.get();
+    ctx.translate(0, -shift * global.screenHeight);
+    drawText("There has been an error!", global.screenWidth / 2, global.screenHeight / 2 - 50, 50, color.guiwhite, "center");
+    drawText("Check the browser console for details.", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
     drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
@@ -1805,18 +1910,30 @@ function animloop() {
         global.metrics.lag = global.time - global.player.time;
     }
     ctx.translate(0.5, 0.5);
-    if (global.gameStart) {
-        gameDrawAlive(ratio, util.getScreenRatio());
-    } else if (!global.disconnected) {
-        gameDrawBeforeStart();
+    try {
+        if (global.gameStart) {
+            gameDrawAlive(ratio, util.getScreenRatio());
+        } else if (!global.disconnected) {
+            gameDrawBeforeStart();
+        }
+        if (global.died) {
+            gameDrawDead();
+        }
+        if (global.disconnected) {
+            gameDrawDisconnected();
+        }
+        ctx.translate(-0.5, -0.5);
+
+    //oh no we need to throw an error!
+    } catch (e) {
+
+        //hold on....
+        gameDrawError();
+        ctx.translate(-0.5, -0.5);
+
+        //okay, NOW throw the error!
+        throw e;
     }
-    if (global.died) {
-        gameDrawDead();
-    }
-    if (global.disconnected) {
-        gameDrawDisconnected();
-    }
-    ctx.translate(-0.5, -0.5);
 }
 
 let clicked = false,

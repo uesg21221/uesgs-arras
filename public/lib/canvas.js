@@ -74,7 +74,7 @@ class Canvas {
                 }
 
                 // or to talk instead
-                if (this.chatInput.hidden) {
+                if (this.chatInput.hidden && global.gameStart) {
                     this.chatInput.hidden = false;
                     this.chatInput.focus();
                     break;
@@ -144,8 +144,6 @@ class Canvas {
                     break;
                 case global.KEY_REVERSE_TANK: //client side only, no server effects except message
                     this.reverseDirection = !this.reverseDirection;
-                    this.target.x *= -1;
-                    this.target.y *= -1;
                     this.socket.talk('t', 4);
                     break;
                 case global.KEY_AUTO_ALT:
@@ -234,6 +232,7 @@ class Canvas {
         }
     }
     mouseDown(mouse) {
+        if (!this.socket) return;
         let primaryFire = 4,
             secondaryFire = 6;
         if (this.inverseMouse) [primaryFire, secondaryFire] = [secondaryFire, primaryFire];
@@ -263,6 +262,7 @@ class Canvas {
         }
     }
     mouseUp(mouse) {
+        if (!this.socket) return;
         let primaryFire = 4,
             secondaryFire = 6;
         if (this.inverseMouse) [primaryFire, secondaryFire] = [secondaryFire, primaryFire];

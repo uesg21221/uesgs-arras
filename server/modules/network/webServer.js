@@ -2,6 +2,7 @@ let fs = require('fs'),
     net = require('net'),
     path = require('path'),
     publicRoot = path.join(__dirname, "../../../public"),
+    sharedRoot = path.join(__dirname, "../../../shared"),
     mimeSet = {
         "js": "application/javascript",
         "json": "application/json",
@@ -39,7 +40,20 @@ let server = require('http').createServer((req, res) => {
         }
     }
 
-    switch (req.url) {
+    if (req.url.startsWith('/shared/')) {
+        let fileToGet = path.join(sharedRoot, req.url.slice(7));
+
+        //if this file does not exist, return the default;
+        if (!fs.existsSync(fileToGet)) {
+            fileToGet = path.join(sharedRoot, c.DEFAULT_FILE);
+        } else if (!fs.lstatSync(fileToGet).isFile()) {
+            fileToGet = path.join(sharedRoot, c.DEFAULT_FILE);
+        }
+
+        //return the file
+        res.writeHead(200, { 'Content-Type': mimeSet[ fileToGet.split('.').pop() ] || 'text/html' });
+        return fs.createReadStream(fileToGet).pipe(res);
+    } else switch (req.url) {
         case "/servers.json":
             resStr = JSON.stringify([ { hasApp: true, secure: !c.host.match(/localhost:(\d)/), ip: c.host }, ...otherServers ]);
             break;
@@ -59,23 +73,11 @@ let server = require('http').createServer((req, res) => {
         default:
             let fileToGet = path.join(publicRoot, req.url);
 
-            // Some fishy business goin' on here...
-            if (!fileToGet.startsWith(publicRoot)) {
-                fileToGet = getDefaultFile();
-
-            // We can't send a file that does not exist, so let's check if it does!
-            } else {
-
-                // 'https://domain.com/app' looks nicer than 'https://domain.com/app.html'
-                if (fileToGet.lastIndexOf('.') < fileToGet.lastIndexOf('\\')) {
-                    fileToGet += '.html';
-                }
-
-                fileToGet = toDefaultIfFileDoesNotExist(fileToGet);
-                
-
-                // Just in case we are suddenly very stupid!!!!
-                fileToGet = toDefaultIfFileDoesNotExist(fileToGet);
+            //if this file does not exist, return the default;
+            if (!fs.existsSync(fileToGet)) {
+                fileToGet = path.join(publicRoot, c.DEFAULT_FILE);
+            } else if (!fs.lstatSync(fileToGet).isFile()) {
+                fileToGet = path.join(publicRoot, c.DEFAULT_FILE);
             }
 
             res.writeHead(200, {
@@ -90,7 +92,8 @@ let server = require('http').createServer((req, res) => {
 
 //very simplified reimplementation of what the forwarded-for npm package does
 getIP = req => {
-    let store = req.headers['fastly-client-ip'] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
+    let store = req.headers["cf-connecting-ip"] ||
+                req.headers['fastly-client-ip'] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
                 req.headers['forwarded']        || req.headers['x-real-ip']       || req.connection.remoteAddress,
         ips = store.split(',');
 

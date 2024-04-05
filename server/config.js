@@ -20,13 +20,13 @@ module.exports = {
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['tdm', 'domination'],
+    GAME_MODES: [],//'tdm', 'domination'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
     // NOTE: Files starting with `map_` are maps. files starting with `overlay_` are overlays that get added on.
     // NOTE: These prefixes are only for categorisation, a room file would work the same regardless of its prefix. APS++ does nothing based on file name prefixes.
-    ROOM_SETUP: ['map_apspp_default'],
+    ROOM_SETUP: ['map_apspp_tiletest'],//default'],
 
     // The dimensions of a single tile on the map.
     TILE_WIDTH: 400,
@@ -63,8 +63,10 @@ module.exports = {
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
                     +"Please report any bugs you encounter!",
-
-
+    
+    // How long a popup message lasts before fading out in milliseconds.
+    MESSAGE_DISPLAY_TIME: 10_000,
+    
 
     // Physics
 
@@ -122,6 +124,9 @@ module.exports = {
     // The chances of a player-bot upgrading a specific amount of times before it stops upgrading.
     BOT_CLASS_UPGRADE_CHANCES: [ 1, 5, 20, 37, 37],
 
+    // The prefix of the bot's name.
+    BOT_NAME_PREFIX: "[AI] ",
+
     // The class that players and player-bots spawn as.
     SPAWN_CLASS: "basic",
 
@@ -130,7 +135,7 @@ module.exports = {
     // Natural Spawns
 
     FOOD_CAP: 3, // Max normal food per normal tile.
-    FOOD_SPAWN_CHANCE: 0.875, // Likeliness of normal food spawn attempts succeedingg.
+    FOOD_SPAWN_CHANCE: 0.875, // Likeliness of normal food spawn attempts succeeding.
     FOOD_SPAWN_COOLDOWN: 30, // Cooldown (in game ticks) of food spawn attempts being made.
 
     FOOD_CAP_NEST: 3, // Max nest food per nest tile.
@@ -213,7 +218,7 @@ module.exports = {
 
 
 
-    // Gamemode related.
+    // Default values for gamemode related stuff.
     // Do not change these, you'll likely break stuff.
     // Change GAME_MODES instead.
     GAMEMODE_NAME_PREFIXES: [],

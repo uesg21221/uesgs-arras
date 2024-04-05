@@ -35,7 +35,7 @@ function closeArena() {
             CAN_BE_ON_LEADERBOARD: false,
             VALUE: 100000,
         });
-        o.color = 3;
+        o.color.base = 3;
         o.team = TEAM_ROOM;
         o.name = "Arena Closer";
     }

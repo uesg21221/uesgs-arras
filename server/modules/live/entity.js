@@ -41,14 +41,7 @@ class Gun {
             alt: false,
             fire: false,
         };
-        this.colorUnboxed = {
-            base: 16,
-            hueShift: 0,
-            saturationShift: 1,
-            brightnessShift: 0,
-            allowBrightnessInvert: false,
-        };
-        this.color = '16 0 1 0 false';
+        this.color = new Color('16 0 1 0 false');
         this.alpha = 1;
         this.strokeWidth = 1;
         this.canShoot = false;
@@ -86,19 +79,7 @@ class Gun {
             this.negRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
             this.independentChildren = info.PROPERTIES.INDEPENDENT_CHILDREN == null ? false : info.PROPERTIES.INDEPENDENT_CHILDREN;
             if (info.PROPERTIES.COLOR != null) {
-                if (typeof info.PROPERTIES.COLOR === "number" || typeof info.PROPERTIES.COLOR === "string") {
-                    if (!isNaN(info.PROPERTIES.COLOR) && !isNaN(parseFloat(info.PROPERTIES.COLOR)) || /^[a-zA-Z]*$/.test(info.PROPERTIES.COLOR))
-                        this.colorUnboxed.base = info.PROPERTIES.COLOR;
-                }
-                else if (typeof info.PROPERTIES.COLOR === "object")
-                    this.colorUnboxed = {
-                        base: info.PROPERTIES.COLOR.BASE ?? 16,
-                        hueShift: info.PROPERTIES.COLOR.HUE_SHIFT ?? 0,
-                        saturationShift: info.PROPERTIES.COLOR.SATURATION_SHIFT ?? 1,
-                        brightnessShift: info.PROPERTIES.COLOR.BRIGHTNESS_SHIFT ?? 0,
-                        allowBrightnessInvert: info.PROPERTIES.COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
-                    };
-                this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+                this.color.interpret(info.PROPERTIES.COLOR);
             }
             this.alpha = info.PROPERTIES.ALPHA == null ? 1 : info.PROPERTIES.ALPHA
             this.strokeWidth = info.PROPERTIES.STROKE_WIDTH == null ? 1 : info.PROPERTIES.STROKE_WIDTH
@@ -191,7 +172,7 @@ class Gun {
     getPhotoInfo() {
         return {
             ...this.lastShot, 
-            color: this.color,
+            color: this.color.compiled,
             alpha: this.alpha,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless, 
@@ -206,26 +187,25 @@ class Gun {
         };
     }
     spawnBullets(useWhile, shootPermission) {
-
-        //find out some intermediate values
+        // Find out some intermediate values
         let angle1 = this.direction + this.angle + this.body.facing,
             angle2 = this.angle + this.body.facing,
-            gunlength = 1.5 * this.length - this.width * this.settings.size / 2,
+            gunlength = this.length - this.width * this.settings.size / 2,
 
-            //calculate offsets based on lengths and directions
-            offset_base_x = this.offset * Math.cos(angle1),
-            offset_base_y = this.offset * Math.sin(angle1),
-            offset_end_x = gunlength * Math.cos(angle2),
-            offset_end_y = gunlength * Math.sin(angle2),
+            // Calculate offsets based on lengths and directions
+            offsetBaseX = this.offset * Math.cos(angle1),
+            offsetBaseY = this.offset * Math.sin(angle1),
+            offsetEndX = gunlength * Math.cos(angle2),
+            offsetEndY = gunlength * Math.sin(angle2),
 
-            //finally get the final bullet offset
-            offset_final_x = offset_base_x + offset_end_x,
-            offset_final_y = offset_base_y + offset_end_y,
+            // Finally get the final bullet offset
+            offsetFinalX = offsetBaseX + offsetEndX,
+            offsetFinalY = offsetBaseY + offsetEndY,
             skill = this.bulletStats === "master" ? this.body.skill : this.bulletStats;
 
         // Shoot, multiple times in a tick if needed
         do {
-            this.fire(offset_final_x, offset_final_y, skill);
+            this.fire(offsetFinalX, offsetFinalY, skill);
             this.cycle--;
             shootPermission =
                   this.countsOwnKids    ? this.countsOwnKids    > this.children.length
@@ -349,25 +329,7 @@ class Gun {
             o.team = this.body.team;
             o.refreshBodyAttributes();
             o.life();
-            this.altFire ? this.master.ON(
-                undefined,
-                'altFire',
-                {
-                    gun: this,
-                    store: this.store,
-                    globalStore: this.globalStore,
-                    child: o
-                }
-            ) : this.master.ON(
-                undefined,
-                'fire',
-                {
-                    gun: this,
-                    store: this.store,
-                    globalStore: this.globalStore,
-                    child: o
-                }
-            )
+            this.master.ON(undefined, this.altFire ? 'altFire' : 'fire', { gun: this, store: this.store, globalStore: this.globalStore, child: o });
             return;
         }
 
@@ -387,32 +349,14 @@ class Gun {
         this.bulletInit(o);
         o.coreSize = o.SIZE;
 
-        this.altFire ? this.master.ON(
-            undefined, 
-            'altFire',   
-                {   
-                    gun: this, 
-                    store: this.store, 
-                    globalStore: this.
-                    globalStore, 
-                    child: o 
-                }
-            ) : this.master.ON(
-                undefined, 
-                'fire', 
-                { 
-                    gun: this, 
-                    store: this.store, 
-                    globalStore: 
-                    this.globalStore, 
-                    child: o 
-                }
-            )
+        this.master.ON(undefined, this.altFire ? 'altFire' : 'fire', { gun: this, store: this.store, globalStore: this.globalStore, child: o });
     }
     bulletInit(o) {
         // Define it by its natural properties
-        o.color = undefined;
-        for (let type of this.bulletTypes) o.define(type);
+        o.color.base = this.body.master.color.base
+        for (let type of this.bulletTypes) {
+            o.define(type);
+        }
         // Pass the gun attributes
         o.define({
             BODY: this.interpret(),
@@ -420,7 +364,6 @@ class Gun {
             SIZE: (this.body.size * this.width * this.settings.size) / 2,
             LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + o.label
         });
-        o.color = o.color ?? this.body.master.color;
         // Keep track of it and give it the function it needs to deutil.log itself upon death
         if (this.countsOwnKids) {
             o.parent = this;
@@ -449,7 +392,7 @@ class Gun {
                 this.bulletInit(host);
                 host.team = oo.master.master.team;
                 host.master = oo.master;
-                host.color = oo.color;
+                host.color.base = oo.color.base;
                 host.facing = save.facing;
                 host.SIZE = save.size;
                 host.health.amount = host.health.max;
@@ -716,6 +659,108 @@ class StatusEffect extends EventEmitter {
     }
 }
 
+class Prop {
+    constructor(position, bond) {
+        this.guns = [];
+        this.color = new Color(16);
+        this.borderless = false;
+        this.drawFill = true;
+        this.strokeWidth = 1;
+
+        // Bind prop
+        this.bond = bond;
+        this.bond.props.push(this);
+        // Get my position.
+        if (Array.isArray(position)) {
+            position = {
+                SIZE: position[0],
+                X: position[1],
+                Y: position[2],
+                ANGLE: position[3],
+                LAYER: position[4]
+            };
+        }
+        position.SIZE ??= 10;
+        position.X ??= 0;
+        position.Y ??= 0;
+        position.ANGLE ??= 0;
+        position.LAYER ??= 0;
+        let _off = new Vector(position.X, position.Y);
+        this.bound = {
+            size: position.SIZE / 20,
+            angle: position.ANGLE * Math.PI / 180,
+            direction: _off.direction,
+            offset: _off.length / 10,
+            layer: position.LAYER
+        };
+        // Initalize.
+        this.facing = 0;
+        this.x = 0;
+        this.y = 0;
+        this.size = 1;
+        this.realSize = 1;
+        this.settings = {};
+        this.settings.mirrorMasterAngle = true;
+        this.upgrades = [];
+        this.turrets = [];
+        this.props = [];
+    }
+    define(def) {
+        let set = ensureIsClass(def);
+
+        if (set.PARENT != null) {
+            if (Array.isArray(set.PARENT)) {
+                for (let i = 0; i < set.PARENT.length; i++) {
+                    this.define(set.PARENT[i], false);
+                }
+            } else {
+                this.define(set.PARENT, false);
+            }
+        }
+        if (set.index != null) this.index = set.index.toString();
+        if (set.SHAPE != null) {
+            this.shape = typeof set.SHAPE === "number" ? set.SHAPE : 0;
+            this.shapeData = set.SHAPE;
+        }
+        this.imageInterpolation = set.IMAGE_INTERPOLATION != null ? set.IMAGE_INTERPOLATION : 'bilinear'
+        if (set.COLOR != null) {
+            this.color.interpret(set.COLOR);
+        }
+        if (set.STROKE_WIDTH != null) this.strokeWidth = set.STROKE_WIDTH
+        if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
+        if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
+        if (set.GUNS != null) {
+            let newGuns = [];
+            for (let i = 0; i < set.GUNS.length; i++) {
+                newGuns.push(new Gun(this, set.GUNS[i]));
+            }
+            this.guns = newGuns;
+        }
+    }
+    camera() {
+        return {
+            type: 0x01,
+            id: this.id,
+            index: this.index,
+            size: this.size,
+            realSize: this.realSize,
+            facing: this.facing,
+            angle: this.bound.angle,
+            direction: this.bound.direction,
+            offset: this.bound.offset,
+            sizeFactor: this.bound.size,
+            mirrorMasterAngle: this.settings.mirrorMasterAngle,
+            layer: this.bound.layer,
+            color: this.color.compiled,
+            strokeWidth: this.strokeWidth,
+            borderless: this.borderless,
+            drawFill: this.drawFill,
+            guns: this.guns.map((gun) => gun.getPhotoInfo()),
+            turrets: this.turrets,
+        };
+    }
+}
+
 let entitiesIdLog = 0;
 const forceTwiggle = ["autospin", "turnWithSpeed", "spin", "fastspin", "veryfastspin", "withMotion", "smoothWithMotion", "looseWithMotion"];
 class Entity extends EventEmitter {
@@ -803,11 +848,16 @@ class Entity extends EventEmitter {
         this.shield = new HealthType(0, "dynamic");
         this.guns = [];
         this.turrets = [];
+        this.props = [];
         this.upgrades = [];
         this.settings = {};
         this.aiSettings = {};
         this.children = [];
         this.statusEffects = [];
+        this.color = new Color(16);
+        this.glow = {radius: null, color: new Color(-1), alpha: 1, recursion: 1}
+        this.invisible = [0, 0];
+        this.alphaRange = [0, 1];
         // Define it
         this.SIZE = 1;
         this.sizeMultiplier = 1;
@@ -836,17 +886,6 @@ class Entity extends EventEmitter {
         this.invuln = false;
         this.alpha = 1;
         this.strokeWidth = 1;
-        this.colorUnboxed = {
-            base: 16,
-            hueShift: 0,
-            saturationShift: 1,
-            brightnessShift: 0,
-            allowBrightnessInvert: false,
-        };
-        this.color = '16 0 1 0 false';
-        this.glow = {radius: null, color: null, alpha: 1, recursion: 1}
-        this.invisible = [0, 0];
-        this.alphaRange = [0, 1];
         this.levelCap = undefined;
         this.autospinBoost = 0;
         this.antiNaN = new antiNaN(this);
@@ -923,8 +962,8 @@ class Entity extends EventEmitter {
                 needsBodyAttribRefresh = true;
                 this.emit('expiredStatusEffect', entry.effect);
             }
-            if (entry.effect.tick && entry.effect.tick(this, entry.effect)) {
-                needsBodyAttribRefresh = true
+            if (entry.effect.tick && entry.effect.tick(this, entry.effect, entry.durationLeftover)) {
+                needsBodyAttribRefresh = true;
             }
         }
         this.statusEffects = lastingEffects;
@@ -993,7 +1032,6 @@ class Entity extends EventEmitter {
     }
     become(player, dom = false) {
         this.addController(new ioTypes.listenToPlayer(this, { player, static: dom }));
-        this.sendMessage = (content, color) => player.socket.talk("m", content);
         this.kick = (reason) => player.socket.kick(reason);
     }
     giveUp(player, name = "Mothership") {
@@ -1011,7 +1049,6 @@ class Entity extends EventEmitter {
         }
         player.body.name = player.body.label;
         player.body.underControl = false;
-        player.body.sendMessage = () => {};
         let fakeBody = new Entity({ x: player.body.x, y: player.body.y });
         fakeBody.passive = true;
         fakeBody.underControl = true;
@@ -1050,23 +1087,16 @@ class Entity extends EventEmitter {
         }
         this.imageInterpolation = set.IMAGE_INTERPOLATION != null ? set.IMAGE_INTERPOLATION : 'bilinear'
         if (set.COLOR != null) {
-            if (typeof set.COLOR === "number" || typeof set.COLOR === 'string')
-                this.colorUnboxed.base = set.COLOR;
-            else if (typeof set.COLOR === "object")
-                this.colorUnboxed = {
-                    base: set.COLOR.BASE ?? 16,
-                    hueShift: set.COLOR.HUE_SHIFT ?? 0,
-                    saturationShift: set.COLOR.SATURATION_SHIFT ?? 1,
-                    brightnessShift: set.COLOR.BRIGHTNESS_SHIFT ?? 0,
-                    allowBrightnessInvert: set.COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
-                };
-            this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+            if (this.color === undefined) {
+                console.log(this);
+            }
+            this.color.interpret(set.COLOR);
         }
         this.upgradeColor = set.UPGRADE_COLOR == null ? null : set.UPGRADE_COLOR;
         if (set.GLOW != null) {
             this.glow = {
                 radius: set.GLOW.RADIUS ?? 0,
-                color: set.GLOW.COLOR ?? null,
+                color: new Color(set.GLOW.COLOR),
                 alpha: set.GLOW.ALPHA ?? 1,
                 recursion: set.GLOW.RECURSION ?? 1
             };
@@ -1292,6 +1322,17 @@ class Entity extends EventEmitter {
                 o.bindToMaster(def.POSITION, this, def.VULNERABLE);
             }
         }
+        if (set.PROPS != null) {
+            this.props = [];
+            for (let i = 0; i < set.PROPS.length; i++) {
+                let def = set.PROPS[i],
+                    o = new Prop(def.POSITION, this),
+                    type = Array.isArray(def.TYPE) ? def.TYPE : [def.TYPE];
+                for (let j = 0; j < type.length; j++) {
+                    o.define(type[j]);
+                }
+            }
+        }
         if (set.ON != null) this.onDef = set.ON;
         this.reverseTargetWithTank = set.REVERSE_TARGET_WITH_TANK ?? false;
         if (set.mockup != null) {
@@ -1324,6 +1365,8 @@ class Entity extends EventEmitter {
                 }
             }
             if (set.LABEL != null && set.LABEL.length > 0) this.label = this.label + "-" + set.LABEL;
+            if (set.MAX_CHILDREN != null) this.maxChildren += set.MAX_CHILDREN;
+            else this.maxChildren = null; // For bullet and drone combos so all parts remain functional
             if (set.BODY != null) {
                 if (set.BODY.ACCELERATION != null) this.ACCELERATION *= set.BODY.ACCELERATION;
                 if (set.BODY.SPEED != null) this.SPEED *= set.BODY.SPEED;
@@ -1364,6 +1407,16 @@ class Entity extends EventEmitter {
                     o.bindToMaster(def.POSITION, this);
                 }
             }
+            if (set.PROPS != null) {
+                for (let i = 0; i < set.PROPS.length; i++) {
+                    let def = set.PROPS[i],
+                        o = new Prop(def.POSITION, this),
+                        type = Array.isArray(def.TYPE) ? def.TYPE : [def.TYPE];
+                    for (let j = 0; j < type.length; j++) {
+                        o.define(type[j]);
+                    }
+                }
+            }
             if (set.SIZE != null) {
                 this.SIZE *= set.SIZE * this.squiggle;
                 if (this.coreSize == null) this.coreSize = this.SIZE;
@@ -1400,10 +1453,7 @@ class Entity extends EventEmitter {
                 for (let root of this.rerootUpgradeTree) finalRoot += root + "\\/";
                 this.rerootUpgradeTree += finalRoot.substring(0, finalRoot.length - 2);
             }
-            this.maxChildren = null; // Required because it just doesn't work out otherwise - overlord-triplet would make the triplet inoperable at 8 drones, etc
         }
-        // Turret layer ordering
-        this.turrets.sort(this.turretSort);
 
         // Batch upgrades
         if (this.batchUpgrades && emitEvent) {
@@ -1421,9 +1471,6 @@ class Entity extends EventEmitter {
             this.selection = JSON.parse(JSON.stringify(this.defs));
             this.chooseUpgradeFromBranch(numBranches); // Recursively build upgrade options
         }
-    }
-    turretSort(a, b) {
-        return a.bound.layer - b.bound.layer;
     }
     chooseUpgradeFromBranch(remaining) {
         if (remaining > 0) { // If there's more to select
@@ -1617,6 +1664,9 @@ class Entity extends EventEmitter {
         return (this.velocity.y + this.accel.y) / c.runSpeed;
     }
     camera(tur = false) {
+        let turretsAndProps = this.turrets.concat(this.props);
+        // Turret layer ordering
+        turretsAndProps.sort((a, b) => a.bound.layer - b.bound.layer);
         return {
             type: 0 + tur * 0x01 + this.settings.drawHealth * 0x02 + (this.type === "tank" && this.displayName) * 0x04,
             invuln: this.invuln,
@@ -1643,14 +1693,14 @@ class Entity extends EventEmitter {
             defaultAngle: this.firingArc[0],
             twiggle: forceTwiggle.includes(this.facingType[0]) || (this.facingType[0] === "locksFacing" && this.control.alt),
             layer: this.layerID ? this.layerID : this.bond != null ? this.bound.layer : this.type === "wall" ? 11 : this.type === "food" ? 10 : this.type === "tank" ? 5 : this.type === "crasher" ? 1 : 0,
-            color: this.color,
+            color: this.color.compiled,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless,
             drawFill: this.drawFill,
             name: (this.nameColor || "#FFFFFF") + this.name,
             score: this.skill.score,
             guns: this.guns.map((gun) => gun.getPhotoInfo()),
-            turrets: this.turrets.map((turret) => turret.camera(true)),
+            turrets: turretsAndProps.map((turret) => turret.camera(true)),
             glow: this.glow,
         };
     }
@@ -1675,7 +1725,7 @@ class Entity extends EventEmitter {
         let old = this;
         if (
             number < this.upgrades.length &&
-            this.level >= this.upgrades[number].level
+            this.skill.level >= this.upgrades[number].level
         ) {
             let upgrade = this.upgrades[number],
                 upgradeClass = upgrade.class,
@@ -1693,6 +1743,9 @@ class Entity extends EventEmitter {
                 this.upgrades = [];
                 this.define(this.defs);
                 this.ON(this.onDef, "upgrade", { oldEntity: old })
+            }
+            if (this.color.base == '-1' || this.color.base == 'mirror') {
+                this.color.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : this.team);
             }
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
@@ -1757,7 +1810,7 @@ class Entity extends EventEmitter {
             case "motor":
                 this.maxSpeed = 0;
                 if (this.topSpeed) {
-                    this.damp = a / this.topSpeed;
+                    this.damp = Math.abs(a) / this.topSpeed;
                 }
                 if (gactive) {
                     let len = Math.sqrt(g.x * g.x + g.y * g.y);
@@ -1967,9 +2020,7 @@ class Entity extends EventEmitter {
     }
     takeSelfie() {
         this.flattenedPhoto = null;
-        this.photo = this.settings.drawShape
-            ? this.camera()
-            : (this.photo = undefined);
+        this.photo = this.settings.drawShape ? this.camera() : undefined;
     }
     physics() {
         if (this.accel.x == null || this.velocity.x == null) {
@@ -2193,10 +2244,20 @@ class Entity extends EventEmitter {
                 }
                 sockets.broadcast(text);
             }
-            // Add the implements to the message
-            for (let i = 0; i < killTools.length; i++) {
-                killText += util.addArticle(killTools[i].label) + " and ";
+
+            // instead of "a Machine Gunner Bullet and a Machine Gunner Bullet and a Machine Gunner Bullet",
+            // make it say " 3 Machine Gunner Bullets"
+            let killCounts = {};
+            for (let { label } of killTools) {
+                if (!killCounts[label]) killCounts[label] = 0;
+                killCounts[label]++;
             }
+            let killCountEntries = Object.entries(killCounts).map(([name, count], i) => name);
+            for (let i = 0; i < killCountEntries.length; i++) {
+                killText += (killCounts[killCountEntries[i]] == 1) ? util.addArticle(killTools[i].label) : killCounts[killCountEntries[i]] + ' ' + killCountEntries[i] + 's';
+                killText += i >= killCountEntries.length - 2 ? ', ' : ' and ';
+            }
+
             // Prepare it and clear the collision array.
             killText = killText.slice(0, -5);
             if (killText === "You have been kille") {
@@ -2230,11 +2291,10 @@ class Entity extends EventEmitter {
         this.isProtected = true;
     }
     say(message, duration = c.CHAT_MESSAGE_DURATION) {
-        let id = player.body.id;
-        if (!chats[id]) {
-            chats[id] = [];
+        if (!chats[this.id]) {
+            chats[this.id] = [];
         }
-        chats[id].unshift({ message, expires: Date.now() + duration });
+        chats[this.id].unshift({ message, expires: Date.now() + duration });
     }
     sendMessage(message) {} // Dummy
     setKillers(killers) {} // Dummy

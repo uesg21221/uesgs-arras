@@ -140,8 +140,9 @@ const util = {
             upgradeTooltip = "",
             rerootUpgradeTree = [],
             allRoots = [],
-            trueColor = mainMockup.color;
-        if (trueColor == '16 0 1 0 false' && color) trueColor = color;
+            trueColor = mainMockup.color.compiled ? mainMockup.color.compiled.split(" ") : mainMockup.color.split(" ");
+        if ((trueColor[0] == '-1' || trueColor[0] == 'mirror') && color) trueColor[0] = color.split(' ')[0];
+        let finalColor = trueColor.join(' ');
         
         for (let i of index.split("-")) {
             let mockup = global.mockups[parseInt(i)];
@@ -155,7 +156,7 @@ const util = {
             if (!rerootUpgradeTree.includes(root))
                 rerootUpgradeTree.push(root);
         }
-        turrets.sort(a => a.layer);
+        turrets.sort((a, b) => a.layer - b.layer);
         return {
             time: 0,
             index: index,
@@ -165,7 +166,7 @@ const util = {
             vy: 0,
             size: mainMockup.size,
             realSize: mainMockup.realSize,
-            color: trueColor,
+            color: finalColor,
             borderless: mainMockup.borderless,
             drawFill: mainMockup.drawFill,
             upgradeColor: mainMockup.upgradeColor,
