@@ -4,6 +4,7 @@ class Color {
 	#saturationShift = 1;
 	#brightnessShift = 0;
 	#allowBrightnessInvert = false;
+
 	constructor (color, isTile) {
         this.isTile = isTile;
         this.stack = new Error().stack;
