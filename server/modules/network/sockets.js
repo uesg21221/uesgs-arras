@@ -421,7 +421,7 @@ function incoming(message, socket) {
                 player.body.define({ RESET_UPGRADES: true, BATCH_UPGRADES: false });
                 player.body.define(Class[socket.permissions.class]);
                 if (player.body.colorUnboxed.base == '-1' || player.body.colorUnboxed.base == 'mirror') {
-                    player.body.colorUnboxed.base = getTeamColor((c.MODE == 'ffa' || c.GROUPS) ? TEAM_RED : player.body.team);
+                    player.body.colorUnboxed.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : player.body.team);
                     player.body.compressColor();
                 }
             }
@@ -852,16 +852,16 @@ const spawn = (socket, name) => {
     }
     player.team = socket.rememberedTeam;
 
-    if (c.MODE == "tdm") {
+    if (c.MODE == "tdm" || c.TAG) {
         let team = getWeakestTeam();
         // Choose from one of the least ones
         if (player.team == null || (player.team !== team && global.defeatedTeams.includes(player.team))
         ) {
             player.team = team;
         }
-        if (socket.party) {
+        if (socket.party && !c.TAG) {
             let team = socket.party / room.partyHash;
-            if (!c.TAG && team > 0 && team < c.TEAMS + 1 && team & 1 == team && !global.defeatedTeams.includes(team)) {
+            if (team > 0 && team < c.TEAMS + 1 && team & 1 == team && !global.defeatedTeams.includes(team)) {
                 player.team = team;
                 console.log("Party Code with team:", team, "Party:", socket.party);
             }
@@ -910,22 +910,20 @@ const spawn = (socket, name) => {
     socket.rememberedTeam = player.team;
     player.body = body;
     body.socket = socket;
-    switch (c.MODE) {
-        case "tdm":
-            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
-                body.colorUnboxed.base = getTeamColor(body.team);
-                body.compressColor();
-            }
-            break;
-        default: 
-            let color = c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12;
-            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
-                body.colorUnboxed.base = color;
-                body.compressColor();
-            }
+    if (c.MODE == "tdm" || c.TAG) {
+        if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
+            body.colorUnboxed.base = getTeamColor(body.team);
+            body.compressColor();
+        }
+    } else {
+        let color = c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12;
+        if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
+            body.colorUnboxed.base = color;
+            body.compressColor();
+        }
     }
     // Decide what to do about colors when sending updates and stuff
-    player.teamColor = (!c.RANDOM_COLORS && (c.MODE === "ffa" || c.GROUPS) ? 10 : getTeamColor(body.team)) + ' 0 1 0 false'; // blue
+    player.teamColor = (!c.RANDOM_COLORS && (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? 10 : getTeamColor(body.team)) + ' 0 1 0 false'; // blue
     player.target = { x: 0, y: 0 };
     player.command = {
         up: false,
@@ -1041,7 +1039,7 @@ function perspective(e, player, data) {
                 data[10] = 1;
             }
         }
-        if (player.body.team === e.source.team && (c.GROUPS || c.MODE == 'ffa')) {
+        if (player.body.team === e.source.team && (c.GROUPS || (c.MODE == 'ffa' && !c.TAG))) {
             // GROUPS
             data = data.slice();
             data[13] = player.teamColor;
@@ -1196,7 +1194,7 @@ const eyes = (socket) => {
 // Util
 let getBarColor = (entry) => {
     // What even is the purpose of all of this?
-    if (c.GROUPS || c.MODE == 'ffa') return '11 0 1 0 false';
+    if (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) return '11 0 1 0 false';
     return entry.color;
 };
 
@@ -1297,7 +1295,7 @@ let minimapTeams = teamIDs.map((team) =>
                     data: [
                         util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
                         util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
-                        (c.MODE == 'ffa' || c.GROUPS) ? '10 0 1 0 false' : my.color,
+                        (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? '10 0 1 0 false' : my.color,
                     ],
                 });
             }
@@ -1312,9 +1310,10 @@ let leaderboard = new Delta(7, () => {
             list.push({
                 id,
                 skill: { score: 0 },
-                index: Class.tagMode.index,
+                index: Class.tagMode.index.toString(),
                 name: getTeamName(team),
-                color: getTeamColor(team),
+                color: `${getTeamColor(team)} 0 1 0 false`,
+                label: "Players",
                 team
             });
         }

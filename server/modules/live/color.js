@@ -1,4 +1,10 @@
 class Color {
+	#base;
+	#hueShift;
+	#saturationShift;
+	#brightnessShift;
+	#allowBrightnessInvert;
+
 	constructor (isTile) {
         this.isTile = isTile;
         this.reset();

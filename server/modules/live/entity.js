@@ -1799,7 +1799,7 @@ class Entity extends EventEmitter {
                 this.ON(this.onDef, "upgrade", { oldEntity: old })
             }
             if (this.colorUnboxed.base == '-1' || this.colorUnboxed.base == 'mirror') {
-                this.colorUnboxed.base = getTeamColor((c.MODE == 'ffa' || c.GROUPS) ? TEAM_RED : this.team);
+                this.colorUnboxed.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : this.team);
                 this.compressColor();
             }
             this.sendMessage("You have upgraded to " + this.label + ".");
