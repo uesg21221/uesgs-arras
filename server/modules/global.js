@@ -17,6 +17,7 @@ global.grid = new hshg.HSHG();
 global.arenaClosed = false;
 global.mockupsLoaded = false;
 
+global.loadedAddons = [];
 global.TEAM_BLUE = -1;
 global.TEAM_GREEN = -2;
 global.TEAM_RED = -3;
