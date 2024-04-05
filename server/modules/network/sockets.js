@@ -1532,8 +1532,8 @@ const sockets = {
         
         //account for proxies
         //very simplified reimplementation of what the forwarded-for npm package does
-        let store = req.headers["cf-connecting-ip" || 'fastly-client-ip'] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
-                    req.headers['forwarded']        || req.headers['x-real-ip']       || req.connection.remoteAddress,
+        let store = req.headers['fastly-client-ip'] || req.headers["cf-connecting-ip"] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
+                    req.headers['forwarded'] || req.headers['x-real-ip'] || req.connection.remoteAddress,
             ips = store.split(',');
 
         if (!ips) {
