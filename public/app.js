@@ -1975,9 +1975,15 @@ function animloop() {
             gameDrawDisconnected();
         }
         ctx.translate(-0.5, -0.5);
+
+    //oh no we need to throw an error!
     } catch (e) {
+
+        //hold on....
         gameDrawError();
         ctx.translate(-0.5, -0.5);
+
+        //okay, NOW throw the error!
         throw e;
     }
 }

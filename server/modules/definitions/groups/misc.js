@@ -87,7 +87,7 @@ Class.dominator = {
         HETERO: 0,
         SHIELD: base.SHIELD * 1.4,
     },
-    CONTROLLERS: ["nearestDifferentMaster"],
+    CONTROLLERS: ["nearestDifferentMaster", ["spin", { onlyWhenIdle: true }]],
     DISPLAY_NAME: true,
     TURRETS: [
         {
@@ -1275,7 +1275,6 @@ Class.tracker3 = {
 // BOTS
 Class.bot = {
     FACING_TYPE: "looseToTarget",
-    NAME: "[AI] ",
     CONTROLLERS: ["nearestDifferentMaster", "mapAltToFire", "minion", "fleeAtLowHealth", ["mapFireToAlt", { onlyIfHasAltFireGun: true }], ["wanderAroundMap", { immitatePlayerMovement: true, lookAtGoal: true }]],
 };
 

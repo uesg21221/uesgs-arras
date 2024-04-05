@@ -198,7 +198,7 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))), JSON.stringify(util.serverStartTime), c.runSpeed, c.ARENA_TYPE);
+            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))), JSON.stringify(util.serverStartTime), c.runSpeed, c.ARENA_TYPE);
             // Log it
             util.log(`[INFO] ${m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
             break;
@@ -419,10 +419,9 @@ function incoming(message, socket) {
             // cheatingbois
             if (player.body != null && socket.permissions && socket.permissions.class) {
                 player.body.define({ RESET_UPGRADES: true, BATCH_UPGRADES: false });
-                player.body.define(Class[socket.permissions.class]);
-                if (player.body.colorUnboxed.base == '-1' || player.body.colorUnboxed.base == 'mirror') {
-                    player.body.colorUnboxed.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : player.body.team);
-                    player.body.compressColor();
+                player.body.define(socket.permissions.class);
+                if (player.body.color.base == '-1' || player.body.color.base == 'mirror') {
+                    player.body.color.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : player.body.team);
                 }
             }
             break;
@@ -911,15 +910,13 @@ const spawn = (socket, name) => {
     player.body = body;
     body.socket = socket;
     if (c.MODE == "tdm" || c.TAG) {
-        if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
-            body.colorUnboxed.base = getTeamColor(body.team);
-            body.compressColor();
+        if (body.color.base == '-1' || body.color.base == 'mirror') {
+            body.color.base = getTeamColor(body.team);
         }
     } else {
         let color = c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12;
-        if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
-            body.colorUnboxed.base = color;
-            body.compressColor();
+        if (body.color.base == '-1' || body.color.base == 'mirror') {
+            body.color.base = color;
         }
     }
     // Decide what to do about colors when sending updates and stuff
@@ -1275,7 +1272,7 @@ let minimapAll = new Delta(5, () => {
                     my.type === "wall" || my.isMothership ? (my.shape === 4 || my.shapeData == "M 1 1 L -1 1 L -1 -1 L 1 -1 Z") ? 2 : 1 : 0,
                     util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
                     util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
-                    my.color,
+                    my.color.compiled,
                     Math.round(my.SIZE),
                 ],
             });
@@ -1295,7 +1292,7 @@ let minimapTeams = teamIDs.map((team) =>
                     data: [
                         util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
                         util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
-                        (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? '10 0 1 0 false' : my.color,
+                        (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? '10 0 1 0 false' : my.color.compiled,
                     ],
                 });
             }
@@ -1354,7 +1351,7 @@ let leaderboard = new Delta(7, () => {
                 c.MOTHERSHIP_LOOP ? Math.round(entry.health.amount) : Math.round(entry.skill.score),
                 entry.index,
                 entry.name,
-                entry.color,
+                entry.color.compiled,
                 getBarColor(entry),
                 entry.nameColor || "#FFFFFF",
                 entry.label,
@@ -1416,7 +1413,7 @@ const sockets = {
     },
     broadcastRoom: () => {
         for (let i = 0; i < clients.length; i++) {
-            clients[i].talk("r", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))));
+            clients[i].talk("r", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))));
         }
     },
     connect: (socket, req) => {
