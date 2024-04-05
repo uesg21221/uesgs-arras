@@ -1351,7 +1351,7 @@ let leaderboard = new Delta(7, () => {
                 c.MOTHERSHIP_LOOP ? Math.round(entry.health.amount) : Math.round(entry.skill.score),
                 entry.index,
                 entry.name,
-                entry.color.compiled,
+                entry.color.compiled || entry.color,
                 getBarColor(entry),
                 entry.nameColor || "#FFFFFF",
                 entry.label,
