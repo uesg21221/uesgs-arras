@@ -353,9 +353,11 @@ class Gun {
     }
     bulletInit(o) {
         // Define it by its natural properties
-        o.color.base = this.body.master.color.base
         for (let type of this.bulletTypes) {
             o.define(type);
+        }
+        if (o.color.base == '-1' || o.color.base == 'mirror') {
+            o.color.base = this.body.master.color.base
         }
         // Pass the gun attributes
         o.define({
