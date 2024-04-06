@@ -1192,7 +1192,7 @@ const eyes = (socket) => {
 let getBarColor = (entry) => {
     // What even is the purpose of all of this?
     if (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) return '11 0 1 0 false';
-    return entry.color;
+    return entry.color.compiled;
 };
 
 // Delta Calculator
@@ -1309,7 +1309,7 @@ let leaderboard = new Delta(7, () => {
                 skill: { score: 0 },
                 index: Class.tagMode.index.toString(),
                 name: getTeamName(team),
-                color: `${getTeamColor(team)} 0 1 0 false`,
+                color: { compiled: `${getTeamColor(team)} 0 1 0 false` },
                 label: "Players",
                 team
             });
@@ -1351,7 +1351,7 @@ let leaderboard = new Delta(7, () => {
                 c.MOTHERSHIP_LOOP ? Math.round(entry.health.amount) : Math.round(entry.skill.score),
                 entry.index,
                 entry.name,
-                entry.color.compiled || entry.color,
+                entry.color.compiled,
                 getBarColor(entry),
                 entry.nameColor || "#FFFFFF",
                 entry.label,
