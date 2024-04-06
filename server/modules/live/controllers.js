@@ -442,10 +442,7 @@ class io_nearestDifferentMaster extends IO {
         // }
         // Consider how fast it's moving and shoot at it
         if (this.targetLock != null) {
-            let radial = {
-                x: this.targetLock.velocity.x - this.body.velocity.x / 6,
-                y: this.targetLock.velocity.y - this.body.velocity.y / 6,
-            }
+            let radial = this.targetLock.velocity;
             let diff = {
                 x: this.targetLock.x - this.body.x,
                 y: this.targetLock.y - this.body.y,
@@ -456,7 +453,8 @@ class io_nearestDifferentMaster extends IO {
                 // Find lead time (or don't)
                 if (!this.body.aiSettings.chase) {
                     let toi = timeOfImpact(diff, radial, tracking)
-                    this.lead = toi
+                    if (toi < 15) toi = 0;
+                    this.lead = toi;
                 }
             }
             if (!Number.isFinite(this.lead)) {
