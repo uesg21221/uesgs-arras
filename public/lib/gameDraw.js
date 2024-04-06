@@ -157,6 +157,7 @@ var gameDraw = {
         gay: "",
         bi: "",
         trans: "",
+        magenta: "",
         blue_red: "",
         blue_grey: "",
         grey_blue: "",
@@ -178,6 +179,10 @@ var gameDraw = {
 
             gay_transition = (now / 2000) % 1,
 
+            ratio        = (Math.sin(now / 2000 * Math.PI)) / 2 + 0.5,
+            light_purple = { h: 258/360, s: 1, l: 0.84 },
+            purple       = { h: 265/360, s: 0.69, l: 0.47 },
+
             bi_pink   = "#D70071",
             bi_purple = "#9C4E97",
             bi_blue   = "#0035AA",
@@ -190,6 +195,11 @@ var gameDraw = {
         gameDraw.animatedColor.gay = gameDraw.hslToRgb(gay_transition, 0.75, 0.5);
         gameDraw.animatedColor.bi = [bi_pink, bi_purple, bi_blue][three_bars];
         gameDraw.animatedColor.trans = [trans_blue, trans_pink, trans_white, trans_pink, trans_blue][five_bars];
+        gameDraw.animatedColor.magenta = gameDraw.hslToRgb(
+            light_purple.h + (purple.h - light_purple.h) * ratio,
+            light_purple.s + (purple.s - light_purple.s) * ratio,
+            light_purple.l + (purple.l - light_purple.l) * ratio
+        );
 
         gameDraw.animatedColor.blue_red = blinker ? gameDraw.color.blue : gameDraw.color.red;
         gameDraw.animatedColor.blue_grey = blinker ? gameDraw.color.blue : gameDraw.color.grey;
@@ -233,6 +243,10 @@ var gameDraw = {
         // bi
         38: true,
         animatedBi: true,
+
+        // magenta
+        42: true,
+        animatedMagenta: true,
     },
     getColor: (colorNumber) => {
         switch (colorNumber) {
@@ -389,6 +403,9 @@ var gameDraw = {
             case "41":
             case "tree":
                 return "#267524";
+            case "42":
+            case "animatedMagenta":
+                return gameDraw.animatedColor.magenta;
         }
     },
     getColorDark: (givenColor) => {
