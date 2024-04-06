@@ -453,8 +453,7 @@ class io_nearestDifferentMaster extends IO {
                 // Find lead time (or don't)
                 if (!this.body.aiSettings.chase) {
                     let toi = timeOfImpact(diff, radial, tracking)
-                    if (toi < 15) toi = 0;
-                    this.lead = toi;
+                    this.lead = toi
                 }
             }
             if (!Number.isFinite(this.lead)) {
