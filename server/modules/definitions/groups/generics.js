@@ -191,6 +191,7 @@ Class.bullet = {
         DAMAGE: 6,
         PUSHABILITY: 0.3,
     },
+    COLOR: 'mirror',
     FACING_TYPE: "smoothWithMotion",
     CAN_GO_OUTSIDE_ROOM: true,
     HITS_OWN_TYPE: "never",
@@ -237,6 +238,7 @@ Class.drone = {
     AI: {
         BLIND: true,
     },
+    COLOR: 'mirror',
     BODY: {
         PENETRATION: 1.2,
         PUSHABILITY: 0.6,
@@ -272,6 +274,7 @@ Class.trap = {
         RESIST: 2.5,
         SPEED: 0,
     },
+    COLOR: 'mirror',
 };
 
 Class.satellite = { 
@@ -295,6 +298,7 @@ Class.satellite = {
         RESIST: 1.5,
         FOV: 0.5,
     },
+    COLOR: 'mirror',
     DRAW_HEALTH: false,
     CLEAR_ON_MASTER_UPGRADE: true,
     BUFF_VS_FOOD: true,
