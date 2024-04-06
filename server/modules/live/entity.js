@@ -1962,7 +1962,7 @@ class Entity extends EventEmitter {
                 break;
             case "smoothWithMotion":
             case "looseWithMotion":
-                this.facing += util.loopSmooth(this.facing, this.velocity.direction, (args.speed ?? 4) / c.runSpeed);
+                this.facing = util.interpolateAngle(this.facing, this.velocity.direction, c.runSpeed / (args.speed ?? 4));
                 break;
             case "withTarget":
             case "toTarget":
@@ -1975,24 +1975,24 @@ class Entity extends EventEmitter {
             case "looseWithTarget":
             case "looseToTarget":
             case "smoothToTarget":
-                this.facing += util.loopSmooth(this.facing, Math.atan2(t.y, t.x), (args.speed ?? 4) / c.runSpeed);
+                this.facing = util.interpolateAngle(this.facing, Math.atan2(t.y, t.x), c.runSpeed / (args.speed ?? 4));
                 break;
             case "noFacing":
                 this.facing = args.angle ?? 0;
                 break;
             case "bound":
-                let givenangle,
+                let angleToTarget, angleDiff = 3,
                     reduceIndependence = false,
                     slowness = this.settings.mirrorMasterAngle ? 1 : (args.slowness ?? 4) / c.runSpeed;
                 if (this.control.main) {
-                    givenangle = Math.atan2(t.y, t.x);
-                    let diff = util.angleDifference(givenangle, this.firingArc[0]);
-                    if (Math.abs(diff) >= this.firingArc[1]) {
-                        givenangle = this.firingArc[0];
+                    angleToTarget = Math.atan2(t.y, t.x);
+                    angleDiff = Math.abs(util.angleDifference(angleToTarget, this.firingArc[0]));
+                    if (angleDiff >= this.firingArc[1]) {
+                        angleToTarget = this.firingArc[0];
                         reduceIndependence = true;
                     }
                 } else {
-                    givenangle = this.firingArc[0];
+                    angleToTarget = this.firingArc[0];
                     reduceIndependence = true;
                 }
                 if (reduceIndependence) {
@@ -2006,7 +2006,7 @@ class Entity extends EventEmitter {
                         this.perceptionAngleIndependence = 1;
                     }
                 }
-                this.facing += util.loopSmooth(this.facing, givenangle, slowness);
+                this.facing = util.interpolateAngle(this.facing, angleToTarget, Math.min(1, 1 / (slowness * Math.min(1, angleDiff))));
                 break;
         }
         this.facing += this.turnAngle;

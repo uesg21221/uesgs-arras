@@ -1016,38 +1016,35 @@ Class.flailBall = {
     PARENT: "genericTank",
     COLOR: "grey",
     HITS_OWN_TYPE: 'hard',
+    INDEPENDENT: true,
     TURRETS: [{
         POSITION: [21.5, 0, 0, 0, 360, 0],
         TYPE: "flailBallSpike",
-    }, ],
+    }],
 };
 Class.flailBolt1 = {
     PARENT: "genericTank",
     COLOR: "grey",
+    INDEPENDENT: true,
     GUNS: [{
         POSITION: [40, 5, 1, 8, 0, 0, 0]
     }],
     TURRETS: [{
         POSITION: [48, 56, 0, 0, 360, 1],
-        TYPE: ["flailBall", {
-            INDEPENDENT: true
-        }]
-        },
-    ],
+        TYPE: "flailBall"
+    }],
 };
 Class.flailBolt2 = {
     PARENT: "genericTank",
     COLOR: "grey",
+    INDEPENDENT: true,
     GUNS: [{
         POSITION: [30, 5, 1, 8, 0, 0, 0]
     }],
     TURRETS: [{
         POSITION: [20, 36, 0, 0, 360, 1],
-        TYPE: ["flailBolt1", {
-            INDEPENDENT: true,
-        }]
-        },
-    ],
+        TYPE: "flailBolt1"
+    }],
 };
 Class.flailBolt3 = {
     PARENT: "genericTank",
@@ -1057,11 +1054,8 @@ Class.flailBolt3 = {
     }],
     TURRETS: [{
         POSITION: [18, 36, 0, 0, 360, 1],
-        TYPE: ["flailBolt2", {
-            INDEPENDENT: true,
-        }]
-        },
-    ],
+        TYPE: "flailBolt2"
+    }],
 };
 Class.genericFlail = {
     PARENT: "genericTank",
