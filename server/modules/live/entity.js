@@ -1531,6 +1531,9 @@ class Entity extends EventEmitter {
                 case 'death':
                     if (eventName == 'death') onPairs.handler({ body: this, killers: value.killers, killTools: value.killTools })
                     break;
+                case 'kill':
+                    if (eventName == 'kill') onPairs.handler({ body: this, entity: value.entity })
+                    break;
                 case 'collide':
                     if (eventName == 'collide') onPairs.handler({ instance: value.instance, other: value.other })
                     break;
@@ -2183,6 +2186,9 @@ class Entity extends EventEmitter {
             // Remove duplicates
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));
             this.onDef != null ? this.ON(this.onDef, 'death', { killers, killTools }) : null
+            killers.forEach((e) => {
+                e.onDef != null ? e.ON(e.onDef, 'kill', { entity: this }) : null;
+            });
             // If there's no valid killers (you were killed by food), change the message to be more passive
             let killText = notJustFood ? "" : "You have been killed by ",
                 dothISendAText = this.settings.givesKillMessage;

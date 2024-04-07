@@ -3507,9 +3507,10 @@ Class.toothlessBossForm = {
         event: "fire",
         handler: ({ body, masterStore }) => {
             masterStore.shotsFired ??= 0;
-            masterStore.shotsFired += 0.1;
+            masterStore.shotsFired += 1;
+            body.power -= 1;
 
-            if (body.power - masterStore.shotsFired <= 80)
+            if (masterStore.shotsFired >= body.oldPower * 0.2)
                 body.define(`toothlessBossGlow4`);
         }
     }],
@@ -3526,11 +3527,15 @@ Class.toothlessBossGlow4 = {
     ON: [{
         event: "fire",
         handler: ({ body, masterStore }) => {
-            masterStore.shotsFired ??= body.power - 80;
-            if (masterStore.shotsFired < 0) masterStore.shotsFired = 0;
-            masterStore.shotsFired += 0.1;
+            masterStore.shotsFired ??= body.oldPower * 0.2;
+            if (masterStore.shotsFired < 1) {
+                body.define(`toothlessBoss`);
+                return;
+            }
+            masterStore.shotsFired += 1;
+            body.power -= 1;
 
-            if (body.power - masterStore.shotsFired <= 60)
+            if (masterStore.shotsFired >= body.oldPower * 0.4)
                 body.define(`toothlessBossGlow3`);
         }
     }],
@@ -3547,11 +3552,15 @@ Class.toothlessBossGlow3 = {
     ON: [{
         event: "fire",
         handler: ({ body, masterStore }) => {
-            masterStore.shotsFired ??= body.power - 60;
-            if (masterStore.shotsFired < 0) masterStore.shotsFired = 0;
-            masterStore.shotsFired += 0.1;
+            masterStore.shotsFired ??= body.oldPower * 0.4;
+            if (masterStore.shotsFired < 1) {
+                body.define(`toothlessBoss`);
+                return;
+            }
+            masterStore.shotsFired += 1;
+            body.power -= 1;
 
-            if (body.power - masterStore.shotsFired <= 40)
+            if (masterStore.shotsFired >= body.oldPower * 0.6)
                 body.define(`toothlessBossGlow2`);
         }
     }],
@@ -3568,11 +3577,15 @@ Class.toothlessBossGlow2 = {
     ON: [{
         event: "fire",
         handler: ({ body, masterStore }) => {
-            masterStore.shotsFired ??= body.power - 40;
-            if (masterStore.shotsFired < 0) masterStore.shotsFired = 0;
-            masterStore.shotsFired += 0.1;
+            masterStore.shotsFired ??= body.oldPower * 0.6;
+            if (masterStore.shotsFired < 1) {
+                body.define(`toothlessBoss`);
+                return;
+            }
+            masterStore.shotsFired += 1;
+            body.power -= 1;
 
-            if (body.power - masterStore.shotsFired <= 20)
+            if (masterStore.shotsFired >= body.oldPower * 0.8)
                 body.define(`toothlessBossGlow1`);
         }
     }],
@@ -3589,14 +3602,16 @@ Class.toothlessBossGlow1 = {
     ON: [{
         event: "fire",
         handler: ({ body, masterStore }) => {
-            masterStore.shotsFired ??= body.power - 20;
-            if (masterStore.shotsFired < 0) masterStore.shotsFired = 0;
-            masterStore.shotsFired += 0.1;
-
-            if (body.power - masterStore.shotsFired < 1) {
-                body.power = -50;
-                body.define("toothlessBoss");
+            masterStore.shotsFired ??= body.oldPower * 0.8;
+            if (masterStore.shotsFired < 1) {
+                body.define(`toothlessBoss`);
+                return;
             }
+            masterStore.shotsFired += 1;
+            body.power -= 1;
+
+            if (masterStore.shotsFired >= body.oldPower)
+                body.define(`toothlessBoss`);
         }
     }],
 }
@@ -3615,15 +3630,17 @@ Class.toothlessBoss = {
         event: "altFire",
         handler: ({ body }) => {
             if (body.power && body.power > 0) {
-                body.power = Math.floor(Math.random() * 101) + 100;
+                body.sendMessage(`Your power level ${body.power}`);
+                body.oldPower = body.power;
+
                 body.define('toothlessBossForm');
             } else body.sendMessage("You don't have enough power...");
         }
     }, {
-        event: "fire",
-        handler: ({ body }) => {
+        event: "kill",
+        handler: ({ body, entity }) => {
             if (body.power == undefined) body.power = 0;
-            body.power += 0.1;
+            body.power += Math.floor(entity.skill.score / 1000);
         }
     }],
 }
