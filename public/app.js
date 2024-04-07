@@ -986,11 +986,12 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
     ctx.globalAlpha = alpha;
     ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(getIconColor(colorIndex));
     drawGuiRect(x, y, len, height);
-    ctx.globalAlpha = 0.2 * alpha;
+    ctx.globalAlpha = 0.25 * alpha;
     ctx.fillStyle = color.black;
     drawGuiRect(x, y + height * 0.6, len, height * 0.4);
     // Shading for hover
     if (hover) {
+        ctx.globalAlpha = 0.15 * alpha;
         ctx.fillStyle = color.guiwhite;
         drawGuiRect(x, y, len, height);
     }

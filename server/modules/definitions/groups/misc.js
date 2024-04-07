@@ -23,7 +23,7 @@ Class.rock = {
     },
     VALUE: 0,
     SIZE: 60,
-    COLOR: "grey",
+    COLOR: "lightGray",
     VARIES_IN_SIZE: true,
     ACCEPTS_SCORE: false,
 };
