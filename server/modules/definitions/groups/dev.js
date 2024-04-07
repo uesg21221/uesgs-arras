@@ -79,7 +79,7 @@ Class.elites = menu("Elites", "pink", 3.5)
 Class.mysticals = menu("Mysticals", "gold", 4)
 Class.nesters = menu("Nesters", "purple", 5.5)
 Class.rogues = menu("Rogues", "darkGrey", 6)
-Class.rammers = menu("Rammers", "teal")
+Class.rammers = menu("Rammers", "aqua")
 Class.rammers.PROPS = [
     {
         POSITION: [21.5, 0, 0, 360, -1],

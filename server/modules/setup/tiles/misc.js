@@ -48,8 +48,9 @@ nestTick = tile => {
     }
 },
 
+nestColor = {BASE: "purple", BRIGHTNESS_SHIFT: 10, SATURATION_SHIFT: 0.8},
 nest = new Tile({
-    color: "purple",
+    color: nestColor,
     data: {
         allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,
@@ -63,7 +64,7 @@ nest = new Tile({
 }),
 
 nestNoBoss = new Tile({
-    color: "purple",
+    color: nestColor,
     data: {
         allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,

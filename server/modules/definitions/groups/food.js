@@ -179,7 +179,7 @@ Class.gem = {
     VALUE: 2e3,
     SHAPE: 6,
     SIZE: 5,
-    COLOR: "teal",
+    COLOR: "aqua",
     BODY: {
         DAMAGE: basePolygonDamage / 4,
         DENSITY: 4,
@@ -352,7 +352,7 @@ Class.hexagon = {
     VALUE: 500,
     SHAPE: 6,
     SIZE: 22,
-    COLOR: "magenta",
+    COLOR: "hexagon",
     BODY: {
         DAMAGE: 3 * basePolygonDamage,
         DENSITY: 8,

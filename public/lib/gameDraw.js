@@ -253,7 +253,6 @@ var gameDraw = {
             case "0":
             case "legendary":
             case "teal":
-            case "aqua":
                 return gameDraw.color.teal;
             case "1":
             case "shiny":
@@ -264,11 +263,13 @@ var gameDraw = {
             case "orange":
                 return gameDraw.color.orange;
             case "3":
+            case "neutral":
             case "yellow":
                 return gameDraw.color.yellow;
             case "4":
-            case "lavender":
-                return gameDraw.color.lavender;
+            case "hexagon":
+            case "aqua":
+                return gameDraw.color.aqua;
             case "5":
             case "crasher":
             case "pink":
@@ -306,7 +307,6 @@ var gameDraw = {
             case "purple":
                 return gameDraw.color.purple;
             case "15":
-            case "hexagon":
             case "magenta":
                 return gameDraw.color.magenta;
             case "16":
@@ -451,7 +451,7 @@ var gameDraw = {
             case "port":
                 return gameDraw.color.guiblack;
             case "nest":
-                return real ? gameDraw.color.purple : gameDraw.color.lavender;
+                return gameDraw.color.purple;
             case "dom0":
                 return gameDraw.color.gold;
             default:

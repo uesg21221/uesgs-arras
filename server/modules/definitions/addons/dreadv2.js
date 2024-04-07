@@ -57,9 +57,6 @@ const buildHexnoughts = true;
 // Set the below variable to true to enable photosphere with 10 auras instead of 6.
 const useOldPhotosphere = false;
 
-// Set the below variable to true to enable the old teal hexagon color.
-const useTealHexdreads = false;
-
 // For hexnought merging
 const hexnoughtScaleFactor = 0.9;
 
@@ -73,7 +70,7 @@ Class.genericEggnought = {
 	PARENT: ["genericDreadnoughtOfficialV2"],
 	BODY: eggnoughtBody,
 	SHAPE: 0,
-	COLOR: 6,
+	COLOR: 'egg',
 	SIZE: 16,
 	DANGER: 8,
 }
@@ -81,7 +78,7 @@ Class.genericSquarenought = {
 	PARENT: ["genericDreadnoughtOfficialV2"],
 	BODY: squarenoughtBody,
 	SHAPE: 4,
-	COLOR: 13,
+	COLOR: 'square',
 	SIZE: 20,
 	DANGER: 9,
 }
@@ -89,7 +86,7 @@ Class.genericTrinought = {
 	PARENT: ["genericDreadnoughtOfficialV2"],
 	BODY: trinoughtBody,
 	SHAPE: 3.5,
-	COLOR: 2,
+	COLOR: 'triangle',
 	SIZE: 23,
 	DANGER: 10,
 }
@@ -97,7 +94,7 @@ Class.genericPentanought = {
 	PARENT: ["genericDreadnoughtOfficialV2"],
 	BODY: pentanoughtBody,
 	SHAPE: 5.5,
-	COLOR: 14,
+	COLOR: 'pentagon',
 	SIZE: 25,
 	DANGER: 11,
 }
@@ -105,7 +102,7 @@ Class.genericHexnought = {
 	PARENT: ["genericDreadnoughtOfficialV2"],
 	BODY: hexnoughtBody,
 	SHAPE: 6,
-	COLOR: useTealHexdreads ? 0 : 'magenta',
+	COLOR: 'hexagon',
 	SIZE: 26,
 	DANGER: 12,
 }

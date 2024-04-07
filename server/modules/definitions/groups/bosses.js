@@ -1162,8 +1162,8 @@ Class.bob = {
     PARENT: ["ramMiniboss"],
     LABEL: "Bob",
     SHAPE: 0,
-    COLOR: "teal",
-    UPGRADE_COLOR: "teal",
+    COLOR: "aqua",
+    UPGRADE_COLOR: "aqua",
     SIZE: 18,
     BODY: {
         FOV: 2,
@@ -1705,7 +1705,7 @@ Class.nailgunTurret = {
         },
     ],
 };
-let atlas = new LayeredBoss(null, "Atlas", "celestial", 9, "lavender", "baseTrapTurret", 6.5, 5.5);
+let atlas = new LayeredBoss(null, "Atlas", "celestial", 9, "purple", "baseTrapTurret", 6.5, 5.5);
 atlas.addLayer({turret: {
     POSITION: [7, 9, 0, null, 180, 0],
     TYPE: "artilleryTurret",
@@ -2165,7 +2165,7 @@ Class.gunnerCruiserTurret = {
 };
 Class.gemDrone = {
     PARENT: ["drone"],
-    COLOR: "teal",
+    COLOR: "aqua",
     DRAW_HEALTH: true,
     SHAPE: 6,
     INDEPENDENT: true,
@@ -2179,7 +2179,7 @@ Class.gemDrone = {
         FOV: 100,
     },
 }
-let odin = new LayeredBoss(null, "Odin", "eternal", 11, "teal", "baseTrapTurret", 4.5, 3.5);
+let odin = new LayeredBoss(null, "Odin", "eternal", 11, "aqua", "baseTrapTurret", 4.5, 3.5);
 odin.addLayer({gun: {
     POSITION: [2.25, 3.25, -1.6, 9, 0, null, 0],
     PROPERTIES: {
@@ -3358,8 +3358,8 @@ Class.frostBoss = {
     NAME: 'Frostbyte',
     FACING_TYPE: 'toTarget',
     SHAPE: 6,
-    COLOR: "teal",
-    UPGRADE_COLOR: "teal",
+    COLOR: "aqua",
+    UPGRADE_COLOR: "aqua",
     SIZE: 31,
 	DANGER: 12,
     VALUE: 888888,
