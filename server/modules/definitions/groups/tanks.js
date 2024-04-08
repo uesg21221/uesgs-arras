@@ -2651,7 +2651,7 @@ Class.commander = makeMulti({
         {
             POSITION: [8, 11, 1.3, 6, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.commander]),
+                SHOOT_SETTINGS: combineStats([g.drone]),
                 TYPE: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -2662,7 +2662,7 @@ Class.commander = makeMulti({
         {
             POSITION: [7, 7.5, 0.6, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.commander]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: gunCalcNames.swarm,
             },
