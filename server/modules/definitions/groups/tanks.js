@@ -738,6 +738,7 @@ Class.swarm = {
     FACING_TYPE: "smoothWithMotion",
     CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal"],
     CRAVES_ATTENTION: true,
+    COLOR: 'mirror',
     BODY: {
         ACCELERATION: 3,
         PENETRATION: 1.5,
