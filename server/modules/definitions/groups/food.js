@@ -198,7 +198,7 @@ Class.jewel = {
     LABEL: "Jewel",
     VALUE: 1e5,
     SHAPE: 6,
-    SIZE: 12,
+    SIZE: 8,
     COLOR: "yellow",
     BODY: {
         DAMAGE: basePolygonDamage / 4,
