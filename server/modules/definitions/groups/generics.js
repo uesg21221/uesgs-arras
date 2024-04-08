@@ -103,6 +103,7 @@ Class.genericTank = {
     MAX_CHILDREN: 0,
     DAMAGE_EFFECTS: false,
     IGNORED_BY_AI: false,
+    ARENA_CLOSER: false,
     REROOT_UPGRADE_TREE: "basic",
     BODY: {
         ACCELERATION: base.ACCEL,

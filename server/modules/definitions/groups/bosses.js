@@ -3465,10 +3465,17 @@ Class.frostBoss = {
     ]
 }
 
+const divide = 600;
 Class.toothlessBase = {
     PARENT: "genericTank",
     LABEL: "Night Fury",
 	UPGRADE_TOOLTIP: "A power league...",
+    GLOW: {
+        RADIUS: 2,
+        COLOR: 42,
+        ALPHA: 0.3,
+        RECURSION: 6,
+    },
 	BODY: {
         ACCEL: 1.6,
         SPEED: 1.4,
@@ -3487,212 +3494,119 @@ Class.toothlessBase = {
         if (level % 3 == 1 && level < 280) return 1;
         return 0;
     },
-    COLOR: "magenta",
+    COLOR: "purple",
     DANGER: 10,
-	SHAPE: 6,
+	SHAPE: 3,
 	SIZE: 30,
-	SKILL_CAP: Array(10).fill(smshskl+3),
-    VALUE: 10e+7,
+	SKILL_CAP: Array(10).fill(smshskl + 3),
+    VALUE: 10e+6,
 }
-Class.toothlessBossForm = {
-    PARENT: "toothlessBase",
-    GLOW: {
-        RADIUS: 2,
-        COLOR: 42,
-        ALPHA: 1,
-        RECURSION: 6
+Class.toothlessBossTurret = {
+    PARENT: "genericTank",
+    LABEL: "",
+    BODY: {
+        FOV: 1.8,
     },
-    GUNS: [],
+    CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"],
+    COLOR: "grey",
+    GUNS: [
+        {
+            POSITION: [32, 8, 1, 0, 0, 0, 0.4],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, {
+                    pen: 1.25,
+                    damage: 1.2,
+                    reload: 0.7,
+                    recoil: 0,
+                }]),
+                TYPE: "bullet",
+            },
+        },
+    ],
     ON: [{
         event: "fire",
-        handler: ({ body, masterStore }) => {
-            masterStore.shotsFired ??= 0;
-            masterStore.shotsFired += 1;
-            body.power -= 1;
-
-            if (masterStore.shotsFired >= body.oldPower * 0.2)
-                body.define(`toothlessBossGlow4`);
-        }
-    }],
-}
-Class.toothlessBossGlow4 = {
-    PARENT: "toothlessBase",
-    GLOW: {
-        RADIUS: 2,
-        COLOR: 42,
-        ALPHA: 0.8,
-        RECURSION: 6
-    },
-    GUNS: [],
-    ON: [{
-        event: "fire",
-        handler: ({ body, masterStore }) => {
-            masterStore.shotsFired ??= body.oldPower * 0.2;
-            if (masterStore.shotsFired < 1) {
-                body.define(`toothlessBoss`);
-                return;
+        handler: ({ body }) => {
+            body._damage ??= [];
+            body._reload ??= [];
+            if (!body._loaded) {
+                body.guns.forEach((gun, i) => {
+                    body._damage[i] = gun.settings.damage;
+                    body._reload[i] = gun.settings.reload;
+                });
+                body._loaded = true;
             }
-            masterStore.shotsFired += 1;
-            body.power -= 1;
 
-            if (masterStore.shotsFired >= body.oldPower * 0.4)
-                body.define(`toothlessBossGlow3`);
-        }
-    }],
-}
-Class.toothlessBossGlow3 = {
-    PARENT: "toothlessBase",
-    GLOW: {
-        RADIUS: 2,
-        COLOR: 42,
-        ALPHA: 0.6,
-        RECURSION: 6
-    },
-    GUNS: [],
-    ON: [{
-        event: "fire",
-        handler: ({ body, masterStore }) => {
-            masterStore.shotsFired ??= body.oldPower * 0.4;
-            if (masterStore.shotsFired < 1) {
-                body.define(`toothlessBoss`);
-                return;
+            const master = body.master;
+            if (master._mode) {
+                master._power -= 1;
+                if (master._power < 1) {
+                    master._mode = 0;
+                    master.color.base = 14;
+                }
             }
-            masterStore.shotsFired += 1;
-            body.power -= 1;
 
-            if (masterStore.shotsFired >= body.oldPower * 0.6)
-                body.define(`toothlessBossGlow2`);
-        }
-    }],
-}
-Class.toothlessBossGlow2 = {
-    PARENT: "toothlessBase",
-    GLOW: {
-        RADIUS: 2,
-        COLOR: 42,
-        ALPHA: 0.4,
-        RECURSION: 6
-    },
-    GUNS: [],
-    ON: [{
-        event: "fire",
-        handler: ({ body, masterStore }) => {
-            masterStore.shotsFired ??= body.oldPower * 0.6;
-            if (masterStore.shotsFired < 1) {
-                body.define(`toothlessBoss`);
-                return;
-            }
-            masterStore.shotsFired += 1;
-            body.power -= 1;
+            if (!master._oldPower) return;
+            const power = master._oldPower / (divide * 2) + 1;
 
-            if (masterStore.shotsFired >= body.oldPower * 0.8)
-                body.define(`toothlessBossGlow1`);
-        }
-    }],
-}
-Class.toothlessBossGlow1 = {
-    PARENT: "toothlessBase",
-    GLOW: {
-        RADIUS: 2,
-        COLOR: 42,
-        ALPHA: 0.2,
-        RECURSION: 6
-    },
-    GUNS: [],
-    ON: [{
-        event: "fire",
-        handler: ({ body, masterStore }) => {
-            masterStore.shotsFired ??= body.oldPower * 0.8;
-            if (masterStore.shotsFired < 1) {
-                body.define(`toothlessBoss`);
-                return;
-            }
-            masterStore.shotsFired += 1;
-            body.power -= 1;
+            body.guns.forEach((gun, i) => {
+                let _1 = body._damage[i] * (master._mode ? power : 1);
+                let _2 = body._reload[i] / (master._mode ? power : 1);
 
-            if (masterStore.shotsFired >= body.oldPower)
-                body.define(`toothlessBoss`);
-        }
+                gun.settings.damage = _1 > 4 ? 4 : _1;
+                gun.settings.reload = _2 < 16 ? 16 : _2;
+            });
+        },
     }],
-}
+};
 Class.toothlessBoss = {
     PARENT: "toothlessBase",
     UPGRADE_COLOR: "magenta",
+    TURRETS: [{
+        POSITION: { SIZE: 15, LAYER: 1 },
+        TYPE: ["triangle", { COLOR: "black", MIRROR_MASTER_ANGLE: true }],
+    }, {
+        POSITION: { SIZE: 23 },
+        TYPE: ["triangle", { COLOR: "black", MIRROR_MASTER_ANGLE: true }],
+    }],
     GUNS: [{
         POSITION: { LENGTH: 0, WIDTH: 0 },
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([ g.basic, { range: 0.1 } ]),
-            TYPE: 'bullet',
+            SHOOT_SETTINGS: combineStats([ g.basic, {
+                range: 0.1,
+                speed: 0.1,
+                maxSpeed: 0.1,
+            }]),
+            TYPE: "bullet",
             ALT_FIRE: true,
-        }
+        },
     }],
     ON: [{
         event: "altFire",
         handler: ({ body }) => {
-            if (body.power && body.power > 0) {
-                body.sendMessage(`Your power level ${body.power}`);
-                body.oldPower = body.power;
+            if (!body._power || body._mode) return;
+            const power = Math.floor(body._power);
 
-                body.define('toothlessBossForm');
-            } else body.sendMessage("You don't have enough power...");
-        }
+            if (power >= 1) {
+                body.sendMessage(`Your power level ${power}`);
+                body._oldPower = body._power;
+                body._mode = 1;
+                body.color.base = 5;
+            }
+        },
     }, {
         event: "kill",
         handler: ({ body, entity }) => {
-            if (body.power == undefined) body.power = 0;
-            body.power += Math.floor(entity.skill.score / 1000);
-        }
+            body._power ??= 0;
+            body._mode ??= 0;
+            if (!body._mode) body._power += entity.skill.score / divide;
+        },
     }],
 }
-for (let i = 0; i < 3; i++) {
-    let _1 = {
-		POSITION: [13.5, 6, 1, 0, 2.2, 120*i, 0.5],
-		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triplet, { speed: 0.7, maxSpeed: 0.7 }, g.pounder, { reload: 0.5 }]),
-			TYPE: "bullet"
-		}
-	};
-    let _2 = {
-		POSITION: [13.5, 6, 1, 0, -2.2, 120*i, 0.5],
-		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triplet, { speed: 0.7, maxSpeed: 0.7 }, g.pounder, { reload: 0.5 }]),
-			TYPE: "bullet"
-		}
-	};
-    let _3 = {
-		POSITION: [15, 6, 1, 0, 0, 120*i, 0],
-		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triplet, { speed: 0.7, maxSpeed: 0.7 }, g.pounder, { reload: 0.5 }]),
-			TYPE: "bullet"
-		}
-	};
-	Class.toothlessBoss.GUNS.push(_1, _2, _3);
-}
-for (let i = 0; i < 3; i++) {
-    let _1 = {
-		POSITION: [13.5, 6, 1, 0, 2.2, 120*i, 0.5],
-		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triplet, { speed: 0.7, maxSpeed: 0.7 }, g.pounder, { reload: 0.5 }, g.power ]),
-			TYPE: "bullet"
-		}
-	};
-    let _2 = {
-		POSITION: [13.5, 6, 1, 0, -2.2, 120*i, 0.5],
-		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triplet, { speed: 0.7, maxSpeed: 0.7 }, g.pounder, { reload: 0.5 }, g.power ]),
-			TYPE: "bullet"
-		}
-	};
-    let _3 = {
-		POSITION: [15, 6, 1, 0, 0, 120*i, 0],
-		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.twin, g.triplet, { speed: 0.7, maxSpeed: 0.7 }, g.pounder, { reload: 0.5 }, g.power ]),
-			TYPE: "bullet"
-		}
-	};
-    Class.toothlessBossForm.GUNS.push(_1, _2, _3);
-    Class.toothlessBossGlow4.GUNS.push(_1, _2, _3);
-    Class.toothlessBossGlow3.GUNS.push(_1, _2, _3);
-    Class.toothlessBossGlow2.GUNS.push(_1, _2, _3);
-    Class.toothlessBossGlow1.GUNS.push(_1, _2, _3);
-}
+for (let b = 0; b < 3; b++)
+    Class.toothlessBoss.TURRETS.push({
+        POSITION: [8, 6, -5.6, 120 * b + 180, 180, 0],
+        TYPE: "toothlessBossTurret",
+    }, {
+        POSITION: [8, 6, 5.6, 120 * b + 180, 180, 0],
+        TYPE: "toothlessBossTurret",
+    });
