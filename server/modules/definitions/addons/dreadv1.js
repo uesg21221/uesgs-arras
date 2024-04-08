@@ -22,7 +22,7 @@ Class.genericDreadnought1 = {
 	PARENT: ["genericTank"],
 	BODY: dreadnoughtBody,
 	SHAPE: 6,
-	COLOR: "magenta",
+	COLOR: 'hexagon',
 	SIZE: 30,
 	SKILL_CAP: Array(10).fill(smshskl+3),
 	REROOT_UPGRADE_TREE: "dreadOfficialV1",
