@@ -25,33 +25,33 @@ Class.rock = {
     SIZE: 60,
     COLOR: "lightGray",
     VARIES_IN_SIZE: true,
-    ACCEPTS_SCORE: false,
-};
+    ACCEPTS_SCORE: false
+}
 Class.stone = {
-    PARENT: ["rock"],
+    PARENT: "rock",
     LABEL: "Stone",
     SIZE: 32,
-    SHAPE: -7,
-};
-Class.moon = {
-    PARENT: ["rock"],
-    LABEL: "Moon",
-    SIZE: 60,
-    SHAPE: 0,
-};
+    SHAPE: -7
+}
 Class.gravel = {
-    PARENT: ["rock"],
+    PARENT: "rock",
     LABEL: "Gravel",
     SIZE: 16,
-    SHAPE: -7,
-};
+    SHAPE: -7
+}
 Class.wall = {
-    PARENT: ["rock"],
+    PARENT: "rock",
     LABEL: "Wall",
     SIZE: 25,
     SHAPE: "M 1 1 L -1 1 L -1 -1 L 1 -1 Z",
-    VARIES_IN_SIZE: false,
-};
+    VARIES_IN_SIZE: false
+}
+Class.moon = {
+    PARENT: "rock",
+    LABEL: "Moon",
+    SIZE: 60,
+    SHAPE: 0
+}
 
 // DOMINATORS
 Class.dominationBody = {
@@ -59,10 +59,10 @@ Class.dominationBody = {
     CONTROLLERS: [["spin", { startAngle: Math.PI / 2, speed: 0, independent: true }]],
     COLOR: "black",
     SHAPE: 6,
-    INDEPENDENT: true,
-};
+    INDEPENDENT: true
+}
 Class.dominator = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Dominator",
     UPGRADE_LABEL: 'Unknown',
     ON_MINIMAP: false,
@@ -85,75 +85,75 @@ Class.dominator = {
         FOV: 0.5,
         PUSHABILITY: 0,
         HETERO: 0,
-        SHIELD: base.SHIELD * 1.4,
+        SHIELD: base.SHIELD * 1.4
     },
     CONTROLLERS: ["nearestDifferentMaster", ["spin", { onlyWhenIdle: true }]],
     DISPLAY_NAME: true,
     TURRETS: [
         {
             POSITION: [22, 0, 0, 0, 360, 0],
-            TYPE: "dominationBody",
-        },
+            TYPE: "dominationBody"
+        }
     ],
     CAN_BE_ON_LEADERBOARD: false,
     GIVE_KILL_MESSAGE: false,
     ACCEPTS_SCORE: false,
-    HITS_OWN_TYPE: "pushOnlyTeam",
-};
+    HITS_OWN_TYPE: "pushOnlyTeam"
+}
 Class.destroyerDominator = {
-    PARENT: ["dominator"],
+    PARENT: "dominator",
     UPGRADE_LABEL: 'Destroyer',
     GUNS: [
         {
             POSITION: [15.25, 6.75, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.destroyerDominator]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
-            POSITION: [5, 6.75, -1.6, 6.75, 0, 0, 0],
-        },
-    ],
-};
+            POSITION: [5, 6.75, -1.6, 6.75, 0, 0, 0]
+        }
+    ]
+}
 Class.gunnerDominator = {
-    PARENT: ["dominator"],
+    PARENT: "dominator",
     UPGRADE_LABEL: 'Gunner',
     GUNS: [
         {
             POSITION: [14.25, 3, 1, 0, -2, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.gunnerDominator]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [14.25, 3, 1, 0, 2, 0, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.gunnerDominator]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
             POSITION: [15.85, 3, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.gunnerDominator]),
-                TYPE: "bullet",
-            },
+                TYPE: "bullet"
+            }
         },
         {
-            POSITION: [5, 8.5, -1.6, 6.25, 0, 0, 0],
-        },
-    ],
-};
+            POSITION: [5, 8.5, -1.6, 6.25, 0, 0, 0]
+        }
+    ]
+}
 Class.trapperDominator = {
-    PARENT: ["dominator"],
+    PARENT: "dominator",
     UPGRADE_LABEL: 'Trapper',
     FACING_TYPE: ["spin", {speed: 0.02}],
     CONTROLLERS: ["alwaysFire"],
     GUNS: [
         {
-            POSITION: [4, 3.75, 1, 8, 0, 0, 0],
+            POSITION: [4, 3.75, 1, 8, 0, 0, 0]
         },
         {
             POSITION: [1.25, 3.75, 1.7, 12, 0, 0, 0],
@@ -161,10 +161,10 @@ Class.trapperDominator = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap
-            },
+            }
         },
         {
-            POSITION: [4, 3.75, 1, 8, 0, 45, 0],
+            POSITION: [4, 3.75, 1, 8, 0, 45, 0]
         },
         {
             POSITION: [1.25, 3.75, 1.7, 12, 0, 45, 0],
@@ -172,10 +172,10 @@ Class.trapperDominator = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap
-            },
+            }
         },
         {
-            POSITION: [4, 3.75, 1, 8, 0, 90, 0],
+            POSITION: [4, 3.75, 1, 8, 0, 90, 0]
         },
         {
             POSITION: [1.25, 3.75, 1.7, 12, 0, 90, 0],
@@ -183,10 +183,10 @@ Class.trapperDominator = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap
-            },
+            }
         },
         {
-            POSITION: [4, 3.75, 1, 8, 0, 135, 0],
+            POSITION: [4, 3.75, 1, 8, 0, 135, 0]
         },
         {
             POSITION: [1.25, 3.75, 1.7, 12, 0, 135, 0],
@@ -194,10 +194,10 @@ Class.trapperDominator = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap
-            },
+            }
         },
         {
-            POSITION: [4, 3.75, 1, 8, 0, 180, 0],
+            POSITION: [4, 3.75, 1, 8, 0, 180, 0]
         },
         {
             POSITION: [1.25, 3.75, 1.7, 12, 0, 180, 0],
@@ -205,10 +205,10 @@ Class.trapperDominator = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap
-            },
+            }
         },
         {
-            POSITION: [4, 3.75, 1, 8, 0, 225, 0],
+            POSITION: [4, 3.75, 1, 8, 0, 225, 0]
         },
         {
             POSITION: [1.25, 3.75, 1.7, 12, 0, 225, 0],
@@ -216,10 +216,10 @@ Class.trapperDominator = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap
-            },
+            }
         },
         {
-            POSITION: [4, 3.75, 1, 8, 0, 270, 0],
+            POSITION: [4, 3.75, 1, 8, 0, 270, 0]
         },
         {
             POSITION: [1.25, 3.75, 1.7, 12, 0, 270, 0],
@@ -227,10 +227,10 @@ Class.trapperDominator = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap
-            },
+            }
         },
         {
-            POSITION: [4, 3.75, 1, 8, 0, 315, 0],
+            POSITION: [4, 3.75, 1, 8, 0, 315, 0]
         },
         {
             POSITION: [1.25, 3.75, 1.7, 12, 0, 315, 0],
@@ -238,10 +238,10 @@ Class.trapperDominator = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap
-            },
-        },
-    ],
-};
+            }
+        }
+    ]
+}
 
 // SANCTUARIES
 Class.sanctuaryHealer = {
