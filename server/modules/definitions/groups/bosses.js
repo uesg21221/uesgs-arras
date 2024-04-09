@@ -2482,6 +2482,7 @@ Class.zephiBoss = {
         HEALTH: 15 * base.HEALTH,
         DAMAGE: 5 * base.DAMAGE,
     },
+    UPGRADE_TOOLTIP: "Good luck.",
     GUNS: Array(4).fill().map((_, i) => ([{
         POSITION: [2.5, 3, 1.2, 8, 5, i * 90, 0],
         PROPERTIES: {
