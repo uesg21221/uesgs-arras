@@ -7,15 +7,7 @@ let fs = require('fs'),
 console.log(`Loading ${groups.length} groups...`);
 for (let filename of groups) {
     console.log(`Loading group: ${filename}`);
-    let group = require('./groups/' + filename);
-    for (let key in group) {
-        if (key in Class) {
-            console.warn(`WARNING: ${key} is present in multiple definition groups!`);
-        } else {
-            definitionCount++;
-        }
-        Class[key] = group[key];
-    }
+    require('./groups/' + filename);
 }
 
 let definitionGroupsLoadEnd = Date.now();
@@ -32,6 +24,7 @@ for (let filename of addons) {
     }
     global.loadedAddons.push(filename.replace(".js", ""));
 }
+definitionCount = Object.keys(Class).length;
 
 let addonsLoadEnd = Date.now();
 console.log("Loaded addons in " + (addonsLoadEnd - definitionGroupsLoadEnd) + " milliseconds. \n");
