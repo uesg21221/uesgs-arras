@@ -123,7 +123,6 @@ Class.genericTank = {
     ON: [],
     GIVE_KILL_MESSAGE: true,
     DRAW_HEALTH: true,
-    ARENA_CLOSER: false,
     HITS_OWN_TYPE: "hardOnlyTanks"
 }
 Class.genericSmasher = {
