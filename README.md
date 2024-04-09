@@ -39,7 +39,6 @@ After doing that, your server should be ready!
 ## Useful Tools
 - [Create a custom shape](https://arras.io/ext/custom-shape)
 - [Create a custom tank](https://zyrafaq.com/arras-tank-builder)
-- [Create a custom theme](https://codepen.io/road-to-100k/full/GRpvMzb)
 - [Addon list](https://github.com/Taureon/aps-plus-plus-addons)
 - [Unofficial Server list](https://zyrafaq.com/arras-server-list/)
 
