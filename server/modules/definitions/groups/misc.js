@@ -146,7 +146,7 @@ Class.gunnerDominator = {
         }
     ]
 }
-Class.trapperDominator = {
+Class.trapperDominator = makeMulti({
     PARENT: "dominator",
     UPGRADE_LABEL: 'Trapper',
     FACING_TYPE: ["spin", {speed: 0.02}],
@@ -162,86 +162,9 @@ Class.trapperDominator = {
                 TYPE: "trap",
                 STAT_CALCULATOR: gunCalcNames.trap
             }
-        },
-        {
-            POSITION: [4, 3.75, 1, 8, 0, 45, 0]
-        },
-        {
-            POSITION: [1.25, 3.75, 1.7, 12, 0, 45, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
-            }
-        },
-        {
-            POSITION: [4, 3.75, 1, 8, 0, 90, 0]
-        },
-        {
-            POSITION: [1.25, 3.75, 1.7, 12, 0, 90, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
-            }
-        },
-        {
-            POSITION: [4, 3.75, 1, 8, 0, 135, 0]
-        },
-        {
-            POSITION: [1.25, 3.75, 1.7, 12, 0, 135, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
-            }
-        },
-        {
-            POSITION: [4, 3.75, 1, 8, 0, 180, 0]
-        },
-        {
-            POSITION: [1.25, 3.75, 1.7, 12, 0, 180, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
-            }
-        },
-        {
-            POSITION: [4, 3.75, 1, 8, 0, 225, 0]
-        },
-        {
-            POSITION: [1.25, 3.75, 1.7, 12, 0, 225, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
-            }
-        },
-        {
-            POSITION: [4, 3.75, 1, 8, 0, 270, 0]
-        },
-        {
-            POSITION: [1.25, 3.75, 1.7, 12, 0, 270, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
-            }
-        },
-        {
-            POSITION: [4, 3.75, 1, 8, 0, 315, 0]
-        },
-        {
-            POSITION: [1.25, 3.75, 1.7, 12, 0, 315, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
-            }
         }
     ]
-}
+}, 8, "Dominator")
 
 // SANCTUARIES
 Class.sanctuaryHealer = {
