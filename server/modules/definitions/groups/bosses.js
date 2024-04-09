@@ -3466,6 +3466,14 @@ Class.frostBoss = {
 }
 
 const divide = 600;
+const arraySize = 10;
+const colorArray = [];
+const max_damage = 4;
+const min_reload = 16;
+for (let i = 0; i < arraySize; i++) {
+    const rgb = Math.round(255 * i / (arraySize - 1));
+    colorArray.push('#' + ((1 << 24) + (rgb << 16) + (rgb << 8) + rgb).toString(16).slice(1));
+}
 Class.toothlessBase = {
     PARENT: "genericTank",
     LABEL: "Night Fury",
@@ -3507,8 +3515,9 @@ Class.toothlessBossTurret = {
     BODY: {
         FOV: 1.8,
     },
-    CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"],
+    CONTROLLERS: [[ "nearestDifferentMaster", { lookAtDanger: false } ], "onlyAcceptInArc"],
     COLOR: "grey",
+    INDEPENDENT: true,
     GUNS: [
         {
             POSITION: [32, 8, 1, 0, 0, 0, 0.4],
@@ -3526,17 +3535,31 @@ Class.toothlessBossTurret = {
     ON: [{
         event: "fire",
         handler: ({ body }) => {
+            const master = body.master;
             body._damage ??= [];
             body._reload ??= [];
+
             if (!body._loaded) {
+                let _temp = 0;
+                master._maxPower ??= 0;
+
                 body.guns.forEach((gun, i) => {
                     body._damage[i] = gun.settings.damage;
                     body._reload[i] = gun.settings.reload;
+
+                    _temp += max_damage / body._damage[i];
+                    _temp += body._reload[i] / min_reload;
+                    _temp /= 2;
                 });
+
+                _temp /= body.guns.length;
+
+                master._maxPower += (_temp - 1) * divide * 2;
+                if (master._maxPower > _temp) master._maxPower /= 2;
+
                 body._loaded = true;
             }
 
-            const master = body.master;
             if (master._mode) {
                 master._power -= 1;
                 if (master._power < 1) {
@@ -3552,8 +3575,8 @@ Class.toothlessBossTurret = {
                 let _1 = body._damage[i] * (master._mode ? power : 1);
                 let _2 = body._reload[i] / (master._mode ? power : 1);
 
-                gun.settings.damage = _1 > 4 ? 4 : _1;
-                gun.settings.reload = _2 < 16 ? 16 : _2;
+                gun.settings.damage = _1 > max_damage ? max_damage : _1;
+                gun.settings.reload = _2 < min_reload ? min_reload : _2;
             });
         },
     }],
@@ -3563,7 +3586,35 @@ Class.toothlessBoss = {
     UPGRADE_COLOR: "magenta",
     TURRETS: [{
         POSITION: { SIZE: 15, LAYER: 1 },
-        TYPE: ["triangle", { COLOR: "black", MIRROR_MASTER_ANGLE: true }],
+        TYPE: ["triangle", {
+            MIRROR_MASTER_ANGLE: true,
+            GUNS: [{
+                POSITION: { LENGTH: 0, WIDTH: 0 },
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([ g.basic, {
+                        range: 0.1,
+                        speed: 0.1,
+                        maxSpeed: 0.1,
+                        recoil: 0,
+                    }]),
+                    TYPE: "bullet",
+                    AUTOFIRE: true,
+                },
+            }],
+            ON: [{
+                event: "fire",
+                handler: ({ body }) => {
+                    const master = body.master;
+                    if (master._maxPower)
+                        body.color.base = colorArray[
+                            Math.floor(master._power / (master._maxPower / arraySize)) > arraySize - 1
+                                ? arraySize - 1
+                                : Math.floor(master._power / (master._maxPower / arraySize)
+                            )
+                        ];
+                },
+            }],
+        }],
     }, {
         POSITION: { SIZE: 23 },
         TYPE: ["triangle", { COLOR: "black", MIRROR_MASTER_ANGLE: true }],
@@ -3575,6 +3626,7 @@ Class.toothlessBoss = {
                 range: 0.1,
                 speed: 0.1,
                 maxSpeed: 0.1,
+                recoil: 0,
             }]),
             TYPE: "bullet",
             ALT_FIRE: true,
