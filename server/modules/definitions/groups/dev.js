@@ -276,10 +276,10 @@ for (let x = 0; x < tensorWidth; x++) for (let y = 0; y < tensorHeight; y++) for
     back   = labyTensor[y     ][x    ][back ];
 
     labyTensor[y][x][z].UPGRADES_TIER_0 = [
-        "developer" ,  front            , "spectator",
-         left       ,  center           ,  right     ,
-        "basic"     ,  back             , "eggGenerator",
-         top      , "PowerGemGenerator" ,  bottom
+        "developer" ,  top                , "spectator",
+         left       ,  center             ,  right     ,
+        "basic"     ,  bottom             , "eggGenerator",
+         front      , "PowerGemGenerator" ,  back
     ];
 }
 
