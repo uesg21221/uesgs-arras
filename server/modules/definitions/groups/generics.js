@@ -121,6 +121,7 @@ Class.genericTank = {
     TURRETS: [],
     PROPS: [],
     ON: [],
+    ARENA_CLOSER: false, // don't remove this
     GIVE_KILL_MESSAGE: true,
     DRAW_HEALTH: true,
     HITS_OWN_TYPE: "hardOnlyTanks"
