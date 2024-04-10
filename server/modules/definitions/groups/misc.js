@@ -54,13 +54,6 @@ Class.moon = {
 }
 
 // DOMINATORS
-Class.dominationBody = {
-    LABEL: "",
-    CONTROLLERS: [["spin", { startAngle: Math.PI / 2, speed: 0, independent: true }]],
-    COLOR: "black",
-    SHAPE: 6,
-    INDEPENDENT: true
-}
 Class.dominator = {
     PARENT: "genericTank",
     LABEL: "Dominator",
@@ -167,20 +160,6 @@ Class.trapperDominator = makeMulti({
 }, 8, "Dominator")
 
 // SANCTUARIES
-Class.sanctuaryHealer = {
-    PARENT: "genericTank",
-    LABEL: "",
-    COLOR: "grey",
-    BODY: {
-        FOV: base.FOV * 1.2,
-    },
-    CONTROLLERS: [["spin", { independent: true, speed: -0.05 }]],
-    TURRETS: [{ 
-        POSITION: { SIZE: 13, LAYER: 1 },
-        TYPE: ['healerSymbol', { CONTROLLERS: [["spin", { startAngle: Math.PI / 2, speed: 0, independent: true }]] }]
-    }],
-};
-
 let sancTiers =       [3, 6, 8, 9, 10, 12]
 let sancHealerTiers = [2, 3, 4]
 for (let tier of sancHealerTiers) {
@@ -323,7 +302,7 @@ Class.crasherSpawner = {
 
 // SENTRIES
 Class.sentry = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     TYPE: "crasher",
     LABEL: "Sentry",
     DANGER: 3,
@@ -363,137 +342,6 @@ Class.sentry = {
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 };
-Class.trapTurret = {
-    PARENT: ["genericTank"],
-    LABEL: "Turret",
-    BODY: {
-        FOV: 0.5,
-    },
-    INDEPENDENT: true,
-    CONTROLLERS: ["nearestDifferentMaster", 'onlyAcceptInArc'],
-    COLOR: "grey",
-    AI: {
-        SKYNET: true,
-        FULL_VIEW: true,
-    },
-    GUNS: [
-        {
-            POSITION: [16, 14, 1, 0, 0, 0, 0],
-        },
-        {
-            POSITION: [4, 14, 1.8, 16, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.lowPower, { speed: 1.2 }, { reload: 2 }]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-    ],
-};
-
-Class.shotTrapBox = {
-    PARENT: 'unsetTrap',
-    MOTION_TYPE: "glide",
-}
-let makeshottrapTurretProps = () => ({
-    SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, { speed: 0.7, maxSpeed: 0.2, damage: 1.5 }]),
-    AUTOFIRE: true,
-    TYPE: "shotTrapBox",
-    STAT_CALCULATOR: gunCalcNames.block,
-});
-Class.shottrapTurret = {
-    PARENT: ["genericTank"],
-    LABEL: 'Turret',
-    BODY: {
-        FOV: 0,
-    },
-    INDEPENDENT: true,
-    CONTROLLERS: ['nearestDifferentMaster', 'onlyAcceptInArc'], 
-    COLOR: "grey",
-    AI: {
-        SKYNET: true,
-        FULL_VIEW: true,
-    },
-    GUNS: [ {
-            POSITION: [ 4, 1.5, 1, 11, -3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 4, 2,   1, 11,  3, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 4, 1.5, 1, 13,  0, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 2,   1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 2,   1, 12, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 1.5, 1, 11,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 2,   1, 13, -1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 2,5, 1, 13,  1, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 2,   1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 2,   1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 2.5, 1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 2.5, 1, 13,  2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 1, 2,   1, 13, -2, 0, 0 ], PROPERTIES: makeshottrapTurretProps(),
-    }, {
-            POSITION: [ 16, 14, -1.4,  0, 0, 0, 0 ], 
-    }, {
-            POSITION: [  6, 14,  1.6, 16, 0, 0, 0 ], PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, g.fake]),
-                AUTOFIRE: true,
-                TYPE: "bullet"
-            }
-    } ]
-};
-Class.barricadeTurret = {
-    PARENT: ["genericTank"],
-    LABEL: "Turret",
-    BODY: {
-        FOV: 0.5,
-    },
-    INDEPENDENT: true,
-    CONTROLLERS: ["nearestDifferentMaster"],
-    COLOR: "grey",
-    AI: {
-        SKYNET: true,
-        FULL_VIEW: true,
-    },
-    GUNS: [
-        {
-            POSITION: [24, 8, 1, 0, 0, 0, 0],
-        },
-        {
-            POSITION: [4, 8, 1.3, 22, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-    ],
-};
-
 Class.sentrySwarm = {
     PARENT: ["sentry"],
     UPGRADE_LABEL: "Swarm Sentry",
@@ -509,28 +357,13 @@ Class.sentrySwarm = {
         },
     ],
 };
-Class.megaAutoTurret = {
-  PARENT: ["autoTurret"],
-  BODY: {
-    FOV: 2,
-    SPEED: 0.9
-  },
-  CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"],
-  GUNS: [{
-    POSITION: [22, 14, 1, 0, 0, 0, 0],
-    PROPERTIES: {
-      SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.autoTurret]),
-      TYPE: "bullet"
-    }
-  }]
-}
 Class.sentryGun = makeAuto(Class.sentry, "Sentry", {
-    type: Class.megaAutoTurret,
+    type: "megaAutoTankGun",
     size: 12,
 });
 Class.sentryGun.UPGRADE_LABEL = "Gun Sentry";
 Class.sentryTrap = makeAuto(Class.sentry, "Sentry", {
-    type: Class.trapTurret,
+    type: "trapTurret",
     size: 12,
 });
 Class.sentryTrap.UPGRADE_LABEL = "Trap Sentry";
@@ -561,95 +394,13 @@ Class.shinySentrySwarm = {
         },
     ],
 };
-Class.artilleryAutoTankgun = {
-    PARENT: ["genericTank"],
-    LABEL: "Artillery",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: [
-        "canRepel",
-        "onlyAcceptInArc",
-        "mapAltToFire",
-        "nearestDifferentMaster",
-    ],
-    COLOR: "grey",
-    GUNS: [{
-        POSITION: [17, 3, 1, 0, -6, -7, 0.25],
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, { reload: 0.25 }]),
-            TYPE: "bullet",
-            LABEL: "Secondary",
-        },
-    },
-        {
-            POSITION: [17, 3, 1, 0, 6, 7, 0.75],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, { reload: 0.25 }]),
-                TYPE: "bullet",
-                LABEL: "Secondary",
-            },
-        },
-        {
-            POSITION: [19, 12, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, { reload: 0.25 }]),
-                TYPE: "bullet",
-                LABEL: "Heavy",
-            },
-        },
-    ],
-};
 Class.shinySentryGun = makeAuto(Class.shinySentry, "Sentry", {
     type: Class.artilleryAutoTankgun,
     size: 12,
 });
 Class.shinySentryGun.UPGRADE_LABEL = "Shiny Gun Sentry";
-Class.barricadeAutoTankGun = {
-    PARENT: ["genericTank"],
-    LABEL: "Turret",
-    BODY: {
-        FOV: 0.5,
-    },
-    INDEPENDENT: true,
-    CONTROLLERS: ["nearestDifferentMaster"],
-    COLOR: "grey",
-    AI: {
-        SKYNET: true,
-        FULL_VIEW: true,
-    },
-    GUNS: [
-        {
-            POSITION: [24, 8, 1, 0, 0, 0, 0],
-        },
-        {
-            POSITION: [4, 8, 1.3, 22, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [4, 8, 1.3, 18, 0, 0, 0.333],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [4, 8, 1.3, 14, 0, 0, 0.667],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }, { reload: 0.25 }]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-    ],
-};
 Class.shinySentryTrap = makeAuto(Class.shinySentry, "Sentry", {
-    type: Class.barricadeAutoTankGun,
+    type: "barricadeTurret",
     size: 12,
 });
 Class.shinySentryTrap.UPGRADE_LABEL = "Shiny Trap Sentry";
@@ -692,42 +443,6 @@ Class.sentinel = {
     FACING_TYPE: "smoothToTarget",
     HITS_OWN_TYPE: "hard",
 };
-Class.sentinelMissile = {
-    PARENT: ["bullet"],
-    LABEL: "Missile",
-    INDEPENDENT: true,
-    BODY: {
-        RANGE: 120,
-        DENSITY: 3,
-    },
-    GUNS: [
-        {
-            POSITION: [12, 10, 0, 0, 0, 180, 0],
-            PROPERTIES: {
-                AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer]),
-                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
-                STAT_CALCULATOR: gunCalcNames.thruster,
-            },
-        }, {
-            POSITION: [14, 6, 1, 0, -2, 130, 0],
-            PROPERTIES: {
-                AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([g.basic, g.skimmer]),
-                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
-                STAT_CALCULATOR: gunCalcNames.thruster,
-            },
-        }, {
-            POSITION: [14, 6, 1, 0, 2, 230, 0],
-            PROPERTIES: {
-                AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([g.basic, g.skimmer]),
-                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
-                STAT_CALCULATOR: gunCalcNames.thruster,
-            },
-        },
-    ],
-};
 Class.sentinelLauncher = {
     PARENT: "sentinel",
     UPGRADE_LABEL: "Missile Sentinel",
@@ -747,9 +462,9 @@ Class.sentinelLauncher = {
     ],
 };
 Class.sentinelCrossbow = {
-  PARENT: ["sentinel"],
-  UPGRADE_LABEL: "Crossbow Sentinel",
-  UPGRADE_COLOR: "purple",
+    PARENT: "sentinel",
+    UPGRADE_LABEL: "Crossbow Sentinel",
+    UPGRADE_COLOR: "purple",
     GUNS: [
         {
             POSITION: [15, 2.5, 1, 0, 3.5, 35/2, 2/3],
@@ -839,46 +554,6 @@ Class.sentinelMinigun = {
 };
 
 // MISCELLANEOUS TANKS
-Class.baseSwarmTurret = {
-    PARENT: ["genericTank"],
-    LABEL: "Protector",
-    COLOR: "grey",
-    BODY: {
-        FOV: 2,
-    },
-    CONTROLLERS: ["nearestDifferentMaster"],
-    AI: {
-        NO_LEAD: true,
-        LIKES_SHAPES: true,
-    },
-    INDEPENDENT: true,
-    GUNS: [
-        {
-            POSITION: [5, 4.5, 0.6, 7, 2, 0, 0.15],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
-                TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [5, 4.5, 0.6, 7, -2, 0, 0.15],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
-                TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-        {
-            POSITION: [5, 4.5, 0.6, 7.5, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.baseProtector]),
-                TYPE: ["swarm", { INDEPENDENT: true, AI: { LIKES_SHAPES: true }}],
-                STAT_CALCULATOR: gunCalcNames.swarm,
-            },
-        },
-    ],
-};
 Class.baseProtector = {
     PARENT: ["genericTank"],
     LABEL: "Base",
@@ -1052,39 +727,6 @@ Class.arenaCloser = {
     }]
 };
 
-Class.antiTankMachineGunArm = {
-    PARENT: "genericTank",
-    COLOR: "grey",
-    CONTROLLERS: ["mapTargetToGoal"],
-    SKILL_CAP: Array(10).fill(255),
-    SKILL: Array(10).fill(255),
-    GUNS: [
-        {
-            POSITION: [14.25, 3, 1, 0, -2, 0, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.op, {recoil: 0, spray: 0.1}]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [14.25, 3, 1, 0, 2, 0, 0.5],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.op, {recoil: 0, spray: 0.1}]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [15.85, 3, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.op, {recoil: 0, spray: 0.1}]),
-                TYPE: "bullet",
-            },
-        },
-        {
-            POSITION: [5, 8.5, -1.6, 6.25, 0, 0, 0],
-        },
-    ],
-}
 Class.antiTankMachineGun = {
     PARENT: "dominator",
     LABEL: "Anti-Tank Machine Gun",
@@ -1150,29 +792,6 @@ Class.antiTankMachineGun = {
 }
 
 // TRACKER-3
-Class.tracker3gun = {
-  PARENT: "genericTank",
-  LABEL: "",
-  COLOR: "timeGem",
-  BODY: {
-    FOV: 3
-  },
-  CONTROLLERS: [
-    "canRepel",
-    "onlyAcceptInArc",
-    "mapAltToFire",
-    "nearestDifferentMaster"
-  ],
-  COLOR: "grey",
-  GUNS: [
-    {
-      POSITION: [22, 10, 1, 0, 0, 0, 0]
-    },
-    {
-      POSITION: [10, 10, -2, 20, 0, 0, 0]
-    }
-  ]
-}
 Class.tracker3 = {
   PARENT: "genericTank",
   LABEL: "Tracker-3",

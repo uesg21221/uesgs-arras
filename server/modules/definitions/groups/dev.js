@@ -68,6 +68,7 @@ Class.spectator = {
 }
 
 Class.bosses = menu("Bosses")
+Class.bosses.REROOT_UPGRADE_TREE = "bosses"
 Class.sentries = menu("Sentries", "pink", 3.5)
 Class.sentries.PROPS = [
     {

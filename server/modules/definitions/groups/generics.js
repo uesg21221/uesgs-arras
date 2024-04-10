@@ -198,28 +198,6 @@ Class.bullet = {
     HITS_OWN_TYPE: "never",
     DIE_AT_RANGE: true,
 };
-Class.speedBullet = {
-    PARENT: ["bullet"],
-    MOTION_TYPE: "accel",
-};
-Class.growBullet = {
-    PARENT: ["bullet"],
-    MOTION_TYPE: "grow",
-};
-Class.flare = {
-    PARENT: ["growBullet"],
-    LABEL: "Flare",
-    SHAPE: 4,
-};
-Class.developerBullet = {
-    PARENT: ["bullet"],
-    SHAPE: [[-1, -1], [1, -1], [2, 0], [1, 1], [-1, 1]],
-};
-Class.casing = {
-    PARENT: ["bullet"],
-    LABEL: "Shell",
-    TYPE: "swarm",
-};
 
 Class.drone = {
     LABEL: "Drone",
@@ -255,6 +233,32 @@ Class.drone = {
     HITS_OWN_TYPE: "hard",
     DRAW_HEALTH: false,
     CLEAR_ON_MASTER_UPGRADE: true,
+    BUFF_VS_FOOD: true,
+};
+
+Class.swarm = {
+    LABEL: "Swarm Drone",
+    TYPE: "swarm",
+    ACCEPTS_SCORE: false,
+    SHAPE: 3,
+    MOTION_TYPE: "swarm",
+    FACING_TYPE: "smoothWithMotion",
+    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal"],
+    CRAVES_ATTENTION: true,
+    COLOR: 'mirror',
+    BODY: {
+        ACCELERATION: 3,
+        PENETRATION: 1.5,
+        HEALTH: 0.175,
+        DAMAGE: 2.25,
+        SPEED: 4.5,
+        RESIST: 1.6,
+        RANGE: 225,
+        DENSITY: 12,
+        PUSHABILITY: 0.6,
+        FOV: 1.5,
+    },
+    DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
 };
 
@@ -306,24 +310,6 @@ Class.satellite = {
     MOTION_TYPE: 'motor'
 }
 
-Class.mendersymbol = {
-    PARENT: ["genericTank"],
-    COLOR: "grey",
-    LABEL: "",
-    SHAPE: 3,
-};
-Class.healerBullet = {
-    PARENT: ["bullet"],
-    HEALER: true,
-    HITS_OWN_TYPE: "normal",
-};
-Class.healerSymbol = {
-    PARENT: ["genericEntity"],
-    SHAPE: [[0.3, -0.3],[1,-0.3],[1,0.3],[0.3,0.3],[0.3,1],[-0.3,1],[-0.3,0.3],[-1,0.3],[-1,-0.3],[-0.3,-0.3],[-0.3,-1],[0.3,-1]],
-    SIZE: 13,
-    COLOR: "red",
-};
-
 Class.auraBase = {
     TYPE: "aura",
     ACCEPTS_SCORE: false,
@@ -347,7 +333,7 @@ Class.auraBase = {
     }
 };
 Class.aura = {
-    PARENT: ["auraBase"],
+    PARENT: "auraBase",
     LABEL: "Aura",
     COLOR: "teal",
     BODY: {
@@ -355,7 +341,7 @@ Class.aura = {
     },
 };
 Class.healAura = {
-    PARENT: ["auraBase"],
+    PARENT: "auraBase",
     LABEL: "Heal Aura",
     HEALER: true,
     COLOR: "red",
@@ -364,7 +350,7 @@ Class.healAura = {
     },
 };
 Class.auraSymbol = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     CONTROLLERS: [["spin", {speed: -0.04}]],
     INDEPENDENT: true,
     COLOR: "teal",
