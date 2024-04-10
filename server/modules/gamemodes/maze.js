@@ -78,6 +78,33 @@ function generateMaze(size) {
             }
             maze[initY][initX] = size;
         };
+        let makeHitbox = (wall) => {
+            const _size = wall.size + 4;
+            //calculate the relative corners
+            let relativeCorners = [
+                    Math.atan2(    _size,     _size) + wall.angle,
+                    Math.atan2(0 - _size,     _size) + wall.angle,
+                    Math.atan2(0 - _size, 0 - _size) + wall.angle,
+                    Math.atan2(    _size, 0 - _size) + wall.angle
+                ],
+                distance = Math.sqrt(_size ** 2 + _size ** 2);
+
+            //convert 4 corners into 4 lines
+            for (let i = 0; i < 4; i++) {
+                relativeCorners[i] = {
+                    x: distance * Math.sin(relativeCorners[i]),
+                    y: distance * Math.cos(relativeCorners[i])
+                };
+            }
+
+            wall.hitbox = [
+                [relativeCorners[0], relativeCorners[1]],
+                [relativeCorners[1], relativeCorners[2]],
+                [relativeCorners[2], relativeCorners[3]],
+                [relativeCorners[3], relativeCorners[0]]
+            ];
+            wall.hitboxRadius = distance;
+        };
         for (let x = 0; x < size - 1; x++) {
             for (let y = 0; y < size - 1; y++) {
                 for (s = 5; s >= 2; s--) checkMazeForBlocks(x, y, s);
@@ -112,6 +139,8 @@ function generateMaze(size) {
                     o.team = TEAM_ENEMIES;
                     o.protect();
                     o.life();
+                    makeHitbox(o);
+                    walls.push(o);
                 }
             }
         }

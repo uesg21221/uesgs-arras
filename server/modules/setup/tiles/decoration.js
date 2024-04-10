@@ -2,6 +2,7 @@ let makeDecoration = defs => new Tile({
     color: "white",
     init: tile => {
         for (let [def, amount] of defs) {
+            if (c.MAZE) return;
             def = ensureIsClass(def);
             let checkRadius = 10 + def.SIZE;
             for (; amount; amount--) {

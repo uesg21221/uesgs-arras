@@ -872,6 +872,7 @@ class Entity extends EventEmitter {
         this.facing = 0;
         this.vfacing = 0;
         this.range = 0;
+        this.angle = 0;
         this.damageRecieved = 0;
         this.recoilMultiplier = 1;
         this.stepRemaining = 1;

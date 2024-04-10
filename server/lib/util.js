@@ -10,6 +10,8 @@ exports.addArticle = string => {
 
 exports.getDistance = (p1, p2) => Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2))
 
+exports.getDistanceSquared = (p1, p2) => Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2)
+
 exports.getDirection = (p1, p2) => Math.atan2(p2.y - p1.y, p2.x - p1.x)
 
 exports.clamp = (value, min, max) => Math.min(Math.max(value, min), max)
