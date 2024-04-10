@@ -1,8 +1,11 @@
 let makeDecoration = defs => new Tile({
     color: "white",
+    data: {
+        allowMazeWallSpawn: false,
+        foodSpawnCooldown: 0, foodCount: 0
+    },
     init: tile => {
         for (let [def, amount] of defs) {
-            if (c.MAZE) return;
             def = ensureIsClass(def);
             let checkRadius = 10 + def.SIZE;
             for (; amount; amount--) {

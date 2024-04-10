@@ -1,4 +1,4 @@
-let checkMazeForBlocks = (initX, initY, size) => {
+let checkMazeForBlocks = (initX, initY, size, maze) => {
         for (let x = 0; x < size; x++) {
             for (let y = 0; y < size; y++) {
                 if (!maze[initY + y] || !maze[initY + y][initX + x]) return;
@@ -107,15 +107,14 @@ let checkMazeForBlocks = (initX, initY, size) => {
             // Convert to big walls
             for (let x = 0; x < size - 1; x++) {
                 for (let y = 0; y < size - 1; y++) {
-                    for (s = 5; s >= 2; s--) checkMazeForBlocks(x, y, s);
+                    for (s = 5; s >= 2; s--) checkMazeForBlocks(x, y, s, maze);
                 }
             }
             for (let x = 0; x < size; x++) {
                 for (let y = 0; y < size; y++) {
-                    let spawnWall = false;
-                    let d = {};
-                    let scale = room.width / size;
-                    let loc = {x, y}
+                    let spawnWall = false,
+                        d = {},
+                        scale = room.width / size;
 
                     // Find spawn location and size
                     for (let s = 5; s >= 1; s--) {
@@ -129,7 +128,7 @@ let checkMazeForBlocks = (initX, initY, size) => {
                             break
                         }
                     }
-                    if (spawnWall && room.getAt(loc).data.allowMazeWallSpawn) {
+                    if (spawnWall && room.getAt(d).data.allowMazeWallSpawn) {
                         let o = new Entity({
                             x: d.x,
                             y: d.y
