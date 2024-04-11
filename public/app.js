@@ -982,7 +982,7 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 
     // Draw box
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor(getIconColor(colorIndex));
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.mixColors(gameDraw.getColor(picture.upgradeColor)) : gameDraw.getColor(getIconColor(colorIndex));
     drawGuiRect(x, y, len, height);
     ctx.globalAlpha = 0.25 * alpha;
     ctx.fillStyle = color.black;
