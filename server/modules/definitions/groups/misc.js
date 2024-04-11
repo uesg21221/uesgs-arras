@@ -173,7 +173,7 @@ for (let tier of sancHealerTiers) {
                 }, {
                     POSITION: { LENGTH: 8, WIDTH: 10, X: 10, ANGLE: (360 / tier) * i },
                     PROPERTIES: {
-                        SHOOT_SETTINGS: combineStats([g.basic, g.healer, {shudder: 0.1, spray: 0.1, speed: 0.4, reload: 0.6}]),
+                        SHOOT_SETTINGS: combineStats([g.basic, g.healer, {shudder: 0.1, spray: 0.1, speed: 0.8, reload: 0.6}]),
                         TYPE: "healerBullet",
                         AUTOFIRE: true,
                     }
