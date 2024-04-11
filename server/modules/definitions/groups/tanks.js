@@ -120,7 +120,8 @@ Class.director = {
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
                 STAT_CALCULATOR: gunCalcNames.drone,
-                MAX_CHILDREN: 6
+                MAX_CHILDREN: 6,
+                WAIT_TO_CYCLE: true
             }
         }
     ]
