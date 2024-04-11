@@ -256,6 +256,7 @@ var gameDraw = {
         animatedMagenta: true,
     },
     getColor: (colorNumber) => {
+        if (colorNumber[0] == '#') return colorNumber;
         switch (colorNumber) {
             case "0":
             case "legendary":
