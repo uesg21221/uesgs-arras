@@ -1040,8 +1040,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
         if (health < 0.99 || shield < 0.99) {
-            let instanceColor = instance.color.split(' ')[0];
-            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(gameDraw.getColor(instanceColor), color.guiwhite, 0.5) : color.lgreen;
+            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(gameDraw.modifyColor(instance.color), color.guiwhite, 0.5) : color.lgreen;
             let yy = y + realSize + 15 * ratio;
             let barWidth = 3 * ratio;
             ctx.globalAlpha = fade * (alpha ** 2);
@@ -1093,7 +1092,7 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 
     // Draw box
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.mixColors(gameDraw.getColor(picture.upgradeColor)) : gameDraw.getColor(getIconColor(colorIndex));
+    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.modifyColor(picture.upgradeColor) : gameDraw.getColor(getIconColor(colorIndex));
     drawGuiRect(x, y, len, height);
     ctx.globalAlpha = 0.25 * alpha;
     ctx.fillStyle = color.black;

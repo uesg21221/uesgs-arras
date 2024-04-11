@@ -171,7 +171,7 @@ const util = {
             color: finalColor,
             borderless: mainMockup.borderless,
             drawFill: mainMockup.drawFill,
-            upgradeColor: mainMockup.upgradeColor,
+            upgradeColor: mainMockup.upgradeColor ? mainMockup.upgradeColor.compiled ? mainMockup.upgradeColor.compiled : mainMockup.upgradeColor : null,
             glow: mainMockup.glow,
             render: {
                 status: {
