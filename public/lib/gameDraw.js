@@ -95,7 +95,7 @@ var gameDraw = {
     colorCache: {},
     modifyColor: (color, base = "16 0 1 0 false") => {
         // Split into array
-        let colorDetails = color.split(" "),
+        let colorDetails = color.compiled ? color.compiled.split(" ") : color.split(" "),
             baseDetails = base.split(" ");
 
         // Color mirroring
@@ -164,6 +164,7 @@ var gameDraw = {
         gay: "",
         bi: "",
         trans: "",
+        magenta: "",
         blue_red: "",
         blue_grey: "",
         grey_blue: "",
@@ -185,6 +186,10 @@ var gameDraw = {
 
             gay_transition = (now / 2000) % 1,
 
+            ratio        = (Math.sin(now / 2000 * Math.PI)) / 2 + 0.5,
+            light_purple = { h: 258/360, s: 1, l: 0.84 },
+            purple       = { h: 265/360, s: 0.69, l: 0.47 },
+
             bi_pink   = "#D70071",
             bi_purple = "#9C4E97",
             bi_blue   = "#0035AA",
@@ -197,6 +202,11 @@ var gameDraw = {
         gameDraw.animatedColor.gay = gameDraw.hslToRgb(gay_transition, 0.75, 0.5);
         gameDraw.animatedColor.bi = [bi_pink, bi_purple, bi_blue][three_bars];
         gameDraw.animatedColor.trans = [trans_blue, trans_pink, trans_white, trans_pink, trans_blue][five_bars];
+        gameDraw.animatedColor.magenta = gameDraw.hslToRgb(
+            light_purple.h + (purple.h - light_purple.h) * ratio,
+            light_purple.s + (purple.s - light_purple.s) * ratio,
+            light_purple.l + (purple.l - light_purple.l) * ratio
+        );
 
         gameDraw.animatedColor.blue_red = blinker ? gameDraw.color.blue : gameDraw.color.red;
         gameDraw.animatedColor.blue_grey = blinker ? gameDraw.color.blue : gameDraw.color.grey;
@@ -240,13 +250,16 @@ var gameDraw = {
         // bi
         38: true,
         animatedBi: true,
+
+        // magenta
+        42: true,
+        animatedMagenta: true,
     },
     getColor: (colorNumber) => {
         switch (colorNumber) {
             case "0":
             case "legendary":
             case "teal":
-            case "aqua":
                 return gameDraw.color.teal;
             case "1":
             case "shiny":
@@ -257,11 +270,13 @@ var gameDraw = {
             case "orange":
                 return gameDraw.color.orange;
             case "3":
+            case "neutral":
             case "yellow":
                 return gameDraw.color.yellow;
             case "4":
-            case "lavender":
-                return gameDraw.color.lavender;
+            case "hexagon":
+            case "aqua":
+                return gameDraw.color.aqua;
             case "5":
             case "crasher":
             case "pink":
@@ -272,6 +287,7 @@ var gameDraw = {
             case "veryLightGray":
                 return gameDraw.color.vlgrey;
             case "7":
+            case "wall":
             case "lightGrey":
             case "lightGray":
                 return gameDraw.color.lgrey;
@@ -299,7 +315,6 @@ var gameDraw = {
             case "purple":
                 return gameDraw.color.purple;
             case "15":
-            case "hexagon":
             case "magenta":
                 return gameDraw.color.magenta;
             case "16":
@@ -396,6 +411,9 @@ var gameDraw = {
             case "41":
             case "tree":
                 return "#267524";
+            case "42":
+            case "animatedMagenta":
+                return gameDraw.animatedColor.magenta;
         }
     },
     getColorDark: (givenColor) => {
@@ -441,7 +459,7 @@ var gameDraw = {
             case "port":
                 return gameDraw.color.guiblack;
             case "nest":
-                return real ? gameDraw.color.purple : gameDraw.color.lavender;
+                return gameDraw.color.purple;
             case "dom0":
                 return gameDraw.color.gold;
             default:

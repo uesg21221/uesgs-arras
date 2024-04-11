@@ -818,7 +818,7 @@ exports.menu = (name = -1, color = -1, shape = 0) => {
     };
     return {
         PARENT: "genericTank",
-        LABEL: name,
+        LABEL: name == -1 ? undefined : name,
         GUNS: [gun],
         COLOR: color,
         UPGRADE_COLOR: color == -1 ? undefined : color,

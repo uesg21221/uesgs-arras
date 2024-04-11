@@ -904,10 +904,10 @@ const socketInit = port => {
                 break;
             case 'm': // message
                 global.messages.push({
-                    text: m[0],
+                    text: m[1],
                     status: 2,
                     alpha: 0,
-                    time: Date.now(),
+                    time: Date.now() + m[0],
                 });
                 break;
             case 'u': // uplink

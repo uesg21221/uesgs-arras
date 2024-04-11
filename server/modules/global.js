@@ -17,6 +17,7 @@ global.grid = new hshg.HSHG();
 global.arenaClosed = false;
 global.mockupsLoaded = false;
 
+global.loadedAddons = [];
 global.TEAM_BLUE = -1;
 global.TEAM_GREEN = -2;
 global.TEAM_RED = -3;
@@ -78,9 +79,44 @@ global.tickEvents = new EventEmitter();
 global.syncedDelaysLoop = () => tickEvents.emit(tickIndex++);
 global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.once(tickIndex + Math.round(ticks), () => callback(...args));
 
-global.c = require("./setup/config.js");
-global.c.port = process.env.PORT || c.port;
+function TO_SCREAMING_SNAKE_CASE(TEXT) {
+    if (/^[A-Z_]*[A-Z]$/.test(TEXT)) {
+        return TEXT;
+    } else if (/[a-zA-Z]+/.test(TEXT)) {
+        return TEXT.replace(/[A-Z]/g, _ => '_' + _).toUpperCase();
+    }
+}
+
+global.c = new Proxy(new EventEmitter(), {
+    get (obj, prop) {
+        return obj[TO_SCREAMING_SNAKE_CASE(prop)];
+    },
+    set (obj, prop, value) {
+        let abort;
+        prop = TO_SCREAMING_SNAKE_CASE(prop);
+
+        events.emit('change', {
+            setting: prop,
+            newValue: value,
+            oldValue: obj[prop],
+            preventDefault: () => abort = true
+        });
+
+        if (!abort) {
+            obj[prop] = value;
+        }
+    }
+});
+global.c.port = process.env.PORT;
 global.Config = global.c;
+
+for (let [key, value] of Object.entries(require('./setup/config.js'))) {
+    if (key in EventEmitter.prototype) {
+        util.warn(`Configuration contains "${key}", which is in 'EventEmitter.prototype' and its value is therefore discarded.`);
+    } else {
+        global.c[key] = value;
+    }
+}
 
 global.Class = {};
 global.ensureIsClass = str => {
@@ -99,6 +135,7 @@ global.ensureIsClass = str => {
 const requires = [
     "./physics/relative.js", // Some basic physics functions that are used across the game.
     "./physics/collisionFunctions.js", // The actual collision functions that make the game work.
+    "./live/color.js", // The class that makes dealing with colors easier.
     "./live/entitySubFunctions.js", // Skill, HealthType and other functions related to entities are here.
     "./live/controllers.js", // The AI of the game.
     "./live/entity.js", // The actual Entity constructor.

@@ -57,8 +57,10 @@ module.exports = {
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
                     +"Please report any bugs you encounter!",
-
-
+    
+    // How long a popup message lasts before fading out in milliseconds.
+    MESSAGE_DISPLAY_TIME: 10_000,
+    
 
     // Physics
 
@@ -115,6 +117,9 @@ module.exports = {
 
     // The chances of a player-bot upgrading a specific amount of times before it stops upgrading.
     BOT_CLASS_UPGRADE_CHANCES: [ 1, 5, 20, 37, 37],
+
+    // The prefix of the bot's name.
+    BOT_NAME_PREFIX: "[AI] ",
 
     // The class that players and player-bots spawn as.
     SPAWN_CLASS: "basic",
@@ -247,7 +252,7 @@ module.exports = {
 
 
 
-    // Gamemode related.
+    // Default values for gamemode related stuff.
     // Do not change these, you'll likely break stuff.
     // Change GAME_MODES instead.
     GAMEMODE_NAME_PREFIXES: [],

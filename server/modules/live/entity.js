@@ -41,14 +41,7 @@ class Gun {
             alt: false,
             fire: false,
         };
-        this.colorUnboxed = {
-            base: 16,
-            hueShift: 0,
-            saturationShift: 1,
-            brightnessShift: 0,
-            allowBrightnessInvert: false,
-        };
-        this.color = '16 0 1 0 false';
+        this.color = new Color('16 0 1 0 false');
         this.alpha = 1;
         this.strokeWidth = 1;
         this.canShoot = false;
@@ -86,18 +79,7 @@ class Gun {
             this.negRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
             this.independentChildren = info.PROPERTIES.INDEPENDENT_CHILDREN == null ? false : info.PROPERTIES.INDEPENDENT_CHILDREN;
             if (info.PROPERTIES.COLOR != null) {
-                if (typeof info.PROPERTIES.COLOR === "number" || typeof info.PROPERTIES.COLOR === "string") {
-                    this.colorUnboxed.base = info.PROPERTIES.COLOR;
-                }
-                else if (typeof info.PROPERTIES.COLOR === "object")
-                    this.colorUnboxed = {
-                        base: info.PROPERTIES.COLOR.BASE ?? 16,
-                        hueShift: info.PROPERTIES.COLOR.HUE_SHIFT ?? 0,
-                        saturationShift: info.PROPERTIES.COLOR.SATURATION_SHIFT ?? 1,
-                        brightnessShift: info.PROPERTIES.COLOR.BRIGHTNESS_SHIFT ?? 0,
-                        allowBrightnessInvert: info.PROPERTIES.COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
-                    };
-                this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+                this.color.interpret(info.PROPERTIES.COLOR);
             }
             if (info.PROPERTIES.BLINKER != null) {
                 this.blinker = {
@@ -218,7 +200,7 @@ class Gun {
     getPhotoInfo() {
         return {
             ...this.lastShot, 
-            color: this.color,
+            color: this.color.compiled,
             alpha: this.alpha,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless, 
@@ -400,9 +382,11 @@ class Gun {
     }
     bulletInit(o) {
         // Define it by its natural properties
-        o.color = undefined;
         for (let type of this.bulletTypes) {
             o.define(type);
+        }
+        if (o.color.base == '-1' || o.color.base == 'mirror') {
+            o.color.base = this.body.master.color.base
         }
         // Pass the gun attributes
         o.define({
@@ -411,10 +395,6 @@ class Gun {
             SIZE: (this.body.size * this.width * this.settings.size) / 2,
             LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + o.label
         });
-        if (!o.color || o.colorUnboxed.base == '-1' || o.colorUnboxed.base == 'mirror') {
-            o.colorUnboxed.base = this.body.master.colorUnboxed.base
-            o.compressColor();
-        }
         // Keep track of it and give it the function it needs to deutil.log itself upon death
         if (this.countsOwnKids) {
             o.parent = this;
@@ -443,7 +423,7 @@ class Gun {
                 this.bulletInit(host);
                 host.team = oo.master.master.team;
                 host.master = oo.master;
-                host.color = oo.color;
+                host.color.base = oo.color.base;
                 host.facing = save.facing;
                 host.SIZE = save.size;
                 host.health.amount = host.health.max;
@@ -713,14 +693,7 @@ class StatusEffect extends EventEmitter {
 class Prop {
     constructor(position, bond) {
         this.guns = [];
-        this.colorUnboxed = {
-            base: 16,
-            hueShift: 0,
-            saturationShift: 1,
-            brightnessShift: 0,
-            allowBrightnessInvert: false,
-        };
-        this.color = '16 0 1 0 false';
+        this.color = new Color(16);
         this.borderless = false;
         this.drawFill = true;
         this.strokeWidth = 1;
@@ -782,16 +755,7 @@ class Prop {
         }
         this.imageInterpolation = set.IMAGE_INTERPOLATION != null ? set.IMAGE_INTERPOLATION : 'bilinear'
         if (set.COLOR != null) {
-            if (typeof set.COLOR === "number" || typeof set.COLOR === 'string')
-                this.colorUnboxed.base = set.COLOR;
-            else if (typeof set.COLOR === "object") {
-                if (set.COLOR.BASE != null) this.colorUnboxed.base = set.COLOR.BASE;
-                if (set.COLOR.HUE_SHIFT != null) this.colorUnboxed.hueShift = set.COLOR.HUE_SHIFT;
-                if (set.COLOR.SATURATION_SHIFT != null) this.colorUnboxed.saturationShift = set.COLOR.SATURATION_SHIFT;
-                if (set.COLOR.BRIGHTNESS_SHIFT != null) this.colorUnboxed.brightnessShift = set.COLOR.BRIGHTNESS_SHIFT;
-                if (set.COLOR.ALLOW_BRIGHTNESS_INVERT != null) this.colorUnboxed.allowBrightnessInvert = set.COLOR.ALLOW_BRIGHTNESS_INVERT;
-            }
-            this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+            this.color.interpret(set.COLOR);
         }
         if (set.STROKE_WIDTH != null) this.strokeWidth = set.STROKE_WIDTH
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
@@ -818,7 +782,7 @@ class Prop {
             sizeFactor: this.bound.size,
             mirrorMasterAngle: this.settings.mirrorMasterAngle,
             layer: this.bound.layer,
-            color: this.color,
+            color: this.color.compiled,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless,
             drawFill: this.drawFill,
@@ -921,15 +885,8 @@ class Entity extends EventEmitter {
         this.aiSettings = {};
         this.children = [];
         this.statusEffects = [];
-        this.colorUnboxed = {
-            base: 16,
-            hueShift: 0,
-            saturationShift: 1,
-            brightnessShift: 0,
-            allowBrightnessInvert: false,
-        };
-        this.color = '16 0 1 0 false';
-        this.glow = {radius: null, color: null, alpha: 1, recursion: 1}
+        this.color = new Color(16);
+        this.glow = {radius: null, color: new Color(-1), alpha: 1, recursion: 1}
         this.invisible = [0, 0];
         this.alphaRange = [0, 1];
         // Define it
@@ -1106,7 +1063,6 @@ class Entity extends EventEmitter {
     }
     become(player, dom = false) {
         this.addController(new ioTypes.listenToPlayer(this, { player, static: dom }));
-        this.sendMessage = (content, color) => player.socket.talk("m", content);
         this.kick = (reason) => player.socket.kick(reason);
     }
     giveUp(player, name = "Mothership") {
@@ -1124,15 +1080,11 @@ class Entity extends EventEmitter {
         }
         player.body.name = player.body.label;
         player.body.underControl = false;
-        player.body.sendMessage = () => {};
         let fakeBody = new Entity({ x: player.body.x, y: player.body.y });
         fakeBody.passive = true;
         fakeBody.underControl = true;
         player.body = fakeBody;
         player.body.kill();
-    }
-    compressColor() {
-        this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
     }
     define(defs, emitEvent = true) {
         if (!Array.isArray(defs)) defs = [defs];
@@ -1167,22 +1119,16 @@ class Entity extends EventEmitter {
         if (set.HEIGHT_SCALE != null) this.heightScale = set.HEIGHT_SCALE;
         this.imageInterpolation = set.IMAGE_INTERPOLATION != null ? set.IMAGE_INTERPOLATION : 'bilinear'
         if (set.COLOR != null) {
-            if (typeof set.COLOR === "number" || typeof set.COLOR === 'string')
-                this.colorUnboxed.base = set.COLOR;
-            else if (typeof set.COLOR === "object") {
-                if (set.COLOR.BASE != null) this.colorUnboxed.base = set.COLOR.BASE;
-                if (set.COLOR.HUE_SHIFT != null) this.colorUnboxed.hueShift = set.COLOR.HUE_SHIFT;
-                if (set.COLOR.SATURATION_SHIFT != null) this.colorUnboxed.saturationShift = set.COLOR.SATURATION_SHIFT;
-                if (set.COLOR.BRIGHTNESS_SHIFT != null) this.colorUnboxed.brightnessShift = set.COLOR.BRIGHTNESS_SHIFT;
-                if (set.COLOR.ALLOW_BRIGHTNESS_INVERT != null) this.colorUnboxed.allowBrightnessInvert = set.COLOR.ALLOW_BRIGHTNESS_INVERT;
+            if (this.color === undefined) {
+                console.log(this);
             }
-            this.compressColor();
+            this.color.interpret(set.COLOR);
         }
         this.upgradeColor = set.UPGRADE_COLOR == null ? null : set.UPGRADE_COLOR;
         if (set.GLOW != null) {
             this.glow = {
                 radius: set.GLOW.RADIUS ?? 0,
-                color: set.GLOW.COLOR ?? null,
+                color: new Color(set.GLOW.COLOR),
                 alpha: set.GLOW.ALPHA ?? 1,
                 recursion: set.GLOW.RECURSION ?? 1
             };
@@ -1633,6 +1579,9 @@ class Entity extends EventEmitter {
                 case 'death':
                     if (eventName == 'death') onPairs.handler({ body: this, killers: value.killers, killTools: value.killTools })
                     break;
+                case 'kill':
+                    if (eventName == 'kill') onPairs.handler({ body: this, entity: value.entity })
+                    break;
                 case 'collide':
                     if (eventName == 'collide') onPairs.handler({ instance: value.instance, other: value.other })
                     break;
@@ -1797,7 +1746,7 @@ class Entity extends EventEmitter {
             defaultAngle: this.firingArc[0],
             twiggle: forceTwiggle.includes(this.facingType[0]) || (this.facingType[0] === "locksFacing" && this.control.alt),
             layer: this.layerID ? this.layerID : this.bond != null ? this.bound.layer : this.type === "wall" ? 11 : this.type === "food" ? 10 : this.type === "tank" ? 5 : this.type === "crasher" ? 1 : 0,
-            color: this.color,
+            color: this.color.compiled,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless,
             drawFill: this.drawFill,
@@ -1848,9 +1797,8 @@ class Entity extends EventEmitter {
                 this.define(this.defs);
                 this.ON(this.onDef, "upgrade", { oldEntity: old })
             }
-            if (this.colorUnboxed.base == '-1' || this.colorUnboxed.base == 'mirror') {
-                this.colorUnboxed.base = getTeamColor((c.MODE == 'ffa' || c.GROUPS) ? TEAM_RED : this.team);
-                this.compressColor();
+            if (this.color.base == '-1' || this.color.base == 'mirror') {
+                this.color.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : this.team);
             }
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
@@ -2068,7 +2016,7 @@ class Entity extends EventEmitter {
                 break;
             case "smoothWithMotion":
             case "looseWithMotion":
-                this.facing += util.loopSmooth(this.facing, this.velocity.direction, (args.speed ?? 4) / c.runSpeed);
+                this.facing = util.interpolateAngle(this.facing, this.velocity.direction, c.runSpeed / (args.speed ?? 4));
                 break;
             case "withTarget":
             case "toTarget":
@@ -2081,24 +2029,24 @@ class Entity extends EventEmitter {
             case "looseWithTarget":
             case "looseToTarget":
             case "smoothToTarget":
-                this.facing += util.loopSmooth(this.facing, Math.atan2(t.y, t.x), (args.speed ?? 4) / c.runSpeed);
+                this.facing = util.interpolateAngle(this.facing, Math.atan2(t.y, t.x), c.runSpeed / (args.speed ?? 4));
                 break;
             case "noFacing":
                 this.facing = args.angle ?? 0;
                 break;
             case "bound":
-                let givenangle,
+                let angleToTarget, angleDiff = 3,
                     reduceIndependence = false,
                     slowness = this.settings.mirrorMasterAngle ? 1 : (args.slowness ?? 4) / c.runSpeed;
                 if (this.control.main) {
-                    givenangle = Math.atan2(t.y, t.x);
-                    let diff = util.angleDifference(givenangle, this.firingArc[0]);
-                    if (Math.abs(diff) >= this.firingArc[1]) {
-                        givenangle = this.firingArc[0];
+                    angleToTarget = Math.atan2(t.y, t.x);
+                    angleDiff = Math.abs(util.angleDifference(angleToTarget, this.firingArc[0]));
+                    if (angleDiff >= this.firingArc[1]) {
+                        angleToTarget = this.firingArc[0];
                         reduceIndependence = true;
                     }
                 } else {
-                    givenangle = this.firingArc[0];
+                    angleToTarget = this.firingArc[0];
                     reduceIndependence = true;
                 }
                 if (reduceIndependence) {
@@ -2112,7 +2060,7 @@ class Entity extends EventEmitter {
                         this.perceptionAngleIndependence = 1;
                     }
                 }
-                this.facing += util.loopSmooth(this.facing, givenangle, slowness);
+                this.facing = util.interpolateAngle(this.facing, angleToTarget, Math.min(1, 1 / (slowness * Math.min(1, angleDiff))));
                 break;
         }
         this.facing += this.turnAngle;
@@ -2128,9 +2076,7 @@ class Entity extends EventEmitter {
     }
     takeSelfie() {
         this.flattenedPhoto = null;
-        this.photo = this.settings.drawShape
-            ? this.camera()
-            : (this.photo = undefined);
+        this.photo = this.settings.drawShape ? this.camera() : undefined;
     }
     physics() {
         if (this.accel.x == null || this.velocity.x == null) {
@@ -2297,6 +2243,9 @@ class Entity extends EventEmitter {
             // Remove duplicates
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));
             this.onDef != null ? this.ON(this.onDef, 'death', { killers, killTools }) : null
+            killers.forEach((e) => {
+                e.onDef != null ? e.ON(e.onDef, 'kill', { entity: this }) : null;
+            });
             // If there's no valid killers (you were killed by food), change the message to be more passive
             let killText = notJustFood ? "" : "You have been killed by ",
                 dothISendAText = this.settings.givesKillMessage;
@@ -2360,10 +2309,20 @@ class Entity extends EventEmitter {
                 }
                 sockets.broadcast(text);
             }
-            // Add the implements to the message
-            for (let i = 0; i < killTools.length; i++) {
-                killText += util.addArticle(killTools[i].label) + " and ";
+
+            // instead of "a Machine Gunner Bullet and a Machine Gunner Bullet and a Machine Gunner Bullet",
+            // make it say " 3 Machine Gunner Bullets"
+            let killCounts = {};
+            for (let { label } of killTools) {
+                if (!killCounts[label]) killCounts[label] = 0;
+                killCounts[label]++;
             }
+            let killCountEntries = Object.entries(killCounts).map(([name, count], i) => name);
+            for (let i = 0; i < killCountEntries.length; i++) {
+                killText += (killCounts[killCountEntries[i]] == 1) ? util.addArticle(killTools[i].label) : killCounts[killCountEntries[i]] + ' ' + killCountEntries[i] + 's';
+                killText += i < killCountEntries.length - 2 ? ', ' : ' and ';
+            }
+
             // Prepare it and clear the collision array.
             killText = killText.slice(0, -5);
             if (killText === "You have been kille") {

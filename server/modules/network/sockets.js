@@ -198,7 +198,7 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))), JSON.stringify(util.serverStartTime), c.runSpeed, c.ARENA_TYPE);
+            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))), JSON.stringify(util.serverStartTime), c.runSpeed, c.ARENA_TYPE);
             // Log it
             util.log(`[INFO] ${m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
             break;
@@ -419,10 +419,9 @@ function incoming(message, socket) {
             // cheatingbois
             if (player.body != null && socket.permissions && socket.permissions.class) {
                 player.body.define({ RESET_UPGRADES: true, BATCH_UPGRADES: false });
-                player.body.define(Class[socket.permissions.class]);
-                if (player.body.colorUnboxed.base == '-1' || player.body.colorUnboxed.base == 'mirror') {
-                    player.body.colorUnboxed.base = getTeamColor((c.MODE == 'ffa' || c.GROUPS) ? TEAM_RED : player.body.team);
-                    player.body.compressColor();
+                player.body.define(socket.permissions.class);
+                if (player.body.color.base == '-1' || player.body.color.base == 'mirror') {
+                    player.body.color.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : player.body.team);
                 }
             }
             break;
@@ -448,7 +447,7 @@ function incoming(message, socket) {
                 if (c.MODE === "tdm" && socket.rememberedTeam === entry.team && entry.type === "tank" && entry.bond == null) possible.push(entry);
             }
             if (!possible.length) {
-                socket.talk("m", "There are no entities to spectate!");
+                player.body.sendMessage("There are no entities to spectate!");
                 return 1;
             }
             let entity;
@@ -456,24 +455,24 @@ function incoming(message, socket) {
                 entity = ran.choose(possible);
             } while (entity === socket.spectateEntity && possible.length > 1);
             socket.spectateEntity = entity;
-            socket.talk("m", `You are now spectating ${entity.name.length ? entity.name : "An unnamed player"}! (${entity.label})`);
+            player.body.sendMessage(`You are now spectating ${entity.name.length ? entity.name : "An unnamed player"}! (${entity.label})`);
             break;
         case "H":
             if (player.body == null) return 1;
             let body = player.body;
             if (body.underControl) {
                 if (c.DOMINATOR_LOOP) {
-                body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You have relinquished control of the dominator.");
-                return 1;
+                    player.body.sendMessage("You have relinquished control of the dominator.");
+                    body.giveUp(player, body.isDominator ? "" : undefined);
+                    return 1;
                 } else if (c.MOTHERSHIP_LOOP) {
-                body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You have relinquished control of the mothership.");
-                return 1;
+                    player.body.sendMessage("You have relinquished control of the mothership.");
+                    body.giveUp(player, body.isDominator ? "" : undefined);
+                    return 1;
                 } else {
-                body.giveUp(player, body.isDominator ? "" : undefined);
-                socket.talk("m", "You have relinquished control of the special tank.");
-                return 1;
+                    player.body.sendMessage("You have relinquished control of the special tank.");
+                    body.giveUp(player, body.isDominator ? "" : undefined);
+                    return 1;
                 }
             }
             if (c.MOTHERSHIP_LOOP) {
@@ -488,7 +487,7 @@ function incoming(message, socket) {
                     })
                     .filter((instance) => instance);
                 if (!motherships.length) {
-                    socket.talk("m", "There are no motherships available that are on your team.");
+                    player.body.sendMessage("There are no motherships available that are on your team.");
                     return 1;
                 }
                 let mothership = motherships.shift();
@@ -507,7 +506,7 @@ function incoming(message, socket) {
                     if (entry.isDominator && entry.team === player.body.team && !entry.underControl) return entry;
                 }).filter(x=>x);
                 if (!dominators.length) {
-                    socket.talk("m", "There are no dominators available that are on your team!");
+                    player.body.sendMessage("There are no dominators available that are on your team!");
                     return 1;
                 }
                 let dominator = dominators.shift();
@@ -522,7 +521,7 @@ function incoming(message, socket) {
                 player.body.sendMessage("You are now controlling the dominator.");
                 player.body.sendMessage("Press F to relinquish control of the dominator.");
             } else {
-                socket.talk("m", "There are no special tanks in this mode that you can control.");
+                player.body.sendMessage("There are no special tanks in this mode that you can control.");
             }
             break;
 
@@ -852,16 +851,16 @@ const spawn = (socket, name) => {
     }
     player.team = socket.rememberedTeam;
 
-    if (c.MODE == "tdm") {
+    if (c.MODE == "tdm" || c.TAG) {
         let team = getWeakestTeam();
         // Choose from one of the least ones
         if (player.team == null || (player.team !== team && global.defeatedTeams.includes(player.team))
         ) {
             player.team = team;
         }
-        if (socket.party) {
+        if (socket.party && !c.TAG) {
             let team = socket.party / room.partyHash;
-            if (!c.TAG && team > 0 && team < c.TEAMS + 1 && team & 1 == team && !global.defeatedTeams.includes(team)) {
+            if (team > 0 && team < c.TEAMS + 1 && team & 1 == team && !global.defeatedTeams.includes(team)) {
                 player.team = team;
                 console.log("Party Code with team:", team, "Party:", socket.party);
             }
@@ -885,6 +884,7 @@ const spawn = (socket, name) => {
         body.controllers = body.controllers.filter(con => !(con instanceof ioTypes.listenToPlayer));
         body.become(player);
         player.team = body.team;
+        console.log('RECONNECT ---', body)
     } else {
         body = new Entity(loc);
         body.protect();
@@ -901,30 +901,26 @@ const spawn = (socket, name) => {
             socket.talk("z", body.nameColor);
         }
         body.addController(new ioTypes.listenToPlayer(body, { player }));
-        body.sendMessage = content => socket.talk("m", content);
         socket.spectateEntity = null;
         body.invuln = true;
     }
+    body.sendMessage = (content, displayTime = c.MESSAGE_DISPLAY_TIME) => socket.talk("m", displayTime, content);
 
     socket.rememberedTeam = player.team;
     player.body = body;
     body.socket = socket;
-    switch (c.MODE) {
-        case "tdm":
-            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
-                body.colorUnboxed.base = getTeamColor(body.team);
-                body.compressColor();
-            }
-            break;
-        default: 
-            let color = c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12;
-            if (body.colorUnboxed.base == '-1' || body.colorUnboxed.base == 'mirror') {
-                body.colorUnboxed.base = color;
-                body.compressColor();
-            }
+    if (c.MODE == "tdm" || c.TAG) {
+        if (body.color.base == '-1' || body.color.base == 'mirror') {
+            body.color.base = getTeamColor(body.team);
+        }
+    } else {
+        let color = c.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : 12;
+        if (body.color.base == '-1' || body.color.base == 'mirror') {
+            body.color.base = color;
+        }
     }
     // Decide what to do about colors when sending updates and stuff
-    player.teamColor = (!c.RANDOM_COLORS && (c.MODE === "ffa" || c.GROUPS) ? 10 : getTeamColor(body.team)) + ' 0 1 0 false'; // blue
+    player.teamColor = (!c.RANDOM_COLORS && (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? 10 : getTeamColor(body.team)) + ' 0 1 0 false'; // blue
     player.target = { x: 0, y: 0 };
     player.command = {
         up: false,
@@ -1040,7 +1036,7 @@ function perspective(e, player, data) {
                 data[10] = 1;
             }
         }
-        if (player.body.team === e.source.team && (c.GROUPS || c.MODE == 'ffa')) {
+        if (player.body.team === e.source.team && (c.GROUPS || (c.MODE == 'ffa' && !c.TAG))) {
             // GROUPS
             data = data.slice();
             data[13] = player.teamColor;
@@ -1195,8 +1191,8 @@ const eyes = (socket) => {
 // Util
 let getBarColor = (entry) => {
     // What even is the purpose of all of this?
-    if (c.GROUPS || c.MODE == 'ffa') return '11 0 1 0 false';
-    return entry.color;
+    if (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) return '11 0 1 0 false';
+    return entry.color.compiled;
 };
 
 // Delta Calculator
@@ -1276,7 +1272,7 @@ let minimapAll = new Delta(5, () => {
                     my.type === "wall" || my.isMothership ? (my.shape === 4 || my.shapeData == "M 1 1 L -1 1 L -1 -1 L 1 -1 Z") ? 2 : 1 : 0,
                     util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
                     util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
-                    my.color,
+                    my.color.compiled,
                     Math.round(my.SIZE),
                 ],
             });
@@ -1296,7 +1292,7 @@ let minimapTeams = teamIDs.map((team) =>
                     data: [
                         util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
                         util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
-                        (c.MODE == 'ffa' || c.GROUPS) ? '10 0 1 0 false' : my.color,
+                        (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? '10 0 1 0 false' : my.color.compiled,
                     ],
                 });
             }
@@ -1311,9 +1307,10 @@ let leaderboard = new Delta(7, () => {
             list.push({
                 id,
                 skill: { score: 0 },
-                index: Class.tagMode.index,
+                index: Class.tagMode.index.toString(),
                 name: getTeamName(team),
-                color: getTeamColor(team),
+                color: { compiled: `${getTeamColor(team)} 0 1 0 false` },
+                label: "Players",
                 team
             });
         }
@@ -1354,7 +1351,7 @@ let leaderboard = new Delta(7, () => {
                 c.MOTHERSHIP_LOOP ? Math.round(entry.health.amount) : Math.round(entry.skill.score),
                 entry.index,
                 entry.name,
-                entry.color,
+                entry.color.compiled,
                 getBarColor(entry),
                 entry.nameColor || "#FFFFFF",
                 entry.label,
@@ -1411,12 +1408,12 @@ const sockets = {
     disconnections: disconnections,
     broadcast: (message) => {
         for (let i = 0; i < clients.length; i++) {
-            clients[i].talk("m", message);
+            clients[i].talk("m", c.MESSAGE_DISPLAY_TIME, message);
         }
     },
     broadcastRoom: () => {
         for (let i = 0; i < clients.length; i++) {
-            clients[i].talk("r", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color))));
+            clients[i].talk("r", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))));
         }
     },
     connect: (socket, req) => {
@@ -1531,8 +1528,8 @@ const sockets = {
         
         //account for proxies
         //very simplified reimplementation of what the forwarded-for npm package does
-        let store = req.headers['fastly-client-ip'] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
-                    req.headers['forwarded']        || req.headers['x-real-ip']       || req.connection.remoteAddress,
+        let store = req.headers['fastly-client-ip'] || req.headers["cf-connecting-ip"] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
+                    req.headers['forwarded'] || req.headers['x-real-ip'] || req.connection.remoteAddress,
             ips = store.split(',');
 
         if (!ips) {

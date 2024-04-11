@@ -21,7 +21,7 @@ Class.developer = {
     CAN_BE_ON_LEADERBOARD: true,
     CAN_GO_OUTSIDE_ROOM: false,
     DRAW_HEALTH: true,
-    ARENA_CLOSER: false,
+    ARENA_CLOSER: true,
     INVISIBLE: [0, 0],
     ALPHA: [0, 1],
     HITS_OWN_TYPE: "hardOnlyTanks",
@@ -68,6 +68,7 @@ Class.spectator = {
 }
 
 Class.bosses = menu("Bosses")
+Class.bosses.REROOT_UPGRADE_TREE = "bosses"
 Class.sentries = menu("Sentries", "pink", 3.5)
 Class.sentries.PROPS = [
     {
@@ -79,7 +80,7 @@ Class.elites = menu("Elites", "pink", 3.5)
 Class.mysticals = menu("Mysticals", "gold", 4)
 Class.nesters = menu("Nesters", "purple", 5.5)
 Class.rogues = menu("Rogues", "darkGrey", 6)
-Class.rammers = menu("Rammers", "teal")
+Class.rammers = menu("Rammers", "aqua")
 Class.rammers.PROPS = [
     {
         POSITION: [21.5, 0, 0, 360, -1],
@@ -222,6 +223,32 @@ for (let tier = 0; tier < 6; tier++) {
                 }],
             });
         }
+        let str = `laby${tier}${poly}Crasher`,
+            LABEL = str[0].toUpperCase() + str.slice(1).replace(/\d/, d => ["", "Beta", "Alpha", "Omega", "Gamma", "Delta"][d]).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
+            code = str + 'Generator';
+        column.push(Class[code] = {
+            PARENT: "spectator",
+            LABEL,
+            SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
+            TURRETS: [{
+                POSITION: [5 + tier * 2, 0, 0, 0, 0, 1],
+                TYPE: str,
+            }],
+            GUNS: [{
+                POSITION: [14, 12, 1, 4, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+                    TYPE: "bullet"
+                }
+            }, {
+                POSITION: [12, 12, 1.4, 4, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+                    INDEPENDENT_CHILDREN: true,
+                    TYPE: str
+                },
+            }],
+        });
         row.push(column);
     }
     labyTensor.push(row);
@@ -990,38 +1017,35 @@ Class.flailBall = {
     PARENT: "genericTank",
     COLOR: "grey",
     HITS_OWN_TYPE: 'hard',
+    INDEPENDENT: true,
     TURRETS: [{
         POSITION: [21.5, 0, 0, 0, 360, 0],
         TYPE: "flailBallSpike",
-    }, ],
+    }],
 };
 Class.flailBolt1 = {
     PARENT: "genericTank",
     COLOR: "grey",
+    INDEPENDENT: true,
     GUNS: [{
         POSITION: [40, 5, 1, 8, 0, 0, 0]
     }],
     TURRETS: [{
         POSITION: [48, 56, 0, 0, 360, 1],
-        TYPE: ["flailBall", {
-            INDEPENDENT: true
-        }]
-        },
-    ],
+        TYPE: "flailBall"
+    }],
 };
 Class.flailBolt2 = {
     PARENT: "genericTank",
     COLOR: "grey",
+    INDEPENDENT: true,
     GUNS: [{
         POSITION: [30, 5, 1, 8, 0, 0, 0]
     }],
     TURRETS: [{
         POSITION: [20, 36, 0, 0, 360, 1],
-        TYPE: ["flailBolt1", {
-            INDEPENDENT: true,
-        }]
-        },
-    ],
+        TYPE: "flailBolt1"
+    }],
 };
 Class.flailBolt3 = {
     PARENT: "genericTank",
@@ -1031,11 +1055,8 @@ Class.flailBolt3 = {
     }],
     TURRETS: [{
         POSITION: [18, 36, 0, 0, 360, 1],
-        TYPE: ["flailBolt2", {
-            INDEPENDENT: true,
-        }]
-        },
-    ],
+        TYPE: "flailBolt2"
+    }],
 };
 Class.genericFlail = {
     PARENT: "genericTank",
@@ -1109,6 +1130,6 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"]
         Class.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "julius", "genghis", "napoleon"]
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"]
-        Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toohtlessBoss"]
+        Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss"]
 
     Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]

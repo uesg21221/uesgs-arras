@@ -340,6 +340,7 @@ class io_stackGuns extends IO {
 class io_nearestDifferentMaster extends IO {
     constructor(body, opts = {}) {
         super(body);
+        this.lookAtDanger = opts.lookAtDanger || true;
         this.accountForMovement = opts.accountForMovement || true;
         this.targetLock = undefined;
         this.tick = ran.irandom(30);
@@ -376,7 +377,11 @@ class io_nearestDifferentMaster extends IO {
             }
         }).filter((e) => {
             // Only return the highest tier of danger
-            if (this.body.aiSettings.farm || e.dangerValue === mostDangerous) {
+            if (
+                this.body.aiSettings.farm ||
+                e.dangerValue === mostDangerous &&
+                this.lookAtDanger
+            ) {
                 if (this.targetLock && e.id === this.targetLock.id) keepTarget = true;
                 return true;
             }

@@ -29,7 +29,7 @@ exports.listify = list => {
 
 exports.angleDifference = (a1, a2) => ((a2 - a1) % (2 * Math.PI) + Math.PI * 3) % (2 * Math.PI) - Math.PI
 
-exports.loopSmooth = (angle, desired, slowness) => exports.angleDifference(angle, desired) / slowness
+exports.interpolateAngle = (angle, desired, step) => angle + exports.angleDifference(angle, desired) * step
 
 exports.averageArray = arr => {
   if (!arr.length) return 0
