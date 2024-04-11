@@ -930,9 +930,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
             shield = instance.render.shield.get();
         if (health < 0.99 || shield < 0.99) {
             let instanceColor = instance.color.split(' ')[0];
-            let getColor = true;
-            if (instanceColor[0] == '#') getColor = false;
-            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(instanceColor) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
+            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(gameDraw.getColor(instanceColor), color.guiwhite, 0.5) : color.lgreen;
             let yy = y + realSize + 15 * ratio;
             let barWidth = 3 * ratio;
             ctx.globalAlpha = fade * (alpha ** 2);
