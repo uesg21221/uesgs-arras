@@ -1632,8 +1632,8 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
     }
     ctx.globalAlpha = 1;
     ctx.lineWidth = 1;
-    ctx.strokeStyle = color.black;
-    ctx.fillStyle = color.black;
+    ctx.strokeStyle = color.guiblack;
+    ctx.fillStyle = color.guiblack;
     drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 1, y + (global.player.cy / global.gameHeight) * height - 1, 2, false);
     if (global.showDebug) {
         drawGuiRect(x, y - 40, len, 30);
