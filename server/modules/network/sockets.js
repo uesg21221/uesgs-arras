@@ -884,7 +884,6 @@ const spawn = (socket, name) => {
         body.controllers = body.controllers.filter(con => !(con instanceof ioTypes.listenToPlayer));
         body.become(player);
         player.team = body.team;
-        console.log('RECONNECT ---', body)
     } else {
         body = new Entity(loc);
         body.protect();

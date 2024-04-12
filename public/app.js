@@ -1092,7 +1092,9 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 
     // Draw box
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.modifyColor(picture.upgradeColor) : gameDraw.getColor(getIconColor(colorIndex));
+    ctx.fillStyle = picture.upgradeColor != null
+        ? gameDraw.modifyColor(picture.upgradeColor)
+        : gameDraw.getColor(getIconColor(colorIndex));
     drawGuiRect(x, y, len, height);
     ctx.globalAlpha = 0.25 * alpha;
     ctx.fillStyle = color.black;
@@ -1343,7 +1345,7 @@ function drawFloor(px, py, ratio) {
             ctx.fillRect(left, top, right - left, bottom - top);
         }
     }
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.25;
     ctx.strokeStyle = settings.graphical.screenshotMode ? color.guiwhite : color.guiblack;
     ctx.globalAlpha = 0.04;
     ctx.beginPath();
@@ -1759,8 +1761,8 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
     }
     ctx.globalAlpha = 1;
     ctx.lineWidth = 1;
-    ctx.strokeStyle = color.black;
-    ctx.fillStyle = color.black;
+    ctx.strokeStyle = color.guiblack;
+    ctx.fillStyle = color.guiblack;
     drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 1, y + (global.player.cy / global.gameHeight) * height - 1, 2, false);
     if (global.showDebug) {
         drawGuiRect(x, y - 40, len, 30);

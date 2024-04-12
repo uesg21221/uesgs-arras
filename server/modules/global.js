@@ -10,6 +10,7 @@ global.protocol = require(".././lib/fasttalk.js");
 global.fps = "Unknown";
 global.minimap = [];
 global.entities = [];
+global.walls = [];
 global.views = [];
 global.chats = {};
 global.entitiesToAvoid = [];
