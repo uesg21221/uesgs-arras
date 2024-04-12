@@ -3477,7 +3477,7 @@ Class.medic = {
         {
             POSITION: [22, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.healer, { reload: 1.2 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.healer, g.sniper]),
                 TYPE: "healerBullet",
             },
         },

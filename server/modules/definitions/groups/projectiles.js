@@ -447,9 +447,8 @@ Class.autoSmasherMissile = {
 
 // Healer Projectiles
 Class.healerBullet = {
-    PARENT: ["bullet"],
+    PARENT: "bullet",
     HEALER: true,
-    HITS_OWN_TYPE: "normal",
 };
 Class.surgeonPillboxTurret = {
     PARENT: "genericTank",

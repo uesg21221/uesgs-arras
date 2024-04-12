@@ -97,7 +97,7 @@ for(let i = 0; i < 3; i++) {
 	{
 		POSITION: [18, 10, 1, 0, 0, 120*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard, g.pounder, { speed: 0.5, maxSpeed: 0.5 }, g.healer]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard, g.pounder, g.healer]),
 			TYPE: "healerBullet",
 			AUTOFIRE: true,
 		},
@@ -122,7 +122,7 @@ for(let i = 0; i < 5; i++) {
 	{
 		POSITION: [18, 10, 1, 0, 0, 72*i, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard, g.flankGuard, g.pounder, { speed: 0.5, maxSpeed: 0.5 }, g.healer]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard, g.flankGuard, g.pounder, g.healer]),
 			TYPE: "healerBullet",
 			AUTOFIRE: true,
 		},
