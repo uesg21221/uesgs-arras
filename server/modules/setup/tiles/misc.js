@@ -82,8 +82,9 @@ wall = new Tile({
 	    o.SIZE = room.tileWidth / 2;
 	    o.protect();
 	    o.life();
+        makeHitbox(o);
+        walls.push(o);
     }
 });
-
 
 module.exports = { normal, nest, wall, nestNoBoss };

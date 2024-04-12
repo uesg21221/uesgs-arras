@@ -419,6 +419,7 @@ class io_nearestDifferentMaster extends IO {
     constructor(body, opts = {}) {
         super(body);
         this.lookAtDanger = opts.lookAtDanger || true;
+        this.timeout = opts.timeout || 90;
         this.accountForMovement = opts.accountForMovement || true;
         this.targetLock = undefined;
         this.tick = ran.irandom(30);
@@ -518,7 +519,7 @@ class io_nearestDifferentMaster extends IO {
                     x: this.body.x,
                     y: this.body.y
                 });
-                this.tick = -90;
+                this.tick = -this.timeout;
             }
         }
         // Lock onto whoever's shooting me.
