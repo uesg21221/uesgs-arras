@@ -2642,7 +2642,7 @@ Class.trapGuard = makeGuard({
 })
 
 // Builder upgrades
-Class.construct = {
+Class.construct = { // it's "construct" and not "constructor" because "constructor" breaks things
     PARENT: "genericTank",
     LABEL: "Constructor",
     STAT_NAMES: statnames.trap,
@@ -2658,7 +2658,7 @@ Class.construct = {
         {
             POSITION: [2, 18, 1.2, 18, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.constructor]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.construct]),
                 TYPE: "setTrap",
                 STAT_CALCULATOR: gunCalcNames.block
             }
