@@ -2230,7 +2230,7 @@ Class.launcher = {
         {
             POSITION: [17, 13, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher]),
                 TYPE: "minimissile",
                 STAT_CALCULATOR: gunCalcNames.sustained,
             },
@@ -2526,6 +2526,7 @@ Class.skimmer = {
 Class.twister = {
     PARENT: "genericTank",
     LABEL: "Twister",
+    TOOLTIP: "Hold right click to reverse missile rotation.",
     DANGER: 7,
     BODY: {
         FOV: 1.1 * base.FOV,
@@ -2537,7 +2538,7 @@ Class.twister = {
         {
             POSITION: [17, 14, -1.4, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, { speed: 1.3, maxSpeed: 1.3 }, { reload: 4/3 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, { reload: 4/3 }]),
                 TYPE: "spinmissile",
                 STAT_CALCULATOR: gunCalcNames.sustained,
             },

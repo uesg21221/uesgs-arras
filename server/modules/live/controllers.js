@@ -725,6 +725,31 @@ class io_spin extends IO {
         };
     }
 }
+class io_spin2 extends IO {
+    constructor(body, opts = {}) {
+        super(body);
+        this.speed = opts.speed ?? 0.04;
+        this.reverseOnAlt = opts.reverseOnAlt ?? true;
+        this.lastAlt = -1;
+        this.reverseOnTheFly = opts.reverseOnTheFly ?? false;
+
+        // On spawn logic
+        let alt = this.body.master.control.alt;
+        let reverse = (this.reverseOnAlt && alt) ? -1 : 1;
+        this.body.facingType = ["spin", {speed: this.speed * reverse}];
+    }
+    think(input) {
+        if (!this.reverseOnTheFly) return;
+
+        // Live logic
+        let alt = this.body.master.control.alt;
+        if (this.lastAlt != alt) {
+            let reverse = (this.reverseOnAlt && alt) ? -1 : 1;
+            this.body.facingType = ["spin", {speed: this.speed * reverse}];
+            this.lastAlt = alt;
+        }
+    }
+}
 class io_fleeAtLowHealth extends IO {
     constructor(b) {
         super(b)
@@ -924,6 +949,7 @@ let ioTypes = {
     targetSelf: io_targetSelf,
     onlyAcceptInArc: io_onlyAcceptInArc,
     spin: io_spin,
+    spin2: io_spin2,
 
     //movement related
     canRepel: io_canRepel,
