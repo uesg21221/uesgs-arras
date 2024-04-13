@@ -270,7 +270,7 @@ Class.tripleShot = {
 Class.tripleTwin = makeMulti({
     PARENT: "genericTank",
     LABEL: "Twin",
-    DANGER: 6,
+    DANGER: 7,
     GUNS: [
         {
             POSITION: [20, 8, 1, 0, 5.5, 0, 0],
