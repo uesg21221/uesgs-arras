@@ -1030,7 +1030,7 @@ class Entity extends EventEmitter {
                 if (io.constructor === oldIO.constructor) this.controllers.splice(i, 1);
             }
         }
-        this.controllers = newIO.concat(this.controllers);
+        this.controllers = (this.controllers ?? []).concat(newIO);
         if (listenToPlayer) this.controllers.unshift(listenToPlayer);
     }
     become(player, dom = false) {
