@@ -129,9 +129,6 @@ class Gun {
             this.recoilDir = 0;
         }
     }
-    set color (color) {
-        this.color.interpret(color);
-    }
     recoil() {
         if (this.motion || this.position) {
             // Simulate recoil
@@ -1653,9 +1650,6 @@ class Entity extends EventEmitter {
         this.facingType = ["bound"];
         this.motionType = ["bound"];
         this.move();
-    }
-    set color (color) {
-        this.color.interpret(color);
     }
     get level() {
         return Math.min(this.levelCap ?? c.LEVEL_CAP, this.skill.level);
