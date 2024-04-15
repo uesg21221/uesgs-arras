@@ -2601,13 +2601,13 @@ Class.toothlessBase = {
     GLOW: {
         RADIUS: 2,
         COLOR: 42,
-        ALPHA: 0.3,
+        ALPHA: 0.6,
         RECURSION: 6,
     },
 	BODY: {
         SPEED: 0.85 * base.SPEED,
         FOV: 1.4 * base.FOV,
-        HEALTH: 7 * base.HEALTH,
+        HEALTH: 4.5 * base.HEALTH,
         DAMAGE: 2.5 * base.DAMAGE,
     },
     LEVEL_SKILL_POINT_FUNCTION: level => {
@@ -2620,7 +2620,7 @@ Class.toothlessBase = {
     COLOR: "purple",
     DANGER: 10,
 	SHAPE: 3,
-	SIZE: 28,
+	SIZE: 20,
 	SKILL_CAP: Array(10).fill(smshskl + 3),
     VALUE: 10e+6,
 }
