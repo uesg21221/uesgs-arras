@@ -11,7 +11,7 @@ let randomItems = (array, count) => {
     return arr;
 };
 let oldGroups = {
-    elites: [ "eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteSkimmer" ],
+    elites: [ "eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner" ],
     mysticals: [ "summoner", "eliteSkimmer", "nestKeeper", "roguePalisade" ],
     celestials: [ "paladin", "freyja", "zaphkiel", "nyx", "theia" ],
     eternals: [ "legionaryCrasher", "kronos", "odin" ],
@@ -127,7 +127,7 @@ class BossRush {
         this.friendlyBossChoices = ["roguePalisade", "rogueArmada", "julius", "genghis", "napoleon"];
         this.bigFodderChoices = ["sentryGun", "sentrySwarm", "sentryTrap", "shinySentryGun"];
         this.smallFodderChoices = ["crasher"];
-        this.length = c.OLD_FORMAT ? this.waveCodes.length : c.WAVES;
+        this.length = c.CLASSIC_SIEGE ? this.waveCodes.length : c.WAVES;
         this.waves = this.generateWaves();
         this.waveId = -1;
         this.gameActive = true;
@@ -149,7 +149,7 @@ class BossRush {
                 wave.push(boss);
             }
 
-            waves.push(c.OLD_FORMAT ? this.waveCodes[i] : wave);
+            waves.push(c.CLASSIC_SIEGE ? this.waveCodes[i] : wave);
         }
         return waves;
     }
@@ -240,7 +240,7 @@ class BossRush {
             enemy.isBoss = true;
         }
 
-        if (!c.OLD_FORMAT) {
+        if (!c.CLASSIC_SIEGE) {
             //spawn fodder enemies
             for (let i = 0; i < this.waveId / 5; i++)
                 this.spawnEnemyWrapper(getSpawnableArea(TEAM_ENEMIES), ran.choose(this.bigFodderChoices));
