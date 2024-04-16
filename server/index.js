@@ -276,7 +276,7 @@ let maintainloop = () => {
             instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
         }
     }
-    if (!naturallySpawnedBosses.length && bossTimer++ > c.BOSS_SPAWN_COOLDOWN && !c.SPECIAL_BOSS_SPAWNS) {
+    if (!naturallySpawnedBosses.length && bossTimer++ > c.BOSS_SPAWN_COOLDOWN) {
         bossTimer = -c.BOSS_SPAWN_DURATION;
         let selection = c.BOSS_TYPES[ran.chooseChance(...c.BOSS_TYPES.map((selection) => selection.chance))],
             amount = ran.chooseChance(...selection.amount) + 1;

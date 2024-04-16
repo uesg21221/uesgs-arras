@@ -5,11 +5,6 @@ let calculatePoints = wave => 5 + wave * 3;
 // It picks a boss to buy by filtering the list of boss choices by if they are affordable.
 // Then it picks a boss at random, with all choices being equally likely.
 
-let randomItems = (array, count) => {
-    let arr = [];
-    for (let i = 0; i < count; i++) arr.push(ran.choose(array));
-    return arr;
-};
 let oldGroups = {
     elites: [ "eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner" ],
     mysticals: [ "summoner", "eliteSkimmer", "nestKeeper", "roguePalisade" ],
@@ -20,64 +15,40 @@ let oldGroups = {
 class BossRush {
     constructor() {
         this.waveCodes = [
-            randomItems(oldGroups.elites, 1),
-            randomItems(oldGroups.elites, 2),
-            randomItems(oldGroups.elites, 3),
-            randomItems(oldGroups.elites, 4),
-            randomItems(oldGroups.elites, 3).concat(randomItems(oldGroups.mysticals, 1)),
-            randomItems(oldGroups.elites, 2).concat(randomItems(oldGroups.mysticals, 2)),
-            randomItems(oldGroups.elites, 1).concat(randomItems(oldGroups.mysticals, 3)),
-            randomItems(oldGroups.mysticals, 4),
-            randomItems(oldGroups.elites, 1).concat(randomItems(oldGroups.mysticals, 4)),
-            randomItems(oldGroups.elites, 2).concat(randomItems(oldGroups.mysticals, 4)),
-            randomItems(oldGroups.elites, 3).concat(randomItems(oldGroups.mysticals, 4)),
-            randomItems(oldGroups.elites, 4).concat(randomItems(oldGroups.mysticals, 4)),
+            ran.chooseN(oldGroups.elites, 1),
+            ran.chooseN(oldGroups.elites, 2),
+            ran.chooseN(oldGroups.elites, 3),
+            ran.chooseN(oldGroups.elites, 4),
+            ran.chooseN(oldGroups.elites, 3).concat(ran.chooseN(oldGroups.mysticals, 1)),
+            ran.chooseN(oldGroups.elites, 2).concat(ran.chooseN(oldGroups.mysticals, 2)),
+            ran.chooseN(oldGroups.elites, 1).concat(ran.chooseN(oldGroups.mysticals, 3)),
+            ran.chooseN(oldGroups.mysticals, 4),
+            ran.chooseN(oldGroups.elites, 1).concat(ran.chooseN(oldGroups.mysticals, 4)),
+            ran.chooseN(oldGroups.elites, 2).concat(ran.chooseN(oldGroups.mysticals, 4)),
+            ran.chooseN(oldGroups.elites, 3).concat(ran.chooseN(oldGroups.mysticals, 4)),
+            ran.chooseN(oldGroups.elites, 4).concat(ran.chooseN(oldGroups.mysticals, 4)),
             [ oldGroups.celestials[0] ],
             [ oldGroups.celestials[1] ],
             [ oldGroups.celestials[2] ],
             [ oldGroups.celestials[3] ],
             [ oldGroups.celestials[4] ],
-            randomItems(oldGroups.elites, 1)
-                .concat(randomItems(oldGroups.mysticals, 1))
-                .concat(randomItems(oldGroups.celestials, 1)),
-            randomItems(oldGroups.elites, 3)
-                .concat(randomItems(oldGroups.mysticals, 1))
-                .concat(randomItems(oldGroups.celestials, 1)),
-            randomItems(oldGroups.elites, 3)
-                .concat(randomItems(oldGroups.mysticals, 3))
-                .concat(randomItems(oldGroups.celestials, 1)),
-            randomItems(oldGroups.elites, 4)
-                .concat(randomItems(oldGroups.mysticals, 4))
-                .concat(randomItems(oldGroups.celestials, 1)),
-            randomItems(oldGroups.celestials, 2),
-            randomItems(oldGroups.elites, 1)
-                .concat(randomItems(oldGroups.mysticals, 2))
-                .concat(randomItems(oldGroups.celestials, 2)),
-            randomItems(oldGroups.elites, 3)
-                .concat(randomItems(oldGroups.mysticals, 3))
-                .concat(randomItems(oldGroups.celestials, 2)),
-            randomItems(oldGroups.elites, 4)
-                .concat(randomItems(oldGroups.mysticals, 4))
-                .concat(randomItems(oldGroups.celestials, 2)),
-            randomItems(oldGroups.celestials, 3),
-            randomItems(oldGroups.elites, 3)
-                .concat(randomItems(oldGroups.mysticals, 3))
-                .concat(randomItems(oldGroups.celestials, 3)),
-            randomItems(oldGroups.elites, 4)
-                .concat(randomItems(oldGroups.mysticals, 4))
-                .concat(randomItems(oldGroups.celestials, 3)),
-            randomItems(oldGroups.celestials, 4),
-            randomItems(oldGroups.elites, 2)
-                .concat(randomItems(oldGroups.mysticals, 2))
-                .concat(randomItems(oldGroups.celestials, 4)),
-            randomItems(oldGroups.elites, 4)
-                .concat(randomItems(oldGroups.mysticals, 4))
-                .concat(randomItems(oldGroups.celestials, 4)),
-            randomItems(oldGroups.celestials, 5),
-            randomItems(oldGroups.elites, 4)
-                .concat(randomItems(oldGroups.mysticals, 4))
-                .concat(randomItems(oldGroups.celestials, 5)),
-            randomItems(oldGroups.eternals, 1),
+            ran.chooseN(oldGroups.elites, 1).concat(ran.chooseN(oldGroups.mysticals, 1)).concat(ran.chooseN(oldGroups.celestials, 1)),
+            ran.chooseN(oldGroups.elites, 3).concat(ran.chooseN(oldGroups.mysticals, 1)).concat(ran.chooseN(oldGroups.celestials, 1)),
+            ran.chooseN(oldGroups.elites, 3).concat(ran.chooseN(oldGroups.mysticals, 3)).concat(ran.chooseN(oldGroups.celestials, 1)),
+            ran.chooseN(oldGroups.elites, 4).concat(ran.chooseN(oldGroups.mysticals, 4)).concat(ran.chooseN(oldGroups.celestials, 1)),
+            ran.chooseN(oldGroups.celestials, 2),
+            ran.chooseN(oldGroups.elites, 1).concat(ran.chooseN(oldGroups.mysticals, 2)).concat(ran.chooseN(oldGroups.celestials, 2)),
+            ran.chooseN(oldGroups.elites, 3).concat(ran.chooseN(oldGroups.mysticals, 3)).concat(ran.chooseN(oldGroups.celestials, 2)),
+            ran.chooseN(oldGroups.elites, 4).concat(ran.chooseN(oldGroups.mysticals, 4)).concat(ran.chooseN(oldGroups.celestials, 2)),
+            ran.chooseN(oldGroups.celestials, 3),
+            ran.chooseN(oldGroups.elites, 3).concat(ran.chooseN(oldGroups.mysticals, 3)).concat(ran.chooseN(oldGroups.celestials, 3)),
+            ran.chooseN(oldGroups.elites, 4).concat(ran.chooseN(oldGroups.mysticals, 4)).concat(ran.chooseN(oldGroups.celestials, 3)),
+            ran.chooseN(oldGroups.celestials, 4),
+            ran.chooseN(oldGroups.elites, 2).concat(ran.chooseN(oldGroups.mysticals, 2)).concat(ran.chooseN(oldGroups.celestials, 4)),
+            ran.chooseN(oldGroups.elites, 4).concat(ran.chooseN(oldGroups.mysticals, 4)).concat(ran.chooseN(oldGroups.celestials, 4)),
+            ran.chooseN(oldGroups.celestials, 5),
+            ran.chooseN(oldGroups.elites, 4).concat(ran.chooseN(oldGroups.mysticals, 4)).concat(ran.chooseN(oldGroups.celestials, 5)),
+            ran.chooseN(oldGroups.eternals, 1),
 
         ]
         this.bossChoices = [
@@ -242,13 +213,17 @@ class BossRush {
 
         if (!c.CLASSIC_SIEGE) {
             //spawn fodder enemies
-            for (let i = 0; i < this.waveId / 5; i++)
+            for (let i = 0; i < this.waveId / 5; i++) {
                 this.spawnEnemyWrapper(getSpawnableArea(TEAM_ENEMIES), ran.choose(this.bigFodderChoices));
-            for (let i = 0; i < this.waveId / 2; i++)
+            }
+            for (let i = 0; i < this.waveId / 2; i++) {
                 this.spawnEnemyWrapper(getSpawnableArea(TEAM_ENEMIES), ran.choose(this.smallFodderChoices));
+            }
 
             //spawn a friendly boss every 20 waves
-            if (waveId % 20 == 19) setTimeout(() => this.spawnFriendlyBoss(), 5000);
+            if (waveId % 20 == 19) {
+                setTimeout(() => this.spawnFriendlyBoss(), 5000);
+            }
         }
     }
 
