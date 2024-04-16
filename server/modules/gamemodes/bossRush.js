@@ -49,8 +49,7 @@ class BossRush {
             ran.chooseN(oldGroups.celestials, 5),
             ran.chooseN(oldGroups.elites, 4).concat(ran.chooseN(oldGroups.mysticals, 4)).concat(ran.chooseN(oldGroups.celestials, 5)),
             ran.chooseN(oldGroups.eternals, 1),
-
-        ]
+        ];
         this.bossChoices = [
             // [ cost , definition reference ],
 
