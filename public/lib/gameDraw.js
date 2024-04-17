@@ -432,23 +432,23 @@ var gameDraw = {
             case "bas5":
             case "bap5":
             case "dom5":
-                return "#C49608";
+                return gameDraw.color.mustard;
             case "bas6":
             case "bap6":
             case "dom6":
-                return "#EC7B0F";
+                return gameDraw.color.tangerine;
             case "bas7":
             case "bap7":
             case "dom7":
-                return "#895918";
+                return gameDraw.color.brown;
             case "bas8":
             case "bap8":
             case "dom8":
-                return "#13808E";
+                return gameDraw.color.cyan;
             case "port":
                 return gameDraw.color.guiblack;
             case "nest":
-                return gameDraw.color.purple;
+                return "#B58EFD";
             case "dom0":
                 return gameDraw.color.gold;
             default:
