@@ -324,6 +324,9 @@ var gameDraw = {
                 return gameDraw.color.cyan;
 
         // shades of grey/gray
+            case "8":
+            case "pureWhite":
+                return gameDraw.color.guiwhite;
             case "18":
             case "white":
                 return gameDraw.color.white;
@@ -335,6 +338,9 @@ var gameDraw = {
             case "darkGrey":
             case "darkGray":
                 return gameDraw.color.dgrey;
+            case "9":
+            case "black":
+                return gameDraw.color.black;
             case "19":
             case "pureBlack":
                 return gameDraw.color.guiblack;
@@ -404,12 +410,6 @@ var gameDraw = {
             case "nest":
             case "lavender":
                 return gameDraw.color.lavender;
-            case "8":
-            case "pureWhite":
-                return gameDraw.color.guiwhite;
-            case "9":
-            case "black":
-                return gameDraw.color.black;
             case "42":
             case "animatedMagenta":
                 return gameDraw.animatedColor.magenta;
