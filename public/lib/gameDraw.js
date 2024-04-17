@@ -357,7 +357,6 @@ var gameDraw = {
             case "cyan":
             case "turquoise":
                 return gameDraw.color.cyan;
-            case "29":
             case "lesbian":
             case "animatedLesbian":
                 return gameDraw.animatedColor.lesbian;
@@ -392,17 +391,13 @@ var gameDraw = {
             case "trans":
             case "animatedTrans":
                 return gameDraw.animatedColor.trans;
-            case "38":
             case "bi":
             case "animatedBi":
                 return gameDraw.animatedColor.bi;
-            case "39":
             case "pumpkinStem":
                 return "#654321";
-            case "40":
             case "pumpkinBody":
                 return "#e58100";
-            case "41":
             case "tree":
                 return "#267524";
             case "42":
