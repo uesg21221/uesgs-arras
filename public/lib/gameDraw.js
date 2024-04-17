@@ -267,6 +267,9 @@ var gameDraw = {
             case "neutral":
             case "yellow":
                 return gameDraw.color.yellow;
+            case "nest":
+            case "lavender":
+                return gameDraw.color.lavender;
             case "4":
             case "hexagon":
             case "aqua":
@@ -448,7 +451,7 @@ var gameDraw = {
             case "port":
                 return gameDraw.color.guiblack;
             case "nest":
-                return "#B58EFD";
+                return gameDraw.color.lavender;
             case "dom0":
                 return gameDraw.color.gold;
             default:
