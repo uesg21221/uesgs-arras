@@ -1032,7 +1032,6 @@ class Entity extends EventEmitter {
             }
         }
         this.controllers = this.controllers.concat(newIO);
-        if (mockupsLoaded) console.log(this.controllers)
     }
     become(player, dom = false) {
         this.addController(new ioTypes.listenToPlayer(this, { player, static: dom }));
