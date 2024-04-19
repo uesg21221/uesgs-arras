@@ -2605,10 +2605,10 @@ Class.toothlessBase = {
         RECURSION: 6,
     },
 	BODY: {
-        SPEED: 0.85 * base.SPEED,
-        FOV: 1.4 * base.FOV,
-        HEALTH: 4.5 * base.HEALTH,
-        DAMAGE: 2.5 * base.DAMAGE,
+        SPEED: 0.8 * base.SPEED,
+        FOV: 1.5 * base.FOV,
+        HEALTH: 6 * base.HEALTH,
+        DAMAGE: 2 * base.DAMAGE,
     },
     LEVEL_SKILL_POINT_FUNCTION: level => {
         if (level < 2) return 0;
@@ -2630,15 +2630,17 @@ Class.toothlessBossTurret = {
     BODY: {
         FOV: 2,
     },
-    CONTROLLERS: [[ "nearestDifferentMaster", { lookAtDanger: false, timeout: 10 } ], "onlyAcceptInArc"],
+    CONTROLLERS: [[ "nearestDifferentMaster", { lookAtDanger: false, firingAtMe: true, timeout: 10 } ], "onlyAcceptInArc"],
     COLOR: "grey",
-    INDEPENDENT: true,
     GUNS: [
         {
             POSITION: [32, 8, 1, 0, 0, 0, 0.4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, {
                     reload: 0.8,
+                    pen: 0.8,
+                    health: 0.6,
+                    damage: 0.6,
                     recoil: 0,
                 }]),
                 TYPE: "bullet",
