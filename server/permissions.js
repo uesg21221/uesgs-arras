@@ -6,7 +6,8 @@ module.exports = [
         "class": "developer",
         "infiniteLevelUp": true,
         "name": "unnamed#0000",
-        "note": "note here"
+        "note": "note here",
+		"evalCommand": true,
     },
     {
         "key": process.env.TOKEN_2,

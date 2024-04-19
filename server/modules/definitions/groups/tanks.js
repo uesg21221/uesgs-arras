@@ -5398,12 +5398,12 @@ Class.augmentation = {
          }, }, {
          POSITION: [ 13, 3, -2, 1, -21, 15, 0.5, ],
          PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.twin, g.machineGunner]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.machineGunner]),
             TYPE: "bullet",
          }, }, {
          POSITION: [ 13, 3, -2, 1, 21, -15, 0, ],
          PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.twin, g.machineGunner]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.gunner, g.power, g.machineGunner]),
             TYPE: "bullet",
          }, }, {
          POSITION: [ 19, 7, -2, 1, 2.5, 67.5, 0, ],
