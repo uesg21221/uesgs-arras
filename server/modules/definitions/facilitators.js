@@ -802,5 +802,42 @@ exports.menu = (name = -1, color = -1, shape = 0) => {
         UPGRADE_COLOR: color == -1 ? undefined : color,
         SHAPE: shape,
         IGNORED_BY_AI: true,
-    };
+    }
+};
+//custom
+exports.makeSenior = (type, name = -1) => {
+    let output = exports.dereference(type);
+    output.COLOR = 10;
+	output.EXTRA_SKILL = 4;
+    output.LABEL = name == -1 ? "Sr. " + type.LABEL : name;
+    return output;
 }
+exports.makeElite = (type, name = -1) => {
+    let output = exports.dereference(type);
+    output.COLOR = 11;
+	output.EXTRA_SKILL = 2;
+    output.LABEL = name == -1 ? "Elite " + type.LABEL : name;
+    return output;
+}
+exports.eliteAug = (type, name = -1) => {
+	let output = exports.dereference(type),
+    cannons = [{
+         POSITION: [ 19, 3, -2, -12, 12, -15, 0, ],
+		 PROPERTIES: {
+            SHOOT_SETTINGS: exports.combineStats([g.basic, g.gunner, g.power, g.twin, g.machineGun]),
+            TYPE: "bullet",
+         },
+         }, {
+         POSITION: [ 19, 3, -2, -12, -12, 15, 0, ],
+		 PROPERTIES: {
+            SHOOT_SETTINGS: exports.combineStats([g.basic, g.gunner, g.power, g.twin, g.machineGun]),
+            TYPE: "bullet",
+         },
+         },
+	];
+    output.GUNS = type.GUNS == null ? cannons : type.GUNS.concat(cannons);
+	output.COLOR = 11;
+	output.EXTRA_SKILL = 2;
+    output.LABEL = name == -1 ? "Elite " + type.LABEL : name;
+    return output;
+};

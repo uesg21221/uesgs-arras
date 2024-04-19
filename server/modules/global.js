@@ -184,6 +184,8 @@ const requires = [
     "./gamemodes/groups.js", // Duos/Trios/Squads
     "./gamemodes/tag.js", // Tag
     "./gamemodes/closeArena.js", // Arena Closing mechanics
+	
+	"./live/controllersEXTENDED.js", // The AI of the game.
 ];
 
 for (let file of requires) {

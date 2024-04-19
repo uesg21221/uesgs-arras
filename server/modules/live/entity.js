@@ -1753,7 +1753,7 @@ class Entity extends EventEmitter {
             if (this.color.base == '-1' || this.color.base == 'mirror') {
                 this.color.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : this.team);
             }
-            this.sendMessage("You have upgraded to " + this.label + ".");
+            //this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
                 def = ensureIsClass(def);
                 if (typeof def.TOOLTIP == 'string' && def.TOOLTIP.length > 0) {
@@ -1930,6 +1930,18 @@ class Entity extends EventEmitter {
                 let waveY = (args.amplitude ?? 15) * Math.cos((this.RANGE - this.range) / (args.period ?? 4)) * this.waveReversed * (args.invert ? -1 : 1);
                 this.x += Math.cos(this.waveAngle) * waveX - Math.sin(this.waveAngle) * waveY;
                 this.y += Math.sin(this.waveAngle) * waveX + Math.cos(this.waveAngle) * waveY;
+                break;
+			case "explode":
+				let growth = 13
+				let scale = this.SIZE * 0.1
+                this.SIZE += growth - scale;
+                this.maxSpeed = this.topSpeed;
+                //this.damp = 0.05;
+                break;
+			case "growglide":
+				this.SIZE *= 1.02;
+				this.maxSpeed = this.topSpeed;
+                this.damp = this.SIZE * -0.004;
                 break;
         }
         this.accel.x += engine.x * this.control.power;

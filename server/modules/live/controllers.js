@@ -195,7 +195,7 @@ class io_listenToPlayer extends IO {
                 let thing = (0.02 * (this.body.autospinBoost * ((this.body.skill.spd / 4) + 0.5)));
                 if (this.player.command.lmb) thing = thing * 2;
                 if (this.player.command.rmb) thing = thing * -1;
-                kk += thing / c.gameSpeed;
+                kk += thing / c.runSpeed;
             }
             target = {
                 x: 100 * Math.cos(kk),

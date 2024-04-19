@@ -10,7 +10,7 @@ module.exports = {
 
     // How often to update the list of the entities that players can see.
     // Has effects of when entities are activated.
-    visibleListInterval: 250,
+    visibleListInterval: 400,
 
     // How long (in ms) a socket can be disconnected without their player dying.
     maxHeartbeatInterval: 300000,
@@ -20,7 +20,7 @@ module.exports = {
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['tdm', 'domination'],
+    GAME_MODES: ['ffa', 'maze'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
@@ -65,7 +65,7 @@ module.exports = {
     // Physics
 
     // General multiplier for acceleration and max speeds.
-    runSpeed: 1.5,
+    runSpeed: 2,
 
     // General damage multiplier everytime damage is dealt.
     DAMAGE_CONSTANT: 0.5,
@@ -107,10 +107,10 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 0,
+    BOTS: 12,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
-    BOT_XP: 125,
+    BOT_XP: 6500,
 
     // The chances of a player-bot upgrading a specific skill when skill upgrades are available.
     BOT_SKILL_UPGRADE_CHANCES: [ 1, 1, 3, 4, 4, 4, 4, 2, 1, 1],
@@ -122,7 +122,7 @@ module.exports = {
     BOT_NAME_PREFIX: "[AI] ",
 
     // The class that players and player-bots spawn as.
-    SPAWN_CLASS: "basic",
+    SPAWN_CLASS: "backbutton",
 
 
 

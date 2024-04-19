@@ -15,7 +15,7 @@ for (let filename of c.ROOM_SETUP) {
 
 global.room = {
     lastCycle: undefined,
-    cycleSpeed: 1000 / 30,
+    cycleSpeed: 1000 / c.runSpeed / 30,
     setup: importedRoom,
     xgrid: importedRoom[0].length,
     ygrid: importedRoom.length,

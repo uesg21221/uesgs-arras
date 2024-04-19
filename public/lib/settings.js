@@ -20,7 +20,7 @@ const settings = {
         memory: 60
     },
     game: {
-        autoLevelUp: false
+        autoLevelUp: true
     }
 };
 export { settings }

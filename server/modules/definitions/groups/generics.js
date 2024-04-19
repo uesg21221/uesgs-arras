@@ -356,3 +356,59 @@ Class.auraSymbol = {
     COLOR: "teal",
     SHAPE: [[-0.598,-0.7796],[-0.3817,-0.9053],[0.9688,-0.1275],[0.97,0.125],[-0.3732,0.9116],[-0.593,0.785]]
 };
+//Custom projectiles
+Class.howlbullet = {
+  PARENT: [Class.bullet],
+  MOTION_TYPE: "grow",
+  TYPE: "aura",
+  BODY: {
+    PENETRATION: 4,
+    SPEED: 3.75,
+    RANGE: 120,
+    DENSITY: 1.25,
+    HEALTH: 0.165,
+    DAMAGE: 6,
+    PUSHABILITY: 0.3,
+	HETERO: 0.01
+  },
+  SHAPE: 4,
+  ALPHA: 0.4,
+};
+Class.windbullet = {
+    PARENT: ["bullet"],
+	CONTROLLERS: [["spin", {speed: -0.04}]],
+	INDEPENDENT: true,
+    SHAPE: "M -0 -1 C 0.7 -1 1 -0.4 1 -0 C 1 0.4 0.7 1 0 1 C 0.4 0.4 0.4 -0.4 -0 -1",
+};
+Class.glimmerbullet = {
+	PARENT: ["bullet"],
+	SHAPE: "M-.7 1Q0 .2.7 1 .1.1 1-.2.1-.1 0-1-.1-.1-1-.2-.1.1-.7 1",
+};
+Class.wavebullet = {
+	PARENT: ["bullet"],
+	TYPE: "aura",
+	MOTION_TYPE: "growglide",
+	DAMAGE_EFFECTS: true,
+	ALPHA: 0.5,
+	BODY: {
+        SHIELD: 1000000,
+        REGEN: 100000,
+        HEALTH: 1000000,
+		DAMAGE: 16,
+        DENSITY: 8,
+        PUSHABILITY: 0,
+    }
+};
+Class.explodebullet = {
+    PARENT: ["bullet"],
+    MOTION_TYPE: "explode",
+	TYPE: "aura",
+	ALPHA: 0.7,
+	BODY: {
+		HEALTH: 1e88,
+		SPEED: 0,
+		PUSHABILITY: 0,
+		HETERO: 0,
+		RESIST: 0,
+	},
+};
