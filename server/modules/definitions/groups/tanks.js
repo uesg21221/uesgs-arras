@@ -3102,7 +3102,7 @@ Class.helix = {
 }
 Class.sidewinder = {
     PARENT: "genericTank",
-    LABEL: "Sidewinder (new)",
+    LABEL: "Sidewinder",
     DANGER: 6,
     STAT_NAMES: statnames.desmos,
     UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!"
