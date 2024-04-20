@@ -418,9 +418,10 @@ class io_stackGuns extends IO {
 class io_nearestDifferentMaster extends IO {
     constructor(body, opts = {}) {
         super(body);
-        this.lookAtDanger = opts.lookAtDanger || true;
+        this.lookAtDanger = opts.lookAtDanger ?? true;
+        this.firingAtMe = opts.firingAtMe ?? false;
         this.timeout = opts.timeout || 90;
-        this.accountForMovement = opts.accountForMovement || true;
+        this.accountForMovement = opts.accountForMovement ?? true;
         this.targetLock = undefined;
         this.tick = ran.irandom(30);
         this.lead = 0;
@@ -459,11 +460,8 @@ class io_nearestDifferentMaster extends IO {
             return !wouldHitWall(this.body, e);
         }).filter((e) => {
             // Only return the highest tier of danger
-            if (
-                this.body.aiSettings.farm ||
-                e.dangerValue === mostDangerous &&
-                this.lookAtDanger
-            ) {
+            if (!this.lookAtDanger) return true;
+            if (this.body.aiSettings.farm || e.dangerValue === mostDangerous) {
                 if (this.targetLock && e.id === this.targetLock.id) keepTarget = true;
                 return true;
             }
@@ -480,6 +478,7 @@ class io_nearestDifferentMaster extends IO {
         }
         // Otherwise, consider how fast we can either move to ram it or shoot at a potiential target.
         let tracking = this.body.topSpeed,
+            damageRef = (this.body.bond == null) ? this.body : this.body.bond,
             range = this.body.fov;
         // Use whether we have functional guns to decide
         for (let i = 0; i < this.body.guns.length; i++) {
@@ -523,13 +522,22 @@ class io_nearestDifferentMaster extends IO {
             }
         }
         // Lock onto whoever's shooting me.
-        // let damageRef = (this.body.bond == null) ? this.body : this.body.bond
-        // if (damageRef.collisionArray.length && damageRef.health.display() < this.oldHealth) {
-        //     this.oldHealth = damageRef.health.display()
-        //     if (this.validTargets.indexOf(damageRef.collisionArray[0]) === -1) {
-        //         this.targetLock = (damageRef.collisionArray[0].master.id === -1) ? damageRef.collisionArray[0].source : damageRef.collisionArray[0].master
-        //     }
-        // }
+        if (this.firingAtMe && damageRef.collisionArray.length && damageRef.health.display() < this.oldHealth) {
+            this.oldHealth = damageRef.health.display();
+            if (this.validTargets.indexOf(damageRef.collisionArray[0]) === -1) {
+                let a = (damageRef.collisionArray[0].master.id === -1)
+                    ? damageRef.collisionArray[0].source
+                    : damageRef.collisionArray[0].master;
+                if (
+                    this.body.firingArc == null ||
+                    this.body.aiSettings.view360 ||
+                    Math.abs(util.angleDifference(util.getDirection(this.body, a), this.body.firingArc[0])) < this.body.firingArc[1]
+                ) {
+                    this.targetLock = a;
+                    this.tick = -this.timeout;
+                }
+            }
+        }
         // Consider how fast it's moving and shoot at it
         if (this.targetLock != null) {
             let radial = this.targetLock.velocity;
