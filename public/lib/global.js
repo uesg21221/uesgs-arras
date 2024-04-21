@@ -79,8 +79,8 @@ const global = {
     KEY_CLASS_TREE: 84,// T
     KEY_MAX_STAT: 77,// M
     KEY_SUICIDE: 79,// O
-    KEY_ZOOM_OUT: 45,// ??
-    KEY_ZOOM_IN: 61,// ??
+    KEY_ZOOM_OUT: 45,// "Insert" apparently, no clue what that is
+    KEY_ZOOM_IN: 61,// "NumpadEqual", yeah we're changing that. not everyone has a numpad
 
     KEY_UPGRADE_ATK: 49,// 1
     KEY_UPGRADE_HTL: 50,// 2
@@ -138,7 +138,6 @@ const global = {
     },
     statHover: false,
     upgradeHover: false,
-    statMaxing: false,
     metrics: {
         latency: 0,
         lag: 0,

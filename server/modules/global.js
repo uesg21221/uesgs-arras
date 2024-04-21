@@ -183,7 +183,9 @@ const requires = [
     "./gamemodes/gamemodeLoop.js", // The gamemode loop.
     "./gamemodes/groups.js", // Duos/Trios/Squads
     "./gamemodes/tag.js", // Tag
-    "./gamemodes/closeArena.js", // Arena Closing mechanics
+    "./gamemodes/closeArena.js", // Arena Closing mechanics,
+
+    '../../shared/packetTypes.js',
 ];
 
 for (let file of requires) {

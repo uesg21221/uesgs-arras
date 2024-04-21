@@ -1,5 +1,132 @@
-import { global } from "./global.js";
-import { settings } from "./settings.js";
+import { global } from './global.js';
+import { settings } from './settings.js';
+import { PlayerInput, InputBind, Input } from './classes/playerInput.js';
+import { c2s } from './shared/packetTypes.js';
+
+// all of this is gonna stay here and canvas.js will be renamed
+
+let maxstat = false,
+playerInput = new PlayerInput(canvas, {
+    // mouse
+    'Mouse0': ['primaryfire', false],
+    'Mouse2': ['secondaryfire', false],
+    'Mouse1': ['tertiaryfire', false], // Mouse1 is middle click
+    'MouseMove': 'lookAround',
+    'MouseWheelUp': 'zoom_up',
+    'MouseWheelDown': 'zoom_down',
+
+    // keyboard
+    'g': ['toggle_autoalt', false],
+    'e': ['toggle_autofire', false],
+    'c': ['toggle_autospin', false],
+    'r': ['toggle_override', false],
+    'v': ['toggle_reversetank', false],
+    'x': ['toggle_spinlock', false],
+    'f': ['become', false],
+    't': ['toggle_classtree', false],
+    'Enter': ['respawn', false],
+    'p': ['upgradetank_token', false],
+    'y': ['upgradetank_option1', false],
+    'u': ['upgradetank_option2', false],
+    'i': ['upgradetank_option3', false],
+    'h': ['upgradetank_option4', false],
+    'j': ['upgradetank_option5', false],
+    'k': ['upgradetank_option6', false],
+    '1': ['upgradeskill_player_damage', false],
+    '2': ['upgradeskill_player_health', false],
+    '3': ['upgradeskill_bullet_speed', false],
+    '4': ['upgradeskill_bullet_health', false],
+    '5': ['upgradeskill_bullet_penetration', false],
+    '6': ['upgradeskill_bullet_damage', false],
+    '7': ['upgradeskill_reload', false],
+    '8': ['upgradeskill_player_speed', false],
+    '9': ['upgradeskill_player_shieldregeneration', false],
+    '0': ['upgradeskill_player_shieldhealth', false],
+
+    'ArrowUp': 'up_classtree',
+    'ArrowLeft': 'down_classtree',
+    'ArrowDown': 'left_classtree',
+    'ArrowRight': 'right_classtree',
+    'w': 'up',
+    'a': 'down',
+    's': 'left',
+    'd': 'right',
+
+    'l': ['levelup', false],
+    'm': 'upgradeskill_maxstat',
+    'Shift': 'secondaryfire_classtreesprint',
+    'o': ['suicide', false],
+
+    '+': ['zoom_up', false],
+    '-': ['zoom_down', false]
+});
+
+// misc
+playerInput.addEventListener('toggle_autoalt');
+playerInput.addEventListener('toggle_autofire');
+playerInput.addEventListener('toggle_autospin');
+playerInput.addEventListener('toggle_override');
+playerInput.addEventListener('toggle_reversetank');
+playerInput.addEventListener('toggle_spinlock');
+
+playerInput.addEventListener('become', e => e.isPressed && socket.talk('H'));
+playerInput.addEventListener('toggle_classtree', e => {
+    if (!e.isPressed) return;
+    global.treeScale = 1;
+    global.showTree = !global.showTree;
+});
+playerInput.addEventListener('respawn', e => e.isPressed && socket.talk(c2s.spawn, global.playerName, 0, settings.game.autoLevelUp));
+
+// upgrades
+playerInput.addEventListener('upgradetank_token', e => e.isPressed && socket.talk(c2s.upgradeTankToken));
+
+playerInput.addEventListener('upgradetank_option1', e => e.isPressed && socket.talk(c2s.upgradeTank, 0));
+playerInput.addEventListener('upgradetank_option2', e => e.isPressed && socket.talk(c2s.upgradeTank, 1));
+playerInput.addEventListener('upgradetank_option3', e => e.isPressed && socket.talk(c2s.upgradeTank, 2));
+playerInput.addEventListener('upgradetank_option4', e => e.isPressed && socket.talk(c2s.upgradeTank, 3));
+playerInput.addEventListener('upgradetank_option5', e => e.isPressed && socket.talk(c2s.upgradeTank, 4));
+playerInput.addEventListener('upgradetank_option6', e => e.isPressed && socket.talk(c2s.upgradeTank, 5));
+
+playerInput.addEventListener('upgradeskill_player_damage'            , e => e.isPressed && socket.talk(c2s.upgradeSkill, 0, maxstat));
+playerInput.addEventListener('upgradeskill_player_health'            , e => e.isPressed && socket.talk(c2s.upgradeSkill, 1, maxstat));
+playerInput.addEventListener('upgradeskill_bullet_speed'             , e => e.isPressed && socket.talk(c2s.upgradeSkill, 2, maxstat));
+playerInput.addEventListener('upgradeskill_bullet_health'            , e => e.isPressed && socket.talk(c2s.upgradeSkill, 3, maxstat));
+playerInput.addEventListener('upgradeskill_bullet_penetration'       , e => e.isPressed && socket.talk(c2s.upgradeSkill, 4, maxstat));
+playerInput.addEventListener('upgradeskill_bullet_damage'            , e => e.isPressed && socket.talk(c2s.upgradeSkill, 5, maxstat));
+playerInput.addEventListener('upgradeskill_reload'                   , e => e.isPressed && socket.talk(c2s.upgradeSkill, 6, maxstat));
+playerInput.addEventListener('upgradeskill_player_speed'             , e => e.isPressed && socket.talk(c2s.upgradeSkill, 7, maxstat));
+playerInput.addEventListener('upgradeskill_player_shieldregeneration', e => e.isPressed && socket.talk(c2s.upgradeSkill, 8, maxstat));
+playerInput.addEventListener('upgradeskill_player_shieldhealth'      , e => e.isPressed && socket.talk(c2s.upgradeSkill, 9, maxstat));
+
+// motion
+playerInput.addEventListener('up_classtree');
+playerInput.addEventListener('down_classtree');
+playerInput.addEventListener('left_classtree');
+playerInput.addEventListener('right_classtree');
+
+playerInput.addEventListener('up');
+playerInput.addEventListener('down');
+playerInput.addEventListener('left');
+playerInput.addEventListener('right');
+
+// mouse control
+playerInput.addEventListener('primaryfire');
+playerInput.addEventListener('secondaryfire');
+playerInput.addEventListener('tertiaryfire');
+playerInput.addEventListener('lookAround');
+
+// operator
+playerInput.addEventListener('levelup');
+playerInput.addEventListener('upgradeskill_maxstat', e => maxstat = e.isPressed);
+playerInput.addEventListener('secondaryfire_classtreesprint');
+playerInput.addEventListener('suicide');
+playerInput.addEventListener('zoom_up', e => e.isPressed && global.showTree && (global.treeScale /= 1.1));
+playerInput.addEventListener('zoom_down', e => e.isPressed && global.showTree && (global.treeScale *= 1.1));
+
+
+
+
+
 
 class Canvas {
     constructor() {
@@ -12,32 +139,31 @@ class Canvas {
         this.chatInput.addEventListener('keydown', event => {
             if (![global.KEY_ENTER, global.KEY_ESC].includes(event.keyCode)) return;
             this.chatInput.blur();
-            this.cv.focus();
+            this.canvas.focus();
             this.chatInput.hidden = true;
             if (!this.chatInput.value) return;
             if (event.keyCode === global.KEY_ENTER) this.socket.talk('M', this.chatInput.value);
             this.chatInput.value = "";
         });
 
-        this.cv = document.getElementById('gameCanvas');
-        this.cv.addEventListener('mousemove', event => this.mouseMove(event), false);
-        this.cv.addEventListener('mousedown', event => this.mouseDown(event), false);
-        this.cv.addEventListener('mouseup', event => this.mouseUp(event), false);
-        this.cv.addEventListener('keypress', event => this.keyPress(event), false);
-        this.cv.addEventListener('keydown', event => this.keyDown(event), false);
-        this.cv.addEventListener('keyup', event => this.keyUp(event), false);
-        this.cv.addEventListener('wheel', event => this.wheel(event), false);
-        this.cv.resize = (width, height) => {
-            this.cv.width = this.width = width;
-            this.cv.height = this.height = height;
+        this.canvas = document.getElementById('gameCanvas');
+        this.canvas.addEventListener('mousemove', event => this.mouseMove(event), false);
+        this.canvas.addEventListener('mousedown', event => this.mouseDown(event), false);
+        this.canvas.addEventListener('mouseup', event => this.mouseUp(event), false);
+        this.canvas.addEventListener('keypress', event => this.keyPress(event), false);
+        this.canvas.addEventListener('keydown', event => this.keyDown(event), false);
+        this.canvas.addEventListener('keyup', event => this.keyUp(event), false);
+        this.canvas.addEventListener('wheel', event => this.wheel(event), false);
+        this.canvas.resize = (width, height) => {
+            this.canvas.width = this.width = width;
+            this.canvas.height = this.height = height;
         };
-        this.cv.resize(innerWidth, innerHeight);
+        this.canvas.resize(innerWidth, innerHeight);
         this.reverseDirection = false;
         this.inverseMouse = false;
         this.spinLock = true;
         this.treeScrollSpeed = 0.5;
         this.treeScrollSpeedMultiplier = 1;
-        global.canvas = this;
     }
     wheel(event) {
         if (!global.died && global.showTree) {
@@ -68,7 +194,7 @@ class Canvas {
             case global.KEY_ENTER:
                 // Enter to respawn
                 if (global.died) {
-                    this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp);
+                    this.socket.talk(c2s.spawn, global.playerName, 0, 1 * settings.game.autoLevelUp);
                     global.died = false;
                     break;
                 }
@@ -165,7 +291,7 @@ class Canvas {
                     global.KEY_UPGRADE_RLD, global.KEY_UPGRADE_MOB, global.KEY_UPGRADE_RGN,
                     global.KEY_UPGRADE_SHI
                 ].indexOf(event.keyCode);
-                if (skill >= 0) this.socket.talk('x', skill, 1 * global.statMaxing);
+                if (skill >= 0) this.socket.talk(c2s.upgradeSkill, skill, 1 * global.statMaxing);
             }
             if (global.canUpgrade) {
                 switch (event.keyCode) {
@@ -244,7 +370,7 @@ class Canvas {
                 };
                 let statIndex = global.clickables.stat.check(mpos);
                 if (statIndex !== -1) {
-                    this.socket.talk('x', statIndex, 0);
+                    this.socket.talk(c2s.upgradeSkill, statIndex, 0);
                 } else if (global.clickables.skipUpgrades.check(mpos) !== -1) {
                     global.clearUpgrades();
                 } else {

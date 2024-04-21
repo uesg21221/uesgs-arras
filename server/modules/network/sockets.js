@@ -142,7 +142,7 @@ function incoming(message, socket) {
             socket.verified = true;
             util.log("Clients: " + clients.length);
             break;
-        case "s":
+        case "spawn":
             // spawn request
             if (!socket.status.deceased) {
                 socket.kick("Trying to spawn while already alive.");
@@ -343,7 +343,7 @@ function incoming(message, socket) {
                 player.body.sendMessage(given.charAt(0).toUpperCase() + given.slice(1) + (player.command[given] ? " enabled." : " disabled."));
             }
             break;
-        case "U":
+        case packetTypes.c2s.upgradeTank:
             // upgrade request
             if (m.length !== 1) {
                 socket.kick("Ill-sized upgrade request.");
@@ -361,7 +361,7 @@ function incoming(message, socket) {
                 player.body.upgrade(upgrade); // Ask to upgrade
             }
             break;
-        case "x":
+        case packetTypes.c2s.upgradeSkill:
             // skill upgrade request
             if (m.length !== 2) {
                 socket.kick("Ill-sized skill request.");
@@ -410,7 +410,7 @@ function incoming(message, socket) {
                 player.body.refreshBodyAttributes();
             }
             break;
-        case "0":
+        case packetTypes.c2s.upgradeTankToken:
             // testbed cheat
             if (m.length !== 0) {
                 socket.kick("Ill-sized testbed request.");
@@ -524,7 +524,6 @@ function incoming(message, socket) {
                 player.body.sendMessage("There are no special tanks in this mode that you can control.");
             }
             break;
-
         case "M":
             if (player.body == null) return 1;
             let abort, message = m[0];

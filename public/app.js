@@ -3,7 +3,7 @@
 import { util } from "./lib/util.js";
 import { global } from "./lib/global.js";
 import { settings } from "./lib/settings.js";
-import { Canvas } from "./lib/canvas.js";
+import { Canvas } from "./lib/playerController.js";
 import { color } from "./lib/color.js";
 import { gameDraw } from "./lib/gameDraw.js";
 import * as socketStuff from "./lib/socketInit.js";
@@ -217,7 +217,7 @@ function resizeEvent() {
 }
 window.resizeEvent = resizeEvent;
 window.canvas = new Canvas();
-var c = window.canvas.cv;
+var c = window.canvas.canvas;
 var ctx = c.getContext("2d");
 var c2 = document.createElement("canvas");
 var ctx2 = c2.getContext("2d");
