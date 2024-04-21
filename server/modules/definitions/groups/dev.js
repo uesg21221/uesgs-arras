@@ -976,6 +976,31 @@ Class.volute = {
         },
     ],
 }
+Class.snakeOld = {
+    PARENT: "missile",
+    LABEL: "Snake",
+    GUNS: [
+        {
+            POSITION: [6, 12, 1.4, 8, 0, 180, 0],
+            PROPERTIES: {
+                AUTOFIRE: true,
+                STAT_CALCULATOR: gunCalcNames.thruster,
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, g.snake, g.snakeskin]),
+                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+            },
+        },
+        {
+            POSITION: [10, 12, 0.8, 8, 0, 180, 0.5],
+            PROPERTIES: {
+                AUTOFIRE: true,
+                NEGATIVE_RECOIL: true,
+                STAT_CALCULATOR: gunCalcNames.thruster,
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, g.snake]),
+                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+            },
+        },
+    ],
+}
 Class.sidewinderOld = {
     PARENT: "genericTank",
     LABEL: "Sidewinder (old)",
@@ -992,7 +1017,7 @@ Class.sidewinderOld = {
             POSITION: [21, 12, -1.1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder]),
-                TYPE: "snake",
+                TYPE: "snakeOld",
                 STAT_CALCULATOR: gunCalcNames.sustained,
             },
         },
