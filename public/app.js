@@ -3,7 +3,7 @@
 import { util } from "./lib/util.js";
 import { global } from "./lib/global.js";
 import { settings } from "./lib/settings.js";
-import { Canvas } from "./lib/playerController.js";
+import { Canvas } from "./classes/playerController.js";
 import { color } from "./lib/color.js";
 import { gameDraw } from "./lib/gameDraw.js";
 import * as socketStuff from "./lib/socketInit.js";

@@ -1,6 +1,5 @@
 // Want to have custom events but DOM is annoying as shit?
-// Here is your solution!!
-// Events, but Simple, Uncomplicated, Better.
+// Here is your solution, a SUBstitute for DOM Events!
 
 const typeSymbol = Symbol('type'),
 	stopSymbol = Symbol('stop');

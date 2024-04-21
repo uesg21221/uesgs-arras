@@ -20,11 +20,11 @@ let doThing = packettypes => Object.fromEntries(packettypes.map((t, i) => [t, i]
 c2s = doThing([
 	'M', // send chat msg
 	'spawn', // (re)spawn
-	'L', // level up
+	'levelup', // level up
 	'upgradeTankToken', // token tank
-	'H', // become
-	'1', // suicide
-	't', // toggle stuff like autospin autofire etc
+	'become', // become
+	'suicide', // suicide
+	'toggleauto', // toggle stuff like autospin autofire etc
 	'upgradeSkill', // upgrade stat
 	'upgradeTank', // upgrade tank
 	'C', // aim and commands

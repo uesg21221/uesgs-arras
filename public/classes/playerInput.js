@@ -4,7 +4,7 @@ let keyboardLayoutMap = {};
 navigator.keyboard.getLayoutMap().then(layout => keyboardLayoutMap = Object.fromEntries(layout.entries()));
 
 class Input {
-	class ({ key, alt = false, ctrl = false, meta = false, shift = false }) {
+	class ({ key, alt, ctrl, meta, shift }) {
 		if ('string' !== typeof key) {
 			throw new Error('the first argument (the key) must be a string!');
 		}
@@ -59,6 +59,7 @@ class PlayerInput extends EventTargetSUB {
 			}
 		}
 
+		// TODO: make it so we dont need to loop through every input to check if there is a right one
 		this.inputbinds = inputbinds;
 	}
 
@@ -82,54 +83,64 @@ class PlayerInput extends EventTargetSUB {
 		this.element = element;
 	}
 
-	handleMouseEvent (mouseEvent, extra) {
-		if (!this.activated || !mouseEvent.isTrusted) return;
+	// TODO: make it so we dont need to loop through every input to check if there is a right one
+	handleEvent (event, inputKey, eventData, isPressed) {
+		if (!this.activated || !event.isTrusted) return;
 
-		let event = this.inputbinds['Mouse' + mouseEvent.button];
-		if (event) {
-			mouseEvent.preventDefault();
+		for (let i = 0; i < this.inputbinds.length; i++) {
+			let inputbind = this.inputbinds[i];
 
-			if ('boolean' === typeof extra) {
-				if (extra && !event.down) return;
-				if (!extra && !event.up) return;
+			if ('boolean' === typeof isPressed) {
+				if (isPressed && !inputbind.down) continue;
+				if (!isPressed && !inputbind.up) continue;
 			}
 
-			// i know that this ternary is a bad idea but its 5:43:55 rn and i dont care
-			this.dispatchEvent(new EventSUB(event.eventName, Object.assign({ x: mouseEvent.x, y: mouseEvent.y }, 'boolean' === typeof extra ? { isPressed: extra } : { yDelta: extra }) ));
+			for (let j = 0; j < inputbind.inputs.length; j++) {
+				let input = inputbind.inputs[j];
+				
+				if (input.key !== inputKey) continue;
+				if ('boolean' === typeof input.alt && input.alt !== event.altKey) continue;
+				if ('boolean' === typeof input.ctrl && input.ctrl !== event.ctrlKey) continue;
+				if ('boolean' === typeof input.meta && input.meta !== event.metaKey) continue;
+				if ('boolean' === typeof input.shift && input.shift !== event.shiftKey) continue;
+
+				event.preventDefault();
+				this.dispatchEvent(new EventSUB(inputbind.eventName, Object.assign({}, eventData)));
+			}
 		}
 	}
 
-	handleMouseMoveEvent (mouseMoveEvent) {
-		if (!this.activated || !mouseMoveEvent.isTrusted) return;
+	handleMouseEvent (mouseEvent, extra) {
+		this.handleEvent(
+			mouseEvent,
+			'Mouse' + mouseEvent.button,
+			Object.assign(
+				{ x: mouseEvent.x, y: mouseEvent.y },
+				'boolean' === typeof extra ? { isPressed: extra } : { yDelta: extra }
+			),
+			'boolean' === typeof extra ? extra : undefined
+		);
+	}
 
-		let event = this.inputbinds['MouseMove'];
-		if (event) {
-			mouseMoveEvent.preventDefault();
-			this.dispatchEvent(new EventSUB(event.eventName, {
+	handleMouseMoveEvent (mouseMoveEvent) {
+		this.handleEvent(
+			mouseMoveEvent,
+			'MouseMove',
+			{
 				x: mouseMoveEvent.x,
 				y: mouseMoveEvent.y,
 				xDelta: mouseMoveEvent.movementX,
 				yDelta: mouseMoveEvent.movementY
-			} ));
-		}
+			}
+		);
 	}
 
 	handleKeyboardEvent (keyboardEvent, isPressed) {
-		if (!this.activated || !keyboardEvent.isTrusted) return;
-
-		let keyboardInput = keyboardEvent.key in keyboardLayoutMap ? keyboardLayoutMap[keyboardEvent.key] : keyboardEvent.key,
-
-			event = this.inputbinds[keyboardInput];
-		if (event) {
-			keyboardEvent.preventDefault();
-
-			if ('boolean' === typeof extra) {
-				if (isPressed && !event.down) return;
-				if (!isPressed && !event.up) return;
-			}
-
-			this.dispatchEvent(new EventSUB(event.eventName, { isPressed } ));
-		}
+		this.handleEvent(
+			keyboardEvent,
+			keyboardEvent.key in keyboardLayoutMap ? keyboardLayoutMap[keyboardEvent.key] : keyboardEvent.key,
+			{ isPressed }
+		);
 	}
 }
 

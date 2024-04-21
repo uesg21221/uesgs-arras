@@ -1,3 +1,5 @@
+const packetTypes = require('../../../shared/packetTypes.js');
+
 let permissionsDict = {},
     net = require('net'),
     clients = [],
@@ -142,7 +144,7 @@ function incoming(message, socket) {
             socket.verified = true;
             util.log("Clients: " + clients.length);
             break;
-        case "spawn":
+        case packetTypes.c2s.spawn:
             // spawn request
             if (!socket.status.deceased) {
                 socket.kick("Trying to spawn while already alive.");
@@ -306,7 +308,7 @@ function incoming(message, socket) {
             // Update the thingy
             socket.timeout.set(commands);
             break;
-        case "t":
+        case packetTypes.c2s.toggleauto:
             // player toggle
             if (m.length !== 1) {
                 socket.kick("Ill-sized toggle.");
@@ -396,7 +398,7 @@ function incoming(message, socket) {
                 } while (limit-- && max && player.body.skill.points && player.body.skill.amount(stat) < player.body.skill.cap(stat))
             }
             break;
-        case "L":
+        case packetTypes.c2s.levelup:
             // level up cheat
             if (m.length !== 0) {
                 socket.kick("Ill-sized level-up request.");
@@ -425,7 +427,7 @@ function incoming(message, socket) {
                 }
             }
             break;
-        case "1":
+        case packetTypes.c2s.suicide:
             //suicide squad
             if (player.body != null && !player.body.underControl) {
                 for (let i = 0; i < entities.length; i++) {
@@ -457,7 +459,7 @@ function incoming(message, socket) {
             socket.spectateEntity = entity;
             player.body.sendMessage(`You are now spectating ${entity.name.length ? entity.name : "An unnamed player"}! (${entity.label})`);
             break;
-        case "H":
+        case packetTypes.c2s.become:
             if (player.body == null) return 1;
             let body = player.body;
             if (body.underControl) {
