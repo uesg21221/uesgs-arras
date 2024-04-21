@@ -438,9 +438,7 @@ class io_nearestDifferentMaster extends IO {
         (this.body.aiSettings.BLIND || ((e.x - m.x) * (e.x - m.x) < sqrRange && (e.y - m.y) * (e.y - m.y) < sqrRange)) &&
         (this.body.aiSettings.SKYNET || ((e.x - mm.x) * (e.x - mm.x) < sqrRangeMaster && (e.y - mm.y) * (e.y - mm.y) < sqrRangeMaster));
     }
-    wouldHitWall(instance, other) { // Override
-        wouldHitWall(instance, other);
-    }
+    wouldHitWall = (me, enemy) => wouldHitWall(me, enemy); // Override
     buildList(range) {
         // Establish whom we judge in reference to
         let mostDangerous = 0,

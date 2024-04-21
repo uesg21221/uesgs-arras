@@ -2587,9 +2587,11 @@ Class.frostBoss = {
     ]
 }
 
-const divide = 600;
+const divide = 1000;
 const arraySize = 10;
 const colorArray = [];
+const damageMultiplayer = 3.5;
+const reloadMultiplayer = 2;
 for (let i = 0; i < arraySize; i++) {
     const rgb = Math.round(255 * i / (arraySize - 1));
     colorArray.push('#' + ((1 << 24) + (rgb << 16) + (rgb << 8) + rgb).toString(16).slice(1));
@@ -2830,8 +2832,8 @@ Class.toothlessBossTurret = {
             body.guns.forEach((gun, i) => {
                 let _1 = body._damage[i] * (master._mode ? power : 1);
                 let _2 = body._reload[i] / (master._mode ? power : 1);
-                let max_damage = body._damage[i] * 3;
-                let min_reload = body._reload[i] / 3;
+                let max_damage = body._damage[i] * damageMultiplayer;
+                let min_reload = body._reload[i] / reloadMultiplayer;
 
                 gun.settings.damage = _1 > max_damage ? max_damage : _1;
                 gun.settings.reload = _2 < min_reload ? min_reload : _2;
@@ -2910,7 +2912,7 @@ Class.toothlessBoss = {
         handler: ({ body, entity }) => {
             body._power ??= 0;
             body._mode ??= 0;
-            if (!body._mode) body._power += entity.skill.score / divide;
+            if (!body._mode) body._power += (entity.skill.score / divide) ** 0.8;
         },
     }],
 }
