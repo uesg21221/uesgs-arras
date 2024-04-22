@@ -21,6 +21,7 @@ function setNatural(natural, type) {
 let lerp = (a, b, x) => a + x * (b - a);
 class Gun extends EventEmitter {
     constructor(body, info) {
+        super();
         this.id = entitiesIdLog++;
         this.ac = false;
         this.lastShot = { time: 0, power: 0 };
@@ -1354,7 +1355,7 @@ class Entity extends EventEmitter {
         }
 
         if (this.definitionEvents) {
-            for (let [ event, handler, once ] of this.definitionEvents) {
+            for (let { event, handler, once } of this.definitionEvents) {
                 this.removeListener(event, handler, once);
             }
         }
