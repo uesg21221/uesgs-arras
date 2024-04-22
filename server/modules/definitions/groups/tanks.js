@@ -3105,7 +3105,25 @@ Class.sidewinder = {
     LABEL: "Sidewinder",
     DANGER: 6,
     STAT_NAMES: statnames.desmos,
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!"
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: [10, 8.5, 1.4, 7, 0, 0, 0]
+        },
+        {
+            POSITION: [20, 10, 0.8, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: "desmos"}]
+            }
+        },
+        {
+            POSITION: [4.25, 11, 2, 2.25, -4.25, 92.5, 0]
+        },
+        {
+            POSITION: [4.25, 11, 2, 2.25, 4.25, -92.5, 0]
+        }
+    ]
 }
 Class.undertow = {
     PARENT: "genericTank",
@@ -3263,7 +3281,32 @@ Class.coil = {
     LABEL: "Coil",
     DANGER: 7,
     STAT_NAMES: statnames.desmos,
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!"
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!",
+    GUNS: [
+        {
+            POSITION: [20, 8, 0.75, 0, -5, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: false}]}]
+            },
+        },
+        {
+            POSITION: [20, 8, 0.75, 0, 5, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: true}]}]
+            },
+        },
+        {
+            POSITION: [3.625, 7.5, 2.75, 5.75, -6.75, 90, 0],
+        },
+        {
+            POSITION: [3.625, 7.5, 2.75, 5.75, 6.75, -90, 0],
+        },
+        {
+            POSITION: [6, 8, 0.25, 10.5, 0, 0, 0],
+        }
+    ]
 }
 Class.python = {
     PARENT: "genericTank",
@@ -3391,10 +3434,10 @@ Class.duplicator = {
             POSITION: [3.75, 10, 2.125, 0, -4.75, 30, 0]
         },
         {
-            POSITION: [18, 8, 0.65, 0, 0, 0, 0]
+            POSITION: [17, 8, 0.65, 0, 0, 0, 0]
         },
         {
-            POSITION: [19, 6, 0.45, 0, 0, 0, 0]
+            POSITION: [18, 8, 0.25, 0, 0, 0, 0]
         },
     ]
 }
