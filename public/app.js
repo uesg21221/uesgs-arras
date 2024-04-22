@@ -1007,7 +1007,7 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
         drawText("[" + upgradeKey + "]", x + len - 4, y + height - 6, height / 8 - 5, color.guiwhite, "right");
     }
     ctx.strokeStyle = color.black;
-    ctx.lineWidth = 3 * lineWidthMult;
+    ctx.lineWidth = 5 * lineWidthMult;
     drawGuiRect(x, y, len, height, true); // Border
 }
 
@@ -1323,7 +1323,6 @@ function drawEntities(px, py, ratio) {
         }
     }
 }
-
 global.showTree = false;
 global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1;
 global.scrollVelocityY = global.scrollVelocityX = 0;
@@ -1335,7 +1334,7 @@ function drawUpgradeTree(spacing, alcoveSize) {
         global.treeScale = 1;
         return;
     }
-
+	
     if (lastGuiType != gui.type) {
         let m = util.getEntityImageFromMockup(gui.type), // The mockup that corresponds to the player's tank
             rootName = m.rerootUpgradeTree, // The upgrade tree root of the player's tank
@@ -1693,12 +1692,13 @@ function drawLeaderboard(spacing, alcoveSize, max) {
 function drawAvailableUpgrades(spacing, alcoveSize) {
     // Draw upgrade menu
     if (gui.upgrades.length > 0) {
+		let rowcap = 9
         let internalSpacing = 15;
         let len = alcoveSize / 2;
-        let height = len;
-
+        let height = len*0.8;
+		let clamp = (val, min, max) => Math.min(Math.max(val, min), max)
         // Animation processing
-        let columnCount = Math.max(3, Math.floor(gui.upgrades.length ** 0.55));
+        let columnCount = Math.max(9, Math.ceil(gui.upgrades.length / 2));
         upgradeMenu.set(0);
         if (!global.canUpgrade) {
             upgradeMenu.force(-columnCount * 3)
@@ -1706,8 +1706,8 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         }
         let glide = upgradeMenu.get();
 
-        let x = glide * 2 * spacing + spacing;
-        let y = spacing - height - 2.5 * internalSpacing;
+        let x = ((window.screen.availWidth / 2) - (104 * clamp(gui.upgrades.length, 0, 9)));
+        let y = global.screenHeight - spacing - height - 60 * internalSpacing;
         let xStart = x;
         let initialX = x;
         let rowWidth = 0;
@@ -1719,8 +1719,11 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         let lastBranch = -1;
         let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
         upgradeSpin += 0.01;
-
+		
+		let backButton = null;
+		
         for (let i = 0; i < gui.upgrades.length; i++) {
+			let pusher = glide * len + 208;
             let upgrade = gui.upgrades[i];
             let upgradeBranch = upgrade[0];
             let upgradeBranchLabel = upgrade[1] == "undefined" ? "" : upgrade[1];
@@ -1728,36 +1731,46 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
 
             // Draw either in the next row or next column
             if (ticker === columnCount || upgradeBranch != lastBranch) {
-                x = xStart;
-                y += height + internalSpacing;
                 if (upgradeBranch != lastBranch) {
                     if (upgradeBranchLabel.length > 0) {
                         drawText(" " + upgradeBranchLabel, xStart, y + internalSpacing * 2, internalSpacing * 2.3, color.guiwhite, "left", false);
                         y += 1.5 * internalSpacing;
                     }
                     y += 1.5 * internalSpacing;
-                    colorIndex = 0;
+                    colorIndex = 7;
                 }
                 lastBranch = upgradeBranch;
-                ticker = 0;
+            } 
+			if (++ticker % columnCount === 0) {
+                x 
+				= x - (104 * gui.upgrades.length) + 208;
+                y += height + internalSpacing;
             } else {
-                x += len + internalSpacing;
+					//x += pusher;
+					x += glide * len + 208
             }
 
             if (y > initialY) initialY = y;
             rowWidth = x;
-
-            global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
+			let screenWsize = window.screen.availWidth / 2 - 52;
+			let screenYsize = window.screen.availHeight / 2 - 104
+			let backX = screenWsize;
+			let backY = y + 180;
             let upgradeKey = getClassUpgradeKey(upgradeNum);
-
-            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.6, colorIndex++, upgradeKey, upgradeNum == upgradeHoverIndex);
-
-            ticker++;
+			if (model.name == "Selector") {
+			x -= 104
+			global.clickables.upgrade.place(i, backX * clickableRatio, backY * clickableRatio, len/2 * clickableRatio, height * 0.75 * clickableRatio);
+            drawEntityIcon(model, backX, backY, len/2, height*0.75, 1, upgradeSpin, 0.6, 14, "", upgradeNum == upgradeHoverIndex);
+			} else {
+				global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
+				drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.6, colorIndex++, "", upgradeNum == upgradeHoverIndex);
+				
+			}
             upgradeNum++;
         }
 
         // Draw dont upgrade button
-        let h = 16,
+/*         let h = 16,
             textScale = h - 6,
             msg = "Don't Upgrade",
             m = measureText(msg, textScale) + 10;
@@ -1766,7 +1779,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h + settings.graphical.barChunk, color.black);
         drawBar(buttonX - m / 2, buttonX + m / 2, buttonY + h / 2, h, color.white);
         drawText(msg, buttonX, buttonY + h / 2, textScale, color.guiwhite, "center", true);
-        global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
+        global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio); */
 
         // Upgrade tooltip
         if (upgradeHoverIndex > -1 && upgradeHoverIndex < gui.upgrades.length) {
@@ -1842,7 +1855,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
         drawSelfInfo(spacing, alcoveSize, max);
         drawMinimapAndDebug(spacing, alcoveSize);
         drawLeaderboard(spacing, alcoveSize, max, lb);
-        drawAvailableUpgrades(spacing, alcoveSize);
+        drawAvailableUpgrades(spacing, alcoveSize*2);
     }
     global.metrics.lastrender = getNow();
 };

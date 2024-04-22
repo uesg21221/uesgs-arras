@@ -138,7 +138,7 @@ module.exports = {
 
     ENEMY_CAP_NEST: 1, // Max nest enemies per nest tile.
     ENEMY_SPAWN_CHANCE_NEST: 0.9, // Likeliness of nest enemies spawn attempts succeeding.
-    ENEMY_SPAWN_COOLDOWN_NEST: 280, // Cooldown (in game ticks) of nest enemies spawn attempts being made.
+    ENEMY_SPAWN_COOLDOWN_NEST: 1400, // Cooldown (in game ticks) of nest enemies spawn attempts being made.
 
     // Cooldown (in seconds) of boss spawns being announced.
     BOSS_SPAWN_COOLDOWN: 60,
