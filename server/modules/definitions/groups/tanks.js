@@ -3677,14 +3677,14 @@ Class.vulture = makeBird({
             }
         },
         {
-            POSITION: [20, 7.5, -1.5, 0, 0, 0, 0.333],
+            POSITION: [20, 7.5, -1.5, 0, 0, 0, 1/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.minigun, {size: 7/7.5}]),
                 TYPE: "bullet"
             }
         },
         {
-            POSITION: [18, 8, -1.5, 0, 0, 0, 0.667],
+            POSITION: [18, 8, -1.5, 0, 0, 0, 2/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.minigun, {size: 7/8}]),
                 TYPE: "bullet"
