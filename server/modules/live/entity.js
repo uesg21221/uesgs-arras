@@ -2080,7 +2080,6 @@ class Entity extends EventEmitter {
                 damageTool.push(instance)
             }
             this.emit('damage', { body: this, damageInflictor, damageTool });
-            // TODO: find out how to fix 'collide' and 'damage'
         }
         // Life-limiting effects
         if (this.settings.diesAtRange) {

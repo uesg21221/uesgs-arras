@@ -531,43 +531,40 @@ Class.strokeWidthTest = {
 
 Class.onTest = {
     PARENT: 'genericTank',
-    LABEL: "'ON' property",
-    TOOLTIP: [
-        'Refer to Class.onTest to know more ',
-        'On collide is a bit buggy right now, please use other methods until its fixed'
-    ],
+    LABEL: "ON property test",
+    TOOLTIP: "Refer to Class.onTest in dev.js to know more.",
     ON: [{
         event: "fire",
         handler: ({ body, gun }) => {
             switch (gun.identifier) {
                 case 'mainGun':
-                    body.sendMessage('fired main gun')
+                    body.sendMessage(`I fired my main gun.`)
                     break;
                 case 'secondaryGun':
-                    body.sendMessage('fired secondary gun')
+                    body.sendMessage('I fired my secondary gun.')
                     break;
             }
         }
     }, {
         event: "altFire",
         handler: ({ body, gun }) => {
-            body.sendMessage('fired alt gun')
+            body.sendMessage(`I fired my alt gun.`)
         }
     }, {
         event: "death",
         handler: ({ body, killers, killTools }) => {
-            body.sendMessage('you died')
+            const killedOrDied = killers.length == 0 ? 'died.' : 'got killed.'
+            body.sendMessage(`I ${killedOrDied}`)
         }
     }, {
         event: "collide",
         handler: ({ instance, other }) => {
-            instance.sendMessage('collide!')
+            instance.sendMessage(`I collided with ${other.label}.`)
         }
     }, {
         event: "damage",
-        handler: ({ body, damageInflictor, damageTool }) => {
-            body.SIZE += damageInflictor[0].SIZE / 2
-            damageInflictor[0].kill()
+        handler: ({ body, damageInflictor, damageTool }) => { 
+            body.sendMessage(`I got hurt`)
         }
     }],
     GUNS: [{
