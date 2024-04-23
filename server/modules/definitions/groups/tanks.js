@@ -3298,6 +3298,12 @@ Class.coil = {
             },
         },
         {
+            POSITION: [21, 4, 0.75, 0, -5, 0, 0]
+        },
+        {
+            POSITION: [21, 4, 0.75, 0, 5, 0, 0]
+        },
+        {
             POSITION: [3.625, 7.5, 2.75, 5.75, -6.75, 90, 0],
         },
         {
@@ -3808,7 +3814,7 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
         Class.overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "autoOverseer", "overdrive", "commander"]
         Class.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "autoCruiser", "commander"]
         Class.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor"]
-        Class.spawner.UPGRADES_TIER_3 = ["factory", "autoSpawner"]
+        Class.spawner.UPGRADES_TIER_3 = ["factory", "autoSpawner", "ranch"]
 
     Class.pounder.UPGRADES_TIER_2 = ["destroyer", "builder", "artillery", "launcher"]
         Class.pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"]
