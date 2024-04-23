@@ -3281,7 +3281,7 @@ Class.coil = {
     LABEL: "Coil",
     DANGER: 7,
     STAT_NAMES: statnames.desmos,
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!",
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
     GUNS: [
         {
             POSITION: [20, 8, 0.75, 0, -5, 0, 0],
