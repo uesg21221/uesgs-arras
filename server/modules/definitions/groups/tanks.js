@@ -3325,8 +3325,37 @@ Class.ranch = {
     PARENT: "genericTank",
     LABEL: "Ranch",
     DANGER: 7,
-    STAT_NAMES: statnames.desmos,
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!"
+    STAT_NAMES: statnames.drone,
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
+    BODY: {
+        SPEED: base.SPEED * 0.8,
+        FOV: 1.1,
+    },
+    GUNS: [
+        {
+            POSITION: [4.5, 10, 1, 10.5, 0, 0, 0],
+        },
+        {
+            POSITION: [1, 12, 1, 15, 0, 0, 0],
+            PROPERTIES: {
+                MAX_CHILDREN: 3,
+                SHOOT_SETTINGS: combineStats([g.factory, g.babyfactory]),
+                TYPE: "minion",
+                STAT_CALCULATOR: gunCalcNames.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+            },
+        },
+        {
+            POSITION: [11.5, 12, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [5, 7.5, 2.5, 1, -4.5, 95, 0],
+        },
+        {
+            POSITION: [5, 7.5, 2.5, 1, 4.5, -95, 0],
+        },
+    ],
 }
 Class.oroboros = {
     PARENT: "genericTank",
