@@ -1977,7 +1977,7 @@ Class.trplnrBossAuraBullet = {
     COLOR: '#F49EFF',
     GLOW: {
         STRENGTH: 25,
-        COLOR: '-1 0 1 0 false',
+        COLOR: 'mirror',
         ALPHA: 1
     },
     DRAW_HEALTH: true,
@@ -2014,7 +2014,7 @@ const trplnrBossDecor = {
     DANGER: 10,
     GLOW: {
         RADIUS: 15,
-        COLOR: '-1 0 1 0 false',
+        COLOR: 'mirror',
         ALPHA: 1,
         RECURSION: 5
     },

@@ -42,7 +42,13 @@ class Gun extends EventEmitter {
             alt: false,
             fire: false,
         };
-        this.color = new Color('16 0 1 0 false');
+        this.color = new Color({
+            BASE: "grey",
+            HUE_SHIFT: 0,
+            SATURATION_SHIFT: 1,
+            BRIGHTNESS_SHIFT: 0,
+            ALLOW_BRIGHTNESS_INVERT: false,
+        });
         this.alpha = 1;
         this.strokeWidth = 1;
         this.canShoot = false;
