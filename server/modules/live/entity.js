@@ -1360,12 +1360,10 @@ class Entity extends EventEmitter {
             }
         }
 
-        if (this.definitionEvents) {
+        if (set.ON != null) {
             for (let { event, handler, once } of this.definitionEvents) {
                 this.removeListener(event, handler, once);
             }
-        }
-        if (set.ON != null) {
             this.definitionEvents = [];
             for (let { event, handler, once = false } of set.ON) {
                 this.definitionEvents.push({ event, handler, once });

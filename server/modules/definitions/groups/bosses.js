@@ -2736,7 +2736,7 @@ class io_nearestDifferentMaster2 extends ioTypes.nearestDifferentMaster {
 ioTypes.nearestDifferentMaster2 = io_nearestDifferentMaster2;
 Class.toothlessBase = {
     PARENT: "genericTank",
-    LABEL: "Night Fury",
+    LABEL: "NightFury",
 	UPGRADE_TOOLTIP: "A power league...",
     GLOW: {
         RADIUS: 2,
@@ -2842,23 +2842,12 @@ Class.toothlessBossTurret = {
     }],
 };
 Class.toothlessBossDeco = {
-    PARENT: "triangle",
+    PARENT: "genericTank",
     LABEL: "",
-    GUNS: [{
-        POSITION: { LENGTH: 0, WIDTH: 0 },
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([ g.basic, {
-                range: 0.1,
-                speed: 0.1,
-                maxSpeed: 0.1,
-                recoil: 0,
-            }]),
-            TYPE: "bullet",
-            AUTOFIRE: true,
-        },
-    }],
+    SHAPE: 3,
+    SIZE: 10,
     ON: [{
-        event: "fire",
+        event: "tick",
         handler: ({ body }) => {
             const master = body.master;
             if (master._maxPower)
