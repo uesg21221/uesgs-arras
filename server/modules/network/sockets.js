@@ -913,7 +913,7 @@ const spawn = (socket, name) => {
             : player.body.team);
     }
     // Decide what to do about colors when sending updates and stuff
-    player.teamColor = (!c.RANDOM_COLORS && (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? 10 : getTeamColor(body.team)) + ' 0 1 0 false'; // blue
+    player.teamColor = new Color(!c.RANDOM_COLORS && (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? 10 : getTeamColor(body.team)).compiled; // blue
     player.target = { x: 0, y: 0 };
     player.command = {
         up: false,
