@@ -1,4 +1,4 @@
-const { combineStats, menu, addAura, makeDeco, LayeredBoss } = require('../facilitators.js');
+const { combineStats, menu, addAura, makeDeco, LayeredBoss, newWeapon, weaponArray } = require('../facilitators.js');
 const { base, gunCalcNames, basePolygonDamage, basePolygonHealth, dfltskl, statnames } = require('../constants.js');
 const g = require('../gunvals.js');
 
@@ -908,6 +908,31 @@ Class.propTest = {
         }
     ]
 }
+Class.weaponArrayTest = {
+    PARENT: 'genericTank',
+    LABEL: 'Weapon Array Test',
+    GUNS: weaponArray([
+        {
+            POSITION: [20, 8, 1, 0, 0, 25, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: 'bullet'
+            }
+        }, {
+            POSITION: [17, 8, 1, 0, 0, 25, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: 'bullet'
+            }
+        }
+    ], 5),
+    TURRETS: weaponArray(
+        {
+            POSITION: [7, 10, 0, -11, 180, 0],
+            TYPE: 'autoTankGun'
+        }
+    , 5, true),
+}
 
 Class.levels = menu("Levels")
 Class.levels.UPGRADES_TIER_0 = []
@@ -1198,4 +1223,4 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"]
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss"]
 
-    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
