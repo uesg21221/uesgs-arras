@@ -2779,19 +2779,19 @@ Class.toothlessBase = {
         HEALTH: 6 * base.HEALTH,
         DAMAGE: 2 * base.DAMAGE,
     },
+    LEVEL_CAP: 45,
+    EXTRA_SKILL: 78, // 120 - 42
+    SHAPE: 3,
+    VALUE: 30e+3,
+    SIZE: 24,
+    COLOR: "purple",
+    SKILL_CAP: Array(10).fill(smshskl + 3),
     LEVEL_SKILL_POINT_FUNCTION: level => {
         if (level < 2) return 0;
         if (level <= 40) return 1;
         if (level <= 45 && level & 1 == 1) return 1;
-        if (level % 3 == 1 && level < 280) return 1;
         return 0;
     },
-    COLOR: "purple",
-    DANGER: 10,
-	SHAPE: 3,
-	SIZE: 20,
-	SKILL_CAP: Array(10).fill(smshskl + 3),
-    VALUE: 10e+6,
 }
 Class.toothlessBossTurret = {
     PARENT: "genericTank",
@@ -2809,7 +2809,6 @@ Class.toothlessBossTurret = {
             POSITION: [32, 8, 1, 0, 0, 0, 0.4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, {
-                    reload: 0.8,
                     pen: 0.8,
                     health: 0.6,
                     damage: 0.6,

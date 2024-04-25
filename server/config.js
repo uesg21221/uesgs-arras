@@ -18,9 +18,12 @@ module.exports = {
     // Flatten entity definition, which gets rid of PARENT attributes and applies the parents' attributes to the entity definition, if they're not set in the entity already.
     flattenDefintions: false,
 
+    // Log speed loop warnings
+    LOGS: true,
+
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['tdm'],
+    GAME_MODES: ['tdm', 'domination'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
@@ -112,6 +115,9 @@ module.exports = {
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
+
+    // How much XP player-bots will receive when first created.
+    BOT_START_XP: 0,
 
     // The chances of a player-bot upgrading a specific skill when skill upgrades are available.
     BOT_SKILL_UPGRADE_CHANCES: [ 1, 1, 3, 4, 4, 4, 4, 2, 1, 1],
