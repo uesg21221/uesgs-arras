@@ -1000,9 +1000,9 @@ class Entity extends EventEmitter {
         b = {
             target: remapTarget(faucet, this.source, this),
             goal: undefined,
-            fire: faucet.fire,
-            main: faucet.main,
-            alt: faucet.alt,
+            fire: faucet.fire ?? false,
+            main: faucet.main ?? false,
+            alt: faucet.alt ?? false,
             power: undefined,
         };
         // Seek attention
