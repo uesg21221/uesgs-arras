@@ -15,7 +15,7 @@ Class.ramMiniboss = {
 
 // ELITE CRASHERS
 Class.elite = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Elite Crasher",
     COLOR: "pink",
     SHAPE: 3,
@@ -30,7 +30,7 @@ Class.elite = {
     },
 };
 Class.eliteDestroyer = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     UPGRADE_LABEL: "Elite Destroyer",
     UPGRADE_COLOR: "pink",
     GUNS: [
@@ -74,7 +74,7 @@ Class.eliteDestroyer = {
     ],
 };
 Class.eliteGunner = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     UPGRADE_LABEL: "Elite Gunner",
     UPGRADE_COLOR: "pink",
     FACING_TYPE: "toTarget",
@@ -106,7 +106,7 @@ Class.eliteGunner = {
     ],
 };
 Class.eliteSprayer = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     UPGRADE_LABEL: "Elite Sprayer",
     UPGRADE_COLOR: "pink",
     SKILL: [0, 9, 3, 9, 2, 9, 9, 9, 9, 0],
@@ -139,7 +139,7 @@ Class.eliteSprayer = {
     ],
 };
 Class.eliteBattleship = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     UPGRADE_LABEL: "Elite Battleship",
     UPGRADE_COLOR: "pink",
     GUNS: [
@@ -222,7 +222,7 @@ Class.eliteBattleship = {
     ],
 };
 Class.eliteSpawner = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     UPGRADE_LABEL: "Elite Spawner",
     UPGRADE_COLOR: "pink",
     MAX_CHILDREN: 9,
@@ -272,7 +272,7 @@ Class.eliteSpawner = {
     ],
 };
 Class.eliteTrapGuard = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     UPGRADE_LABEL: "Elite Trap Guard",
     UPGRADE_COLOR: "pink",
     AI: { STRAFE: false },
@@ -308,7 +308,7 @@ for (let i = 0; i < 3; i++) {
     )
 };
 Class.eliteSpinner = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     UPGRADE_LABEL: "Elite Spinner",
     UPGRADE_COLOR: "pink",
     AI: { STRAFE: false },
@@ -349,7 +349,7 @@ for (let i = 0; i < 3; i++) {
 
 // OLD ELITE
 Class.oldEliteSprayer = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     UPGRADE_LABEL: "Elite Sprayer (Old)",
     UPGRADE_COLOR: "pink",
     AI: { NO_LEAD: false },
@@ -369,7 +369,7 @@ Class.oldEliteSprayer = {
 
 // Legionary Crasher
 Class.legionaryCrasherTop = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     AI: { STRAFE: false, NO_LEAD: false },
     CONTROLLERS: [ ["spin", { independent: true, speed: -0.005 }] ],
     INDEPENDENT: true,
@@ -405,7 +405,7 @@ for (let i = 0; i < 3; i++) {
     )
 }
 Class.legionaryCrasher = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     LABEL: "Legionary Crasher",
     UPGRADE_COLOR: "pink",
     AI: { STRAFE: false, NO_LEAD: false },
@@ -455,7 +455,7 @@ for (let i = 0; i < 3; i++) {
 }
 
 Class.sprayerLegion = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     UPGRADE_LABEL: "Sprayer Legion",
     UPGRADE_COLOR: "pink",
     AI: { NO_LEAD: false },
@@ -475,7 +475,7 @@ Class.sprayerLegion = {
 
 // STRANGE BOSSES
 Class.sorcerer = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Sorcerer",
     DANGER: 7,
     SHAPE: 0,
@@ -503,7 +503,7 @@ Class.sorcerer = {
     }))
 };
 Class.summoner = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Summoner",
     DANGER: 8,
     SHAPE: 4,
@@ -531,7 +531,7 @@ Class.summoner = {
     }))
 };
 Class.enchantress = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Enchantress",
     DANGER: 8,
     SHAPE: 3.5,
@@ -559,7 +559,7 @@ Class.enchantress = {
     }))
 };
 Class.exorcistor = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Exorcistor",
     DANGER: 8,
     SHAPE: 5.5,
@@ -615,7 +615,7 @@ Class.shaman = {
     }))
 };
 Class.eliteSkimmer = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     LABEL: "Elite Skimmer",
     COLOR: "orange",
     UPGRADE_COLOR: "orange",
@@ -635,7 +635,7 @@ Class.eliteSkimmer = {
 
 // Nesters
 Class.nestKeeper = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Nest Keeper",
     COLOR: "purple",
     UPGRADE_COLOR: "purple",
@@ -722,7 +722,7 @@ Class.nestKeeper = {
     ],
 };
 Class.nestWarden = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Nest Warden",
     COLOR: "purple",
     UPGRADE_COLOR: "purple",
@@ -766,7 +766,7 @@ for(let i = 0; i < 5; i++) {
     );
 };
 Class.nestGuardian = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Nest Guardian",
     COLOR: "purple",
     UPGRADE_COLOR: "purple",
@@ -810,7 +810,7 @@ for(let i = 0; i < 5; i++) {
 
 // Rogues
 Class.roguePalisade = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Rogue Palisade",
     COLOR: "darkGrey",
     UPGRADE_COLOR: "darkGrey",
@@ -873,7 +873,7 @@ Class.rogueArmada = (() => {
         });
     }
     return {
-        PARENT: ["miniboss"],
+        PARENT: "miniboss",
         LABEL: 'Rogue Armada',
         COLOR: "darkGrey",
         UPGRADE_COLOR: "darkGrey",
@@ -894,7 +894,7 @@ Class.rogueArmada = (() => {
 
 // Bob.
 Class.bob = {
-    PARENT: ["ramMiniboss"],
+    PARENT: "ramMiniboss",
     LABEL: "Bob",
     SHAPE: 0,
     COLOR: "aqua",
@@ -924,7 +924,7 @@ Class.bob = {
     ],
 };
 Class.nemesis = {
-    PARENT: ["bob"],
+    PARENT: "bob",
     LABEL: "Nemesis",
     COLOR: "red",
     UPGRADE_COLOR: "red",
@@ -939,7 +939,7 @@ Class.nemesis = {
 
 // DIEP BOSSES
 Class.guardian = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     LABEL: "Guardian of the Pentagons",
     UPGRADE_LABEL: "Guardian",
     UPGRADE_COLOR: "pink",
@@ -957,7 +957,7 @@ Class.guardian = {
     AI: { NO_LEAD: false },
 };
 Class.defenderAutoTankGun = {
-    PARENT: ["autoTankGun"],
+    PARENT: "autoTankGun",
     GUNS: [
         {
             POSITION: [22, 10, 1, 0, 0, 0, 0],
@@ -969,7 +969,7 @@ Class.defenderAutoTankGun = {
     ],
 };
 Class.defender = {
-    PARENT: ["elite"],
+    PARENT: "elite",
     LABEL: "Defender",
     COLOR: "orange",
     UPGRADE_COLOR: "orange",
@@ -1020,7 +1020,7 @@ Class.defender = {
 
 // CELESTIALS
 Class.terrestrial = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Terrestrial",
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
     VALUE: 5e5,
@@ -1036,7 +1036,7 @@ Class.terrestrial = {
     },
 };
 Class.celestial = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Celestial",
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
     VALUE: 1e6,
@@ -1052,12 +1052,12 @@ Class.celestial = {
     },
 };
 Class.rogueCelestial = {
-    PARENT: ["celestial"],
+    PARENT: "celestial",
     LABEL: "Rogue Celestial",
     COLOR: "darkGrey",
 };
 Class.eternal = {
-    PARENT: ["miniboss"],
+    PARENT: "miniboss",
     LABEL: "Eternal",
     SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
     VALUE: 4e6,
@@ -1964,7 +1964,7 @@ Class.dogeiscutBoss = {
         },
     ]
 }
-Class.trplnrBossAuraBulletAura = addAura(1, 1)
+Class.trplnrBossAuraBulletAura = addAura(1, 0.8)
 Class.trplnrBossAuraBullet = {
     PARENT: 'genericTank',
     LABEL: 'Nest',
@@ -1977,7 +1977,7 @@ Class.trplnrBossAuraBullet = {
     COLOR: '#F49EFF',
     GLOW: {
         STRENGTH: 25,
-        COLOR: '-1 0 1 0 false',
+        COLOR: 'mirror',
         ALPHA: 1
     },
     DRAW_HEALTH: true,
@@ -1988,7 +1988,7 @@ Class.trplnrBossAuraBullet = {
                 POSITION: { ANGLE: (360/4)*i, ASPECT: -0.35, X: -5 },
                 PROPERTIES: {
                     COLOR: 'white',
-                    SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { size: 0.8 }, {reload: 0.8, damage: 1.25}]),
+                    SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { size: 0.8 }, {reload: 1.6, damage: 1.5}]),
                     TYPE: 'autoswarm',
                     AUTOFIRE: true,
                 },
@@ -2010,15 +2010,15 @@ const trplnrBossDecor = {
     NAME: 'Trioplane',
     SHAPE: 3,
     SIZE: 25,
-    VALUE: 5e9,
+    VALUE: 5e7,
     DANGER: 10,
     GLOW: {
         RADIUS: 15,
-        COLOR: '-1 0 1 0 false',
+        COLOR: 'mirror',
         ALPHA: 1,
         RECURSION: 5
     },
-    TURRETS: [{
+    PROPS: [{
         POSITION: { SIZE: 25 ** Math.SQRT1_2, ANGLE: 180, LAYER: 1 },
         TYPE: ['triangle', { COLOR: 'black', MIRROR_MASTER_ANGLE: true }]
     }, {
@@ -2032,6 +2032,17 @@ const trplnrBossDecor = {
 Class.trplnrBoss = {
     PARENT: "miniboss",
     ...trplnrBossDecor,
+    UPGRADE_TOOLTIP: "\"Heck, even The Guardians are afraid of him, \n" + 
+                     "They usually call him the The Light, Victory, Death and Ruler of the Pentagon Race a.k.a Lvndr. \n" +
+                     "We don't know where his teleportation powers came from, \n" +
+                     "He was secretive of it. \n" +
+                     "Though some say there was an old script found at the Neutrality Point \n" +
+                     "at the middle of the nest when it still existed, It had some \n" +
+                     "sort of drawing of a tank going through walls, and this thing that said '6@D M0|)3 \n" +
+                     "Nest Reseachers still haven't been able to decipher it though. \n" +
+                     "One day, The Neutrality Point left and on that same day, \n" +
+                     "A sentry's child went missing, \n" +
+                     "Coincidence? I think not.\"", 
     BODY: {
         HEALTH: 500,
     },
@@ -2047,8 +2058,8 @@ Class.trplnrBoss = {
                     'This thing is really gonna annoy you HAHA!',
                     'I don\'t know what to say uhhh, die i guess.'
                 ]
-                body.sendMessage(messages[Math.floor(Math.random() * messages.length)])
-                body.sendMessage('Lavender will turn into `BULL3T HELL F0rM`, Run!')
+                sockets.broadcast(messages[Math.floor(Math.random() * messages.length)])
+                sockets.broadcast('Lavender will turn into `BULL3T HELL F0rM`, Run!')
                 for (let i = 0; i < 24; i++) {
                     i < 12 ?
                         setTimeout(() => { body.SIZE /= 1.1; body.alpha /= 1.2 }, i * 50)
@@ -2066,6 +2077,7 @@ Class.trplnrBoss = {
             }
         }
     ],
+    GUNS: [],
     GUNS: (() => {
         let output = []
         for (let i = 0; i<2; i++) {
@@ -2086,7 +2098,8 @@ Class.trplnrBoss = {
                 SHOOT_SETTINGS: combineStats([g.basic, {reload: 100}]),
                 TYPE: "trplnrBossAuraBullet",
                 INDEPENDENT_CHILDREN: true,
-                IDENTIFIER: 'onHandler'
+                IDENTIFIER: 'onHandler',
+                ALPHA: 0,
             }
         })
         for (let i = 0; i < 3; i++) {
@@ -2114,8 +2127,9 @@ Class.trplnrBoss = {
 
 Class.trplnrBossBulletHellFormPentagonsAuraBullet = {
     PARENT: 'bullet',
+    PERSISTS_AFTER_DEATH: true,
     TURRETS: [{
-        POSITION: {SIZE: 15, LAYER: 1},
+        POSITION: {SIZE: 13, LAYER: 1},
         TYPE: "trplnrBossAuraBulletAura"
     }]
 } 
@@ -2124,7 +2138,7 @@ Class.trplnrBossBulletHellFormPentagons = {
     PARENT: 'bullet',
     LABEL: 'Pentagon',
     SHAPE: -5,
-    TURRETS: [{
+    PROPS: [{
         POSITION: { SIZE: 40 ** Math.SQRT1_2, ANGLE: 180, LAYER: 1 },
         TYPE: ['pentagon', {COLOR: 'black', MIRROR_MASTER_ANGLE: true}]
     }],
@@ -2132,12 +2146,12 @@ Class.trplnrBossBulletHellFormPentagons = {
         let output = []
         for (let i = 0; i < 5; i++) {
             output.push({
-                POSITION: { WIDTH: 10, HEIGHT: 10, ANGLE: ((360/5)*i) - 180, DELAY: 1 },
+                POSITION: { WIDTH: 10, HEIGHT: 10, ANGLE: ((360/5)*i) - 180, DELAY: 11.5 },
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.basic, g.pounder, {reload: 0.8}]),
+                    SHOOT_SETTINGS: combineStats([g.basic, g.pounder, {reload: 0.4}]),
                     TYPE: 'trplnrBossBulletHellFormPentagonsAuraBullet',
                     AUTOFIRE: true,
-                    COLOR: 'white'
+                    COLOR: 'white',
                 }
             })
         }
@@ -2182,12 +2196,13 @@ Class.trplnrBossBulletHellForm = {
                         'Bruh my keyboard isn\'t working',
                         'Omg bruh I chose the wrong form'
                     ]
-                    body.sendMessage(messages[Math.floor(Math.random() * messages.length)])
-                    body.sendMessage('Lavender is in its `VULN3RABLE F0RM`, Attack!')
+                    sockets.broadcast(messages[Math.floor(Math.random() * messages.length)])
+                    sockets.broadcast('Lavender is in its `VULN3RABLE F0RM`, Attack!')
                 }
             }
         }
     ],
+    GUNS: [],
     GUNS: (() => {
         let output = []
         for (let i = 0; i<3; i++) {
@@ -2206,7 +2221,7 @@ Class.trplnrBossBulletHellForm = {
             }, {
                 POSITION: { WIDTH: 10, HEIGHT: 5, ASPECT: 1.5, ANGLE: ((360 / 3) * i) - 180 },
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, { reload: 2 }]),
+                    SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, { reload: 3 }]),
                     TYPE: 'trplnrBossBulletHellFormPentagons',
                     COLOR: 'white'
                 }
@@ -2227,7 +2242,8 @@ Class.trplnrBossBulletHellForm = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, { reload: 2 }, g.fake]),
                 TYPE: 'bullet',
-                IDENTIFIER: 'onHandler'
+                IDENTIFIER: 'onHandler',
+                ALPHA: 0
             }
         })
         return output
@@ -2239,18 +2255,30 @@ Class.trplnrBossVulnerableForm = {
     LABEL: 'Lavender - Vulnerable Form',
     BODY: {
         HEALTH: 500,
-        SPEED: 0.01
+        SPEED: 0.1
     },
     ON: [
+        {
+            event: "tick",
+            handler: ({ body }) => {
+                body.store.ticks ??= 0
+                body.store.ticks++
+                const spawnCrashers = body.store.ticks % 3 == 0
+                const spawnSentries = body.store.ticks % 60 == 0
+                const sentries = ["sentrySwarm", "sentryGun", "sentryTrap"]
+                if (spawnCrashers) new Entity(body, body).define("crasher")
+                if (spawnSentries) new Entity(body, body).define(sentries[Math.floor(Math.random() * sentries.length)])
+            }
+        },
         {
             event: "fire",
             handler: ({ body, gun }) => {
                 if (gun.identifier != 'onHandler') return
                 setTimeout(() => {
                     body.define('trplnrBoss')
-                    body.sendMessage('im awake')
+                    sockets.broadcast('im awake')
                 }, 15000)
-                setTimeout(() => body.sendMessage('Lavender will activate in 10 seconds and turn into S4nctuary F0rM'), 5000)
+                setTimeout(() => sockets.broadcast('Lavender will activate in 10 seconds and turn into S4nctuary F0rM'), 5000)
             }
         }
     ],
@@ -2260,7 +2288,8 @@ Class.trplnrBossVulnerableForm = {
             SHOOT_SETTINGS: combineStats([g.basic, {reload: 500}]),
             TYPE: 'bullet',
             AUTOFIRE: true,
-            IDENTIFIER: 'onHandler'
+            IDENTIFIER: 'onHandler',
+            ALPHA: 0
         }
     }]
 }
@@ -2312,7 +2341,7 @@ Class.frostAuraLargeOutline = {
         "M 0 0 L 0.293 0.902 M 0 0 L -0.768 0.558 M 0 0 L -0.768 -0.558 M 0 0 L 0.293 -0.902",
 }
 Class.frostAuraSymbol = {
-	PARENT: ["genericTank"],
+	PARENT: "genericTank",
 	CONTROLLERS: [["spin", { speed: -0.04 }]],
 	INDEPENDENT: true,
     BORDERLESS: true,
@@ -2736,7 +2765,7 @@ class io_nearestDifferentMaster2 extends ioTypes.nearestDifferentMaster {
 ioTypes.nearestDifferentMaster2 = io_nearestDifferentMaster2;
 Class.toothlessBase = {
     PARENT: "genericTank",
-    LABEL: "Night Fury",
+    LABEL: "NightFury",
 	UPGRADE_TOOLTIP: "A power league...",
     GLOW: {
         RADIUS: 2,
@@ -2750,19 +2779,19 @@ Class.toothlessBase = {
         HEALTH: 6 * base.HEALTH,
         DAMAGE: 2 * base.DAMAGE,
     },
+    LEVEL_CAP: 45,
+    EXTRA_SKILL: 78, // 120 - 42
+    SHAPE: 3,
+    VALUE: 30e+3,
+    SIZE: 24,
+    COLOR: "purple",
+    SKILL_CAP: Array(10).fill(smshskl + 3),
     LEVEL_SKILL_POINT_FUNCTION: level => {
         if (level < 2) return 0;
         if (level <= 40) return 1;
         if (level <= 45 && level & 1 == 1) return 1;
-        if (level % 3 == 1 && level < 280) return 1;
         return 0;
     },
-    COLOR: "purple",
-    DANGER: 10,
-	SHAPE: 3,
-	SIZE: 20,
-	SKILL_CAP: Array(10).fill(smshskl + 3),
-    VALUE: 10e+6,
 }
 Class.toothlessBossTurret = {
     PARENT: "genericTank",
@@ -2780,7 +2809,6 @@ Class.toothlessBossTurret = {
             POSITION: [32, 8, 1, 0, 0, 0, 0.4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, {
-                    reload: 0.8,
                     pen: 0.8,
                     health: 0.6,
                     damage: 0.6,
@@ -2842,23 +2870,12 @@ Class.toothlessBossTurret = {
     }],
 };
 Class.toothlessBossDeco = {
-    PARENT: "triangle",
+    PARENT: "genericTank",
     LABEL: "",
-    GUNS: [{
-        POSITION: { LENGTH: 0, WIDTH: 0 },
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([ g.basic, {
-                range: 0.1,
-                speed: 0.1,
-                maxSpeed: 0.1,
-                recoil: 0,
-            }]),
-            TYPE: "bullet",
-            AUTOFIRE: true,
-        },
-    }],
+    SHAPE: 3,
+    SIZE: 10,
     ON: [{
-        event: "fire",
+        event: "tick",
         handler: ({ body }) => {
             const master = body.master;
             if (master._maxPower)

@@ -21,6 +21,7 @@ function setNatural(natural, type) {
 let lerp = (a, b, x) => a + x * (b - a);
 class Gun extends EventEmitter {
     constructor(body, info) {
+        super();
         this.id = entitiesIdLog++;
         this.ac = false;
         this.lastShot = { time: 0, power: 0 };
@@ -41,7 +42,13 @@ class Gun extends EventEmitter {
             alt: false,
             fire: false,
         };
-        this.color = new Color('16 0 1 0 false');
+        this.color = new Color({
+            BASE: "grey",
+            HUE_SHIFT: 0,
+            SATURATION_SHIFT: 1,
+            BRIGHTNESS_SHIFT: 0,
+            ALLOW_BRIGHTNESS_INVERT: false,
+        });
         this.alpha = 1;
         this.strokeWidth = 1;
         this.canShoot = false;
@@ -406,7 +413,7 @@ class Gun extends EventEmitter {
                     facing: host.facing,
                     size: host.SIZE,
                 };
-                host.define(Class.genericEntity);
+                host.define("genericEntity");
                 this.bulletInit(host);
                 host.team = oo.master.master.team;
                 host.master = oo.master;
@@ -446,7 +453,7 @@ class Gun extends EventEmitter {
                     y: 3 * Math.sin(save.angle),
                 };
                 o.color = gun.body.master.master.color;
-                o.define(Class.hitScanExplosion);
+                o.define("hitScanExplosion");
                 // Pass the gun attributes
                 o.define({
                     BODY: gun.interpret(gun.settings3),
@@ -479,7 +486,7 @@ class Gun extends EventEmitter {
                     );
                     o.facing = Math.atan2(target.y - y, target.x - x) + dir;
                     o.color = this.body.master.master.color;
-                    o.define(Class.hitScanBullet);
+                    o.define("hitScanBullet");
                     // Pass the gun attributes
                     o.define({
                         BODY: this.interpret(this.settings3),
@@ -511,7 +518,7 @@ class Gun extends EventEmitter {
                 let e = new Entity({ x: x, y: y }, this.body);
                 e.facing = Math.atan2(target.y - y, target.x - x);
                 e.color = this.body.master.master.color;
-                e.define(Class.hitScanBullet);
+                e.define("hitScanBullet");
                 // Pass the gun attributes
                 e.define({
                     BODY: this.interpret(this.settings2),
@@ -855,6 +862,7 @@ class Entity extends EventEmitter {
         this.autoOverride = false;
         this.healer = false;
         this.controllers = [];
+        this.definitionEvents = [];
         this.blend = {
             color: "#FFFFFF",
             amount: 0,
@@ -889,7 +897,7 @@ class Entity extends EventEmitter {
         this.vfacing = 0;
         this.range = 0;
         this.angle = 0;
-        this.damageRecieved = 0;
+        this.damageReceived = 0;
         this.recoilMultiplier = 1;
         this.stepRemaining = 1;
         this.x = position.x;
@@ -906,7 +914,7 @@ class Entity extends EventEmitter {
         this.alpha = 1;
         this.strokeWidth = 1;
         this.levelCap = undefined;
-        this.autospinBoost = 0;
+        this.autospinBoost = 1;
         this.antiNaN = new antiNaN(this);
         // Get a new unique id
         this.id = entitiesIdLog++;
@@ -1016,9 +1024,9 @@ class Entity extends EventEmitter {
         }
         this.control.target = b.target == null ? this.control.target : b.target;
         this.control.goal = b.goal ? b.goal : { x: this.x, y: this.y };
-        this.control.fire = b.fire;
-        this.control.main = b.main;
-        this.control.alt = b.alt;
+        this.control.fire = b.fire ?? false;
+        this.control.main = b.main ?? false;
+        this.control.alt = b.alt ?? false;
         this.control.power = b.power == null ? 1 : b.power;
 
         if (this.invuln && (this.control.goal.x !== this.x || this.control.goal.y !== this.y)) {
@@ -1131,9 +1139,9 @@ class Entity extends EventEmitter {
         }
         if (set.IGNORED_BY_AI != null) this.ignoredByAi = set.IGNORED_BY_AI;
         if (set.MOTION_TYPE != null) this.motionType = set.MOTION_TYPE;
-        if (typeof this.motionType == "string") this.motionType = [this.motionType];
+        if (typeof this.motionType == "string") this.motionType = [this.motionType, {}];
         if (set.FACING_TYPE != null) this.facingType = set.FACING_TYPE;
-        if (typeof this.facingType == "string") this.facingType = [this.facingType];
+        if (typeof this.facingType == "string") this.facingType = [this.facingType, {}];
         if (set.MIRROR_MASTER_ANGLE != null) this.settings.mirrorMasterAngle = set.MIRROR_MASTER_ANGLE
         if (set.DRAW_HEALTH != null) this.settings.drawHealth = set.DRAW_HEALTH;
         if (set.DRAW_SELF != null) this.settings.drawShape = set.DRAW_SELF;
@@ -1315,6 +1323,12 @@ class Entity extends EventEmitter {
             this.refreshBodyAttributes();
         }
         if (set.SPAWN_ON_DEATH) this.spawnOnDeath = set.SPAWN_ON_DEATH;
+        if (set.RESET_EVENTS) {
+            for (let { event, handler, once } of this.definitionEvents) {
+                this.removeListener(event, handler, once);
+            }
+            this.definitionEvents = [];
+        }
         if (set.REROOT_UPGRADE_TREE) this.rerootUpgradeTree = set.REROOT_UPGRADE_TREE;
         if (Array.isArray(this.rerootUpgradeTree)) {
             let finalRoot = "";
@@ -1353,13 +1367,7 @@ class Entity extends EventEmitter {
             }
         }
 
-        if (this.definitionEvents) {
-            for (let [ event, handler, once ] of this.definitionEvents) {
-                this.removeListener(event, handler, once);
-            }
-        }
         if (set.ON != null) {
-            this.definitionEvents = [];
             for (let { event, handler, once = false } of set.ON) {
                 this.definitionEvents.push({ event, handler, once });
                 this.on(event, handler, once);
@@ -1622,8 +1630,10 @@ class Entity extends EventEmitter {
         // Initalize.
         this.activation.update();
         this.facing = this.bond.facing + this.bound.angle;
-        this.facingType = ["bound"];
-        this.motionType = ["bound"];
+        if (this.facingType[0].includes('Target')) {
+            this.facingType = ["bound", {}];
+        }
+        this.motionType = ["bound", {}];
         this.move();
     }
     get level() {
@@ -1775,7 +1785,7 @@ class Entity extends EventEmitter {
             this.damp = 100;
         }
         let type = this.motionType[0],
-            args = this.motionType[1] ?? {};
+            args = this.motionType[1];
         switch (type) {
             case "grow":
                 this.SIZE += args.growSpeed ?? 1;
@@ -1918,7 +1928,7 @@ class Entity extends EventEmitter {
             oldFacing = this.facing,
             oldVFacing = this.vfacing;
         let type = this.facingType[0],
-            args = this.facingType[1] ?? {};
+            args = this.facingType[1];
         switch (type) {
             case "autospin":
                 this.facing += (args.speed ?? 0.02) / c.runSpeed;
@@ -2065,10 +2075,10 @@ class Entity extends EventEmitter {
     }
     contemplationOfMortality() {
         if (this.invuln) {
-            this.damageRecieved = 0;
+            this.damageReceived = 0;
             return 0;
         }
-        if (this.damageRecieved > 0) {
+        if (this.damageReceived > 0) {
             let damageInflictor = []
             let damageTool = []
 
@@ -2079,7 +2089,6 @@ class Entity extends EventEmitter {
                 damageTool.push(instance)
             }
             this.emit('damage', { body: this, damageInflictor, damageTool });
-            // TODO: find out how to fix 'collide' and 'damage'
         }
         // Life-limiting effects
         if (this.settings.diesAtRange) {
@@ -2098,19 +2107,19 @@ class Entity extends EventEmitter {
         }
         // Shield regen and damage
         if (this.shield.max) {
-            if (this.damageRecieved) {
-                let shieldDamage = this.shield.getDamage(this.damageRecieved);
-                this.damageRecieved -= shieldDamage;
+            if (this.damageReceived) {
+                let shieldDamage = this.shield.getDamage(this.damageReceived);
+                this.damageReceived -= shieldDamage;
                 this.shield.amount -= shieldDamage;
             }
         }
         // Health damage
-        if (this.damageRecieved) {
-            let healthDamage = this.health.getDamage(this.damageRecieved);
+        if (this.damageReceived) {
+            let healthDamage = this.health.getDamage(this.damageReceived);
             this.blend.amount = 1;
             this.health.amount -= healthDamage;
         }
-        this.damageRecieved = 0;
+        this.damageReceived = 0;
         // Check for death
         if (this.isDead()) {
 
