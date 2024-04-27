@@ -185,35 +185,55 @@ exports.makeMulti = (type, count, name = -1, startRotation = 0) => {
     type = ensureIsClass(type);
     let greekNumbers = ',Double ,Triple ,Quad ,Penta ,Hexa ,Septa ,Octo ,Nona ,Deca ,Hendeca ,Dodeca ,Trideca ,Tetradeca ,Pentadeca ,Hexadeca ,Septadeca ,Octadeca ,Nonadeca ,Icosa ,Henicosa ,Doicosa ,Triaicosa ,Tetraicosa ,Pentaicosa ,Hexaicosa ,Septaicosa ,Octoicosa ,Nonaicosa ,Triaconta '.split(','),
         output = exports.dereference(type),
-        shootyBois = output.GUNS,
         fraction = 360 / count;
     output.GUNS = [];
     for (let gun of type.GUNS) {
         for (let i = 0; i < count; i++) {
             let newgun = exports.dereference(gun);
-            newgun.POSITION[5] += startRotation + fraction * i;
-            if (gun.PROPERTIES) newgun.PROPERTIES.TYPE = gun.PROPERTIES.TYPE;
+            if (Array.isArray(newgun.POSITION)) {
+                newgun.POSITION[5] += startRotation + fraction * i;
+            } else {
+                newgun.POSITION.ANGLE = (newgun.POSITION.ANGLE ?? 0) + startRotation + fraction * i;
+            }
+            if (gun.PROPERTIES) newgun.PROPERTIES = gun.PROPERTIES;
             output.GUNS.push(newgun);
         };
     }
     output.LABEL = name == -1 ? (greekNumbers[count - 1] || (count + ' ')) + type.LABEL : name;
     return output;
 }
-exports.makeBird = (type, name = -1, color) => {
+exports.makeBird = (type, name = -1, frontRecoilFactor = 1, backRecoilFactor = 1, color) => {
     type = ensureIsClass(type);
-    let output = exports.dereference(type),
-        shootyBois = [{
+    let output = exports.dereference(type);
+    // Thrusters
+    let backRecoil = 0.5 * backRecoilFactor;
+    let thrusterProperties = { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: backRecoil }]), TYPE: "bullet", LABEL: gunCalcNames.thruster };
+    let shootyBois = [{
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
-        },{
+            PROPERTIES: thrusterProperties
+        }, {
             POSITION: [16, 8, 1, 0, 0, 210, 0.1],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
-        },{
+            PROPERTIES: thrusterProperties
+        }, {
             POSITION: [18, 8, 1, 0, 0, 180, 0.6],
-            PROPERTIES: { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.5 }]), TYPE: "bullet", LABEL: gunCalcNames.thruster }
+            PROPERTIES: thrusterProperties
         }];
-    if (color) for (let i = 0; i < 3; i++) shootyBois[i].PROPERTIES.TYPE = [shootyBois[i].PROPERTIES.TYPE, { COLOR: color, KEEP_OWN_COLOR: true }];
-    for (let i in output.GUNS) if (output.GUNS[i].PROPERTIES) output.GUNS[i].PROPERTIES.ALT_FIRE = true;
+    // Assign thruster color
+    if (color) for (let gun of shootyBois) {
+        gun.PROPERTIES.TYPE = [gun.PROPERTIES.TYPE, { COLOR: color }];
+    }
+
+    // Modify front barrels
+    for (let gun of output.GUNS) {
+        if (gun.PROPERTIES) {
+            gun.PROPERTIES.ALT_FIRE = true;
+            // Nerf front barrels
+            if (gun.PROPERTIES.SHOOT_SETTINGS) {
+                gun.PROPERTIES.SHOOT_SETTINGS = exports.combineStats([gun.PROPERTIES.SHOOT_SETTINGS, g.flankGuard, g.triAngle, g.triAngleFront, {recoil: frontRecoilFactor}]);
+            }
+        }
+    }
+    // Assign misc settings
     if (output.FACING_TYPE == "locksFacing") output.FACING_TYPE = "toTarget";
     output.GUNS = type.GUNS == null ? [...shootyBois] : [...output.GUNS, ...shootyBois];
     output.LABEL = name == -1 ? "Bird " + type.LABEL : name;
@@ -255,7 +275,12 @@ exports.makeHybridDrive = (type, name = -1) => {
             MAX_CHILDREN: 3,
         },
     };
+      let spawnerdeco = {
+        POSITION: [7, 14, 0, 180, 0, 0],
+        TYPE: ["autoTurret", { INDEPENDENT: true, MIRROR_MASTER_ANGLE: true }]
+    }
     output.GUNS = type.GUNS == null ? [spawner] : type.GUNS.concat([spawner]);
+    output.TURRETS = type.TURRETS == null ? [spawnerdeco] : type.TURRETS.concat([spawnerdeco]);
     output.LABEL = name == -1 ? "Hybrid " + type.LABEL : name;
     return output;
 }
@@ -778,6 +803,47 @@ exports.makeCeptionNerf = (type, name = -1, options = {}) => {
     output.DANGER = type.DANGER + 1;
     return output;
 }
+exports.addBackTurret = (type, name = "", options = {}) => {
+    type = ensureIsClass(type);
+    let turret = {
+        type: "autoTurret",
+        size: 11,
+        angle: 180,
+    };
+    if (options.type != null) {
+        turret.type = options.type;
+    }
+    if (options.size != null) {
+        turret.size = options.size;
+    }
+    if (options.color != null) {
+        turret.color = options.color;
+    }
+    if (options.angle != null) {
+        turret.angle = options.angle;
+    }
+    let output = exports.dereference(type);
+    let autogun = {
+        POSITION: [turret.size, 8, 0, turret.angle, 190, 1],
+        TYPE: [
+            turret.type,
+            {
+                COLOR: turret.color,
+            },
+        ],
+    };
+    if (type.GUNS != null) {
+        output.GUNS = type.GUNS;
+    }
+    if (type.TURRETS == null) {
+        output.TURRETS = [autogun];
+    } else {
+        output.TURRETS = [...type.TURRETS, autogun];
+    }
+    output.LABEL = name;
+    output.DANGER = type.DANGER + 1;
+    return output;
+}
 exports.makeDeco = (shape = 0, color = 16) => {
     return {
         PARENT: "genericTank",
@@ -785,10 +851,10 @@ exports.makeDeco = (shape = 0, color = 16) => {
         COLOR: color,
     };
 }
-exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) => {
+exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor, symbolType) => {
     let isHeal = damageFactor < 0;
     let auraType = isHeal ? "healAura" : "aura";
-    let symbolType = isHeal ? "healerSymbol" : "auraSymbol";
+    if (symbolType == null) symbolType = isHeal ? "healerSymbol" : "auraSymbol";
     auraColor = auraColor ?? (isHeal ? 12 : 0);
     return {
         PARENT: ["genericTank"],
@@ -815,6 +881,83 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) =
         ]
     };
 }
+exports.makeAura = (type, name = -1, options = {}) => {
+    let turret = {
+        type: "auraBasicGen",
+        size: 14,
+    };
+    if (options.type != null) {
+        turret.type = options.type;
+    }
+    if (options.size != null) {
+        turret.size = options.size;
+    } 
+    let output = exports.dereference(type);
+    let aurathing = {
+        /*********    SIZE                             X             Y         ANGLE        ARC */
+        POSITION: [turret.size, 0, 0, 0, 0, 1],
+        TYPE: [
+            turret.type,
+        ],
+    };
+    if (type.GUNS != null) {
+        output.GUNS = type.GUNS;
+    }
+    if (type.TURRETS == null) {
+        output.TURRETS = [aurathing];
+    } else {
+        output.TURRETS = [...type.TURRETS, aurathing];
+    }
+    if (name == -1) {
+        output.LABEL = "Aura " + type.LABEL;
+    } else {
+        output.LABEL = name;
+    }
+    output.DANGER = type.DANGER + 2;
+    return output;
+}
+
+exports.menu = (name = -1, color = -1, shape = 0) => {
+    let gun = {
+        POSITION: [18, 10, -1.4, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: exports.combineStats([g.basic]),
+            TYPE: "bullet",
+        },
+    };
+    return {
+        PARENT: "genericTank",
+        LABEL: name == -1 ? undefined : name,
+        GUNS: [gun],
+        COLOR: color,
+        UPGRADE_COLOR: color == -1 ? undefined : color,
+        SHAPE: shape,
+        IGNORED_BY_AI: true,
+    };
+}
+
+exports.weaponArray = (weapons, count) => {
+    if (!Array.isArray(weapons)) {
+        weapons = [weapons]
+    }
+    let isTurret = weapons[0].PROPERTIES == undefined;
+    let angleIndex = isTurret ? 3 : 5;
+
+    let output = [];
+    for (let weapon of weapons) {
+        for (let i = 0; i < count; i++) {
+            let angle = 360 / count * i;
+            let newWeapon = exports.dereference(weapon);
+            if (Array.isArray(newWeapon.POSITION)) {
+                newWeapon.POSITION[angleIndex] += angle;
+            } else {
+                newWeapon.POSITION.ANGLE = (newWeapon.POSITION.ANGLE ?? 0) + angle;
+            }
+            output.push(newWeapon);
+        }
+    }
+    return output;
+}
 
 class LayeredBoss {
     constructor(identifier, NAME, PARENT = "celestial", SHAPE = 9, COLOR = 0, trapTurretType = "baseTrapTurret", trapTurretSize = 6.5, layerScale = 5, BODY, SIZE, VALUE) {
@@ -840,6 +983,7 @@ class LayeredBoss {
         this.layerSize -= layerScale ?? this.layerScale;
         let layer = {
             PARENT: "genericTank",
+            LABEL: "",
             SHAPE: this.shape,
             COLOR: -1,
             INDEPENDENT: true,

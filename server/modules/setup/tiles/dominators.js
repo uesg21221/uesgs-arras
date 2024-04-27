@@ -9,15 +9,14 @@ spawn = (tile, team, color, type = false) => {
     let o = new Entity(tile.loc);
     o.define(type);
     o.team = team;
-    o.colorUnboxed.base = color;
-    o.compressColor();
+    o.color.base = color;
     o.skill.score = 111069;
     o.name = "Dominator";
     o.SIZE = room.tileWidth / 10;
     o.isDominator = true;
     o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: true })];
 
-    tile.color = color;
+    tile.color.base = color;
 
     if (!teamcounts[team]) {
         teamcounts[team] = 0;
@@ -69,11 +68,60 @@ spawn = (tile, team, color, type = false) => {
         spawn(tile, newTeam, newColor, type);
         sockets.broadcastRoom();
     });
+},
+
+makeDefenderDominator = (tile, mainTeam, team, aliveDef) => {
+    aliveDef = aliveDef ? aliveDef : ran.choose(dominatorTypes);
+    let o = new Entity(tile.loc);
+    o.define(mainTeam == team ? aliveDef : "dominator");
+    o.team = team;
+    o.color.base = getTeamColor(team);
+    o.skill.score = 111069;
+    o.SIZE = room.tileWidth / 10;
+    o.isDominator = true;
+
+    tile.color.base = getTeamColor(team);
+
+    if (!teamcounts[team]) {
+        teamcounts[team] = 0;
+    }
+    teamcounts[team]++;
+
+    o.on('dead', () => {
+
+        teamcounts[team]--;
+
+        if (team === mainTeam) {
+            sockets.broadcast(`A ${o.label} has been destroyed!`);
+            if (!teamcounts[team] && !gameWon) {
+                gameWon = true;
+                setTimeout(sockets.broadcast, 1500, "The raiders has won the game!"); //figure out how to guess a better text
+                setTimeout(closeArena, 4500);
+            }
+
+        } else {
+            sockets.broadcast(`A ${o.label} has been repaired!`);
+        }
+
+        makeDefenderDominator(tile, mainTeam, team === mainTeam ? TEAM_ENEMIES : mainTeam, aliveDef);
+        sockets.broadcastRoom();
+    });
 };
 
-let makeDominatorTile = (team, type) => new Tile({ init: tile => spawn(tile, team, getTeamColor(team), type) }),
-    contested = makeDominatorTile(TEAM_ENEMIES),
-    sanctuaryBlue = makeDominatorTile(TEAM_BLUE, "trapperDominator"),
-    sanctuaryGreen = makeDominatorTile(TEAM_GREEN, "trapperDominator");
+let dominatorBlue = new Tile({ init: tile => makeDefenderDominator(tile, TEAM_BLUE, TEAM_BLUE) }),
+    dominatorGreen = new Tile({ init: tile => makeDefenderDominator(tile, TEAM_GREEN, TEAM_GREEN) }),
+    dominatorContested = new Tile({ init: tile => spawn(tile, TEAM_ENEMIES, getTeamColor(TEAM_ENEMIES)) }),
+    sanctuaryBlue = new Tile({ init: tile => makeDefenderDominator(tile, TEAM_BLUE, TEAM_BLUE, 'sanctuaryTier1') }),
+    sanctuaryGreen = new Tile({ init: tile => makeDefenderDominator(tile, TEAM_GREEN, TEAM_GREEN, 'sanctuaryTier1') }),
+    sanctuaryContested = new Tile({ init: tile => spawn(tile, TEAM_ENEMIES, getTeamColor(TEAM_ENEMIES), 'sanctuaryTier1') });
 
-module.exports = { contested, sanctuaryBlue, sanctuaryGreen };
+
+module.exports = {
+    contested: dominatorContested,
+    dominatorBlue,
+    dominatorGreen,
+    dominatorContested,
+    sanctuaryBlue, // siege
+    sanctuaryGreen, // assault
+    sanctuaryContested // idk i thought it was funny
+};

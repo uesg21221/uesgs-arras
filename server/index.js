@@ -25,11 +25,12 @@ process.stdout.write(String.fromCharCode(27) + "]0;" + c.WINDOW_NAME + String.fr
 util.log(room.width + " x " + room.height + " room initalized.");
 
 // Collision stuff
+const auraCollideTypes = ["miniboss", "tank", "food", "crasher"]
 function collide(collision) {
     // Pull the two objects from the collision grid
     let instance = collision[0],
         other = collision[1];
-    if (instance.onDef != null) instance.ON(undefined, 'collide', { instance, other })
+    instance.emit('collide', { body: instance, instance, other });
     // Check for ghosts...
     if (other.isGhost) {
         util.error("GHOST FOUND");
@@ -66,6 +67,7 @@ function collide(collision) {
             if (instance.type === "wall" && other.type === "wall") return;
             if (instance.type === "aura" || other.type === "aura") return;
             if (instance.type === "satellite" || other.type === "satellite") return;
+            if (instance.type === "shield" || other.type === "shield" || instance.type === "brella" || other.type === "brella") return;
             let wall = instance.type === "wall" ? instance : other;
             let entity = instance.type === "wall" ? other : instance;
             if (entity.ac || entity.master.ac) return;
@@ -80,6 +82,29 @@ function collide(collision) {
                 default:
                     let a = entity.type === "bullet" ? 1 + 10 / (entity.velocity.length + 10) : 1;
                     advancedcollide(wall, entity, false, false, a);
+                    break;
+            }
+            break;
+        case instance.type === "shield" || other.type === "shield":
+            if (instance.type === "aura" || other.type === "aura" || instance.type === "satellite" || other.type === "satellite" || instance.type === "satellite" || other.type === "satellite" || instance.team === other.team) return;
+            let shield = instance.type === "shield" ? instance : other;
+            let nonshield = instance.type === "shield" ? other : instance;
+            switch (true) {
+                case (shield.shapeData == "m -0.7020 -0.8099 c 0.2987 0.4922 0.4276 1.0098 0 1.6105 c 0.4606 -0.1615 0.9233 -0.3735 1.3947 -0.8052 C 0.2005 -0.4442 -0.2526 -0.6387 -0.702 -0.8099"):
+                    mirrorcollide(shield, nonshield);
+                    break;
+                default:
+                    reflectcollide(shield, nonshield);
+                    break;
+            }
+            break;
+        case instance.type === "brella" || other.type === "brella":
+            if (instance.type === "aura" || other.type === "aura" || instance.type === "satellite" || other.type === "satellite" || instance.type === "satellite" || other.type === "satellite" || instance.team === other.team) return;
+            let brella = instance.type === "brella" ? instance : other;
+            let nonbrella = instance.type === "brella" ? other : instance;
+            switch (true) {
+                default:
+                    reflectcollide(brella, nonbrella);
                     break;
             }
             break;
@@ -108,11 +133,11 @@ function collide(collision) {
                 instance.healer ||
                 other.healer
             )):
-            // Exits if the aura is not hitting a boss or tank
+            // Exits if the aura is not hitting a boss, tank, food, or crasher
             if (instance.type === "aura") {
-                if (!(other.type === "tank" || other.type === "miniboss" || other.type == "food")) return;
+                if (!(auraCollideTypes.includes(other.type))) return;
             } else if (other.type === "aura") {
-                if (!(instance.type === "tank" || instance.type === "miniboss" || instance.type == "food")) return;
+                if (!(auraCollideTypes.includes(instance.type))) return;
             }
             advancedcollide(instance, other, true, true);
             break;
@@ -242,7 +267,7 @@ const gameloop = () => {
         }
         // Update collisions.
         my.collisionArray = [];
-        if (my.onDef != null) my.ON(undefined, 'tick')
+        my.emit('tick', { body: my });
     }
     logs.entities.mark();
     logs.master.mark();
@@ -331,12 +356,12 @@ let maintainloop = () => {
         o.define('bot');
         o.define(c.SPAWN_CLASS);
         o.refreshBodyAttributes();
+        o.skill.score = c.BOT_START_XP;
         o.isBot = true;
-        o.name += ran.chooseBotName();
+        o.name = Config.BOT_NAME_PREFIX + ran.chooseBotName();
         o.leftoverUpgrades = ran.chooseChance(...c.BOT_CLASS_UPGRADE_CHANCES);
-        let color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
-        o.colorUnboxed.base = color;
-        o.compressColor();
+        let color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : "red";
+        o.color.base = color;
         if (team) o.team = team;
         bots.push(o);
         o.on('dead', () => util.remove(bots, bots.indexOf(o)));

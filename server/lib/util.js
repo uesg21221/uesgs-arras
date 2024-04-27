@@ -10,6 +10,8 @@ exports.addArticle = string => {
 
 exports.getDistance = (p1, p2) => Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2))
 
+exports.getDistanceSquared = (p1, p2) => Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2)
+
 exports.getDirection = (p1, p2) => Math.atan2(p2.y - p1.y, p2.x - p1.x)
 
 exports.clamp = (value, min, max) => Math.min(Math.max(value, min), max)
@@ -29,7 +31,7 @@ exports.listify = list => {
 
 exports.angleDifference = (a1, a2) => ((a2 - a1) % (2 * Math.PI) + Math.PI * 3) % (2 * Math.PI) - Math.PI
 
-exports.loopSmooth = (angle, desired, slowness) => exports.angleDifference(angle, desired) / slowness
+exports.interpolateAngle = (angle, desired, step) => angle + exports.angleDifference(angle, desired) * step
 
 exports.averageArray = arr => {
   if (!arr.length) return 0

@@ -1,79 +1,50 @@
-global.defeatedTeams = [];
-let motherships = [];
-let teamWon = false;
-let choices = ['mothership'];
+let won = false;
 
-function spawn() {
-    let locs = [{
-        x: c.WIDTH * 0.1,
-        y: c.HEIGHT * 0.1
-    }, {
-        x: c.WIDTH * 0.9,
-        y: c.HEIGHT * 0.9
-    }, {
-        x: c.WIDTH * 0.9,
-        y: c.HEIGHT * 0.1
-    }, {
-        x: c.WIDTH * 0.1,
-        y: c.HEIGHT * 0.9
-    }, {
-        x: c.WIDTH * 0.9,
-        y: c.HEIGHT * 0.5
-    }, {
-        x: c.WIDTH * 0.1,
-        y: c.HEIGHT * 0.5
-    }, {
-        x: c.WIDTH * 0.5,
-        y: c.HEIGHT * 0.9
-    }, {
-        x: c.WIDTH * 0.5,
-        y: c.HEIGHT * 0.1
-    }].sort(() => 0.5 - Math.random());
-    for (let i = 0; i < c.TEAMS; i++) {
-        let o = new Entity(locs[i]),
-            team = -i - 1;
-        o.define(ran.choose(choices));
-        o.define({ ACCEPTS_SCORE: false, VALUE: 643890 });
-        o.color = getTeamColor(team);
-        o.team = team;
-        o.name = "Mothership";
-        o.isMothership = true;
-        o.controllers.push(new ioTypes.nearestDifferentMaster(o), new ioTypes.mapTargetToGoal(o));
-        o.refreshBodyAttributes();
-        motherships.push([o.id, team]);
+function checkWin() {
+    if (won) return;
+    let all = 0,
+        teams = {};
+    for (let i = 1; i <= c.TEAMS; i++) {
+        teams[-i] = 0;
     }
-};
-
-function death(entry) {
-    sockets.broadcast(getTeamName(entry[1]) + "'s mothership has been killed!");
-    global.defeatedTeams.push(-entry[1] - 1);
     for (let i = 0; i < entities.length; i++) {
         let o = entities[i];
-        if (o.team === -entry[1] - 1) {
-            o.sendMessage("Your team has been eliminated.");
-            o.kill();
+        if (o.team < 0 && (o.isPlayer || o.isBot) && isPlayerTeam(o.team)) {
+            teams[o.team]++;
+            all++;
         }
     }
-    return false;
-};
-
-function winner(teamId) {
-    sockets.broadcast(getTeamName(teamId) + " has won the game!");
-    setTimeout(closeArena, 3000);
-};
-
-function loop() {
-    if (teamWon) return;
-    let aliveNow = motherships.map(entry => [...entry, entities.find(entity => entity.id === entry[0])]);
-    aliveNow = aliveNow.filter(entry => {
-        if (!entry[2] || entry[2].isDead()) return death(entry);
-        return true;
-    });
-    if (aliveNow.length === 1) {
-        teamWon = true;
-        setTimeout(winner, 2500, aliveNow[0][1]);
+    let team;
+    for (let t in teams) {
+        if (teams[t] === all) {
+            team = t;
+            break;
+        }
     }
-    motherships = aliveNow;
-};
+    if (!team || all < 2) return;
+    won = true;
+    sockets.broadcast(getTeamName(team) + " has won the game!");
+    setTimeout(closeArena, 3000);
+}
 
-module.exports = { mothershipLoop:  { spawn, loop, motherships } };
+function init(g) {
+    g.events.on('spawn', entity => {
+        entity.on('dead', () => {
+            if (!c.TAG || !entity.isPlayer && !entity.isBot) return;
+            let killers = [];
+            for (let entry of entity.collisionArray) {
+                if (isPlayerTeam(entry.team) && entity.team !== entry.team) {
+                    killers.push(entry);
+                }
+            }
+            if (!killers.length) return;
+            let killer = ran.choose(killers);
+            if (entity.socket) {
+                entity.socket.rememberedTeam = killer.team;
+            }
+            setTimeout(checkWin, 1000);
+        });
+    });
+}
+
+module.exports = { init };

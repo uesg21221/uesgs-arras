@@ -1,11 +1,11 @@
 module.exports = {
 // Bases
-    basic: { reload: 18, recoil: 1.4, shudder: 0.1, damage: 0.75, speed: 4.5, spray: 15 },
-    drone: { reload: 50, recoil: 0.25, shudder: 0.1, size: 0.6, speed: 2, spray: 0.1 },
-    trap: { reload: 36, shudder: 0.25, size: 0.6, damage: 0.75, speed: 5, spray: 15, resist: 3 },
-    swarm: { reload: 18, recoil: 0.25, shudder: 0.05, size: 0.4, damage: 0.75, speed: 4, spray: 5 },
-    factory: { reload: 60, shudder: 0.1, size: 0.7, damage: 0.75, speed: 3, spray: 0.1 },
-    productionist: { reload: 75, recoil: 0.25, shudder: 0.05, size: 0.7, damage: 0.75, speed: 4, range: 1.5, spray: 5 },
+    basic: { reload: 10.5, recoil: 1.4, shudder: 0.1, damage: 0.75, speed: 4.5, spray: 15 },
+    drone: { reload: 36, recoil: 0.25, shudder: 0.1, size: 0.6, speed: 2, spray: 0.1 },
+    trap: { reload: 23, shudder: 0.25, size: 0.6, damage: 0.75, speed: 5, spray: 15, resist: 3 },
+    swarm: { reload: 23, recoil: 0.25, shudder: 0.05, size: 0.4, damage: 0.75, speed: 4, spray: 5 },
+    factory: { reload: 48, shudder: 0.1, size: 0.7, damage: 0.75, speed: 3, spray: 0.1 },
+    productionist: { reload: 56, recoil: 0.25, shudder: 0.05, size: 0.7, damage: 0.75, speed: 4, range: 1.5, spray: 5 },
 
 // Spammers
     desmos: { shudder: 0, spray: 0, size: 0.8 },
@@ -19,6 +19,7 @@ module.exports = {
     triplet: { reload: 1.2, recoil: 0.667, shudder: 0.9, health: 0.85, damage: 0.85, pen: 0.9, density: 1.1, spray: 0.9, resist: 0.95 },
     turret: { reload: 2, health: 0.8, damage: 0.6, pen: 0.7, density: 0.1 },
     autoTurret: { reload: 0.9, recoil: 0.75, shudder: 0.5, size: 0.8, health: 0.9, damage: 0.6, pen: 1.2, speed: 1.1, range: 0.8, density: 1.3, resist: 1.25 },
+    littleHunter: { recoil: 0.9, shudder: 0.9, health: 0.9, damage: 0.7, pen: 0.9 },
 
 // Snipers
     sniper: { reload: 1.35, shudder: 0.25, damage: 0.8, pen: 1.1, speed: 1.5, maxSpeed: 1.5, density: 1.5, spray: 0.2, resist: 1.15 },
@@ -55,19 +56,20 @@ module.exports = {
 // Drones
     overseer: { reload: 1.25, size: 0.85, health: 0.7, damage: 0.8, maxSpeed: 0.9, density: 2 },
     overdrive: { reload: 2.5, health: 0.8, damage: 0.8, pen: 0.8, speed: 0.9, maxSpeed: 0.9, range: 0.9, spray: 1.2 },
-    commander: { reload: 3, size: 0.7, health: 0.4, damage: 0.7, range: 0.1, density: 0.5 },
-    baseProtector: { reload: 5, recoil: 0.000001, health: 100, range: 0.5, density: 5, resist: 10 },
+    commander: { reload: 1.5, health: 0.4, damage: 0.7 },
+    baseProtector: { reload: 2, recoil: 0.000001, health: 100, range: 0.5, density: 5, resist: 10 },
     battleship: { health: 1.25, damage: 1.15, maxSpeed: 0.85, resist: 1.1 },
     carrier: { reload: 1.5, damage: 0.8, speed: 1.3, maxSpeed: 1.2, range: 1.2 },
     bee: { reload: 1.3, size: 1.4, damage: 1.5, pen: 0.5, speed: 3, maxSpeed: 1.5, density: 0.25 },
     sunchip: { reload: 5, size: 1.4, health: 0.5, damage: 0.4, pen: 0.6, density: 0.8 },
     maleficitor: { reload: 0.5, size: 1.05, health: 1.15, damage: 1.15, pen: 1.15, speed: 0.8, maxSpeed: 0.8, density: 1.15 },
     summoner: { reload: 0.3, size: 1.125, health: 0.4, damage: 0.345, pen: 0.4, density: 0.8 },
-    minionGun: { shudder: 2, health: 0.4, damage: 0.4, pen: 1.2, range: 0.75, spray: 2 },
+    minionGun: { recoil: 0, shudder: 2, health: 0.4, damage: 0.4, pen: 1.2, range: 0.75, spray: 2 },
     babyfactory: { reload: 1.5, maxSpeed: 1.35 },
     bigCheese: { reload: 1.5, size: 1.8, health: 2.5, speed: 1.25 },
     mothership: { reload: 1.25, pen: 1.1, speed: 0.775, maxSpeed: 0.8, range: 15, resist: 1.15 },
     satellite: { size: 0.8, reload: 3, damage: 1.875 },
+    contagi: { reload: 1, recoil: 0.5, shudder: 1.5, size: 1, health: 0.6, damage: 0.6, pen: 0.75, speed: 1.05, maxSpeed: 1, range: 1, density: 0.9, spray: 0.75, resist: 0.7 },
 
 // Heavy cannons
     pounder: { reload: 2, recoil: 1.6, damage: 2, speed: 0.85, maxSpeed: 0.8, density: 1.5, resist: 1.15 },
@@ -81,9 +83,9 @@ module.exports = {
     
 // Missiles
     launcher: { reload: 1.5, recoil: 1.5, shudder: 0.1, size: 0.72, health: 1.05, damage: 0.925, speed: 0.9, maxSpeed: 1.2, range: 1.1, resist: 1.5 },
-    skimmer: { recoil: 0.8, shudder: 0.8, size: 0.9, health: 1.35, damage: 0.8, pen: 2, speed: 0.3, maxSpeed: 0.3, resist: 1.1 },
-    snake: { reload: 0.4, shudder: 4, health: 1.5, damage: 0.9, pen: 1.2, speed: 0.2, maxSpeed: 0.35, density: 3, spray: 6, resist: 0.5 },
-    snakeskin: { reload: 0.6, shudder: 2, health: 0.5, damage: 0.5, maxSpeed: 0.2, range: 0.4, spray: 5 },
+    skimmer: { recoil: 0.8, shudder: 0.8, size: 0.9, health: 1.35, damage: 0.8, pen: 2, speed: 0.85, maxSpeed: 0.85, resist: 1.1 },
+    snake: { reload: 0.4, shudder: 4, health: 1.5, damage: 0.9, pen: 1.2, speed: 0.1, maxSpeed: 0.35, density: 3, spray: 6, resist: 0.5 },
+    snakeskin: { reload: 0.6, shudder: 2, health: 0.5, damage: 0.5, speed: 2, maxSpeed: 0.2, range: 0.4, spray: 5 },
     sidewinder: { reload: 1.5, recoil: 2, health: 1.5, damage: 0.9, speed: 0.15, maxSpeed: 0.5 },
     rocketeer: { reload: 1.4, shudder: 0.9, size: 1.2, health: 1.5, damage: 1.4, pen: 1.4, speed: 0.3, range: 1.2, resist: 1.4 },
     missileTrail: { reload: 0.6, recoil: 0.25, shudder: 2, damage: 0.9, pen: 0.7, speed: 0.4, range: 0.5 },
@@ -101,28 +103,38 @@ module.exports = {
     blank: { reload: 1, recoil: 1, shudder: 1, size: 1, health: 1, damage: 1, pen: 1, speed: 1, maxSpeed: 1, range: 1, density: 1, spray: 1, resist: 1 },
     weak: { reload: 2, health: 0.6, damage: 0.6, pen: 0.8, speed: 0.5, maxSpeed: 0.7, range: 0.25, density: 0.3 },
     power: { shudder: 0.6, size: 1.2, pen: 1.25, speed: 2, maxSpeed: 1.7, density: 2, spray: 0.5, resist: 1.5 },
-    fake: { recoil: 0.00001, size: 0.00001, health: 0.0001, speed: 0.00001, maxSpeed: 2, range: 0 },
+    fake: { recoil: 0.00001, size: 0.00001, health: 0.0001, speed: 0, maxSpeed: 0, shudder: 0, spray: 0, recoil: 0, range: 0 },
     op: { reload: 0.5, recoil: 1.3, health: 4, damage: 4, pen: 4, speed: 3, maxSpeed: 2, density: 5, spray: 2 },
     arenaCloser: { reload: 1.25, recoil: 0.25, health: 1000, damage: 1000, pen: 1000, speed: 2.5, maxSpeed: 2.25, range: 1.4, density: 4, spray: 0.25 },
-    healer: { damage: -1 },
+    healer: { damage: -1, speed: 0.5, maxSpeed: 0.5, recoil: 0.5 },
     lowPower: { shudder: 2, health: 0.5, damage: 0.5, pen: 0.7, spray: 0.5, resist: 0.7 },
-    halfrange: { range: 0.5 },
-    aura: { reload: 0.001, recoil: 0.001, shudder: 0.001, size: 6, damage: 3, speed: 0.001, maxSpeed: 0.001, spray: 0.001 },
+    aura: { reload: 0.001, recoil: 0.001, shudder: 0.001, size: 6, speed: 0.001, maxSpeed: 0.001, spray: 0.001 },
     noSpread: { shudder: 0, spray: 0 },
+    lessspread: { shudder: 0.75, spread: 0.75 },
+  
+    // Range
+    doublerange: { range: 2 },
+    morerange: { range: 1.15 },
+    halfrange: { range: 0.5 },
+    norange: { range: 0.2 },
+    literallynorange: { range: 0 },
 
     // Recoil
     tonsmorerecoil: { recoil: 4 },
     lotsmorrecoil: { recoil: 1.8 },
     muchmorerecoil: { recoil: 1.35 },
     morerecoil: { recoil: 1.15 },
+    lessrecoil: { recoil: 0.65 },
     halfrecoil: { recoil: 0.5 },
 
     // Reload
     halfreload: { reload: 2 },
     lessreload: { reload: 1.5 },
     one_third_reload: { reload: 1.333 },
+    bitlessreload: { reload: 0.9 },
     morereload: { reload: 0.75 },
     doublereload: { reload: 0.5 },
+    triplereload: { reload: 1/3 },
 
     // Speed
     fast: { speed: 1.2 },
@@ -137,7 +149,6 @@ module.exports = {
     lancer: { reload: 0.4, speed: 0.1, maxSpeed: 0.1, range: 0.1 },
     celeslower: { size: 0.5 },
     notdense: { density: 0.1 },
-    doublerange: { range: 2 },
     acc: { shudder: 0.1 },
     fakewithrecoil: { recoil: 1, size: 0.00001, health: 0.0001, speed: 0.00001, maxSpeed: 2, range: 0 },
     halfdamage: { damage: 0.5 },
@@ -146,6 +157,14 @@ module.exports = {
     shockwave: { damage: 5, pen: 5 },
     xtrahealth: { health: 5 },
     xxtrahealth: { health: 999 },
-    grenade_explosion: { reload: 8, recoil: 0, shudder: 4.25, size: 2, health: 2.25, damage: 1.75, pen: 1.5, speed: 1.35, maxSpeed: 1, range: 1, density: 1, spray: 4, resist: 1
-    },
+    lance: { reload: 0.4, speed: 0.1, maxSpeed: 0.1, range: 0.1, pen: 0.9, damage: 0.9, health: 0.75 },
+    shield: { reload: 4, recoil: 0, shudder: 0.1, size: 4, health: 387420489, damage: 0, pen: 0.9, speed: 0.7, maxSpeed: 1, range: 0.02, density: 3387420489, spray: 1, resist: 9 },
+    lesspower: { reload: 1, recoil: 1, shudder: 1, size: 1, health: .9, damage: .9, pen: .9, speed: 1, maxSpeed: 1, range: 1, density: 1, spray: 1, resist: 1 },
+    slightlyweaker: { health: 0.8, damage: 0.8, pen: 0.8 },
+    grenade_explosion: { reload: 8, recoil: 0, shudder: 4.25, size: 2, health: 2.25, damage: 1.75, pen: 1.5, speed: 1.35, maxSpeed: 1, range: 1, density: 1, spray: 4, resist: 1 },
+    literallyamachinegun: { reload: 0.2, speed: 5, maxSpeed: 5, spray: 0.3, shudder: 0.6 },
+    rainmaker: { speed: 0.03, maxSpeed: 0.5, health: 0.9, damage: 0.85, pen: 1 },
+    acceltospeedoflight: { speed: 0.001, maxSpeed: 1000 },
+    explosion: { speed: 0.01, maxSpeed: 0.01, health: 5, damage: 4, pen: 5, density: 3.7, resist: 3 },
+    brella: { reload: 2.5, health: 35, pen: 0, damage: 0.2, density: 1, resist: 1, speed: 1, maxSpeed: 0.8, spray: 0, range: 2.25, size: 2.4, shudder: 0.1 }
 }

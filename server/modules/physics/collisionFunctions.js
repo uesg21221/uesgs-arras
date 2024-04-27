@@ -58,15 +58,46 @@ function firmcollide(my, n, buffer = 0) {
 }
 
 function reflectcollide(wall, bounce) {
-    let delta = new Vector(wall.x - bounce.x, wall.y - bounce.y);
-    let dist = delta.length;
-    let difference = wall.size + bounce.size - dist;
-    if (difference > 0) {
-        bounce.accel.x -= difference * delta.x / dist;
-        bounce.accel.y -= difference * delta.y / dist;
-        return 1;
+    if (wall.master.team != bounce.team) {
+        let delta = new Vector(wall.x - bounce.x, wall.y - bounce.y);
+        let dist = delta.length;
+        let difference = wall.size + bounce.size - dist;
+        if (difference > 0) {
+            bounce.accel.x -= difference * delta.x / dist;
+            bounce.accel.y -= difference * delta.y / dist;
+            return 1;
+        }
+        return 0;
     }
-    return 0;
+}
+
+function brellacollide(brella, bounce) {
+    if (brella.master.team != bounce.team) {
+        let delta = new Vector(brella.x - bounce.x, brella.y - bounce.y);
+        let dist = delta.length;
+        let difference = brella.size + bounce.size - dist;
+        if (difference > 0) {
+            bounce.accel.x -= difference * delta.x / dist;
+            bounce.accel.y -= difference * delta.y / dist;
+            return 1;
+        }
+        return 0;
+    }
+}
+
+function mirrorcollide(shield, bounce) {
+        let delta = new Vector(shield.x - bounce.x, shield.y - bounce.y);
+        let dist = delta.length;
+        let difference = shield.size + bounce.size - dist;
+        if (difference > 0) {
+            bounce.accel.x -= difference * delta.x / dist;
+            bounce.accel.y -= difference * delta.y / dist;
+            if (bounce.type == 'bullet') {
+            bounce.team = shield.master.team;
+            }
+            return 1;
+        }
+        return 0;
 }
 
 function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
@@ -229,14 +260,14 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
             deathFactor._n = (stuff > n.health.amount) ? n.health.amount / stuff : 1;
             reductionFactor = Math.min(deathFactor._me, deathFactor._n);
             // Now apply it
-            // my.damageRecieved += damage._n * deathFactor._n;
-            // n.damageRecieved += damage._me * deathFactor._me;
+            // my.damageReceived += damage._n * deathFactor._n;
+            // n.damageReceived += damage._me * deathFactor._me;
             const __my = damage._n * deathFactor._n;
             const __n = damage._me * deathFactor._me;
-            my.damageRecieved += __my * Number(__my > 0
+            my.damageReceived += __my * Number(__my > 0
                 ? my.team != n.team
                 : n.healer && n.team == my.team && my.type == "tank" && n.master.id != my.id);
-            n.damageRecieved += __n * Number(__n > 0
+            n.damageReceived += __n * Number(__n > 0
                 ? my.team != n.team
                 : my.healer && n.team == my.team && n.type == "tank" && my.master.id != n.id);
         }
@@ -380,11 +411,93 @@ function mazewallcollide(wall, bounce) {
     }
 
     if (intersected) {
-        if (bounce.type !== 'tank' && bounce.type !== 'miniboss' && bounce.type !== 'food') {
+        if (bounce.type !== 'tank' && bounce.type !== 'miniboss' && bounce.type !== 'food' && bounce.type !== "flail" && bounce.type !== "brella") {
             bounce.kill();
         } else {
             bounce.collisionArray.push(wall);
         }
+    }
+};
+
+function mazewallcollidenokill(wall, bounce) {
+    if (bounce.god === true || bounce.passive === true || bounce.ac || bounce.master.ac) return;
+    if (bounce.store.noWallCollision) return;
+    if (bounce.team === wall.team && bounce.type === "tank") return;
+    let trueWallSize = wall.size + 2;
+    if (bounce.x + bounce.size < wall.x - trueWallSize ||
+        bounce.x - bounce.size > wall.x + trueWallSize ||
+        bounce.y + bounce.size < wall.y - trueWallSize ||
+        bounce.y - bounce.size > wall.y + trueWallSize) return 0;
+    if (wall.intangibility) return 0
+    let bounceBy = bounce.type === 'tank' ? 1.0 : bounce.type === 'miniboss' ? 2.5 : 0.1
+    let left = bounce.x < wall.x - trueWallSize
+    let right = bounce.x > wall.x + trueWallSize
+    let top = bounce.y < wall.y - trueWallSize
+    let bottom = bounce.y > wall.y + trueWallSize
+    let leftExposed = bounce.x - bounce.size < wall.x - trueWallSize
+    let rightExposed = bounce.x + bounce.size > wall.x + trueWallSize
+    let topExposed = bounce.y - bounce.size < wall.y - trueWallSize
+    let bottomExposed = bounce.y + bounce.size > wall.y + trueWallSize
+
+    let intersected = true
+
+    if (left && right) {
+        left = right = false
+    }
+    if (top && bottom) {
+        top = bottom = false
+    }
+    if (leftExposed && rightExposed) {
+        leftExposed = rightExposed = false
+    }
+    if (topExposed && bottomExposed) {
+        topExposed = bottomExposed = false
+    }
+    if ((left && !top && !bottom) || (leftExposed && !topExposed && !bottomExposed)) {
+        bounce.accel.x -= (bounce.x + bounce.size - wall.x + trueWallSize) * bounceBy
+    } else if ((right && !top && !bottom) || (rightExposed && !topExposed && !bottomExposed)) {
+        bounce.accel.x -= (bounce.x - bounce.size - wall.x - trueWallSize) * bounceBy
+    } else if ((top && !left && !right) || (topExposed && !leftExposed && !rightExposed)) {
+        bounce.accel.y -= (bounce.y + bounce.size - wall.y + trueWallSize) * bounceBy
+    } else if ((bottom && !left && !right) || (bottomExposed && !leftExposed && !rightExposed)) {
+        bounce.accel.y -= (bounce.y - bounce.size - wall.y - trueWallSize) * bounceBy
+    } else {
+        let x = leftExposed ? -trueWallSize : rightExposed ? trueWallSize : 0
+        let y = topExposed ? -trueWallSize : bottomExposed ? trueWallSize : 0
+
+        let point = new Vector(wall.x + x - bounce.x, wall.y + y - bounce.y)
+
+        if (!x || !y) {
+            if (bounce.x + bounce.y < wall.x + wall.y) { // top left
+                if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
+                    bounce.accel.x -= (bounce.x + bounce.size - wall.x + trueWallSize) * bounceBy
+                } else { // top right
+                    bounce.accel.y -= (bounce.y + bounce.size - wall.y + trueWallSize) * bounceBy
+                }
+            } else { // bottom right
+                if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
+                    bounce.accel.y -= (bounce.y - bounce.size - wall.y - trueWallSize) * bounceBy
+                } else { // top right
+                    bounce.accel.x -= (bounce.x - bounce.size - wall.x - trueWallSize) * bounceBy
+                }
+            }
+        } else if (!(left || right || top || bottom)) {
+            let force = (bounce.size / point.length - 1) * bounceBy / 2
+            bounce.accel.x += point.x * force
+            bounce.accel.y += point.y * force
+        } else if (point.isShorterThan(bounce.size)) {
+            //let force = (bounce.size - point.length) / point.length * bounceBy
+            // once to get collision amount, once to norm
+            let force = (bounce.size / point.length - 1) * bounceBy / 2 // simplified
+            bounce.accel.x -= point.x * force
+            bounce.accel.y -= point.y * force
+        } else {
+            intersected = false
+        }
+    }
+
+    if (!intersected) {
+            bounce.collisionArray.push(wall);
     }
 };
 
@@ -394,5 +507,8 @@ module.exports = {
     reflectcollide,
     advancedcollide,
     mooncollide,
-    mazewallcollide
+    mazewallcollide,
+    mirrorcollide,
+    brellacollide,
+    mazewallcollidenokill,
 };

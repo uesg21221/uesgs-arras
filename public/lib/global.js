@@ -54,7 +54,7 @@ const global = {
     KEY_SHIFT: 16,
     KEY_BECOME: 70,
     KEY_CHAT: 13,
-    KEY_FIREFOOD: 113,
+    KEY_FIREFOOD: 119,
     KEY_SPLIT: 32,
 
     KEY_LEFT: 65,
@@ -96,6 +96,7 @@ const global = {
     KEY_DRAG: 221,
     KEY_SPAWN_WALL: 90,
     KEY_RANDOM_TEST: 81,
+    KEY_CHANGE_SONG: 112,
 
     KEY_UPGRADE_ATK: 49,
     KEY_UPGRADE_HTL: 50,
@@ -116,6 +117,7 @@ const global = {
     KEY_CHOOSE_4: 72,
     KEY_CHOOSE_5: 74,
     KEY_CHOOSE_6: 75,
+    KEY_WIKI: 118,
 
     showTree: false,
     showDebug: !1,
@@ -135,6 +137,7 @@ const global = {
     died: false,
     kicked: false,
     continuity: false,
+    wiki: false,
     startPingTime: 0,
     toggleMassState: 0,
     backgroundColor: '#f2fbff',
@@ -164,7 +167,18 @@ const global = {
         lastrender: 0,
         rendergap: 0,
         lastuplink: 0,
+        killcount: 0,
+        shapecount: 0,
     },
+    emojiloaded: false,
+    wikidisplaytank: 999,
+    ISTHEGODAMNFUCKINGGAMEON: "no",
+    killsoundready: true,
+    skin: "",
+    skinpage: 0,
+    savedkillcount: 0,
+    savedshapecount: 0,
+    lockedornot: 0,
     mouse: { x: 0, y: 0},
     target: { x: 0, y: 0 },
     reverseTank: 1,
@@ -173,6 +187,12 @@ const global = {
     ratio: window.devicePixelRatio,
     mockupLoading: { then: cb => cb() },
     treeScale: 1,
-    chats: {}
+    chats: {},
+    music2: {
+      src: "",
+      songname: "",
+    },
+    stopthefuckingkillsoundyouprick: false,
+
 };
 export { global }

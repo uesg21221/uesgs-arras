@@ -9,7 +9,7 @@ const g = require('../gunvals');
   
   	// This addon is enabled by default.
 	// If you want to disable, uncomment the line below.
-  //return console.log('[revolutionistPack.js] Addon disabled by default');
+  return console.log('[revolutionistPack.js] Addon disabled by default');
   
   Class.revoautoTurret = {
     PARENT: "genericTank",

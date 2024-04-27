@@ -104,7 +104,7 @@ let encode = (message) => {
         contentSize += block.length + 1;
       }
     } else {
-      console.error("Unencodable data type", block);
+      console.error("Unencodable data type:", block);
       throw new Error("Unencodable data type");
     }
     headers.push(typeCode);

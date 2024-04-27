@@ -70,7 +70,7 @@ class TileEntity {
     constructor (tile, loc) {
         if (!(tile instanceof Tile)) {
             throw new Error(`The cell at ${loc.x},${loc.y} in the room setup is not a Tile object!` +
-                ('string' == typeof tile ? ' But it is a string, which means you probably need to update your room setup!' : 'But it is of type ' + typeof tile)
+                ('string' == typeof tile ? ' But it is a string, which means you probably need to update your room setup!' : ' But it is of type ' + typeof tile)
             );
         }
         let gridLoc = this.gridLoc = { x: parseFloat(loc.x), y: parseFloat(loc.y) };
@@ -79,39 +79,11 @@ class TileEntity {
             get x() { return room.tileWidth * (gridLoc.x + 0.5); },
             get y() { return room.tileHeight * (gridLoc.y + 0.5); }
         };
-        this.color = tile.color ?? 8;
+        this.color = new Color(tile.color ?? 8);
         this.init = tile.init;
         this.tick = tile.tick;
         this.entities = [];
         this.data = JSON.parse(JSON.stringify(tile.data));
-    }
-
-    get color () {
-        return this._color;
-    }
-    set color (color) {
-        if (typeof color === "number" || typeof color === 'string') {
-            this.colorUnboxed = {
-                base: color,
-                hueShift: 0,
-                saturationShift: 1,
-                brightnessShift: 0,
-                allowBrightnessInvert: false,
-            };
-        } else if (typeof color === "object") {
-            this.colorUnboxed = {
-                base: color.BASE ?? 16,
-                hueShift: color.HUE_SHIFT ?? 0,
-                saturationShift: color.SATURATION_SHIFT ?? 1,
-                brightnessShift: color.BRIGHTNESS_SHIFT ?? 0,
-                allowBrightnessInvert: color.ALLOW_BRIGHTNESS_INVERT ?? false,
-            };
-        }
-        let oldColor = this._color;
-        this._color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
-        if (this._color != oldColor) {
-            room.sendColorsToClient = true;
-        }
     }
 
     randomInside() {
