@@ -675,9 +675,9 @@ Class.auraHealer = {
 };
 
 Class.ghoster_ghosted = {
-    PARENT: 'genericTank',
+    PARENT: "genericTank",
     TOOLTIP: 'You are now hidden, roam around and find your next target. You will be visible again in 5 seconds',
-    LABEL: "Ghoster",
+    LABEL: 'Ghoster',
     BODY: {
         SPEED: 20,
         ACCELERATION: 10,
@@ -690,8 +690,8 @@ Class.ghoster_ghosted = {
 }
 
 Class.ghoster = {
-    PARENT: 'genericTank',
-    LABEL: "Ghoster",
+    PARENT: "genericTank",
+    LABEL: 'Ghoster',
     TOOLTIP: 'Shooting will hide you for 5 seconds',
     BODY: {
         SPEED: base.SPEED,
@@ -701,7 +701,7 @@ Class.ghoster = {
         {
             event: 'fire',
             handler: ({ body }) => {
-                body.define(Class.ghoster_ghosted)
+                body.define("ghoster_ghosted")
                 setTimeout(() => {
                     body.SPEED = 1e-99
                     body.ACCEL = 1e-99
@@ -710,7 +710,7 @@ Class.ghoster = {
                 }, 2000)
                 setTimeout(() => {
                     body.SPEED = base.SPEED
-                    body.define(Class.ghoster)
+                    body.define("ghoster")
                 }, 2500)
             }
         }
@@ -990,6 +990,31 @@ Class.propTest = {
         }
     ]
 }
+Class.weaponArrayTest = {
+    PARENT: 'genericTank',
+    LABEL: 'Weapon Array Test',
+    GUNS: weaponArray([
+        {
+            POSITION: [20, 8, 1, 0, 0, 25, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: 'bullet'
+            }
+        }, {
+            POSITION: [17, 8, 1, 0, 0, 25, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: 'bullet'
+            }
+        }
+    ], 5),
+    TURRETS: weaponArray(
+        {
+            POSITION: [7, 10, 0, -11, 180, 0],
+            TYPE: 'autoTankGun'
+        }
+    , 5),
+}
 
 Class.levels = menu("Levels")
 Class.levels.UPGRADES_TIER_0 = []
@@ -1040,6 +1065,75 @@ Class.goofytanks.UPGRADE_TOOLTIP = "The Funny v3"
   
 Class.addons = menu("Addon Entities")
 Class.addons.UPGRADES_TIER_0 = []
+
+Class.volute = {
+    PARENT: "genericTank",
+    LABEL: "Volute",
+    DANGER: 6,
+    STAT_NAMES: statnames.desmos,
+    GUNS: [
+        {
+            POSITION: [20, 13, 0.8, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, g.pounder]),
+                TYPE: ["bullet", {MOTION_TYPE: "desmos"}]
+            },
+        },
+        {
+            POSITION: [5, 10, 2.125, 1, -6.375, 90, 0],
+        },
+        {
+            POSITION: [5, 10, 2.125, 1, 6.375, -90, 0],
+        },
+    ],
+}
+Class.snakeOld = {
+    PARENT: "missile",
+    LABEL: "Snake",
+    GUNS: [
+        {
+            POSITION: [6, 12, 1.4, 8, 0, 180, 0],
+            PROPERTIES: {
+                AUTOFIRE: true,
+                STAT_CALCULATOR: gunCalcNames.thruster,
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, g.snake, g.snakeskin]),
+                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+            },
+        },
+        {
+            POSITION: [10, 12, 0.8, 8, 0, 180, 0.5],
+            PROPERTIES: {
+                AUTOFIRE: true,
+                NEGATIVE_RECOIL: true,
+                STAT_CALCULATOR: gunCalcNames.thruster,
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, g.snake]),
+                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+            },
+        },
+    ],
+}
+Class.sidewinderOld = {
+    PARENT: "genericTank",
+    LABEL: "Sidewinder (old)",
+    DANGER: 7,
+    BODY: {
+        SPEED: 0.8 * base.SPEED,
+        FOV: 1.3 * base.FOV,
+    },
+    GUNS: [
+        {
+            POSITION: [10, 11, -0.5, 14, 0, 0, 0],
+        },
+        {
+            POSITION: [21, 12, -1.1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder]),
+                TYPE: "snakeOld",
+                STAT_CALCULATOR: gunCalcNames.sustained,
+            },
+        },
+    ],
+}
 
 Class.whirlwindDeco = makeDeco(6)
 Class.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
@@ -2130,28 +2224,6 @@ Class.wallPlacer = {
         },
     ],
 };
-Class.legacysidewinder = {
-    PARENT: "genericTank",
-    LABEL: "Sidewinder",
-    DANGER: 7,
-    BODY: {
-        SPEED: 0.8 * base.SPEED,
-        FOV: 1.3 * base.FOV,
-    },
-    GUNS: [
-        {
-            POSITION: [10, 11, -0.5, 14, 0, 0, 0],
-        },
-        {
-            POSITION: [21, 12, -1.1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder]),
-                TYPE: "oldsnake",
-                STAT_CALCULATOR: gunCalcNames.sustained,
-            },
-        },
-    ],
-}
 Class.imagetest = {
     PARENT: "genericTank",
     UPGRADE_COLOR: "black",
@@ -2383,7 +2455,8 @@ Class.developer.UPGRADES_TIER_0 = ["basic", "tanks", "AIT", "utilities", "addons
     Class.tanks.UPGRADES_TIER_0 = ["developer", "overpowered", "testing", "unavailable", "features"]
         Class.AIT.UPGRADES_TIER_0 = ["developer", "bosses", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"]
         Class.utilities.UPGRADES_TIER_0 = ["developer", "levels", "teams", "eggGenerator", "spectator", "wallPlacer"]
-        Class.unavailable.UPGRADES_TIER_0 = ["developer", "healer", "flail", "doubleFlail", "winsor0", "legacysidewinder"]
+        Class.unavailable.UPGRADES_TIER_0 = ["developer", "healer", "doubleFlail", "winsor0", "volute"]
+            Class.volute.UPGRADES_TIER_3 = ["sidewinderOld"]
             //Class.flail.UPGRADES_TIER_2 = ["doubleFlail"]
                 Class.doubleFlail.UPGRADES_TIER_3 = ["tripleFlail"]
         Class.testing.UPGRADES_TIER_0 = ["tanks", "vanquisher", "mummifier", "tracker3", ["grappletest", "basic"], "brella"]
@@ -2402,7 +2475,7 @@ Class.developer.UPGRADES_TIER_0 = ["basic", "tanks", "AIT", "utilities", "addons
         Class.eternals.UPGRADES_TIER_0 = ["bosses", "odin", "kronos"]
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss"]
 
-        Class.features.UPGRADES_TIER_0 = ["tanks", "diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"]]
+        Class.features.UPGRADES_TIER_0 = ["tanks", "diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
         Class.overpowered.UPGRADES_TIER_0 = ["tanks", "goofytanks", "armyOfOne", "godbasic", "maximumOverdrive", "oppenheimer", "homingdev", ["maxStatTank", "basic"], "quiteliterallyAMachineGun", "speedoflight"]
         Class.goofytanks.UPGRADES_TIER_0 = ["overpowered", "pisseroo", "papyrus", "Trapper_guy", "watertank", "piszerbeam", "baseThrowerDelta", "pouner", "adsfoipuasdfiopu", "goofywhirlwind"]
 

@@ -629,6 +629,7 @@ if (player.body != null && socket.permissions) {
         case "H":
             if (player.body == null) return 1;
             let body = player.body;
+            body.emit("control", { body })
             if (body.underControl) {
                 if (c.DOMINATOR_LOOP) {
                     player.body.sendMessage("You have relinquished control of the dominator.");
@@ -1055,7 +1056,6 @@ const spawn = (socket, name) => {
         util.remove(disconnections, disconnections.indexOf(recover));
         clearTimeout(recover.timeout);
         body = recover.body;
-        body.controllers = body.controllers.filter(con => !(con instanceof ioTypes.listenToPlayer));
         body.become(player);
         player.team = body.team;
     } else {

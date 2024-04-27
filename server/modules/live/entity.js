@@ -426,7 +426,7 @@ class Gun extends EventEmitter {
                     facing: host.facing,
                     size: host.SIZE,
                 };
-                host.define(Class.genericEntity);
+                host.define("genericEntity");
                 this.bulletInit(host);
                 host.team = oo.master.master.team;
                 host.master = oo.master;
@@ -466,7 +466,7 @@ class Gun extends EventEmitter {
                     y: 3 * Math.sin(save.angle),
                 };
                 o.color = gun.body.master.master.color;
-                o.define(Class.hitScanExplosion);
+                o.define("hitScanExplosion");
                 // Pass the gun attributes
                 o.define({
                     BODY: gun.interpret(gun.settings3),
@@ -499,7 +499,7 @@ class Gun extends EventEmitter {
                     );
                     o.facing = Math.atan2(target.y - y, target.x - x) + dir;
                     o.color = this.body.master.master.color;
-                    o.define(Class.hitScanBullet);
+                    o.define("hitScanBullet");
                     // Pass the gun attributes
                     o.define({
                         BODY: this.interpret(this.settings3),
@@ -531,7 +531,7 @@ class Gun extends EventEmitter {
                 let e = new Entity({ x: x, y: y }, this.body);
                 e.facing = Math.atan2(target.y - y, target.x - x);
                 e.color = this.body.master.master.color;
-                e.define(Class.hitScanBullet);
+                e.define("hitScanBullet");
                 // Pass the gun attributes
                 e.define({
                     BODY: this.interpret(this.settings2),
@@ -1035,9 +1035,9 @@ class Entity extends EventEmitter {
         }
         this.control.target = b.target == null ? this.control.target : b.target;
         this.control.goal = b.goal ? b.goal : { x: this.x, y: this.y };
-        this.control.fire = b.fire;
-        this.control.main = b.main;
-        this.control.alt = b.alt;
+        this.control.fire = b.fire ?? false;
+        this.control.main = b.main ?? false;
+        this.control.alt = b.alt ?? false;
         this.control.power = b.power == null ? 1 : b.power;
 
         if (this.invuln && (this.control.goal.x !== this.x || this.control.goal.y !== this.y)) {
@@ -1948,6 +1948,7 @@ class Entity extends EventEmitter {
                 }
                 break;
             case "desmos":
+                this.damp = 0;
                 let save = {
                     x: this.master.x,
                     y: this.master.y,

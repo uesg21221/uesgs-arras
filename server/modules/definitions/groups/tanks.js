@@ -2910,7 +2910,7 @@ Class.architect = {
 }
 
 // Trap Guard upgrades
-Class.bushwhacker = makeGuard(Class.sniper, "Bushwhacker")
+Class.bushwhacker = makeGuard("sniper", "Bushwhacker")
 Class.gunnerTrapper = {
     PARENT: "genericTank",
     LABEL: "Gunner Trapper",
@@ -3822,27 +3822,6 @@ Class.minilaser = {
                 TYPE: "laser",
             },
         }
-    ],
-}
-Class.volute = {
-    PARENT: "genericTank",
-    LABEL: "Volute",
-    DANGER: 6,
-    STAT_NAMES: statnames.desmos,
-    GUNS: [
-        {
-            POSITION: [20, 13, 0.8, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, g.pounder]),
-                TYPE: ["bullet", {MOTION_TYPE: "desmos"}]
-            },
-        },
-        {
-            POSITION: [5, 10, 2.125, 1, -6.375, 90, 0],
-        },
-        {
-            POSITION: [5, 10, 2.125, 1, 6.375, -90, 0],
-        },
     ],
 }
 Class.cruiserdrive = {
@@ -4810,7 +4789,7 @@ Class.triContagion = makeMulti({
         }
     }]
 }, 3, "Tri-Contagion");
-Class.autoContagion = makeAuto(Class.contagion);
+Class.autoContagion = makeAuto("contagion");
 Class.fort = {
     PARENT: "genericTank",
     LABEL: "Fort",
@@ -5345,18 +5324,18 @@ Class.autoinceptionistbody = {
 }
 
 // Auto tanks
-Class.autoBasic = makeAuto(Class.basic, "Auto-Basic");
-Class.autoTwin = makeAuto(Class.twin, "Auto-Twin");
-Class.autoMach = makeAuto(Class.machineGun, "Auto-Mach");
-Class.autoSniper = makeAuto(Class.sniper, "Auto-Sniper");
-Class.autoFlank = makeAuto(Class.flankGuard, "Auto-Flank");
-Class.autoDirector = makeAuto(Class.director, "Chairman");
-Class.autoPound = makeAuto(Class.pounder, "Scratcher");
-Class.autoTrap = makeAuto(Class.trapper, "Auto-Trapper");
-Class.autoDesmos = makeAuto(Class.desmos, "Auto-Desmos");
-Class.autolittleHunter = makeAuto(Class.littleHunter, "Auto-Subduer")
-Class.autoinception = makeAuto(Class.inception, "Auto-inception");
-Class.autoauto2 = makeAuto(Class.auto2, "Auto-Auto-2");
+Class.autoBasic = makeAuto("basic", "Auto-Basic");
+Class.autoTwin = makeAuto("twin", "Auto-Twin");
+Class.autoMach = makeAuto("machineGun", "Auto-Mach");
+Class.autoSniper = makeAuto("sniper", "Auto-Sniper");
+Class.autoFlank = makeAuto("flankGuard", "Auto-Flank");
+Class.autoDirector = makeAuto("director", "Chairman");
+Class.autoPound = makeAuto("pounder", "Scratcher");
+Class.autoTrap = makeAuto("trapper", "Auto-Trapper");
+Class.autoDesmos = makeAuto("desmos", "Auto-Desmos");
+Class.autolittleHunter = makeAuto("littleHunter", "Auto-Subduer")
+Class.autoinception = makeAuto("inception", "Auto-inception");
+Class.autoauto2 = makeAuto("auto2", "Auto-Auto-2");
 Class.autoCloner = makeAuto({
   PARENT: "genericTank",
   GUNS: [
@@ -5385,44 +5364,44 @@ Class.autoCloner = makeAuto({
     }
   ]
 }, "Auto-Cloner");
-Class.autoDouble = makeAuto(Class.doubleTwin, "Auto-Double")
-Class.autoAssassin = makeAuto(Class.assassin)
-Class.autoGunner = makeAuto(Class.gunner)
-Class.autoTriAngle = makeAuto(Class.triAngle)
-Class.autoOverseer = makeAuto(Class.overseer)
-Class.autoRevolutionist = makeAuto(Class.revolutionist, "Audioboard");
-Class.autoCruiser = makeAuto(Class.cruiser)
-Class.autoSpawner = makeAuto(Class.spawner)
-Class.autoBuilder = makeAuto(Class.builder)
-Class.autoBinary = makeAuto(Class.binary, "Auto-Binary")
-Class.autoinceptionist = makeAuto(Class.autoinceptionistbody, "Auto-Inceptionist", {type: 'ceptionistturret'});
-Class.autoGundirector = makeAuto(Class.gundirector, "Auto-Pathogen")
-Class.autoBigSubduer = makeAuto(Class.bigSubduer, "Auto-Mitochondrion")
-Class.autoFlankdue = makeAuto(Class.flankdue, "Auto-Flankduer")
-Class.autoTripleShot = makeAuto(Class.tripleShot, "Auto-Triple Shot");
-Class.autoHunter = makeAuto(Class.hunter, "Auto-Hunter");
-Class.autoRifle = makeAuto(Class.rifle, "Auto-Rifle");
-Class.autoTwinsniper = makeAuto(Class.twinsniper, "Auto-Twiper");
-Class.autoAcid = makeAuto(Class.acid, "Cyanide");
-Class.autoChill = makeAuto(Class.chiller, "Auto-Chiller");
-Class.autoMini = makeAuto(Class.minigun, "Auto-Minigun");
-Class.autoSprayer = makeAuto(Class.sprayer, "Auto-Sprayer");
-Class.autoHexaTank = makeAuto(Class.hexaTank, "Auto-HexaTank");
-Class.autoAuto3 = makeAuto(Class.auto3, "Auto-Auto3");
-Class.autoUnderseer = makeAuto(Class.underseer, "Auto-Underseer");
-Class.autoDestroy = makeAuto(Class.destroyer, "Auto-Destroyer");
-Class.autoArtillery = makeAuto(Class.artillery, "Auto-Artillery");
-Class.autoLaunch = makeAuto(Class.launcher, "Auto-Launcher");
-Class.autoTriTrapper = makeAuto(Class.triTrapper, "Auto-Tri Trapper");
-Class.autoTrapGuard = makeAuto(Class.trapGuard, "Auto-TrapGuard");
-Class.autoSidewinder = makeAuto(Class.sidewinder, "Auto-Sidewinder");
-Class.autoHelix = makeAuto(Class.helix, "Auto-Helix");
-Class.autoUndertow = makeAuto(Class.undertow, "Auto-Undertow");
-Class.autoRepeater = makeAuto(Class.repeater, "Auto-Repeater");
-Class.automachinception = makeAuto(Class.machinception, "Auto-Machceptioner");
-Class.autotailgator = makeAuto(Class.tailgator, "Auto-Tailgator");
-Class.autoflankinception = makeAuto(Class.flankinception, "Auto-Flankceptioner");
-Class.autoBackShield = makeAuto(Class.backShield, "Auto-BackShield");
+Class.autoDouble = makeAuto("doubleTwin", "Auto-Double")
+Class.autoAssassin = makeAuto("assassin")
+Class.autoGunner = makeAuto("gunner")
+Class.autoTriAngle = makeAuto("triAngle")
+Class.autoOverseer = makeAuto("overseer")
+Class.autoRevolutionist = makeAuto("revolutionist", "Audioboard");
+Class.autoCruiser = makeAuto("cruiser")
+Class.autoSpawner = makeAuto("spawner")
+Class.autoBuilder = makeAuto("builder")
+Class.autoBinary = makeAuto("binary", "Auto-Binary")
+Class.autoinceptionist = makeAuto("autoinceptionistbody", "Auto-Inceptionist", {type: 'ceptionistturret'});
+Class.autoGundirector = makeAuto("gundirector", "Auto-Pathogen")
+Class.autoBigSubduer = makeAuto("bigSubduer", "Auto-Mitochondrion")
+Class.autoFlankdue = makeAuto("flankdue", "Auto-Flankduer")
+Class.autoTripleShot = makeAuto("tripleShot", "Auto-Triple Shot");
+Class.autoHunter = makeAuto("hunter", "Auto-Hunter");
+Class.autoRifle = makeAuto("rifle", "Auto-Rifle");
+Class.autoTwinsniper = makeAuto("twinsniper", "Auto-Twiper");
+Class.autoAcid = makeAuto("acid", "Cyanide");
+Class.autoChill = makeAuto("chiller", "Auto-Chiller");
+Class.autoMini = makeAuto("minigun", "Auto-Minigun");
+Class.autoSprayer = makeAuto("sprayer", "Auto-Sprayer");
+Class.autoHexaTank = makeAuto("hexaTank", "Auto-HexaTank");
+Class.autoAuto3 = makeAuto("auto3", "Auto-Auto3");
+Class.autoUnderseer = makeAuto("underseer", "Auto-Underseer");
+Class.autoDestroy = makeAuto("destroyer", "Auto-Destroyer");
+Class.autoArtillery = makeAuto("artillery", "Auto-Artillery");
+Class.autoLaunch = makeAuto("launcher", "Auto-Launcher");
+Class.autoTriTrapper = makeAuto("triTrapper", "Auto-Tri Trapper");
+Class.autoTrapGuard = makeAuto("trapGuard", "Auto-TrapGuard");
+Class.autoSidewinder = makeAuto("sidewinder", "Auto-Sidewinder");
+Class.autoHelix = makeAuto("helix", "Auto-Helix");
+Class.autoUndertow = makeAuto("undertow", "Auto-Undertow");
+Class.autoRepeater = makeAuto("repeater", "Auto-Repeater");
+Class.automachinception = makeAuto("machinception", "Auto-Machceptioner");
+Class.autotailgator = makeAuto("tailgator", "Auto-Tailgator");
+Class.autoflankinception = makeAuto("flankinception", "Auto-Flankceptioner");
+Class.autoBackShield = makeAuto("backShield", "Auto-BackShield");
 Class.autoSmasher = makeAuto({
     PARENT: "genericSmasher",
     DANGER: 6,
@@ -5565,26 +5544,26 @@ Class.trackerAcid = makeTracker(Class.acid, "Acidilizer");
 Class.trackerChill = makeTracker(Class.chiller, "Icilizer");
 
 //Homing Auto Tanks
-Class.homingautoBasic = makeAuto(Class.basic, "Homing Auto-Basic", {type: 'homingAutoTurret'});
-Class.homingautoTwin = makeAuto(Class.twin, "Homing Auto-Twin", {type: 'homingAutoTurret'});
-Class.homingautoMach = makeAuto(Class.machineGun, "Homing Auto-Mach", {type: 'homingAutoTurret'});
-Class.homingautoSniper = makeAuto(Class.sniper, "Homing-Auto Sniper", {type: 'homingAutoTurret'});
-Class.homingautoFlank = makeAuto(Class.flankGuard, "Homing Auto-Flank", {type: 'homingAutoTurret'});
-Class.homingautoDirector = makeAuto(Class.director, "Homing Auto-Director", {type: 'homingAutoTurret'});
-Class.homingautoPound = makeAuto(Class.pounder, "Homing Auto-Pounder", {type: 'homingAutoTurret'});
-Class.homingautoTrap = makeAuto(Class.trapper, "Homing Auto-Trapper", {type: 'homingAutoTurret'});
-Class.homingautoDesmos = makeAuto(Class.desmos, "Homing Auto-Desmos", {type: 'homingAutoTurret'});
-Class.homingautobascrid = makeAuto(Class.bascrid, "Homing Auto-Bascrid", {type: 'homingAutoTurret'})
-Class.homingautolittleHunter = makeAuto(Class.littleHunter, "Homing Auto-Subduer", {type: 'homingAutoTurret'})
-Class.homingautoinception = makeAuto(Class.inception, "Auto Inception", {type: 'homingAutoTurret'});
-Class.homingautoauto2 = makeAuto(Class.auto2, "Auto-2", {type: 'homingAutoTurret'});
+Class.homingautoBasic = makeAuto("basic", "Homing Auto-Basic", {type: 'homingAutoTurret'});
+Class.homingautoTwin = makeAuto("twin", "Homing Auto-Twin", {type: 'homingAutoTurret'});
+Class.homingautoMach = makeAuto("machineGun", "Homing Auto-Mach", {type: 'homingAutoTurret'});
+Class.homingautoSniper = makeAuto("sniper", "Homing-Auto Sniper", {type: 'homingAutoTurret'});
+Class.homingautoFlank = makeAuto("flankGuard", "Homing Auto-Flank", {type: 'homingAutoTurret'});
+Class.homingautoDirector = makeAuto("director", "Homing Auto-Director", {type: 'homingAutoTurret'});
+Class.homingautoPound = makeAuto("pounder", "Homing Auto-Pounder", {type: 'homingAutoTurret'});
+Class.homingautoTrap = makeAuto("trapper", "Homing Auto-Trapper", {type: 'homingAutoTurret'});
+Class.homingautoDesmos = makeAuto("desmos", "Homing Auto-Desmos", {type: 'homingAutoTurret'});
+Class.homingautobascrid = makeAuto("bascrid", "Homing Auto-Bascrid", {type: 'homingAutoTurret'})
+Class.homingautolittleHunter = makeAuto("littleHunter", "Homing Auto-Subduer", {type: 'homingAutoTurret'})
+Class.homingautoinception = makeAuto("inception", "Auto Inception", {type: 'homingAutoTurret'});
+Class.homingautoauto2 = makeAuto("auto2", "Auto-2", {type: 'homingAutoTurret'});
 
 //Reveries
 Class.reverie = addBackTurret(Class.basic, "Reverie", {type: 'autoTankGun'});
 Class.twinreverie = addBackTurret(Class.basic, "Tyverie", {type: 'fastbigauto4gun'});
 Class.poundreverie = addBackTurret(Class.basic, "Pyverie", {type: 'megaAutoTankGun'});
 Class.dualreverie = addBackTurret(Class.basic, "Douverie", {type: 'dualAutoTankGun'});
-Class.autoReverie = makeAuto(Class.inception, "Auto-Reverie");
+Class.autoReverie = makeAuto("reverie", "Auto-Reverie");
 Class.reveriebrid = makeHybrid('reverie', "Reverie-Hybrid");
 
 //Auras
