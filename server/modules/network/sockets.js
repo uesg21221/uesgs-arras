@@ -460,6 +460,7 @@ function incoming(message, socket) {
         case "H":
             if (player.body == null) return 1;
             let body = player.body;
+            body.emit("control", { body })
             if (body.underControl) {
                 if (c.DOMINATOR_LOOP) {
                     player.body.sendMessage("You have relinquished control of the dominator.");
