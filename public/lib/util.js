@@ -11,6 +11,17 @@ const util = {
         document.getElementById(name).checked = localStorage.getItem(name + 'Checked') === 'true';
         return false;
     },
+    submitAchievementToLocalStorage: achive => {
+        localStorage.setItem(achive, "YOUDIDIT:D!!!");
+        return false;
+    },
+    resetAchievementFromLocalStorage: achive => {
+        localStorage.setItem(achive, "noachievement");
+        return false;
+    },
+    getTankWikiStats: name => {
+        return name;
+    },
     handleLargeNumber: (a, cullZeroes = false) => {
         if (cullZeroes && a == 0) {
             return '';
@@ -199,6 +210,7 @@ const util = {
             facing: mainMockup.facing,
             shape: mainMockup.shape,
             name: name.substring(1),
+            className: mainMockup.className,
             upgradeTooltip: upgradeTooltip.substring(1),
             upgradeName: mainMockup.upgradeName,
             score: 0,
@@ -246,9 +258,8 @@ const util = {
             }),
         };
     },
-    sizeMultipleMockups: (positionData) => {
+      sizeMultipleMockups: (positionData) => {
         let endPoints = [];
-
         function rounder(val) {
             if (Math.abs(val) < 0.00001) val = 0;
             return +val.toPrecision(6);
@@ -290,7 +301,6 @@ const util = {
             // Check point is on the line with a small margin
             return Math.abs(checkPoint[1] - predictedY) <= 1e-5;
         }
-
         // Find circumcircle and circumcenter
         function constructCircumcirle(point1, point2, point3) {
             // Rounder to avoid floating point nonsense
@@ -300,7 +310,6 @@ const util = {
             let y2 = rounder(point2[1]);
             let x3 = rounder(point3[0]);
             let y3 = rounder(point3[1]);
-
             // Invalid math protection
             if (x3 == x1 || x3 == x2) {
                 x3 += 1e-5;
@@ -315,7 +324,6 @@ const util = {
             let y = (numer1 * factorX1 - numer2 * factorX2) / (factorY1 * factorX2 - factorY2 * factorX1);
             let x = ((y - y3) ** 2 - (y - y1) ** 2 - x1 ** 2 + x3 ** 2) / factorX2;
             let r = Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2));
-
             return {x, y, r};
         }
         
@@ -327,7 +335,6 @@ const util = {
                 endPoints.push([middle.x + Math.cos(theta) * axis / 2, middle.y + Math.sin(theta) * axis / 2]);
             }
         }
-
         // Convert to useful info
         endPoints.sort((a, b) => (b[0] ** 2 + b[1] ** 2 - a[0] ** 2 - a[1] ** 2));
         let point1 = getFurthestFrom(0, 0),
@@ -337,7 +344,6 @@ const util = {
         while (point1[0] == 0 && point2[0] == 0 || point1[1] == 0 && point2[1] == 0) {
             point2 = getFurthestFrom(...point1);
         }
-
         let avgX = (point1[0] + point2[0]) / 2,
             avgY = (point1[1] + point2[1]) / 2,
             point3 = getFurthestFrom(avgX, avgY);
@@ -348,7 +354,6 @@ const util = {
         }
         
         let {x, y, r} = constructCircumcirle(point1, point2, point3);
-
         return {
             axis: r * 2,
             middle: {x, y},

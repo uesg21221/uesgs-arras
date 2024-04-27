@@ -48,61 +48,79 @@ let Region = (size) => {
 };
 
 const global = {
-    // Keys and other mathematical constants. You can find the list here: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
-    KEY_ESC: 27,// Escape
-    KEY_ENTER: 13,// Enter
-    KEY_SHIFT: 16,// Shift
-    KEY_BECOME: 70,// F
-    KEY_CHAT: 13,// Enter
-    KEY_FIREFOOD: 119,// F8
-    KEY_SPLIT: 32,// Space
+    // Keys and other mathematical constants
+    KEY_ESC: 27,
+    KEY_ENTER: 13,
+    KEY_SHIFT: 16,
+    KEY_BECOME: 70,
+    KEY_CHAT: 13,
+    KEY_FIREFOOD: 119,
+    KEY_SPLIT: 32,
 
-    KEY_LEFT: 65,// A
-    KEY_UP: 87,// W
-    KEY_RIGHT: 68,// D
-    KEY_DOWN: 83,// S
-    KEY_LEFT_ARROW: 37,// ArrowLeft
-    KEY_UP_ARROW: 38,// ArrowUp
-    KEY_RIGHT_ARROW: 39,// ArrowRight
-    KEY_DOWN_ARROW: 40,// ArrowDown
+    KEY_LEFT: 65,
+    KEY_UP: 87,
+    KEY_RIGHT: 68,
+    KEY_DOWN: 83,
+    KEY_LEFT_ARROW: 37,
+    KEY_UP_ARROW: 38,
+    KEY_RIGHT_ARROW: 39,
+    KEY_DOWN_ARROW: 40,
 
-    KEY_AUTO_SPIN: 67,// C
-    KEY_AUTO_FIRE: 69,// E
-    KEY_AUTO_ALT: 71,// G
-    KEY_OVER_RIDE: 82,// R
-    KEY_REVERSE_TANK: 86,// V
-    KEY_REVERSE_MOUSE: 66,// B
-    KEY_SPIN_LOCK: 88,// X
+    KEY_AUTO_SPIN: 67,
+    KEY_AUTO_FIRE: 69,
+    KEY_AUTO_ALT: 71,
+    KEY_OVER_RIDE: 82,
+    KEY_REVERSE_TANK: 86,
+    KEY_REVERSE_MOUSE: 66,
+    KEY_SPIN_LOCK: 88,
 
     KEY_LEVEL_UP: 78,
-    KEY_FUCK_YOU: 80,// P
-    KEY_CLASS_TREE: 84,// T
-    KEY_MAX_STAT: 77,// M
-    KEY_SUICIDE: 79,// O
-    KEY_ZOOM_OUT: 45,// ??
-    KEY_ZOOM_IN: 61,// ??
+    KEY_FUCK_YOU: 192,
+    KEY_PING: 76,
+    KEY_CLASS_TREE: 84,
+    KEY_MAX_STAT: 77,
+    KEY_SUICIDE: 79,
+    KEY_ZOOM_OUT: 45,
+    KEY_ZOOM_IN: 61,
+    KEY_TELEPORT: 80,
+    KEY_SMALLER_TANK: 188,
+    KEY_BIGGER_TANK: 190,
+    KEY_SMALLER_FOV: 187,
+    KEY_BIGGER_FOV: 189,
+    KEY_GOD_MODE: 186,
+    KEY_INVISIBLE: 222,
+    KEY_CAN_BE_ON_LEADERBOARD: 113,
+    KEY_STRONG: 191,
+    KEY_HEAL: 220,
+    KEY_WATCH_THIS: 219,
+    KEY_DRAG: 221,
+    KEY_SPAWN_WALL: 90,
+    KEY_RANDOM_TEST: 81,
+    KEY_CHANGE_SONG: 112,
 
-    KEY_UPGRADE_ATK: 49,// 1
-    KEY_UPGRADE_HTL: 50,// 2
-    KEY_UPGRADE_SPD: 51,// 3
-    KEY_UPGRADE_STR: 52,// 4
-    KEY_UPGRADE_PEN: 53,// 5
-    KEY_UPGRADE_DAM: 54,// 6
-    KEY_UPGRADE_RLD: 55,// 7
-    KEY_UPGRADE_MOB: 56,// 8
-    KEY_UPGRADE_RGN: 57,// 9
-    KEY_UPGRADE_SHI: 48,// 0
-    KEY_MOUSE_0: 32,// 32
-    KEY_MOUSE_1: 86,// V
-    KEY_MOUSE_2: 16,// ShiftLeft
-    KEY_CHOOSE_1: 89,// Y
-    KEY_CHOOSE_2: 85,// U
-    KEY_CHOOSE_3: 73,// I
-    KEY_CHOOSE_4: 72,// H
-    KEY_CHOOSE_5: 74,// J
-    KEY_CHOOSE_6: 75,// K
+    KEY_UPGRADE_ATK: 49,
+    KEY_UPGRADE_HTL: 50,
+    KEY_UPGRADE_SPD: 51,
+    KEY_UPGRADE_STR: 52,
+    KEY_UPGRADE_PEN: 53,
+    KEY_UPGRADE_DAM: 54,
+    KEY_UPGRADE_RLD: 55,
+    KEY_UPGRADE_MOB: 56,
+    KEY_UPGRADE_RGN: 57,
+    KEY_UPGRADE_SHI: 48,
+    KEY_MOUSE_0: 32,
+    KEY_MOUSE_1: 86,
+    KEY_MOUSE_2: 16,
+    KEY_CHOOSE_1: 89,
+    KEY_CHOOSE_2: 85,
+    KEY_CHOOSE_3: 73,
+    KEY_CHOOSE_4: 72,
+    KEY_CHOOSE_5: 74,
+    KEY_CHOOSE_6: 75,
+    KEY_WIKI: 118,
 
     showTree: false,
+    showDebug: !1,
     scrollX: 0,
     realScrollX: 0,
     // Canvas
@@ -119,6 +137,7 @@ const global = {
     died: false,
     kicked: false,
     continuity: false,
+    wiki: false,
     startPingTime: 0,
     toggleMassState: 0,
     backgroundColor: '#f2fbff',
@@ -148,7 +167,18 @@ const global = {
         lastrender: 0,
         rendergap: 0,
         lastuplink: 0,
+        killcount: 0,
+        shapecount: 0,
     },
+    emojiloaded: false,
+    wikidisplaytank: 999,
+    ISTHEGODAMNFUCKINGGAMEON: "no",
+    killsoundready: true,
+    skin: "",
+    skinpage: 0,
+    savedkillcount: 0,
+    savedshapecount: 0,
+    lockedornot: 0,
     mouse: { x: 0, y: 0},
     target: { x: 0, y: 0 },
     reverseTank: 1,
@@ -157,6 +187,12 @@ const global = {
     ratio: window.devicePixelRatio,
     mockupLoading: { then: cb => cb() },
     treeScale: 1,
-    chats: {}
+    chats: {},
+    music2: {
+      src: "",
+      songname: "",
+    },
+    stopthefuckingkillsoundyouprick: false,
+
 };
 export { global }

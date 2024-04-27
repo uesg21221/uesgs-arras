@@ -4,7 +4,8 @@ spawnPermanentBaseProtector = (loc, team) => {
     let o = new Entity(loc);
     o.define('baseProtector');
     o.team = team;
-    o.color.base = getTeamColor(team);
+    o.colorUnboxed.base = getTeamColor(team);
+    o.compressColor();
     o.on('dead', () => spawnPermanentBaseProtector(loc, team));
 };
 

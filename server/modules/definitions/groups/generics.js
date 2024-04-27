@@ -138,6 +138,12 @@ Class.genericSmasher = {
         DENSITY: 2 * base.DENSITY
     }
 }
+Class.genericLancer = {
+    PARENT: "genericTank",
+    DANGER: 6,
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+    STAT_NAMES: statnames.lancer,
+}
 Class.genericBoss = {
     PARENT: "genericTank",
     TYPE: "miniboss",
@@ -236,7 +242,6 @@ Class.drone = {
     CLEAR_ON_MASTER_UPGRADE: true,
     BUFF_VS_FOOD: true,
 };
-
 Class.swarm = {
     LABEL: "Swarm Drone",
     TYPE: "swarm",
@@ -262,7 +267,6 @@ Class.swarm = {
     DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
 };
-
 Class.trap = {
     LABEL: "Thrown Trap",
     TYPE: "trap",
@@ -356,4 +360,11 @@ Class.auraSymbol = {
     INDEPENDENT: true,
     COLOR: "teal",
     SHAPE: [[-0.598,-0.7796],[-0.3817,-0.9053],[0.9688,-0.1275],[0.97,0.125],[-0.3732,0.9116],[-0.593,0.785]]
+};
+Class.rangeAuraSymbol = {
+    PARENT: "genericTank",
+    CONTROLLERS: [["spin", {speed: -0.04}]],
+    INDEPENDENT: true,
+    COLOR: "teal",
+    SHAPE: "M -0.7671 0.6521 L -0.7671 -0.6521 L -0.6521 -0.7671 L -0.6521 -0.7671 L 0.6521 -0.7671 L 0.7671 -0.6521 L 0.7671 0.6521 L 0.6521 0.7671 L -0.6521 0.7671 L -0.7671 0.6521"
 };

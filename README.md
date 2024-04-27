@@ -1,6 +1,5 @@
 # Open Source Arras
 
-<img alt="Logo" src="public/favicon.ico" width="120" />
 
 ![GitHub Release](https://img.shields.io/github/v/release/Taureon/aps-plus-plus)
 ![Discord](https://img.shields.io/discord/1004907608018264094)
@@ -32,7 +31,7 @@ Create a new project and choose to import one from GitHub. When prompted for the
 
 Navigate to `server/config.js` and replace `localhost:26301` with the URL for your project. (For Glitch users, it's `your-project.glitch.me` (replace `your-project` with the actual name of your project, it should be above settings)).
 
-**For Glitch specifically, go to `package.json` and replace `"node": "18.x"` with `"node": "16.x"` and change your port to something more generic like 3000 or 8080.**
+**For Glitch specifically, go to `package.json` and replace `"node": "18.x"` with `"node": "16.x"`. Glitch doesn't currently support Node 18.**
 
 After doing that, your server should be ready!
 

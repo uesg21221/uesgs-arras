@@ -1,14 +1,14 @@
 {
-    "name": "Open Source Arras",
-    "theme_color": "#454b7f",
+    "name": "Nero.io 2",
+    "theme_color": "#000000",
     "background_color": "#484948",
-    "description": "This server runs on Open Source Arras.",
+    "description": "Nero.io 2 runs on Open Source Arras.",
     "orientation": "landscape",
     "start_url": "/",
     "scope": "/",
     "display": "fullscreen",
     "icons": [{
-        "src": "round.png",
+        "src": "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2023_12_06_0za_Kleki.png?v=1701910145704",
         "sizes": "96x96",
         "type": "image/png"
     }]

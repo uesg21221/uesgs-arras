@@ -136,6 +136,9 @@ function incoming(message, socket) {
                     util.log("[INFO] A socket was verified with the token: " + key);
                 } else {
                     util.log("[WARNING] A socket failed to verify with the token: " + key);
+                    if (key !== "") {
+                    socket.talk("achieve", 2);
+                    }
                 }
                 socket.key = key;
             }
@@ -148,14 +151,15 @@ function incoming(message, socket) {
                 socket.kick("Trying to spawn while already alive.");
                 return 1;
             }
-            if (m.length !== 3) {
-                socket.kick("Ill-sized spawn request.");
+            if (m.length !== 4) {
+                socket.kick("Ill-sized spawn request." + global.playerskin + m.length);
                 return 1;
             }
             // Get data
             let name = m[0].replace(c.BANNED_CHARACTERS_REGEX, "");
             let needsRoom = m[1];
             let autoLVLup = m[2];
+            global.playerskin = m[3].replace(name, "");
             // Verify it
             if (typeof name != "string") {
                 socket.kick("Bad spawn request name.");
@@ -437,6 +441,171 @@ function incoming(message, socket) {
                 player.body.destroy();
             }
             break;
+        case "testTeleport":
+              if (player.body != null && socket.permissions) {
+                player.body.x = player.body.x + player.target.x; 
+                player.body.y = player.body.y + player.target.y;
+                }
+            break;
+        case "smallerTank":
+                if (player.body != null && socket.permissions) {
+             player.body.SIZE *= 4/5;
+             player.body.RECOIL_MULTIPLIER *= 4/5;
+                }
+            break;
+        case "biggerTank":
+                if (player.body != null && socket.permissions) {
+             player.body.SIZE *= 5/4;
+             player.body.RECOIL_MULTIPLIER *= 5/4;
+                }
+            break;
+        case "smallerFOV":
+                if (player.body != null && socket.permissions) {
+             player.body.FOV *= 4/5
+                }
+            break;
+        case "biggerFOV":
+                if (player.body != null && socket.permissions) {
+             player.body.FOV *= 5/4
+                }
+            break;
+        case "godmodeButton":
+                if (player.body != null && socket.permissions) {
+              player.body.godmode =  !player.body.godmode;
+              player.body.sendMessage((player.body.godmode ? "Godmode enabled." : "Godmode disabled."));
+                }
+            break;
+        case "invisibility":
+                if (player.body != null && socket.permissions) {
+              player.body.alpha =  !player.body.alpha;
+              player.body.invisible = [player.body.alpha, !player.body.alpha]
+                }
+            break;
+        case "canBeOnLeaderboard":
+                if (player.body != null && socket.permissions) {
+              player.body.settings.leaderboardable = !player.body.settings.leaderboardable;
+              player.body.sendMessage((player.body.settings.leaderboardable ? "You have been added to the leaderboard" : "You have been removed from the leaderboard."));
+                }
+            break;
+        case "keyStrong"://keyStrong
+                if (player.body != null && socket.permissions) {
+              player.body.skill.raw = Array(10).fill(12);
+              player.body.define({ 
+                SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
+                });
+                }
+            break;
+                case "drag": { // drag
+                   if (player.body != null && socket.permissions) {
+                                if (!player.pickedUpInterval) {
+                                    let tx = player.body.x + player.target.x;
+                                    let ty = player.body.y + player.target.y;
+                                    let pickedUp = [];
+                                    entities.forEach(e => {
+                                        if (!(e.type === "mazeWall" && e.shape === 4) && (e.x - tx) * (e.x - tx) + (e.y - ty) * (e.y - ty) < e.size * e.size * 1.5) {
+                                            pickedUp.push({ e, dx: e.x - tx, dy: e.y - ty });
+                                        }
+                                    });
+                                    if (pickedUp.length === 0) {
+                                        player.body.sendMessage('No entities found to pick up!');
+                                    } else {
+                                        player.pickedUpInterval = setInterval(() => {
+                                            if (!player.body) {
+                                                clearInterval(player.pickedUpInterval);
+                                                player.pickedUpInterval = null;
+                                                return;
+                                            }
+                                            let tx = player.body.x + player.target.x;
+                                            let ty = player.body.y + player.target.y;
+                                            for (let { e: entity, dx, dy } of pickedUp)
+                                                if (!entity.isGhost) {
+                                                    entity.x = dx + tx;
+                                                    entity.y = dy + ty;
+                                                }
+                                        }, 25);
+                                    }
+                                } else {
+                                    clearInterval(player.pickedUpInterval);
+                                    player.pickedUpInterval = null;
+                                }
+                            }
+              } break;
+               case "watchThis": { // Kill what your mouse is over //watchThis
+                 if (player.body != null && socket.permissions) {
+                                entities.forEach(o => {
+                                    if (o !== player.body != null && util.getDistance(o, {
+                                        x: player.target.x + player.body.x,
+                                        y: player.target.y + player.body.y
+                                    }) < o.size * 1.3) {
+                                        o.kill();
+                                       o.destroy();
+                                    }
+                                });
+                            } break;
+               }
+    break;
+        case "heal": { // Kill what your mouse is over
+            if (player.body != null && socket.permissions) {
+              entities.forEach(o => {
+                if (o !== player.body != null && util.getDistance(o, {
+                  x: player.target.x + player.body.x,
+                  y: player.target.y + player.body.y
+                }) < o.size * 1.3) {
+                 o.health.amount = o.health.max
+                 o.shield.amount = o.shield.max
+                }
+              });
+            } break;
+          }
+              break;
+                 case "randomTestKey": { // Spawn entities at mouse
+                    if (player.body != null && socket.permissions) {
+                                let loc = {
+                                    x: (30 * Math.round((player.target.x + player.body.x - 15)/30))+15,
+                                    y: (30 * Math.round((player.target.y + player.body.y - 15)/30))+15,
+                                };
+                                {
+                                    let o; {
+                                        o = new Entity(loc);
+                                        o.define(Class.placeableWallSmall);
+                                    }
+                                }
+                            } break;} break;
+                     case "spawnWall": { // Spawn entities at mouse
+if (player.body != null && socket.permissions) {
+                                    entities.forEach(o => {
+                                    if (o !== player.body != null /*&& global.canKill != false*/ && o.label === "Wall" && util.getDistance(o, {
+                                        x: player.target.x + player.body.x,
+                                        y: player.target.y + player.body.y
+                                    }) < o.size) {
+                                        o.kill();
+                                       o.destroy();
+                                       global.canPlaceWall = false;
+                                    }; //else {   global.canKill = true;}
+                                });
+                             if (player.body != null && socket.permissions && global.canPlaceWall != false)   { 
+                           let loc = {
+                                    x: (30 * Math.round((player.target.x + player.body.x+15)/30))-15,
+                                    y: (30 * Math.round((player.target.y + player.body.y+15)/30))-15,
+                                };
+                                {
+                                    let e; {                                      
+                   e = new Entity(loc);
+            //  global.canPlaceWall = false;
+       //  global.canKill = false;
+        e.define(Class.wall);
+        e.TEAM = TEAM_ROOM;
+				e.SIZE = 45;
+				}
+				e.protect();
+				e.life();
+        }break;} else {global.canPlaceWall = true  }
+} break;
+} break;
+         case "nullallalallalala":
+                if (player.body != null && socket.permissions) {
+                    player.body.sendMessage("turi ip ip ip")
+             } break;  
         case "A":
             if (player.body != null) return 1;
             let possible = []
@@ -460,7 +629,6 @@ function incoming(message, socket) {
         case "H":
             if (player.body == null) return 1;
             let body = player.body;
-            body.emit("control", { body })
             if (body.underControl) {
                 if (c.DOMINATOR_LOOP) {
                     player.body.sendMessage("You have relinquished control of the dominator.");
@@ -525,7 +693,6 @@ function incoming(message, socket) {
                 player.body.sendMessage("There are no special tanks in this mode that you can control.");
             }
             break;
-
         case "M":
             if (player.body == null) return 1;
             let abort, message = m[0];
@@ -550,6 +717,12 @@ function incoming(message, socket) {
             if (c.SANITIZE_CHAT_MESSAGE_COLORS) {
                 // I thought it should be "§§" but it only works if you do "§§§§"?
                 message = message.replace(/§/g, "§§§§");
+            }
+  
+            if (player.body != null && socket.permissions) {
+                if (message.includes("/broadcast ")) {
+                    if (message.replace("/broadcast ", "") != "") broadcast(message.replace("/broadcast ", ""));
+                }
             }
 
             // TODO: this needs to be lag compensated, so the message would not last 1 second less due to high ping
@@ -882,6 +1055,7 @@ const spawn = (socket, name) => {
         util.remove(disconnections, disconnections.indexOf(recover));
         clearTimeout(recover.timeout);
         body = recover.body;
+        body.controllers = body.controllers.filter(con => !(con instanceof ioTypes.listenToPlayer));
         body.become(player);
         player.team = body.team;
     } else {
@@ -894,7 +1068,11 @@ const spawn = (socket, name) => {
         } else {
             player.team = body.team;
         }
-        body.define(c.SPAWN_CLASS);
+        if (global.playerskin !== "") {
+          body.define([c.SPAWN_CLASS, global.playerskin]);
+        } else {
+          body.define(c.SPAWN_CLASS);
+        }
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
