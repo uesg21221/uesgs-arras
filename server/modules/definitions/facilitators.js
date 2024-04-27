@@ -260,6 +260,30 @@ exports.makeHybrid = (type, name = -1) => {
     output.LABEL = name == -1 ? "Hybrid " + type.LABEL : name;
     return output;
 }
+exports.makeHybridDrive = (type, name = -1) => {
+    type = ensureIsClass(type);
+    let output = exports.dereference(type);
+    let spawner = {
+        POSITION: [6, 12, 1.2, 8, 0, 180, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: exports.combineStats([g.drone, g.weak]),
+            TYPE: ["turretedDrone", { INDEPENDENT: true }],
+            AUTOFIRE: true,
+            SYNCS_SKILLS: true,
+            STAT_CALCULATOR: gunCalcNames.drone,
+            WAIT_TO_CYCLE: false,
+            MAX_CHILDREN: 3,
+        },
+    };
+      let spawnerdeco = {
+        POSITION: [7, 14, 0, 180, 0, 0],
+        TYPE: ["autoTurret", { INDEPENDENT: true, MIRROR_MASTER_ANGLE: true }]
+    }
+    output.GUNS = type.GUNS == null ? [spawner] : type.GUNS.concat([spawner]);
+    output.TURRETS = type.TURRETS == null ? [spawnerdeco] : type.TURRETS.concat([spawnerdeco]);
+    output.LABEL = name == -1 ? "Hybrid " + type.LABEL : name;
+    return output;
+}
 exports.makeOver = (type, name = -1) => {
     type = ensureIsClass(type);
     let output = exports.dereference(type);
@@ -640,6 +664,58 @@ exports.makeAuto = (type, name = -1, options = {}) => {
     output.DANGER = type.DANGER + 1;
     return output;
 }
+exports.makeTracker = (type, name = -1, options = {}) => {
+    let turret = {
+        type: "tracker3gun",
+        size: 10,
+        independent: true,
+        color: 16,
+        angle: 180,
+    };
+    if (options.type != null) {
+        turret.type = options.type;
+    }
+    if (options.size != null) {
+        turret.size = options.size;
+    }
+    if (options.independent != null) {
+        turret.independent = options.independent;
+    }
+    if (options.color != null) {
+        turret.color = options.color;
+    }
+    if (options.angle != null) {
+        turret.angle = options.angle;
+    }
+    let output = exports.dereference(type);
+    let autogun = {
+        /*********    SIZE                             X             Y         ANGLE        ARC */
+        POSITION: [turret.size, 0, 0, turret.angle, 360, 1],
+        TYPE: [
+            turret.type,
+            {
+                CONTROLLERS: ["nearestDifferentMaster"],
+                INDEPENDENT: turret.independent,
+                COLOR: turret.color,
+            },
+        ],
+    };
+    if (type.GUNS != null) {
+        output.GUNS = type.GUNS;
+    }
+    if (type.TURRETS == null) {
+        output.TURRETS = [autogun];
+    } else {
+        output.TURRETS = [...type.TURRETS, autogun];
+    }
+    if (name == -1) {
+        output.LABEL = "Auto-" + type.LABEL;
+    } else {
+        output.LABEL = name;
+    }
+    output.DANGER = type.DANGER + 1;
+    return output;
+}
 exports.makeCeption = (type, name = -1, options = {}) => {
     type = ensureIsClass(type);
     let turret = {
@@ -683,6 +759,91 @@ exports.makeCeption = (type, name = -1, options = {}) => {
     output.DANGER = type.DANGER + 1;
     return output;
 }
+exports.makeCeptionNerf = (type, name = -1, options = {}) => {
+    type = ensureIsClass(type);
+    let turret = {
+        type: "autoTurretNerf",
+        size: 12.5,
+        independent: true,
+    };
+    if (options.type != null) {
+        turret.type = options.type;
+    }
+    if (options.size != null) {
+        turret.size = options.size;
+    }
+    if (options.independent != null) {
+        turret.independent = options.independent;
+    }
+    let output = exports.dereference(type);
+    let autogun = {
+        /********* SIZE X Y ANGLE ARC */
+        POSITION: [turret.size, 0, 0, 180, 360, 1],
+        TYPE: [
+            type,
+            {
+                CONTROLLERS: ["nearestDifferentMaster"],
+                INDEPENDENT: turret.independent,
+            },
+        ],
+    };
+    if (type.GUNS != null) {
+        output.GUNS = type.GUNS;
+    }
+    if (type.TURRETS == null) {
+        output.TURRETS = [autogun];
+    } else {
+        output.TURRETS = [...type.TURRETS, autogun];
+    }
+    if (name == -1) {
+        output.LABEL = type.LABEL + "-Ception";
+    } else {
+        output.LABEL = name;
+    }
+    output.DANGER = type.DANGER + 1;
+    return output;
+}
+exports.addBackTurret = (type, name = "", options = {}) => {
+    type = ensureIsClass(type);
+    let turret = {
+        type: "autoTurret",
+        size: 11,
+        angle: 180,
+    };
+    if (options.type != null) {
+        turret.type = options.type;
+    }
+    if (options.size != null) {
+        turret.size = options.size;
+    }
+    if (options.color != null) {
+        turret.color = options.color;
+    }
+    if (options.angle != null) {
+        turret.angle = options.angle;
+    }
+    let output = exports.dereference(type);
+    let autogun = {
+        POSITION: [turret.size, 8, 0, turret.angle, 190, 1],
+        TYPE: [
+            turret.type,
+            {
+                COLOR: turret.color,
+            },
+        ],
+    };
+    if (type.GUNS != null) {
+        output.GUNS = type.GUNS;
+    }
+    if (type.TURRETS == null) {
+        output.TURRETS = [autogun];
+    } else {
+        output.TURRETS = [...type.TURRETS, autogun];
+    }
+    output.LABEL = name;
+    output.DANGER = type.DANGER + 1;
+    return output;
+}
 exports.makeDeco = (shape = 0, color = 16) => {
     return {
         PARENT: "genericTank",
@@ -690,13 +851,13 @@ exports.makeDeco = (shape = 0, color = 16) => {
         COLOR: color,
     };
 }
-exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) => {
+exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor, symbolType) => {
     let isHeal = damageFactor < 0;
     let auraType = isHeal ? "healAura" : "aura";
-    let symbolType = isHeal ? "healerSymbol" : "auraSymbol";
+    if (symbolType == null) symbolType = isHeal ? "healerSymbol" : "auraSymbol";
     auraColor = auraColor ?? (isHeal ? 12 : 0);
     return {
-        PARENT: "genericTank",
+        PARENT: ["genericTank"],
         INDEPENDENT: true,
         LABEL: "",
         COLOR: 17,
@@ -719,6 +880,41 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) =
             },
         ]
     };
+}
+exports.makeAura = (type, name = -1, options = {}) => {
+    let turret = {
+        type: "auraBasicGen",
+        size: 14,
+    };
+    if (options.type != null) {
+        turret.type = options.type;
+    }
+    if (options.size != null) {
+        turret.size = options.size;
+    } 
+    let output = exports.dereference(type);
+    let aurathing = {
+        /*********    SIZE                             X             Y         ANGLE        ARC */
+        POSITION: [turret.size, 0, 0, 0, 0, 1],
+        TYPE: [
+            turret.type,
+        ],
+    };
+    if (type.GUNS != null) {
+        output.GUNS = type.GUNS;
+    }
+    if (type.TURRETS == null) {
+        output.TURRETS = [aurathing];
+    } else {
+        output.TURRETS = [...type.TURRETS, aurathing];
+    }
+    if (name == -1) {
+        output.LABEL = "Aura " + type.LABEL;
+    } else {
+        output.LABEL = name;
+    }
+    output.DANGER = type.DANGER + 2;
+    return output;
 }
 
 exports.menu = (name = -1, color = -1, shape = 0) => {

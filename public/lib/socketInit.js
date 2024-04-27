@@ -809,6 +809,11 @@ const socketInit = port => {
             if (socket.cmd.check()) socket.cmd.talk();
         });
     };
+      var KillSound = new Audio();
+      function PlaySoundKS() {
+      KillSound.src = ("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Voicy_Slap%20Battles%20Killstreak%20Kill.mp3?v=1714045643190");
+      KillSound.play();
+      }
     // Handle incoming messages
     socket.onmessage = async function socketMessage(message) {
         await new Promise(Resolve => setTimeout(Resolve, window.fakeLagMS));
@@ -822,7 +827,7 @@ const socketInit = port => {
             case 'w': // welcome to the game
                 if (m[0]) { // Ask to spawn
                     console.log('The server has welcomed us to the game room. Sending spawn request.');
-                    socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp);
+                    socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp, global.skin);
                     global.message = '';
                 }
             break;
@@ -844,6 +849,24 @@ const socketInit = port => {
             case 'info': // info
                 global.message = m[0];
                 console.log(m[0]);
+                break;
+          case "achieve":
+                const achievementTable = ['killachievement', 'killachievement2', 'tokenachievement'] // lookup table of achievements and their ids
+                util.submitAchievementToLocalStorage(achievementTable[m[0]]) // whatever code to actually give the player the achievement
+                break;
+          case "killgained":
+                PlaySoundKS()
+                global.metrics.killcount += 1;
+                global.savedkillcount = (Number(localStorage.getItem("savedkills")) + 1);
+                localStorage.setItem("savedkills", global.savedkillcount.toString());
+                break;
+          case "shapegained":
+                global.metrics.shapecount += 1;
+                global.savedshapecount = (Number(localStorage.getItem("savedshapes")) + 1);
+                localStorage.setItem("savedshapes", global.savedshapecount.toString());
+                break;
+          case "killstreakreset":
+                global.metrics.killcount = 0;
                 break;
             case 'c': // force camera move
                 global.player.renderx = global.player.cx = m[0];
@@ -891,6 +914,7 @@ const socketInit = port => {
                         global.gameStart = true;
                         global.entities = [];
                         global.message = '';
+                        global.stopthefuckingkillsoundyouprick = true;
                     });
                 }
                 break;

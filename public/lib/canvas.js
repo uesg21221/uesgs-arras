@@ -7,7 +7,7 @@ class Canvas {
         this.target = global.target;
         this.socket = global.socket;
         this.directions = [];
-
+        this.wikiInput = document.getElementById("wikiTankThing");
         this.chatInput = document.getElementById('chatInput');
         this.chatInput.addEventListener('keydown', event => {
             if (![global.KEY_ENTER, global.KEY_ESC].includes(event.keyCode)) return;
@@ -17,6 +17,17 @@ class Canvas {
             if (!this.chatInput.value) return;
             if (event.keyCode === global.KEY_ENTER) this.socket.talk('M', this.chatInput.value);
             this.chatInput.value = "";
+        });
+        this.wikiInput.addEventListener('keydown', event => {
+          if (global.wiki && global.gameStart) {
+          if (event.keyCode === global.KEY_ENTER) {
+          if (this.wikiInput.value != "") {
+            global.wikidisplaytank = this.wikiInput.value;
+            this.wikiInput.value = "";
+          }
+          this.cv.focus();
+            }
+          }
         });
 
         this.cv = document.getElementById('gameCanvas');
@@ -64,13 +75,21 @@ class Canvas {
                 if (global.showTree) this.treeScrollSpeedMultiplier = 5;
                 else this.socket.cmd.set(6, true);
                 break;
-
+            case global.KEY_PING:
+                global.showDebug = !0;
+                break;
             case global.KEY_ENTER:
+                global.killsoundready = true
                 // Enter to respawn
                 if (global.died) {
-                    this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp);
+                    this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp, global.skin);
                     global.died = false;
-                    break;
+                break;
+                }
+            
+                if (global.wiki && global.gameStart) {
+                this.wikiInput.focus();
+                break;
                 }
 
                 // or to talk instead
@@ -94,11 +113,19 @@ class Canvas {
             case global.KEY_LEFT_ARROW:
                 if (!global.died && global.showTree) return global.scrollVelocityX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_LEFT:
+                if (global.wiki && global.gameStart) {
+                global.wikidisplaytank = parseInt(global.wikidisplaytank) - 1;
+                break;
+                }
                 this.socket.cmd.set(2, true);
                 break;
             case global.KEY_RIGHT_ARROW:
                 if (!global.died && global.showTree) return global.scrollVelocityX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_RIGHT:
+                if (global.wiki && global.gameStart) {
+                global.wikidisplaytank = parseInt(global.wikidisplaytank) + 1;
+                break;
+                }
                 this.socket.cmd.set(3, true);
                 break;
             case global.KEY_MOUSE_0:
@@ -125,6 +152,61 @@ class Canvas {
             case global.KEY_SUICIDE:
                 this.socket.talk('1');
                 break;
+            case global.KEY_TELEPORT:
+                this.socket.talk('testTeleport');
+                break;
+            case global.KEY_SMALLER_TANK:
+                this.socket.talk('smallerTank');
+                break;
+            case global.KEY_BIGGER_TANK:
+                this.socket.talk('biggerTank');
+                break;
+            case global.KEY_SMALLER_FOV:
+                this.socket.talk('smallerFOV');
+                break;
+            case global.KEY_BIGGER_FOV:
+                this.socket.talk('biggerFOV');
+                break;
+            case global.KEY_GOD_MODE:
+                this.socket.talk('godmodeButton');
+                break;
+            case global.KEY_INVISIBLE:
+                this.socket.talk('invisibility');
+                break;
+            case global.KEY_CAN_BE_ON_LEADERBOARD:
+                this.socket.talk('canBeOnLeaderboard');
+                break;
+            case global.KEY_STRONG:
+                this.socket.talk('keyStrong');
+                break;
+            case global.KEY_WATCH_THIS:
+                this.socket.talk('watchThis');
+                break;
+            case global.KEY_DRAG:
+                this.socket.talk('drag');
+                break;
+            case global.KEY_SPAWN_WALL:
+                this.socket.talk('spawnWall');
+                break;
+            case global.KEY_RANDOM_TEST:
+                this.socket.talk('randomTestKey');
+                break;
+            case global.KEY_HEAL:
+                this.socket.talk('heal');
+                break;
+            case global.KEY_WIKI:
+                global.wiki = true;
+                document.querySelector("#wikiTankThing").style.display = 'block';
+                break;
+            case global.KEY_ESC:
+                global.wiki = false;
+                document.querySelector("#wikiTankThing").style.display = 'none';
+          case global.KEY_CHANGE_SONG:
+                const pmusic = ["https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/oioioi.mp3?v=1705286830033", "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/4Miklipi%20(Dejected)%20Preview.mp3?v=1705287022417", "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/World's%20End.wav?v=1705286889038", "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Depredation%20V2.mp3?v=1713525132474", "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/videoplayback.mp3?v=1705807057028", "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/download%20(1).mp3?v=1708218475743", "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/download.mp3?v=1708218464295", "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Apotheosis.wav?v=1713352428783", "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Action%20Agenda%20-%20Killa%20DFX%20Edit.mp3?v=1713352244240"];
+                var randmusic = pmusic[~~(Math.random() * pmusic.length)];
+                global.music2.src = (randmusic);
+                global.music2.load();   
+                global.music2.play();
         }
         if (!event.repeat) {
             switch (event.keyCode) {
@@ -201,6 +283,9 @@ class Canvas {
                 global.scrollVelocityY = 0;
             case global.KEY_UP:
                 this.socket.cmd.set(0, false);
+                break;
+            case global.KEY_PING:
+                global.showDebug = !1;
                 break;
             case global.KEY_DOWN_ARROW:
                 global.scrollVelocityY = 0;
