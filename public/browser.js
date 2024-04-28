@@ -121,7 +121,7 @@ function filter() {
         minPlayers = parseInt(getValueOfId('minPlayers'));
 
     for (let server of servers) {
-        this.mainContainer.hidden = !(
+        server.mainContainer.hidden = !(
 
             (!hasApp || server.hasApp) &&
             (!hasBrowser || server.hasBrowser) &&
