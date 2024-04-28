@@ -31,7 +31,7 @@ toDefaultIfFileDoesNotExist = (fileToGet, root = publicRoot, defaultFile = Confi
     return fileToGet;
 },
 
-isLocalHost = ip => ['::1', '::ffff', '127.0.0.1'].includes(ip);
+isLocalHost = ip => ['::1', '::ffff:127.0.0.1', '127.0.0.1'].includes(ip);
 
 if (Config.host === 'localhost') {
     util.warn(`config.host is just "localhost", are you sure you don't mean "localhost:${Config.port}"?`);
