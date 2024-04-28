@@ -1467,32 +1467,19 @@ Class.surfer = {
 Class.auto5 = makeRadialAuto("autoTankGun", {isTurret: true, danger: 7, label: "Auto-5", count: 5})
 Class.mega3 = makeRadialAuto("megaAutoTankGun", {isTurret: true, danger: 7, size: 14, label: "Mega-5", body: {SPEED: 0.95 * base.SPEED}})
 Class.auto4 = makeRadialAuto("auto4gun", {isTurret: true, danger: 7, size: 13, x: 6, angle: 45, label: "Auto-4", count: 4})
-Class.banshee = {
-    PARENT: "genericTank",
-    LABEL: "Banshee",
-    DANGER: 7,
-    BODY: {
-        SPEED: 0.8 * base.SPEED,
-        FOV: 1.1 * base.FOV,
+Class.banshee = makeRadialAuto("bansheegun", {isTurret: true, danger: 7, size: 10, label: "Banshee", count: 3, body: {SPEED: 0.8 * base.SPEED, FOV: 1.1 * base.FOV}})
+Class.banshee.GUNS = weaponArray({
+    POSITION: [6, 11, 1.2, 8, 0, 60, 0],
+    PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.drone, g.overseer]),
+        TYPE: "drone",
+        AUTOFIRE: true,
+        SYNCS_SKILLS: true,
+        STAT_CALCULATOR: gunCalcNames.drone,
+        WAIT_TO_CYCLE: true,
+        MAX_CHILDREN: 2,
     },
-    FACING_TYPE: ["spin", {speed: 0.02}],
-    TURRETS: weaponArray({
-        POSITION: [10, 8, 0, 0, 80, 0],
-        TYPE: "bansheegun",
-    }, 3),
-    GUNS: weaponArray({
-        POSITION: [6, 11, 1.2, 8, 0, 60, 0],
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.drone, g.overseer]),
-            TYPE: "drone",
-            AUTOFIRE: true,
-            SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.drone,
-            WAIT_TO_CYCLE: true,
-            MAX_CHILDREN: 2,
-        },
-    }, 3)
-}
+}, 3)
 
 // Director upgrades
 Class.overseer = {
