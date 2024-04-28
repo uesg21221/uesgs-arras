@@ -48,8 +48,9 @@ nestTick = tile => {
     }
 },
 
+nestColor = {BASE: "purple", BRIGHTNESS_SHIFT: 10, SATURATION_SHIFT: 0.8},
 nest = new Tile({
-    color: "purple",
+    color: nestColor,
     data: {
         allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,
@@ -63,7 +64,7 @@ nest = new Tile({
 }),
 
 nestNoBoss = new Tile({
-    color: "purple",
+    color: nestColor,
     data: {
         allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,
@@ -75,14 +76,15 @@ nestNoBoss = new Tile({
 wall = new Tile({
     color: "white",
     init: tile => {
-	    let o = new Entity(tile.loc);
-	    o.define("wall");
-	    o.team = TEAM_ROOM;
-	    o.SIZE = room.tileWidth / 2;
-	    o.protect();
-	    o.life();
+        let o = new Entity(tile.loc);
+        o.define("wall");
+        o.team = TEAM_ROOM;
+        o.SIZE = room.tileWidth / 2;
+        o.protect();
+        o.life();
+        makeHitbox(o);
+        walls.push(o);
     }
 });
-
 
 module.exports = { normal, nest, wall, nestNoBoss };

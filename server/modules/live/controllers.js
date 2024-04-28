@@ -1,20 +1,98 @@
 let compressMovementOffsets = [
-    { x: 1, y: 0},
-    { x: 1, y: 1},
-    { x: 0, y: 1},
-    { x:-1, y: 1},
-    { x:-1, y: 0},
-    { x:-1, y:-1},
-    { x: 0, y:-1},
-    { x: 1, y:-1}
-],
-compressMovement = (current, goal) => {
-    let offset = compressMovementOffsets[Math.round(( Math.atan2(current.y - goal.y, current.x - goal.x) / (Math.PI * 2) ) * 8 + 4) % 8];
-    return {
-        x: current.x + offset.x,
-        y: current.y + offset.y
-    }
-};
+        { x: 1, y: 0},
+        { x: 1, y: 1},
+        { x: 0, y: 1},
+        { x:-1, y: 1},
+        { x:-1, y: 0},
+        { x:-1, y:-1},
+        { x: 0, y:-1},
+        { x: 1, y:-1}
+    ],
+    compressMovement = (current, goal) => {
+        let offset = compressMovementOffsets[
+            Math.round(( Math.atan2(current.y - goal.y, current.x - goal.x) / (Math.PI * 2) ) * 8 + 4) % 8
+        ];
+        return {
+            x: current.x + offset.x,
+            y: current.y + offset.y
+        }
+    },
+    CLLonSegment = (p0, p1, q0, q1, r0, r1) => {
+        return q0 <= Math.max(p0, r0) && q0 >= Math.min(p0, r0) && q1 <= Math.max(p1, r1) && q1 >= Math.min(p1, r1);
+    },
+    CLLorientation = (p0, p1, q0, q1, r0, r1) => {
+        let v = (q1 - p1) * (r0 - q0) - (q0 - p0) * (r1 - q1);
+        return !v ? 0 : v > 0 ? 1 : 2; // clock or counterclock wise
+    },
+    collisionLineLine = (p10, p11, q10, q11, p20, p21, q20, q21) => {
+        // Find the four orientations needed for general and special cases
+        let o1 = CLLorientation(p10, p11, q10, q11, p20, p21),
+            o2 = CLLorientation(p10, p11, q10, q11, q20, q21),
+            o3 = CLLorientation(p20, p21, q20, q21, p10, p11),
+            o4 = CLLorientation(p20, p21, q20, q21, q10, q11);
+
+        return (
+            (o1 == 0 && CLLonSegment(p10, p11, p20, p21, q10, q11)) ||
+            (o2 == 0 && CLLonSegment(p10, p11, q20, q21, q10, q11)) ||
+            (o3 == 0 && CLLonSegment(p20, p21, p10, p11, q20, q21)) ||
+            (o4 == 0 && CLLonSegment(p20, p21, q10, q11, q20, q21)) ||
+            (o1 != o2 && o3 != o4)
+        );
+    },
+    // TODO: make this not lag entire server
+    calcHowMuchAheadToShoot = (me, enemy) => {
+        // Calculate relative position and velocity of enemy
+        let relativeVelocity = {
+                x: enemy.velocity.x - me.velocity.x,
+                y: enemy.velocity.y - me.velocity.y
+            },
+            timeToIntercept = null,
+            projectileSpeed = null;
+
+        // Calculate time to intercept
+        me.guns.forEach(gun => {
+            if (gun.settings) projectileSpeed += gun.settings.speed;
+        });
+        projectileSpeed /= me.guns.length;
+        timeToIntercept = util.getDistance(me, enemy) / projectileSpeed;
+
+        // Predict future position of the enemy
+        return {
+            x: enemy.x + relativeVelocity.x * timeToIntercept,
+            y: enemy.y + relativeVelocity.y * timeToIntercept
+        };
+    },
+    // me: { ...Vector }
+    // enemy: data to calculte where it is gonna be soon
+    // walls: Array<{ ...Vector, hitboxRadius, hitbox: Array<[Vector, Vector]> }>
+    wouldHitWall = (me, enemy) => {
+        // thing for culling off walls where theres no point of checking
+        let inclusionCircle = {
+            x: (me.x + enemy.x) / 2,
+            y: (me.y + enemy.y) / 2,
+            radius: util.getDistance(me, enemy) / 2
+        };
+
+        for (let i = 0; i < walls.length; i++) {
+            let crate = walls[i];
+
+            //avoid calculating collisions if it would just be a waste
+            if (util.getDistanceSquared(inclusionCircle, crate) > (inclusionCircle.radius + crate.hitboxRadius) ** 2) continue;
+
+            //if the crate intersects with the line, add them to the list of walls that have been hit
+            //works by checking if the line from the gun end to the enemy position collides with any line from the crate hitbox
+            for (let j = 0; j < crate.hitbox.length; j++) {
+                let hitboxLine = crate.hitbox[j];
+                if (collisionLineLine(
+                    me.x, me.y,
+                    enemy.x, enemy.y,
+                    crate.x + hitboxLine[0].x, crate.y + hitboxLine[0].y,
+                    crate.x + hitboxLine[1].x, crate.y + hitboxLine[1].y
+                )) return true;
+            }
+        }
+        return false;
+    };
 
 // Define IOs (AI)
 class IO {
@@ -97,6 +175,10 @@ class io_listenToPlayer extends IO {
         this.player = opts.player;
         this.static = opts.static;
         this.acceptsFromTop = false;
+
+        this.normalFacingType = null;
+        this.wasAutospinning = false;
+        this.isAutospinning = false;
     }
     // THE PLAYER MUST HAVE A VALID COMMAND AND TARGET OBJECT
     think() {
@@ -111,19 +193,24 @@ class io_listenToPlayer extends IO {
             target.y *= this.body.reverseTank;
         }
         this.body.facingLocked = this.player.command.spinlock;
-        if (this.player.command.autospin) {
-            let kk = Math.atan2(this.body.control.target.y, this.body.control.target.x) + (this.player.command.rmb ? 0.02 * -1 : 0.02);
-            if (this.body.autospinBoost) {
-                let thing = (0.02 * (this.body.autospinBoost * ((this.body.skill.spd / 4) + 0.5)));
-                if (this.player.command.lmb) thing = thing * 2;
-                if (this.player.command.rmb) thing = thing * -1;
-                kk += thing / c.gameSpeed;
-            }
-            target = {
-                x: 100 * Math.cos(kk),
-                y: 100 * Math.sin(kk),
-            };
+        
+        // Autospin logic
+        this.isAutospinning = this.player.command.autospin;
+        if (this.isAutospinning && !this.wasAutospinning) {
+            // Save facing type for later
+            this.normalFacingType = [...this.body.facingType];
+            this.wasAutospinning = true;
+        } else if (!this.isAutospinning && this.wasAutospinning) {
+            // Restore facing type from earlier
+            this.body.facingType = [...this.normalFacingType];
+            this.wasAutospinning = false;
         }
+        // Define autospin facingType
+        if (this.isAutospinning) {
+            let speed = 0.05 * (alt ? -1 : 1) * this.body.autospinBoost;
+            this.body.facingType = ["spin", {speed}];
+        }
+
         this.body.autoOverride = this.player.command.override;
         if (this.body.invuln && (fire || alt)) this.body.invuln = false;
         return {
@@ -134,7 +221,7 @@ class io_listenToPlayer extends IO {
                 x: this.body.x + this.player.command.right - this.player.command.left,
                 y: this.body.y + this.player.command.down - this.player.command.up,
             },
-            main: fire || this.player.command.autospin
+            main: fire,
         };
     }
 }
@@ -340,7 +427,7 @@ class io_stackGuns extends IO {
 class io_nearestDifferentMaster extends IO {
     constructor(body, opts = {}) {
         super(body);
-        this.accountForMovement = opts.accountForMovement || true;
+        this.accountForMovement = opts.accountForMovement ?? true;
         this.targetLock = undefined;
         this.tick = ran.irandom(30);
         this.lead = 0;
@@ -360,6 +447,7 @@ class io_nearestDifferentMaster extends IO {
         (this.body.aiSettings.BLIND || ((e.x - m.x) * (e.x - m.x) < sqrRange && (e.y - m.y) * (e.y - m.y) < sqrRange)) &&
         (this.body.aiSettings.SKYNET || ((e.x - mm.x) * (e.x - mm.x) < sqrRangeMaster && (e.y - mm.y) * (e.y - mm.y) < sqrRangeMaster));
     }
+    wouldHitWall = (me, enemy) => wouldHitWall(me, enemy); // Override
     buildList(range) {
         // Establish whom we judge in reference to
         let mostDangerous = 0,
@@ -374,6 +462,9 @@ class io_nearestDifferentMaster extends IO {
                 mostDangerous = Math.max(e.dangerValue, mostDangerous);
                 return true;
             }
+        }).filter((e) => {
+            // Even more expensive
+            return !this.wouldHitWall(this.body, e);
         }).filter((e) => {
             // Only return the highest tier of danger
             if (this.body.aiSettings.farm || e.dangerValue === mostDangerous) {
@@ -411,7 +502,10 @@ class io_nearestDifferentMaster extends IO {
             range = 640 * this.body.FOV;
         }
         // Check if my target's alive
-        if (this.targetLock && !this.validate(this.targetLock, this.body, this.body.master.master, range * range, range * range * 4 / 3)) {
+        if (this.targetLock && (
+            !this.validate(this.targetLock, this.body, this.body.master.master, range * range, range * range * 4 / 3) ||
+            this.wouldHitWall(this.body, this.targetLock) // Very expensive
+        )) {
             this.targetLock = undefined;
             this.tick = 100;
         }
@@ -433,11 +527,13 @@ class io_nearestDifferentMaster extends IO {
             }
         }
         // Lock onto whoever's shooting me.
-        // let damageRef = (this.body.bond == null) ? this.body : this.body.bond
+        // let damageRef = (this.body.bond == null) ? this.body : this.body.bond;
         // if (damageRef.collisionArray.length && damageRef.health.display() < this.oldHealth) {
-        //     this.oldHealth = damageRef.health.display()
+        //     this.oldHealth = damageRef.health.display();
         //     if (this.validTargets.indexOf(damageRef.collisionArray[0]) === -1) {
-        //         this.targetLock = (damageRef.collisionArray[0].master.id === -1) ? damageRef.collisionArray[0].source : damageRef.collisionArray[0].master
+        //         let a = (damageRef.collisionArray[0].master.id === -1)
+        //             ? damageRef.collisionArray[0].source
+        //             : damageRef.collisionArray[0].master;
         //     }
         // }
         // Consider how fast it's moving and shoot at it
@@ -512,9 +608,12 @@ class io_avoid extends IO {
     }
 }
 class io_minion extends IO {
-    constructor(body) {
+    constructor(body, opts = {}) {
         super(body)
-        this.turnwise = 1
+        this.turnwise = 1;
+        this.leashRange = opts.leash ?? 82;
+        this.orbitRange = opts.orbit ?? 140;
+        this.repelRange = opts.repel ?? 142;
     }
     think(input) {
         if (this.body.aiSettings.reverseDirection && ran.chance(0.005)) {
@@ -522,9 +621,9 @@ class io_minion extends IO {
         }
         if (input.target != null && (input.alt || input.main)) {
             let sizeFactor = Math.sqrt(this.body.master.size / this.body.master.SIZE)
-            let leash = 82 * sizeFactor
-            let orbit = 140 * sizeFactor
-            let repel = 142 * sizeFactor
+            let leash = this.leashRange * sizeFactor
+            let orbit = this.orbitRange * sizeFactor
+            let repel = this.repelRange * sizeFactor
             let goal
             let power = 1
             let target = new Vector(input.target.x, input.target.y)
@@ -635,6 +734,31 @@ class io_spin extends IO {
         };
     }
 }
+class io_spin2 extends IO {
+    constructor(body, opts = {}) {
+        super(body);
+        this.speed = opts.speed ?? 0.04;
+        this.reverseOnAlt = opts.reverseOnAlt ?? true;
+        this.lastAlt = -1;
+        this.reverseOnTheFly = opts.reverseOnTheFly ?? false;
+
+        // On spawn logic
+        let alt = this.body.master.control.alt;
+        let reverse = (this.reverseOnAlt && alt) ? -1 : 1;
+        this.body.facingType = ["spin", {speed: this.speed * reverse}];
+    }
+    think(input) {
+        if (!this.reverseOnTheFly) return;
+
+        // Live logic
+        let alt = this.body.master.control.alt;
+        if (this.lastAlt != alt) {
+            let reverse = (this.reverseOnAlt && alt) ? -1 : 1;
+            this.body.facingType = ["spin", {speed: this.speed * reverse}];
+            this.lastAlt = alt;
+        }
+    }
+}
 class io_fleeAtLowHealth extends IO {
     constructor(b) {
         super(b)
@@ -681,7 +805,10 @@ class io_wanderAroundMap extends IO {
         this.spot = ran.choose(room.spawnableDefault).loc;
     }
     think(input) {
-        if (new Vector( this.body.x - this.spot.x, this.body.y - this.spot.y ).isShorterThan(50)) {
+        if (
+            new Vector( this.body.x - this.spot.x, this.body.y - this.spot.y ).isShorterThan(50) ||
+            wouldHitWall(this.body, this.spot)
+        ) {
             this.spot = ran.choose(room.spawnableDefault).loc;
         }
         if (input.goal == null && !this.body.autoOverride) {
@@ -831,6 +958,7 @@ let ioTypes = {
     targetSelf: io_targetSelf,
     onlyAcceptInArc: io_onlyAcceptInArc,
     spin: io_spin,
+    spin2: io_spin2,
 
     //movement related
     canRepel: io_canRepel,

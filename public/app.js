@@ -259,7 +259,7 @@ function parseTheme(string){
             lgreen:   colorArray[1],
             orange:   colorArray[2],
             yellow:   colorArray[3],
-            lavender: colorArray[4],
+            aqua:     colorArray[4],
             pink:     colorArray[5],
             vlgrey:   colorArray[6],
             lgrey:    colorArray[7],
@@ -295,7 +295,7 @@ function parseTheme(string){
             content.lgreen,
             content.orange,
             content.yellow,
-            content.lavender,
+            content.aqua,
             content.pink,
             content.vlgrey,
             content.lgrey,
@@ -743,7 +743,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
     if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
         context = ctx2;
-        context.canvas.width = context.canvas.height = drawSize * m.position.axis / ratio * 2;
+        context.canvas.width = context.canvas.height = drawSize * m.position.axis / ratio * 2 + initStrokeWidth;
         xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
         yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.y * Math.sin(rot)) / 4;
     } else {
@@ -877,10 +877,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
         if (health < 0.99 || shield < 0.99) {
-            let instanceColor = instance.color.split(' ')[0];
-            let getColor = true;
-            if (instanceColor[0] == '#') getColor = false;
-            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(instanceColor) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
+            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(gameDraw.modifyColor(instance.color), color.guiwhite, 0.5) : color.lgreen;
             let yy = y + realSize + 15 * ratio;
             let barWidth = 3 * ratio;
             ctx.globalAlpha = fade * (alpha ** 2);
@@ -911,7 +908,12 @@ function drawHealth(x, y, instance, ratio, alpha) {
     }
 }
 
-function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, colorIndex, upgradeKey) {
+const iconColorOrder = [10, 11, 12, 15, 13, 2, 14, 4, 5, 1, 0, 3];
+function getIconColor(colorIndex) {
+    return iconColorOrder[colorIndex % 12].toString();
+}
+
+function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, colorIndex, upgradeKey, hover = false) {
     let picture = (typeof model == "object") ? model : util.getEntityImageFromMockup(model, gui.color),
         position = picture.position,
         scale = (0.6 * len) / position.axis,
@@ -927,13 +929,19 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 
     // Draw box
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor((colorIndex > 18 ? colorIndex - 19 : colorIndex).toString());
+    ctx.fillStyle = picture.upgradeColor != null
+        ? gameDraw.modifyColor(picture.upgradeColor)
+        : gameDraw.getColor(getIconColor(colorIndex));
     drawGuiRect(x, y, len, height);
-    ctx.globalAlpha = 0.1;
-    ctx.fillStyle = picture.upgradeColor != null ? gameDraw.getColor(picture.upgradeColor) : gameDraw.getColor((colorIndex - 9).toString());
-    drawGuiRect(x, y, len, height * 0.6);
+    ctx.globalAlpha = 0.25 * alpha;
     ctx.fillStyle = color.black;
     drawGuiRect(x, y + height * 0.6, len, height * 0.4);
+    // Shading for hover
+    if (hover) {
+        ctx.globalAlpha = 0.15 * alpha;
+        ctx.fillStyle = color.guiwhite;
+        drawGuiRect(x, y, len, height);
+    }
     ctx.globalAlpha = 1;
 
     // Draw Tank
@@ -1098,7 +1106,7 @@ let tiles,
         for (let i = 0; i < hasUpgrades.length; i++) {
             let upgrade = hasUpgrades[i],
                 spacing = 2 * Math.max(1, upgrade.tier - tier),
-                measure = measureSize(x, y + spacing, upgrade.upgradeColor ?? 10 + i, upgrade);
+                measure = measureSize(x, y + spacing, upgrade.upgradeColor ?? i, upgrade);
             branches.push([{ x, y: y + Math.sign(i) }, { x, y: y + spacing + 1 }]);
             if (i === hasUpgrades.length - 1 && !noUpgrades.length) {
                 branches.push([{ x: xStart, y: y + 1 }, { x, y: y + 1 }]);
@@ -1111,7 +1119,7 @@ let tiles,
         for (let i = 0; i < noUpgrades.length; i++) {
             let upgrade = noUpgrades[i],
                 height = 2 + upgrades.length;
-            measureSize(x, y + 1 + i + Math.sign(hasUpgrades.length) * 2, upgrade.upgradeColor ?? 10 + i, upgrade);
+            measureSize(x, y + 1 + i + Math.sign(hasUpgrades.length) * 2, upgrade.upgradeColor ?? i, upgrade);
             if (i === noUpgrades.length - 1) {
                 if (hasUpgrades.length > 1) cumulativeWidth++;
                 branches.push([{ x: xStart, y }, { x, y }]);
@@ -1128,10 +1136,10 @@ function generateTankTree(indexes) {
     tiles = [];
     branches = [];
     tankTree = { width: 0, height: 0 };
-    let rightestSoFar = 0;
+    let rightmostSoFar = 0;
     if (!Array.isArray(indexes)) indexes = [indexes];
     for (let index of indexes) {
-        rightestSoFar += 3 + measureSize(rightestSoFar, 0, 10, { index }).width;
+        rightmostSoFar += 3 + measureSize(rightmostSoFar, 0, 0, { index }).width;
     }
     for (let { x, y } of tiles) {
         tankTree.width = Math.max(tankTree.width, x);
@@ -1173,7 +1181,7 @@ function drawFloor(px, py, ratio) {
             ctx.fillRect(left, top, right - left, bottom - top);
         }
     }
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.25;
     ctx.strokeStyle = settings.graphical.screenshotMode ? color.guiwhite : color.guiblack;
     ctx.globalAlpha = 0.04;
     ctx.beginPath();
@@ -1269,12 +1277,12 @@ global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1
 global.scrollVelocityY = global.scrollVelocityX = 0;
 let lastGuiType = null;
 function drawUpgradeTree(spacing, alcoveSize) {
-    if (global.died) {
+    /*if (global.died) {
         global.showTree = false;
         global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = global.scrollVelocityY = global.scrollVelocityX = 0;
         global.treeScale = 1;
         return;
-    }
+    }*/ // Hide the tree on death
 
     if (lastGuiType != gui.type) {
         let m = util.getEntityImageFromMockup(gui.type), // The mockup that corresponds to the player's tank
@@ -1400,7 +1408,6 @@ function drawMessages(spacing) {
 
 function drawSkillBars(spacing, alcoveSize) {
     // Draw skill bars
-    global.canSkill = !!gui.points;
     statMenu.set(0 + (global.died || global.statHover || (global.canSkill && !gui.skills.every(skill => skill.cap === skill.amount))));
     global.clickables.stat.hide();
     let vspacing = 4;
@@ -1573,8 +1580,8 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
     }
     ctx.globalAlpha = 1;
     ctx.lineWidth = 1;
-    ctx.strokeStyle = color.black;
-    ctx.fillStyle = color.black;
+    ctx.strokeStyle = color.guiblack;
+    ctx.fillStyle = color.guiblack;
     drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 1, y + (global.player.cy / global.gameHeight) * height - 1, 2, false);
     if (global.showDebug) {
         drawGuiRect(x, y - 40, len, 30);
@@ -1639,7 +1646,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         let height = len;
 
         // Animation processing
-        let columnCount = Math.max(3, Math.ceil(gui.upgrades.length / 4));
+        let columnCount = Math.max(3, Math.floor(gui.upgrades.length ** 0.55));
         upgradeMenu.set(0);
         if (!global.canUpgrade) {
             upgradeMenu.force(-columnCount * 3)
@@ -1655,9 +1662,10 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         let initialY = y;
         let ticker = 0;
         let upgradeNum = 0;
-        let colorIndex = 10;
+        let colorIndex = 0;
         let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
         let lastBranch = -1;
+        let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
         upgradeSpin += 0.01;
 
         for (let i = 0; i < gui.upgrades.length; i++) {
@@ -1676,7 +1684,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
                         y += 1.5 * internalSpacing;
                     }
                     y += 1.5 * internalSpacing;
-                    colorIndex = 10;
+                    colorIndex = 0;
                 }
                 lastBranch = upgradeBranch;
                 ticker = 0;
@@ -1690,7 +1698,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
             let upgradeKey = getClassUpgradeKey(upgradeNum);
 
-            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.5, colorIndex++, upgradeKey);
+            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.6, colorIndex++, upgradeKey, upgradeNum == upgradeHoverIndex);
 
             ticker++;
             upgradeNum++;
@@ -1709,7 +1717,6 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
 
         // Upgrade tooltip
-        let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
         if (upgradeHoverIndex > -1 && upgradeHoverIndex < gui.upgrades.length) {
             let picture = gui.upgrades[upgradeHoverIndex][2];
             if (picture.upgradeTooltip.length > 0) {
@@ -1774,6 +1781,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
     gui.__s.update();
     let lb = leaderboard.get();
     let max = lb.max;
+    global.canSkill = !!gui.points && !global.showTree;
     if (global.showTree) {
         drawUpgradeTree(spacing, alcoveSize);
     } else {

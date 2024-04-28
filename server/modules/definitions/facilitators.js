@@ -696,7 +696,7 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) =
     let symbolType = isHeal ? "healerSymbol" : "auraSymbol";
     auraColor = auraColor ?? (isHeal ? 12 : 0);
     return {
-        PARENT: ["genericTank"],
+        PARENT: "genericTank",
         INDEPENDENT: true,
         LABEL: "",
         COLOR: 17,
@@ -719,6 +719,48 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) =
             },
         ]
     };
+}
+
+exports.menu = (name = -1, color = -1, shape = 0) => {
+    let gun = {
+        POSITION: [18, 10, -1.4, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: exports.combineStats([g.basic]),
+            TYPE: "bullet",
+        },
+    };
+    return {
+        PARENT: "genericTank",
+        LABEL: name == -1 ? undefined : name,
+        GUNS: [gun],
+        COLOR: color,
+        UPGRADE_COLOR: color == -1 ? undefined : color,
+        SHAPE: shape,
+        IGNORED_BY_AI: true,
+    };
+}
+
+exports.weaponArray = (weapons, count) => {
+    if (!Array.isArray(weapons)) {
+        weapons = [weapons]
+    }
+    let isTurret = weapons[0].PROPERTIES == undefined;
+    let angleIndex = isTurret ? 3 : 5;
+
+    let output = [];
+    for (let weapon of weapons) {
+        for (let i = 0; i < count; i++) {
+            let angle = 360 / count * i;
+            let newWeapon = exports.dereference(weapon);
+            if (Array.isArray(newWeapon.POSITION)) {
+                newWeapon.POSITION[angleIndex] += angle;
+            } else {
+                newWeapon.POSITION.ANGLE = (newWeapon.POSITION.ANGLE ?? 0) + angle;
+            }
+            output.push(newWeapon);
+        }
+    }
+    return output;
 }
 
 class LayeredBoss {
@@ -785,22 +827,4 @@ exports.makeLabyrinthShape = (type) => {
     let output = exports.dereference(type);
     let downscale = Math.max(output.SHAPE, 3);
     return output;
-}
-exports.menu = (name = -1, color = -1, shape = 0) => {
-    let gun = {
-        POSITION: [18, 10, -1.4, 0, 0, 0, 0],
-        PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.basic]),
-            TYPE: "bullet",
-        },
-    };
-    return {
-        PARENT: "genericTank",
-        LABEL: name == -1 ? undefined : name,
-        GUNS: [gun],
-        COLOR: color,
-        UPGRADE_COLOR: color == -1 ? undefined : color,
-        SHAPE: shape,
-        IGNORED_BY_AI: true,
-    };
 }

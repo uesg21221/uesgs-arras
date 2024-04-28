@@ -30,7 +30,7 @@ function collide(collision) {
     // Pull the two objects from the collision grid
     let instance = collision[0],
         other = collision[1];
-    if (instance.onDef != null) instance.ON(undefined, 'collide', { instance, other })
+    instance.emit('collide', { body: instance, instance, other });
     // Check for ghosts...
     if (other.isGhost) {
         util.error("GHOST FOUND");
@@ -243,7 +243,7 @@ const gameloop = () => {
         }
         // Update collisions.
         my.collisionArray = [];
-        if (my.onDef != null) my.ON(undefined, 'tick')
+        my.emit('tick', { body: my });
     }
     logs.entities.mark();
     logs.master.mark();
@@ -332,10 +332,11 @@ let maintainloop = () => {
         o.define('bot');
         o.define(c.SPAWN_CLASS);
         o.refreshBodyAttributes();
+        o.skill.score = c.BOT_START_XP;
         o.isBot = true;
         o.name = Config.BOT_NAME_PREFIX + ran.chooseBotName();
         o.leftoverUpgrades = ran.chooseChance(...c.BOT_CLASS_UPGRADE_CHANCES);
-        let color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
+        let color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : "red";
         o.color.base = color;
         if (team) o.team = team;
         bots.push(o);

@@ -14,7 +14,7 @@ function getMockup(e, positionInfo) {
         upgradeTooltip: e.upgradeTooltip,
         x: rounder(e.x),
         y: rounder(e.y),
-        color: e.color,
+        color: e.color.compiled,
         strokeWidth: e.strokeWidth,
         upgradeColor: e.upgradeColor,
         glow: e.glow,
@@ -43,7 +43,7 @@ function getMockup(e, positionInfo) {
                 width: rounder(gun.width),
                 aspect: rounder(gun.aspect),
                 angle: rounder(gun.angle),
-                color: gun.color,
+                color: gun.color.compiled,
                 strokeWidth: gun.strokeWidth,
                 alpha: gun.alpha,
                 borderless: gun.borderless,
@@ -85,6 +85,22 @@ function checkIfSamePoint(p1, p2) {
     return p1[0] == p2[0] && p1[1] == p2[1];
 }
 
+function checkIfOnLine(endpoint1, endpoint2, checkPoint) {
+    let xDiff = endpoint2[0] - endpoint1[0],
+        yDiff = endpoint2[1] - endpoint1[1];
+    
+    // Endpoints on the same vertical line
+    if (xDiff == 0) {
+        return (checkPoint[0] == endpoint1[0]);
+    }
+
+    let slope = yDiff / xDiff,
+        xLengthToCheck = checkPoint[0] - endpoint1[0],
+        predictedY = endpoint1[1] + xLengthToCheck * slope;
+    // Check point is on the line with a small margin
+    return Math.abs(checkPoint[1] - predictedY) <= 1e-5;
+}
+
 function getDimensions(entity) {
     // Begin processing from the main body
     endPoints = [];
@@ -93,13 +109,19 @@ function getDimensions(entity) {
     // Convert to useful info
     endPoints.sort((a, b) => (b[0] ** 2 + b[1] ** 2 - a[0] ** 2 - a[1] ** 2));
     let point1 = getFurthestFrom(0, 0),
-        point2 = getFurthestFrom(point1[0], point1[1]),
-        avgX = (point1[0] + point2[0]) / 2,
+        point2 = getFurthestFrom(...point1);
+    
+    // Repeat selecting the second point until at least one of the first two points is off the centerline
+    while (point1[0] == 0 && point2[0] == 0 || point1[1] == 0 && point2[1] == 0) {
+        point2 = getFurthestFrom(...point1);
+    }
+
+    let avgX = (point1[0] + point2[0]) / 2,
         avgY = (point1[1] + point2[1]) / 2,
         point3 = getFurthestFrom(avgX, avgY);
     
-    // Repeat selecting the third point until it's actually different from the other points
-    while (checkIfSamePoint(point3, point1) || checkIfSamePoint(point3, point2)) {
+    // Repeat selecting the third point until it's actually different from the other points and it's not collinear with them
+    while (checkIfSamePoint(point3, point1) || checkIfSamePoint(point3, point2) || checkIfOnLine(point1, point2, point3)) {
         point3 = getFurthestFrom(avgX, avgY);
     }
     
@@ -121,8 +143,10 @@ function constructCircumcirle(point1, point2, point3) {
     let x3 = rounder(point3[0]);
     let y3 = rounder(point3[1]);
 
-    // Divide by zero protection
-    if (x3 == x1 || x3 == x2) x3 += 1e-5;
+    // Invalid math protection
+    if (x3 == x1 || x3 == x2) {
+        x3 += 1e-5;
+    }
     
     let numer1 = x3 ** 2 + y3 ** 2 - x1 ** 2 - y1 ** 2;
     let numer2 = x2 ** 2 + y2 ** 2 - x1 ** 2 - y1 ** 2;
@@ -181,9 +205,10 @@ function sizeEntity(entity, x = 0, y = 0, angle = 0, scale = 1) {
 
     // Process turrets
     for (let t of entity.turrets) {
-        let xShift = t.bound.offset * Math.cos(t.bound.direction + t.bound.angle),
-            yShift = t.bound.offset * Math.sin(t.bound.direction + t.bound.angle);
-        sizeEntity(t, x + xShift * scale, y + yShift * scale, t.bound.angle, t.bound.size * scale);
+        let trueAngle = angle + t.bound.angle,
+            xShift = t.bound.offset * Math.cos(t.bound.direction + trueAngle),
+            yShift = t.bound.offset * Math.sin(t.bound.direction + trueAngle);
+        sizeEntity(t, x + xShift * scale, y + yShift * scale, trueAngle, t.bound.size * scale);
     }
 }
 
