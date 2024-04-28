@@ -812,7 +812,7 @@ exports.weaponArray = (weapons, count) => {
     if (!Array.isArray(weapons)) {
         weapons = [weapons]
     }
-    let isTurret = weapons[0].PROPERTIES == undefined;
+    let isTurret = weapons[0].TYPE != undefined;
     let angleIndex = isTurret ? 3 : 5;
 
     let output = [];
