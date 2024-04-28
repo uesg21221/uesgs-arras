@@ -29,7 +29,9 @@ toDefaultIfFileDoesNotExist = (fileToGet, root = publicRoot, defaultFile = Confi
         fileToGet = path.join(root, defaultFile);
     }
     return fileToGet;
-};
+},
+
+isLocalHost = ip => ['::1', '::ffff', '127.0.0.1'].includes(ip);
 
 if (Config.host === 'localhost') {
     util.warn(`config.host is just "localhost", are you sure you don't mean "localhost:${Config.port}"?`);
@@ -62,7 +64,7 @@ let server = require('http').createServer((req, res) => {
         return fs.createReadStream(fileToGet).pipe(res);
     } else switch (req.url) {
         case "/servers.json":
-            resStr = JSON.stringify([ { hasApp: true, secure: getIP(req) != '::1' && c.behindHttpsProxy, ip: Config.host }, ...otherServers ]);
+            resStr = JSON.stringify([ { hasApp: true, secure: !isLocalHost(getIP(req)) && c.behindHttpsProxy, ip: Config.host }, ...otherServers ]);
             break;
 
         case "/lib/json/mockups.json":
@@ -125,14 +127,14 @@ motdSocket = socket => {
         if (message.length > 32) return socket.close();
 
         let now = Date.now();
-        if (now - socket.lastMessageTimestamp < c.MOTD_SOCKET_REFRESH_DELAY) return socket.close();
+        if (now - socket.lastMessageTimestamp < Config.MOTD_SOCKET_REFRESH_DELAY) return socket.close();
         socket.lastMessageTimestamp = now;
 
-        c.MOTD_DATA.players = sockets.players.length;
-        c.MOTD_DATA.maxPlayers = c.maxPlayers;
-        socket.send(message.toString() + ' ' + c.MOTD_SOCKET_REFRESH_DELAY + ' ' + JSON.stringify(c.MOTD_DATA));
+        Config.MOTD_DATA.players = sockets.players.length;
+        Config.MOTD_DATA.maxPlayers = Config.maxPlayers;
+        socket.send(message.toString() + ' ' + Config.MOTD_SOCKET_REFRESH_DELAY + ' ' + JSON.stringify(Config.MOTD_DATA));
     });
-    setTimeout(() => socket.readyState === socket.OPEN && socket.close(), c.MOTD_SOCKET_TIMEOUT);
+    setTimeout(() => socket.readyState === socket.OPEN && socket.close(), Config.MOTD_SOCKET_TIMEOUT);
 };
 
 server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, head, ws => {
@@ -144,7 +146,7 @@ server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, 
             return socket.close();
         }
         ws.onclose = () => util.log('motd websocket disconnection from ' + getIP(req));
-        if (c.MOTD_SOCKET) {
+        if (Config.MOTD_SOCKET) {
             motdSocket(ws);
         } else {
             ws.close();
@@ -154,5 +156,5 @@ server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, 
     }
 }));
 
-server.listen(c.port, () => console.log("Server listening on port", c.port));
+server.listen(Config.port, () => console.log("Server listening on port", Config.port));
 module.exports = { server, otherServers, getIP };
