@@ -1,4 +1,4 @@
-const { combineStats, makeAuto, makeHybrid, makeOver, makeDeco, makeGuard, makeBird, makeMulti } = require('../facilitators.js');
+const { combineStats, makeAuto, makeHybrid, makeOver, makeDeco, makeGuard, makeBird, makeMulti, makeRadialAuto } = require('../facilitators.js');
 const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js');
 require('./generics.js');
 const g = require('../gunvals.js');
@@ -1248,26 +1248,7 @@ Class.triAngle = {
         },
     ],
 }
-Class.auto3 = {
-    PARENT: "genericTank",
-    LABEL: "Auto-3",
-    DANGER: 6,
-    FACING_TYPE: ["spin", {speed: 0.02}],
-    TURRETS: [
-        {
-            POSITION: [11, 8, 0, 0, 190, 0],
-            TYPE: "autoTankGun",
-        },
-        {
-            POSITION: [11, 8, 0, 120, 190, 0],
-            TYPE: "autoTankGun",
-        },
-        {
-            POSITION: [11, 8, 0, 240, 190, 0],
-            TYPE: "autoTankGun",
-        },
-    ],
-}
+Class.auto3 = makeRadialAuto("autoTankGun", {isTurret: true, danger: 6, label: "Auto-3"})
 
 // Hexa Tank upgrades
 Class.octoTank = makeMulti({
@@ -1480,81 +1461,9 @@ Class.surfer = {
 }
 
 // Auto-3 upgrades
-Class.auto5 = {
-    PARENT: "genericTank",
-    LABEL: "Auto-5",
-    DANGER: 7,
-    FACING_TYPE: ["spin", {speed: 0.02}],
-    TURRETS: [
-        {
-            POSITION: [11, 8, 0, 0, 190, 0],
-            TYPE: "autoTankGun",
-        },
-        {
-            POSITION: [11, 8, 0, 72, 190, 0],
-            TYPE: "autoTankGun",
-        },
-        {
-            POSITION: [11, 8, 0, 144, 190, 0],
-            TYPE: "autoTankGun",
-        },
-        {
-            POSITION: [11, 8, 0, 216, 190, 0],
-            TYPE: "autoTankGun",
-        },
-        {
-            POSITION: [11, 8, 0, 288, 190, 0],
-            TYPE: "autoTankGun",
-        },
-    ],
-}
-Class.mega3 = {
-    PARENT: "genericTank",
-    LABEL: "Mega-3",
-    BODY: {
-        SPEED: 0.95 * base.SPEED,
-    },
-    DANGER: 7,
-    FACING_TYPE: ["spin", {speed: 0.02}],
-    TURRETS: [
-        {
-            POSITION: [14, 8, 0, 0, 190, 0],
-            TYPE: "megaAutoTankGun",
-        },
-        {
-            POSITION: [14, 8, 0, 120, 190, 0],
-            TYPE: "megaAutoTankGun",
-        },
-        {
-            POSITION: [14, 8, 0, 240, 190, 0],
-            TYPE: "megaAutoTankGun",
-        },
-    ],
-}
-Class.auto4 = {
-    PARENT: "genericTank",
-    LABEL: "Auto-4",
-    FACING_TYPE: ["spin", {speed: 0.02}],
-    DANGER: 7,
-    TURRETS: [
-        {
-            POSITION: [13, 6, 0, 45, 160, 0],
-            TYPE: "auto4gun",
-        },
-        {
-            POSITION: [13, 6, 0, 135, 160, 0],
-            TYPE: "auto4gun",
-        },
-        {
-            POSITION: [13, 6, 0, 225, 160, 0],
-            TYPE: "auto4gun",
-        },
-        {
-            POSITION: [13, 6, 0, 315, 160, 0],
-            TYPE: "auto4gun",
-        },
-    ],
-}
+Class.auto5 = makeRadialAuto("autoTankGun", {isTurret: true, danger: 7, label: "Auto-5", count: 5})
+Class.mega3 = makeRadialAuto("megaAutoTankGun", {isTurret: true, danger: 7, size: 14, label: "Mega-5", body: {SPEED: 0.95 * base.SPEED}})
+Class.auto4 = makeRadialAuto("auto4gun", {isTurret: true, danger: 7, size: 13, x: 6, angle: 45, label: "Auto-4", count: 4})
 Class.banshee = {
     PARENT: "genericTank",
     LABEL: "Banshee",
