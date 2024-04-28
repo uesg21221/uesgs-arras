@@ -1,3 +1,5 @@
+const { config } = require('process');
+
 let fs = require('fs'),
     net = require('net'),
     path = require('path'),
@@ -17,13 +19,22 @@ let fs = require('fs'),
 
 wsServer = new (require('ws').WebSocketServer)({ noServer: true }),
 
-getDefaultFile = (defaultFile = c.DEFAULT_FILE) => path.join(publicRoot, defaultFile),
-toDefaultIfFileDoesNotExist = (fileToGet, defaultFile = c.DEFAULT_FILE) => (!fs.existsSync(fileToGet) || !fs.lstatSync(fileToGet).isFile()) ? getDefaultFile(defaultFile) : fileToGet;
+toDefaultIfFileDoesNotExist = (fileToGet, root = publicRoot, defaultFile = Config.DEFAULT_FILE) => {
+    if (!fs.existsSync(fileToGet)) {
+        fileToGet += '.html';
+        if (!fs.existsSync(fileToGet)) {
+            fileToGet = path.join(root, defaultFile);
+        }
+    } else if (!fs.lstatSync(fileToGet).isFile()) {
+        fileToGet = path.join(root, defaultFile);
+    }
+    return fileToGet;
+};
 
-if (c.host === 'localhost') {
-    util.warn(`config.host is just "localhost", are you sure you don't mean "localhost:${c.port}"?`);
+if (Config.host === 'localhost') {
+    util.warn(`config.host is just "localhost", are you sure you don't mean "localhost:${Config.port}"?`);
 }
-if (c.host.match(/localhost:(\d)/) && c.host !== 'localhost:' + c.port) {
+if (Config.host.match(/localhost:(\d)/) && Config.host !== 'localhost:' + Config.port) {
     util.warn('config.host is a localhost domain but its port is different to config.port!');
 }
 
@@ -31,7 +42,7 @@ let server = require('http').createServer((req, res) => {
     let resStr = "",
 
     // I dislike CORS
-    cors = req.method === 'OPTIONS' || (c.MOTD_SOCKET && req.url == '/iconBrowser.png');
+    cors = req.method === 'OPTIONS' || (Config.MOTD_SOCKET && req.url == '/iconBrowser.png');
     if (cors) {
         res.setHeader('Access-Control-Allow-Origin', '*');
         if (req.method === 'OPTIONS') {
@@ -44,18 +55,14 @@ let server = require('http').createServer((req, res) => {
         let fileToGet = path.join(sharedRoot, req.url.slice(7));
 
         //if this file does not exist, return the default;
-        if (!fs.existsSync(fileToGet)) {
-            fileToGet = path.join(sharedRoot, c.DEFAULT_FILE);
-        } else if (!fs.lstatSync(fileToGet).isFile()) {
-            fileToGet = path.join(sharedRoot, c.DEFAULT_FILE);
-        }
+        fileToGet = toDefaultIfFileDoesNotExist(fileToGet, sharedRoot);
 
         //return the file
         res.writeHead(200, { 'Content-Type': mimeSet[ fileToGet.split('.').pop() ] || 'text/html' });
         return fs.createReadStream(fileToGet).pipe(res);
     } else switch (req.url) {
         case "/servers.json":
-            resStr = JSON.stringify([ { hasApp: true, secure: !c.host.match(/localhost:(\d)/), ip: c.host }, ...otherServers ]);
+            resStr = JSON.stringify([ { hasApp: true, secure: getIP(req) != '::1' && c.behindHttpsProxy, ip: Config.host }, ...otherServers ]);
             break;
 
         case "/lib/json/mockups.json":
@@ -63,22 +70,18 @@ let server = require('http').createServer((req, res) => {
             break;
 
         case "/lib/json/gamemodeData.json":
-            resStr = JSON.stringify({ gameMode: c.gameModeName, players: views.length });
+            resStr = JSON.stringify({ gameMode: Config.gameModeName, players: views.length });
             break;
 
         case "/serverData.json":
-            resStr = JSON.stringify({ ip: c.host });
+            resStr = JSON.stringify({ ip: Config.host });
             break;
 
         default:
             let fileToGet = path.join(publicRoot, req.url);
 
             //if this file does not exist, return the default;
-            if (!fs.existsSync(fileToGet)) {
-                fileToGet = path.join(publicRoot, c.DEFAULT_FILE);
-            } else if (!fs.lstatSync(fileToGet).isFile()) {
-                fileToGet = path.join(publicRoot, c.DEFAULT_FILE);
-            }
+            fileToGet = toDefaultIfFileDoesNotExist(fileToGet);
 
             res.writeHead(200, {
                 // If we have no idea what the mine type is of that, just assume it is a html file.

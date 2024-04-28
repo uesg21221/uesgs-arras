@@ -195,15 +195,16 @@ span {
 .mainContainer:hover {
 	background-color: #cfd8dd;
 }
-.notLoaded {}
-.textContainer {
-}
+.debugLog {}
+.textContainer {}
 .statsContainer {
 	opacity: 50%;
 	margin-left: auto; 
 	margin-right: 0;
 	text-align: right;
 }
+.rightSideContainer {}
+.debugButton {}
 .icon {
 	width: 96px;
 	height: 96px;

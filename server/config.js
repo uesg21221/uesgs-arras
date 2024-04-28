@@ -8,6 +8,11 @@ module.exports = {
     // Which port to run the web server on.
     port: 26301,
 
+    // If we are behind a HTTPS proxy, which would turn our HTTP traffic into HTTPS traffic,
+    // Which is done by server hosts like Glitch, Replit or most public-facing Nginx sites.
+    // Still requires http for localhost access.
+    behindHttpsProxy: true,
+
     // How often to update the list of the entities that players can see.
     // Has effects of when entities are activated.
     visibleListInterval: 250,

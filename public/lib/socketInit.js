@@ -1013,19 +1013,32 @@ const socketInit = port => {
                 }
                 break;
             case 'REDIRECT':
+                // secure: if to use https or not
+                // ip: the ip of the server to switch to
+                // key: the encrypted data of the player
+                // autojoin: to instantly join the game or not
                 let [ secure, ip, key, autojoin ] = m,
+
                 // https://stackoverflow.com/a/326076/10793061
                     isInIFrame = true;
-                try { isInIFrame = window.self !== window.top; } catch (e) {}
+                try { isInIFrame = window.self !== window.top; } catch (e) { /* do complete fuckall */ }
 
                 secure = !!secure;
                 autojoin = !!autojoin;
+
+                let queryparams = Object.entries({ key, autojoin })
+                    .filter(x => x[1])
+                    .map(x => x.join('='))
+                    .join('&'),
+
+                    url = `${secure ? 'https' : 'http'}://${ip}/app${queryparams ? '?' + queryparams : ''}`;
+
                 if (isInIFrame) {
-                    window.top.postMessage({ secure, ip, key, autojoin });
+                    window.top.postMessage(url);
                 } else {
-                    console.log('redirecting\nip:', ip, 'secure:', secure, '\nkey:', key, '\nautojoin:', autojoin);
-                    location.href = `${secure ? 'https' : 'http'}://${ip}/app` + (key || autojoin ? '?' : '') + (key ? 'key=' + key : '') + (key && autojoin ? '&' : '') + (autojoin ? 'autojoin=' + autojoin : '');
+                    location.href = url;
                 }
+                break;
             default:
                 throw new Error('Unknown message index.');
         }
