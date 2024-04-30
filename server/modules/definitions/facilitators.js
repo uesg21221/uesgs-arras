@@ -122,23 +122,6 @@ exports.makeGuard = (type, name = -1) => {
     output.LABEL = name == -1 ? type.LABEL + " Guard" : name;
     return output;
 }
-exports.makeConq = (type, name = -1) => {
-    type = ensureIsClass(type);
-    let output = exports.dereference(type),
-    cannons = [{
-        POSITION: [18, 14, 1, 0, 0, 180, 0],
-    }, {
-        POSITION: [2, 14, 1.1, 18, 0, 180, 0],
-        PROPERTIES: {
-            SHOOT_SETTINGS: exports.combineStats([g.trap, g.setTrap]),
-            TYPE: "setTrap",
-            STAT_CALCULATOR: gunCalcNames.block
-        },
-    }];
-    output.GUNS = type.GUNS == null ? cannons : type.GUNS.concat(cannons);
-    output.LABEL = name == -1 ? type.LABEL + " Conqueror" : name;
-    return output;
-}
 exports.addBackGunner = (type, name = -1) => {
     type = ensureIsClass(type);
     let output = exports.dereference(type);
