@@ -3533,11 +3533,11 @@ Class.phoenix = makeBird("sprayer", "Phoenix")
 Class.eagle = makeBird("pounder", "Eagle")
 
 // Hybrid tanks
-Class.bentHybrid = makeOver('tripleShot', "Bent Hybrid", {count: 1, independent: true})
-Class.poacher = makeOver('hunter', "Poacher", {count: 1, independent: true})
-Class.armsman = makeOver('rifle', "Armsman", {count: 1, independent: true})
-Class.cropDuster = makeOver('minigun', "Crop Duster", {count: 1, independent: true})
-Class.hybrid = makeOver('destroyer', "Hybrid", {count: 1, independent: true})
+Class.bentHybrid = makeOver('tripleShot', "Bent Hybrid", {count: 1, independent: true, cycle: false})
+Class.poacher = makeOver('hunter', "Poacher", {count: 1, independent: true, cycle: false})
+Class.armsman = makeOver('rifle', "Armsman", {count: 1, independent: true, cycle: false})
+Class.cropDuster = makeOver('minigun', "Crop Duster", {count: 1, independent: true, cycle: false})
+Class.hybrid = makeOver('destroyer', "Hybrid", {count: 1, independent: true, cycle: false})
 
 // Over tanks
 Class.overgunner = makeOver({

@@ -244,6 +244,7 @@ exports.makeOver = (type, name = -1, options = {}) => {
     let angle = 180 - (options.angle ?? 125);
     let count = options.count ?? 2;
     let independent = options.independent ?? false;
+    let cycle = options.cycle ?? true;
     let maxChildren = options.maxDrones ?? 3;
     let stats = options.extraStats ?? [];
     let spawnerProperties = {
@@ -252,7 +253,7 @@ exports.makeOver = (type, name = -1, options = {}) => {
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
         STAT_CALCULATOR: gunCalcNames.drone,
-        WAIT_TO_CYCLE: true,
+        WAIT_TO_CYCLE: cycle,
         MAX_CHILDREN: maxChildren,
     };
 
