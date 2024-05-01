@@ -3607,10 +3607,7 @@ Class.autoSmasher = makeAuto({
         }
     ],
     SKILL_CAP: [smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl, smshskl]
-}, "Auto-Smasher", {
-    type: "autoSmasherTurret",
-    size: 11,
-})
+}, "Auto-Smasher", {type: "autoSmasherTurret", size: 11})
 
 // Upgrade paths
 Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "desmos"]
