@@ -218,7 +218,7 @@ exports.makeBird = (type, name = -1, options = {}) => {
 }
 
 // drone functions
-exports.makeHybrid = (type, name = -1) => {
+exports.makeHybrid = (type, name = -1) => { // this function has been deprecated and will be removed in a future update. please use makeOver instead.
     type = ensureIsClass(type);
     let output = exports.dereference(type);
     let spawner = {

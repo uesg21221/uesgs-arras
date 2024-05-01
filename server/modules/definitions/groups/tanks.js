@@ -1,4 +1,4 @@
-const { combineStats, makeAuto, makeHybrid, makeOver, makeDeco, makeGuard, makeBird, makeMulti, makeRadialAuto, weaponArray } = require('../facilitators.js');
+const { combineStats, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeMulti, makeRadialAuto, weaponArray } = require('../facilitators.js');
 const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js');
 require('./generics.js');
 const g = require('../gunvals.js');
@@ -3533,11 +3533,11 @@ Class.phoenix = makeBird("sprayer", "Phoenix")
 Class.eagle = makeBird("pounder", "Eagle")
 
 // Hybrid tanks
-Class.bentHybrid = makeHybrid('tripleShot', "Bent Hybrid")
-Class.poacher = makeHybrid('hunter', "Poacher")
-Class.armsman = makeHybrid('rifle', "Armsman")
-Class.cropDuster = makeHybrid('minigun', "Crop Duster")
-Class.hybrid = makeHybrid('destroyer', "Hybrid")
+Class.bentHybrid = makeOver('tripleShot', "Bent Hybrid", {count: 1, independent: true})
+Class.poacher = makeOver('hunter', "Poacher", {count: 1, independent: true})
+Class.armsman = makeOver('rifle', "Armsman", {count: 1, independent: true})
+Class.cropDuster = makeOver('minigun', "Crop Duster", {count: 1, independent: true})
+Class.hybrid = makeOver('destroyer', "Hybrid", {count: 1, independent: true})
 
 // Over tanks
 Class.overgunner = makeOver({
