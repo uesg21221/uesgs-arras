@@ -134,7 +134,7 @@ function compileMatrix(matrix, matrix2Entrance) {
             GUNS: [{
                 POSITION: [14, 12, 1, 4, 0, 0, 0],
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+                    SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }, g.fake]),
                     TYPE: "bullet"
                 }
             }, {
@@ -213,7 +213,7 @@ for (let poly = 0; poly < 5; poly++) {
                     GUNS: [{
                         POSITION: [14, 12, 1, 4, 0, 0, 0],
                         PROPERTIES: {
-                            SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+                            SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }, g.fake]),
                             TYPE: "bullet"
                         }
                     }, {
