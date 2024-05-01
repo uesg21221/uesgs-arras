@@ -152,7 +152,7 @@ class io_moveInCircles extends IO {
         this.timer = ran.irandom(10) + 3
         this.goal = {
             x: this.body.x + 10 * Math.cos(-this.body.facing),
-            y: this.body.y + 10 * Math.sin(-this.body.facing),
+            y: this.body.y + 10 * Math.sin(-this.body.facing)
         }
     }
     think() {
@@ -160,7 +160,7 @@ class io_moveInCircles extends IO {
             this.timer = 10
             this.goal = {
                 x: this.body.x + 10 * Math.cos(-this.body.facing),
-                y: this.body.y + 10 * Math.sin(-this.body.facing),
+                y: this.body.y + 10 * Math.sin(-this.body.facing)
             }
         }
         return {
@@ -574,24 +574,18 @@ class io_avoid extends IO {
         super(body)
     }
     think(input) {
-        let masterId = this.body.master.id
-        let range = this.body.size * this.body.size * 100
-        this.avoid = nearest(entities, {
-            x: this.body.x,
-            y: this.body.y
-        }, function (test, sqrdst) {
-            return (test.master.id !== masterId && (test.type === 'bullet' || test.type === 'drone' || test.type === 'swarm' || test.type === 'satellite' || test.type === 'trap' || test.type === 'block') && sqrdst < range);
-        })
+        let range = (this.body.size ** 2) * 100
+        this.avoid = nearest(entities, this.body, (test, sqrdst) => test.team !== this.body.team && (test.type === 'bullet' || test.type === 'drone' || test.type === 'swarm' || test.type === 'satellite' || test.type === 'trap' || test.type === 'block') && sqrdst < range)
         // Aim at that target
         if (this.avoid != null) {
             // Consider how fast it's moving.
             let delt = new Vector(this.body.velocity.x - this.avoid.velocity.x, this.body.velocity.y - this.avoid.velocity.y)
             let diff = new Vector(this.avoid.x - this.body.x, this.avoid.y - this.body.y);
-            let comp = (delt.x * diff.x + delt.y * diff.y) / delt.length / diff.length
+            let comp = (delt.x * diff.x + delt.y * diff.y) / (delt.length * diff.length)
             let goal = {}
             if (comp > 0) {
                 if (input.goal) {
-                    let goalDist = Math.sqrt(range / (input.goal.x * input.goal.x + input.goal.y * input.goal.y))
+                    let goalDist = Math.sqrt(range / (input.goal.x ** 2 + input.goal.y ** 2))
                     goal = {
                         x: input.goal.x * goalDist - diff.x * comp,
                         y: input.goal.y * goalDist - diff.y * comp,
@@ -609,7 +603,7 @@ class io_avoid extends IO {
 }
 class io_minion extends IO {
     constructor(body, opts = {}) {
-        super(body)
+        super(body);
         this.turnwise = 1;
         this.leashRange = opts.leash ?? 82;
         this.orbitRange = opts.orbit ?? 140;
