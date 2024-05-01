@@ -43,7 +43,7 @@ module.exports = ({ Config }) => {
 				k ? 10 ** (c.length - k - 1) : 200_000_000,
 
 				// 2-wide dimension of the 2 shape "ranks" - normal, crasher
-				[[10, `laby_${i+3}_${j}_${k}_0`], [1, `laby_${i+3}_${j}_${k}_1`]]
+				[[24, `laby_${i+3}_${j}_${k}_0`], [1, `laby_${i+3}_${j}_${k}_1`]]
 			])
 		])
 	]);
