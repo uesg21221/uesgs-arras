@@ -1735,7 +1735,11 @@ class Entity extends EventEmitter {
             }
             this.emit("upgrade", { body: this });
             if (this.color.base == '-1' || this.color.base == 'mirror') {
-                this.color.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : this.team);
+                if (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) {
+                    this.color.base = this.isBot ? "darkGrey" : getTeamColor(TEAM_RED);
+                } else {
+                    this.color.base = getTeamColor(this.team);
+                }
             }
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
