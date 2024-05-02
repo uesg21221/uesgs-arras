@@ -288,19 +288,6 @@ class Gun extends EventEmitter {
             }
         }
     }
-      syncTurretSkills() {
-        if (this.syncTurretSkills) {
-            let self = this;
-            for (let i = 0; i < this.turret.length; i++) {
-                let turret = this.turrets[i];
-                turret.define({
-                    BODY: self.interpret(),
-                    SKILL: self.getSkillRaw(),
-                });
-                turret.refreshBodyAttributes();
-            }
-        }
-    }
     fire(gx, gy, sk) {
         // Recoil
         this.lastShot.time = util.time();
@@ -336,7 +323,7 @@ class Gun extends EventEmitter {
             }
         }
 
-         //create an independent entity
+        //create an independent entity
         if (this.independentChildren) {
             var o = new Entity({
                 x: this.body.x + this.body.size * gx - s.x,
@@ -704,6 +691,7 @@ class Prop {
         this.borderless = false;
         this.drawFill = true;
         this.strokeWidth = 1;
+
         // Bind prop
         this.bond = bond;
         this.bond.props.push(this);
@@ -744,6 +732,7 @@ class Prop {
     }
     define(def) {
         let set = ensureIsClass(def);
+
         if (set.PARENT != null) {
             if (Array.isArray(set.PARENT)) {
                 for (let i = 0; i < set.PARENT.length; i++) {
@@ -1222,7 +1211,6 @@ class Entity extends EventEmitter {
             }
             for (let child of this.children) child.team = set.TEAM
         }
-        if (set.SYNC_TURRET_SKILLS != null) this.syncTurretSkills = set.SYNC_TURRET_SKILLS;
         if (set.VARIES_IN_SIZE != null) {
             this.settings.variesInSize = set.VARIES_IN_SIZE;
             this.squiggle = this.settings.variesInSize ? ran.randomRange(0.8, 1.2) : 1;
@@ -1378,6 +1366,7 @@ class Entity extends EventEmitter {
                 }
             }
         }
+
         if (set.ON != null) {
             for (let { event, handler, once = false } of set.ON) {
                 this.definitionEvents.push({ event, handler, once });
@@ -1493,7 +1482,7 @@ class Entity extends EventEmitter {
                     }
                 }
             }
-             if (set.REROOT_UPGRADE_TREE) this.rerootUpgradeTree = set.REROOT_UPGRADE_TREE;
+            if (set.REROOT_UPGRADE_TREE) this.rerootUpgradeTree = set.REROOT_UPGRADE_TREE;
             if (Array.isArray(this.rerootUpgradeTree)) {
                 let finalRoot = "";
                 for (let root of this.rerootUpgradeTree) finalRoot += root + "\\/";
@@ -1588,7 +1577,7 @@ class Entity extends EventEmitter {
         this.health.set(((this.settings.healthWithLevel ? 2 * this.level : 0) + this.HEALTH) * this.skill.hlt * healthMultiplier);
         this.health.resist = 1 - 1 / Math.max(1, this.RESIST + this.skill.brst);
         this.shield.set(((this.settings.healthWithLevel ? 0.6 * this.level : 0) + this.SHIELD) * this.skill.shi, Math.max(0, ((this.settings.healthWithLevel ? 0.006 * this.level : 0) + 1) * this.REGEN * this.skill.rgn * regenMultiplier));
-        this.damage = damageMultiplier * this.DAMAGE * this.skill.atk * !this.pacify;
+        this.damage = damageMultiplier * this.DAMAGE * this.skill.atk;
         this.penetration = penetrationMultiplier * (this.PENETRATION + 1.5 * (this.skill.brst + 0.8 * (this.skill.atk - 1)));
         if (!this.settings.dieAtRange || !this.range) this.range = rangeMultiplier * this.RANGE;
         this.fov = fovMultiplier * this.FOV * 275 * Math.sqrt(this.size);
@@ -1641,7 +1630,7 @@ class Entity extends EventEmitter {
         // Initalize.
         this.activation.update();
         this.facing = this.bond.facing + this.bound.angle;
-        if (this.facingType[0].includes('Target')) {
+        if (this.facingType[0].includes('Target') || this.facingType[0].includes('Speed')) {
             this.facingType = ["bound", {}];
         }
         this.motionType = ["bound", {}];
@@ -1746,7 +1735,11 @@ class Entity extends EventEmitter {
             }
             this.emit("upgrade", { body: this });
             if (this.color.base == '-1' || this.color.base == 'mirror') {
-                this.color.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : this.team);
+                if (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) {
+                    this.color.base = this.isBot ? "darkGrey" : getTeamColor(TEAM_RED);
+                } else {
+                    this.color.base = getTeamColor(this.team);
+                }
             }
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
@@ -1804,12 +1797,6 @@ class Entity extends EventEmitter {
             case "fastgrow":
                 this.SIZE += args.growSpeed ?? 5;
                 break;
-            case "fuckingnuclearbomb":
-                this.SIZE += args.growSpeed ?? 10;
-                break;
-            case "trappershockwave":
-                this.SIZE += args.growSpeed ?? 20;
-                break;
             case "glide":
                 this.maxSpeed = this.topSpeed;
                 this.damp = args.damp ?? 0.05;
@@ -1837,20 +1824,6 @@ class Entity extends EventEmitter {
                 this.maxSpeed = this.topSpeed;
                 this.damp = args.damo ?? -0.025;
                 break;
-            case "accelerate":
-                    this.velocity.x = this.velocity.x + (4.5 * Math.cos(this.facing))
-                    this.velocity.y = this.velocity.y + (4.5 * Math.sin(this.facing))
-                    this.topSpeed += 10;
-                    this.maxSpeed += 10;
-                    this.damp = -0.0125;
-                    break;
-            case "acceleratetothespeedoflight":
-                    this.velocity.x = this.velocity.x + ((1 * this.maxSpeed + 0.5) * Math.cos(this.facing))
-                    this.velocity.y = this.velocity.y + ((1 * this.maxSpeed + 0.5) * Math.sin(this.facing))
-                    this.topSpeed += 0.5;
-                    this.maxSpeed += 0.5;
-                    this.damp = -0.0001;
-                    break;
             case "swarm":
                 this.maxSpeed = this.topSpeed;
                 let l =
@@ -1898,20 +1871,6 @@ class Entity extends EventEmitter {
                     this.maxSpeed = 0;
                 }
                 break;
-            case "aimassist":
-                this.x = this.source.x + this.master.control.target.x;
-                this.y = this.source.y + this.master.control.target.y;
-                this.velocity.x = this.source.velocity.x;
-                this.velocity.y = this.source.velocity.y;
-                break;
-            case "aimassistlock":
-            if (!this.control.alt) {
-                this.x = this.source.x + this.master.control.target.x;
-                this.y = this.source.y + this.master.control.target.y;
-                this.velocity.x = this.source.velocity.x;
-                this.velocity.y = this.source.velocity.y;
-            };
-                break;
             case "drift":
                 this.maxSpeed = 0;
                 engine = {
@@ -1954,22 +1913,22 @@ class Entity extends EventEmitter {
                     y: this.master.y,
                 };
                 let target = {
-                    x: save.x + this.master.control.target.x,
-                    y: save.y + this.master.control.target.y,
+                    x: this.master.x + this.master.control.target.x,
+                    y: this.master.y + this.master.control.target.y,
                 };
-                let amount = (util.getDistance(target, save) / 10) | 0;                this.damp = 0;
+                let amount = (util.getDistance(target, save) / 100) | 0;
+                //sockets.broadcast(this.velocity.x.toString())
                 if (this.waveReversed == null) this.waveReversed = this.master.control.alt ? -1 : 1;
                 if (this.waveAngle == null) {
                     this.waveAngle = this.master.facing;
-                    this.velocity.x = this.velocity.length + amount * Math.cos(this.waveAngle);
-                    this.velocity.y = this.velocity.length * Math.sin(this.waveAngle);
+                    this.velocity.x = ((5 + this.velocity.length * (amount + 2)) * Math.cos(this.waveAngle)) / 7;
+                    this.velocity.y = ((5 + this.velocity.length * (amount + 2)) * Math.sin(this.waveAngle)) / 7;
                 }
                 let waveX = this.maxSpeed * 5 * Math.cos((this.RANGE - this.range) / (args.period ?? 4) * 2);
                 let waveY = (args.amplitude ?? 15) * Math.cos((this.RANGE - this.range) / (args.period ?? 4)) * this.waveReversed * (args.invert ? -1 : 1);
                 this.x += Math.cos(this.waveAngle) * waveX - Math.sin(this.waveAngle) * waveY;
                 this.y += Math.sin(this.waveAngle) * waveX + Math.cos(this.waveAngle) * waveY;
                 break;
-
         }
         this.accel.x += engine.x * this.control.power;
         this.accel.y += engine.y * this.control.power;
@@ -2129,11 +2088,10 @@ class Entity extends EventEmitter {
         }
     }
     contemplationOfMortality() {
-    if (this.invuln || this.godmode) {
+        if (this.invuln) {
             this.damageReceived = 0;
             return 0;
         }
-
         if (this.damageReceived > 0) {
             let damageInflictor = []
             let damageTool = []
@@ -2227,7 +2185,6 @@ class Entity extends EventEmitter {
             killers = killers.filter((elem, index, self) => index == self.indexOf(elem));
             this.emit('death', { body: this, killers, killTools });
             killers.forEach((e) => e.emit('kill', { body: e, entity: this }));
-
             // If there's no valid killers (you were killed by food), change the message to be more passive
             let killText = notJustFood ? "" : "You have been killed by ",
                 dothISendAText = this.settings.givesKillMessage;
@@ -2238,20 +2195,11 @@ class Entity extends EventEmitter {
                 switch (this.type) {
                     case "tank":
                         killers.length > 1 ? instance.killCount.assists++ : instance.killCount.solo++;
-                        if (instance.killCount.solo == 5) {
-                          if (instance.socket) instance.socket.talk("achieve", 0);
-                        };
-                        if (instance.killCount.solo == 10) {
-                          if (instance.socket) instance.socket.talk("achieve", 1);
-                          sockets.broadcast(instance.name + " is on a kill streak of 10!");
-                        };
-                          if (instance.socket) instance.socket.talk("killgained");
                         break;
                     
                     case "food":
                     case "crasher":
                         instance.killCount.polygons++;
-                        if (instance.socket) instance.socket.talk("shapegained");
                         break
                     
                     case "miniboss": 
@@ -2300,6 +2248,7 @@ class Entity extends EventEmitter {
                 }
                 sockets.broadcast(text);
             }
+
             // instead of "a Machine Gunner Bullet and a Machine Gunner Bullet and a Machine Gunner Bullet",
             // make it say " 3 Machine Gunner Bullets"
             let killCounts = {};
@@ -2312,6 +2261,7 @@ class Entity extends EventEmitter {
                 killText += (killCounts[killCountEntries[i]] == 1) ? util.addArticle(killTools[i].label) : killCounts[killCountEntries[i]] + ' ' + killCountEntries[i] + 's';
                 killText += i < killCountEntries.length - 2 ? ', ' : ' and ';
             }
+
             // Prepare it and clear the collision array.
             killText = killText.slice(0, -5);
             if (killText === "You have been kille") {

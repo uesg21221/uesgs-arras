@@ -94,10 +94,10 @@ var gameDraw = {
     //TODO: somehow move the calculation to these in reanimateColors to improve performance
     colorCache: {},
     modifyColor: (color, base = "16 0 1 0 false") => {
-      // Split into array
+        // Split into array
         let colorDetails = color.split(" "),
             baseDetails = base.split(" ");
-      
+
         // Color mirroring
         if (colorDetails[0] == "-1" || colorDetails[0] == "mirror") {
             colorDetails[0] = baseDetails[0];
@@ -156,26 +156,21 @@ var gameDraw = {
         lesbian: "",
         gay: "",
         bi: "",
-        nero: "",
         trans: "",
         magenta: "",
         blue_red: "",
         blue_grey: "",
         grey_blue: "",
         red_grey: "",
-        grey_red: "",
-        sans: "",
-        epilepsy: ""
+        grey_red: ""
     },
     reanimateColors: () => {
         let now = Date.now(),
 
-            six_gradient = Math.floor((now / 200) % 6),
+            //six_gradient = Math.floor((now / 200) % 6),
             five_bars = Math.floor((now % 2000) / 400),
             three_bars = Math.floor((now % 2000) * 3 / 2000),
-            fourtyfive_bars = Math.floor((now % 4000) * 45 / 4000),
             blinker = 150 > now % 300,
-            seizure = 5 > now % 10,
 
             lesbian_magenta  = "#a50062",
             lesbian_oredange = "#d62900",
@@ -183,7 +178,7 @@ var gameDraw = {
             lesbian_useSecondSet = five_bars < 2,
 
             gay_transition = (now / 2000) % 1,
-            
+
             ratio        = (Math.sin(now / 2000 * Math.PI)) / 2 + 0.5,
             light_purple = { h: 258/360, s: 1, l: 0.84 },
             purple       = { h: 265/360, s: 0.69, l: 0.47 },
@@ -191,16 +186,6 @@ var gameDraw = {
             bi_pink   = "#D70071",
             bi_purple = "#9C4E97",
             bi_blue   = "#0035AA",
-            
-            nero_blue1 = "#4287F5",
-            nero_blue2 = "#3CA2F0",
-            nero_blue3 = "#70B5FF",
-            nero_blue4 = "#4B90DB",
-            nero_blue5 = "#355BBD",
-            nero_blue6 = "#1F4199",
-            nero_blue7 = "#242bbd",
-            nero_blue8 = "#1814E0",
-            nero_blue9 = "#2668d1",
 
             trans_pink  = "#f7a8b8",
             trans_blue  = "#55cdfc",
@@ -221,9 +206,6 @@ var gameDraw = {
         gameDraw.animatedColor.grey_blue = blinker ? gameDraw.color.grey : gameDraw.color.blue;
         gameDraw.animatedColor.red_grey = blinker ? gameDraw.color.red : gameDraw.color.grey;
         gameDraw.animatedColor.grey_red = blinker ? gameDraw.color.grey : gameDraw.color.red;
-        gameDraw.animatedColor.epilepsy = seizure ? gameDraw.color.guiblack : gameDraw.color.guiwhite;
-      
-        gameDraw.animatedColor.nero = [nero_blue1, "#418CF4", "#4092F3", "#3E97F2", "#3D9DF1", nero_blue2, "#46A6F3", "#51AAF6", "#5BADF9", "#66B1FC", nero_blue3, "#69AEF8", "#61A6F1", "#5A9FE9", "#5297E2", nero_blue4, "#4785D5", "#427BCF", "#3E70C9", "#3966C3", nero_blue5, "#3156B6", "#2C51AF", "#284BA7", "#2346A0", nero_blue6, "#203DA0", "#2138A7", "#2234AF", "#232FB6", nero_blue7, "#2226C4", "#1F22CB", "#1D1DD2", "#1A19D9", nero_blue8, "#1B25DD", "#1E36DA", "#2046D7", "#2357D4", nero_blue9, "#2C6ED8", "#3174DF", "#377BE7", "#3C81EE", "#4287F5"][fourtyfive_bars];
     },
     animatedColors: {
         // police
@@ -261,18 +243,10 @@ var gameDraw = {
         // bi
         38: true,
         bi: true,
-      
+
         // magenta
         42: true,
         animatedMagenta: true,
-      
-        // nero
-        43: true,
-        animatednero: true,
-      
-        // epil
-        44: true,
-        animatedepilepsy: true
     },
     getColor: (colorNumber) => {
         if (colorNumber[0] == '#') return colorNumber;
@@ -439,16 +413,6 @@ var gameDraw = {
             case "42":
             case "animatedMagenta":
                 return gameDraw.animatedColor.magenta;
-            
-        // nero  shit
-            case "43":
-            case "animatednero":
-            case "nero":
-                return gameDraw.animatedColor.nero;
-            case "44":
-            case "animatedepilepsy":
-            case "epilepsy":
-                return gameDraw.animatedColor.epilepsy;
         }
     },
     getColorDark: (givenColor) => {

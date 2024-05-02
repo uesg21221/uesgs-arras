@@ -48,3 +48,4 @@ module.exports = ({ Events }) => {
 
 	console.log('[basicChatModeration] Loaded spam prevention!');
 };
+

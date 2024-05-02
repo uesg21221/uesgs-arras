@@ -8,7 +8,6 @@ global.protocol = require(".././lib/fasttalk.js");
 
 // Global Variables (These must come before we import from the modules folder.)
 global.fps = "Unknown";
-global.playerskin = "";
 global.minimap = [];
 global.entities = [];
 global.walls = [];
@@ -18,9 +17,6 @@ global.entitiesToAvoid = [];
 global.grid = new hshg.HSHG();
 global.arenaClosed = false;
 global.mockupsLoaded = false;
-const d = new Date();
-global.dayofweek = d.getUTCDay();
-global.cangrappleonceagain = "yes"
 
 global.loadedAddons = [];
 global.TEAM_BLUE = -1;
@@ -145,6 +141,7 @@ global.makeHitbox = wall => {
             Math.atan2(    _size, 0 - _size) + wall.angle
         ],
         distance = Math.sqrt(_size ** 2 + _size ** 2);
+
     //convert 4 corners into 4 lines
     for (let i = 0; i < 4; i++) {
         relativeCorners[i] = {
@@ -152,6 +149,7 @@ global.makeHitbox = wall => {
             y: distance * Math.cos(relativeCorners[i])
         };
     }
+
     wall.hitbox = [
         [relativeCorners[0], relativeCorners[1]],
         [relativeCorners[1], relativeCorners[2]],

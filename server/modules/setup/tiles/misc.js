@@ -7,7 +7,7 @@ let pickFromChanceSet = set => {
 
 spawnNatural = (tile, layeredSet, kind) => {
     let o = new Entity(tile.randomInside());
-    o.define(pickFromChanceSet(pickFromChanceSet(layeredSet)));
+    o.define(pickFromChanceSet(layeredSet));
     o.facing = ran.randomAngle();
     o.team = TEAM_ENEMIES;
     o.on('dead', () => tile.data[kind + 'Count']--);
@@ -30,65 +30,6 @@ normal = new Tile({
             }
         }
     }
-}),
-    
-normalNoFood = new Tile({
-    color: "white",
-    data: {
-        allowMazeWallSpawn: true,
-    },
-    init: tile => room.spawnableDefault.push(tile),
-}),
-
-dancefloor = new Tile({
-    color: "rainbow",
-    data: {
-        allowMazeWallSpawn: false,
-    },
-    init: tile => room.spawnableDefault.push(tile),
-}),
-    
-dancefloor1 = new Tile({
-    color: 20,
-    data: {
-        allowMazeWallSpawn: false,
-    },
-    init: tile => room.spawnableDefault.push(tile),
-}),
-dancefloor2 = new Tile({
-    color: 21,
-    data: {
-        allowMazeWallSpawn: false,
-    },
-    init: tile => room.spawnableDefault.push(tile),
-}),
-dancefloor3 = new Tile({
-    color: 22,
-    data: {
-        allowMazeWallSpawn: false,
-    },
-    init: tile => room.spawnableDefault.push(tile),
-}),
-dancefloor4 = new Tile({
-    color: 23,
-    data: {
-        allowMazeWallSpawn: false,
-    },
-    init: tile => room.spawnableDefault.push(tile),
-}),
-dancefloor5 = new Tile({
-    color: 24,
-    data: {
-        allowMazeWallSpawn: false,
-    },
-    init: tile => room.spawnableDefault.push(tile),
-}),
-blacktile = new Tile({
-    color: 19,
-    data: {
-        allowMazeWallSpawn: false,
-    },
-    init: tile => room.spawnableDefault.push(tile),
 }),
 
 nestTick = tile => {
@@ -131,40 +72,19 @@ nestNoBoss = new Tile({
     },
     tick: nestTick
 }),
-    
-nestNoFood = new Tile({
-    color: nestColor,
-    data: {
-        allowMazeWallSpawn: true,
-    },
-}),
 
 wall = new Tile({
-    color: "lightGray",
+    color: "white",
     init: tile => {
-	    let o = new Entity(tile.loc);
-	    o.define("wall");
-	    o.team = TEAM_ROOM;
-	    o.SIZE = room.tileWidth / 2;
-	    o.protect();
-	    o.life();
-      makeHitbox(o);
-      walls.push(o);
+        let o = new Entity(tile.loc);
+        o.define("wall");
+        o.team = TEAM_ROOM;
+        o.SIZE = room.tileWidth / 2;
+        o.protect();
+        o.life();
+        makeHitbox(o);
+        walls.push(o);
     }
 });
 
-dfxwall = new Tile({
-    color: "lightGray",
-    init: tile => {
-	    let o = new Entity(tile.loc);
-	    o.define("dfxwall");
-      o.team = TEAM_ROOM;
-	    o.SIZE = room.tileWidth / 2;
-	    o.protect();
-	    o.life();
-      makeHitbox(o);
-      walls.push(o);
-    }
-});
-
-module.exports = { normal, normalNoFood, nest, nestNoFood, wall, nestNoBoss, blacktile, dancefloor, dancefloor1, dancefloor2, dancefloor3, dancefloor4, dancefloor5, dfxwall };
+module.exports = { normal, nest, wall, nestNoBoss };

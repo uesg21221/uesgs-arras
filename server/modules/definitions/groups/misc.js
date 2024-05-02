@@ -46,17 +46,6 @@ Class.wall = {
     SHAPE: "M 1 1 L -1 1 L -1 -1 L 1 -1 Z",
     VARIES_IN_SIZE: false
 }
-Class.dfxwall = {
-    PARENT: "rock",
-    LABEL: "Wall",
-    SIZE: 25,
-    SHAPE: "M 1 1 L -1 1 L -1 -1 L 1 -1 Z",
-    VARIES_IN_SIZE: false,
-    TURRETS: [{
-        POSITION: [7, -5, -5, 0, 0, 3],
-        TYPE: "dfxskin"
-    },]
-}
 Class.moon = {
     PARENT: "rock",
     LABEL: "Moon",

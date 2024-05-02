@@ -136,9 +136,6 @@ function incoming(message, socket) {
                     util.log("[INFO] A socket was verified with the token: " + key);
                 } else {
                     util.log("[WARNING] A socket failed to verify with the token: " + key);
-                    if (key !== "") {
-                    socket.talk("achieve", 2);
-                    }
                 }
                 socket.key = key;
             }
@@ -151,15 +148,14 @@ function incoming(message, socket) {
                 socket.kick("Trying to spawn while already alive.");
                 return 1;
             }
-            if (m.length !== 4) {
-                socket.kick("Ill-sized spawn request." + global.playerskin + m.length);
+            if (m.length !== 3) {
+                socket.kick("Ill-sized spawn request.");
                 return 1;
             }
             // Get data
             let name = m[0].replace(c.BANNED_CHARACTERS_REGEX, "");
             let needsRoom = m[1];
             let autoLVLup = m[2];
-            global.playerskin = m[3].replace(name, "");
             // Verify it
             if (typeof name != "string") {
                 socket.kick("Bad spawn request name.");
@@ -441,171 +437,6 @@ function incoming(message, socket) {
                 player.body.destroy();
             }
             break;
-        case "testTeleport":
-              if (player.body != null && socket.permissions) {
-                player.body.x = player.body.x + player.target.x; 
-                player.body.y = player.body.y + player.target.y;
-                }
-            break;
-        case "smallerTank":
-                if (player.body != null && socket.permissions) {
-             player.body.SIZE *= 4/5;
-             player.body.RECOIL_MULTIPLIER *= 4/5;
-                }
-            break;
-        case "biggerTank":
-                if (player.body != null && socket.permissions) {
-             player.body.SIZE *= 5/4;
-             player.body.RECOIL_MULTIPLIER *= 5/4;
-                }
-            break;
-        case "smallerFOV":
-                if (player.body != null && socket.permissions) {
-             player.body.FOV *= 4/5
-                }
-            break;
-        case "biggerFOV":
-                if (player.body != null && socket.permissions) {
-             player.body.FOV *= 5/4
-                }
-            break;
-        case "godmodeButton":
-                if (player.body != null && socket.permissions) {
-              player.body.godmode =  !player.body.godmode;
-              player.body.sendMessage((player.body.godmode ? "Godmode enabled." : "Godmode disabled."));
-                }
-            break;
-        case "invisibility":
-                if (player.body != null && socket.permissions) {
-              player.body.alpha =  !player.body.alpha;
-              player.body.invisible = [player.body.alpha, !player.body.alpha]
-                }
-            break;
-        case "canBeOnLeaderboard":
-                if (player.body != null && socket.permissions) {
-              player.body.settings.leaderboardable = !player.body.settings.leaderboardable;
-              player.body.sendMessage((player.body.settings.leaderboardable ? "You have been added to the leaderboard" : "You have been removed from the leaderboard."));
-                }
-            break;
-        case "keyStrong"://keyStrong
-                if (player.body != null && socket.permissions) {
-              player.body.skill.raw = Array(10).fill(12);
-              player.body.define({ 
-                SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
-                });
-                }
-            break;
-                case "drag": { // drag
-                   if (player.body != null && socket.permissions) {
-                                if (!player.pickedUpInterval) {
-                                    let tx = player.body.x + player.target.x;
-                                    let ty = player.body.y + player.target.y;
-                                    let pickedUp = [];
-                                    entities.forEach(e => {
-                                        if (!(e.type === "mazeWall" && e.shape === 4) && (e.x - tx) * (e.x - tx) + (e.y - ty) * (e.y - ty) < e.size * e.size * 1.5) {
-                                            pickedUp.push({ e, dx: e.x - tx, dy: e.y - ty });
-                                        }
-                                    });
-                                    if (pickedUp.length === 0) {
-                                        player.body.sendMessage('No entities found to pick up!');
-                                    } else {
-                                        player.pickedUpInterval = setInterval(() => {
-                                            if (!player.body) {
-                                                clearInterval(player.pickedUpInterval);
-                                                player.pickedUpInterval = null;
-                                                return;
-                                            }
-                                            let tx = player.body.x + player.target.x;
-                                            let ty = player.body.y + player.target.y;
-                                            for (let { e: entity, dx, dy } of pickedUp)
-                                                if (!entity.isGhost) {
-                                                    entity.x = dx + tx;
-                                                    entity.y = dy + ty;
-                                                }
-                                        }, 25);
-                                    }
-                                } else {
-                                    clearInterval(player.pickedUpInterval);
-                                    player.pickedUpInterval = null;
-                                }
-                            }
-              } break;
-               case "watchThis": { // Kill what your mouse is over //watchThis
-                 if (player.body != null && socket.permissions) {
-                                entities.forEach(o => {
-                                    if (o !== player.body != null && util.getDistance(o, {
-                                        x: player.target.x + player.body.x,
-                                        y: player.target.y + player.body.y
-                                    }) < o.size * 1.3) {
-                                        o.kill();
-                                       o.destroy();
-                                    }
-                                });
-                            } break;
-               }
-    break;
-        case "heal": { // Kill what your mouse is over
-            if (player.body != null && socket.permissions) {
-              entities.forEach(o => {
-                if (o !== player.body != null && util.getDistance(o, {
-                  x: player.target.x + player.body.x,
-                  y: player.target.y + player.body.y
-                }) < o.size * 1.3) {
-                 o.health.amount = o.health.max
-                 o.shield.amount = o.shield.max
-                }
-              });
-            } break;
-          }
-              break;
-                 case "randomTestKey": { // Spawn entities at mouse
-                    if (player.body != null && socket.permissions) {
-                                let loc = {
-                                    x: (30 * Math.round((player.target.x + player.body.x - 15)/30))+15,
-                                    y: (30 * Math.round((player.target.y + player.body.y - 15)/30))+15,
-                                };
-                                {
-                                    let o; {
-                                        o = new Entity(loc);
-                                        o.define(Class.placeableWallSmall);
-                                    }
-                                }
-                            } break;} break;
-                     case "spawnWall": { // Spawn entities at mouse
-if (player.body != null && socket.permissions) {
-                                    entities.forEach(o => {
-                                    if (o !== player.body != null /*&& global.canKill != false*/ && o.label === "Wall" && util.getDistance(o, {
-                                        x: player.target.x + player.body.x,
-                                        y: player.target.y + player.body.y
-                                    }) < o.size) {
-                                        o.kill();
-                                       o.destroy();
-                                       global.canPlaceWall = false;
-                                    }; //else {   global.canKill = true;}
-                                });
-                             if (player.body != null && socket.permissions && global.canPlaceWall != false)   { 
-                           let loc = {
-                                    x: (30 * Math.round((player.target.x + player.body.x+15)/30))-15,
-                                    y: (30 * Math.round((player.target.y + player.body.y+15)/30))-15,
-                                };
-                                {
-                                    let e; {                                      
-                   e = new Entity(loc);
-            //  global.canPlaceWall = false;
-       //  global.canKill = false;
-        e.define(Class.wall);
-        e.TEAM = TEAM_ROOM;
-				e.SIZE = 45;
-				}
-				e.protect();
-				e.life();
-        }break;} else {global.canPlaceWall = true  }
-} break;
-} break;
-         case "nullallalallalala":
-                if (player.body != null && socket.permissions) {
-                    player.body.sendMessage("turi ip ip ip")
-             } break;  
         case "A":
             if (player.body != null) return 1;
             let possible = []
@@ -694,6 +525,7 @@ if (player.body != null && socket.permissions) {
                 player.body.sendMessage("There are no special tanks in this mode that you can control.");
             }
             break;
+
         case "M":
             if (player.body == null) return 1;
             let abort, message = m[0];
@@ -718,12 +550,6 @@ if (player.body != null && socket.permissions) {
             if (c.SANITIZE_CHAT_MESSAGE_COLORS) {
                 // I thought it should be "§§" but it only works if you do "§§§§"?
                 message = message.replace(/§/g, "§§§§");
-            }
-  
-            if (player.body != null && socket.permissions) {
-                if (message.includes("/broadcast ")) {
-                    if (message.replace("/broadcast ", "") != "") broadcast(message.replace("/broadcast ", ""));
-                }
             }
 
             // TODO: this needs to be lag compensated, so the message would not last 1 second less due to high ping
@@ -1062,17 +888,12 @@ const spawn = (socket, name) => {
         body = new Entity(loc);
         body.protect();
         body.isPlayer = true;
-        body.name = name;
         if (player.team != null) {
             body.team = player.team;
         } else {
             player.team = body.team;
         }
-        if (global.playerskin !== "") {
-          body.define([c.SPAWN_CLASS, global.playerskin]);
-        } else {
-          body.define(c.SPAWN_CLASS);
-        }
+        body.define(c.SPAWN_CLASS);
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
@@ -1081,6 +902,7 @@ const spawn = (socket, name) => {
         socket.spectateEntity = null;
         body.invuln = true;
     }
+    body.name = name;
     body.sendMessage = (content, displayTime = c.MESSAGE_DISPLAY_TIME) => socket.talk("m", displayTime, content);
 
     socket.rememberedTeam = player.team;
@@ -1369,9 +1191,10 @@ const Delta = class {
     constructor(dataLength, finder) {
         this.dataLength = dataLength;
         this.finder = finder;
+        this.old = [];
         this.now = finder([]);
     }
-    update(...args) {
+    update(save, ...args) {
         let old = this.now;
         let now = this.finder(args);
         this.now = now;
@@ -1421,6 +1244,13 @@ const Delta = class {
         let reset = [0, now.length];
         for (let element of now) reset.push(element.id, ...element.data);
         let update = [deletesLength, ...deletes, updatesLength, ...updates];
+        if (!updatesLength && !deletesLength && this.save) {
+            update = this.old;
+            this.save--;
+        } else if (save) {
+            this.old = update;
+            this.save = save;
+        }
         return { reset, update };
     }
 };
@@ -1449,25 +1279,21 @@ let minimapAll = new Delta(5, args => {
     }
     return all;
 });
-let teamIDs = [1, 2, 3, 4];
-if (c.GROUPS) for (let i = 0; i < 100; i++) teamIDs.push(i + 5);
-let minimapTeams = teamIDs.map((team) =>
-    new Delta(3, args => {
-        let all = [];
-        for (let my of entities)
-            if (my.type === "tank" && my.team === -team && my.master === my && my.allowedOnMinimap) {
-                all.push({
-                    id: my.id,
-                    data: [
-                        util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
-                        util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
-                        (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? '10 0 1 0 false' : my.color.compiled,
-                    ],
-                });
-            }
-        return all;
-    })
-);
+let minimapTeams = new Delta(3, args => {
+    let all = [];
+    for (let my of entities)
+        if (my.type === "tank" && my.team === args[0] && my.master === my && my.allowedOnMinimap) {
+            all.push({
+                id: my.id,
+                data: [
+                    util.clamp(Math.floor((256 * my.x) / room.width), 0, 255),
+                    util.clamp(Math.floor((256 * my.y) / room.height), 0, 255),
+                    (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? '10 0 1 0 false' : my.color.compiled,
+                ],
+            });
+        }
+    return all;
+});
 let leaderboard = new Delta(7, args => {
     let list = [];
     if (c.TAG)
@@ -1514,7 +1340,9 @@ let leaderboard = new Delta(7, args => {
         }
         if (is === 0) break;
         let entry = list[top];
-        let color = args.length && args[0] == entry.id && entry.color.base == 12 ? '10 0 1 0 false' : entry.color.compiled;
+        let color = args.length && args[0] == entry.team
+            ? '10 0 1 0 false'
+            : entry.color.compiled;
         topTen.push({
             id: entry.id,
             data: [
@@ -1538,16 +1366,24 @@ let subscribers = [];
 setInterval(() => {
     logs.minimap.set();
     let minimapUpdate = minimapAll.update();
-    let minimapTeamUpdates = minimapTeams.map((r) => r.update());
     for (let socket of subscribers) {
         if (!socket.status.hasSpawned) continue;
-        let leaderboardUpdate = leaderboard.update(socket.player.body ? socket.player.body.id : null);
-        let team = minimapTeamUpdates[-socket.player.team - 1];
+        let team = minimapTeams.update(
+            subscribers.length - 1,
+            socket.player.team
+        );
+        let leaderboardUpdate = leaderboard.update(
+            subscribers.length - 1,
+            c.GROUPS || (c.MODE == 'ffa' && !c.TAG) ? socket.player.team : 0
+        );
+        socket.talk(
+            "b",
+            ...(socket.status.needsNewBroadcast ? minimapUpdate.reset : minimapUpdate.update),
+            ...(team ? socket.status.needsNewBroadcast ? team.reset : team.update : [0, 0]),
+            ...(socket.anon ? [0, 0] : socket.status.needsNewBroadcast ? leaderboardUpdate.reset : leaderboardUpdate.update)
+        );
         if (socket.status.needsNewBroadcast) {
-            socket.talk("b", ...minimapUpdate.reset, ...(team ? team.reset : [0, 0]), ...(socket.anon ? [0, 0] : leaderboardUpdate.reset));
             socket.status.needsNewBroadcast = false;
-        } else {
-            socket.talk("b", ...minimapUpdate.update, ...(team ? team.update : [0, 0]), ...(socket.anon ? [0, 0] : leaderboardUpdate.update));
         }
     }
     logs.minimap.mark();
@@ -1694,7 +1530,7 @@ const sockets = {
             util.log("[ERROR]:");
             util.error(e);
         });
-        
+
         //account for proxies
         //very simplified reimplementation of what the forwarded-for npm package does
         let store = req.headers['fastly-client-ip'] || req.headers["cf-connecting-ip"] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
