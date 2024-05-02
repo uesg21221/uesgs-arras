@@ -908,6 +908,7 @@ class io_disableOnOverride extends IO {
         super(body);
         this.pacify = false;
         this.lastPacify = false;
+        this.savedDamage = 0;
     }
 
     think(input) {
@@ -919,11 +920,12 @@ class io_disableOnOverride extends IO {
         this.pacify = (this.body.parent.master.autoOverride || this.body.parent.master.master.autoOverride);
         if (this.pacify && !this.lastPacify) {
             this.targetAlpha = 0;
-            this.body.pacify = true;
+            this.savedDamage = this.body.DAMAGE;
+            this.body.DAMAGE = 0;
             this.body.refreshBodyAttributes();
         } else if (!this.pacify && this.lastPacify) {
             this.targetAlpha = this.initialAlpha;
-            this.body.pacify = false;
+            this.body.DAMAGE = this.savedDamage;
             this.body.refreshBodyAttributes();
         }
         this.lastPacify = this.pacify;
@@ -931,6 +933,26 @@ class io_disableOnOverride extends IO {
         if (this.body.alpha != this.targetAlpha) {
             this.body.alpha += util.clamp(this.targetAlpha - this.body.alpha, -0.05, 0.05);
             if (this.body.flattenedPhoto) this.body.flattenedPhoto.alpha = this.body.alpha;
+        }
+    }
+}
+
+class io_scaleWithMaster extends IO {
+    constructor(body) {
+        super(body);
+        let handler = ({body: b}) => {
+            this.sizeFactor = b.size / b.master.size;
+        };
+        this.body.definitionEvents.push({ event: 'define', handler, once: false });
+        this.body.on('define', handler, false);
+        
+        this.storedSize = 0;
+    }
+    think(input) {
+        let masterSize = this.body.master.size;
+        if (masterSize != this.storedSize) {
+            this.storedSize = masterSize;
+            this.body.SIZE = masterSize * this.sizeFactor;
         }
     }
 }
@@ -945,6 +967,7 @@ let ioTypes = {
     mapFireToAlt: io_mapFireToAlt,
     whirlwind: io_whirlwind,
     disableOnOverride: io_disableOnOverride,
+    scaleWithMaster: io_scaleWithMaster,
 
     //aiming related
     stackGuns: io_stackGuns,
