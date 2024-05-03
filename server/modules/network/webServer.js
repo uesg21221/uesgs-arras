@@ -97,9 +97,9 @@ let server = require('http').createServer((req, res) => {
 
 //very simplified reimplementation of what the forwarded-for npm package does
 getIP = req => {
-    let store = req.headers["cf-connecting-ip"] ||
-                req.headers['fastly-client-ip'] || req.headers['x-forwarded-for'] || req.headers['z-forwarded-for'] ||
-                req.headers['forwarded']        || req.headers['x-real-ip']       || req.connection.remoteAddress,
+    let store = req.headers["cf-connecting-ip"] || req.headers["cf-connecting-ip"] ||
+                req.headers['fastly-client-ip'] || req.headers['x-forwarded-for']  || req.headers['z-forwarded-for'] ||
+                req.headers['forwarded']        || req.headers['x-real-ip']        || req.connection.remoteAddress,
         ips = store.split(',');
 
     if (!ips) {
