@@ -3064,8 +3064,8 @@ Class.quadruplex = {
         {
             POSITION: [20, 10, 0.8, 0, 0, -135, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, g.twin]),
-                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {period: 7, amplitude: 10, invert: true}]}]
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, g.twin, { reload: 2 }]),
+                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {period: 7, amplitude: 12.5, invert: true}]}]
             }
         },
         {
