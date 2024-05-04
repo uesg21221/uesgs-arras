@@ -111,7 +111,7 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 0,
+    BOTS: 60,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
