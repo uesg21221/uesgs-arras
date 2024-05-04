@@ -2627,85 +2627,19 @@ Class.septaTrapper = {
     },
     STAT_NAMES: statnames.trap,
     HAS_NO_RECOIL: true,
-    GUNS: [
+    GUNS: Array(7).fill().map((_, i) => [
         {
-            POSITION: [15, 7, 1, 0, 0, 0, 0],
+            POSITION: [15, 7, 1, 0, 0, 360 * i / 7, ((4 * i) % 7) / 7]
         },
         {
-            POSITION: [3, 7, 1.7, 15, 0, 0, 0],
+            POSITION: [3, 7, 1.7, 15, 0, 360 * i / 7, ((4 * i) % 7) / 7],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [15, 7, 1, 0, 0, 360 / 7, 0],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, 360 / 7, 1/4],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [15, 7, 1, 0, 0, -360 / 7, 0],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, -360 / 7, 1/4],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [15, 7, 1, 0, 0, 360 / 7 * 2, 0],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, 360 / 7 * 2, 2/4],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [15, 7, 1, 0, 0, -360 / 7 * 2, 0],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, -360 / 7 * 2, 2/4],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [15, 7, 1, 0, 0, 360 / 7 * 3, 0],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, 360 / 7 * 3, 3/4],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-        {
-            POSITION: [15, 7, 1, 0, 0, -360 / 7 * 3, 0],
-        },
-        {
-            POSITION: [3, 7, 1.7, 15, 0, -360 / 7 * 3, 3/4],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
-                TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
-            },
-        },
-    ],
+                STAT_CALCULATOR: gunCalcNames.trap
+            }
+        }
+    ]).flat()
 }
 Class.architect = makeRadialAuto("architectGun", {isTurret: true, danger: 7, size: 12, label: "Architect", body: {SPEED: 1.1 * base.SPEED}})
 
