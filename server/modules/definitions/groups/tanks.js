@@ -2643,7 +2643,7 @@ Class.septaTrapper = {
             POSITION: [15, 7, 1, 0, 0, 360 / 7, 0],
         },
         {
-            POSITION: [3, 7, 1.7, 15, 0, 360 / 7, 1 / 3],
+            POSITION: [3, 7, 1.7, 15, 0, 360 / 7, 1/4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
                 TYPE: "trap",
@@ -2654,7 +2654,7 @@ Class.septaTrapper = {
             POSITION: [15, 7, 1, 0, 0, -360 / 7, 0],
         },
         {
-            POSITION: [3, 7, 1.7, 15, 0, -360 / 7, 1 / 3],
+            POSITION: [3, 7, 1.7, 15, 0, -360 / 7, 1/4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
                 TYPE: "trap",
@@ -2665,7 +2665,7 @@ Class.septaTrapper = {
             POSITION: [15, 7, 1, 0, 0, 360 / 7 * 2, 0],
         },
         {
-            POSITION: [3, 7, 1.7, 15, 0, 360 / 7 * 2, 2 / 3],
+            POSITION: [3, 7, 1.7, 15, 0, 360 / 7 * 2, 2/4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
                 TYPE: "trap",
@@ -2676,7 +2676,7 @@ Class.septaTrapper = {
             POSITION: [15, 7, 1, 0, 0, -360 / 7 * 2, 0],
         },
         {
-            POSITION: [3, 7, 1.7, 15, 0, -360 / 7 * 2, 2 / 3],
+            POSITION: [3, 7, 1.7, 15, 0, -360 / 7 * 2, 2/4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
                 TYPE: "trap",
@@ -2687,7 +2687,7 @@ Class.septaTrapper = {
             POSITION: [15, 7, 1, 0, 0, 360 / 7 * 3, 0],
         },
         {
-            POSITION: [3, 7, 1.7, 15, 0, 360 / 7 * 3, 1],
+            POSITION: [3, 7, 1.7, 15, 0, 360 / 7 * 3, 3/4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
                 TYPE: "trap",
@@ -2698,7 +2698,7 @@ Class.septaTrapper = {
             POSITION: [15, 7, 1, 0, 0, -360 / 7 * 3, 0],
         },
         {
-            POSITION: [3, 7, 1.7, 15, 0, -360 / 7 * 3, 1],
+            POSITION: [3, 7, 1.7, 15, 0, -360 / 7 * 3, 3/4],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
                 TYPE: "trap",
