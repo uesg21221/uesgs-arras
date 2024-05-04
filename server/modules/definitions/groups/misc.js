@@ -826,3 +826,61 @@ Class.tagMode = {
     LABEL: "Players",
     SHAPE: ""
 };
+
+// demonstration for server travelling
+Class.nexusPortal = {
+    PARENT: 'genericEntity',
+    LABEL: 'APS++ Nexus Portal Test',
+    COLOR: 'black',
+    BODY: {
+        PUSHABILITY: 0
+    },
+    ON: [{
+        event: 'tick',
+        handler: ({ body }) => {
+            let ang = Math.random() * Math.PI * 2,
+            e = new Entity({
+                x: body.x - 1 * Math.sin(ang),
+                y: body.y - 1 * Math.cos(ang)
+            });
+            e.define('genericEntity');
+            e.velocity.x = 1 * Math.sin(ang);
+            e.velocity.y = 1 * Math.cos(ang);
+            e.SIZE = body.size + 5;
+            e.team = body.team;
+            e.color.base = 'rainbow';
+            e.alpha = 0.5;
+            setSyncedTimeout(() => e.kill(), 3);
+        }
+    },{
+        event: 'collide',
+        handler: ({ body: my, other: n }) => {
+            let tock = Math.min(my.stepRemaining, n.stepRemaining),
+                combinedRadius = n.size + my.size,
+                motion = {
+                    _me: new Vector(my.xMotion, my.yMotion),
+                    _n: new Vector(n.xMotion, n.yMotion),
+                },
+                delta = new Vector(
+                    tock * (motion._me.x - motion._n.x),
+                    tock * (motion._me.y - motion._n.y)
+                ),
+                difference = new Vector(my.x - n.x, my.y - n.y),
+                direction = new Vector((n.x - my.x) / difference.length, (n.y - my.y) / difference.length),
+                component = Math.max(0, direction.x * delta.x + direction.y * delta.y);
+
+            // radius and socket check
+            if (component < difference.length - combinedRadius || !n.socket) return;
+
+            // secure: if to use https or not
+            // ip: the ip of the server to switch to
+            // key: the encrypted data of the player
+            // autojoin: to instantly join the game or not
+            let secure = false,
+                ip = Config.host,
+                key = '',
+                autojoin = true;
+            n.socket.talk('REDIRECT', secure, ip, key, autojoin);
+        }
+    }]
+};
