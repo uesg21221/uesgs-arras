@@ -660,4 +660,3 @@ for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_1) {
 		}
 	}
 }
-console.log(Class.pacifierOfficialV1juggernautOfficialV1)
