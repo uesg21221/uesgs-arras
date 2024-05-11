@@ -9,6 +9,7 @@ const dreadnoughtBody = {
     SHIELD: base.SHIELD * 2.5,
     FOV: base.FOV * 1.4,
     DENSITY: base.DENSITY * 6,
+	REGEN: base.REGEN,
 };
 g.dreadv1Generic = {
 	health: 1.4,
@@ -659,3 +660,4 @@ for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_1) {
 		}
 	}
 }
+console.log(Class.pacifierOfficialV1juggernautOfficialV1)
