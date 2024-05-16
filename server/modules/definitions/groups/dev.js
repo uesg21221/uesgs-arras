@@ -617,7 +617,7 @@ Class.turretStatScaleTest = {
     LABEL: 'Turret Stat Test',
     TURRETS: Array(5).fill().map((_, i) => ({
         POSITION: [15, 0, -40 + 20 * i, 0, 360, 1],
-        TYPE: [{GUN_STAT_SCALE: {speed: 1 + i / 5, maxSpeed: 1 + i / 5, reload: 1 + i / 5, recoil: 0}}, 'autoTankGun']
+        TYPE: ['autoTankGun', {GUN_STAT_SCALE: {speed: 1 + i / 5, maxSpeed: 1 + i / 5, reload: 1 + i / 5, recoil: 0}}]
     }))
 }
 

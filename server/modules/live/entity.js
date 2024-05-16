@@ -82,9 +82,6 @@ class Gun extends EventEmitter {
             this.waitToCycle = info.PROPERTIES.WAIT_TO_CYCLE == null ? false : info.PROPERTIES.WAIT_TO_CYCLE;
             this.bulletStats = (info.PROPERTIES.BULLET_STATS == null || info.PROPERTIES.BULLET_STATS == "master") ? "master" : new Skill(info.PROPERTIES.BULLET_STATS);
             this.settings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : JSON.parse(JSON.stringify(info.PROPERTIES.SHOOT_SETTINGS));
-            if (this.body.gunStatScale) {
-                this.settings = combineStats([this.settings, ...this.body.gunStatScale]);
-            }
             this.countsOwnKids = info.PROPERTIES.MAX_CHILDREN == null ? false : info.PROPERTIES.MAX_CHILDREN;
             this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS == null ? false : info.PROPERTIES.SYNCS_SKILLS;
             this.negRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
@@ -1284,18 +1281,21 @@ class Entity extends EventEmitter {
         }
         if (set.VALUE != null) this.skill.score = Math.max(this.skill.score, set.VALUE * this.squiggle);
         if (set.ALT_ABILITIES != null) this.abilities = set.ALT_ABILITIES;
-        if (set.GUN_STAT_SCALE) {
-            this.gunStatScale = set.GUN_STAT_SCALE;
-            if (typeof this.gunStatScale == "object") {
-                this.gunStatScale = [this.gunStatScale];
-            }
-        }
         if (set.GUNS != null) {
             let newGuns = [];
             for (let i = 0; i < set.GUNS.length; i++) {
                 newGuns.push(new Gun(this, set.GUNS[i]));
             }
             this.guns = newGuns;
+        }
+        if (set.GUN_STAT_SCALE) {
+            this.gunStatScale = set.GUN_STAT_SCALE;
+            if (typeof this.gunStatScale == "object") {
+                this.gunStatScale = [this.gunStatScale];
+            }
+            for (let gun of this.guns) {
+                gun.settings = combineStats([gun.settings, ...this.gunStatScale]);
+            }
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
         if (set.RESET_CHILDREN) this.destroyAllChildren();
