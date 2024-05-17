@@ -1,6 +1,10 @@
 import { PlayerInput, InputBind, Input } from './playerInput.js';
 import { c2s } from './shared/packetTypes.js';
 
+// TODO: patch
+import * as socketStuff from "../lib/socketInit.js";
+let { gui } = socketStuff;
+
 class PlayerController {
     constructor (element, inputbinds, extraEvents, socket, global, settings) {
 
@@ -110,12 +114,12 @@ PlayerController.VanillaBinds = [
     // upgrades
     ['upgradetank_token', e => this.socket.talk(c2s.upgradeTankToken)],
     
-    ['upgradetank_option1', e => this.socket.talk(c2s.upgradeTank, 0)],
-    ['upgradetank_option2', e => this.socket.talk(c2s.upgradeTank, 1)],
-    ['upgradetank_option3', e => this.socket.talk(c2s.upgradeTank, 2)],
-    ['upgradetank_option4', e => this.socket.talk(c2s.upgradeTank, 3)],
-    ['upgradetank_option5', e => this.socket.talk(c2s.upgradeTank, 4)],
-    ['upgradetank_option6', e => this.socket.talk(c2s.upgradeTank, 5)],
+    ['upgradetank_option1', e => this.socket.talk(c2s.upgradeTank, 0, parseInt(gui.upgrades[0][0]))],
+    ['upgradetank_option2', e => this.socket.talk(c2s.upgradeTank, 1, parseInt(gui.upgrades[1][0]))],
+    ['upgradetank_option3', e => this.socket.talk(c2s.upgradeTank, 2, parseInt(gui.upgrades[2][0]))],
+    ['upgradetank_option4', e => this.socket.talk(c2s.upgradeTank, 3, parseInt(gui.upgrades[3][0]))],
+    ['upgradetank_option5', e => this.socket.talk(c2s.upgradeTank, 4, parseInt(gui.upgrades[4][0]))],
+    ['upgradetank_option6', e => this.socket.talk(c2s.upgradeTank, 5, parseInt(gui.upgrades[5][0]))],
     
     ['upgradeskill_player_damage'            , e => this.socket.talk(c2s.upgradeSkill, 0, this.maxstat)],
     ['upgradeskill_player_health'            , e => this.socket.talk(c2s.upgradeSkill, 1, this.maxstat)],
@@ -335,22 +339,22 @@ class Canvas {
             if (global.canUpgrade) {
                 switch (event.keyCode) {
                     case global.KEY_CHOOSE_1:
-                        this.socket.talk(c2s.upgradeTank, 0);
+                        this.socket.talk(c2s.upgradeTank, 0, parseInt(gui.upgrades[0][0]));
                         break;
                     case global.KEY_CHOOSE_2:
-                        this.socket.talk(c2s.upgradeTank, 1);
+                        this.socket.talk(c2s.upgradeTank, 1, parseInt(gui.upgrades[1][0]));
                         break;
                     case global.KEY_CHOOSE_3:
-                        this.socket.talk(c2s.upgradeTank, 2);
+                        this.socket.talk(c2s.upgradeTank, 2, parseInt(gui.upgrades[2][0]));
                         break;
                     case global.KEY_CHOOSE_4:
-                        this.socket.talk(c2s.upgradeTank, 3);
+                        this.socket.talk(c2s.upgradeTank, 3, parseInt(gui.upgrades[3][0]));
                         break;
                     case global.KEY_CHOOSE_5:
-                        this.socket.talk(c2s.upgradeTank, 4);
+                        this.socket.talk(c2s.upgradeTank, 4, parseInt(gui.upgrades[4][0]));
                         break;
                     case global.KEY_CHOOSE_6:
-                        this.socket.talk(c2s.upgradeTank, 5);
+                        this.socket.talk(c2s.upgradeTank, 5, parseInt(gui.upgrades[5][0]));
                         break;
                 }
             }
@@ -414,7 +418,7 @@ class Canvas {
                     global.clearUpgrades();
                 } else {
                     let upgradeIndex = global.clickables.upgrade.check(mpos);
-                    if (upgradeIndex !== -1) this.socket.talk('U', upgradeIndex);
+                    if (upgradeIndex !== -1) this.socket.talk('U', upgradeIndex, parseInt(gui.upgrades[upgradeIndex][0]));
                     else this.socket.cmd.set(primaryFire, true);
                 }
                 break;

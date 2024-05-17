@@ -224,6 +224,7 @@ const Entry = class {
         let indexes = this.index.split("-"),
             ref = global.mockups[parseInt(indexes[0])];
         return {
+            id: this.id,
             image: util.getEntityImageFromMockup(this.index, this.color),
             position: ref.position,
             barColor: this.bar,
@@ -566,18 +567,15 @@ const process = (z = {}) => {
     }
     // Update turrets
     let turnumb = get.next();
-    if (turnumb) {
-        let b = 1;
-    }
-    if (isNew) {
+    if (isNew || z.turrets.length !== turnumb) {
         z.turrets = [];
         for (let i = 0; i < turnumb; i++) {
             z.turrets.push(process());
         }
     } else {
-        if (z.turrets.length !== turnumb) {
-            throw new Error('Mismatch between data turret number and remembered turret number!');
-        }
+        // if (z.turrets.length !== turnumb) {
+        //     throw new Error('Mismatch between data turret number and remembered turret number!');
+        // }
         for (let tur of z.turrets) {
             tur = process(tur);
         }
@@ -964,6 +962,8 @@ const socketInit = port => {
                 global.updateTimes++; // metrics
                 break;
             case "b":
+                global.FFA = m[0];
+                m.shift();
                 convert.begin(m);
                 convert.broadcast();
                 break;

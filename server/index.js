@@ -59,8 +59,8 @@ function collide(collision) {
     }
     if (
         (!instance.activation.check() && !other.activation.check()) ||
-        (instance.ac && !instance.alpha) ||
-        (other.ac && !other.alpha)
+        (instance.isArenaCloser && !instance.alpha) ||
+        (other.isArenaCloser && !other.alpha)
     ) return 0;
     switch (true) {
         case instance.type === "wall" || other.type === "wall":
@@ -69,7 +69,7 @@ function collide(collision) {
             if (instance.type === "satellite" || other.type === "satellite") return;
             let wall = instance.type === "wall" ? instance : other;
             let entity = instance.type === "wall" ? other : instance;
-            if (entity.ac || entity.master.ac) return;
+            if (entity.isArenaCloser || entity.master.isArenaCloser) return;
             switch (true) {
                 case (wall.shape == 4):
                 case (wall.shapeData == "M 1 1 L -1 1 L -1 -1 L 1 -1 Z"):
@@ -336,7 +336,7 @@ let maintainloop = () => {
         o.isBot = true;
         o.name = Config.BOT_NAME_PREFIX + ran.chooseBotName();
         o.leftoverUpgrades = ran.chooseChance(...c.BOT_CLASS_UPGRADE_CHANCES);
-        let color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : "red";
+        let color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : "darkGrey";
         o.color.base = color;
         if (team) o.team = team;
         bots.push(o);

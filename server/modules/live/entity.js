@@ -1,3 +1,5 @@
+const { combineStats } = require('../definitions/facilitators');
+
 let EventEmitter = require('events'),
     events,
     init = g => events = g.events;
@@ -23,7 +25,6 @@ class Gun extends EventEmitter {
     constructor(body, info) {
         super();
         this.id = entitiesIdLog++;
-        this.ac = false;
         this.lastShot = { time: 0, power: 0 };
         this.body = body;
         this.master = body.source;
@@ -876,6 +877,7 @@ class Entity extends EventEmitter {
         this.turrets = [];
         this.props = [];
         this.upgrades = [];
+        this.skippedUpgrades = [];
         this.settings = {};
         this.aiSettings = {};
         this.children = [];
@@ -1201,15 +1203,16 @@ class Entity extends EventEmitter {
         if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
         if (set.TEAM != null) {
             this.team = set.TEAM;
-            if (!sockets.players.length) {
-                const _entity = this;
+            if (sockets.players.length) {
                 for (let i = 0; i < sockets.players.length; i++) {
-                    if (sockets.players[i].body.id == _entity.id) {
-                        sockets.players[i].team = -_entity.team;
+                    const player = sockets.players[i];
+                    if (player.body.id == this.id) {
+                        player.team = this.team;
                     }
                 }
             }
-            for (let child of this.children) child.team = set.TEAM
+            if (this.socket) this.socket.status.needsNewBroadcast = true;
+            for (let child of this.children) child.team = set.TEAM;
         }
         if (set.VARIES_IN_SIZE != null) {
             this.settings.variesInSize = set.VARIES_IN_SIZE;
@@ -1221,15 +1224,11 @@ class Entity extends EventEmitter {
             this.skill.setCaps(caps);
             this.upgrades = [];
             this.isArenaCloser = false;
-            this.ac = false;
             this.alpha = 1;
             this.reset();
         }
         if (set.RESET_UPGRADE_MENU) this.upgrades = []
-        if (set.ARENA_CLOSER != null) {
-            this.isArenaCloser = set.ARENA_CLOSER;
-            this.ac = set.ARENA_CLOSER;
-        }
+        if (set.ARENA_CLOSER != null) this.isArenaCloser = set.ARENA_CLOSER;
         if (set.BRANCH_LABEL != null) this.branchLabel = set.BRANCH_LABEL;
         if (set.BATCH_UPGRADES != null) this.batchUpgrades = set.BATCH_UPGRADES;
         for (let i = 0; i < c.MAX_UPGRADE_TIER; i++) {
@@ -1288,6 +1287,10 @@ class Entity extends EventEmitter {
                 newGuns.push(new Gun(this, set.GUNS[i]));
             }
             this.guns = newGuns;
+        }
+        if (set.GUN_STAT_SCALE) {
+            let gunStatScale = set.GUN_STAT_SCALE;
+            this.gunStatScale = gunStatScale;
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
         if (set.RESET_CHILDREN) this.destroyAllChildren();
@@ -1577,7 +1580,7 @@ class Entity extends EventEmitter {
         this.health.set(((this.settings.healthWithLevel ? 2 * this.level : 0) + this.HEALTH) * this.skill.hlt * healthMultiplier);
         this.health.resist = 1 - 1 / Math.max(1, this.RESIST + this.skill.brst);
         this.shield.set(((this.settings.healthWithLevel ? 0.6 * this.level : 0) + this.SHIELD) * this.skill.shi, Math.max(0, ((this.settings.healthWithLevel ? 0.006 * this.level : 0) + 1) * this.REGEN * this.skill.rgn * regenMultiplier));
-        this.damage = damageMultiplier * this.DAMAGE * this.skill.atk * !this.pacify;
+        this.damage = damageMultiplier * this.DAMAGE * this.skill.atk;
         this.penetration = penetrationMultiplier * (this.PENETRATION + 1.5 * (this.skill.brst + 0.8 * (this.skill.atk - 1)));
         if (!this.settings.dieAtRange || !this.range) this.range = rangeMultiplier * this.RANGE;
         this.fov = fovMultiplier * this.FOV * 275 * Math.sqrt(this.size);
@@ -1630,7 +1633,7 @@ class Entity extends EventEmitter {
         // Initalize.
         this.activation.update();
         this.facing = this.bond.facing + this.bound.angle;
-        if (this.facingType[0].includes('Target')) {
+        if (this.facingType[0].includes('Target') || this.facingType[0].includes('Speed')) {
             this.facingType = ["bound", {}];
         }
         this.motionType = ["bound", {}];
@@ -1653,6 +1656,18 @@ class Entity extends EventEmitter {
     }
     get yMotion() {
         return (this.velocity.y + this.accel.y) / c.runSpeed;
+    }
+    set gunStatScale(gunStatScale) {
+        if (typeof gunStatScale == "object") {
+            gunStatScale = [gunStatScale];
+        }
+        for (let gun of this.guns) {
+            if (!gun.settings) {
+                continue
+            }
+            gun.settings = combineStats([gun.settings, ...gunStatScale]);
+            gun.trueRecoil = gun.settings.recoil;
+        }
     }
     camera(tur = false) {
         let turretsAndProps = this.turrets.concat(this.props);
@@ -1712,8 +1727,11 @@ class Entity extends EventEmitter {
         }
         return suc;
     }
-    upgrade(number) {
-        let old = this;
+    upgrade(number, branchId) {
+        // Account for upgrades that are too high level for the player to access
+        for (let i = 0; i < branchId; i++) {
+            number += this.skippedUpgrades[i] ?? 0;
+        }
         if (
             number < this.upgrades.length &&
             this.skill.level >= this.upgrades[number].level
@@ -1735,7 +1753,11 @@ class Entity extends EventEmitter {
             }
             this.emit("upgrade", { body: this });
             if (this.color.base == '-1' || this.color.base == 'mirror') {
-                this.color.base = getTeamColor((c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? TEAM_RED : this.team);
+                if (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) {
+                    this.color.base = this.isBot ? "darkGrey" : getTeamColor(TEAM_RED);
+                } else {
+                    this.color.base = getTeamColor(this.team);
+                }
             }
             this.sendMessage("You have upgraded to " + this.label + ".");
             for (let def of this.defs) {
@@ -1904,21 +1926,30 @@ class Entity extends EventEmitter {
                 break;
             case "desmos":
                 this.damp = 0;
+                let save = {
+                    x: this.master.x,
+                    y: this.master.y,
+                };
+                let target = {
+                    x: this.master.x + this.master.control.target.x,
+                    y: this.master.y + this.master.control.target.y,
+                };
+                let amount = (util.getDistance(target, save) / 100) | 0;
                 if (this.waveReversed == null) this.waveReversed = this.master.control.alt ? -1 : 1;
                 if (this.waveAngle == null) {
                     this.waveAngle = this.master.facing;
-                    this.velocity.x = this.velocity.length * Math.cos(this.waveAngle);
-                    this.velocity.y = this.velocity.length * Math.sin(this.waveAngle);;
+                    this.velocity.x = ((5 + this.velocity.length * (amount + 2)) * Math.cos(this.waveAngle)) / 7;
+                    this.velocity.y = ((5 + this.velocity.length * (amount + 2)) * Math.sin(this.waveAngle)) / 7;
                 }
                 let waveX = this.maxSpeed * 5 * Math.cos((this.RANGE - this.range) / (args.period ?? 4) * 2);
                 let waveY = (args.amplitude ?? 15) * Math.cos((this.RANGE - this.range) / (args.period ?? 4)) * this.waveReversed * (args.invert ? -1 : 1);
                 this.x += Math.cos(this.waveAngle) * waveX - Math.sin(this.waveAngle) * waveY;
                 this.y += Math.sin(this.waveAngle) * waveX + Math.cos(this.waveAngle) * waveY;
                 break;
+            }
+            this.accel.x += engine.x * this.control.power;
+            this.accel.y += engine.y * this.control.power;
         }
-        this.accel.x += engine.x * this.control.power;
-        this.accel.y += engine.y * this.control.power;
-    }
     reset(keepPlayerController = true) {
         this.controllers = keepPlayerController ? [this.controllers.filter(con => con instanceof ioTypes.listenToPlayer)[0]] : [];
     }
