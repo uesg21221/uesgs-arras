@@ -1211,7 +1211,6 @@ class Entity extends EventEmitter {
                     }
                 }
             }
-            if (this.socket) this.socket.status.needsNewBroadcast = true;
             for (let child of this.children) child.team = set.TEAM;
         }
         if (set.VARIES_IN_SIZE != null) {
@@ -1263,8 +1262,11 @@ class Entity extends EventEmitter {
         if (set.LEVEL_CAP != null) {
             this.levelCap = set.LEVEL_CAP;
         }
+        if ("function" === typeof set.LEVEL_SKILL_POINT_FUNCTION) {
+            this.skill.LSPF = set.LEVEL_SKILL_POINT_FUNCTION;
+        }
         if (set.LEVEL != null) {
-            this.skill.reset();
+            this.skill.reset(true);
             while (this.skill.level < set.LEVEL) {
                 this.skill.score += this.skill.levelScore;
                 this.skill.maintain();
@@ -1294,9 +1296,6 @@ class Entity extends EventEmitter {
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
         if (set.RESET_CHILDREN) this.destroyAllChildren();
-        if ("function" === typeof set.LEVEL_SKILL_POINT_FUNCTION) {
-            this.skill.LSPF = set.LEVEL_SKILL_POINT_FUNCTION;
-        }
         if (set.RECALC_SKILL != null) {
             let score = this.skill.score;
             this.skill.reset();
