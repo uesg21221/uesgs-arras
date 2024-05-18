@@ -756,13 +756,13 @@ const socketInit = port => {
     // Handle commands
     let flag = false;
     let commands = [
+        false, // lmb
+        false, // mmb
+        false, // rmb
         false, // up
         false, // down
         false, // left
         false, // right
-        false, // lmb
-        false, // mmb
-        false, // rmb
         false,
     ];
     socket.cmd = {
@@ -779,7 +779,10 @@ const socketInit = port => {
                 if (commands[i]) o += Math.pow(2, i);
             }
             let ratio = util.getRatio();
-            socket.talk('C', Math.round(global.target.x / ratio), Math.round(global.target.y / ratio), global.reverseTank, o);
+            socket.talk(c2s.command,
+                Math.round(global.target.x / ratio), Math.round(global.target.y / ratio),
+                global.goal.x + commands[6] - commands[5], global.goal.y + commands[4] - commands[3],
+                global.reverseTank, o);
         },
         check: () => flag,
         getMotion: () => ({
@@ -799,10 +802,10 @@ const socketInit = port => {
     socket.onopen = function socketOpen() {
         socket.open = true;
         global.message = 'That token is invalid, expired, or already in use on this server. Please try another one!';
-        socket.talk('k', global.playerKey);
+        socket.talk(c2s.token, global.playerKey);
         console.log('Token submitted to the server for validation.');
         // define a pinging function
-        socket.ping = payload => socket.talk('p', payload);
+        socket.ping = payload => socket.talk(c2s.ping, payload);
         socket.commandCycle = setInterval(() => {
             if (socket.cmd.check()) socket.cmd.talk();
         });
@@ -832,7 +835,7 @@ const socketInit = port => {
                 settings.roomSpeed = m[4];
                 console.log('Room data received. Commencing syncing process.');
                 // Start the syncing process
-                socket.talk('S', getNow());
+                socket.talk('sync', getNow());
                 break;
             case "r":
                 global.gameWidth = m[0];
@@ -850,7 +853,7 @@ const socketInit = port => {
                 global.player.nameColor = m[3];
                 console.log('Camera moved!');
                 break;
-            case 'S': // clock syncing
+            case 'sync': // clock syncing
                 let clientTime = m[0],
                     serverTime = m[1],
                     laten = (getNow() - clientTime) / 2,
@@ -860,7 +863,7 @@ const socketInit = port => {
                 // Do it again a couple times
                 if (sync.length < 10) {
                     // Wait a bit just to space things out
-                    setTimeout(() => socket.talk('S', getNow()), 10);
+                    setTimeout(() => socket.talk(sync, getNow()), 10);
                     global.message = "Syncing clocks, please do not tab away. " + sync.length + "/10...";
                 } else {
                     // Calculate the clock error
@@ -956,8 +959,7 @@ const socketInit = port => {
                 } else {
                     console.log("Old data! Last given time: " + global.player.time + "; offered packet timestamp: " + camtime + ".");
                 }
-                // Send the downlink and the target
-                socket.talk('d', Math.max(global.player.lastUpdate, camtime));
+                // Send the target
                 socket.cmd.talk();
                 global.updateTimes++; // metrics
                 break;

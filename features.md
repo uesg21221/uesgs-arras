@@ -264,7 +264,7 @@ It includes all features up to the latest release version.
 
 ## Fixes
 
-* `public/lib/gameDraw.js` is now actually used.
+* `public/lib (legacy)/gameDraw.js` is now actually used.
 * Turrets no longer shoot multiple times as fast than intended.
 * Entities with 0 body damage don't get assist credit when they happen to ram something as it dies.
 * Entities now die if they are dead but are touching a rock.

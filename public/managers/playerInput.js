@@ -1,7 +1,23 @@
-import { EventSUB, EventTargetSUB } from './eventsSUB.js';
+import { EventSUB, EventTargetSUB } from '../classes/eventsSUB.js';
 
-let keyboardLayoutMap = {};
-navigator.keyboard.getLayoutMap().then(layout => keyboardLayoutMap = Object.fromEntries(layout.entries()));
+let keyboardLayoutMap = { ' ': 'Space' };
+if ('function' === typeof navigator?.keyboard?.getLayoutMap) {
+	navigator.keyboard.getLayoutMap().then(layout => {
+		keyboardLayoutMap = Object.fromEntries(layout.entries());
+		keyboardLayoutMap[' '] = 'Space';
+	});
+} else {
+	console.warn('Your browser does not support a feature that helps with keyboard layouts.\n' +
+		'While its absence does not directly cause fatal problems, you can switch to a Chromium-based browser if you experience severe keyboard layout problems.\n\n' +
+
+		'Ungoogled Chromium is recommended if you prefer a very simple, private and performant browsing experience:\n' +
+		'https://ungoogled-software.github.io/ungoogled-chromium-binaries/\n' +
+		'Please also read the FaQ of Ungoogled Chromium if you are not a very technical person:\n' +
+		'https://ungoogled-software.github.io/ungoogled-chromium-wiki/faq\n\n' +
+	
+		'If you do not want Ungoogled Chromium, at the very least do not get an Opera Software product.\n' +
+		'Their browsers do not bring any actual benefits.');
+}
 
 class Input {
 	class ({ key, alt, ctrl, meta, shift }) {
@@ -17,17 +33,17 @@ class Input {
 }
 
 class InputBind {
-	constructor ({ eventName, description = '', inputs = [], down = true, up = true }) {
+	constructor ({ eventName, description = '', inputs = [], down = true, up = true, repeatingDown = false }) {
 		if ('string' !== typeof eventName) {
 			throw new Error('the first argument (the event name) must be a string!');
 		}
 
-		if (!Array.isArray(keys)) {
+		if (!Array.isArray(inputs)) {
 			throw new Error("'inputs' must be an array of Input instances!");
 		}
 
-		for (let i in keys) {
-			if (!(keys[i] instanceof Input)) {
+		for (let i in inputs) {
+			if (!(inputs[i] instanceof Input)) {
 				throw new Error('item number ' + i + " of 'inputs' must be an instance of Input!");
 			}
 		}
@@ -37,6 +53,7 @@ class InputBind {
 		this.keys = keys;
 		this.down = down;
 		this.up = up;
+		this.repeatingDown = repeatingDown;
 	}
 }
 
@@ -90,6 +107,7 @@ class PlayerInput extends EventTargetSUB {
 		for (let i = 0; i < this.inputbinds.length; i++) {
 			let inputbind = this.inputbinds[i];
 
+			if (event.repeat && !inputbind.repeatingDown) continue;
 			if ('boolean' === typeof isPressed) {
 				if (isPressed && !inputbind.down) continue;
 				if (!isPressed && !inputbind.up) continue;

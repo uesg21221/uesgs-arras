@@ -1,17 +1,27 @@
 import { PlayerInput, InputBind, Input } from './playerInput.js';
+import { Vector } from '../classes/vector.js';
 import { c2s } from './shared/packetTypes.js';
+import { click } from './clickables.js';
 
-// TODO: patch
-import * as socketStuff from "../lib/socketInit.js";
-let { gui } = socketStuff;
+// TODO: patch this away, we shouldnt want it
+import { gui } from "../lib (legacy)/socketInit.js";
 
 class PlayerController {
     constructor (element, inputbinds, extraEvents, socket, global, settings) {
+        this.target = new Vector;
+        this.goal = new Vector;
+        this.toggles = {
+            autoalt: false,
+            autofire: false,
+            autospin: false,
+            override: false,
+            reversetank: false,
+            reversemouse: false,
+            spinlock: false
+        };
 
-        this.autoSpin = false;
-        this.reverseDirection = false;
-        this.inverseMouse = false;
-        this.spinLock = false;
+        this.upgradeTankQueue = [];
+        this.upgradeSkillQueue = [];
         this.maxstat = false;
 
         this.socket = socket;
@@ -29,11 +39,14 @@ class PlayerController {
 
             this.playerInput.addEventListener(name, listener.bind(this));
         }
-
-        this.current();
     }
 
-    current () {
+    currentCommands () {
+        return {
+            goal: this.goal,
+            target: this.target,
+            toggles: this.toggles
+        };
     }
 }
 
@@ -99,13 +112,13 @@ PlayerController.DefaultInputBinds = {
 
 PlayerController.VanillaBinds = [
     // misc
-    ['toggle_autoalt', e => this.socket.talk(c2s.toggleauto, 5)],
-    ['toggle_autofire', e => this.socket.talk(c2s.toggleauto, 1)],
-    ['toggle_autospin', e => { this.autoSpin = !this.autoSpin; this.socket.talk(c2s.toggleauto, 0); }],
-    ['toggle_override', e => this.socket.talk(c2s.toggleauto, 2)],
-    ['toggle_reversetank', e => { this.reverseDirection = !this.reverseDirection; this.socket.talk(c2s.toggleauto, 4); }],
-    ['toggle_reversemouse', e => { this.inverseMouse = !this.inverseMouse; this.socket.talk(c2s.toggleauto, 3); }],
-    ['toggle_spinlock', e => { this.spinLock = !this.spinLock; this.socket.talk(c2s.toggleauto, 6); }],
+    ['toggle_autoalt', e => this.toggles.autoalt = !this.toggles.autoalt ], //this.socket.talk(c2s.toggleauto, 5)],
+    ['toggle_autofire', e => this.toggles.autofire = !this.toggles.autofire ], //this.socket.talk(c2s.toggleauto, 1)],
+    ['toggle_autospin', e => this.toggles.autospin = !this.toggles.autospin ], //{ this.autoSpin = !this.autoSpin; this.socket.talk(c2s.toggleauto, 0); }],
+    ['toggle_override', e => this.toggles.override = !this.toggles.override ], //this.socket.talk(c2s.toggleauto, 2)],
+    ['toggle_reversetank', e => this.toggles.reversetank = !this.toggles.reversetank ], //{ this.reverseDirection = !this.reverseDirection; this.socket.talk(c2s.toggleauto, 4); }],
+    ['toggle_reversemouse', e => this.toggles.reversemouse = !this.toggles.reversemouse ], //{ this.inverseMouse = !this.inverseMouse; this.socket.talk(c2s.toggleauto, 3); }],
+    ['toggle_spinlock', e => this.toggles.spinlock = !this.toggles.spinlock ], //{ this.spinLock = !this.spinLock; this.socket.talk(c2s.toggleauto, 6); }],
     
     ['become', e => this.socket.talk(c2s.become)],
     ['toggle_classtree', e => { global.treeScale = 1; global.showTree = !global.showTree; }],
@@ -114,39 +127,39 @@ PlayerController.VanillaBinds = [
     // upgrades
     ['upgradetank_token', e => this.socket.talk(c2s.upgradeTankToken)],
     
-    ['upgradetank_option1', e => this.socket.talk(c2s.upgradeTank, 0, parseInt(gui.upgrades[0][0]))],
-    ['upgradetank_option2', e => this.socket.talk(c2s.upgradeTank, 1, parseInt(gui.upgrades[1][0]))],
-    ['upgradetank_option3', e => this.socket.talk(c2s.upgradeTank, 2, parseInt(gui.upgrades[2][0]))],
-    ['upgradetank_option4', e => this.socket.talk(c2s.upgradeTank, 3, parseInt(gui.upgrades[3][0]))],
-    ['upgradetank_option5', e => this.socket.talk(c2s.upgradeTank, 4, parseInt(gui.upgrades[4][0]))],
-    ['upgradetank_option6', e => this.socket.talk(c2s.upgradeTank, 5, parseInt(gui.upgrades[5][0]))],
+    ['upgradetank_option1', e => this.upgradeTankQueue.push(0) ], // this.socket.talk(c2s.upgradeTank, 0, parseInt(gui.upgrades[0][0]))],
+    ['upgradetank_option2', e => this.upgradeTankQueue.push(1) ], // this.socket.talk(c2s.upgradeTank, 1, parseInt(gui.upgrades[1][0]))],
+    ['upgradetank_option3', e => this.upgradeTankQueue.push(2) ], // this.socket.talk(c2s.upgradeTank, 2, parseInt(gui.upgrades[2][0]))],
+    ['upgradetank_option4', e => this.upgradeTankQueue.push(3) ], // this.socket.talk(c2s.upgradeTank, 3, parseInt(gui.upgrades[3][0]))],
+    ['upgradetank_option5', e => this.upgradeTankQueue.push(4) ], // this.socket.talk(c2s.upgradeTank, 4, parseInt(gui.upgrades[4][0]))],
+    ['upgradetank_option6', e => this.upgradeTankQueue.push(5) ], // this.socket.talk(c2s.upgradeTank, 5, parseInt(gui.upgrades[5][0]))],
     
-    ['upgradeskill_player_damage'            , e => this.socket.talk(c2s.upgradeSkill, 0, this.maxstat)],
-    ['upgradeskill_player_health'            , e => this.socket.talk(c2s.upgradeSkill, 1, this.maxstat)],
-    ['upgradeskill_bullet_speed'             , e => this.socket.talk(c2s.upgradeSkill, 2, this.maxstat)],
-    ['upgradeskill_bullet_health'            , e => this.socket.talk(c2s.upgradeSkill, 3, this.maxstat)],
-    ['upgradeskill_bullet_penetration'       , e => this.socket.talk(c2s.upgradeSkill, 4, this.maxstat)],
-    ['upgradeskill_bullet_damage'            , e => this.socket.talk(c2s.upgradeSkill, 5, this.maxstat)],
-    ['upgradeskill_reload'                   , e => this.socket.talk(c2s.upgradeSkill, 6, this.maxstat)],
-    ['upgradeskill_player_speed'             , e => this.socket.talk(c2s.upgradeSkill, 7, this.maxstat)],
-    ['upgradeskill_player_shieldregeneration', e => this.socket.talk(c2s.upgradeSkill, 8, this.maxstat)],
-    ['upgradeskill_player_shieldhealth'      , e => this.socket.talk(c2s.upgradeSkill, 9, this.maxstat)],
+    ['upgradeskill_player_damage'            , e => this.upgradeSkillQueue.push([0, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 0, this.maxstat)],
+    ['upgradeskill_player_health'            , e => this.upgradeSkillQueue.push([1, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 1, this.maxstat)],
+    ['upgradeskill_bullet_speed'             , e => this.upgradeSkillQueue.push([2, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 2, this.maxstat)],
+    ['upgradeskill_bullet_health'            , e => this.upgradeSkillQueue.push([3, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 3, this.maxstat)],
+    ['upgradeskill_bullet_penetration'       , e => this.upgradeSkillQueue.push([4, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 4, this.maxstat)],
+    ['upgradeskill_bullet_damage'            , e => this.upgradeSkillQueue.push([5, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 5, this.maxstat)],
+    ['upgradeskill_reload'                   , e => this.upgradeSkillQueue.push([6, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 6, this.maxstat)],
+    ['upgradeskill_player_speed'             , e => this.upgradeSkillQueue.push([7, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 7, this.maxstat)],
+    ['upgradeskill_player_shieldregeneration', e => this.upgradeSkillQueue.push([8, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 8, this.maxstat)],
+    ['upgradeskill_player_shieldhealth'      , e => this.upgradeSkillQueue.push([9, this.maxstat]) ], // this.socket.talk(c2s.upgradeSkill, 9, this.maxstat)],
     
     // motion
-    ['up_classtree', e => global.showTree ? (global.scrollVelocityY = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier) : this.socket.cmd.set(0, e.isPressed)],
-    ['down_classtree', e => global.showTree ? (global.scrollVelocityY = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier) : this.socket.cmd.set(1, e.isPressed)],
-    ['left_classtree', e => global.showTree ? (global.scrollVelocityX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier) : this.socket.cmd.set(2, e.isPressed)],
-    ['right_classtree', e => global.showTree ? (global.scrollVelocityX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier) : this.socket.cmd.set(3, e.isPressed)],
+    ['up_classtree', e => global.showTree ? (global.scrollVelocityY = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier) : this.target.y -= e.isPressed * 2 - 1 ],
+    ['down_classtree', e => global.showTree ? (global.scrollVelocityY = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier) : this.target.y += e.isPressed * 2 - 1 ],
+    ['left_classtree', e => global.showTree ? (global.scrollVelocityX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier) : this.target.x -= e.isPressed * 2 - 1 ],
+    ['right_classtree', e => global.showTree ? (global.scrollVelocityX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier) : this.target.x += e.isPressed * 2 - 1 ],
     
-    ['up', e => this.socket.cmd.set(0, e.isPressed)],
-    ['down', e => this.socket.cmd.set(1, e.isPressed)],
-    ['left', e => this.socket.cmd.set(2, e.isPressed)],
-    ['right', e => this.socket.cmd.set(3, e.isPressed)],
+    ['up', e => this.target.y -= e.isPressed * 2 - 1 ],
+    ['down', e => this.target.y += e.isPressed * 2 - 1 ],
+    ['left', e => this.target.x -= e.isPressed * 2 - 1 ],
+    ['right', e => this.target.x += e.isPressed * 2 - 1 ],
     
     // mouse control
-    ['primaryfire', e => this.socket.cmd.set(4, e.isPressed)],
-    ['secondaryfire', e => this.socket.cmd.set(5, e.isPressed)],
-    ['tertiaryfire', e => this.socket.cmd.set(6, e.isPressed)],
+    ['primaryfire', e => click() this.socket.cmd.set(0, e.isPressed)],
+    ['secondaryfire', e => click() this.socket.cmd.set(1, e.isPressed)],
+    ['tertiaryfire', e => click() this.socket.cmd.set(2, e.isPressed)],
     ['lookAround', e => {
         global.statHover = global.clickables.hover.check({
             x: mouse.clientX * global.ratio,
@@ -170,7 +183,7 @@ PlayerController.VanillaBinds = [
 
 
 
-// TODO: to be removed
+// TODO: check if there is anything from this to port over. if there is none, get rid of the class and implement PlayerController
 class Canvas {
     constructor() {
         this.directionLock = false;
@@ -185,7 +198,7 @@ class Canvas {
             this.canvas.focus();
             this.chatInput.hidden = true;
             if (!this.chatInput.value) return;
-            if (event.keyCode === global.KEY_ENTER) this.socket.talk('M', this.chatInput.value);
+            if (event.keyCode === global.KEY_ENTER) this.socket.talk('chatMessage', this.chatInput.value);
             this.chatInput.value = "";
         });
 

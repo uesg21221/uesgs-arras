@@ -1,12 +1,12 @@
 /* jshint esversion: 11 */
 
-import { util } from "./lib/util.js";
-import { global } from "./lib/global.js";
-import { settings } from "./lib/settings.js";
-import { Canvas } from "./classes/playerController.js";
-import { color } from "./lib/color.js";
-import { gameDraw } from "./lib/gameDraw.js";
-import * as socketStuff from "./lib/socketInit.js";
+import { util } from "./lib (legacy)/util.js";
+import { global } from "./lib (legacy)/global.js";
+import { settings } from "./lib (legacy)/settings.js";
+import { Canvas } from "./managers/playerController.js";
+import { color } from "./lib (legacy)/color.js";
+import { gameDraw } from "./lib (legacy)/gameDraw.js";
+import * as socketStuff from "./lib (legacy)/socketInit.js";
 (async function (util, global, settings, Canvas, color, gameDraw, socketStuff) {
 
 let { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow } = socketStuff;

@@ -163,7 +163,7 @@ global.makeHitbox = wall => {
 const requires = [
     "./physics/relative.js", // Some basic physics functions that are used across the game.
     "./physics/collisionFunctions.js", // The actual collision functions that make the game work.
-    "./live/color.js", // The class that makes dealing with colors easier.
+    "../../shared/color.js", // The class that makes dealing with colors easier.
     "./live/entitySubFunctions.js", // Skill, HealthType and other functions related to entities are here.
     "./live/controllers.js", // The AI of the game.
     "./live/entity.js", // The actual Entity constructor.

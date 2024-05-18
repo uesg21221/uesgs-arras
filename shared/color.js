@@ -1,3 +1,5 @@
+let isServer = 'undefined' === typeof window;
+
 class Color {
 	#base = -1;
 	#hueShift = 0;

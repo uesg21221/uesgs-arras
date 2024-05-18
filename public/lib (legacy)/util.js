@@ -1,16 +1,6 @@
 import { global } from "./global.js";
 import { settings } from "./settings.js";
 const util = {
-    submitToLocalStorage: name => {
-        localStorage.setItem(name + 'Value', document.getElementById(name).value);
-        localStorage.setItem(name + 'Checked', document.getElementById(name).checked);
-        return false;
-    },
-    retrieveFromLocalStorage: name => {
-        document.getElementById(name).value = localStorage.getItem(name + 'Value');
-        document.getElementById(name).checked = localStorage.getItem(name + 'Checked') === 'true';
-        return false;
-    },
     handleLargeNumber: (a, cullZeroes = false) => {
         if (cullZeroes && a == 0) {
             return '';
@@ -61,14 +51,14 @@ const util = {
         return y;
     },
     addArticle: string => {
-        return (/[aeiouAEIOU]/.test(string[0])) ? 'an ' + string : 'a ' + string;
+        return (/[aeiou]/i.test(string[0])) ? 'an ' + string : 'a ' + string;
     },
     formatLargeNumber: x => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     pullJSON: fileName => {
         return new Promise((resolve, reject) => {
-            const url = `${location.protocol}//${window.serverAdd}/lib/json/${fileName}.json`;
+            const url = `${location.protocol}//${window.serverAdd}/lib (legacy)/json/${fileName}.json`;
             console.log("Loading JSON from " + url);
             fetch(url).then(response => response.json()).then(json => {
                 console.log("JSON load from " + url + " complete");

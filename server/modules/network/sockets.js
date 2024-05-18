@@ -120,7 +120,7 @@ function incoming(message, socket) {
         return;
     }
     switch (m.shift()) {
-        case "k":
+        case packetTypes.c2s.token:
             // key verification
             if (m.length > 1) {
                 socket.kick("Ill-sized key request.");
@@ -204,7 +204,7 @@ function incoming(message, socket) {
             // Log it
             util.log(`[INFO] ${m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
             break;
-        case "S":
+        case packetTypes.c2s.sync:
             // clock syncing
             if (m.length !== 1) {
                 socket.kick("Ill-sized sync packet.");
@@ -220,40 +220,8 @@ function incoming(message, socket) {
             // Bounce it back
             socket.talk("S", synctick, util.time());
             break;
-        case "p":
-            // ping
-            if (m.length !== 1) {
-                socket.kick("Ill-sized ping.");
-                return 1;
-            }
-            // Get data
-            let ping = m[0];
-            // Verify it
-            if (typeof ping !== "number") {
-                socket.kick("Weird ping.");
-                return 1;
-            }
-            // Pong
-            socket.talk("p", m[0]); // Just pong it right back
-            socket.status.lastHeartbeat = util.time();
-            break;
-        case "d":
-            // downlink
-            if (m.length !== 1) {
-                socket.kick("Ill-sized downlink.");
-                return 1;
-            }
-            // Get data
-            let time = m[0];
-            // Verify data
-            if (typeof time !== "number") {
-                socket.kick("Bad downlink.");
-                return 1;
-            }
-            //socket.view.gazeUpon();
-            //socket.lastUptime = Infinity;
-            break;
-        case "C":
+        case packetTypes.c2s.ping:
+        case packetTypes.c2s.command:
             // command packet
             if (m.length !== 4) {
                 socket.kick("Ill-sized command packet.");
@@ -264,12 +232,18 @@ function incoming(message, socket) {
                     x: m[0],
                     y: m[1],
                 },
-                reverseTank = m[2],
-                commands = m[3];
+                goal = {
+                    x: m[2],
+                    y: m[3],
+                },
+                reverseTank = m[4],
+                commands = m[5];
             // Verify data
             if (
                 typeof target.x !== "number" ||
                 typeof target.y !== "number" ||
+                typeof goal.x !== "number" ||
+                typeof goal.y !== "number" ||
                 typeof commands !== "number"
             ) {
                 socket.kick("Weird downlink.");
@@ -294,16 +268,13 @@ function incoming(message, socket) {
             // }
             // Put the new target in
             player.target = target;
+            player.goal = goal;
             if (player.body) player.body.reverseTank = reverseTank;
             // Process the commands
             if (player.command != null && player.body != null) {
-                player.command.up = commands & 1;
-                player.command.down = (commands & 2) >> 1;
-                player.command.left = (commands & 4) >> 2;
-                player.command.right = (commands & 8) >> 3;
-                player.command.lmb = (commands & 16) >> 4;
-                player.command.mmb = (commands & 32) >> 5;
-                player.command.rmb = (commands & 64) >> 6;
+                player.command.lmb = commands & 1;
+                player.command.mmb = (commands & 2) >> 1;
+                player.command.rmb = (commands & 4) >> 2;
             }
             // Update the thingy
             socket.timeout.set(commands);
@@ -429,37 +400,6 @@ function incoming(message, socket) {
             }
             break;
         case packetTypes.c2s.suicide:
-            //suicide squad
-            if (player.body != null && !player.body.underControl) {
-                for (let i = 0; i < entities.length; i++) {
-                    let instance = entities[i];
-                    if (instance.settings.clearOnMasterUpgrade && instance.master.id === player.body.id) {
-                        instance.kill();
-                    }
-                }
-                player.body.destroy();
-            }
-            break;
-        case "A":
-            if (player.body != null) return 1;
-            let possible = []
-            for (let i = 0; i < entities.length; i++) {
-                let entry = entities[i];
-                if (entry.type === "miniboss") possible.push(entry);
-                if (entry.isDominator || entry.isMothership || entry.isArenaCloser) possible.push(entry);
-                if (c.MODE === "tdm" && socket.rememberedTeam === entry.team && entry.type === "tank" && entry.bond == null) possible.push(entry);
-            }
-            if (!possible.length) {
-                player.body.sendMessage("There are no entities to spectate!");
-                return 1;
-            }
-            let entity;
-            do {
-                entity = ran.choose(possible);
-            } while (entity === socket.spectateEntity && possible.length > 1);
-            socket.spectateEntity = entity;
-            player.body.sendMessage(`You are now spectating ${entity.name.length ? entity.name : "An unnamed player"}! (${entity.label})`);
-            break;
         case packetTypes.c2s.become:
             if (player.body == null) return 1;
             let body = player.body;
@@ -528,7 +468,7 @@ function incoming(message, socket) {
                 player.body.sendMessage("There are no special tanks in this mode that you can control.");
             }
             break;
-        case "M":
+        case packetTypes.c2s.chatMessage:
             if (player.body == null) return 1;
             let abort, message = m[0];
 
@@ -926,11 +866,8 @@ const spawn = (socket, name) => {
     // Decide what to do about colors when sending updates and stuff
     player.teamColor = new Color(!c.RANDOM_COLORS && (c.GROUPS || (c.MODE == 'ffa' && !c.TAG)) ? 10 : getTeamColor(body.team)).compiled; // blue
     player.target = { x: 0, y: 0 };
+    player.goal = { x: 0, y: 0 };
     player.command = {
-        up: false,
-        down: false,
-        left: false,
-        right: false,
         lmb: false,
         mmb: false,
         rmb: false,

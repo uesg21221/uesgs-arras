@@ -18,7 +18,7 @@
 let doThing = packettypes => Object.fromEntries(packettypes.map((t, i) => [t, i])),
 
 c2s = doThing([
-	'M', // send chat msg
+	'chatMessage', // send chat msg
 	'spawn', // (re)spawn
 	'levelup', // level up
 	'upgradeTankToken', // token tank
@@ -27,11 +27,10 @@ c2s = doThing([
 	'toggleauto', // toggle stuff like autospin autofire etc
 	'upgradeSkill', // upgrade stat
 	'upgradeTank', // upgrade tank
-	'C', // aim and commands
-	'k', // token
-	'p', // ping
-	'S', // sync
-	'd'  // last cam update
+	'command', // aim and commands
+	'token', // token
+	'ping', // ping
+	'sync' // sync
 ]),
 
 s2c = doThing([
@@ -40,7 +39,7 @@ s2c = doThing([
 	"r", // room update
 	'info', // info
 	'c', // teleport camera and set hud data
-	'S', // clock syncing
+	'sync', // clock syncing
 	'm', // message
 	'u', // uplink
 	"b", // minimap data
