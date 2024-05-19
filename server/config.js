@@ -69,10 +69,10 @@ module.exports = {
     // Physics
 
     // General multiplier for acceleration and max speeds.
-    runSpeed: 1.5,
+    runSpeed: 1.9,
 
     // General damage multiplier everytime damage is dealt.
-    DAMAGE_CONSTANT: 0.5,
+    DAMAGE_CONSTANT: 0.7,
 
     // General knockback multiplier everytime knockback is applied.
     KNOCKBACK_CONSTANT: 1.5,
@@ -96,7 +96,7 @@ module.exports = {
     },
 
     // Default skill caps.
-    MAX_SKILL: 9,
+    MAX_SKILL: 15,
 
     // Amount of tank tiers.
     MAX_UPGRADE_TIER: 9,
@@ -105,13 +105,13 @@ module.exports = {
     TIER_MULTIPLIER: 15,
 
     // Max normally achievable level.
-    LEVEL_CAP: 45,
+    LEVEL_CAP: 45000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
 
     // Max level you get by level-up key and auto-level-up.
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 0,
+    BOTS: 3,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
@@ -148,32 +148,32 @@ module.exports = {
     ENEMY_SPAWN_COOLDOWN_NEST: 60, // Cooldown (in game ticks) of nest enemies spawn attempts being made.
 
     // Cooldown (in seconds) of boss spawns being announced.
-    BOSS_SPAWN_COOLDOWN: 60,
+    BOSS_SPAWN_COOLDOWN: 90,
     // The delay (in seconds) between the boss spawns being announced and the bosses actually spawning.
     // NOTE: The spawn message (ex. "A strange trembling...") takes half as long to appear than the boss.
     BOSS_SPAWN_DURATION: 5,
 
     // The possible food types that can spawn.
     FOOD_TYPES: [
-        [2000, [
-            [1024, 'egg'], [256, 'square'], [64, 'triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
+        [1500, [
+            [1024, 'egg'], [256, 'square'], [64, 'triangle'], [16, 'pentagon'], [6, 'betaPentagon'], [1.5, 'alphaPentagon']
         ]],
-        [1, [
+        [133, [
             [3125, 'gem'], [625, 'shinySquare'], [125, 'shinyTriangle'], [25, 'shinyPentagon'], [5, 'shinyBetaPentagon'], [1, 'shinyAlphaPentagon']
         ]],
-        [0.1, [
+        [13, [
             [6836, 'jewel'], [1296, 'legendarySquare'], [216, 'legendaryTriangle'], [36, 'legendaryPentagon'], [6, 'legendaryBetaPentagon'], [1, 'legendaryAlphaPentagon']
         ]],
-        [0.005, [
+        [6, [
             /*[16807, 'egg'], */[2401, 'shadowSquare'], [343, 'shadowTriangle'], [49, 'shadowPentagon'], [7, 'shadowBetaPentagon'], [1, 'shadowAlphaPentagon']
         ]],
-        [0.001, [
+        [1.3, [
             /*[65536, 'egg'], */[8192, 'rainbowSquare'], [1024, 'rainbowTriangle'], [64, 'rainbowPentagon'], [8, 'rainbowBetaPentagon'], [1, 'rainbowAlphaPentagon']
         ]],
-        [0.0005, [
+        [0.065, [
             [59549, 'egg'], [6561, 'transSquare'], [729, 'transTriangle'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
         ]],
-        [0.0001, [
+        [0.013, [
             [100000, 'sphere'], [10000, 'cube'], [1000, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
         ]]
     ],
