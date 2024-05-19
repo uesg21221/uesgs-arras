@@ -1156,7 +1156,7 @@ Class.taureonCore = {
         POSITION: [21, 15, -1.1, 0, 0, 0, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.destroyer, g.sniper]),
-            TYPE: "snake",
+            TYPE: "snakeOld",
             STAT_CALCULATOR: gunCalcNames.sustained
         }
     }],

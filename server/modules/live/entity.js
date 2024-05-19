@@ -20,7 +20,7 @@ function setNatural(natural, type) {
         }
     }
 }
-let lerp = (a, b, x) => a + x * (b - a);
+
 class Gun extends EventEmitter {
     constructor(body, info) {
         super();
@@ -2093,8 +2093,8 @@ class Entity extends EventEmitter {
                 }, dist = util.getDistance(this, centerPoint);
                 if (dist > room.width / 2) {
                     let strength = (dist - room.width / 2) * c.ROOM_BOUND_FORCE / (c.runSpeed * 750);
-                    this.x = lerp(this.x, centerPoint.x, strength);
-                    this.y = lerp(this.y, centerPoint.y, strength);
+                    this.x = util.lerp(this.x, centerPoint.x, strength);
+                    this.y = util.lerp(this.y, centerPoint.y, strength);
                 }
             } else {
                 let padding = this.realSize - 50;
