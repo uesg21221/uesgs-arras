@@ -820,14 +820,14 @@ const socketInit = port => {
         }
         // Decide how to interpret it
         switch (m.shift()) {
-            case 'w': // welcome to the game
+            case s2c.welcome: // welcome to the game
                 if (m[0]) { // Ask to spawn
                     console.log('The server has welcomed us to the game room. Sending spawn request.');
-                    socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp);
+                    socket.talk(c2s.spawn, global.playerName, 1, 1 * settings.game.autoLevelUp);
                     global.message = '';
                 }
             break;
-            case 'R': // room setup
+            case s2c.roomInit: // room setup
                 global.gameWidth = m[0];
                 global.gameHeight = m[1];
                 global.roomSetup = JSON.parse(m[2]);
@@ -835,25 +835,25 @@ const socketInit = port => {
                 settings.roomSpeed = m[4];
                 console.log('Room data received. Commencing syncing process.');
                 // Start the syncing process
-                socket.talk('sync', getNow());
+                socket.talk(c2s.sync, getNow());
                 break;
-            case "r":
+            case s2c.roomUpdate:
                 global.gameWidth = m[0];
                 global.gameHeight = m[1];
                 global.roomSetup = JSON.parse(m[2]);
                 break;
-            case 'info': // info
+            case s2c.info: // info
                 global.message = m[0];
                 console.log(m[0]);
                 break;
-            case 'c': // force camera move
+            case s2c.setCamera: // force camera move
                 global.player.renderx = global.player.cx = m[0];
                 global.player.rendery = global.player.cy = m[1];
                 global.player.renderv = global.player.view = m[2];
                 global.player.nameColor = m[3];
                 console.log('Camera moved!');
                 break;
-            case 'sync': // clock syncing
+            case s2c.sync: // clock syncing
                 let clientTime = m[0],
                     serverTime = m[1],
                     laten = (getNow() - clientTime) / 2,
@@ -895,7 +895,7 @@ const socketInit = port => {
                     });
                 }
                 break;
-            case 'm': // message
+            case s2c.broadcastMessage: // message
                 global.messages.push({
                     text: m[1],
                     status: 2,
@@ -903,7 +903,7 @@ const socketInit = port => {
                     time: Date.now() + m[0],
                 });
                 break;
-            case 'u': // uplink
+            case s2c.uplink: // uplink
                 // Pull the camera info
                 let camtime = m[0],
                     camx = m[1],
@@ -963,16 +963,16 @@ const socketInit = port => {
                 socket.cmd.talk();
                 global.updateTimes++; // metrics
                 break;
-            case "b":
+            case s2c."b":
                 global.FFA = m[0];
                 m.shift();
                 convert.begin(m);
                 convert.broadcast();
                 break;
-            case 'p': // ping
+            case s2c.'p': // ping
                 global.metrics.latency = global.time - m[0];
                 break;
-            case 'F': // to pay respects
+            case s2c.'F': // to pay respects
                 global.finalScore = util.Smoothbar(0, 4);
                 global.finalScore.set(m[0]);
                 global.finalLifetime = util.Smoothbar(0, 5);
@@ -992,13 +992,13 @@ const socketInit = port => {
                 global.autoSpin = false;
                 window.onbeforeunload = () => false;
                 break;
-            case 'K': // kicked
+            case s2c.'K': // kicked
                 window.onbeforeunload = () => false;
                 break;
-            case 'z': // name color
+            case s2c.'z': // name color
                 global.nameColor = m[0];
                 break;
-            case 'CHAT_MESSAGE_ENTITY':
+            case s2c.entityChatMessages:
                 get.set(m);
                 global.chats = {};
 

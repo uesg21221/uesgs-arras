@@ -6,8 +6,8 @@ import { getRGBFromColor } from '../managers/clientColors.js';
 class Box extends Element {
 	constructor (opts = {}) {
 		super(opts);
-		this.colorBorder = opts.colorBorder ?? new Color();
-		this.colorPrimary = opts.colorPrimary ?? new Color();
+		this.colorBorder = opts.colorBorder ?? new Color('black');
+		this.colorPrimary = opts.colorPrimary ?? new Color('gray');
 		this.colorSecondary = opts.colorSecondary;
 		this.innerOpacity = opts.innerOpacity ?? 1;
 		this.secondarySpan = opts.innerOpacity ?? 0.4;

@@ -36,7 +36,7 @@ class Element extends EventTargetSUB {
 			A = new Vector(
 				lerp(parentCornerTopLeft.x, parentCornerBottomRight.x, t.x),
 				lerp(parentCornerTopLeft.y, parentCornerBottomRight.y, t.y)
-			),
+			).add(position),
 
 			B = A.add(this.scale.multiply(this.pivot));
 

@@ -35,24 +35,174 @@ c2s = doThing([
 
 s2c = doThing([
 	'w', // we can spawn
-	'R', // room setup
-	"r", // room update
-	'info', // info
-	'c', // teleport camera and set hud data
+	'roomInit', // [ vector: roomSizeTiles, 2Darray: tile colors, bigint: serverStartTime, float: roomSpeed ] // room setup
+	"roomUpdate", // [ vector: roomSizeTiles, 2Darray: tile colors ] // room update
+	'info', // [ string: notFullyConnectedInfoMessage ] // info
+	'setCamera', // [ vector: camPos, float: fov, string: namecolor ] // teleport camera and set hud data
 	'sync', // clock syncing
-	'm', // message
-	'u', // uplink
+	'broadcastMessage', // message
+	'uplink', // PACKET: [
+		//     BigInt: tickHappenedWhen,
+		//     vector: camPos,
+		//     float: fov,
+		//     vector: camVel,
+		//     boolean: isScoping,
+		//
+		//     structDynamic: gui {
+		//         float: fps,
+		//         Label: label,
+		//         BigInt: score,
+		//         Uint32: points,
+		//         Array16<Upgrade>: upgrades,
+		//         StatBar[10]: statsdata,
+		//         Float: accel,
+		//         Float: top, // unused
+		//         boolean: root, // unused
+		//         String: class
+		//     },
+		//
+		//     Array32<Entity>: entities
+		// ]
+		//
+		// structs needed:
+		// Label: { string: type, Color: color, Uint32: playerid }
+		// Upgrade: { uint: branchId, string: branchLabel, string: upgradeIndex }
+		// StatBar: { Uint16: amount, Uint16: cap, Uint16: softcap, String8: name }
+		// Entity: {}
+		// TurretAttributes: {}
+		// EntityAttributes: {}
+		//
+		// // uplink
 	"b", // minimap data
 	'p', // ping
 	'F', // killscreen info
 	'K', // kicked
 	'z', // name color
-	'CHAT_MESSAGE_ENTITY' // currently visible chat messages from entities in range
+
+	'entityChatMessages' // currently visible chat messages from entities in range
 ]);
 
-// export throws an error in cjs files if it exists as a normal statement
-try {
-    eval('export { c2s, s2c }');
-} catch (e) {
-    module.exports = { packetTypes: { c2s, s2c } };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import { Bitfield } from './liteSockets/Bitfield.js';
+import { Builder } from './liteSockets/Walker/builder.js';
+import { Reader } from './liteSockets/Walker/reader.js';
+
+// TODO: use these
+Builder.StructDynamic = function (object, struct) {
+	let structKeys = Object.keys(struct.map(x => x[0])),
+		doesPropertyExist = new Bitfield(keys);
+
+	doesPropertyExist.forEach(field => {
+		if (field in object) {
+			doesPropertyExist.set(field, true);
+		}
+	});
+
+	switch (structKeys.length >> 3) {
+		case 0:
+			// should i throw an error here?
+			break;
+		case 1:
+			this.Uint8(parseInt(doesPropertyExist.store));
+			break;
+		case 2:
+			this.Uint16(parseInt(doesPropertyExist.store));
+			break;
+		case 3: case 4:
+			this.Uint32(parseInt(doesPropertyExist.store));
+			break;
+		default:
+			this.BitUint64(doesPropertyExist.store);
+	}
+
+	for (let [key, type, ...argument] of struct) {
+		if (!doesPropertyExist.get(key)) continue;
+		if ('function' != typeof this[type]) throw new Error(`Nonexistant type in struct!\nkey: ${key}\ntype: ${type}\nstruct: ${struct}`);
+		if (this[type].length && !argument) throw new Error(`Missing argument in struct!\nkey: ${key}\ntype: ${type}\nstruct: ${struct}`);
+		if (!(key in object)) throw new Error(`Missing property in object!\nmissing property: ${key}\nexpected type: ${type}`);
+		this[type](object[key], ...argument);
+	}
+	return this;
+};
+
+Reader.StructDynamic = function (struct) {
+	let structKeys = Object.keys(struct.map(x => x[0])),
+		bitfieldInit = 0n;
+	switch (structKeys.length >> 3) {
+		case 0:
+			// should i throw an error here?
+			break;
+		case 1:
+			bitfieldInit = BigInt(this.Uint8());
+			break;
+		case 2:
+			bitfieldInit = BigInt(this.Uint16());
+			break;
+		case 3: case 4:
+			bitfieldInit = BigInt(this.Uint32());
+			break;
+		default:
+			bitfieldInit = this.BitUint64();
+	}
+	let doesPropertyExist = new Bitfield(keys, bitfieldInit),
+		result = {};
+	for (let [key, type, ...argument] of struct) {
+		if (!doesPropertyExist.get(key)) continue;
+		if ('function' != typeof this[type]) throw new Error(`Nonexistant type in struct!\nkey: ${key}\ntype: ${type}\nstruct: ${struct}`);
+		if (this[type].length && !argument) throw new Error(`Missing argument in struct!\nkey: ${key}\ntype: ${type}\nstruct: ${struct}`);
+		result[key] = this[type](...argument);
+	}
+	return result;
 }
+
+let vectorStruct = [ [ 'x', 'Float32' ], [ 'y', 'Float32' ] ],
+
+	clientPackages = [
+		['chatMessage', 'StringRemaining'], // StringRemaining is the chat message
+		['spawn', 'Struct', [
+			['name', 'String8'],
+			['needsRoom', 'Int8'], // TODO: merge those two into a bitfield
+			['autoLevelUp', 'Int8']
+		]],
+		['levelup'], // no payload needed
+		['upgradeTankToken'], // no payload needed
+		['become'], // no payload needed
+		['suicide'], // no payload needed
+		['toggleauto', 'Int8'], // Int8 is the auto-type // TODO: check if we should merge this with the 'command' packet
+		['upgradeSkill', 'Struct', [
+			['statId', 'Uint8'],
+			['shouldMax', 'Int8'], // boolean
+		]],
+		['upgradeTank', 'Struct', [
+			['upgradeId', 'Uint8'],
+			['branchId', 'Uint8']
+		]],
+		['command', 'Struct', [
+			['target', 'Struct', vectorStruct],
+			['goal', 'Struct', vectorStruct],
+			['commands', 'Uint16'] // bitfield
+		]],
+		['token', 'StringRemaining'], // StringRemaining is the token
+		['ping', 'BigInt64'], // BigInt64, here and everywhere else, are timestamps
+		['sync', 'Struct', [
+			['clientTime', 'BigInt64'], // idk if both of these have to be bigints
+			['serverTime', 'BigInt64'] // we should redo the lag compensation code lol
+		]]
+	],
+
+	serverPackages = [
+		// LOOK HOW MUCH EASIER THIS IS
+		['entityChatMessages', 'ArrayRemaining', 'Struct', [
+			['entityId', 'Uint32'],
+			['messages', 'Array8', 'Struct', [
+				['text', 'String16'],
+				['expires', 'BigInt64']
+			]]
+		]]
+	]
+
+export { serverPackages, clientPackages };

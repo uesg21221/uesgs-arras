@@ -5,8 +5,8 @@ import { Vector } from '../vector.js';
 class Text extends Element {
 	constructor (opts = {}) {
 		super(opts);
-		this.colorBackground = opts.colorBackground ?? new Color();
-		this.colorFill = opts.colorFill ?? new Color();
+		this.colorBackground = opts.colorBackground ?? new Color('black');
+		this.colorFill = opts.colorFill ?? new Color('white');
 		this.text = opts.text ?? '';
 		this.fontSize = opts.fontSize ?? 20;
 	}

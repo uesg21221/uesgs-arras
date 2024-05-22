@@ -93,7 +93,7 @@ function chatLoop() {
             }
         }
 
-        view.socket.talk('CHAT_MESSAGE_ENTITY', spammersAdded, ...array);
+        view.socket.talk(packetTypes.s2c.entityChatMessages, spammersAdded, ...array);
     }
 }
 
@@ -130,13 +130,13 @@ function incoming(message, socket) {
                 socket.kick("Duplicate verification attempt.");
                 return 1;
             }
-            socket.talk("w", true);
+            socket.talk(packetTypes.s2c.welcome, true);
             if (m.length === 1) {
                 let key = m[0].toString().trim();
                 socket.permissions = permissionsDict[key];
                 if (socket.permissions) {
                     util.log("[INFO] A socket was verified with the token: " + key);
-                } else {
+                } else if (key) {
                     util.log("[WARNING] A socket failed to verify with the token: " + key);
                 }
                 socket.key = key;
@@ -200,7 +200,7 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))), JSON.stringify(util.serverStartTime), c.runSpeed, c.ARENA_TYPE);
+            socket.talk(packetTypes.s2c.roomInit, room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))), JSON.stringify(util.serverStartTime), c.runSpeed, c.ARENA_TYPE);
             // Log it
             util.log(`[INFO] ${m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
             break;
@@ -221,6 +221,22 @@ function incoming(message, socket) {
             socket.talk("S", synctick, util.time());
             break;
         case packetTypes.c2s.ping:
+            // ping
+            if (m.length !== 1) {
+                socket.kick("Ill-sized ping.");
+                return 1;
+            }
+            // Get data
+            let ping = m[0];
+            // Verify it
+            if (typeof ping !== "number") {
+                socket.kick("Weird ping.");
+                return 1;
+            }
+            // Pong
+            socket.talk("p", m[0]); // Just pong it right back
+            socket.status.lastHeartbeat = util.time();
+            break;
         case packetTypes.c2s.command:
             // command packet
             if (m.length !== 4) {
@@ -236,7 +252,7 @@ function incoming(message, socket) {
                     x: m[2],
                     y: m[3],
                 },
-                reverseTank = m[4],
+                reverseTank = m[4], // this shouldnt be its own thing
                 commands = m[5];
             // Verify data
             if (
@@ -400,6 +416,17 @@ function incoming(message, socket) {
             }
             break;
         case packetTypes.c2s.suicide:
+            //suicide squad
+            if (player.body != null && !player.body.underControl) {
+                for (let i = 0; i < entities.length; i++) {
+                    let instance = entities[i];
+                    if (instance.settings.clearOnMasterUpgrade && instance.master.id === player.body.id) {
+                        instance.kill();
+                    }
+                }
+                player.body.destroy();
+            }
+            break;
         case packetTypes.c2s.become:
             if (player.body == null) return 1;
             let body = player.body;
@@ -561,7 +588,10 @@ function floppy(value = null) {
                                 eh = true;
                             } else {
                                 for (let i = 0, len = newValue.length; i < len; i++) {
-                                    if (newValue[i] !== value[i]) eh = true;
+                                    if (newValue[i] !== value[i]) {
+                                        eh = true;
+                                        break;
+                                    }
                                 }
                             }
                             break;
@@ -615,8 +645,12 @@ function container(player) {
              * excessive updates long after the first and only
              * needed one as it slowly hits each updated value
              */
-            for (let j = 0; j < vars.length; j++)
-                if (vars[j].publish() != null) needsupdate = true;
+            for (let j = 0; j < vars.length; j++) {
+                if (vars[j].publish() != null) {
+                    needsupdate = true;
+                    break;
+                }
+            }
             if (needsupdate) {
                 // Update everything
                 for (let j = 0; j < statnames.length; j++) {
@@ -853,7 +887,7 @@ const spawn = (socket, name) => {
         body.invuln = true;
     }
     body.name = name;
-    body.sendMessage = (content, displayTime = c.MESSAGE_DISPLAY_TIME) => socket.talk("m", displayTime, content);
+    body.sendMessage = (content, displayTime = c.MESSAGE_DISPLAY_TIME) => socket.talk(packetTypes.s2c.broadcastMessage, displayTime, content);
 
     socket.rememberedTeam = player.team;
     player.body = body;
@@ -901,7 +935,7 @@ const spawn = (socket, name) => {
     for (let i = 0; i < msg.length; i++) {
         body.sendMessage(msg[i]);
     }
-    socket.talk("c", socket.camera.x, socket.camera.y, socket.camera.fov);
+    socket.talk(packetTypes.s2c.setCamera, socket.camera.x, socket.camera.y, socket.camera.fov);
     return player;
 };
 
@@ -1114,7 +1148,7 @@ const eyes = (socket) => {
             player.gui.update();
             // Send it to the player
             socket.talk(
-                "u",
+                s2c.uplink,
                 rightNow,
                 camera.x,
                 camera.y,
@@ -1352,12 +1386,12 @@ const sockets = {
     disconnections: disconnections,
     broadcast: (message) => {
         for (let i = 0; i < clients.length; i++) {
-            clients[i].talk("m", c.MESSAGE_DISPLAY_TIME, message);
+            clients[i].talk(packetTypes.s2c.broadcastMessage, c.MESSAGE_DISPLAY_TIME, message);
         }
     },
     broadcastRoom: () => {
         for (let i = 0; i < clients.length; i++) {
-            clients[i].talk("r", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))));
+            clients[i].talk(roomUpdate, room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))));
         }
     },
     connect: (socket, req) => {

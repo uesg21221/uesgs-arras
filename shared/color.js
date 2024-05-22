@@ -7,6 +7,14 @@ class Color {
 	#brightnessShift = 0;
 	#allowBrightnessInvert = false;
 
+	static lsPacketStruct = [
+		['base', 'String8'],
+		['hueShift', 'Float32'],
+		['saturationShift', 'Float32'],
+		['brightnessShift', 'Float32'],
+		['allowBrightnessInvert', 'Int8']
+	];
+
 	constructor (color, isTile) {
         this.isTile = isTile;
         this.interpret(color);
