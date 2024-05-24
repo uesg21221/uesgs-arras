@@ -68,9 +68,69 @@ s2c = doThing([
 		// Label: { string: type, Color: color, Uint32: playerid }
 		// Upgrade: { uint: branchId, string: branchLabel, string: upgradeIndex }
 		// StatBar: { Uint16: amount, Uint16: cap, Uint16: softcap, String8: name }
-		// Entity: {}
-		// TurretAttributes: {}
-		// EntityAttributes: {}
+		// Entity: {
+		//     bitfield: type,
+		//     TurretAttributes?: issa turret, // type & 0x01
+		//     EntityAttributes?: issa something real, // !(type & 0x01)
+		//     Array<Gun>: guns,
+		//     Array<Entity>: turrets
+		// }
+		// TurretAttributes: {
+		//     float: facing, // what its actually looking at
+		//     float: layer, // this is float cuz idk what kind of thing this is but its definitely numeric
+		//     String: index, // ??????????????? something branch related // could be just the class its defined as
+		//     Color: color,
+		//     float: strokeWidth,
+		//     boolean: borderless,
+		//     boolean: drawfill,
+		//     float: size, // size in relation to parent entity
+		//     float: realSize, // what its actual size is if turret
+		//     float: sizeFactor, // i dont know
+		//     float: angle, // default angle it rests in
+		//     float: direction, // in which direction to shift this entity in
+		//     float: offset, // how much to shift this entity in
+		//     boolean: mirrorMasterAngle,
+		// }
+		// EntityAttributes: {
+		//     Int32: id,
+		//     string: index, // just the class its defined as
+		//     float: x,
+		//     float: y,
+		//     float: vx,
+		//     float: vy,
+		//     float: size,
+		//     float: facing,
+		//     float : perceptionAngleIndependence,
+		//     float : defaultAngle,
+		//     float: twiggle,
+		//     float: layer,
+		//     Color: color,
+		//     boolean: borderless,
+		//     boolean: drawFill,
+		//     boolean: invuln,
+		//     float: health,
+		//     float: shield,
+		//     float: alpha,
+		//     string: name, // these only exist if `type & 0x04`
+		//     BigInt: score, // these only exist if `type & 0x04`
+		//     boolean: nameplate  // these is true if `type & 0x04`
+		// }
+		// Gun: {
+		//     BigInt: time,
+		//     float: power,
+		//     Color: color,
+		//     float: alpha,
+		//     float: strokeWidth,
+		//     boolean: borderless,
+		//     boolean: drawFill,
+		//     boolean: drawAbove,
+		//     float: length,
+		//     float: width,
+		//     float: aspect,
+		//     float: angle,
+		//     float: direction,
+		//     float: offset,
+		// }
 		//
 		// // uplink
 	"b", // minimap data
