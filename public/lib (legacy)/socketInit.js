@@ -120,7 +120,10 @@ const Integrate = class {
     }
     update(delta, index = 0) {
         let deletedLength = delta[index++]
-        for (let i = 0; i < deletedLength; i++) delete this.elements[delta[index++]]
+        for (let i = 0; i < deletedLength; i++) {
+            delete this.elements[delta[index++]]
+        }
+
         let updatedLength = delta[index++]
         for (let i = 0; i < updatedLength; i++) {
             let id = delta[index++]
@@ -963,16 +966,15 @@ const socketInit = port => {
                 socket.cmd.talk();
                 global.updateTimes++; // metrics
                 break;
-            case s2c."b":
-                global.FFA = m[0];
-                m.shift();
+            case s2c.minimapAndLeaderboard: // minimap data
+                global.FFA = m.shift();
                 convert.begin(m);
                 convert.broadcast();
                 break;
-            case s2c.'p': // ping
+            case s2c.ping: // ping
                 global.metrics.latency = global.time - m[0];
                 break;
-            case s2c.'F': // to pay respects
+            case s2c.deathScreen: // to pay respects
                 global.finalScore = util.Smoothbar(0, 4);
                 global.finalScore.set(m[0]);
                 global.finalLifetime = util.Smoothbar(0, 5);
@@ -992,10 +994,10 @@ const socketInit = port => {
                 global.autoSpin = false;
                 window.onbeforeunload = () => false;
                 break;
-            case s2c.'K': // kicked
+            case s2c.kicked: // kicked
                 window.onbeforeunload = () => false;
                 break;
-            case s2c.'z': // name color
+            case s2c.nameColor: // name color
                 global.nameColor = m[0];
                 break;
             case s2c.entityChatMessages:

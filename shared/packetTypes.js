@@ -18,29 +18,29 @@
 let doThing = packettypes => Object.fromEntries(packettypes.map((t, i) => [t, i])),
 
 c2s = doThing([
-	'chatMessage', // send chat msg
-	'spawn', // (re)spawn
-	'levelup', // level up
-	'upgradeTankToken', // token tank
-	'become', // become
-	'suicide', // suicide
-	'toggleauto', // toggle stuff like autospin autofire etc
-	'upgradeSkill', // upgrade stat
-	'upgradeTank', // upgrade tank
-	'command', // aim and commands
-	'token', // token
-	'ping', // ping
-	'sync' // sync
+	'chatMessage', // [ String: message ] // send chat msg
+	'spawn', // [ String: name, boolean: needsRoom, boolean: autoLVLup ] // (re)spawn
+	'levelup', // [ ] // level up
+	'upgradeTankToken', // [ ] // token tank
+	'become', // [ ] // become
+	'suicide', // [ ] // suicide
+	'toggleauto', // [ Uint8: autoId ] // toggle stuff like autospin autofire etc
+	'upgradeSkill', // [ Uint8: statId, boolean: wantsMax ] // upgrade stat
+	'upgradeTank', // [ Uint8: upgrade, Uint8: branchId ] // upgrade tank
+	'command', // [ Vector: target, Vector: goal, bitfield: commands ] // aim and commands
+	'token', // [ String: token ] // token
+	'ping', // [ BigInt: sentTime ] // ping
+	'sync' // [ BigInt: syncTick ] // sync
 ]),
 
 s2c = doThing([
-	'w', // we can spawn
+	'welcome', // we can spawn
 	'roomInit', // [ vector: roomSizeTiles, 2Darray: tile colors, bigint: serverStartTime, float: roomSpeed ] // room setup
 	"roomUpdate", // [ vector: roomSizeTiles, 2Darray: tile colors ] // room update
 	'info', // [ string: notFullyConnectedInfoMessage ] // info
 	'setCamera', // [ vector: camPos, float: fov, string: namecolor ] // teleport camera and set hud data
 	'sync', // clock syncing
-	'broadcastMessage', // message
+	'broadcastMessage', // [ string: message ] // message
 	'uplink', // PACKET: [
 		//     BigInt: tickHappenedWhen,
 		//     vector: camPos,
@@ -133,11 +133,49 @@ s2c = doThing([
 		// }
 		//
 		// // uplink
-	"b", // minimap data
-	'p', // ping
-	'F', // killscreen info
-	'K', // kicked
-	'z', // name color
+	"minimapAndLeaderboard", // [
+		//     boolean: isFFA,
+		//     array<Uint32>: minimapAllDeleted,
+		//     array<minimapAllEntry>: minimapAllUpdated,
+		//     array<Uint32>: miinimapTeamDeleted,
+		//     array<minimapTeamEntry>: minimapTeamUpdated,
+		//     array<Uint32>: leaderboardDeleted,
+		//     array<leaderboardEntry>: leaderboardUpdated,
+		// ]
+		//
+		// structs needed:
+		// minimapAllEntry: {
+		//     Uint32: id,
+		//     Uint8: type,
+		//     float: x,
+		//     float: y,
+		//     Color: color,
+		//     float: size
+		// }
+		// minimapTeamEntry: {
+		//     Uint32: id,
+		//     float: x,
+		//     float: y,
+		//     Color: color
+		// }
+		// leaderboardEntry: {
+		//     id: Uint32,
+		//     BigInt: score,
+		//     Uint8: index,
+		//     String: name,
+		//     Color: color,
+		//     Color: bar,
+		//     String: nameColor,
+		//     String: label
+		// }
+		//
+		// // minimap data
+	'ping', // [ BigInt: receivedTime ] // ping
+	'deathScreen', // [ BigInt: score, Uint32: totalLifetime,
+		//     Uint16: kills, Uint16: assists, Uint16: bosskills, Uint16: polygonkills,
+		//     Array<String>: killerClasses ] // killscreen info
+	'kicked', // kicked
+	'nameColor', // name color
 
 	'entityChatMessages' // currently visible chat messages from entities in range
 ]);

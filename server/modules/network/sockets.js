@@ -57,7 +57,7 @@ function close(socket) {
 // Being kicked
 function kick(socket, reason = "No reason given.") {
     util.warn(reason + " Kicking.");
-    socket.lastWords("K");
+    socket.lastWords(packetTypes.s2c.kicked);
 }
 
 function chatLoop() {
@@ -218,7 +218,7 @@ function incoming(message, socket) {
                 return 1;
             }
             // Bounce it back
-            socket.talk("S", synctick, util.time());
+            socket.talkpacketTypes.s2c.ping, synctick, util.time());
             break;
         case packetTypes.c2s.ping:
             // ping
@@ -234,7 +234,7 @@ function incoming(message, socket) {
                 return 1;
             }
             // Pong
-            socket.talk("p", m[0]); // Just pong it right back
+            socket.talk(packetTypes.s2c.ping, m[0]); // Just pong it right back
             socket.status.lastHeartbeat = util.time();
             break;
         case packetTypes.c2s.command:
@@ -880,7 +880,7 @@ const spawn = (socket, name) => {
         body.define(c.SPAWN_CLASS);
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
-            socket.talk("z", body.nameColor);
+            socket.talk(packetTypes.s2c.nameColor, body.nameColor);
         }
         body.addController(new ioTypes.listenToPlayer(body, { player }));
         socket.spectateEntity = null;
@@ -1073,7 +1073,7 @@ const eyes = (socket) => {
                 if (player.body.isDead()) {
                     socket.status.deceased = true;
                     // Let the client know it died
-                    socket.talk("F", ...player.records());
+                    socket.talk(packetTypes.s2c.deathScreen, ...player.records());
                     // Remove the body
                     player.body = null;
                 }
@@ -1349,7 +1349,7 @@ setInterval(() => {
         if (!socket.status.hasSpawned) continue;
         let team = teamUpdate[-socket.player.team - 1];
         socket.talk(
-            "b",
+            packetTypes.s2c.minimapAndLeaderboard,
             c.GROUPS || (c.MODE == 'ffa' && !c.TAG),
             ...socket.status.needsNewBroadcast ? minimapUpdate.reset : minimapUpdate.update,
             ...team ? socket.status.needsNewBroadcast ? team.reset : team.update : [0, 0],
@@ -1362,7 +1362,7 @@ setInterval(() => {
     logs.minimap.mark();
     let time = util.time();
     for (let socket of clients) {
-        if (socket.timeout.check(time)) socket.lastWords("K");
+        if (socket.timeout.check(time)) socket.lastWords(packetTypes.s2c.kicked);
         if (time - socket.statuslastHeartbeat > c.maxHeartbeatInterval) socket.kick("Lost heartbeat.");
     }
 }, 250);
