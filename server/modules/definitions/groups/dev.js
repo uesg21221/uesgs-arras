@@ -529,7 +529,6 @@ Class.makeAutoTest = {
         TYPE: 'makeAutoTestTurret'
     }, 3)
 }
-console.log(Class.makeAutoTestTurret)
 
 Class.imageShapeTest = {
     PARENT: 'genericTank',
