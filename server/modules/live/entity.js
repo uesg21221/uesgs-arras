@@ -120,6 +120,7 @@ class Gun extends EventEmitter {
             this.cycleTimer = this.maxCycleTimer;
             this.trueRecoil = this.shootSettings.recoil;
             this.facing = 0;
+            this.calculateBulletStats();
         }
     }
     recoil() {
@@ -261,17 +262,17 @@ class Gun extends EventEmitter {
         }
         if (oldestChild) oldestChild.kill();
     }
-    syncChildren() {
-        if (this.syncsSkills) {
-            let self = this;
-            for (let i = 0; i < this.children.length; i++) {
-                let child = this.children[i];
-                child.define({
-                    BODY: self.interpret(),
-                    SKILL: self.getSkillRaw(),
-                });
-                child.refreshBodyAttributes();
-            }
+    syncGunStats() {
+        this.calculateBulletStats();
+        if (!this.syncsSkills) return;
+
+        for (let i = 0; i < this.children.length; i++) {
+            let child = this.children[i];
+            child.define({
+                BODY: this.interpretedStats,
+                SKILL: this.getSkillRaw(),
+            });
+            child.refreshBodyAttributes();
         }
     }
     fire(gx, gy, sk) {
@@ -365,7 +366,7 @@ class Gun extends EventEmitter {
         }
         // Pass the gun attributes
         o.define({
-            BODY: this.interpret(),
+            BODY: this.interpretedStats,
             SKILL: this.getSkillRaw(),
             SIZE: (this.body.size * this.width * this.shootSettings.size) / 2,
             LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + o.label
@@ -417,9 +418,11 @@ class Gun extends EventEmitter {
             range: Math.sqrt(this.bulletStats == "master" ? this.body.skill.spd : this.bulletStats.spd) * this.shootSettings.range * this.natural.RANGE
         };
     }
-    interpret(alt = false) {
+    calculateBulletStats() {
+        if (!this.canShoot) return;
+
         let sizeFactor = this.master.size / this.master.SIZE;
-        let shoot = alt ? alt : this.shootSettings;
+        let shoot = this.shootSettings;
         let sk = this.bulletStats == "master" ? this.body.skill : this.bulletStats;
         // Defaults
         let out = {
@@ -465,7 +468,7 @@ class Gun extends EventEmitter {
                 continue;
             out[property] *= this.natural[property];
         }
-        return out;
+        this.interpretedStats = out;
     }
 }
 
@@ -1144,8 +1147,7 @@ class Entity extends EventEmitter {
             this.guns = newGuns;
         }
         if (set.GUN_STAT_SCALE) {
-            let gunStatScale = set.GUN_STAT_SCALE;
-            this.gunStatScale = gunStatScale;
+            this.gunStatScale = set.GUN_STAT_SCALE;
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
         if (set.RESET_CHILDREN) this.destroyAllChildren();
@@ -1489,6 +1491,7 @@ class Entity extends EventEmitter {
             this.facingType = ["bound", {}];
         }
         this.motionType = ["bound", {}];
+        this.syncSkillsToGuns();
         this.move();
     }
     get level() {
@@ -1519,6 +1522,7 @@ class Entity extends EventEmitter {
             }
             gun.shootSettings = combineStats([gun.shootSettings, ...gunStatScale]);
             gun.trueRecoil = gun.shootSettings.recoil;
+            gun.calculateBulletStats();
         }
     }
     camera(tur = false) {
@@ -1563,7 +1567,7 @@ class Entity extends EventEmitter {
         };
     }
     syncTurrets() {
-        for (let i = 0; i < this.guns.length; i++) this.guns[i].syncChildren();
+        for (let i = 0; i < this.guns.length; i++) this.guns[i].syncGunStats();
         for (let i = 0; i < this.turrets.length; i++) {
             this.turrets[i].skill = this.skill;
             this.turrets[i].refreshBodyAttributes();
@@ -1574,10 +1578,13 @@ class Entity extends EventEmitter {
         let suc = this.skill.upgrade(stat);
         if (suc) {
             this.refreshBodyAttributes();
-            for (let i = 0; i < this.guns.length; i++) this.guns[i].syncChildren();
-            for (let i = 0; i < this.turrets.length; i++) this.turrets[i].syncTurrets();
+            this.syncSkillsToGuns();
         }
         return suc;
+    }
+    syncSkillsToGuns() {
+        for (let i = 0; i < this.guns.length; i++) this.guns[i].syncGunStats();
+        for (let i = 0; i < this.turrets.length; i++) this.turrets[i].syncTurrets();
     }
     upgrade(number, branchId) {
         // Account for upgrades that are too high level for the player to access
