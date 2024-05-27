@@ -314,7 +314,7 @@ Class.mummifier = {
             TYPE: "mummy",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.necro
+            STAT_CALCULATOR: "necro"
         }
     },{
         POSITION: [5.5, 13, 1.1, 8, 0, 270, 0],
@@ -323,7 +323,7 @@ Class.mummifier = {
             TYPE: "mummy",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.necro
+            STAT_CALCULATOR: "necro"
         }
     }],
     TURRETS: [{
@@ -778,7 +778,7 @@ Class.vanquisher = {
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.trap, g.setTrap]),
             TYPE: "setTrap",
-            STAT_CALCULATOR: gunCalcNames.block
+            STAT_CALCULATOR: "block"
         }
 
     //launcher
@@ -786,7 +786,7 @@ Class.vanquisher = {
         POSITION: [10, 9, 1, 9, 0, 90, 0],
     },{
         POSITION: [17, 13, 1, 0, 0, 90, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery]), TYPE: "minimissile", STAT_CALCULATOR: gunCalcNames.sustained }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery]), TYPE: "minimissile", STAT_CALCULATOR: "sustained" }
 
     //shotgun
     },{
@@ -1046,7 +1046,7 @@ Class.snakeOld = {
             POSITION: [6, 12, 1.4, 8, 0, 180, 0],
             PROPERTIES: {
                 AUTOFIRE: true,
-                STAT_CALCULATOR: gunCalcNames.thruster,
+                STAT_CALCULATOR: "thruster",
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, g.snake, g.snakeskin]),
                 TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
             },
@@ -1056,7 +1056,7 @@ Class.snakeOld = {
             PROPERTIES: {
                 AUTOFIRE: true,
                 NEGATIVE_RECOIL: true,
-                STAT_CALCULATOR: gunCalcNames.thruster,
+                STAT_CALCULATOR: "thruster",
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, g.snake]),
                 TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
             },
@@ -1080,7 +1080,7 @@ Class.sidewinderOld = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder]),
                 TYPE: "snakeOld",
-                STAT_CALCULATOR: gunCalcNames.sustained,
+                STAT_CALCULATOR: "sustained",
             },
         },
     ],

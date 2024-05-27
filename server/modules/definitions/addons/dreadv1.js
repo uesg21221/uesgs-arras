@@ -210,7 +210,7 @@ Class.invaderOfficialV1 = {
 			TYPE: "drone",
 			AUTOFIRE: true,
 			SYNCS_SKILLS: true,
-			STAT_CALCULATOR: gunCalcNames.drone,
+			STAT_CALCULATOR: "drone",
 			WAIT_TO_CYCLE: true,
 			MAX_CHILDREN: 4,
 		}
@@ -229,7 +229,7 @@ Class.centaurOfficialV1 = {
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, {reload: 0.55}]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
-				STAT_CALCULATOR: gunCalcNames.trap,
+				STAT_CALCULATOR: "trap",
 			},
 		}
 	], 3)
@@ -380,7 +380,7 @@ Class.inquisitorOfficialV1 = {
 			TYPE: "drone",
 			AUTOFIRE: true,
 			SYNCS_SKILLS: true,
-			STAT_CALCULATOR: gunCalcNames.drone,
+			STAT_CALCULATOR: "drone",
 			WAIT_TO_CYCLE: true,
 			MAX_CHILDREN: 5,
 		}
@@ -399,7 +399,7 @@ Class.assailantOfficialV1 = {
 				MAX_CHILDREN: 4,
 				SHOOT_SETTINGS: combineStats([g.factory, g.overseer, g.dreadv1Drone, {damage: 0.6, speed: 0.85, maxSpeed: 0.85}]),
 				TYPE: "weakMinion",
-				STAT_CALCULATOR: gunCalcNames.drone,
+				STAT_CALCULATOR: "drone",
 				AUTOFIRE: true,
 				SYNCS_SKILLS: true
 			}
@@ -418,21 +418,21 @@ Class.infiltratorOfficialV1 = {
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.swarm, g.carrier, { reload: 2, speed: 0.5, range: 0.9, health: 0.85}]),
 				TYPE: "swarm",
-				STAT_CALCULATOR: gunCalcNames.swarm
+				STAT_CALCULATOR: "swarm"
 			}
 		}, {
 			POSITION: [7, 6, 0.6, 5.5, -2.8, 0, 0.5],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.swarm, g.carrier, { reload: 2, speed: 0.5, range: 0.9, health: 0.85}]),
 				TYPE: "swarm",
-				STAT_CALCULATOR: gunCalcNames.swarm
+				STAT_CALCULATOR: "swarm"
 			}
 		}, {
 			POSITION: [7, 6, 0.6, 8, 0, 0, 0],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.swarm, g.carrier, { reload: 2, speed: 0.5, range: 0.9, health: 0.85}]),
 				TYPE: "swarm",
-				STAT_CALCULATOR: gunCalcNames.swarm
+				STAT_CALCULATOR: "swarm"
 			}
 		}
 	], 3)
@@ -450,7 +450,7 @@ Class.cerberusOfficialV1 = {
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.flankGuard, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { size: 1.3 }]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
-				STAT_CALCULATOR: gunCalcNames.trap,
+				STAT_CALCULATOR: "trap",
 			},
 		}, {
 			POSITION: [13.5, 2.25, 1, 0, -4, 0, 0]
@@ -459,7 +459,7 @@ Class.cerberusOfficialV1 = {
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.flankGuard, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { size: 1.3 }]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
-				STAT_CALCULATOR: gunCalcNames.trap
+				STAT_CALCULATOR: "trap"
 			}
 		}, {
 			POSITION: [15, 3, 1, 0, 0, 0, 0]
@@ -468,7 +468,7 @@ Class.cerberusOfficialV1 = {
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.flankGuard, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { size: 1.3 }]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
-				STAT_CALCULATOR: gunCalcNames.trap
+				STAT_CALCULATOR: "trap"
 			}
 		}
 	], 3)
@@ -485,7 +485,7 @@ Class.minotaurOfficialV1 = {
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.5, health: 1.4, size: 1.3 }]),
 				TYPE: ["unsetTrap", {HITS_OWN_TYPE: "never"} ],
-				STAT_CALCULATOR: gunCalcNames.block
+				STAT_CALCULATOR: "block"
 			}
 		}
 	], 3)
@@ -501,7 +501,7 @@ Class.sirenOfficialV1 = {
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { size: 1.3 }]),
 				TYPE: ["turretedTrap", {HITS_OWN_TYPE: "never"} ],
-				STAT_CALCULATOR: gunCalcNames.trap,
+				STAT_CALCULATOR: "trap",
 			}
 		}
 	], 3)

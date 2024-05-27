@@ -42,7 +42,12 @@ class Gun extends EventEmitter {
             BRIGHTNESS_SHIFT: 0,
             ALLOW_BRIGHTNESS_INVERT: false,
         });
+        this.alpha = 1;
+        this.strokeWidth = 1;
         this.canShoot = false;
+        this.borderless = false;
+        this.drawFill = true;
+        this.drawAbove = false;
         if (info.PROPERTIES != null) {
             if (info.PROPERTIES.TYPE != null) {
                 this.canShoot = true;
@@ -55,25 +60,25 @@ class Gun extends EventEmitter {
             }
             this.autofire = info.PROPERTIES.AUTOFIRE == null ? false : info.PROPERTIES.AUTOFIRE;
             this.altFire = info.PROPERTIES.ALT_FIRE == null ? false : info.PROPERTIES.ALT_FIRE;
-            this.calculator = info.PROPERTIES.STAT_CALCULATOR == null ? "default" : info.PROPERTIES.STAT_CALCULATOR;
+            this.statCalculator = info.PROPERTIES.STAT_CALCULATOR == null ? "default" : info.PROPERTIES.STAT_CALCULATOR;
             this.waitToCycle = info.PROPERTIES.WAIT_TO_CYCLE == null ? false : info.PROPERTIES.WAIT_TO_CYCLE;
             this.bulletStats = (info.PROPERTIES.BULLET_STATS == null || info.PROPERTIES.BULLET_STATS == "master") ? "master" : new Skill(info.PROPERTIES.BULLET_STATS);
-            this.settings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : JSON.parse(JSON.stringify(info.PROPERTIES.SHOOT_SETTINGS));
+            this.shootSettings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : JSON.parse(JSON.stringify(info.PROPERTIES.SHOOT_SETTINGS));
             this.maxChildren = info.PROPERTIES.MAX_CHILDREN == null ? false : info.PROPERTIES.MAX_CHILDREN;
             this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS == null ? false : info.PROPERTIES.SYNCS_SKILLS;
-            this.negRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
+            this.negativeRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
             this.independentChildren = info.PROPERTIES.INDEPENDENT_CHILDREN == null ? false : info.PROPERTIES.INDEPENDENT_CHILDREN;
             if (info.PROPERTIES.COLOR != null) {
                 this.color.interpret(info.PROPERTIES.COLOR);
             }
-            this.alpha = info.PROPERTIES.ALPHA == null ? 1 : info.PROPERTIES.ALPHA
-            this.strokeWidth = info.PROPERTIES.STROKE_WIDTH == null ? 1 : info.PROPERTIES.STROKE_WIDTH
-            this.borderless = info.PROPERTIES.BORDERLESS == null ? false : info.PROPERTIES.BORDERLESS;
-            this.drawFill = info.PROPERTIES.DRAW_FILL == null ? true : info.PROPERTIES.DRAW_FILL;
+            if (info.PROPERTIES.ALPHA != null) this.alpha = info.PROPERTIES.ALPHA;
+            if (info.PROPERTIES.STROKE_WIDTH != null) this.strokeWidth = info.PROPERTIES.STROKE_WIDTH;
+            if (info.PROPERTIES.BORDERLESS != null) this.borderless = info.PROPERTIES.BORDERLESS;
+            if (info.PROPERTIES.DRAW_FILL != null) this.drawFill = info.PROPERTIES.DRAW_FILL;
+            if (info.PROPERTIES.DRAW_ABOVE) this.drawAbove = info.PROPERTIES.DRAW_ABOVE;
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
             if (this.destroyOldestChild) this.maxChildren++;
             this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
-            this.drawAbove = (info.PROPERTIES.DRAW_ABOVE == null) ? false : info.PROPERTIES.DRAW_ABOVE;
             this.stack = (info.PROPERTIES.STACK_GUN == null) ? true : info.PROPERTIES.STACK_GUN;
             this.identifier = (info.PROPERTIES.IDENTIFIER == null) ? null : info.PROPERTIES.IDENTIFIER
         }
@@ -113,7 +118,7 @@ class Gun extends EventEmitter {
         this.recoilVelocity = 0;
         if (this.canShoot) {
             this.cycleTimer = this.maxCycleTimer;
-            this.trueRecoil = this.settings.recoil;
+            this.trueRecoil = this.shootSettings.recoil;
             this.facing = 0;
         }
     }
@@ -178,7 +183,7 @@ class Gun extends EventEmitter {
         // Find out some intermediate values
         let angle1 = this.offsetDirection + this.angle + this.body.facing,
             angle2 = this.angle + this.body.facing,
-            gunlength = this.length - this.width * this.settings.size / 2,
+            gunlength = this.length - this.width * this.shootSettings.size / 2,
 
             // Calculate offsets based on lengths and directions
             offsetBaseX = this.offset * Math.cos(angle1),
@@ -212,10 +217,10 @@ class Gun extends EventEmitter {
         // Decides what to do based on child-counting settings
         let shootPermission = this.maxChildren
             ? this.maxChildren >
-                this.children.length * (this.calculator == "necro" ? sk.rld : 1)
+                this.children.length * (this.statCalculator == "necro" ? sk.rld : 1)
             : this.body.maxChildren
             ? this.body.maxChildren >
-                this.body.children.length * (this.calculator == "necro" ? sk.rld : 1)
+                this.body.children.length * (this.statCalculator == "necro" ? sk.rld : 1)
             : true;
         if (this.destroyOldestChild) {
             if (!shootPermission) {
@@ -230,7 +235,7 @@ class Gun extends EventEmitter {
         // Cycle up if we should
         if (shootPermission || !this.waitToCycle) {
             if (this.cycleTimer < 1) {
-                this.cycleTimer += 1 / (this.settings.reload * Config.runSpeed * (this.calculator == "necro" || this.calculator == "fixed reload" ? 1 : sk.rld));
+                this.cycleTimer += 1 / (this.shootSettings.reload * Config.runSpeed * (this.statCalculator == "necro" || this.statCalculator == "fixedReload" ? 1 : sk.rld));
             }
         }
         // Firing routines
@@ -276,19 +281,19 @@ class Gun extends EventEmitter {
         this.recoilVelocity += this.lastShot.power;
         // Find inaccuracy
         let shudder = 0, spread = 0;
-        if (this.settings.shudder) {
+        if (this.shootSettings.shudder) {
             do {
-                shudder = ran.gauss(0, Math.sqrt(this.settings.shudder));
-            } while (Math.abs(shudder) >= this.settings.shudder * 2);
+                shudder = ran.gauss(0, Math.sqrt(this.shootSettings.shudder));
+            } while (Math.abs(shudder) >= this.shootSettings.shudder * 2);
         }
-        if (this.settings.spray) {
+        if (this.shootSettings.spray) {
             do {
-                spread = ran.gauss(0, this.settings.spray * this.settings.shudder);
-            } while (Math.abs(spread) >= this.settings.spray / 2);
+                spread = ran.gauss(0, this.shootSettings.spray * this.shootSettings.shudder);
+            } while (Math.abs(spread) >= this.shootSettings.spray / 2);
         }
         spread *= Math.PI / 180;
         // Find speed
-        let vecLength = (this.negRecoil ? -1 : 1) * this.settings.speed * Config.runSpeed * sk.spd * (1 + shudder),
+        let vecLength = (this.negativeRecoil ? -1 : 1) * this.shootSettings.speed * Config.runSpeed * sk.spd * (1 + shudder),
             vecAngle = this.angle + this.body.facing + spread,
         s = new Vector(vecLength * Math.cos(vecAngle), vecLength * Math.sin(vecAngle));
         // Boost it if we should
@@ -362,7 +367,7 @@ class Gun extends EventEmitter {
         o.define({
             BODY: this.interpret(),
             SKILL: this.getSkillRaw(),
-            SIZE: (this.body.size * this.width * this.settings.size) / 2,
+            SIZE: (this.body.size * this.width * this.shootSettings.size) / 2,
             LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + o.label
         });
         // Keep track of it and give it the function it needs to deutil.log itself upon death
@@ -408,13 +413,13 @@ class Gun extends EventEmitter {
     }
     getTracking() {
         return {
-            speed: Config.runSpeed * (this.bulletStats == "master" ? this.body.skill.spd : this.bulletStats.spd) * this.settings.maxSpeed * this.natural.SPEED,
-            range: Math.sqrt(this.bulletStats == "master" ? this.body.skill.spd : this.bulletStats.spd) * this.settings.range * this.natural.RANGE
+            speed: Config.runSpeed * (this.bulletStats == "master" ? this.body.skill.spd : this.bulletStats.spd) * this.shootSettings.maxSpeed * this.natural.SPEED,
+            range: Math.sqrt(this.bulletStats == "master" ? this.body.skill.spd : this.bulletStats.spd) * this.shootSettings.range * this.natural.RANGE
         };
     }
     interpret(alt = false) {
         let sizeFactor = this.master.size / this.master.SIZE;
-        let shoot = alt ? alt : this.settings;
+        let shoot = alt ? alt : this.shootSettings;
         let sk = this.bulletStats == "master" ? this.body.skill : this.bulletStats;
         // Defaults
         let out = {
@@ -429,7 +434,7 @@ class Gun extends EventEmitter {
             HETERO: 3 - 2.8 * sk.ghost,
         };
         // Special cases
-        switch (this.calculator) {
+        switch (this.statCalculator) {
             case "thruster":
                 this.trueRecoil = shoot.recoil * Math.sqrt(sk.rld * sk.spd);
                 break;
@@ -1509,11 +1514,11 @@ class Entity extends EventEmitter {
             gunStatScale = [gunStatScale];
         }
         for (let gun of this.guns) {
-            if (!gun.settings) {
+            if (!gun.shootSettings) {
                 continue
             }
-            gun.settings = combineStats([gun.settings, ...gunStatScale]);
-            gun.trueRecoil = gun.settings.recoil;
+            gun.shootSettings = combineStats([gun.shootSettings, ...gunStatScale]);
+            gun.trueRecoil = gun.shootSettings.recoil;
         }
     }
     camera(tur = false) {
