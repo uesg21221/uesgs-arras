@@ -215,7 +215,7 @@ module.exports = {
         message: "A strange trembling...",
     },{
         bosses: ["paladin", "freyja", "zaphkiel", "nyx", "theia"],
-        amount: [1], chance: 0.1,
+        amount: [1], chance: 0.01,
         message: "The world tremors as the celestials are reborn anew!",
     },{
         bosses: ["julius", "genghis", "napoleon"],
