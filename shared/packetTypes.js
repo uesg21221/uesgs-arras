@@ -22,6 +22,7 @@ c2s = doThing([
 	'spawn', // [ String: name, boolean: needsRoom, boolean: autoLVLup ] // (re)spawn
 	'levelup', // [ ] // level up
 	'upgradeTankToken', // [ ] // token tank
+	'spectate', // [ ] // spectate
 	'become', // [ ] // become
 	'suicide', // [ ] // suicide
 	'toggleauto', // [ Uint8: autoId ] // toggle stuff like autospin autofire etc
@@ -267,6 +268,7 @@ let vectorStruct = [ [ 'x', 'Float32' ], [ 'y', 'Float32' ] ],
 		]],
 		['levelup'], // no payload needed
 		['upgradeTankToken'], // no payload needed
+		['spectate'], // no payload needed
 		['become'], // no payload needed
 		['suicide'], // no payload needed
 		['toggleauto', 'Int8'], // Int8 is the auto-type // TODO: check if we should merge this with the 'command' packet
