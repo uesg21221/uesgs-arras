@@ -51,23 +51,24 @@ class Gun extends EventEmitter {
         if (info.PROPERTIES != null) {
             if (info.PROPERTIES.TYPE != null) {
                 this.canShoot = true;
-                this.label = info.PROPERTIES.LABEL == null ? "" : info.PROPERTIES.LABEL;
+                this.label = info.PROPERTIES.LABEL ?? "";
                 this.bulletTypes = Array.isArray(info.PROPERTIES.TYPE) ? info.PROPERTIES.TYPE : [info.PROPERTIES.TYPE];
                 // Pre-load bullet definitions so we don't have to recalculate them every shot
                 let natural = {};
                 for (let type of this.bulletTypes) setNatural(natural, type);
                 this.natural = natural;
             }
-            this.autofire = info.PROPERTIES.AUTOFIRE == null ? false : info.PROPERTIES.AUTOFIRE;
-            this.altFire = info.PROPERTIES.ALT_FIRE == null ? false : info.PROPERTIES.ALT_FIRE;
-            this.statCalculator = info.PROPERTIES.STAT_CALCULATOR == null ? "default" : info.PROPERTIES.STAT_CALCULATOR;
-            this.waitToCycle = info.PROPERTIES.WAIT_TO_CYCLE == null ? false : info.PROPERTIES.WAIT_TO_CYCLE;
-            this.bulletStats = (info.PROPERTIES.BULLET_STATS == null || info.PROPERTIES.BULLET_STATS == "master") ? "master" : new Skill(info.PROPERTIES.BULLET_STATS);
+            this.autofire = info.PROPERTIES.AUTOFIRE ?? false;
+            this.altFire = info.PROPERTIES.ALT_FIRE ?? false;
+            this.statCalculator = info.PROPERTIES.STAT_CALCULATOR ?? "default";
+            this.waitToCycle = info.PROPERTIES.WAIT_TO_CYCLE ?? false;
+            this.bulletSkills = (info.PROPERTIES.BULLET_STATS == null || info.PROPERTIES.BULLET_STATS == "master") ? "master" : new Skill(info.PROPERTIES.BULLET_STATS);
+            this.useMasterSkills = this.bulletSkills === "master";
             this.shootSettings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : JSON.parse(JSON.stringify(info.PROPERTIES.SHOOT_SETTINGS));
-            this.maxChildren = info.PROPERTIES.MAX_CHILDREN == null ? false : info.PROPERTIES.MAX_CHILDREN;
-            this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS == null ? false : info.PROPERTIES.SYNCS_SKILLS;
-            this.negativeRecoil = info.PROPERTIES.NEGATIVE_RECOIL == null ? false : info.PROPERTIES.NEGATIVE_RECOIL;
-            this.independentChildren = info.PROPERTIES.INDEPENDENT_CHILDREN == null ? false : info.PROPERTIES.INDEPENDENT_CHILDREN;
+            this.maxChildren = info.PROPERTIES.MAX_CHILDREN ?? false;
+            this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS ?? false;
+            this.negativeRecoil = info.PROPERTIES.NEGATIVE_RECOIL ?? false;
+            this.independentChildren = info.PROPERTIES.INDEPENDENT_CHILDREN ?? false;
             if (info.PROPERTIES.COLOR != null) {
                 this.color.interpret(info.PROPERTIES.COLOR);
             }
@@ -76,11 +77,11 @@ class Gun extends EventEmitter {
             if (info.PROPERTIES.BORDERLESS != null) this.borderless = info.PROPERTIES.BORDERLESS;
             if (info.PROPERTIES.DRAW_FILL != null) this.drawFill = info.PROPERTIES.DRAW_FILL;
             if (info.PROPERTIES.DRAW_ABOVE) this.drawAbove = info.PROPERTIES.DRAW_ABOVE;
-            this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD == null ? false : info.PROPERTIES.DESTROY_OLDEST_CHILD;
+            this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD ?? false;
             if (this.destroyOldestChild) this.maxChildren++;
-            this.shootOnDeath = (info.PROPERTIES.SHOOT_ON_DEATH == null) ? false : info.PROPERTIES.SHOOT_ON_DEATH;
-            this.stack = (info.PROPERTIES.STACK_GUN == null) ? true : info.PROPERTIES.STACK_GUN;
-            this.identifier = (info.PROPERTIES.IDENTIFIER == null) ? null : info.PROPERTIES.IDENTIFIER
+            this.shootOnDeath = info.PROPERTIES.SHOOT_ON_DEATH ?? false;
+            this.stack = info.PROPERTIES.STACK_GUN ?? true ;
+            this.identifier = info.PROPERTIES.IDENTIFIER ?? null;
         }
         let position = info.POSITION;
         if (Array.isArray(position)) {
@@ -147,7 +148,7 @@ class Gun extends EventEmitter {
         }
     }
     getSkillRaw() {
-        if (this.bulletStats === "master") {
+        if (this.useMasterSkills) {
             return [
                 this.body.skill.raw[0],
                 this.body.skill.raw[1],
@@ -161,7 +162,7 @@ class Gun extends EventEmitter {
                 0,
             ];
         }
-        return this.bulletStats.raw;
+        return this.bulletSkills.raw;
     }
     getPhotoInfo() {
         return {
@@ -194,12 +195,11 @@ class Gun extends EventEmitter {
 
             // Finally get the final bullet offset
             offsetFinalX = offsetBaseX + offsetEndX,
-            offsetFinalY = offsetBaseY + offsetEndY,
-            skill = this.bulletStats === "master" ? this.body.skill : this.bulletStats;
+            offsetFinalY = offsetBaseY + offsetEndY;
 
         // Shoot, multiple times in a tick if needed
         do {
-            this.fire(offsetFinalX, offsetFinalY, skill);
+            this.fire(offsetFinalX, offsetFinalY);
             this.cycleTimer--;
             shootPermission =
                   this.maxChildren    ? this.maxChildren    > this.children.length
@@ -209,19 +209,17 @@ class Gun extends EventEmitter {
         } while (useWhile && shootPermission && this.cycleTimer-1 >= 1);
     }
     live() {
+        if (!this.canShoot) return
+        
         this.recoil();
 
-        if (!this.canShoot) return
-
-        // Find the proper skillset for shooting
-        let sk = this.bulletStats === "master" ? this.body.skill : this.bulletStats;
         // Decides what to do based on child-counting settings
         let shootPermission = this.maxChildren
             ? this.maxChildren >
-                this.children.length * (this.statCalculator == "necro" ? sk.rld : 1)
+                this.children.length * (this.statCalculator == "necro" ? this.bulletSkills.rld : 1)
             : this.body.maxChildren
             ? this.body.maxChildren >
-                this.body.children.length * (this.statCalculator == "necro" ? sk.rld : 1)
+                this.body.children.length * (this.statCalculator == "necro" ? this.bulletSkills.rld : 1)
             : true;
         if (this.destroyOldestChild) {
             if (!shootPermission) {
@@ -236,7 +234,7 @@ class Gun extends EventEmitter {
         // Cycle up if we should
         if (shootPermission || !this.waitToCycle) {
             if (this.cycleTimer < 1) {
-                this.cycleTimer += 1 / (this.shootSettings.reload * Config.runSpeed * (this.statCalculator == "necro" || this.statCalculator == "fixedReload" ? 1 : sk.rld));
+                this.cycleTimer += 1 / (this.shootSettings.reload * Config.runSpeed * (this.statCalculator == "necro" || this.statCalculator == "fixedReload" ? 1 : this.bulletSkills.rld));
             }
         }
         // Firing routines
@@ -275,10 +273,10 @@ class Gun extends EventEmitter {
             child.refreshBodyAttributes();
         }
     }
-    fire(gx, gy, sk) {
+    fire(gx, gy) {
         // Recoil
         this.lastShot.time = util.time();
-        this.lastShot.power = 3 * Math.log(Math.sqrt(sk.spd) + this.trueRecoil + 1) + 1;
+        this.lastShot.power = 3 * Math.log(Math.sqrt(this.bulletSkills.spd) + this.trueRecoil + 1) + 1;
         this.recoilVelocity += this.lastShot.power;
         // Find inaccuracy
         let shudder = 0, spread = 0;
@@ -294,7 +292,7 @@ class Gun extends EventEmitter {
         }
         spread *= Math.PI / 180;
         // Find speed
-        let vecLength = (this.negativeRecoil ? -1 : 1) * this.shootSettings.speed * Config.runSpeed * sk.spd * (1 + shudder),
+        let vecLength = (this.negativeRecoil ? -1 : 1) * this.shootSettings.speed * Config.runSpeed * this.bulletSkills.spd * (1 + shudder),
             vecAngle = this.angle + this.body.facing + spread,
         s = new Vector(vecLength * Math.cos(vecAngle), vecLength * Math.sin(vecAngle));
         // Boost it if we should
@@ -386,9 +384,9 @@ class Gun extends EventEmitter {
         let oo = o;
         o.necro = (host) => {
             if (this.maxChildren ?
-                this.maxChildren > this.children.length * (this.bulletStats === "master" ? this.body.skill.rld : this.bulletStats.rld)
+                this.maxChildren > this.children.length * this.bulletSkills.rld
               : this.body.maxChildren ?
-                this.body.maxChildren > this.body.children.length * (this.bulletStats === "master" ? this.body.skill.rld : this.bulletStats.rld)
+                this.body.maxChildren > this.body.children.length * this.bulletSkills.rld
               : true
             ) {
                 let save = {
@@ -414,8 +412,8 @@ class Gun extends EventEmitter {
     }
     getTracking() {
         return {
-            speed: Config.runSpeed * (this.bulletStats == "master" ? this.body.skill.spd : this.bulletStats.spd) * this.shootSettings.maxSpeed * this.natural.SPEED,
-            range: Math.sqrt(this.bulletStats == "master" ? this.body.skill.spd : this.bulletStats.spd) * this.shootSettings.range * this.natural.RANGE
+            speed: Config.runSpeed * this.bulletSkills.spd * this.shootSettings.maxSpeed * this.natural.SPEED,
+            range: Math.sqrt(this.bulletSkills.spd) * this.shootSettings.range * this.natural.RANGE
         };
     }
     calculateBulletStats() {
@@ -423,42 +421,44 @@ class Gun extends EventEmitter {
 
         let sizeFactor = this.master.size / this.master.SIZE;
         let shoot = this.shootSettings;
-        let sk = this.bulletStats == "master" ? this.body.skill : this.bulletStats;
+        if (this.useMasterSkills) {
+            this.bulletSkills = this.body.skill;
+        }
         // Defaults
         let out = {
-            SPEED: shoot.maxSpeed * sk.spd,
-            HEALTH: shoot.health * sk.str,
-            RESIST: shoot.resist + sk.rst,
-            DAMAGE: shoot.damage * sk.dam,
-            PENETRATION: Math.max(1, shoot.pen * sk.pen),
-            RANGE: shoot.range / Math.sqrt(sk.spd),
-            DENSITY: (shoot.density * sk.pen * sk.pen) / sizeFactor,
-            PUSHABILITY: 1 / sk.pen,
-            HETERO: 3 - 2.8 * sk.ghost,
+            SPEED: shoot.maxSpeed * this.bulletSkills.spd,
+            HEALTH: shoot.health * this.bulletSkills.str,
+            RESIST: shoot.resist + this.bulletSkills.rst,
+            DAMAGE: shoot.damage * this.bulletSkills.dam,
+            PENETRATION: Math.max(1, shoot.pen * this.bulletSkills.pen),
+            RANGE: shoot.range / Math.sqrt(this.bulletSkills.spd),
+            DENSITY: (shoot.density * this.bulletSkills.pen * this.bulletSkills.pen) / sizeFactor,
+            PUSHABILITY: 1 / this.bulletSkills.pen,
+            HETERO: 3 - 2.8 * this.bulletSkills.ghost,
         };
         // Special cases
         switch (this.statCalculator) {
             case "thruster":
-                this.trueRecoil = shoot.recoil * Math.sqrt(sk.rld * sk.spd);
+                this.trueRecoil = shoot.recoil * Math.sqrt(this.bulletSkills.rld * this.bulletSkills.spd);
                 break;
             case "sustained":
                 out.RANGE = shoot.range;
                 break;
             case "swarm":
-                out.PENETRATION = Math.max(1, shoot.pen * (0.5 * (sk.pen - 1) + 1));
-                out.HEALTH /= shoot.pen * sk.pen;
+                out.PENETRATION = Math.max(1, shoot.pen * (0.5 * (this.bulletSkills.pen - 1) + 1));
+                out.HEALTH /= shoot.pen * this.bulletSkills.pen;
                 break;
             case "trap":
             case "block":
-                out.PUSHABILITY = 1 / Math.pow(sk.pen, 0.5);
+                out.PUSHABILITY = 1 / Math.pow(this.bulletSkills.pen, 0.5);
                 out.RANGE = shoot.range;
                 break;
             case "necro":
             case "drone":
                 out.PUSHABILITY = 1;
-                out.PENETRATION = Math.max(1, shoot.pen * (0.5 * (sk.pen - 1) + 1));
-                out.HEALTH = (shoot.health * sk.str + sizeFactor) / Math.pow(sk.pen, 0.8);
-                out.DAMAGE = shoot.damage * sk.dam * Math.sqrt(sizeFactor) * shoot.pen * sk.pen;
+                out.PENETRATION = Math.max(1, shoot.pen * (0.5 * (this.bulletSkills.pen - 1) + 1));
+                out.HEALTH = (shoot.health * this.bulletSkills.str + sizeFactor) / Math.pow(this.bulletSkills.pen, 0.8);
+                out.DAMAGE = shoot.damage * this.bulletSkills.dam * Math.sqrt(sizeFactor) * shoot.pen * this.bulletSkills.pen;
                 out.RANGE = shoot.range * Math.sqrt(sizeFactor);
                 break;
         }
