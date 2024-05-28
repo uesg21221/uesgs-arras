@@ -134,7 +134,6 @@ s2c = doThing([
 		//
 		// // uplink
 	"minimapAndLeaderboard", // [
-		//     boolean: isFFA,
 		//     array<Uint32>: minimapAllDeleted,
 		//     array<minimapAllEntry>: minimapAllUpdated,
 		//     array<Uint32>: miinimapTeamDeleted,
