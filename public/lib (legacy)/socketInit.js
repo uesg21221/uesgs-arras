@@ -907,67 +907,7 @@ const socketInit = port => {
                 });
                 break;
             case s2c.uplink: // uplink
-                // Pull the camera info
-                let camtime = m[0],
-                    camx = m[1],
-                    camy = m[2],
-                    camfov = m[3],
-                    camvx = m[4],
-                    camvy = m[5],
-                    camscoping = m[6],
-                    // We'll have to do protocol decoding on the remaining data
-                    theshit = m.slice(7);
-                // Process the data
-                if (camtime > global.player.lastUpdate) { // Don't accept out-of-date information.
-                    // Time shenanigans
-                    lag.add(getNow() - camtime);
-                    global.player.time = camtime + lag.get();
-                    global.metrics.rendergap = camtime - global.player.lastUpdate;
-                    if (global.metrics.rendergap <= 0) {
-                        console.log('yo some bullshit is up wtf');
-                    }
-                    global.player.lastUpdate = camtime;
-                    // Convert the gui and entities
-                    convert.begin(theshit);
-                    convert.gui();
-                    convert.data();
-                    // Save old physics values
-                    global.player.lastx = global.player.cx;
-                    global.player.lasty = global.player.cy;
-                    global.player.lastvx = global.player.vx;
-                    global.player.lastvy = global.player.vy;
-                    // Get new physics values
-                    global.player.cx = camx;
-                    global.player.cy = camy;
-                    global.player.vx = global.died ? 0 : camvx;
-                    global.player.vy = global.died ? 0 : camvy;
-                    // For centered camera
-                    global.player.isScoping = camscoping;
-                    // Figure out where we're rendering if we don't yet know
-                    if (isNaN(global.player.renderx)) {
-                        global.player.renderx = global.player.cx;
-                    }
-                    if (isNaN(global.player.rendery)) {
-                        global.player.rendery = global.player.cy;
-                    }
-                    moveCompensation.reset();
-                    // Fov stuff
-                    global.player.view = camfov;
-                    if (isNaN(global.player.renderv) || global.player.renderv === 0) {
-                        global.player.renderv = 2000;
-                    }
-                    // Metrics
-                    global.metrics.lastlag = global.metrics.lag;
-                    global.metrics.lastuplink = getNow();
-                } else {
-                    console.log("Old data! Last given time: " + global.player.time + "; offered packet timestamp: " + camtime + ".");
-                }
-                // Send the target
-                socket.cmd.talk();
-                global.updateTimes++; // metrics
-                break;
             case s2c.minimapAndLeaderboard: // minimap data
-                global.FFA = m.shift();
                 convert.begin(m);
                 convert.broadcast();
                 break;
