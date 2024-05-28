@@ -74,7 +74,6 @@ if (Config.flattenDefintions) {
 }
 
 console.log(`Combined ${groups.length} definition groups and ${loadedAddons.length} addons into ${definitionCount} ${Config.flattenDefintions ? 'flattened ' : ''}definitions!`);
-console.log("Successfully generated 'definitions.js'. Now starting to load mockups.\n")
 // Index the definitions
 let i = 0;
 for (let key in Class) {

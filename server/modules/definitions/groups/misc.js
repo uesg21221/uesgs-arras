@@ -44,13 +44,14 @@ Class.wall = {
     LABEL: "Wall",
     SIZE: 25,
     SHAPE: 4,
-    VARIES_IN_SIZE: false,
+    VARIES_IN_SIZE: false
 }
 Class.moon = {
     PARENT: "rock",
     LABEL: "Moon",
     SIZE: 60,
-    SHAPE: 0
+    SHAPE: 0,
+    VARIES_IN_SIZE: false
 }
 
 // DOMINATORS
