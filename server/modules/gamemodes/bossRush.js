@@ -145,7 +145,7 @@ class BossRush {
                 instance.kill();
             }
         }
-        sockets.broadcast('All sanctuaries have been upgraded to tier ' + this.sancUpgradeCount + ".");
+        sockets.broadcast('The sanctuaries have been upgraded to tier ' + this.sancUpgradeCount);
     }
     spawnSanctuary(tile, team, type = false) {
         type = type ? type : `sanctuaryTier${this.sancUpgradeCount}`;
