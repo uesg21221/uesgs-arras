@@ -112,7 +112,28 @@ global.canUpgrade = false;
 global.canSkill = false;
 global.message = "";
 global.time = 0;
-// Window setup <3
+global.enableSlideAnimation = false;
+// Tips setup :D
+let tips = [
+    [
+        "Tip: You can view and edit your keybinds in the options menu.",
+        "Tip: You can play on mobile by just going to arras.io on your phone!"
+    ],
+    [
+        "Tip: You can have the shield and health bar be separated by going to the options menu.",
+        "Tip: If arras is having a low frame rate, you can try enabling low graphics in the options menu.",
+        "Tip: You can make traps rounded with the classic trap setting in the options menu.",
+        "Tip: You can create your own private server with the template in the link on the options menu.",
+        "Tip: You can create your own theme with the custom theme makerin the link on the options menu."
+    ],
+    [
+        "Teaming in FFA or FFA Maze is frowned upon, but when taken to the extremes, you can be punished.",
+        "Witch hunting is when you continuously target someone and follow them. This is frowned upon, but when taken to the extremes, you can be punished.",
+        "Multiboxing is when you use a script to control multiple tanks at the same time. This is considered CHEATING and will result in a ban."
+    ]
+];
+tips = tips[Math.floor(Math.random() * tips.length)];
+global.tips = tips[Math.floor(Math.random() * tips.length)];
 global.mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
 var serverName = "Connected";
 var provider = "Unknown";
@@ -428,6 +449,8 @@ function startGame() {
     // Other more important stuff
     let playerNameInput = document.getElementById("playerNameInput");
     let playerKeyInput = document.getElementById("playerKeyInput");
+    let autolevelUpInput = document.getElementById("autoLevelUp").checked;
+    global.autolvlUp = autolevelUpInput;
     // Name and keys
     util.submitToLocalStorage("playerNameInput");
     util.submitToLocalStorage("playerKeyInput");
@@ -436,8 +459,11 @@ function startGame() {
     // Change the screen
     global.screenWidth = window.innerWidth;
     global.screenHeight = window.innerHeight;
-    document.getElementById("startMenuWrapper").style.maxHeight = "0px";
+    document.getElementById("startMenuWrapper").style.top = "-700px";
     document.getElementById("gameAreaWrapper").style.opacity = 1;
+    setTimeout(() => {
+        document.getElementById("mainWrapper").remove();
+    }, 1e3);
     // Set up the socket
     if (!global.socket) {
         global.socket = socketInit(26301);
@@ -603,105 +629,110 @@ function drawBar(x1, x2, y, width, color) {
 // Sub-drawing functions
 const drawPolyImgs = [];
 function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation) {
-    // Start drawing
-    context.beginPath();
-    if (sides instanceof Array) {
-        let dx = Math.cos(angle);
-        let dy = Math.sin(angle);
-        for (let [x, y] of sides)
-            context.lineTo(
-                centerX + radius * (x * dx - y * dy),
-                centerY + radius * (y * dx + x * dy)
-            );
-    } else {
-        if ("string" === typeof sides) {
-            //ideally we'd preload images when mockups are loaded but im too lazy for that atm
-            if (!drawPolyImgs[sides]) {
-                drawPolyImgs[sides] = new Image();
-                drawPolyImgs[sides].src = sides;
-                drawPolyImgs[sides].isBroken = false;
-                drawPolyImgs[sides].onerror = function() {
-                    this.isBroken = true;
-                };
-            }
-            let img = drawPolyImgs[sides];
-            if (img.isBroken || !img.complete) { // check if img is broken and draw as path2d if so
-                let path = new Path2D(sides);
-                context.save();
-                context.translate(centerX, centerY);
-                context.scale(radius, radius);
-                context.lineWidth /= radius;
-                context.rotate(angle);
-                context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-                if (!borderless) context.stroke(path);
-                if (fill) context.fill(path);
-                context.restore();
-                return;
-            }
-            context.translate(centerX, centerY);
-            context.rotate(angle);
-            context.imageSmoothingEnabled = imageInterpolation;
-            context.drawImage(img, -radius, -radius, radius*2, radius*2);
-            context.imageSmoothingEnabled = true;
-            context.rotate(-angle);
-            context.translate(-centerX, -centerY);
-            return;
-        }
-        angle += sides % 2 ? 0 : Math.PI / sides;
+    try {
+ // Start drawing
+ context.beginPath();
+ if (sides instanceof Array) {
+     let dx = Math.cos(angle);
+     let dy = Math.sin(angle);
+     for (let [x, y] of sides)
+         context.lineTo(
+             centerX + radius * (x * dx - y * dy),
+             centerY + radius * (y * dx + x * dy)
+         );
+ } else {
+     if ("string" === typeof sides) {
+         //ideally we'd preload images when mockups are loaded but im too lazy for that atm
+         if (!drawPolyImgs[sides]) {
+             drawPolyImgs[sides] = new Image();
+             drawPolyImgs[sides].src = sides;
+             drawPolyImgs[sides].isBroken = false;
+             drawPolyImgs[sides].onerror = function() {
+                 this.isBroken = true;
+             };
+         }
+         let img = drawPolyImgs[sides];
+         if (img.isBroken || !img.complete) { // check if img is broken and draw as path2d if so
+             let path = new Path2D(sides);
+             context.save();
+             context.translate(centerX, centerY);
+             context.scale(radius, radius);
+             context.lineWidth /= radius;
+             context.rotate(angle);
+             context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+             if (!borderless) context.stroke(path);
+             if (fill) context.fill(path);
+             context.restore();
+             return;
+         }
+         context.translate(centerX, centerY);
+         context.rotate(angle);
+         context.imageSmoothingEnabled = imageInterpolation;
+         context.drawImage(img, -radius, -radius, radius*2, radius*2);
+         context.imageSmoothingEnabled = true;
+         context.rotate(-angle);
+         context.translate(-centerX, -centerY);
+         return;
+     }
+     angle += sides % 2 ? 0 : Math.PI / sides;
+ }
+ if (!sides) {
+     // Circle
+     let fillcolor = context.fillStyle;
+     let strokecolor = context.strokeStyle;
+     context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+     context.fillStyle = strokecolor;
+     context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+     if (!borderless) context.stroke();
+     context.closePath();
+     context.beginPath();
+     context.fillStyle = fillcolor;
+     context.arc(centerX, centerY, radius * fill, 0, 2 * Math.PI);
+     if (fill) context.fill();
+     context.closePath();
+     return;
+ } else if (sides < 0) {
+     // Star
+     if (settings.graphical.pointy) context.lineJoin = "miter";
+     sides = -sides;
+     angle += (sides % 1) * Math.PI * 2;
+     sides = Math.floor(sides);
+     let dip = 1 - 6 / (sides ** 2);
+     context.moveTo(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle));
+     context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+     for (let i = 0; i < sides; i++) {
+         let htheta = ((i + 0.5) / sides) * 2 * Math.PI + angle,
+             theta = ((i + 1) / sides) * 2 * Math.PI + angle,
+             cx = centerX + radius * dip * Math.cos(htheta),
+             cy = centerY + radius * dip * Math.sin(htheta),
+             px = centerX + radius * Math.cos(theta),
+             py = centerY + radius * Math.sin(theta);
+         /*if (curvyTraps) {
+             context.quadraticCurveTo(cx, cy, px, py);
+         } else {
+             context.lineTo(cx, cy);
+             context.lineTo(px, py);
+         }*/
+         context.quadraticCurveTo(cx, cy, px, py);
+     }
+ } else if (sides > 0) {
+     // Polygon
+     angle += (sides % 1) * Math.PI * 2;
+     sides = Math.floor(sides);
+     context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+     for (let i = 0; i < sides; i++) {
+         let theta = (i / sides) * 2 * Math.PI + angle;
+         context.lineTo(centerX + radius * Math.cos(theta), centerY + radius * Math.sin(theta));
+     }
+ }
+ context.closePath();
+ if (!borderless) context.stroke();
+ if (fill) context.fill();
+ context.lineJoin = "round";
+    } catch (e) { // this actually prevents to panic the client. so we will just call "resizeEvent()".
+        resizeEvent();
+        console.error("Uh oh, 'CanvasRenderingContext2D' has gotton an error! Error: " + e)
     }
-    if (!sides) {
-        // Circle
-        let fillcolor = context.fillStyle;
-        let strokecolor = context.strokeStyle;
-        context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-        context.fillStyle = strokecolor;
-        context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-        if (!borderless) context.stroke();
-        context.closePath();
-        context.beginPath();
-        context.fillStyle = fillcolor;
-        context.arc(centerX, centerY, radius * fill, 0, 2 * Math.PI);
-        if (fill) context.fill();
-        context.closePath();
-        return;
-    } else if (sides < 0) {
-        // Star
-        if (settings.graphical.pointy) context.lineJoin = "miter";
-        sides = -sides;
-        angle += (sides % 1) * Math.PI * 2;
-        sides = Math.floor(sides);
-        let dip = 1 - 6 / (sides ** 2);
-        context.moveTo(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle));
-        context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-        for (let i = 0; i < sides; i++) {
-            let htheta = ((i + 0.5) / sides) * 2 * Math.PI + angle,
-                theta = ((i + 1) / sides) * 2 * Math.PI + angle,
-                cx = centerX + radius * dip * Math.cos(htheta),
-                cy = centerY + radius * dip * Math.sin(htheta),
-                px = centerX + radius * Math.cos(theta),
-                py = centerY + radius * Math.sin(theta);
-            /*if (curvyTraps) {
-                context.quadraticCurveTo(cx, cy, px, py);
-            } else {
-                context.lineTo(cx, cy);
-                context.lineTo(px, py);
-            }*/
-            context.quadraticCurveTo(cx, cy, px, py);
-        }
-    } else if (sides > 0) {
-        // Polygon
-        angle += (sides % 1) * Math.PI * 2;
-        sides = Math.floor(sides);
-        context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-        for (let i = 0; i < sides; i++) {
-            let theta = (i / sides) * 2 * Math.PI + angle;
-            context.lineTo(centerX + radius * Math.cos(theta), centerY + radius * Math.sin(theta));
-        }
-    }
-    context.closePath();
-    if (!borderless) context.stroke();
-    if (fill) context.fill();
-    context.lineJoin = "round";
 }
 function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha, strokeWidth, position) {
     let h = [];
@@ -907,8 +938,16 @@ function drawHealth(x, y, instance, ratio, alpha) {
         var name = instance.name.substring(7, instance.name.length + 1);
         var namecolor = instance.name.substring(0, 7);
         ctx.globalAlpha = alpha;
-        drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor, "center");
-        drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor, "center");
+        if (namecolor == "#ffffff") {
+            drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, color.guiwhite, "center");
+          } else {
+            drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor, "center");
+          }
+        if (namecolor == "#ffffff") {
+             drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, color.guiwhite, "center");
+          } else {
+             drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor, "center");
+          }
         ctx.globalAlpha = 1;
     }
 }
@@ -1217,7 +1256,7 @@ function drawEntities(px, py, ratio) {
         }
         instance.render.x = util.lerp(instance.render.x, Math.round(instance.x + instance.vx), 0.1, true);
         instance.render.y = util.lerp(instance.render.y, Math.round(instance.y + instance.vy), 0.1, true);
-        instance.render.f = instance.id === gui.playerid && !global.autoSpin && !instance.twiggle && !global.died ? Math.atan2(global.target.y * global.reverseTank, global.target.x * global.reverseTank) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
+        instance.render.f = instance.id === gui.playerid && !global.autoSpin && !global.syncingWithTank && !instance.twiggle && !global.died ? Math.atan2(global.target.y * global.reverseTank, global.target.x * global.reverseTank) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
         let x = ratio * instance.render.x - px,
             y = ratio * instance.render.y - py,
             baseColor = instance.color;
@@ -1253,8 +1292,8 @@ function drawEntities(px, py, ratio) {
             indexes = instance.index.split("-"),
             m = global.mockups[parseInt(indexes[0])],
             realSize = (size / m.size) * m.realSize,
-            x = instance.id === gui.playerid ? 0 : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid ? 0 : ratio * instance.render.y - py;
+            x = instance.id === gui.playerid ? global.player.screenx : ratio * instance.render.x - px,
+            y = instance.id === gui.playerid ? global.player.screeny : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
         y += global.screenHeight / 2 - realSize - 46 * ratio;
         if (instance.id !== gui.playerid && instance.nameplate) y -= 8 * ratio;
@@ -1518,12 +1557,17 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     //write the score and name
     drawText("Score: " + util.formatLargeNumber(Math.floor(gui.__s.getScore())), x + len / 2, y + height / 2 + 1, height - 3.5, color.guiwhite, "center", true);
     ctx.lineWidth = 4;
-    drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor, "center");
+    if (global.nameColor == "#ffffff") { // if custom colored nickname not being used then stick with the color.guiwhite.
+        drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, color.guiwhite, "center");
+      } else { // else just use this.
+        drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor, "center");
+      }
 }
 
-function drawMinimapAndDebug(spacing, alcoveSize) {
+function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     // Draw minimap and FPS monitors
     //minimap stuff starts here
+    let orangeColor = false;
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
@@ -1599,16 +1643,19 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
     //debug stuff
     if (!global.showDebug) y += 14 * 3;
     // Text
+    if ((100 * gui.fps).toFixed(2) < 100) orangeColor = true;
+    if (global.metrics.rendertime < 10) orangeColor = true;
     if (global.showDebug) {
-        drawText("Open Source Arras", x + len, y - 50 - 5 * 14 - 2, 15, "#B6E57C", "right");
+        drawText("Open Source Arras", x + len, y - 50 - 5 * 14 - 2, 15, "#1081E5", "right");
         drawText("Prediction: " + Math.round(GRAPHDATA) + "ms", x + len, y - 50 - 4 * 14, 10, color.guiwhite, "right");
-        drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
+       /* drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right"); */
+       drawText("Memory: " + global.metrics.rendergap + " Mib : " + "Class: " + gui.class, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
         drawText("Update Rate: " + global.metrics.updatetime + "Hz", x + len, y - 50 - 2 * 14, 10, color.guiwhite, "right");
-        drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, global.metrics.rendertime > 10 ? color.guiwhite : color.orange, "right");
+        drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText(global.metrics.latency + " ms - " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
     } else {
-        drawText("Open Source Arras", x + len, y - 50 - 2 * 14 - 2, 15, "#B6E57C", "right");
-        drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, global.metrics.rendertime > 10 ? color.guiwhite : color.orange, "right");
+        drawText("Open Source Arras", x + len, y - 50 - 2 * 14 - 2, 15, "#1081E5", "right");
+        drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText(global.metrics.latency + " ms : " + global.metrics.updatetime + "Hz", x + len, y - 50, 10, color.guiwhite, "right");
     }
     global.fps = global.metrics.rendertime;
@@ -1622,6 +1669,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     let height = 14;
     let x = global.screenWidth - len - spacing;
     let y = spacing + height + 7;
+    if (!lb.data.length) return; // dont show leaderboard when nothing is showing.
     drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 3.5, color.guiwhite, "center");
     y += 7;
     for (let i = 0; i < lb.data.length; i++) {
@@ -1632,7 +1680,11 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         drawBar(x, x + len * shift, y + height / 2, height - 3.5, gameDraw.modifyColor(entry.barColor));
         // Leadboard name + score
         let nameColor = entry.nameColor || "#FFFFFF";
-        drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor, "center", true);
+        if (nameColor == "#ffffff") {
+            drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, color.guiwhite, "center", true);
+          } else {
+            drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor, "center", true);
+          }
         // Mini-image
         let scale = height / entry.position.axis,
             xx = x - 1.5 * height - scale * entry.position.middle.x * Math.SQRT1_2,
@@ -1794,7 +1846,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
         drawMessages(spacing);
         drawSkillBars(spacing, alcoveSize);
         drawSelfInfo(spacing, alcoveSize, max);
-        drawMinimapAndDebug(spacing, alcoveSize);
+        drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA);
         drawLeaderboard(spacing, alcoveSize, max, lb);
         drawAvailableUpgrades(spacing, alcoveSize);
     }
@@ -1841,11 +1893,57 @@ let getDeath = () => {
     }
     return txt;
 };
-const gameDrawDead = () => {
+let getTips = () => {
+    let txt = "";
+    if (global.finalKillers.length) {
+      txt = "❓ Try to get revenge on your enemy to get your score back!";
+    } else if (!global.autolvlUp) {
+      txt =
+        "❓ Enable auto level up at the options menu to get instant level 45!";
+    } else {
+      txt += "❓ Try killing players to earn XP!";
+    }
+    return txt;
+  };
+  const gameDrawDead = () => {
     clearScreen(color.black, 0.25);
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
     let shift = animations.deathScreen.get();
+    ctx.translate(0, -shift * global.screenHeight);
+    let x = global.screenWidth / 2,
+        y = global.screenHeight / 2 - 50;
+        let len = 140,
+        position = global.mockups[parseInt(gui.type.split("-")[0])].position,
+        scale = len / position.axis,
+        xx = global.screenWidth / 2 - scale * position.middle.x * 0.707,
+        yy = global.screenHeight / 2 - 35 + scale * position.middle.y * 0.707,
+        picture = util.getEntityImageFromMockup(gui.type, gui.color),
+        baseColor = picture.color;
+      drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
+      drawText("Level " + gui.__s.getLevel(), x - 275, y - -80, 14, color.guiwhite, "center");
+      drawText(picture.name, x - 275, y - -110, 24, color.guiwhite, "center");
+      drawText("Game over, try again!", x, y - 80, 8, color.guiwhite, "center");
+      if (global.player.name == "") {
+        drawText("Your Score: ", x - 170, y - 30, 24, color.guiwhite);
+      } else {
+        drawText(global.player.name + "'s Score: ", x - 170, y - 30, 24, color.guiwhite);
+      }
+      drawText(util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
+      drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);
+      drawText(getKills(), x - 170, y + 77, 16, color.guiwhite);
+      drawText(getDeath(), x - 170, y + 99, 16, color.guiwhite);
+      drawText(getTips(), x - 170, y + 122, 16, color.guiwhite);
+      drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active for the run!", x - 170, y + 144, 16, color.guiwhite);
+      // drawText(global.cannotRespawn ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center"); // uncomment this when mobile support finished.
+      drawText(global.cannotRespawn ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
+      ctx.translate(0, shift * global.screenHeight);
+};
+const gameDrawOldDead = () => {
+    clearScreen(color.black, 0.25);
+    let ratio = util.getScreenRatio();
+    scaleScreenRatio(ratio, true);
+    let shift = global.enableSlideAnimation ? animations.deathScreen.get() : animations.deathScreen.getNoLerp();
     ctx.translate(0, -shift * global.screenHeight);
     let x = global.screenWidth / 2,
         y = global.screenHeight / 2 - 50;
@@ -1867,20 +1965,22 @@ const gameDrawDead = () => {
     ctx.translate(0, shift * global.screenHeight);
 };
 const gameDrawBeforeStart = () => {
+    let enableAnimation = false;
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
     clearScreen(color.white, 0.5);
-    let shift = animations.connecting.get();
+    let shift = global.enableSlideAnimation ? animations.connecting.get() : animations.connecting.getNoLerp();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("Connecting...", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
     drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.lgreen, "center");
+    drawText(global.tips, global.screenWidth / 2, global.screenHeight / 2 + 90, 15, color.guiwhite, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
 const gameDrawDisconnected = () => {
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
     clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.3), 0.25);
-    let shift = animations.disconnected.get();
+    let shift = global.enableSlideAnimation ? animations.disconnected.get() : animations.disconnected.getNoLerp();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("Disconnected", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
     drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
@@ -1890,7 +1990,7 @@ const gameDrawError = () => {
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
     clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.2), 0.35);
-    let shift = animations.error.get();
+    let shift = global.enableSlideAnimation ? animations.error.get() : animations.error.getNoLerp();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("There has been an error!", global.screenWidth / 2, global.screenHeight / 2 - 50, 50, color.guiwhite, "center");
     drawText("Check the browser console for details.", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");

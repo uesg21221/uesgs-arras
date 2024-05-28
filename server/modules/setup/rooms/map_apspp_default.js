@@ -1,5 +1,5 @@
 let { rock, roid } = require('../tiles/decoration.js'),
-    { normal: ____, nest } = require('../tiles/misc.js'),
+    { normal: ____, nest, } = require('../tiles/misc.js'),
 
 room = [
     [____,____,____,____,____,____,roid,roid,roid,____,____,____,____,____,____],

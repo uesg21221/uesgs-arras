@@ -843,6 +843,12 @@ const socketInit = port => {
                 global.message = m[0];
                 console.log(m[0]);
                 break;
+            case "svInfo": // For debugging.
+                global.serverName = m[0];
+            break;
+            case "updateName": // Update the name if needed.
+                global.player.name = m[0];
+            break;
             case 'c': // force camera move
                 global.player.renderx = global.player.cx = m[0];
                 global.player.rendery = global.player.cy = m[1];
@@ -861,6 +867,7 @@ const socketInit = port => {
                 if (sync.length < 10) {
                     // Wait a bit just to space things out
                     setTimeout(() => socket.talk('S', getNow()), 10);
+                    global.canThrowSyncClockError = true;
                     global.message = "Syncing clocks, please do not tab away. " + sync.length + "/10...";
                 } else {
                     // Calculate the clock error
@@ -880,6 +887,7 @@ const socketInit = port => {
                         }
                     }
                     clockDiff = Math.round(sum / valid);
+                    global.canThrowSyncClockError = false;
                     // Start the game
                     console.log(sync);
                     console.log('Syncing complete, calculated clock difference ' + clockDiff + 'ms.');
@@ -889,6 +897,7 @@ const socketInit = port => {
                         global.gameStart = true;
                         global.entities = [];
                         global.message = '';
+                        global.canThrowClosedMessage = true;
                     });
                 }
                 break;
@@ -982,11 +991,26 @@ const socketInit = port => {
                 for (let i = 0; i < m[6]; i++) {
                     global.finalKillers.push(m[7 + i]);
                 }
+                global.respawnTimeout = m[7];
+                if (global.respawnTimeout !== 0) {
+                    global.cannotRespawn = true;
+                    let respawnTimeoutloop = setInterval(() => {
+                      if (global.respawnTimeout <= 1) {
+                        global.cannotRespawn = false;
+                        global.respawnTimeout = false;
+                        clearInterval(respawnTimeoutloop);
+                      } else global.respawnTimeout--
+                    }, 1000) // One second.
+                }
                 window.animations.deathScreen.reset();
                 window.canvas.reverseDirection = false;
                 global.died = true;
                 global.autoSpin = false;
+                global.syncingWithTank = false;
                 window.onbeforeunload = () => false;
+                break;
+            case 'I': // sync with the tank
+                if (m[0]) global.syncingWithTank = true; else global.syncingWithTank = false;
                 break;
             case 'K': // kicked
                 window.onbeforeunload = () => false;
@@ -1021,6 +1045,8 @@ const socketInit = port => {
         clearInterval(socket.commandCycle);
         window.onbeforeunload = () => false;
         console.log('The connection has closed.');
+        if (global.canThrowSyncClockError) global.message = "Failed to sync with the server. Please try again."
+        if (global.canThrowClosedMessage) global.message = "The connection has closed. Refresh to continue playing!"
     };
     // Notify about errors
     socket.onerror = error => {

@@ -39,6 +39,7 @@ Class.genericEntity = {
     HEALTH_WITH_LEVEL: true,
     CAN_BE_ON_LEADERBOARD: true,
     HAS_NO_RECOIL: false,
+    SYNC_WITH_TANK: false,
     BUFF_VS_FOOD: false,
     OBSTACLE: false,
     CRAVES_ATTENTION: false,
@@ -85,6 +86,18 @@ Class.genericEntity = {
         LEVEL: -1
     }
 }
+Class.genericTurret = {
+    PARENT: "genericTank",
+    LABEL: "Unknown Turret Class",
+    FACING_TYPE: "toTarget",
+    COLOR: 16,
+    IGNORED_BY_AI: true,
+    DAMAGE_EFFECTS: false,
+    GUNS: [],
+    TURRETS: [],
+    PROPS: [],
+    ON: [],
+  }
 Class.genericTank = {
     LABEL: "Unknown Class",
     TYPE: "tank",
@@ -103,6 +116,7 @@ Class.genericTank = {
     MAX_CHILDREN: 0,
     DAMAGE_EFFECTS: false,
     IGNORED_BY_AI: false,
+    SYNC_WITH_TANK: false,
     REROOT_UPGRADE_TREE: "basic",
     BODY: {
         ACCELERATION: base.ACCEL,

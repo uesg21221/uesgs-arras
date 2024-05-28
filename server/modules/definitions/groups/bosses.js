@@ -1261,6 +1261,7 @@ Class.taureonBoss = {
     DANGER: 10,
     SHAPE: 4.5,
     SIZE: 50,
+    SYNC_WITH_TANK: true,
     FACING_TYPE: "smoothToTarget",
     UPGRADE_TOOLTIP: "With a powerful Gatling Gun on the front, Rocket Launchers as wings, movable Thrusters on the back, " +
                     "and equipped with Railgun Turrets, it perfectly excells at terminating those who feel its Wrath.\n" +
@@ -1623,6 +1624,7 @@ Class.dogeiscutBoss = {
     LABEL: "DOG",
     NAME: "DogeisCut",
     DANGER: 10,
+    SYNC_WITH_TANK: true,
     FACING_TYPE: "smoothToTarget",
     SHAPE: [[1,0],[-0.7,0.7],[-0.35,0],[-0.7,-0.7]],
     COLOR: "yellow",
@@ -2327,6 +2329,7 @@ Class.frostBoss = {
     PARENT: 'miniboss',
     LABEL: 'Extrasolar',
     NAME: 'Frostbyte',
+    SYNC_WITH_TANK: true,
     CONTROLLERS: [["minion", {orbit: 260, leash: 190, repel: 270}]],
     FACING_TYPE: 'toTarget',
     SHAPE: 6,
@@ -2776,3 +2779,217 @@ Class.toothlessBoss.TURRETS = Class.toothlessBoss.TURRETS.concat(weaponArray([{
     POSITION: [8, 6, 5.6, 180, 180, 0],
     TYPE: "toothlessBossTurret",
 }], 3));
+
+Class.MKAura = addAura(5, 0.3, 0, 42);
+Class.MKDoneAura = addAura(2, 2, 0.3, 32);
+Class.MKFactoryAura = addAura(2.6, 1.3, 0.3, "trans");
+Class.MKCarrierAura = addAura(2.1, 1.3, 0.3, 1);
+Class.MKDrone = {
+  PARENT: ["drone"],
+  LABEL: "MKShip Drone",
+  TURRETS: [
+      {
+        POSITION: [13, 0, 0, 0, 360, 1],
+        TYPE: "MKDoneAura",
+      },
+  ]
+};
+Class.MKTurretFactoryWithController = {
+    PARENT: ["MKTurretFactory"],
+    CONTROLLERS: ["nearestDifferentMaster"],
+    INDEPENDENT: true,
+    BODY: {
+      FOV: 2,
+    },
+    TURRETS: [
+        {
+          POSITION: [13, 0, 0, 0, 360, 1],
+          TYPE: "MKFactoryAura",
+        },
+    ]
+  };
+  Class.MKTurretFactory = {
+    PARENT: ["factory"],
+    LABEL: "MKTurret factory",
+    SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
+    COLOR: 16,
+    IGNORED_BY_AI: true,
+    DAMAGE_EFFECTS: false,
+  };
+  Class.MKTurretCarrier = {
+    PARENT: ["carrier"],
+    FACING_TYPE: "toTarget",
+    LABEL: "MKTurret carrier",
+    SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
+    COLOR: 16,
+    IGNORED_BY_AI: true,
+    DAMAGE_EFFECTS: false,
+  };
+  Class.MKTurretCarrierWithController = {
+    PARENT: ["MKTurretCarrier"],
+    CONTROLLERS: ["nearestDifferentMaster"],
+    INDEPENDENT: true,
+    BODY: {
+      FOV: 2,
+    },
+    TURRETS: [
+        {
+          POSITION: [13, 0, 0, 0, 360, 1],
+          TYPE: "MKCarrierAura",
+        },
+    ]
+  };
+  Class.MKTurretThruster = {
+    PARENT: "genericTurret",
+    LABEL: "MKTurret Thruster",
+    GUNS: [{
+        POSITION: [14, 12, 1, 4, 0, 180, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.175, reload: 0.25, recoil: 1.25 }]),
+            TYPE: ["bullet", { ALPHA: 0.5 }]
+        }
+    }, {
+        POSITION: [12, 12, 1.4, 4, 0, 180, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.175, reload: 0.25, recoil: 1.25 }]),
+            TYPE: ["bullet", { ALPHA: 0.5 }]
+        },
+    }]
+};
+  Class.MKTurret = {
+    PARENT: ["genericTurret"],
+    LABEL: "MKTurret",
+    SHAPE: 5,
+    SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
+    TURRETS: [
+      {
+        POSITION: [13, 0, 0, 0, 360, 1],
+        TYPE: "MKTurretFactory",
+      },
+      {
+        POSITION: [10, 16.1, 2.6, 140, 180, 0],
+        TYPE: "MKTurretFactoryWithController",
+      },
+      {
+        POSITION: [10, 16.1, 2.6, 203, 180, 0],
+        TYPE: "MKTurretFactoryWithController",
+      },
+      {
+        POSITION: [10, 16.1, -3.9, 310, 180, 0],
+        TYPE: "MKTurretFactoryWithController",
+      },
+      {
+        POSITION: [10, 16.1, 2.6, 413, 180, 0],
+        TYPE: "MKTurretFactoryWithController",
+      },
+      {
+        POSITION: [10, 10.2, 0, 0, 360, 0],
+        TYPE: "MKTurretCarrier",
+      },
+      {
+        POSITION: [10, 10.2, 0, 105.5, 180, 0],
+        TYPE: "MKTurretCarrierWithController",
+      },
+      {
+        POSITION: [10, 10.2, 0, 180, 180, 0],
+        TYPE: "MKTurretCarrierWithController",
+      },
+      {
+        POSITION: [10, 10.2, 0, 255, 180, 0],
+        TYPE: "MKTurretCarrierWithController",
+      },
+      {
+        POSITION: [8, -10, -2, -45, 90, 0],
+        TYPE: "MKTurretThruster"
+      },
+      {
+        POSITION: [8, -10, 2, 45, 90, 0],
+        TYPE: "MKTurretThruster"
+      },
+    ],
+  };
+  Class.AEMKShipBoss = {
+    PARENT: ["genericTank"],
+    LABEL: "MKShip",
+    NAME: "Æ🚫Sports",
+    SYNC_WITH_TANK: true,
+    CONTROLLERS: ["nearestDifferentMaster", "minion"],
+    UPGRADE_TOOLTIP: "Has 4 carrier's and 4 factories, NOW FACE MY DESTRUCTION!",
+    COLOR: 32,
+    UPGRADE_COLOR: 32,
+    GLOW: {
+        RADIUS: 1.5,
+        COLOR: 32,
+        ALPHA: 0.9,
+        RECURSION: 3,
+    },
+    DANGER: 10,
+    LEVEL_CAP: 45,
+    LEVEL: 45,
+    SIZE: Class.genericTank.SIZE * (17 / 3),
+    SHAPE: 16,
+    VALUE: 5e5,
+    SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
+    BODY: {
+      REGEN: 0.4,
+      FOV: 1,
+      SHIELD: 2,
+      ACCEL: 0.2,
+      SPEED: 1.3,
+      HEALTH: 6000,
+      PUSHABILITY: 0.15,
+      DENSITY: 0.2,
+      DAMAGE: 5.5,
+    },
+    HITS_OWN_TYPE: "pushOnlyTeam",
+    TURRETS: [
+      {
+        POSITION: [18, 0, 0, 0, 360, 1],
+        TYPE: "MKAura",
+      },
+      {
+        POSITION: [11, 0, 0, 0, 360, 1],
+        TYPE: "MKTurret",
+      },
+    ],
+    GUNS: (() => {
+      let e = [],
+        T = [1];
+      for (let e = 1; e < 8.5; e += 0.5) {
+        let t = e / 16;
+        T.push(t);
+      }
+      for (let t = 0; t < 16; t++) {
+        let S = 22.5 * (t + 1),
+          E = {
+            MAX_CHILDREN: 2,
+            SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
+            TYPE: "MKDrone",
+            AUTOFIRE: true,
+            SYNCS_SKILLS: true,
+            STAT_CALCULATOR: gunCalcNames.drone,
+            WAIT_TO_CYCLE: true,
+          };
+        t % 2 == 0 &&
+          (E.TYPE = [
+            "MKDrone",
+            {
+              AI: {
+                skynet: true,
+              },
+              INDEPENDENT: true,
+              LAYER: 10,
+              BODY: {
+                FOV: 2,
+              },
+            },
+          ]);
+        let O = {
+          POSITION: [4.3, 3.1, 1.2, 8, 0, S, T[t]],
+          PROPERTIES: E,
+        };
+        e.push(O);
+      }
+      return e;
+    })(),
+  };

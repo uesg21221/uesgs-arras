@@ -69,14 +69,14 @@ class Canvas {
 
             case global.KEY_ENTER:
                 // Enter to respawn
-                if (global.died) {
+                if (global.died && !global.cannotRespawn) {
                     this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp);
                     global.died = false;
                     break;
                 }
 
                 // or to talk instead
-                if (this.chatInput.hidden && global.gameStart) {
+                if (this.chatInput.hidden && global.gameStart && !global.cannotRespawn) {
                     this.chatInput.hidden = false;
                     this.chatInput.focus();
                     break;
@@ -150,6 +150,9 @@ class Canvas {
                     break;
                 case global.KEY_AUTO_ALT:
                     this.socket.talk('t', 5);
+                    break;
+                case global.KEY_DEBUG:
+                    global.showDebug = !global.showDebug;
                     break;
                 case global.KEY_SPIN_LOCK:
                     this.spinLock = !this.spinLock;

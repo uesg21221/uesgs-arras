@@ -34,9 +34,12 @@ function closeArena() {
             ACCEPTS_SCORE: false,
             CAN_BE_ON_LEADERBOARD: false,
             VALUE: 100000,
+            LEVEL: 45,
+            CAN_GO_OUTSIDE_ROOM: true,
         });
         o.color.base = 3;
-        o.team = TEAM_ROOM;
+        //o.team = TEAM_ROOM; // [DEV NOTE ONLY]: Why on team room?
+        o.team = TEAM_ENEMIES;
         o.name = "Arena Closer";
     }
     let ticks = 0;

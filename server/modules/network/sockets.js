@@ -133,9 +133,9 @@ function incoming(message, socket) {
                 let key = m[0].toString().trim();
                 socket.permissions = permissionsDict[key];
                 if (socket.permissions) {
-                    util.log("[INFO] A socket was verified with the token: " + key);
+                    util.log(`[INFO] A socket ( ${socket.ip} ) was verified with the token: ${key}`);
                 } else {
-                    util.log("[WARNING] A socket failed to verify with the token: " + key);
+                    util.log(`[WARNING] A socket ( ${socket.ip} ) failed to verify with the token: ${key}`);
                 }
                 socket.key = key;
             }
@@ -143,7 +143,8 @@ function incoming(message, socket) {
             util.log("Clients: " + clients.length);
             break;
         case "s":
-            // spawn request
+            // spawn request'
+            util.log(`[INFO] A socket ( ${socket.ip} ) is trying to spawn an player, checking all securities...`);
             if (!socket.status.deceased) {
                 socket.kick("Trying to spawn while already alive.");
                 return 1;
@@ -185,6 +186,7 @@ function incoming(message, socket) {
                 util.remove(views, views.indexOf(socket.view));
                 socket.makeView();
             }
+            util.log("[INFO] Passed the security, spawning player.");
             socket.party = m[4];
             socket.player = socket.spawn(name);
 
@@ -198,9 +200,13 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))), JSON.stringify(util.serverStartTime), Config.runSpeed, Config.ARENA_TYPE);
+            if (needsRoom) socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))), JSON.stringify(util.serverStartTime), Config.runSpeed, Config.ARENA_TYPE);
+            // Give the server name.
+            socket.talk("svInfo", Config.gameModeName);
+            // More important stuff
+            socket.talk("updateName", socket.player.body.name);
             // Log it
-            util.log(`[INFO] ${m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
+            util.log(`[INFO] ${name == "" ? "An unnamed player" : m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
             break;
         case "S":
             // clock syncing
@@ -489,16 +495,17 @@ function incoming(message, socket) {
                     })
                     .filter((instance) => instance);
                 if (!motherships.length) {
-                    player.body.sendMessage("There are no motherships available that are on your team.");
+                    player.body.sendMessage("There are no motherships available that are on your team or already controlled by an player.");
                     return 1;
                 }
                 let mothership = motherships.shift();
                 mothership.controllers = [];
                 mothership.underControl = true;
                 player.body = mothership;
-                body.kill();
                 player.body.become(player);
-                player.body.FOV += 0.5;
+                body.kill();
+                if (!player.body.dontIncreaseFov) player.body.FOV += 0.5;
+                player.body.dontIncreaseFov = true;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
                 player.body.sendMessage("You are now controlling the mothership.");
@@ -508,16 +515,18 @@ function incoming(message, socket) {
                     if (entry.isDominator && entry.team === player.body.team && !entry.underControl) return entry;
                 }).filter(x=>x);
                 if (!dominators.length) {
-                    player.body.sendMessage("There are no dominators available that are on your team!");
+                    player.body.sendMessage("There are no dominators available that are on your team or already controlled by an player.");
                     return 1;
                 }
                 let dominator = dominators.shift();
                 dominator.controllers = [];
                 dominator.underControl = true;
                 player.body = dominator;
-                body.kill();
                 player.body.become(player, true);
-                player.body.FOV += 0.5;
+                body.dontSendDeathMessage = true;
+                body.kill();
+                if (!player.body.dontIncreaseFov) player.body.FOV += 0.5;
+                player.body.dontIncreaseFov = true;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
                 player.body.sendMessage("You are now controlling the dominator.");
@@ -896,7 +905,7 @@ const spawn = (socket, name) => {
     } else {
         body = new Entity(loc);
         body.protect();
-        body.isPlayer = true;
+        body.isPlayer = true; // Mark it as an player.
         if (player.team != null) {
             body.team = player.team;
         } else {
@@ -907,12 +916,11 @@ const spawn = (socket, name) => {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
         }
-        body.addController(new ioTypes.listenToPlayer(body, { player }));
-        socket.spectateEntity = null;
-        body.invuln = true;
+        body.become(player); // become it so it can speak and listen.
+        socket.spectateEntity = null; // Dont break the camera.
+        body.invuln = true; // Make it safe 
     }
-    body.name = name;
-    body.sendMessage = (content, displayTime = Config.MESSAGE_DISPLAY_TIME) => socket.talk("m", displayTime, content);
+    body.name = name; // Define the name.
 
     socket.rememberedTeam = player.team;
     player.body = body;
@@ -950,6 +958,7 @@ const spawn = (socket, name) => {
         player.body.killCount.polygons,
         player.body.killCount.killers.length,
         ...player.body.killCount.killers,
+        Config.RESPAWN_TIMEOUT
     ];
     player.gui = newgui(player);
     player.socket = socket;
@@ -963,7 +972,7 @@ const spawn = (socket, name) => {
     for (let i = 0; i < msg.length; i++) {
         body.sendMessage(msg[i]);
     }
-    socket.talk("c", socket.camera.x, socket.camera.y, socket.camera.fov);
+    socket.talk("c", socket.camera.x, socket.camera.y, socket.camera.fov); // Move the camera
     return player;
 };
 

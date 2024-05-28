@@ -63,6 +63,9 @@ module.exports = {
     
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
+
+    // How players has their respawn cooldown before respawning. Type 0 to disable it.
+    RESPAWN_TIMEOUT: 0,
     
 
 
@@ -111,7 +114,7 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 0,
+    BOTS: 10,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
@@ -130,6 +133,9 @@ module.exports = {
 
     // The class that players and player-bots spawn as.
     SPAWN_CLASS: "basic",
+
+    // How every entity regenerates their health.
+    REGENERATE_TICK: 200,
 
 
 

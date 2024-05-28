@@ -44,7 +44,7 @@ Class.wall = {
     LABEL: "Wall",
     SIZE: 25,
     SHAPE: 4,
-    VARIES_IN_SIZE: false
+    VARIES_IN_SIZE: false,
 }
 Class.moon = {
     PARENT: "rock",
@@ -173,7 +173,7 @@ for (let tier of sancHealerTiers) {
                 }, {
                     POSITION: { LENGTH: 8, WIDTH: 10, X: 10, ANGLE: (360 / tier) * i },
                     PROPERTIES: {
-                        SHOOT_SETTINGS: combineStats([g.basic, g.healer]),
+                        SHOOT_SETTINGS: combineStats([g.basic, { range: 0.5 }, g.healer]),
                         TYPE: "healerBullet",
                         AUTOFIRE: true,
                     }

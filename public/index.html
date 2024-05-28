@@ -25,7 +25,7 @@
         <div id="startMenuWrapper">
             <div id="startMenu">
                 <div class="startMenuHolder">
-                  <center>This Arras.io Private Server runs on Open Source Arras.<br>For more info, visit <a href="https://github.com/Taureon/aps-plus-plus">the GitHub Repository</a>.<br><br>Not an official Arras.io project. We are not associated with Arras.io or Momentum Studios.</center>
+                  <center>This Arras.io Private Server runs on Open Source Arras.<br>For more info, visit <a href="https://github.com/Taureon/aps-plus-plus">the GitHub Repository</a>.<br><br>Not an official Arras.io project. We are not associated with Arras.io or Momentum Studios.<br><br>Join our official discord <a href="https://discord.gg/7QzHbtc2tA">here</a>.</center>
                 </div>
                 <div class="startMenuHolder">
                     <div class="sliderHolder">
@@ -48,11 +48,11 @@
                             <table>
                                 <tr> <td><b>E</b> - auto-fire</td>     <td><b>C</b> - auto-spin</td> </tr>
                                 <tr> <td><b>R</b> - disable AI</td>    <td><b>N</b> - level up</td> </tr>
-                                <tr> <td><b>V</b> - reverse tank</td>  <td><b>F</b> - auto-alt</td> </tr>
+                                <tr> <td><b>V</b> - reverse tank</td>  <td><b>G</b> - auto-alt</td> </tr>
                                 <tr> <td><b>B</b> - reverse mouse</td> <td><b>O</b> - self-destruct</td> </tr>
                                 <tr> <td><b>T</b> - show tank tree</td><td><b>M</b> - maximize stat</td> </tr>
                                 <tr> <td><b>X</b> - spin lock</td>     <td><b>P</b> - developer tank*</td> </tr>
-                                <tfoot> <td><b>*</b> = requires valid token</td> </tfoot>
+                                <tr> <td><b>F</b> - action</td>        <td class="greyText"><b>*</b> = requires valid token</td> </tr>
                             </table>
                             <options_header>Options:</options_header>
                             <select id="optColors" tabindex="-1">
@@ -88,20 +88,20 @@
                             <input type="hidden" placeholder="Insert Custom Theme" id="optCustom" />
                             <table>
                                 <tr>
-                                    <td><div><label><input id="optScreenshotMode"   tabindex="-1" class="checkbox" type="checkbox"> Screenshot Mode</label></div></td>
-                                    <td><div><label><input id="optNoPointy"         tabindex="-1" class="checkbox" type="checkbox"> Classic Traps</label></div></td>
+                                    <td><div><label class="container"><input id="optScreenshotMode"   tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Screenshot Mode</label></div></td>
+                                    <td><div><label class="container"><input id="optNoPointy"         tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Classic Traps</label></div></td>
                                 </tr>
                                 <tr>
-                                    <td><div><label><input id="optFancy"            tabindex="-1" class="checkbox" type="checkbox"> Low Graphics</label></div></td>
-                                    <td><div><label><input id="optPredictive"       tabindex="-1" class="checkbox" type="checkbox"> Disable Hyperactivity</label></div></td>
+                                    <td><div><label class="container"><input id="optFancy"            tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Low Graphics</label></div></td>
+                                    <td><div><label class="container"><input id="optPredictive"       tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Disable Hyperactivity</label></div></td>
                                 </tr>
                                 <tr>
-                                    <td><div><label><input id="coloredHealthbars"   tabindex="-1" class="checkbox" type="checkbox"> Colored Health Bars</label></div></td>
-                                    <td><div><label><input id="seperatedHealthbars" tabindex="-1" class="checkbox" type="checkbox"> Seperated Health Bars</label></div></td>
+                                    <td><div><label class="container"><input id="coloredHealthbars"   tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Colored Health Bars</label></div></td>
+                                    <td><div><label class="container"><input id="seperatedHealthbars" tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Seperated Health Bars</label></div></td>
                                 </tr>
                                 <tr>
-                                    <td><div><label><input id="autoLevelUp"         tabindex="-1" class="checkbox" type="checkbox"> Auto-Level Up</label></div></td>
-                                    <td><div><label><input id="centerTank"          tabindex="-1" class="checkbox" type="checkbox"> Center Camera</label></div></td>
+                                    <td><div><label class="container"><input id="autoLevelUp"         tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Auto-Level Up</label></div></td>
+                                    <td><div><label class="container"><input id="centerTank"          tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Center Camera</label></div></td>
                                 </tr>
                             </table>
                         </div>

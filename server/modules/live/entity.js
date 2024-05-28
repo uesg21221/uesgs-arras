@@ -1060,7 +1060,8 @@ class Entity extends EventEmitter {
         this.controllers = this.controllers.concat(newIO);
     }
     become(player, dom = false) {
-        this.addController(new ioTypes.listenToPlayer(this, { player, static: dom }));
+        this.addController(new ioTypes.listenToPlayer(this, { player, static: dom })); // make it listen.
+        this.sendMessage = (content, displayTime = Config.MESSAGE_DISPLAY_TIME) => player.socket.talk("m", displayTime, content); // make sure that it sends messages.
         this.kick = (reason) => player.socket.kick(reason);
     }
     giveUp(player, name = "Mothership") {
@@ -1103,7 +1104,10 @@ class Entity extends EventEmitter {
         }
         if (set.LAYER != null) this.layerID = set.LAYER;
         if (set.index != null) this.index = set.index.toString();
-        if (set.NAME != null) this.name = set.NAME;
+        if (set.NAME != null) {
+            this.name = set.NAME;
+            if (this.socket) this.socket.talk("updateName", this.name);
+        };
         if (set.LABEL != null) this.label = set.LABEL;
         if (set.ANGLE != null) this.angle = set.ANGLE;
         if (set.UPGRADE_LABEL != null) this.upgradeLabel = set.UPGRADE_LABEL;
@@ -1157,6 +1161,11 @@ class Entity extends EventEmitter {
         if (set.DIE_AT_LOW_SPEED != null) this.settings.diesAtLowSpeed = set.DIE_AT_LOW_SPEED;
         if (set.DIE_AT_RANGE != null) this.settings.diesAtRange = set.DIE_AT_RANGE;
         if (set.INDEPENDENT != null) this.settings.independent = set.INDEPENDENT;
+        if (set.SYNC_WITH_TANK != null) {
+            this.settings.syncWithTank = set.SYNC_WITH_TANK;
+            if (set.SYNC_WITH_TANK == true && this.socket) this.socket.talk("I", true);
+            if (set.SYNC_WITH_TANK == false && this.socket) this.socket.talk("I", false);
+        }
         if (set.PERSISTS_AFTER_DEATH != null) this.settings.persistsAfterDeath = set.PERSISTS_AFTER_DEATH;
         if (set.CLEAR_ON_MASTER_UPGRADE != null) this.settings.clearOnMasterUpgrade = set.CLEAR_ON_MASTER_UPGRADE;
         if (set.HEALTH_WITH_LEVEL != null) this.settings.healthWithLevel = set.HEALTH_WITH_LEVEL;
@@ -1457,6 +1466,15 @@ class Entity extends EventEmitter {
             if (set.SIZE != null) {
                 this.SIZE *= set.SIZE * this.squiggle;
                 if (this.coreSize == null) this.coreSize = this.SIZE;
+            }
+            if (set.CONTROLLERS != null) {
+                let toAdd = [];
+                for (let i = 0; i < set.CONTROLLERS.length; i++) {
+                    let io = set.CONTROLLERS[i];
+                    if ("string" == typeof io) io = [io];
+                    toAdd.push(new ioTypes[io[0]](this, io[1]));
+                }
+                this.addController(toAdd);
             }
             if (set.BATCH_UPGRADES != null) this.batchUpgrades = set.BATCH_UPGRADES;
             for (let i = 0; i < Config.MAX_UPGRADE_TIER; i++) {
@@ -2202,7 +2220,7 @@ class Entity extends EventEmitter {
             this.emit('death', { body: this, killers, killTools });
             killers.forEach((e) => e.emit('kill', { body: e, entity: this }));
             // If there's no valid killers (you were killed by food), change the message to be more passive
-            let killText = notJustFood ? "" : "You have been killed by ",
+            let killText = notJustFood ? "" : !this.dontSendDeathMessage ? "You have been killed by " : "",
                 dothISendAText = this.settings.givesKillMessage;
 
             for (let i = 0; i < killers.length; i++) {
@@ -2235,9 +2253,11 @@ class Entity extends EventEmitter {
                     }
                     // Only if we give messages
                     if (dothISendAText) {
+                        if (!this.dontSendDeathMessage)
                         instance.sendMessage("You killed " + name + (killers.length > 1 ? " (with some help)." : "."));
                     }
                     if (this.settings.killMessage) {
+                        if (!this.dontSendDeathMessage)
                         instance.sendMessage("You " + this.settings.killMessage + " " + name + (killers.length > 1 ? " (with some help)." : "."));
                     }
                 }
@@ -2280,10 +2300,10 @@ class Entity extends EventEmitter {
 
             // Prepare it and clear the collision array.
             killText = killText.slice(0, -5);
-            if (killText === "You have been kille") {
+            if (killText === "You have been kille" && !this.dontSendDeathMessage) {
                 killText = "You have died a stupid death";
             }
-            this.sendMessage(killText + ".");
+            if (!this.dontSendDeathMessage) this.sendMessage(killText + ".");
             // If I'm the leader, broadcast it:
             if (this.id === room.topPlayerID) {
                 let usurptText = this.name === "" ? "The leader" : this.name;
