@@ -2,7 +2,7 @@ module.exports = {
     // Server
 
     // Game server domain.
-    // If 'localhost:NUMBER', the port must equal the port setting.
+    // If the host is 'localhost:NUMBER', the NUMBER must be the port setting.
     host: "localhost:26301",
 
     // Which port to run the web server on.
@@ -39,7 +39,7 @@ module.exports = {
 
     // Miscellaneous
 
-    // How long a entity chat message lasts in milliseconds.
+    // How long a chat message lasts in milliseconds.
     // Includes the fade-out period.
     CHAT_MESSAGE_DURATION: 30_000,
 
@@ -64,7 +64,7 @@ module.exports = {
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
 
-    // How players has their respawn cooldown before respawning. Type 0 to disable it.
+    // How long you have to wait to respawn in seconds.
     RESPAWN_TIMEOUT: 0,
     
 
@@ -107,10 +107,10 @@ module.exports = {
     // Level difference between each tier.
     TIER_MULTIPLIER: 15,
 
-    // Max normally achievable level.
+    // Maximum normally achievable level.
     LEVEL_CAP: 45,
 
-    // Max level you get by level-up key and auto-level-up.
+    // Maximum level via the level-up key and auto-level-up.
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
@@ -225,9 +225,8 @@ module.exports = {
 
 
 
-    // Default values for gamemode related stuff.
-    // Do not change these, you'll likely break stuff.
-    // Change GAME_MODES instead.
+    // Default values for gamemode related things.
+    // Do not change these here, you'll likely break stuff! Change GAME_MODES instead.
     GAMEMODE_NAME_PREFIXES: [],
     SPECIAL_BOSS_SPAWNS: false,
     MOTHERSHIP_LOOP: false,
