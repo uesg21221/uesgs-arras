@@ -2527,7 +2527,6 @@ Class.assembler = {
 // Tri-Trapper upgrades
 Class.hexaTrapper = makeAuto({
     PARENT: "genericTank",
-    LABEL: "Hexa-Trapper",
     DANGER: 7,
     BODY: {
         SPEED: 0.8 * base.SPEED,
@@ -2547,7 +2546,7 @@ Class.hexaTrapper = makeAuto({
             },
         },
     ], 6, 0.5),
-})
+}, "Hexa-Trapper")
 Class.septaTrapper = {
     PARENT: "genericTank",
     LABEL: "Septa-Trapper",
