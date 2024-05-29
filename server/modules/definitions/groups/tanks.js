@@ -1918,7 +1918,6 @@ Class.factory = {
         SPEED: base.SPEED * 0.8,
         FOV: 1.1,
     },
-    MAX_CHILDREN: 6,
     GUNS: [
         {
             POSITION: [5, 11, 1, 10.5, 0, 0, 0],
@@ -1928,6 +1927,7 @@ Class.factory = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.factory]),
                 TYPE: "minion",
+                MAX_CHILDREN: 6,
                 STAT_CALCULATOR: gunCalcNames.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
