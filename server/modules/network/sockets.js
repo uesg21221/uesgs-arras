@@ -218,7 +218,7 @@ function incoming(message, socket) {
                 return 1;
             }
             // Bounce it back
-            socket.talkpacketTypes.s2c.ping, synctick, util.time());
+            socket.talk(packetTypes.s2c.ping, synctick, util.time());
             break;
         case packetTypes.c2s.ping:
             // ping
