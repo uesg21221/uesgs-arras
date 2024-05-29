@@ -2781,19 +2781,30 @@ Class.toothlessBoss.TURRETS = Class.toothlessBoss.TURRETS.concat(weaponArray([{
 }], 3));
 
 Class.MKAura = addAura(5, 0.3, 0, 42);
-Class.MKDoneAura = addAura(2, 2, 0.3, 32);
+Class.MKDoneAura = addAura(3, 2, 0.3, 32);
 Class.MKFactoryAura = addAura(2.6, 1.3, 0.3, "trans");
 Class.MKCarrierAura = addAura(2.1, 1.3, 0.3, 1);
+Class.MKMinionAura = addAura (2, 2, 0.3, 32);
 Class.MKDrone = {
-  PARENT: ["drone"],
-  LABEL: "MKShip Drone",
-  TURRETS: [
-      {
-        POSITION: [13, 0, 0, 0, 360, 1],
-        TYPE: "MKDoneAura",
-      },
-  ]
+    PARENT: ["drone"],
+     LABEL: "MKShip Drone",
+     TURRETS: [
+        {
+          POSITION: [13, 0, 0, 0, 360, 1],
+          TYPE: "MKDoneAura",
+        },
+     ]
 };
+Class.MKMinion = {
+    PARENT: ["minion"],
+    LABEL: "MKShip Minion",
+    TURRETS: [
+        {
+          POSITION: [13, 0, 0, 0, 360, 1],
+          TYPE: "MKMinionAura",
+        },
+    ]
+}
 Class.MKTurretFactoryWithController = {
     PARENT: ["MKTurretFactory"],
     CONTROLLERS: ["nearestDifferentMaster"],
@@ -2809,12 +2820,31 @@ Class.MKTurretFactoryWithController = {
     ]
   };
   Class.MKTurretFactory = {
-    PARENT: ["factory"],
+    PARENT: ["genericTank"],
     LABEL: "MKTurret factory",
     SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     COLOR: 16,
     IGNORED_BY_AI: true,
     DAMAGE_EFFECTS: false,
+    GUNS: [
+        {
+            POSITION: [5, 11, 1, 10.5, 0, 0, 0],
+        },
+        {
+            POSITION: [2, 14, 1, 15.5, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.factory]),
+                TYPE: "MKMinion",
+                MAX_CHILDREN: 6,
+                STAT_CALCULATOR: gunCalcNames.drone,
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+            },
+        },
+        {
+            POSITION: [12, 14, 1, 0, 0, 0, 0],
+        },
+    ],
   };
   Class.MKTurretCarrier = {
     PARENT: ["carrier"],

@@ -1,6 +1,7 @@
 let loop;
 function close() {
     sockets.broadcast("Closing!");
+    util.log('Closing!');
     clearInterval(loop);
     setTimeout(process.exit, 1000);
 }
@@ -38,8 +39,7 @@ function closeArena() {
             CAN_GO_OUTSIDE_ROOM: true,
         });
         o.color.base = 3;
-        //o.team = TEAM_ROOM; // [DEV NOTE ONLY]: Why on team room?
-        o.team = TEAM_ENEMIES;
+        o.team = TEAM_ROOM;
         o.name = "Arena Closer";
     }
     let ticks = 0;
@@ -51,7 +51,7 @@ function closeArena() {
             let instance = entities[i];
             if (
                 instance.isPlayer || instance.isMothership ||
-                (instance.isDominator && instance.team !== -101)
+                (instance.isDominator && instance.team !== TEAM_ROOM)
             ) {
                 alive = true;
             }

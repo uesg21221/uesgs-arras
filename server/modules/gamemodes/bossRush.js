@@ -140,7 +140,7 @@ class BossRush {
     }
 
     spawnSanctuary(tile, team, type = false) {
-        type = type ? type : "sanctuaryTier3";
+        type = type ? type : "sanctuaryTier1";
         let o = new Entity(tile.loc);
         this.defineSanctuary(o, team, type, tile);
         this.sanctuaries.push(o);
@@ -155,6 +155,7 @@ class BossRush {
         entity.SIZE = room.tileWidth / (Config.CLASSIC_SIEGE ? 10 : 17.5);
         let spawnableTeam = room.spawnable[Object.keys(room.spawnable).find((key) => room.spawnable[key].includes(tile),)];
         entity.isDominator = true;
+        entity.nameColor = "#ffffff";
         entity.define({ DANGER: 11 })
         entity.on('dead', () => {
             if (entity.team === TEAM_ENEMIES) {

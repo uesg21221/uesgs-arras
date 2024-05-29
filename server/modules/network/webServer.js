@@ -63,5 +63,6 @@ server = require('http').createServer((req, res) => {
     res.end(resStr);
 });
 server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, head, ws => sockets.connect(ws, req)));
-server.listen(Config.port, () => console.log("Server listening on port", Config.port));
+server.listen(Config.port, () => console.log("Web server listening on port", Config.port));
+console.log("Web Server initialized.");
 module.exports = { server };
