@@ -43,16 +43,16 @@
                             <h3 class="nopadding">view options ▸</h3>
                         </div>
                         <div class="slider">
-                            <br>
-                            <options_header>Advanced Controls:</options_header><br>
-                            <table>
-                                <tr> <td><b>E</b> - auto-fire</td>     <td><b>C</b> - auto-spin</td> </tr>
-                                <tr> <td><b>R</b> - disable AI</td>    <td><b>N</b> - level up</td> </tr>
-                                <tr> <td><b>V</b> - reverse tank</td>  <td><b>G</b> - auto-alt</td> </tr>
-                                <tr> <td><b>B</b> - reverse mouse</td> <td><b>O</b> - self-destruct</td> </tr>
-                                <tr> <td><b>T</b> - show tank tree</td><td><b>M</b> - maximize stat</td> </tr>
-                                <tr> <td><b>X</b> - spin lock</td>     <td><b>P</b> - developer tank*</td> </tr>
-                                <tr> <td><b>F</b> - action</td>        <td class="greyText"><b>*</b> = requires valid token</td> </tr>
+                            <br><options_header>Advanced Controls:</options_header><br>
+                            <button id="controlReset" style="display:none">Reset Keybinds</button>
+                            <table id="controlSettings">
+                                <tr> <td><b data-key="KEY_AUTO_FIRE">E</b> - auto-fire</td>     <td><b data-key="KEY_AUTO_SPIN">C</b> - auto-spin</td> </tr>
+                                <tr> <td><b data-key="KEY_OVER_RIDE">R</b> - disable AI</td>    <td><b data-key="KEY_LEVEL_UP">N</b> - level up</td> </tr>
+                                <tr> <td><b data-key="KEY_REVERSE_TANK">V</b> - reverse tank</td>  <td><b data-key="KEY_SPECIAL">G</b> - auto-alt</td> </tr>
+                                <tr> <td><b data-key="KEY_REVERSE_MOUSE">B</b> - reverse mouse</td> <td><b data-key="KEY_SUICIDE">O</b> - self-destruct</td> </tr>
+                                <tr> <td><b data-key="KEY_CLASS_TREE">T</b> - show tank tree</td><td><b data-key="KEY_MAX_STAT">M</b> - maximize stat</td> </tr>
+                                <tr> <td><b data-key="KEY_SPIN_LOCK">X</b> - spin lock</td>     <td><b data-key="KEY_FUCK_YOU">P</b> - developer tank*</td> </tr>
+                                <tr> <td><b data-key="KEY_BECOME">F</b> - action</td>        <td class="greyText"><b>*</b> = requires valid token</td> </tr>
                             </table>
                             <options_header>Options:</options_header>
                             <select id="optColors" tabindex="-1">

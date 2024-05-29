@@ -341,6 +341,7 @@ let regenerateHealthAndShield = () => {
         o.isBot = true;
         o.name = botName;
         o.invuln = true;
+        o.nameColor = "#ffffff";
         o.leftoverUpgrades = ran.chooseChance(...Config.BOT_CLASS_UPGRADE_CHANCES);
         let color = Config.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : "darkGrey";
         o.color.base = color;

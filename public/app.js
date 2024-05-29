@@ -214,14 +214,112 @@ window.onload = async () => {
     if (document.getElementById("optBorders").value === "") {
         document.getElementById("optBorders").value = "normal";
     }
+    // Keybinds stuff
+    let controls = document.getElementById("controlSettings"),
+        resetButton = document.getElementById("controlReset"),
+        selectedElement = null,
+        controlsArray = [],
+        defaultKeybinds = {},
+        keybinds = {};
+    function getKeybinds() {
+      let kb = localStorage.getItem("keybinds");
+      keybinds = typeof kb === "string" && kb.startsWith("{") ? JSON.parse(kb) : {};
+    }
+    function setKeybinds() {
+      localStorage.setItem("keybinds", JSON.stringify(keybinds));
+    }
+    function unselectElement() {
+      if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+      }
+      selectedElement.element.parentNode.classList.remove("editing");
+      selectedElement = null;
+    }
+    function selectElement(element) {
+      selectedElement = element;
+      selectedElement.element.parentNode.classList.add("editing");
+      if (selectedElement.keyCode !== -1 && window.getSelection) {
+        let selection = window.getSelection();
+        selection.removeAllRanges();
+        let range = document.createRange();
+        range.selectNodeContents(selectedElement.element);
+        selection.addRange(range);
+      }
+    }
+    function setKeybind(key, keyCode) {
+      selectedElement.element.parentNode.classList.remove("editing");
+      document.getElementById("controlReset").style.display = "block";
+      if (keyCode !== selectedElement.keyCode) {
+        let otherElement = controlsArray.find(c => c.keyCode === keyCode);
+        if (keyCode !== -1 && otherElement) {
+          otherElement.keyName = selectedElement.keyName;
+          otherElement.element.innerText = selectedElement.keyName;
+          otherElement.keyCode = selectedElement.keyCode;
+          global[otherElement.keyId] = selectedElement.keyCode;
+          keybinds[otherElement.keyId] = [selectedElement.keyName, selectedElement.keyCode];
+        }
+      }
+      selectedElement.keyName = key;
+      selectedElement.element.innerText = key;
+      selectedElement.keyCode = keyCode;
+      global[selectedElement.keyId] = keyCode;
+      keybinds[selectedElement.keyId] = [key, keyCode];
+      setKeybinds();
+    }
+    function getElements(kb, storeInDefault) {
+    for (let row of controls.rows) {
+      for (let cell of row.cells) {
+        let element = cell.firstChild;
+        if (!element) continue;
+        let key = element.dataset.key;
+        if (storeInDefault) defaultKeybinds[key] = [element.innerText, global[key]];
+        if (kb[key]) {
+          element.innerText = kb[key][0];
+          global[key] = kb[key][1];
+          document.getElementById("controlReset").style.display = "block";
+        }
+        let obj = {
+          element,
+          keyId: key,
+          keyName: element.innerText,
+          keyCode: global[key]
+        };
+        controlsArray.push(obj);
+      }
+    }
+      }
+    getKeybinds();
+    getElements(keybinds, true);
+    document.addEventListener("click", event => {
+      if (!global.gameStart) {
+        if (selectedElement) unselectElement();
+        else {
+          let element = controlsArray.find(({ element }) => element === event.target);
+          if (element) selectElement(element);
+        }
+      }
+    });
+    resetButton.addEventListener("click", () => {
+      keybinds = {};
+      setKeybinds();
+      controlsArray = [];
+      getElements(defaultKeybinds);
+      document.getElementById("controlReset").style.display = "none";
+    });
     // Game start stuff
     document.getElementById("startButton").onclick = () => startGame();
     document.onkeydown = (e) => {
-        var key = e.which || e.keyCode;
-        if (key === global.KEY_ENTER && (global.dead || !global.gameLoading)) {
+        if (!(global.gameStart || e.shiftKey || e.ctrlKey || e.altKey)) {
+          let key = e.which || e.keyCode;
+          if (selectedElement) {
+            if (1 !== e.key.length || /[0-9]/.test(e.key) || 3 === e.location) {
+              if (!("Backspace" !== e.key && "Delete" !== e.key)) setKeybind("", -1);
+            } else setKeybind(e.key.toUpperCase(), e.keyCode);
+          } else if (key === global.KEY_ENTER) {
             startGame();
+          }
         }
-    };
+      };
     window.addEventListener("resize", resizeEvent);
     resizeEvent();
 };
@@ -462,7 +560,7 @@ function startGame() {
     document.getElementById("startMenuWrapper").style.top = "-700px";
     document.getElementById("gameAreaWrapper").style.opacity = 1;
     setTimeout(() => {
-        document.getElementById("mainWrapper").remove();
+        document.getElementById("startMenuWrapper").remove();
     }, 1e3);
     // Set up the socket
     if (!global.socket) {
@@ -938,16 +1036,8 @@ function drawHealth(x, y, instance, ratio, alpha) {
         var name = instance.name.substring(7, instance.name.length + 1);
         var namecolor = instance.name.substring(0, 7);
         ctx.globalAlpha = alpha;
-        if (namecolor == "#ffffff") {
-            drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, color.guiwhite, "center");
-          } else {
-            drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor, "center");
-          }
-        if (namecolor == "#ffffff") {
-             drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, color.guiwhite, "center");
-          } else {
-             drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor, "center");
-          }
+        drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
+        drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
         ctx.globalAlpha = 1;
     }
 }
@@ -1557,11 +1647,7 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     //write the score and name
     drawText("Score: " + util.formatLargeNumber(Math.floor(gui.__s.getScore())), x + len / 2, y + height / 2 + 1, height - 3.5, color.guiwhite, "center", true);
     ctx.lineWidth = 4;
-    if (global.nameColor == "#ffffff") { // if custom colored nickname not being used then stick with the color.guiwhite.
-        drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, color.guiwhite, "center");
-      } else { // else just use this.
-        drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor, "center");
-      }
+    drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor = "#ffffff" ? color.guiwhite : global.nameColor, "center");
 }
 
 function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
@@ -1680,11 +1766,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         drawBar(x, x + len * shift, y + height / 2, height - 3.5, gameDraw.modifyColor(entry.barColor));
         // Leadboard name + score
         let nameColor = entry.nameColor || "#FFFFFF";
-        if (nameColor == "#ffffff") {
-            drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, color.guiwhite, "center", true);
-          } else {
-            drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor, "center", true);
-          }
+        drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor == "#ffffff" ? color.guiwhite : nameColor, "center", true);
         // Mini-image
         let scale = height / entry.position.axis,
             xx = x - 1.5 * height - scale * entry.position.middle.x * Math.SQRT1_2,
@@ -1936,7 +2018,7 @@ let getTips = () => {
       drawText(getTips(), x - 170, y + 122, 16, color.guiwhite);
       drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active for the run!", x - 170, y + 144, 16, color.guiwhite);
       // drawText(global.cannotRespawn ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center"); // uncomment this when mobile support finished.
-      drawText(global.cannotRespawn ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
+      drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
       ctx.translate(0, shift * global.screenHeight);
 };
 const gameDrawOldDead = () => {
