@@ -68,7 +68,10 @@ Class.dominator = {
         str: 1,
         spd: 1,
     }),
-    LEVEL: -1,
+    LEVEL: 45,
+    LEVEL_CAP: 45,
+    SIZE: 50,
+    SYNC_WITH_TANK: true,
     BODY: {
         RESIST: 100,
         SPEED: 1.32,

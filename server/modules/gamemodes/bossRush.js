@@ -94,7 +94,7 @@ class BossRush {
             [100, "kronos"],
             [100, "odin"],
         ];
-        this.friendlyBossChoices = ["roguePalisade", "rogueArmada", "julius", "genghis", "napoleon"];
+        this.friendlyBossChoices = [ [9, "roguePalisade"], [8, "rogueArmada"], [1, "julius"], [1, "genghis"], [1, "napoleon"] ];
         this.bigFodderChoices = ["sentryGun", "sentrySwarm", "sentryTrap", "shinySentryGun"];
         this.smallFodderChoices = ["crasher"];
         this.length = Config.CLASSIC_SIEGE ? this.waveCodes.length : Config.WAVES;
@@ -103,7 +103,8 @@ class BossRush {
         this.gameActive = true;
         this.timer = 0;
         this.remainingEnemies = 0;
-        this.sancUpgradeCount = 1;
+        this.sanctuaryTier = 1;
+        this.sanctuaries = [];
     }
 
     generateWaves() {
@@ -127,57 +128,44 @@ class BossRush {
 
     spawnFriendlyBoss() {
         let o = new Entity(getSpawnableArea(TEAM_BLUE));
-        o.define(ran.choose(this.friendlyBossChoices));
+        let type = this.friendlyBossChoices[ran.chooseChance(...this.friendlyBossChoices.map((x) => x[0]))][1]
+        o.define(type);
         o.define({ DANGER: 10 });
         o.team = TEAM_BLUE;
         o.controllers.push(new ioTypes.nearestDifferentMaster(o), new ioTypes.wanderAroundMap(0, { lookAtGoal: true }));
+        o.name = ran.chooseBossName('castle');
+        o.FOV = 10;
+        o.settings.broadcastMessage = `${o.name} has fallen!`;
         sockets.broadcast(o.name + ' has arrived and joined your team!');
     }
-    upgradeSanctuary() {
-        if (this.sancUpgradeCount == 6) return;
-        global.sanctuaryUpgrade = true;
-        this.sancUpgradeCount += 1;
-        setTimeout(() => {
-            global.sanctuaryUpgrade = false;
-        }, 150)
-        for (let instance of entities) {
-            if (instance.isDominator && instance.team == TEAM_BLUE) {
-                instance.kill();
-            }
-        }
-        sockets.broadcast('The sanctuaries have been upgraded to tier ' + this.sancUpgradeCount);
-    }
+
     spawnSanctuary(tile, team, type = false) {
-        type = type ? type : `sanctuaryTier${this.sancUpgradeCount}`;
+        type = type ? type : "sanctuaryTier3";
         let o = new Entity(tile.loc);
-        o.define(type);
-        o.team = team;
-        o.color.base = getTeamColor(team);
-        o.skill.score = 111069;
-        o.name = 'Sanctuary';
-        o.SIZE = room.tileWidth / 10;
-        o.isDominator = true;
+        this.defineSanctuary(o, team, type, tile);
+        this.sanctuaries.push(o);
+    }
+
+    defineSanctuary(entity, team, type, tile) {
+        entity.define(type);
+        entity.team = team;
+        entity.color.base = getTeamColor(team);
+        entity.skill.score = 111069;
+        entity.name = 'Sanctuary';
+        entity.SIZE = room.tileWidth / (Config.CLASSIC_SIEGE ? 10 : 17.5);
         let spawnableTeam = room.spawnable[Object.keys(room.spawnable).find((key) => room.spawnable[key].includes(tile),)];
-        o.on('dead', () => {
-            /*let isAC;
-            for (let instance of o.collisionArray) {
-                if (TEAM_ROOM !== instance.team && instance.type !== 'food' && instance.type !== 'wall') {
-                    isAC = true;
-                }
-            }
-            if (isAC) {
-                tile.color = 'white';
-            } else */if (global.sanctuaryUpgrade) {
-                this.spawnSanctuary(tile, TEAM_BLUE);
-            } else if (o.team === TEAM_ENEMIES) {
-                this.spawnSanctuary(tile, TEAM_BLUE);
+        entity.isDominator = true;
+        entity.define({ DANGER: 11 })
+        entity.on('dead', () => {
+            if (entity.team === TEAM_ENEMIES) {
+                this.spawnSanctuary(tile, TEAM_BLUE, `sanctuaryTier${this.sanctuaryTier}`);
                 tile.color.interpret(getTeamColor(TEAM_BLUE));
                 sockets.broadcast('A sanctuary has been repaired!');
-                if (team !== spawnableTeam) { // Allow the players to spawn so we add it to the spawnable locations.
-                    room.spawnable[TEAM_BLUE].push(tile); 
+                if (team !== spawnableTeam) { // Allow the player to spawn so we add it to the spawnable locations.
+                    room.spawnable[TEAM_BLUE].push(tile);
                  }
             } else {
-                this.spawnSanctuary(tile, TEAM_ENEMIES, Class.dominator);
+                this.spawnSanctuary(tile, TEAM_ENEMIES, "dominator");
                 tile.color.interpret(getTeamColor(TEAM_ENEMIES));
                 sockets.broadcast('A sanctuary has been destroyed!');
                 if (team !== spawnableTeam) { // Dont allow players to spawn at the destroyed sanctuary so we remove it from spawnable location.
@@ -246,10 +234,16 @@ class BossRush {
             if (waveId % 20 == 19) {
                 setTimeout(() => this.spawnFriendlyBoss(), 5000);
             }
-            // upgrade the sanctuary every 5 waves.
-            if (waveId % 5 == 4) {
-                setTimeout(() => this.upgradeSanctuary(), 1000);
+        }
+
+        // Update sanctuary tiers
+        let newSancTier = Math.min(Math.floor(this.waveId / 5) + 1, 6);
+        if (newSancTier != this.sanctuaryTier) {
+            for (let sanc of this.sanctuaries) {
+                this.defineSanctuary(sanc, TEAM_BLUE, `sanctuaryTier${newSancTier}`);
             }
+            sockets.broadcast(`The sanctuaries have upgraded to tier ${newSancTier}.`);
+            this.sanctuaryTier = newSancTier;
         }
     }
 
@@ -258,7 +252,7 @@ class BossRush {
         Class.basic.UPGRADES_TIER_2.push("healer");
         //TODO: filter out tiles that are not of sanctuary type
         for (let tile of room.spawnable[TEAM_BLUE]) {
-            this.spawnSanctuary(tile, TEAM_BLUE);
+            this.spawnSanctuary(tile, TEAM_BLUE, "sanctuaryTier1");
         }
     }
 
