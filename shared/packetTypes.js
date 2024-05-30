@@ -175,9 +175,8 @@ s2c = doThing([
 		//     Uint16: kills, Uint16: assists, Uint16: bosskills, Uint16: polygonkills,
 		//     Array<String>: killerClasses ] // killscreen info
 	'kicked', // kicked
-	'nameColor', // name color
-
-	'entityChatMessages' // currently visible chat messages from entities in range
+	'nameColor', // [ Color: nameColor ] // name color
+	'entityChatMessages' // [ String: message ] // currently visible chat messages from entities in range
 ]);
 
 
@@ -188,9 +187,10 @@ s2c = doThing([
 import { Bitfield } from './liteSockets/Bitfield.js';
 import { Builder } from './liteSockets/Walker/builder.js';
 import { Reader } from './liteSockets/Walker/reader.js';
+import { Color } from './color.js';
 
-// TODO: use these
-Builder.StructDynamic = function (object, struct) {
+// TODO: test these
+Builder.prototype.StructDynamic = function (object, struct) {
 	let structKeys = Object.keys(struct.map(x => x[0])),
 		doesPropertyExist = new Bitfield(keys);
 
@@ -227,7 +227,7 @@ Builder.StructDynamic = function (object, struct) {
 	return this;
 };
 
-Reader.StructDynamic = function (struct) {
+Reader.prototype.StructDynamic = function (struct) {
 	let structKeys = Object.keys(struct.map(x => x[0])),
 		bitfieldInit = 0n;
 	switch (structKeys.length >> 3) {
