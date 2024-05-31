@@ -105,6 +105,7 @@ class BossRush {
         this.remainingEnemies = 0;
         this.sanctuaryTier = 1;
         this.sanctuaries = [];
+        this.leftSanctuaries = 0;
     }
 
     generateWaves() {
@@ -160,14 +161,16 @@ class BossRush {
             if (entity.team === TEAM_ENEMIES) {
                 this.spawnSanctuary(tile, TEAM_BLUE, `sanctuaryTier${this.sanctuaryTier}`);
                 tile.color.interpret(getTeamColor(TEAM_BLUE));
-                sockets.broadcast('A sanctuary has been repaired!');
+                this.leftSanctuaries++;
+                sockets.broadcast('A sanctuary has been repaired! ' + this.leftSanctuaries + ' sanctuaries remain.');
                 if (team !== spawnableTeam) { // Allow the player to spawn so we add it to the spawnable locations.
                     room.spawnable[TEAM_BLUE].push(tile);
                 }
             } else {
                 this.spawnSanctuary(tile, TEAM_ENEMIES, "dominator");
                 tile.color.interpret(getTeamColor(TEAM_ENEMIES));
-                sockets.broadcast('A sanctuary has been destroyed!');
+                this.leftSanctuaries--;
+                sockets.broadcast('A sanctuary has been destroyed! ' + this.leftSanctuaries + ' sanctuaries remain.');
                 if (team !== spawnableTeam) { // Don't allow players to spawn at the destroyed sanctuary so we remove it from spawnable location.
                     util.remove(spawnableTeam, spawnableTeam.indexOf(tile));
                 }
@@ -252,6 +255,7 @@ class BossRush {
         Class.basic.UPGRADES_TIER_2.push("healer");
         //TODO: filter out tiles that are not of sanctuary type
         for (let tile of room.spawnable[TEAM_BLUE]) {
+            this.leftSanctuaries += 1;
             this.spawnSanctuary(tile, TEAM_BLUE, "sanctuaryTier1");
         }
     }
