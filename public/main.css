@@ -148,6 +148,7 @@ input.checkbox {
     top: -2px;
     overflow: hidden;
 }
+
 #optColors {
     width: 150px;
 }
@@ -329,6 +330,7 @@ update {
         background-color: gray;
     }
 }
+
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -340,13 +342,13 @@ select {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAICAYAAAD0g6+qAAAAwklEQVQoU42QMQrCQBBFZxeGgJ7BI1jYa2GzTTY3sRUECy1yA0svEQhhEHIHLdRrqF2a5EuCkbgmmin/zLz5f5QxZsTMK2ZeR1F0p5ay1i7zPD+LiLT1S01Za7dEtCGiY5Zl8zRNH81h3/d3SqkFgFOSJJNOUBAEAwAHIpq6sAbkprWexXF86QSVjTaY53nhy8lfSBWtvuDAKhlAL8gHyHUGAFrr8a84zZhvR7VojBkyc1gUxV5Erl0/cfUvUN9Fd+4JA1JkCdbmVf8AAAAASUVORK5CYII=) 100% no-repeat #eee;
     border-radius: 4px;
     border: 1px solid #ccc;
-  }
-  select:hover {
+}
+select:hover {
     background-color: #ccc;
-  }
-  select:active {
+}
+select:active {
     background-color: #eee;
-  }
+}
 .shadowScroll {
     overflow-y: scroll;
     background:
@@ -397,13 +399,14 @@ select {
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-.greyText {
-    opacity: 0.5;
-}
 #bottomHolder {
     width: 370px;
     display: grid;
     grid-template-columns: auto auto auto;
+}
+
+.greyText {
+    opacity: 0.5;
 }
 .container {
     position: relative;
@@ -413,15 +416,14 @@ select {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  }
-  
-  .container input {
+}
+.container input {
     position: absolute;
     visibility: hidden;
     width: 0;
     height: 0;
     cursor: pointer;
-  }
+}
 .checkmark {
     position: absolute;
     top: 0;
@@ -431,8 +433,8 @@ select {
     border-radius: 4px;
     background-color: #eee;
     border: 1px solid #ccc;
-  }
-  .radio {
+}
+.radio {
     position: absolute;
     top: 0;
     left: 0;
@@ -441,31 +443,27 @@ select {
     border-radius: 50%;
     background-color: #eee;
     border: 1px solid #ccc;
-  }
-  
-  .container:hover input ~ .checkmark, .container:hover input ~ .radio {
+}
+
+.container:hover input ~ .checkmark, .container:hover input ~ .radio {
     background-color: #ccc;
-  }
-  .container input:disabled ~ .checkmark, .container input:disabled ~ .radio {
+}
+.container input:disabled ~ .checkmark, .container input:disabled ~ .radio {
     background-color: #ddd;
-  }
-  
-  .container input:checked ~ .checkmark, .container input:checked ~ .radio {
+}
+.container input:checked ~ .checkmark, .container input:checked ~ .radio {
     background-color: #0074DA;
     border: 1px solid #0074DA;
-  }
-  
-  .container:hover input:checked ~ .checkmark, .container:hover input:checked ~ .radio {
+}
+.container:hover input:checked ~ .checkmark, .container:hover input:checked ~ .radio {
     background-color: #004894;
     border: 1px solid #004894;
-  }
-  
-  .container input:disabled:checked ~ .checkmark, .container input:disabled:checked ~ .radio {
+}
+.container input:disabled:checked ~ .checkmark, .container input:disabled:checked ~ .radio {
     background-color: #002C5B;
     border: 1px solid #002C5B;
-  }
-  
-  .container .checkmark:after {
+}
+.container .checkmark:after {
     content: '';
     position: absolute;
     display: none;
@@ -476,8 +474,8 @@ select {
     border: solid white;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
-  }
-  .container .radio:after {
+}
+.container .radio:after {
     content: '';
     display: none;
     margin: 4px;
@@ -485,11 +483,11 @@ select {
     height: 6px;
     border-radius: 50%;
     background: #fff;
-  }
-  
-  .container input:checked ~ .checkmark:after, .container input:checked ~ .radio:after {
+}
+.container input:checked ~ .checkmark:after, .container input:checked ~ .radio:after {
     display: block;
-  }
+}
+
 a.link {
     border-radius: 5px;
     box-sizing: border-box;
@@ -695,6 +693,7 @@ input [type="image"]:focus {
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+
 td b {
     display: inline-block;
     cursor: pointer;
@@ -722,13 +721,14 @@ td.editing span {
     visibility: hidden;
 }
 td b {
-      display: inline-block;
-      width: 12px;
-      height: 17px;
-      cursor: pointer;
-      text-align: right;
-      vertical-align: bottom;
+    display: inline-block;
+    width: 12px;
+    height: 17px;
+    cursor: pointer;
+    text-align: right;
+    vertical-align: bottom;
 }
+
 *:focus {
     outline: 1px solid transparent;
     border-style: none;

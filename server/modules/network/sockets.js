@@ -143,7 +143,7 @@ function incoming(message, socket) {
             util.log("Clients: " + clients.length);
             break;
         case "s":
-            // spawn request'
+            // spawn request
             util.log(`[INFO] A socket ( ${socket.ip} ) is trying to spawn an player, checking all securities...`);
             if (!socket.status.deceased) {
                 socket.kick("Trying to spawn while already alive.");
@@ -200,7 +200,15 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            if (needsRoom) socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))), JSON.stringify(util.serverStartTime), Config.runSpeed, Config.ARENA_TYPE);
+            if (needsRoom) socket.talk(
+                "R",
+                room.width,
+                room.height,
+                JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))),
+                JSON.stringify(util.serverStartTime),
+                Config.runSpeed,
+                Config.ARENA_TYPE
+            );
             // Give the server name.
             socket.talk("svInfo", Config.gameModeName);
             // More important stuff

@@ -845,10 +845,10 @@ const socketInit = port => {
                 break;
             case "svInfo": // For debugging.
                 global.serverName = m[0];
-            break;
+                break;
             case "updateName": // Update the name if needed.
                 global.player.name = m[0];
-            break;
+                break;
             case 'c': // force camera move
                 global.player.renderx = global.player.cx = m[0];
                 global.player.rendery = global.player.cy = m[1];
@@ -995,12 +995,14 @@ const socketInit = port => {
                 if (global.respawnTimeout !== 0) {
                     global.cannotRespawn = true;
                     let respawnTimeoutloop = setInterval(() => {
-                      if (global.respawnTimeout <= 1) {
-                        global.cannotRespawn = false;
-                        global.respawnTimeout = false;
-                        clearInterval(respawnTimeoutloop);
-                      } else global.respawnTimeout--
-                    }, 1000) // One second.
+                        if (global.respawnTimeout <= 1) {
+                            global.cannotRespawn = false;
+                            global.respawnTimeout = false;
+                            clearInterval(respawnTimeoutloop);
+                        } else {
+                            global.respawnTimeout--;
+                        }
+                    }, 1000); // One second.
                 }
                 window.animations.deathScreen.reset();
                 window.canvas.reverseDirection = false;
@@ -1010,7 +1012,11 @@ const socketInit = port => {
                 window.onbeforeunload = () => false;
                 break;
             case 'I': // sync with the tank
-                if (m[0]) global.syncingWithTank = true; else global.syncingWithTank = false;
+                if (m[0]) {
+                    global.syncingWithTank = true;
+                } else {
+                    global.syncingWithTank = false;
+                }
                 break;
             case 'K': // kicked
                 window.onbeforeunload = () => false;

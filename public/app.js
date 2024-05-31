@@ -71,12 +71,32 @@ class Animation {
         return Math.abs(this.to - this.value) < val;
     }
 }
-let animations = window.animations = {
-    connecting: new Animation(1, 0),
-    disconnected: new Animation(1, 0),
-    deathScreen: new Animation(1, 0),
-    error: new Animation(1, 0),
-};
+let controls = document.getElementById("controlSettings"),
+    resetButton = document.getElementById("controlReset"),
+    selectedElement = null,
+    controlsArray = [],
+    defaultKeybinds = {},
+    keybinds = {},
+    animations = window.animations = {
+        connecting: new Animation(1, 0),
+        disconnected: new Animation(1, 0),
+        deathScreen: new Animation(1, 0),
+        error: new Animation(1, 0),
+    },
+    tips = [[
+        "Tip: You can view and edit your keybinds in the options menu.",
+        "Tip: You can play on mobile by just going to arras.io on your phone!"
+    ], [
+        "Tip: You can have the shield and health bar be separated by going to the options menu.",
+        "Tip: If arras is having a low frame rate, you can try enabling low graphics in the options menu.",
+        "Tip: You can make traps rounded with the classic trap setting in the options menu.",
+        "Tip: You can create your own private server with the template in the link on the options menu.",
+        "Tip: You can create your own theme with the custom theme makerin the link on the options menu."
+    ], [
+        "Teaming in FFA or FFA Maze is frowned upon, but when taken to the extremes, you can be punished.",
+        "Witch hunting is when you continuously target someone and follow them. This is frowned upon, but when taken to the extremes, you can be punished.",
+        "Multiboxing is when you use a script to control multiple tanks at the same time. This is considered CHEATING and will result in a ban."
+    ]];
 
 // Mockup functions
 // Prepare stuff
@@ -114,24 +134,6 @@ global.message = "";
 global.time = 0;
 global.enableSlideAnimation = false;
 // Tips setup :D
-let tips = [
-    [
-        "Tip: You can view and edit your keybinds in the options menu.",
-        "Tip: You can play on mobile by just going to arras.io on your phone!"
-    ],
-    [
-        "Tip: You can have the shield and health bar be separated by going to the options menu.",
-        "Tip: If arras is having a low frame rate, you can try enabling low graphics in the options menu.",
-        "Tip: You can make traps rounded with the classic trap setting in the options menu.",
-        "Tip: You can create your own private server with the template in the link on the options menu.",
-        "Tip: You can create your own theme with the custom theme makerin the link on the options menu."
-    ],
-    [
-        "Teaming in FFA or FFA Maze is frowned upon, but when taken to the extremes, you can be punished.",
-        "Witch hunting is when you continuously target someone and follow them. This is frowned upon, but when taken to the extremes, you can be punished.",
-        "Multiboxing is when you use a script to control multiple tanks at the same time. This is considered CHEATING and will result in a ban."
-    ]
-];
 tips = tips[Math.floor(Math.random() * tips.length)];
 global.tips = tips[Math.floor(Math.random() * tips.length)];
 global.mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
@@ -145,6 +147,73 @@ function getMockups() {
             Resolve();
         });
     });
+}
+function getKeybinds() {
+    let kb = localStorage.getItem("keybinds");
+    keybinds = typeof kb === "string" && kb.startsWith("{") ? JSON.parse(kb) : {};
+}
+function setKeybinds() {
+    localStorage.setItem("keybinds", JSON.stringify(keybinds));
+}
+function unselectElement() {
+    if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+    }
+    selectedElement.element.parentNode.classList.remove("editing");
+    selectedElement = null;
+}
+function selectElement(element) {
+    selectedElement = element;
+    selectedElement.element.parentNode.classList.add("editing");
+    if (selectedElement.keyCode !== -1 && window.getSelection) {
+        let selection = window.getSelection();
+        selection.removeAllRanges();
+        let range = document.createRange();
+        range.selectNodeContents(selectedElement.element);
+        selection.addRange(range);
+    }
+}
+function setKeybind(key, keyCode) {
+    selectedElement.element.parentNode.classList.remove("editing");
+    document.getElementById("controlReset").style.display = "block";
+    if (keyCode !== selectedElement.keyCode) {
+        let otherElement = controlsArray.find(c => c.keyCode === keyCode);
+        if (keyCode !== -1 && otherElement) {
+            otherElement.keyName = selectedElement.keyName;
+            otherElement.element.innerText = selectedElement.keyName;
+            otherElement.keyCode = selectedElement.keyCode;
+            global[otherElement.keyId] = selectedElement.keyCode;
+            keybinds[otherElement.keyId] = [selectedElement.keyName, selectedElement.keyCode];
+        }
+    }
+    selectedElement.keyName = key;
+    selectedElement.element.innerText = key;
+    selectedElement.keyCode = keyCode;
+    global[selectedElement.keyId] = keyCode;
+    keybinds[selectedElement.keyId] = [key, keyCode];
+    setKeybinds();
+}
+function getElements(kb, storeInDefault) {
+    for (let row of controls.rows) {
+        for (let cell of row.cells) {
+            let element = cell.firstChild;
+            if (!element) continue;
+            let key = element.dataset.key;
+            if (storeInDefault) defaultKeybinds[key] = [element.innerText, global[key]];
+            if (kb[key]) {
+                element.innerText = kb[key][0];
+                global[key] = kb[key][1];
+                document.getElementById("controlReset").style.display = "block";
+            }
+            let obj = {
+                element,
+                keyId: key,
+                keyName: element.innerText,
+                keyCode: global[key]
+            };
+            controlsArray.push(obj);
+        }
+    }
 }
 window.onload = async () => {
     window.serverAdd = (await (await fetch("/serverData.json")).json()).ip;
@@ -215,111 +284,43 @@ window.onload = async () => {
         document.getElementById("optBorders").value = "normal";
     }
     // Keybinds stuff
-    let controls = document.getElementById("controlSettings"),
-        resetButton = document.getElementById("controlReset"),
-        selectedElement = null,
-        controlsArray = [],
-        defaultKeybinds = {},
-        keybinds = {};
-    function getKeybinds() {
-      let kb = localStorage.getItem("keybinds");
-      keybinds = typeof kb === "string" && kb.startsWith("{") ? JSON.parse(kb) : {};
-    }
-    function setKeybinds() {
-      localStorage.setItem("keybinds", JSON.stringify(keybinds));
-    }
-    function unselectElement() {
-      if (window.getSelection) {
-        window.getSelection().removeAllRanges();
-      }
-      selectedElement.element.parentNode.classList.remove("editing");
-      selectedElement = null;
-    }
-    function selectElement(element) {
-      selectedElement = element;
-      selectedElement.element.parentNode.classList.add("editing");
-      if (selectedElement.keyCode !== -1 && window.getSelection) {
-        let selection = window.getSelection();
-        selection.removeAllRanges();
-        let range = document.createRange();
-        range.selectNodeContents(selectedElement.element);
-        selection.addRange(range);
-      }
-    }
-    function setKeybind(key, keyCode) {
-      selectedElement.element.parentNode.classList.remove("editing");
-      document.getElementById("controlReset").style.display = "block";
-      if (keyCode !== selectedElement.keyCode) {
-        let otherElement = controlsArray.find(c => c.keyCode === keyCode);
-        if (keyCode !== -1 && otherElement) {
-          otherElement.keyName = selectedElement.keyName;
-          otherElement.element.innerText = selectedElement.keyName;
-          otherElement.keyCode = selectedElement.keyCode;
-          global[otherElement.keyId] = selectedElement.keyCode;
-          keybinds[otherElement.keyId] = [selectedElement.keyName, selectedElement.keyCode];
-        }
-      }
-      selectedElement.keyName = key;
-      selectedElement.element.innerText = key;
-      selectedElement.keyCode = keyCode;
-      global[selectedElement.keyId] = keyCode;
-      keybinds[selectedElement.keyId] = [key, keyCode];
-      setKeybinds();
-    }
-    function getElements(kb, storeInDefault) {
-    for (let row of controls.rows) {
-      for (let cell of row.cells) {
-        let element = cell.firstChild;
-        if (!element) continue;
-        let key = element.dataset.key;
-        if (storeInDefault) defaultKeybinds[key] = [element.innerText, global[key]];
-        if (kb[key]) {
-          element.innerText = kb[key][0];
-          global[key] = kb[key][1];
-          document.getElementById("controlReset").style.display = "block";
-        }
-        let obj = {
-          element,
-          keyId: key,
-          keyName: element.innerText,
-          keyCode: global[key]
-        };
-        controlsArray.push(obj);
-      }
-    }
-      }
     getKeybinds();
     getElements(keybinds, true);
     document.addEventListener("click", event => {
-      if (!global.gameStart) {
-        if (selectedElement) unselectElement();
-        else {
-          let element = controlsArray.find(({ element }) => element === event.target);
-          if (element) selectElement(element);
+        if (!global.gameStart) {
+            if (selectedElement) {
+                unselectElement();
+            } else {
+                let element = controlsArray.find(({ element }) => element === event.target);
+                if (element) selectElement(element);
+            }
         }
-      }
     });
     resetButton.addEventListener("click", () => {
-      keybinds = {};
-      setKeybinds();
-      controlsArray = [];
-      getElements(defaultKeybinds);
-      document.getElementById("controlReset").style.display = "none";
+        keybinds = {};
+        setKeybinds();
+        controlsArray = [];
+        getElements(defaultKeybinds);
+        document.getElementById("controlReset").style.display = "none";
     });
     // Game start stuff
     document.getElementById("startButton").onclick = () => startGame();
     document.onkeydown = (e) => {
         if (!(global.gameStart || e.shiftKey || e.ctrlKey || e.altKey)) {
-          let key = e.which || e.keyCode;
-          if (selectedElement) {
-            if (1 !== e.key.length || /[0-9]/.test(e.key) || 3 === e.location) {
-              if (!("Backspace" !== e.key && "Delete" !== e.key)) setKeybind("", -1);
-            } else setKeybind(e.key.toUpperCase(), e.keyCode);
-          } else if (key === global.KEY_ENTER) {
-            startGame();
-          }
+            let key = e.which || e.keyCode;
+            if (selectedElement) {
+                if (1 !== e.key.length || /[0-9]/.test(e.key) || 3 === e.location) {
+                    if (!("Backspace" !== e.key && "Delete" !== e.key)) {
+                        setKeybind("", -1);
+                    }
+                } else {
+                    setKeybind(e.key.toUpperCase(), e.keyCode);
+                }
+            } else if (key === global.KEY_ENTER) {
+                startGame();
+            }
         }
-      };
+    };
     window.addEventListener("resize", resizeEvent);
     resizeEvent();
 };
@@ -728,108 +729,108 @@ function drawBar(x1, x2, y, width, color) {
 const drawPolyImgs = [];
 function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation) {
     try {
- // Start drawing
- context.beginPath();
- if (sides instanceof Array) {
-     let dx = Math.cos(angle);
-     let dy = Math.sin(angle);
-     for (let [x, y] of sides)
-         context.lineTo(
-             centerX + radius * (x * dx - y * dy),
-             centerY + radius * (y * dx + x * dy)
-         );
- } else {
-     if ("string" === typeof sides) {
-         //ideally we'd preload images when mockups are loaded but im too lazy for that atm
-         if (!drawPolyImgs[sides]) {
-             drawPolyImgs[sides] = new Image();
-             drawPolyImgs[sides].src = sides;
-             drawPolyImgs[sides].isBroken = false;
-             drawPolyImgs[sides].onerror = function() {
-                 this.isBroken = true;
-             };
-         }
-         let img = drawPolyImgs[sides];
-         if (img.isBroken || !img.complete) { // check if img is broken and draw as path2d if so
-             let path = new Path2D(sides);
-             context.save();
-             context.translate(centerX, centerY);
-             context.scale(radius, radius);
-             context.lineWidth /= radius;
-             context.rotate(angle);
-             context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-             if (!borderless) context.stroke(path);
-             if (fill) context.fill(path);
-             context.restore();
-             return;
-         }
-         context.translate(centerX, centerY);
-         context.rotate(angle);
-         context.imageSmoothingEnabled = imageInterpolation;
-         context.drawImage(img, -radius, -radius, radius*2, radius*2);
-         context.imageSmoothingEnabled = true;
-         context.rotate(-angle);
-         context.translate(-centerX, -centerY);
-         return;
-     }
-     angle += sides % 2 ? 0 : Math.PI / sides;
- }
- if (!sides) {
-     // Circle
-     let fillcolor = context.fillStyle;
-     let strokecolor = context.strokeStyle;
-     context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-     context.fillStyle = strokecolor;
-     context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-     if (!borderless) context.stroke();
-     context.closePath();
-     context.beginPath();
-     context.fillStyle = fillcolor;
-     context.arc(centerX, centerY, radius * fill, 0, 2 * Math.PI);
-     if (fill) context.fill();
-     context.closePath();
-     return;
- } else if (sides < 0) {
-     // Star
-     if (settings.graphical.pointy) context.lineJoin = "miter";
-     sides = -sides;
-     angle += (sides % 1) * Math.PI * 2;
-     sides = Math.floor(sides);
-     let dip = 1 - 6 / (sides ** 2);
-     context.moveTo(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle));
-     context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-     for (let i = 0; i < sides; i++) {
-         let htheta = ((i + 0.5) / sides) * 2 * Math.PI + angle,
-             theta = ((i + 1) / sides) * 2 * Math.PI + angle,
-             cx = centerX + radius * dip * Math.cos(htheta),
-             cy = centerY + radius * dip * Math.sin(htheta),
-             px = centerX + radius * Math.cos(theta),
-             py = centerY + radius * Math.sin(theta);
-         /*if (curvyTraps) {
-             context.quadraticCurveTo(cx, cy, px, py);
-         } else {
-             context.lineTo(cx, cy);
-             context.lineTo(px, py);
-         }*/
-         context.quadraticCurveTo(cx, cy, px, py);
-     }
- } else if (sides > 0) {
-     // Polygon
-     angle += (sides % 1) * Math.PI * 2;
-     sides = Math.floor(sides);
-     context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-     for (let i = 0; i < sides; i++) {
-         let theta = (i / sides) * 2 * Math.PI + angle;
-         context.lineTo(centerX + radius * Math.cos(theta), centerY + radius * Math.sin(theta));
-     }
- }
- context.closePath();
- if (!borderless) context.stroke();
- if (fill) context.fill();
- context.lineJoin = "round";
+        // Start drawing
+        context.beginPath();
+        if (sides instanceof Array) {
+            let dx = Math.cos(angle);
+            let dy = Math.sin(angle);
+            for (let [x, y] of sides)
+                context.lineTo(
+                    centerX + radius * (x * dx - y * dy),
+                    centerY + radius * (y * dx + x * dy)
+                );
+        } else {
+            if ("string" === typeof sides) {
+                //ideally we'd preload images when mockups are loaded but im too lazy for that atm
+                if (!drawPolyImgs[sides]) {
+                    drawPolyImgs[sides] = new Image();
+                    drawPolyImgs[sides].src = sides;
+                    drawPolyImgs[sides].isBroken = false;
+                    drawPolyImgs[sides].onerror = function() {
+                        this.isBroken = true;
+                    };
+                }
+                let img = drawPolyImgs[sides];
+                if (img.isBroken || !img.complete) { // check if img is broken and draw as path2d if so
+                    let path = new Path2D(sides);
+                    context.save();
+                    context.translate(centerX, centerY);
+                    context.scale(radius, radius);
+                    context.lineWidth /= radius;
+                    context.rotate(angle);
+                    context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+                    if (!borderless) context.stroke(path);
+                    if (fill) context.fill(path);
+                    context.restore();
+                    return;
+                }
+                context.translate(centerX, centerY);
+                context.rotate(angle);
+                context.imageSmoothingEnabled = imageInterpolation;
+                context.drawImage(img, -radius, -radius, radius*2, radius*2);
+                context.imageSmoothingEnabled = true;
+                context.rotate(-angle);
+                context.translate(-centerX, -centerY);
+                return;
+            }
+            angle += sides % 2 ? 0 : Math.PI / sides;
+        }
+        if (!sides) {
+            // Circle
+            let fillcolor = context.fillStyle;
+            let strokecolor = context.strokeStyle;
+            context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            context.fillStyle = strokecolor;
+            context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+            if (!borderless) context.stroke();
+            context.closePath();
+            context.beginPath();
+            context.fillStyle = fillcolor;
+            context.arc(centerX, centerY, radius * fill, 0, 2 * Math.PI);
+            if (fill) context.fill();
+            context.closePath();
+            return;
+        } else if (sides < 0) {
+            // Star
+            if (settings.graphical.pointy) context.lineJoin = "miter";
+            sides = -sides;
+            angle += (sides % 1) * Math.PI * 2;
+            sides = Math.floor(sides);
+            let dip = 1 - 6 / (sides ** 2);
+            context.moveTo(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle));
+            context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+            for (let i = 0; i < sides; i++) {
+                let htheta = ((i + 0.5) / sides) * 2 * Math.PI + angle,
+                    theta = ((i + 1) / sides) * 2 * Math.PI + angle,
+                    cx = centerX + radius * dip * Math.cos(htheta),
+                    cy = centerY + radius * dip * Math.sin(htheta),
+                    px = centerX + radius * Math.cos(theta),
+                    py = centerY + radius * Math.sin(theta);
+                /*if (curvyTraps) {
+                    context.quadraticCurveTo(cx, cy, px, py);
+                } else {
+                    context.lineTo(cx, cy);
+                    context.lineTo(px, py);
+                }*/
+                context.quadraticCurveTo(cx, cy, px, py);
+            }
+        } else if (sides > 0) {
+            // Polygon
+            angle += (sides % 1) * Math.PI * 2;
+            sides = Math.floor(sides);
+            context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+            for (let i = 0; i < sides; i++) {
+                let theta = (i / sides) * 2 * Math.PI + angle;
+                context.lineTo(centerX + radius * Math.cos(theta), centerY + radius * Math.sin(theta));
+            }
+        }
+        context.closePath();
+        if (!borderless) context.stroke();
+        if (fill) context.fill();
+        context.lineJoin = "round";
     } catch (e) { // this actually prevents to panic the client. so we will just call "resizeEvent()".
         resizeEvent();
-        console.error("Uh oh, 'CanvasRenderingContext2D' has gotton an error! Error: " + e)
+        console.error("Uh oh, 'CanvasRenderingContext2D' has gotton an error! Error: " + e);
     }
 }
 function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha, strokeWidth, position) {
@@ -1728,13 +1729,13 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     //minimap stuff ends here
     //debug stuff
     if (!global.showDebug) y += 14 * 3;
-    // Text
     if ((100 * gui.fps).toFixed(2) < 100) orangeColor = true;
     if (global.metrics.rendertime < 10) orangeColor = true;
+    // Text
     if (global.showDebug) {
         drawText("Open Source Arras", x + len, y - 50 - 5 * 14 - 2, 15, "#1081E5", "right");
         drawText("Prediction: " + Math.round(GRAPHDATA) + "ms", x + len, y - 50 - 4 * 14, 10, color.guiwhite, "right");
-       /* drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right"); */
+        // drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
         drawText("Memory: " + global.metrics.rendergap + " Mib : " + "Class: " + gui.class, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
         drawText("Update Rate: " + global.metrics.updatetime + "Hz", x + len, y - 50 - 2 * 14, 10, color.guiwhite, "right");
         drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
@@ -1976,18 +1977,17 @@ let getDeath = () => {
     return txt;
 };
 let getTips = () => {
-    let txt = "";
+    let txt = "❓ ";
     if (global.finalKillers.length) {
-      txt = "❓ Try to get revenge on your enemy to get your score back!";
+        txt += "Try to get revenge on your enemy to get your score back!";
     } else if (!global.autolvlUp) {
-      txt =
-        "❓ Enable auto level up at the options menu to get instant level 45!";
+        txt += "Enable auto level up at the options menu to get instant level 45!";
     } else {
-      txt += "❓ Try killing players to earn XP!";
+        txt += "Try killing players to earn XP!";
     }
     return txt;
-  };
-  const gameDrawDead = () => {
+};
+const gameDrawDead = () => {
     clearScreen(color.black, 0.25);
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
@@ -2002,24 +2002,24 @@ let getTips = () => {
         yy = global.screenHeight / 2 - 35 + scale * position.middle.y * 0.707,
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
         baseColor = picture.color;
-      drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
-      drawText("Level " + gui.__s.getLevel(), x - 275, y - -80, 14, color.guiwhite, "center");
-      drawText(picture.name, x - 275, y - -110, 24, color.guiwhite, "center");
-      drawText("Game over, try again!", x, y - 80, 8, color.guiwhite, "center");
-      if (global.player.name == "") {
+    drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
+    drawText("Level " + gui.__s.getLevel(), x - 275, y - -80, 14, color.guiwhite, "center");
+    drawText(picture.name, x - 275, y - -110, 24, color.guiwhite, "center");
+    drawText("Game over, try again!", x, y - 80, 8, color.guiwhite, "center");
+    if (global.player.name == "") {
         drawText("Your Score: ", x - 170, y - 30, 24, color.guiwhite);
-      } else {
+    } else {
         drawText(global.player.name + "'s Score: ", x - 170, y - 30, 24, color.guiwhite);
-      }
-      drawText(util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
-      drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);
-      drawText(getKills(), x - 170, y + 77, 16, color.guiwhite);
-      drawText(getDeath(), x - 170, y + 99, 16, color.guiwhite);
-      drawText(getTips(), x - 170, y + 122, 16, color.guiwhite);
-      drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active for the run!", x - 170, y + 144, 16, color.guiwhite);
-      // drawText(global.cannotRespawn ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center"); // uncomment this when mobile support finished.
-      drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
-      ctx.translate(0, shift * global.screenHeight);
+    }
+    drawText(util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
+    drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);
+    drawText(getKills(), x - 170, y + 77, 16, color.guiwhite);
+    drawText(getDeath(), x - 170, y + 99, 16, color.guiwhite);
+    drawText(getTips(), x - 170, y + 122, 16, color.guiwhite);
+    drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active for the run!", x - 170, y + 144, 16, color.guiwhite);
+    // drawText(global.cannotRespawn ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center"); // uncomment this when mobile support finished.
+    drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
+    ctx.translate(0, shift * global.screenHeight);
 };
 const gameDrawOldDead = () => {
     clearScreen(color.black, 0.25);
@@ -2047,7 +2047,6 @@ const gameDrawOldDead = () => {
     ctx.translate(0, shift * global.screenHeight);
 };
 const gameDrawBeforeStart = () => {
-    let enableAnimation = false;
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
     clearScreen(color.white, 0.5);

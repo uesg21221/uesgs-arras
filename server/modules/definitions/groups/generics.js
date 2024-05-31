@@ -86,18 +86,6 @@ Class.genericEntity = {
         LEVEL: -1
     }
 }
-Class.genericTurret = {
-    PARENT: "genericTank",
-    LABEL: "Unknown Turret Class",
-    FACING_TYPE: "toTarget",
-    COLOR: 16,
-    IGNORED_BY_AI: true,
-    DAMAGE_EFFECTS: false,
-    GUNS: [],
-    TURRETS: [],
-    PROPS: [],
-    ON: [],
-  }
 Class.genericTank = {
     LABEL: "Unknown Class",
     TYPE: "tank",

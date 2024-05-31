@@ -2787,21 +2787,21 @@ Class.MKCarrierAura = addAura(2.1, 1, 0.3, 1);
 Class.MKMinionAura = addAura(1.1, 1, 0.3, 32);
 Class.MKDrone = {
     PARENT: ["drone"],
-     LABEL: "MKShip Drone",
-     TURRETS: [
+    LABEL: "MKShip Drone",
+    TURRETS: [
         {
-          POSITION: [13, 0, 0, 0, 360, 1],
-          TYPE: "MKDoneAura",
+            POSITION: [13, 0, 0, 0, 360, 1],
+            TYPE: "MKDoneAura",
         },
-     ]
-};
+    ]
+}
 Class.MKMinion = {
     PARENT: ["minion"],
     LABEL: "MKShip Minion",
     TURRETS: [
         {
-          POSITION: [13, 0, 0, 0, 360, 1],
-          TYPE: "MKMinionAura",
+            POSITION: [13, 0, 0, 0, 360, 1],
+            TYPE: "MKMinionAura",
         },
     ]
 }
@@ -2810,16 +2810,16 @@ Class.MKTurretFactoryWithController = {
     CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     BODY: {
-      FOV: 2,
+        FOV: 2,
     },
     TURRETS: [
         {
-          POSITION: [13, 0, 0, 0, 360, 1],
-          TYPE: "MKFactoryAura",
+            POSITION: [13, 0, 0, 0, 360, 1],
+            TYPE: "MKFactoryAura",
         },
     ]
-  };
-  Class.MKTurretFactory = {
+}
+Class.MKTurretFactory = {
     PARENT: ["genericTank"],
     LABEL: "MKTurret factory",
     SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
@@ -2845,8 +2845,8 @@ Class.MKTurretFactoryWithController = {
             POSITION: [12, 14, 1, 0, 0, 0, 0],
         },
     ],
-  };
-  Class.MKTurretCarrier = {
+}
+Class.MKTurretCarrier = {
     PARENT: ["carrier"],
     FACING_TYPE: "toTarget",
     LABEL: "MKTurret carrier",
@@ -2854,24 +2854,28 @@ Class.MKTurretFactoryWithController = {
     COLOR: 16,
     IGNORED_BY_AI: true,
     DAMAGE_EFFECTS: false,
-  };
-  Class.MKTurretCarrierWithController = {
+}
+Class.MKTurretCarrierWithController = {
     PARENT: ["MKTurretCarrier"],
     CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     BODY: {
-      FOV: 2,
+        FOV: 2,
     },
     TURRETS: [
         {
-          POSITION: [13, 0, 0, 0, 360, 1],
-          TYPE: "MKCarrierAura",
+            POSITION: [13, 0, 0, 0, 360, 1],
+            TYPE: "MKCarrierAura",
         },
     ]
-  };
-  Class.MKTurretThruster = {
-    PARENT: "genericTurret",
+}
+Class.MKTurretThruster = {
+    PARENT: "genericTank",
     LABEL: "MKTurret Thruster",
+    FACING_TYPE: "toTarget",
+    IGNORED_BY_AI: true,
+    DAMAGE_EFFECTS: false,
+    COLOR: 16,
     GUNS: [{
         POSITION: [14, 12, 1, 4, 0, 180, 0],
         PROPERTIES: {
@@ -2885,60 +2889,60 @@ Class.MKTurretFactoryWithController = {
             TYPE: ["bullet"]
         },
     }]
-};
-  Class.MKTurret = {
+}
+Class.MKTurret = {
     PARENT: ["genericTurret"],
     LABEL: "MKTurret",
     SHAPE: 5,
     SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     TURRETS: [
-      {
-        POSITION: [13, 0, 0, 0, 360, 1],
-        TYPE: "MKTurretFactory",
-      },
-      {
-        POSITION: [10, 16.1, 2.6, 140, 180, 0],
-        TYPE: "MKTurretFactoryWithController",
-      },
-      {
-        POSITION: [10, 16.1, 2.6, 203, 180, 0],
-        TYPE: "MKTurretFactoryWithController",
-      },
-      {
-        POSITION: [10, 16.1, -3.9, 310, 180, 0],
-        TYPE: "MKTurretFactoryWithController",
-      },
-      {
-        POSITION: [10, 16.1, 2.6, 413, 180, 0],
-        TYPE: "MKTurretFactoryWithController",
-      },
-      {
-        POSITION: [10, 10.2, 0, 0, 360, 0],
-        TYPE: "MKTurretCarrier",
-      },
-      {
-        POSITION: [10, 10.2, 0, 105.5, 180, 0],
-        TYPE: "MKTurretCarrierWithController",
-      },
-      {
-        POSITION: [10, 10.2, 0, 180, 180, 0],
-        TYPE: "MKTurretCarrierWithController",
-      },
-      {
-        POSITION: [10, 10.2, 0, 255, 180, 0],
-        TYPE: "MKTurretCarrierWithController",
-      },
-      {
-        POSITION: [8, -10, -2, -45, 90, 0],
-        TYPE: "MKTurretThruster"
-      },
-      {
-        POSITION: [8, -10, 2, 45, 90, 0],
-        TYPE: "MKTurretThruster"
-      },
+        {
+            POSITION: [13, 0, 0, 0, 360, 1],
+            TYPE: "MKTurretFactory",
+        },
+        {
+            POSITION: [10, 16.1, 2.6, 140, 180, 0],
+            TYPE: "MKTurretFactoryWithController",
+        },
+        {
+            POSITION: [10, 16.1, 2.6, 203, 180, 0],
+            TYPE: "MKTurretFactoryWithController",
+        },
+        {
+            POSITION: [10, 16.1, -3.9, 310, 180, 0],
+            TYPE: "MKTurretFactoryWithController",
+        },
+        {
+            POSITION: [10, 16.1, 2.6, 413, 180, 0],
+            TYPE: "MKTurretFactoryWithController",
+        },
+        {
+            POSITION: [10, 10.2, 0, 0, 360, 0],
+            TYPE: "MKTurretCarrier",
+        },
+        {
+            POSITION: [10, 10.2, 0, 105.5, 180, 0],
+            TYPE: "MKTurretCarrierWithController",
+        },
+        {
+            POSITION: [10, 10.2, 0, 180, 180, 0],
+            TYPE: "MKTurretCarrierWithController",
+        },
+        {
+            POSITION: [10, 10.2, 0, 255, 180, 0],
+            TYPE: "MKTurretCarrierWithController",
+        },
+        {
+            POSITION: [8, -10, -2, -45, 90, 0],
+            TYPE: "MKTurretThruster"
+        },
+        {
+            POSITION: [8, -10, 2, 45, 90, 0],
+            TYPE: "MKTurretThruster"
+        },
     ],
-  };
-  Class.AEMKShipBoss = {
+}
+Class.AEMKShipBoss = {
     PARENT: ["genericTank"],
     LABEL: "MKShip",
     NAME: "Æ🚫Sports",
@@ -2961,65 +2965,65 @@ Class.MKTurretFactoryWithController = {
     VALUE: 5e5,
     SKILL: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
     BODY: {
-      REGEN: 0.4,
-      FOV: 1,
-      SHIELD: 2,
-      ACCEL: 0.2,
-      SPEED: 0.6,
-      HEALTH: 5000,
-      PUSHABILITY: 0.15,
-      DENSITY: 0.2,
-      DAMAGE: 4,
+        REGEN: 0.4,
+        FOV: 1,
+        SHIELD: 2,
+        ACCEL: 0.2,
+        SPEED: 0.6,
+        HEALTH: 5000,
+        PUSHABILITY: 0.15,
+        DENSITY: 0.2,
+        DAMAGE: 4,
     },
     HITS_OWN_TYPE: "pushOnlyTeam",
     TURRETS: [
-      {
-        POSITION: [18, 0, 0, 0, 360, 1],
-        TYPE: "MKAura",
-      },
-      {
-        POSITION: [11, 0, 0, 0, 360, 1],
-        TYPE: "MKTurret",
-      },
+        {
+            POSITION: [18, 0, 0, 0, 360, 1],
+            TYPE: "MKAura",
+        },
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: "MKTurret",
+        },
     ],
     GUNS: (() => {
-      let e = [],
-        T = [1];
-      for (let e = 1; e < 8.5; e += 0.5) {
-        let t = e / 16;
-        T.push(t);
-      }
-      for (let t = 0; t < 16; t++) {
-        let S = 22.5 * (t + 1),
-          E = {
-            MAX_CHILDREN: 2,
-            SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
-            TYPE: "MKDrone",
-            AUTOFIRE: true,
-            SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.drone,
-            WAIT_TO_CYCLE: true,
-          };
-        t % 2 == 0 &&
-          (E.TYPE = [
-            "MKDrone",
-            {
-              AI: {
-                skynet: true,
-              },
-              INDEPENDENT: true,
-              LAYER: 10,
-              BODY: {
-                FOV: 2,
-              },
-            },
-          ]);
-        let O = {
-          POSITION: [4.3, 3.1, 1.2, 8, 0, S, T[t]],
-          PROPERTIES: E,
-        };
-        e.push(O);
-      }
-      return e;
+        let e = [],
+            T = [1];
+        for (let e = 1; e < 8.5; e += 0.5) {
+            let t = e / 16;
+            T.push(t);
+        }
+        for (let t = 0; t < 16; t++) {
+            let S = 22.5 * (t + 1),
+                E = {
+                    MAX_CHILDREN: 2,
+                    SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
+                    TYPE: "MKDrone",
+                    AUTOFIRE: true,
+                    SYNCS_SKILLS: true,
+                    STAT_CALCULATOR: gunCalcNames.drone,
+                    WAIT_TO_CYCLE: true,
+                };
+            t % 2 == 0 &&
+            (E.TYPE = [
+                "MKDrone",
+                {
+                    AI: {
+                        skynet: true,
+                    },
+                    INDEPENDENT: true,
+                    LAYER: 10,
+                    BODY: {
+                        FOV: 2,
+                    },
+                },
+            ]);
+            let O = {
+                POSITION: [4.3, 3.1, 1.2, 8, 0, S, T[t]],
+                PROPERTIES: E,
+            };
+            e.push(O);
+        }
+        return e;
     })(),
-  };
+}

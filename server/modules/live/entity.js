@@ -1161,11 +1161,6 @@ class Entity extends EventEmitter {
         if (set.DIE_AT_LOW_SPEED != null) this.settings.diesAtLowSpeed = set.DIE_AT_LOW_SPEED;
         if (set.DIE_AT_RANGE != null) this.settings.diesAtRange = set.DIE_AT_RANGE;
         if (set.INDEPENDENT != null) this.settings.independent = set.INDEPENDENT;
-        if (set.SYNC_WITH_TANK != null) {
-            this.settings.syncWithTank = set.SYNC_WITH_TANK;
-            if (set.SYNC_WITH_TANK == true && this.socket) this.socket.talk("I", true);
-            if (set.SYNC_WITH_TANK == false && this.socket) this.socket.talk("I", false);
-        }
         if (set.PERSISTS_AFTER_DEATH != null) this.settings.persistsAfterDeath = set.PERSISTS_AFTER_DEATH;
         if (set.CLEAR_ON_MASTER_UPGRADE != null) this.settings.clearOnMasterUpgrade = set.CLEAR_ON_MASTER_UPGRADE;
         if (set.HEALTH_WITH_LEVEL != null) this.settings.healthWithLevel = set.HEALTH_WITH_LEVEL;
@@ -1198,6 +1193,10 @@ class Entity extends EventEmitter {
         };
         if (set.AI != null) this.aiSettings = set.AI;
         if (set.INVISIBLE != null) this.invisible = set.INVISIBLE;
+        if (set.SYNC_WITH_TANK != null) {
+            this.settings.syncWithTank = set.SYNC_WITH_TANK;
+            if (this.socket) this.socket.talk("I", !!set.SYNC_WITH_TANK);
+        }
         if (set.ALPHA != null) {
             this.alpha = ("number" === typeof set.ALPHA) ? set.ALPHA : set.ALPHA[1];
             this.alphaRange = [
@@ -2220,7 +2219,7 @@ class Entity extends EventEmitter {
             this.emit('death', { body: this, killers, killTools });
             killers.forEach((e) => e.emit('kill', { body: e, entity: this }));
             // If there's no valid killers (you were killed by food), change the message to be more passive
-            let killText = notJustFood ? "" : !this.dontSendDeathMessage ? "You have been killed by " : "",
+            let killText = notJustFood ? "You have been killed by " : "",
                 dothISendAText = this.settings.givesKillMessage;
 
             for (let i = 0; i < killers.length; i++) {
@@ -2253,11 +2252,9 @@ class Entity extends EventEmitter {
                     }
                     // Only if we give messages
                     if (dothISendAText) {
-                        if (!this.dontSendDeathMessage)
                         instance.sendMessage("You killed " + name + (killers.length > 1 ? " (with some help)." : "."));
                     }
                     if (this.settings.killMessage) {
-                        if (!this.dontSendDeathMessage)
                         instance.sendMessage("You " + this.settings.killMessage + " " + name + (killers.length > 1 ? " (with some help)." : "."));
                     }
                 }
@@ -2300,10 +2297,12 @@ class Entity extends EventEmitter {
 
             // Prepare it and clear the collision array.
             killText = killText.slice(0, -5);
-            if (killText === "You have been kille" && !this.dontSendDeathMessage) {
+            if (killText === "You have been kille") {
                 killText = "You have died a stupid death";
             }
-            if (!this.dontSendDeathMessage) this.sendMessage(killText + ".");
+            if (!this.dontSendDeathMessage) {
+                this.sendMessage(killText + ".");
+            }
             // If I'm the leader, broadcast it:
             if (this.id === room.topPlayerID) {
                 let usurptText = this.name === "" ? "The leader" : this.name;

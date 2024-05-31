@@ -114,7 +114,7 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 10,
+    BOTS: 0,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
@@ -226,7 +226,8 @@ module.exports = {
 
 
     // Default values for gamemode related things.
-    // Do not change these here, you'll likely break stuff! Change GAME_MODES instead.
+    // Do not change these, you'll likely break stuff!
+    // Change GAME_MODES instead.
     GAMEMODE_NAME_PREFIXES: [],
     SPECIAL_BOSS_SPAWNS: false,
     MOTHERSHIP_LOOP: false,

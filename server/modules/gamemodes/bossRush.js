@@ -127,8 +127,8 @@ class BossRush {
     }
 
     spawnFriendlyBoss() {
-        let o = new Entity(getSpawnableArea(TEAM_BLUE));
-        let type = this.friendlyBossChoices[ran.chooseChance(...this.friendlyBossChoices.map((x) => x[0]))][1]
+        let o = new Entity(getSpawnableArea(TEAM_BLUE)),
+            type = this.friendlyBossChoices[ran.chooseChance(...this.friendlyBossChoices.map((x) => x[0]))][1];
         o.define(type);
         o.define({ DANGER: 10 });
         o.team = TEAM_BLUE;
@@ -140,9 +140,8 @@ class BossRush {
     }
 
     spawnSanctuary(tile, team, type = false) {
-        type = type ? type : "sanctuaryTier1";
         let o = new Entity(tile.loc);
-        this.defineSanctuary(o, team, type, tile);
+        this.defineSanctuary(o, team, type || "sanctuaryTier1", tile);
         this.sanctuaries.push(o);
     }
 
@@ -164,7 +163,7 @@ class BossRush {
                 sockets.broadcast('A sanctuary has been repaired!');
                 if (team !== spawnableTeam) { // Allow the player to spawn so we add it to the spawnable locations.
                     room.spawnable[TEAM_BLUE].push(tile);
-                 }
+                }
             } else {
                 this.spawnSanctuary(tile, TEAM_ENEMIES, "dominator");
                 tile.color.interpret(getTeamColor(TEAM_ENEMIES));

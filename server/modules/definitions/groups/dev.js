@@ -49,27 +49,26 @@ Class.developer = {
     ]
 }
 Class.spectator = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "Spectator",
     ALPHA: 0,
     CAN_BE_ON_LEADERBOARD: false,
     ACCEPTS_SCORE: false,
     DRAW_HEALTH: false,
-    IGNORED_BY_AI: true,
     HITS_OWN_TYPE: "never",
+    IGNORED_BY_AI: true,
     ARENA_CLOSER: true,
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
-      PUSHABILITY: 0,
-      SPEED: 5,
-      FOV: 2.5,
-      DAMAGE: 0,
-      HEALTH: 1e100,
-      SHIELD: 1e100,
-      REGEN: 1e100,
+        PUSHABILITY: 0,
+        SPEED: 5,
+        FOV: 2.5,
+        DAMAGE: 0,
+        HEALTH: 1e100,
+        SHIELD: 1e100,
+        REGEN: 1e100,
     },
-    GUNS: [],
-  };
+}
 
 Class.bosses = menu("Bosses")
 Class.bosses.REROOT_UPGRADE_TREE = "bosses"

@@ -275,8 +275,8 @@ let regenerateHealthAndShield = () => {
             instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
         }
     }
-  }
-  const maintainloop = () => {
+}
+const maintainloop = () => {
     // Update the grid
     if (!naturallySpawnedBosses.length && bossTimer++ > Config.BOSS_SPAWN_COOLDOWN) {
         bossTimer = -Config.BOSS_SPAWN_DURATION;
@@ -324,8 +324,8 @@ let regenerateHealthAndShield = () => {
 
     // then add new bots if arena is open
     if (!global.arenaClosed && bots.length < Config.BOTS) {
-        const botName = Config.BOT_NAME_PREFIX + ran.chooseBotName();
-        let team = Config.MODE === "tdm" ? getWeakestTeam() : undefined,
+        let botName = Config.BOT_NAME_PREFIX + ran.chooseBotName(),
+            team = Config.MODE === "tdm" ? getWeakestTeam() : undefined,
             limit = 20, // give up after 20 attempts and just pick whatever is currently chosen
             loc;
         do {
@@ -333,9 +333,7 @@ let regenerateHealthAndShield = () => {
         } while (limit-- && dirtyCheck(loc, 50))
         let o = new Entity(loc);
         o.define(Config.SPAWN_CLASS);
-        o.define({
-            CONTROLLERS: ["nearestDifferentMaster"],
-        })
+        o.define({ CONTROLLERS: ["nearestDifferentMaster"] });
         o.refreshBodyAttributes();
         o.skill.score = Config.BOT_START_XP;
         o.isBot = true;
@@ -347,15 +345,12 @@ let regenerateHealthAndShield = () => {
         o.color.base = color;
         if (team) o.team = team;
         bots.push(o);
-        setTimeout(
-            () => {
-              // allow them to move
-              o.define([o.defs, 'bot']);
-              o.refreshBodyAttributes();
-              o.invuln = false;
-            },
-            3000 + Math.floor(Math.random() * 7000),
-          );
+        setTimeout(() => {
+            // allow them to move
+            o.define([o.defs, 'bot']);
+            o.refreshBodyAttributes();
+            o.invuln = false;
+        }, 3000 + Math.floor(Math.random() * 7000));
         o.on('dead', () => util.remove(bots, bots.indexOf(o)));
     }
 };
