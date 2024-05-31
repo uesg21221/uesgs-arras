@@ -2786,7 +2786,7 @@ Class.MKFactoryAura = addAura(2.6, 1, 0.3, "trans");
 Class.MKCarrierAura = addAura(2.1, 1, 0.3, 1);
 Class.MKMinionAura = addAura(1.1, 1, 0.3, 32);
 Class.MKDrone = {
-    PARENT: ["drone"],
+    PARENT: "drone",
     LABEL: "MKShip Drone",
     TURRETS: [
         {
@@ -2796,7 +2796,7 @@ Class.MKDrone = {
     ]
 }
 Class.MKMinion = {
-    PARENT: ["minion"],
+    PARENT: "minion",
     LABEL: "MKShip Minion",
     TURRETS: [
         {
@@ -2806,7 +2806,7 @@ Class.MKMinion = {
     ]
 }
 Class.MKTurretFactoryWithController = {
-    PARENT: ["MKTurretFactory"],
+    PARENT: "MKTurretFactory",
     CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     BODY: {
@@ -2820,7 +2820,7 @@ Class.MKTurretFactoryWithController = {
     ]
 }
 Class.MKTurretFactory = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "MKTurret factory",
     SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     COLOR: 16,
@@ -2847,7 +2847,7 @@ Class.MKTurretFactory = {
     ],
 }
 Class.MKTurretCarrier = {
-    PARENT: ["carrier"],
+    PARENT: "carrier",
     FACING_TYPE: "toTarget",
     LABEL: "MKTurret carrier",
     SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
@@ -2856,7 +2856,7 @@ Class.MKTurretCarrier = {
     DAMAGE_EFFECTS: false,
 }
 Class.MKTurretCarrierWithController = {
-    PARENT: ["MKTurretCarrier"],
+    PARENT: "MKTurretCarrier",
     CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     BODY: {
@@ -2880,19 +2880,23 @@ Class.MKTurretThruster = {
         POSITION: [14, 12, 1, 4, 0, 180, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.375, reload: 0.75, recoil: 1.05 }]),
-            TYPE: ["bullet"]
+            TYPE: "bullet"
         }
     }, {
         POSITION: [12, 12, 1.4, 4, 0, 180, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.375, reload: 0.75, recoil: 1.05 }]),
-            TYPE: ["bullet"]
+            TYPE: "bullet"
         },
     }]
 }
 Class.MKTurret = {
-    PARENT: ["genericTurret"],
+    PARENT: "genericTank",
+    FACING_TYPE: "toTarget",
+    IGNORED_BY_AI: true,
+    DAMAGE_EFFECTS: false,
     LABEL: "MKTurret",
+    COLOR: 16,
     SHAPE: 5,
     SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     TURRETS: [
@@ -2943,7 +2947,7 @@ Class.MKTurret = {
     ],
 }
 Class.AEMKShipBoss = {
-    PARENT: ["genericTank"],
+    PARENT: "genericTank",
     LABEL: "MKShip",
     NAME: "Æ🚫Sports",
     SYNC_WITH_TANK: true,
