@@ -2780,11 +2780,11 @@ Class.toothlessBoss.TURRETS = Class.toothlessBoss.TURRETS.concat(weaponArray([{
     TYPE: "toothlessBossTurret",
 }], 3));
 
-Class.MKAura = addAura(5, 0.3, 0, 42);
-Class.MKDoneAura = addAura(3, 2, 0.3, 32);
-Class.MKFactoryAura = addAura(2.6, 1.3, 0.3, "trans");
-Class.MKCarrierAura = addAura(2.1, 1.3, 0.3, 1);
-Class.MKMinionAura = addAura (2, 2, 0.3, 32);
+Class.MKAura = addAura(5, 0.4, 0.1, 42);
+Class.MKDoneAura = addAura(2, 1, 0.3, 32);
+Class.MKFactoryAura = addAura(2.6, 1, 0.3, "trans");
+Class.MKCarrierAura = addAura(2.1, 1, 0.3, 1);
+Class.MKMinionAura = addAura(1.1, 1, 0.3, 32);
 Class.MKDrone = {
     PARENT: ["drone"],
      LABEL: "MKShip Drone",
@@ -2875,14 +2875,14 @@ Class.MKTurretFactoryWithController = {
     GUNS: [{
         POSITION: [14, 12, 1, 4, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.175, reload: 0.25, recoil: 1.25 }]),
-            TYPE: ["bullet", { ALPHA: 0.5 }]
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.375, reload: 0.75, recoil: 1.05 }]),
+            TYPE: ["bullet"]
         }
     }, {
         POSITION: [12, 12, 1.4, 4, 0, 180, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.175, reload: 0.25, recoil: 1.25 }]),
-            TYPE: ["bullet", { ALPHA: 0.5 }]
+            SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.machineGun, g.thruster, { range: 0.375, reload: 0.75, recoil: 1.05 }]),
+            TYPE: ["bullet"]
         },
     }]
 };
@@ -2944,7 +2944,7 @@ Class.MKTurretFactoryWithController = {
     NAME: "Æ🚫Sports",
     SYNC_WITH_TANK: true,
     CONTROLLERS: ["nearestDifferentMaster", "minion"],
-    UPGRADE_TOOLTIP: "Has 4 carrier's and 4 factories, NOW FACE MY DESTRUCTION!",
+    UPGRADE_TOOLTIP: "Has 4 carrier's, 4 factories, and their own auras. NOW FACE MY DESTRUCTION!",
     COLOR: 32,
     UPGRADE_COLOR: 32,
     GLOW: {
@@ -2959,17 +2959,17 @@ Class.MKTurretFactoryWithController = {
     SIZE: Class.genericTank.SIZE * (17 / 3),
     SHAPE: 16,
     VALUE: 5e5,
-    SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
+    SKILL: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
     BODY: {
       REGEN: 0.4,
       FOV: 1,
       SHIELD: 2,
       ACCEL: 0.2,
-      SPEED: 1.3,
-      HEALTH: 6000,
+      SPEED: 0.6,
+      HEALTH: 5000,
       PUSHABILITY: 0.15,
       DENSITY: 0.2,
-      DAMAGE: 5.5,
+      DAMAGE: 4,
     },
     HITS_OWN_TYPE: "pushOnlyTeam",
     TURRETS: [
