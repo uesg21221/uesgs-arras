@@ -1261,7 +1261,6 @@ Class.taureonBoss = {
     DANGER: 10,
     SHAPE: 4.5,
     SIZE: 50,
-    SYNC_WITH_TANK: true,
     FACING_TYPE: "smoothToTarget",
     UPGRADE_TOOLTIP: "With a powerful Gatling Gun on the front, Rocket Launchers as wings, movable Thrusters on the back, " +
                     "and equipped with Railgun Turrets, it perfectly excells at terminating those who feel its Wrath.\n" +
@@ -1624,7 +1623,6 @@ Class.dogeiscutBoss = {
     LABEL: "DOG",
     NAME: "DogeisCut",
     DANGER: 10,
-    SYNC_WITH_TANK: true,
     FACING_TYPE: "smoothToTarget",
     SHAPE: [[1,0],[-0.7,0.7],[-0.35,0],[-0.7,-0.7]],
     COLOR: "yellow",
@@ -2329,7 +2327,6 @@ Class.frostBoss = {
     PARENT: 'miniboss',
     LABEL: 'Extrasolar',
     NAME: 'Frostbyte',
-    SYNC_WITH_TANK: true,
     CONTROLLERS: [["minion", {orbit: 260, leash: 190, repel: 270}]],
     FACING_TYPE: 'toTarget',
     SHAPE: 6,
