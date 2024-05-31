@@ -2888,7 +2888,7 @@ Class.MKTurretThruster = {
     }]
 }
 Class.MKTurret = {
-    PARENT: ["genericTurret"],
+    PARENT: ["genericEntity"],
     LABEL: "MKTurret",
     SHAPE: 5,
     SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
