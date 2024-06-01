@@ -978,12 +978,12 @@ Class.gunBenchmark = {
     PARENT: 'genericTank',
     LABEL: "Gun Benchmark",
     GUNS: weaponArray({
-        POSITION: [20, 4, -0.4, 0, 0, 0, 0],
+        POSITION: [60, 0.2, 0, 0, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, {reload: 0.05, range: 0.05}]),
+            SHOOT_SETTINGS: combineStats([g.basic, {size: 0, reload: 0.05, range: 0.05}]),
             TYPE: ["bullet", {DRAW_SELF: false}]
         }
-    }, 120)
+    }, 180)
 }
 
 Class.levels = menu("Levels")
