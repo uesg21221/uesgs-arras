@@ -2084,7 +2084,7 @@ const gameDrawError = () => {
 function animloop() {
     global.animLoopHandle = window.requestAnimFrame(animloop);
     gameDraw.reanimateColors();
-    global.player.renderv += (global.player.view - global.player.renderv) / 30;
+    global.player.renderv += (global.player.view - global.player.renderv) / 10
     var ratio = settings.graphical.screenshotMode ? 2 : util.getRatio();
     // Set the drawing style
     ctx.lineCap = "round";
