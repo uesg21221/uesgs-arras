@@ -2219,8 +2219,8 @@ class Entity extends EventEmitter {
             this.emit('death', { body: this, killers, killTools });
             killers.forEach((e) => e.emit('kill', { body: e, entity: this }));
             // If there's no valid killers (you were killed by food), change the message to be more passive
-            let killText = notJustFood ? "You have been killed by " : "",
-                dothISendAText = this.settings.givesKillMessage;
+            let killText = "You have been killed by ",
+                doISendAText = this.settings.givesKillMessage;
 
             for (let i = 0; i < killers.length; i++) {
                 let instance = killers[i];
@@ -2251,7 +2251,7 @@ class Entity extends EventEmitter {
                         killText += " and ";
                     }
                     // Only if we give messages
-                    if (dothISendAText) {
+                    if (doISendAText) {
                         instance.sendMessage("You killed " + name + (killers.length > 1 ? " (with some help)." : "."));
                     }
                     if (this.settings.killMessage) {
