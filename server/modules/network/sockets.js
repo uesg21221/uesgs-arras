@@ -209,8 +209,6 @@ function incoming(message, socket) {
                 Config.runSpeed,
                 Config.ARENA_TYPE
             );
-            // Give the server name.
-            socket.talk("svInfo", Config.gameModeName);
             // More important stuff
             socket.talk("updateName", socket.player.body.name);
             // Log it

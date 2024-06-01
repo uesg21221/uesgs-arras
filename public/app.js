@@ -133,6 +133,8 @@ global.canSkill = false;
 global.message = "";
 global.time = 0;
 global.enableSlideAnimation = false;
+global.mspt = "?";
+global.serverName = "Unknown";
 // Tips setup :D
 tips = tips[Math.floor(Math.random() * tips.length)];
 global.tips = tips[Math.floor(Math.random() * tips.length)];
@@ -1734,7 +1736,7 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     // Text
     if (global.showDebug) {
         drawText("Open Source Arras", x + len, y - 50 - 5 * 14 - 2, 15, "#1081E5", "right");
-        drawText("Prediction: " + Math.round(GRAPHDATA) + "ms", x + len, y - 50 - 4 * 14, 10, color.guiwhite, "right");
+        drawText("Prediction: " + Math.round(GRAPHDATA) + "ms : " + global.mspt + " mspt", x + len, y - 50 - 4 * 14, 10, color.guiwhite, "right");
         // drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
         drawText("Memory: " + global.metrics.rendergap + " Mib : " + "Class: " + gui.class, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
         drawText("Update Rate: " + global.metrics.updatetime + "Hz", x + len, y - 50 - 2 * 14, 10, color.guiwhite, "right");

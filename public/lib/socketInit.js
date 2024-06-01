@@ -845,6 +845,8 @@ const socketInit = port => {
                 break;
             case "svInfo": // For debugging.
                 global.serverName = m[0];
+                global.mspt = m[1];
+                if (global.showDebug) console.log(`mspt: ${global.mspt} total entities on screen: ${global.entities.length} Player X: ${(global.player.renderx).toFixed(1)} Player Y: ${(global.player.rendery).toFixed(1)}`);
                 break;
             case "updateName": // Update the name if needed.
                 global.player.name = m[0];
