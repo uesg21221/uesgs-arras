@@ -96,6 +96,28 @@ Class.spectator = {
     }]
 }
 
+Class.generatorBase = {
+    PARENT: "genericTank",
+    LABEL: "Generator",
+    ALPHA: 0,
+    IGNORED_BY_AI: true,
+    CAN_BE_ON_LEADERBOARD: false,
+    ACCEPTS_SCORE: false,
+    DRAW_HEALTH: false,
+    HITS_OWN_TYPE: "never",
+    ARENA_CLOSER: true,
+    TOOLTIP: "Left click to teleport, Right click above or below the screen to change FOV",
+    SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
+    BODY: {
+        SPEED: 5,
+        FOV: 2.5,
+        DAMAGE: 0,
+        HEALTH: 1e100,
+        SHIELD: 1e100,
+        REGEN: 1e100,
+    },
+}
+
 Class.bosses = menu("Bosses")
 Class.bosses.REROOT_UPGRADE_TREE = "bosses"
 Class.sentries = menu("Sentries", "pink", 3.5)
@@ -151,9 +173,8 @@ function compileMatrix(matrix, matrix2Entrance) {
             LABEL = str[0].toUpperCase() + str.slice(1).replace(/[A-Z]/g, m => ' ' + m) + " Generator",
             code = str + 'Generator';
         Class[code] = matrix[y][x] = {
-            PARENT: "spectator",
+            PARENT: "generatorBase",
             LABEL,
-            SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
             TURRETS: [{
                 POSITION: [5 + y * 2, 0, 0, 0, 0, 1],
                 TYPE: str,
@@ -230,9 +251,8 @@ for (let poly = 0; poly < 5; poly++) {
                 let str = `laby_${poly}_${tier}_${shiny}_${rank}`,
                     LABEL = ensureIsClass(str).LABEL + " Generator";
                 Class['generator_' + str] = {
-                    PARENT: "spectator",
+                    PARENT: "generatorBase",
                     LABEL,
-                    SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
                     TURRETS: [{
                         POSITION: [5 + tier * 2, 0, 0, 0, 0, 1],
                         TYPE: str,
