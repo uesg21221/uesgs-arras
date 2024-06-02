@@ -58,6 +58,7 @@ Class.spectator = {
     DRAW_HEALTH: false,
     HITS_OWN_TYPE: "never",
     ARENA_CLOSER: true,
+    TOOLTIP: "Left click to teleport, Right click above or below the screen to change FOV",
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
         SPEED: 5,
@@ -66,7 +67,33 @@ Class.spectator = {
         HEALTH: 1e100,
         SHIELD: 1e100,
         REGEN: 1e100,
-    }
+    },
+    GUNS: [{
+        POSITION: [0,0,0,0,0,0,0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, {reload: 0.2}, g.fake]),
+            TYPE: "bullet",
+            ALPHA: 0
+        }
+    }, {
+        POSITION: [0, 0, 0, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, { reload: 0.25 }, g.fake]),
+            TYPE: "bullet",
+            ALPHA: 0,
+            ALT_FIRE: true,
+        }
+    }],
+    ON: [{
+        event: "fire",
+        handler: ({ body }) => {
+            body.x = body.x + body.control.target.x
+            body.y = body.y + body.control.target.y
+        }
+    }, {
+        event: "altFire",
+        handler: ({ body }) => body.FOV = body.y + body.control.target.y < body.y ? body.FOV + 0.5 : Math.max(body.FOV - 0.5, 0.2)
+    }]
 }
 
 Class.bosses = menu("Bosses")
