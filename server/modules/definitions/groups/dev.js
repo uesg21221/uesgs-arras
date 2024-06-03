@@ -106,7 +106,6 @@ Class.generatorBase = {
     DRAW_HEALTH: false,
     HITS_OWN_TYPE: "never",
     ARENA_CLOSER: true,
-    TOOLTIP: "Left click to teleport, Right click above or below the screen to change FOV",
     SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
     BODY: {
         SPEED: 5,
