@@ -23,6 +23,7 @@ Array.prototype.remove = function (index) {
 process.stdout.write(String.fromCharCode(27) + "]0;" + Config.WINDOW_NAME + String.fromCharCode(7));
 
 util.log(room.width + " x " + room.height + " room initalized.");
+
 // Collision stuff
 const auraCollideTypes = ["miniboss", "tank", "food", "crasher"]
 function collide(collision) {
