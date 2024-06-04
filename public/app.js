@@ -83,7 +83,7 @@ let controls = document.getElementById("controlSettings"),
         deathScreen: new Animation(1, 0),
         error: new Animation(1, 0),
     },
-    tips = [[
+    tips = [[ // You can edit this!
         "Tip: You can view and edit your keybinds in the options menu.",
         "Tip: You can play on mobile by just going to arras.io on your phone!"
     ], [
@@ -261,6 +261,7 @@ window.onload = async () => {
     } else {
         getMockups();
         util.pullJSON("gamemodeData").then((json) => {
+            console.log("Successfully recived the gamemode data and players.")
             document.getElementById("serverName").innerHTML = `<h4 class="nopadding">${json.gameMode} | ${json.players} Players</h4>`;
         });
     }
@@ -2084,7 +2085,7 @@ const gameDrawError = () => {
 function animloop() {
     global.animLoopHandle = window.requestAnimFrame(animloop);
     gameDraw.reanimateColors();
-    global.player.renderv += (global.player.view - global.player.renderv) / 10
+    global.player.renderv += (global.player.view - global.player.renderv) / 10;
     var ratio = settings.graphical.screenshotMode ? 2 : util.getRatio();
     // Set the drawing style
     ctx.lineCap = "round";
@@ -2113,10 +2114,10 @@ function animloop() {
         } else if (!global.disconnected) {
             gameDrawBeforeStart();
         }
-        if (global.died) {
+        if (global.died) { // Womp Womp you died
             gameDrawDead();
         }
-        if (global.disconnected) {
+        if (global.disconnected) { // Draw disconnection screen if the client lost connection to the server.
             gameDrawDisconnected();
         }
         ctx.translate(-0.5, -0.5);
@@ -2125,7 +2126,7 @@ function animloop() {
     } catch (e) {
 
         //hold on....
-        gameDrawError();
+        gameDrawError(); // Draw the error screen.
         ctx.translate(-0.5, -0.5);
 
         //okay, NOW throw the error!
