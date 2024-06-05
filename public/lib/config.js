@@ -17,3 +17,6 @@ global.getTips = [[ // You can edit this!
         "Multiboxing is when you use a script to control multiple tanks at the same time. This is considered CHEATING and will result in a ban."
     ]
 ];
+
+
+// Developers please add something more.
