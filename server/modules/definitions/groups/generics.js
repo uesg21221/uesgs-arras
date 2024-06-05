@@ -23,6 +23,7 @@ Class.genericEntity = {
     FACING_TYPE: "toTarget",
     DRAW_HEALTH: false,
     DRAW_SELF: true,
+    IS_IMMUNE_TO_TILES: false,
     DAMAGE_EFFECTS: true,
     RATEFFECTS: true,
     MOTION_EFFECTS: true,
@@ -105,6 +106,7 @@ Class.genericTank = {
     DAMAGE_EFFECTS: false,
     IGNORED_BY_AI: false,
     SYNC_WITH_TANK: false,
+    IS_IMMUNE_TO_TILES: false,
     REROOT_UPGRADE_TREE: "basic",
     BODY: {
         ACCELERATION: base.ACCEL,
@@ -172,6 +174,7 @@ Class.food = {
     MOTION_TYPE: "drift",
     FACING_TYPE: "turnWithSpeed",
     VARIES_IN_SIZE: true,
+    IS_IMMUNE_TO_TILES: false,
     LEVEL_CAP: 1,
     BODY: {
         STEALTH: 30,

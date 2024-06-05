@@ -27,7 +27,7 @@ bossSpawn = new Tile({
     tick: tile => {
         for (let i = 0; i < tile.entities.length; i++) {
             let entity = tile.entities[i];
-            if (entity.pushability) {
+            if (entity.pushability && !entity.immuneToTiles && !entity.master.immuneToTiles) {
                 let dirToCenter = Math.atan2(room.center.y - entity.y, room.center.x - entity.x);
                 entity.velocity.x = Math.cos(dirToCenter) * 25 * entity.pushability;
                 entity.velocity.y = Math.sin(dirToCenter) * 25 * entity.pushability;

@@ -58,6 +58,7 @@ Class.spectator = {
     HITS_OWN_TYPE: "never",
     IGNORED_BY_AI: true,
     ARENA_CLOSER: true,
+    IS_IMMUNE_TO_TILES: true,
     TOOLTIP: "Left click to teleport, Right click above or below the screen to change FOV",
     SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
     BODY: {
@@ -107,6 +108,7 @@ Class.generatorBase = {
     DRAW_HEALTH: false,
     HITS_OWN_TYPE: "never",
     ARENA_CLOSER: true,
+    IS_IMMUNE_TO_TILES: true,
     SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
     BODY: {
         SPEED: 5,
