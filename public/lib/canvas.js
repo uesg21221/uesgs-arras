@@ -22,13 +22,30 @@ class Canvas {
         });
 
         this.cv = document.getElementById('gameCanvas');
-        this.cv.addEventListener('mousemove', event => this.mouseMove(event), false);
-        this.cv.addEventListener('mousedown', event => this.mouseDown(event), false);
-        this.cv.addEventListener('mouseup', event => this.mouseUp(event), false);
-        this.cv.addEventListener('keypress', event => this.keyPress(event), false);
-        this.cv.addEventListener('keydown', event => this.keyDown(event), false);
-        this.cv.addEventListener('keyup', event => this.keyUp(event), false);
-        this.cv.addEventListener('wheel', event => this.wheel(event), false);
+        if (global.mobile) {
+            // Mobile
+            let mobilecv = this.cv;
+            this.controlTouch = null;
+            this.movementTouch = null;
+            this.movementTop = false;
+            this.movementBottom = false;
+            this.movementLeft = false;
+            this.movementRight = false;
+            this.movementTouchPos = { x: 0, y: 0 };
+            this.controlTouchPos = { x: 0, y: 0 };
+            mobilecv.addEventListener("touchstart", (event) => this.touchStart(event), false);
+            mobilecv.addEventListener("touchmove", (event) => this.touchMove(event), false);
+            mobilecv.addEventListener("touchend", (event) => this.touchEnd(event), false);
+            mobilecv.addEventListener("touchcancel",(event) => this.touchEnd(event), false);
+          } else {
+            this.cv.addEventListener('mousemove', event => this.mouseMove(event), false);
+            this.cv.addEventListener('mousedown', event => this.mouseDown(event), false);
+            this.cv.addEventListener('mouseup', event => this.mouseUp(event), false);
+            this.cv.addEventListener('keypress', event => this.keyPress(event), false);
+            this.cv.addEventListener('keydown', event => this.keyDown(event), false);
+            this.cv.addEventListener('keyup', event => this.keyUp(event), false);
+            this.cv.addEventListener('wheel', event => this.wheel(event), false);
+          }
         this.cv.resize = (width, height) => {
             this.cv.width = this.width = width;
             this.cv.height = this.height = height;
@@ -289,8 +306,126 @@ class Canvas {
             y: mouse.clientY * global.ratio,
         }) === 0;
         if (!this.spinLock) return;
-        global.mouse.x = mouse.clientX * global.ratio;
-        global.mouse.y = mouse.clientY * global.ratio;
+            global.mouse.x = mouse.clientX * global.ratio;
+            global.mouse.y = mouse.clientY * global.ratio;
     }
+    touchStart(e) {
+        e.preventDefault();
+        if (global.died) {
+            this.socket.talk("s", global.playerName, 0, 1 * settings.game.autoLevelUp);
+            global.died = false;
+            global.autoSpin = false;
+        } else {
+            for (let touch of e.changedTouches) {
+                let mpos = {
+                  x: touch.clientX * global.ratio,
+                  y: touch.clientY * global.ratio,
+                };
+                let id = touch.identifier;
+                let statIndex = global.clickables.stat.check(mpos);
+                if (statIndex !== -1) this.socket.talk("x", statIndex, 0);
+                else if (global.clickables.skipUpgrades.check(mpos) !== -1)
+                  global.clearUpgrades();
+                else {
+                  let upgradeIndex = global.clickables.upgrade.check(mpos);
+                  if (upgradeIndex !== -1) this.socket.talk("U", upgradeIndex, parseInt(gui.upgrades[upgradeIndex][0]));
+                  else {
+                    let onLeft = mpos.x < this.cv.width / 2;
+                    if (this.movementTouch === null && onLeft) {
+                      this.movementTouch = id;
+                    } else if (this.controlTouch === null && !onLeft) {
+                      this.controlTouch = id;
+                      this.socket.cmd.set(4, true);
+                    }
+                  }
+                }
+              }
+            this.touchMove(e);
+        }
+      }
+    touchMove(e) {
+        e.preventDefault();
+        for (let touch of e.changedTouches) {
+          let mpos = {
+            x: touch.clientX * global.ratio,
+            y: touch.clientY * global.ratio,
+          };
+          let id = touch.identifier;
+    
+          if (this.movementTouch === id) {
+            let radius = Math.min(global.screenWidth * 0.6, global.screenHeight * 0.12);
+            let cx = mpos.x - (this.cv.width * 1) / 6;
+            let cy = mpos.y - (this.cv.height * 2) / 3;
+            let r = Math.sqrt(cx ** 2 + cy ** 2);
+            let angle = Math.atan2(cy, cx);
+            if (r > radius) {
+              cx = Math.cos(angle) * radius;
+              cy = Math.sin(angle) * radius;
+            }
+            this.movementTouchPos = { x: cx, y: cy };
+            let x = mpos.x - (this.cv.width * 1) / 6;
+            let y = mpos.y - (this.cv.height * 2) / 3;
+            let norm = Math.sqrt(x * x + y * y);
+            x /= norm;
+            y /= norm;
+            let amount = 0.38268323650898;
+            if (y < -amount !== this.movementTop)
+              this.socket.cmd.set(0, (this.movementTop = y < -amount));
+            if (y > amount !== this.movementBottom)
+              this.socket.cmd.set(1, (this.movementBottom = y > amount));
+            if (x < -amount !== this.movementLeft)
+              this.socket.cmd.set(2, (this.movementLeft = x < -amount));
+            if (x > amount !== this.movementRight)
+              this.socket.cmd.set(3, (this.movementRight = x > amount));
+          } else if (this.controlTouch === id) {
+            let radius = Math.min(global.screenWidth * 0.6, global.screenHeight * 0.12);
+            let cx = mpos.x - (this.cv.width * 5) / 6;
+            let cy = mpos.y - (this.cv.height * 2) / 3;
+            let r = Math.sqrt(cx ** 2 + cy ** 2);
+            let angle = Math.atan2(cy, cx);
+            if (r > radius) {
+              cx = Math.cos(angle) * radius;
+              cy = Math.sin(angle) * radius;
+            }
+            this.controlTouchPos = { x: cx, y: cy };
+            if (this.spinLock) {
+             /* let x = cx / radius * this.cv.width / 2;
+              let y = cy / radius * this.cv.height / 2;
+              if (x > this.cv.width / 2) x = this.cv.width / 2;
+              else if (x < -this.cv.width / 2) x = -this.cv.width / 2;
+              if (y > this.cv.height / 2) y = this.cv.height / 2;
+              else if (y < -this.cv.height / 2) y = -this.cv.height / 2;
+              */
+              this.target.x = cx / radius * this.cv.width / 2;
+              this.target.y = cy / radius * this.cv.height / 2;
+            }
+          }
+        }
+        global.mouse = this.target;
+      }
+      touchEnd(e) {
+        e.preventDefault();
+        for (let touch of e.changedTouches) {
+          let mpos = { x: touch.clientX, y: touch.clientY };
+          let id = touch.identifier;
+    
+          if (this.movementTouch === id) {
+            this.movementTouch = null;
+            this.movementTouchPos = { x: 0, y: 0 };
+            if (this.movementTop)
+              this.socket.cmd.set(0, (this.movementTop = false));
+            if (this.movementBottom)
+              this.socket.cmd.set(1, (this.movementBottom = false));
+            if (this.movementLeft)
+              this.socket.cmd.set(2, (this.movementLeft = false));
+            if (this.movementRight)
+              this.socket.cmd.set(3, (this.movementRight = false));
+          } else if (this.controlTouch === id) {
+            this.controlTouch = null;
+            this.controlTouchPos = { x: 0, y: 0 };
+            this.socket.cmd.set(4, false);
+          }
+        }
+      }
 }
 export { Canvas }

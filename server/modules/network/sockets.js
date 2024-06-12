@@ -958,13 +958,13 @@ const spawn = (socket, name) => {
     player.records = () => [
         player.body.skill.score,
         Math.floor((util.time() - begin) / 1000),
+        Config.RESPAWN_TIMEOUT,
         player.body.killCount.solo,
         player.body.killCount.assists,
         player.body.killCount.bosses,
         player.body.killCount.polygons,
         player.body.killCount.killers.length,
-        ...player.body.killCount.killers,
-        Config.RESPAWN_TIMEOUT
+        ...player.body.killCount.killers
     ];
     player.gui = newgui(player);
     player.socket = socket;

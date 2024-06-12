@@ -247,7 +247,6 @@ window.onload = async () => {
     } else {
         getMockups();
         util.pullJSON("gamemodeData").then((json) => {
-            console.log("Successfully recived the gamemode data and players.")
             document.getElementById("serverName").innerHTML = `<h4 class="nopadding">${json.gameMode} | ${json.players} Players</h4>`;
         });
     }
@@ -367,7 +366,7 @@ global.player = {
     cy: 0,
     screenx: 0,
     screeny: 0,
-    target: calculateTarget(),
+    target: !global.mobile ? calculateTarget() : window.canvas.target,
     name: "",
     lastUpdate: 0,
     time: 0,
@@ -490,7 +489,7 @@ function parseTheme(string){
 function startGame() {
     // Set flag
     global.gameLoading = true;
-    console.log('Started connecting.')
+    console.log('Started connecting.');
     // Get options
     util.submitToLocalStorage("optFancy");
     util.submitToLocalStorage("centerTank");
@@ -1487,13 +1486,17 @@ function drawUpgradeTree(spacing, alcoveSize) {
     ctx.strokeText(text, global.screenWidth / 2 - w / 2, innerHeight * 0.04);
 }
 
-function drawMessages(spacing) {
+function drawMessages(spacing, alcoveSize) {
     // Draw messages
     let vspacing = 4;
     let len = 0;
     let height = 18;
     let x = global.screenWidth / 2;
     let y = spacing;
+    if (global.mobile) {
+        y += global.canUpgrade ? (alcoveSize / 1.5 /*+ spacing * 2*/) * upgradeMenu.get() : 0;
+        y += global.canSkill ? (alcoveSize / 2.5 /*+ spacing * 2*/) * statMenu.get() : 0;
+    }
     // Draw each message
     for (let i = global.messages.length - 1; i >= 0; i--) {
         let msg = global.messages[i],
@@ -1532,6 +1535,7 @@ function drawMessages(spacing) {
 
 function drawSkillBars(spacing, alcoveSize) {
     // Draw skill bars
+    if (global.mobile) return drawMobileSkillUpgrades(spacing, alcoveSize);
     statMenu.set(0 + (global.died || global.statHover || (global.canSkill && !gui.skills.every(skill => skill.cap === skill.amount))));
     global.clickables.stat.hide();
     let vspacing = 4;
@@ -1609,7 +1613,77 @@ function drawSkillBars(spacing, alcoveSize) {
         drawText("x" + gui.points, Math.round(x + len - 2) + 0.5, Math.round(y + height - 4) + 0.5, 20, color.guiwhite, "right");
     }
 }
+function drawMobileSkillUpgrades(spacing, alcoveSize) {
+    global.canSkill = gui.points > 0 && gui.skills.some(s => s.amount < s.cap) && !global.canUpgrade;
+    statMenu.set(global.canSkill || global.died || global.disconnected ? 1 : 0);
+    let n = statMenu.get();
+    global.clickables.stat.hide();
+    let t = alcoveSize / 2,
+        q = alcoveSize / 3,
+        x = 2 * n * spacing - spacing,
+        statNames = gui.getStatNames(global.mockups[parseInt(gui.type.split("-")[0])].statnames),
+        clickableRatio = canvas.height / global.screenHeight / global.ratio;
+    if (global.canSkill) {
+        for (let i = 0; i < gui.skills.length; i++) {
+            let skill = gui.skills[i],
+                softcap = skill.softcap;
+            if (softcap <= 0) continue;
+            let amount = skill.amount,
+                skillColor = color[skill.color],
+                cap = skill.cap,
+                name = statNames[9 - i].split(/\s+/),
+                halfNameLength = Math.floor(name.length / 2),
+                [name1, name2] = name.length === 1 ? [name[0], null] : [name.slice(0, halfNameLength).join(" "), name.slice(halfNameLength).join(" ")];
 
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = skillColor;
+            drawGuiRect(x, spacing, t, 2 * q / 3);
+
+            ctx.globalAlpha = 0.1;
+            ctx.fillStyle = color.black;
+            drawGuiRect(x, spacing + q * 2 / 3 * 2 / 3, t, q * 2 / 3 / 3);
+
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = color.guiwhite;
+            drawGuiRect(x, spacing + q * 2 / 3, t, q / 3);
+
+            ctx.fillStyle = skillColor;
+            drawGuiRect(x, spacing + q * 2 / 3, t * amount / softcap, q / 3);
+
+            ctx.strokeStyle = color.black;
+            ctx.lineWidth = 1;
+            for (let j = 1; j < cap; j++) {
+                let width = x + j / softcap * t;
+                drawGuiLine(width, spacing + q * 2 / 3, width, spacing + q);
+            }
+
+            cap === 0 || !gui.points || softcap !== cap && amount === softcap || global.clickables.stat.place(9 - i, x * clickableRatio, spacing * clickableRatio, t * clickableRatio, q * clickableRatio);
+
+            if (name2) {
+                drawText(name2, x + t / 2, spacing + q * 0.55, q / 5, color.guiwhite, "center");
+                drawText(name1, x + t / 2, spacing + q * 0.3, q / 5, color.guiwhite, "center");
+            } else {
+                drawText(name1, x + t / 2, spacing + q * 0.425, q / 5, color.guiwhite, "center");
+            }
+
+            if (amount > 0) {
+                drawText(amount < softcap ? `+${amount}` : "MAX", x + t / 2, spacing + q * 1.3, q / 4, skillColor, "center");
+            }
+
+            ctx.strokeStyle = color.black;
+            ctx.globalAlpha = 1;
+            ctx.lineWidth = 3;
+            drawGuiLine(x, spacing + q * 2 / 3, x + t, spacing + q * 2 / 3);
+            drawGuiRect(x, spacing, t, q, true);
+
+            x += n * (t + 14);
+        }
+
+        if (gui.points > 1) {
+            drawText(`x${gui.points}`, x, spacing + 20, 20, color.guiwhite, "left");
+        }
+    }
+  }
 function drawSelfInfo(spacing, alcoveSize, max) {
     //rendering information
     let vspacing = 4.5;
@@ -1746,6 +1820,10 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     let x = global.screenWidth - len - spacing;
     let y = spacing + height + 7;
     if (!lb.data.length) return; // dont show leaderboard when nothing is showing.
+    if (global.mobile) {
+        y += global.canUpgrade ? (alcoveSize / 1.5 /*+ spacing * 2*/) * upgradeMenu.get() : 0;
+        y += global.canSkill ? (alcoveSize / 2.5 /*+ spacing * 2*/) * statMenu.get() : 0;
+    }
     drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 3.5, color.guiwhite, "center");
     y += 7;
     for (let i = 0; i < lb.data.length; i++) {
@@ -1776,7 +1854,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         let height = len;
 
         // Animation processing
-        let columnCount = Math.max(3, Math.floor(gui.upgrades.length ** 0.55));
+        let columnCount = Math.max(global.mobile ? 9 : 3, Math.floor(gui.upgrades.length ** 0.55));
         upgradeMenu.set(0);
         if (!global.canUpgrade) {
             upgradeMenu.force(-columnCount * 3)
@@ -1880,7 +1958,50 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         global.clickables.skipUpgrades.hide();
     }
 }
-
+function drawMobileJoysticks() {
+    // draw joysticks if needed.
+    if (!global.mobile) return;
+    let radius = Math.min(
+        global.screenWidth * 0.6,
+        global.screenHeight * 0.12
+    );
+    ctx.globalAlpha = 0.3;
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(
+        (global.screenWidth * 1) / 6,
+        (global.screenHeight * 2) / 3,
+        radius,
+        0,
+        2 * Math.PI
+    );
+    ctx.arc(
+        (global.screenWidth * 5) / 6,
+        (global.screenHeight * 2) / 3,
+        radius,
+        0,
+        2 * Math.PI
+    );
+    ctx.fill();
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(
+        canvas.movementTouchPos.x + (global.screenWidth * 1) / 6,
+        canvas.movementTouchPos.y + (global.screenHeight * 2) / 3,
+        radius / 2.5,
+        0,
+        2 * Math.PI
+    );
+    ctx.arc(
+        canvas.controlTouchPos.x + (global.screenWidth * 5) / 6,
+        canvas.controlTouchPos.y + (global.screenHeight * 2) / 3,
+        radius / 2.5,
+        0,
+        2 * Math.PI
+    );
+    ctx.fill();
+}
 const gameDrawAlive = (ratio, drawRatio) => {
     let GRAPHDATA = 0;
     // Prep stuff
@@ -1897,7 +2018,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
         py = ratio * global.player.rendery;
 
     // Get the player's target
-    calculateTarget();
+    if (!global.mobile) calculateTarget();
 
     //draw the in game stuff
     drawFloor(px, py, ratio);
@@ -1915,7 +2036,8 @@ const gameDrawAlive = (ratio, drawRatio) => {
     if (global.showTree) {
         drawUpgradeTree(spacing, alcoveSize);
     } else {
-        drawMessages(spacing);
+        drawMobileJoysticks();
+        drawMessages(spacing, alcoveSize);
         drawSkillBars(spacing, alcoveSize);
         drawSelfInfo(spacing, alcoveSize, max);
         drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA);
@@ -2006,8 +2128,8 @@ const gameDrawDead = () => {
     drawText(getDeath(), x - 170, y + 99, 16, color.guiwhite);
     drawText(getTips(), x - 170, y + 122, 16, color.guiwhite);
     drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active for the run!", x - 170, y + 144, 16, color.guiwhite);
-    // drawText(global.cannotRespawn ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center"); // uncomment this when mobile support finished.
-    drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
+    drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center"); // uncomment this when mobile support finished.
+    //drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
 const gameDrawOldDead = () => {

@@ -1,4 +1,7 @@
 import { global } from "./global.js";
+import { util } from "./util.js";
+
+// You add stuff in here!
 
 // Tips for the client to show at the connecting screen.
 

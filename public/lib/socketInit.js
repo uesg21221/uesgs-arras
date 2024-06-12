@@ -985,16 +985,8 @@ const socketInit = port => {
                 global.finalLifetime = util.Smoothbar(0, 5);
                 global.finalLifetime.set(m[1]);
                 global.finalKills = [util.Smoothbar(0, 3), util.Smoothbar(0, 4.5), util.Smoothbar(0, 2.5), util.Smoothbar(0, 10)];
-                global.finalKills[0].set(m[2]);
-                global.finalKills[1].set(m[3]);
-                global.finalKills[2].set(m[4]);
-                global.finalKills[3].set(m[5]);
-                global.finalKillers = [];
-                for (let i = 0; i < m[6]; i++) {
-                    global.finalKillers.push(m[7 + i]);
-                }
-                global.respawnTimeout = m[7];
-                if (global.respawnTimeout !== 0) {
+                global.respawnTimeout = m[2];
+                if (global.respawnTimeout > 0) {
                     global.cannotRespawn = true;
                     let respawnTimeoutloop = setInterval(() => {
                         if (global.respawnTimeout <= 1) {
@@ -1005,6 +997,14 @@ const socketInit = port => {
                             global.respawnTimeout--;
                         }
                     }, 1000); // One second.
+                }
+                global.finalKills[0].set(m[3]);
+                global.finalKills[1].set(m[4]);
+                global.finalKills[2].set(m[5]);
+                global.finalKills[3].set(m[6]);
+                global.finalKillers = [];
+                for (let i = 0; i < m[7]; i++) {
+                    global.finalKillers.push(m[8 + i]);
                 }
                 window.animations.deathScreen.reset();
                 window.canvas.reverseDirection = false;
