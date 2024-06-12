@@ -52,11 +52,14 @@ class Gun extends EventEmitter {
             if (info.PROPERTIES.TYPE != null) {
                 this.canShoot = true;
                 this.label = info.PROPERTIES.LABEL ?? "";
-                this.bulletTypes = Array.isArray(info.PROPERTIES.TYPE) ? info.PROPERTIES.TYPE : [info.PROPERTIES.TYPE];
-                // Pre-load bullet definitions so we don't have to recalculate them every shot
-                let natural = {};
-                for (let type of this.bulletTypes) setNatural(natural, type);
-                this.natural = natural;
+                // Pre-flatten bullet types to save on doing the same define() sequence a million times
+                this.bulletType = Array.isArray(info.PROPERTIES.TYPE) ? info.PROPERTIES.TYPE : [info.PROPERTIES.TYPE];
+                let flattenedType = {};
+                for (let type of this.bulletType) {
+                    type = ensureIsClass(type);
+                    util.flattenDefinition(flattenedType, type);
+                }
+                this.bulletType = flattenedType;
             }
             this.autofire = info.PROPERTIES.AUTOFIRE ?? false;
             this.altFire = info.PROPERTIES.ALT_FIRE ?? false;
@@ -67,7 +70,7 @@ class Gun extends EventEmitter {
             this.shootSettings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : JSON.parse(JSON.stringify(info.PROPERTIES.SHOOT_SETTINGS));
             this.maxChildren = info.PROPERTIES.MAX_CHILDREN ?? false;
             this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS ?? false;
-            this.negativeRecoil = info.PROPERTIES.NEGATIVE_RECOIL ?? false;
+            this.negativeRecoil = info.PROPERTIES.NEGATIVE_RECOIL ? -1 : 1;
             this.independentChildren = info.PROPERTIES.INDEPENDENT_CHILDREN ?? false;
             if (info.PROPERTIES.COLOR != null) {
                 this.color.interpret(info.PROPERTIES.COLOR);
@@ -126,34 +129,31 @@ class Gun extends EventEmitter {
         }
     }
     live() {
-        if (!this.canShoot) return
+        if (!this.canShoot) return;
+        // Override if invulnerable
+        if (this.body.master.invuln) return;
         
+        // Handle recoil
         this.recoil();
 
         // Determine shoot permission based on child counting settings
         let shootPermission = this.checkShootPermission();
-        if (this.destroyOldestChild) {
-            if (!shootPermission) {
-                shootPermission = true;
-                this.destroyOldest();
-            }
-        }
-        // Override in invuln
-        if (this.body.master.invuln) {
-            shootPermission = false;
-        }
+
         // Cycle up if we should
-        if (shootPermission || !this.waitToCycle) {
-            if (this.cycleTimer < 1) {
-                this.cycleTimer += 1 / (this.shootSettings.reload * Config.runSpeed * this.reloadRateFactor);
-            }
+        if ((shootPermission || !this.waitToCycle) && this.cycleTimer < 1) {
+            this.cycleTimer += 1 / (this.shootSettings.reload * this.reloadRateFactor * Config.runSpeed);
         }
-        // Firing routines
+
+        // Firing routine
         let fireCommand = this.autofire || (this.altFire ? this.body.control.alt : this.body.control.fire);
-        if (shootPermission && fireCommand) {
-            while (this.cycleTimer >= 1) {
+        if (fireCommand) {
+            // Loop while allowed to shoot and reloaded enough to shoot
+            while (shootPermission && this.cycleTimer >= 1) {
                 this.fire();
                 this.cycleTimer--;
+
+                // Repeatedly check for shoot permission to prevent ultra low reload guns from exceeding the child limit in 1 tick
+                shootPermission = this.checkShootPermission();
             }
         // If we're not shooting, only cycle up to where we'll have the proper firing delay
         } else if (this.cycleTimer > this.maxCycleTimer) {
@@ -161,13 +161,21 @@ class Gun extends EventEmitter {
         }
     }
     checkShootPermission() {
-        return this.maxChildren
-            ? this.maxChildren >
-                this.children.length * this.childrenLimitFactor
-            : this.body.maxChildren
-            ? this.body.maxChildren >
-                this.body.children.length * this.childrenLimitFactor
-            : true;
+        let shootPermission = this.maxChildren
+        ? this.maxChildren >
+            this.children.length * this.childrenLimitFactor
+        : this.body.maxChildren
+        ? this.body.maxChildren >
+            this.body.children.length * this.childrenLimitFactor
+        : true;
+
+        // Handle destroying oldest child
+        if (this.destroyOldestChild && !shootPermission) {
+            shootPermission = true;
+            this.destroyOldest();
+        }
+
+        return shootPermission;
     }
     fire() {
         // Recoil
@@ -178,7 +186,6 @@ class Gun extends EventEmitter {
         // Initialize bullet
         let [spawnX, spawnY] = this.findBulletSpawnPosition();
         let bullet = this.createBullet(spawnX, spawnY);
-        
 
         // If told to, create an independent entity
         if (this.independentChildren) {
@@ -187,8 +194,6 @@ class Gun extends EventEmitter {
         } else {
             this.defineBullet(bullet);
         }
-        // Shared code between independent and dependent bullets
-        bullet.coreSize = bullet.SIZE;
         bullet.refreshBodyAttributes();
         bullet.life();
 
@@ -206,6 +211,24 @@ class Gun extends EventEmitter {
             globalGunStore: this.globalStore
         });
     }
+    findBulletSpawnPosition() {
+        // Find out some intermediate values
+        let angle1 = this.offsetDirection + this.angle + this.body.facing,
+            angle2 = this.angle + this.body.facing,
+            gunlength = this.length - this.width * this.shootSettings.size / 2,
+
+        // Calculate offset of gun base and gun end based
+            offsetBaseX = this.offset * Math.cos(angle1),
+            offsetBaseY = this.offset * Math.sin(angle1),
+            offsetEndX = gunlength * Math.cos(angle2),
+            offsetEndY = gunlength * Math.sin(angle2),
+
+        // Combine offsets to get final values
+            offsetFinalX = offsetBaseX + offsetEndX,
+            offsetFinalY = offsetBaseY + offsetEndY;
+        
+        return [offsetFinalX, offsetFinalY]
+    }
     createBullet(spawnX, spawnY) {
         // Find inaccuracy
         let shudder = 0, spread = 0;
@@ -222,7 +245,7 @@ class Gun extends EventEmitter {
         spread *= Math.PI / 180;
 
         // Find velocity
-        let velocityMagnitude = (this.negativeRecoil ? -1 : 1) * this.shootSettings.speed * Config.runSpeed * this.bulletSkills.spd * (1 + shudder),
+        let velocityMagnitude = this.negativeRecoil * this.shootSettings.speed * this.bulletSkills.spd * (shudder + 1) * Config.runSpeed,
             velocityDirection = this.angle + this.body.facing + spread,
             velocity = new Vector(velocityMagnitude * Math.cos(velocityDirection), velocityMagnitude * Math.sin(velocityDirection));
         
@@ -242,27 +265,26 @@ class Gun extends EventEmitter {
         // Spawn bullet
         spawnX = this.body.x + this.body.size * spawnX - velocity.x,
         spawnY = this.body.y + this.body.size * spawnY - velocity.y;
-        let bullet;
+        
+        // Independent children
         if (this.independentChildren) {
-            bullet = new Entity({x: spawnX, y: spawnY});
-        } else {
-            bullet = new Entity({x: spawnX, y: spawnY}, this.master.master);
-            bullet.velocity = velocity;
+            let bullet = new Entity({x: spawnX, y: spawnY});
+            return bullet;
         }
 
+        // Dependent children
+        let bullet = new Entity({x: spawnX, y: spawnY}, this.master.master);
+        bullet.velocity = velocity;
         return bullet;
     }
     defineIndependentBullet(bullet) {
-        for (let type of this.bulletTypes) {
-            bullet.define(type);
-        }
+        bullet.define(this.bulletType);
+        bullet.coreSize = bullet.SIZE;
         bullet.team = this.body.team;
     }
     defineBullet(bullet) {
         // Define it by its natural properties
-        for (let type of this.bulletTypes) {
-            bullet.define(type);
-        }
+        bullet.define(this.bulletType);
         if (bullet.color.base == '-1' || bullet.color.base == 'mirror') {
             bullet.color.base = this.body.master.color.base
         }
@@ -273,8 +295,9 @@ class Gun extends EventEmitter {
             SIZE: (this.body.size * this.width * this.shootSettings.size) / 2,
             LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + bullet.label
         });
+        bullet.coreSize = bullet.SIZE;
 
-        // Keep track of it and give it the function it needs to deutil.log itself upon death
+        // Keep track of it for child counting
         if (this.maxChildren) {
             bullet.parent = this;
             this.children.push(bullet);
@@ -307,24 +330,6 @@ class Gun extends EventEmitter {
             return false;
         };
     }
-    findBulletSpawnPosition() {
-        // Find out some intermediate values
-        let angle1 = this.offsetDirection + this.angle + this.body.facing,
-            angle2 = this.angle + this.body.facing,
-            gunlength = this.length - this.width * this.shootSettings.size / 2,
-
-        // Calculate offset of gun base and gun end based
-            offsetBaseX = this.offset * Math.cos(angle1),
-            offsetBaseY = this.offset * Math.sin(angle1),
-            offsetEndX = gunlength * Math.cos(angle2),
-            offsetEndY = gunlength * Math.sin(angle2),
-
-        // Combine offsets to get final values
-            offsetFinalX = offsetBaseX + offsetEndX,
-            offsetFinalY = offsetBaseY + offsetEndY;
-        
-        return [offsetFinalX, offsetFinalY]
-    }
     recoil() {
         if (this.recoilVelocity || this.recoilPosition) {
             // Simulate recoil
@@ -341,7 +346,7 @@ class Gun extends EventEmitter {
         }
         // Apply recoil to motion
         if (this.recoilVelocity > 0 && this.body.recoilMultiplier) {
-            let recoilForce = (-this.recoilPosition * this.trueRecoil * this.body.recoilMultiplier * 1.08 / this.body.size) / Config.runSpeed;
+            let recoilForce = -this.recoilPosition * this.trueRecoil * this.body.recoilMultiplier * 1.08 / this.body.size / Config.runSpeed;
             this.body.accel.x += recoilForce * Math.cos(this.facing);
             this.body.accel.y += recoilForce * Math.sin(this.facing);
         }
@@ -413,9 +418,9 @@ class Gun extends EventEmitter {
         }
         // Go through and make sure we respect its natural properties
         for (let property in out) {
-            if (this.natural[property] == null || !out.hasOwnProperty(property))
+            if (this.bulletType.BODY[property] == null || !out.hasOwnProperty(property))
                 continue;
-            out[property] *= this.natural[property];
+            out[property] *= this.bulletType.BODY[property];
         }
         this.interpretedStats = out;
     }
@@ -433,8 +438,8 @@ class Gun extends EventEmitter {
     }
     getTracking() {
         return {
-            speed: Config.runSpeed * this.bulletSkills.spd * this.shootSettings.maxSpeed * this.natural.SPEED,
-            range: Math.sqrt(this.bulletSkills.spd) * this.shootSettings.range * this.natural.RANGE
+            speed: Config.runSpeed * this.bulletSkills.spd * this.shootSettings.maxSpeed * this.bulletType.BODY.SPEED,
+            range: Math.sqrt(this.bulletSkills.spd) * this.shootSettings.range * this.bulletType.BODY.RANGE
         };
     }
     getSkillRaw() {
@@ -658,7 +663,7 @@ class Entity extends EventEmitter {
             polygons: 0,
             killers: [],
         };
-        this.creationTime = new Date().getTime();
+        this.creationTime = Date.now();
         // Inheritance
         this.skipLife = false;
         this.master = master;
@@ -1020,7 +1025,7 @@ class Entity extends EventEmitter {
         if (set.ACCEPTS_SCORE != null) this.settings.acceptsScore = set.ACCEPTS_SCORE;
         if (set.OBSTACLE != null) this.settings.obstacle = set.OBSTACLE;
         if (set.NECRO != null) this.settings.necroTypes = Array.isArray(set.NECRO) ? set.NECRO : set.NECRO ? [this.shape] : [];
-        if (set.HAS_NO_RECOIL != null) this.RECOIL_MULTIPLIER = 0;
+        if (set.HAS_NO_RECOIL) this.RECOIL_MULTIPLIER = 0;
         if (set.CRAVES_ATTENTION != null) this.settings.attentionCraver = set.CRAVES_ATTENTION;
         if (set.KILL_MESSAGE != null) this.settings.killMessage = set.KILL_MESSAGE === "" ? "Killed" : set.KILL_MESSAGE;
         if (set.AUTOSPIN_MULTIPLIER != null) this.autospinBoost = set.AUTOSPIN_MULTIPLIER;
@@ -2198,8 +2203,9 @@ class Entity extends EventEmitter {
             view.remove(this);
         }
         // Remove from parent lists if needed
-        if (this.parent != null)
+        if (this.parent != null) {
             util.remove(this.parent.children, this.parent.children.indexOf(this));
+        }
         // Kill all of its children
         for (let instance of entities) {
             if (instance.source.id === this.id) {
@@ -2218,7 +2224,9 @@ class Entity extends EventEmitter {
             }
         }
         // Remove everything bound to it
-        for (let i = 0; i < this.turrets.length; i++) this.turrets[i].destroy();
+        for (let i = 0; i < this.turrets.length; i++) {
+            this.turrets[i].destroy();
+        }
         // Remove from the collision grid
         this.removeFromGrid();
         this.isGhost = true;

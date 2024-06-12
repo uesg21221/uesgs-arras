@@ -1026,10 +1026,10 @@ Class.gunBenchmark = {
     GUNS: weaponArray({
         POSITION: [60, 0.2, 0, 0, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, {size: 0, reload: 0.05, range: 0.05}]),
+            SHOOT_SETTINGS: combineStats([g.basic, {size: 0, reload: 0.15, range: 0.05}]),
             TYPE: ["bullet", {DRAW_SELF: false}]
         }
-    }, 180)
+    }, 720)
 }
 
 Class.levels = menu("Levels")

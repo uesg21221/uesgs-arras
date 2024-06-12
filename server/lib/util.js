@@ -81,3 +81,24 @@ exports.forcePush = (object, property, ...items) => {
     object[property] = [...items];
   }
 }
+
+// Performance savings for define()
+exports.flattenDefinition = (output, definition) => {
+  definition = ensureIsClass(definition);
+
+  if (definition.PARENT) {
+      if (!Array.isArray(definition.PARENT)) {
+          exports.flattenDefinition(output, definition.PARENT);
+      } else for (let parent in definition.PARENT) {
+          exports.flattenDefinition(output, definition.PARENT[parent]);
+      }
+  }
+
+  for (let key in definition) {
+      if (key !== "PARENT") {
+          output[key] = definition[key];
+      }
+  }
+
+  return output;
+};
