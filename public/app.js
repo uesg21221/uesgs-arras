@@ -490,6 +490,16 @@ function startGame() {
     // Set flag
     global.gameLoading = true;
     console.log('Started connecting.');
+    if (global.mobile) {
+        var d = document.body;
+        d.requestFullscreen
+          ? d.requestFullscreen()
+          : d.msRequestFullscreen
+          ? d.msRequestFullscreen()
+          : d.mozRequestFullScreen
+          ? d.mozRequestFullScreen()
+          : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
+    }
     // Get options
     util.submitToLocalStorage("optFancy");
     util.submitToLocalStorage("centerTank");
@@ -1088,6 +1098,7 @@ window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimatio
 // Drawing states
 const statMenu = Smoothbar(0, 0.7, 1.5, 0.1);
 const upgradeMenu = Smoothbar(0, 2, 3, 0.1);
+const mobileUpgradeGlide = Smoothbar(0, 2, 3, 0.1);
 // Define the graph constructor
 function graph() {
     var data = [];
@@ -1494,7 +1505,10 @@ function drawMessages(spacing, alcoveSize) {
     let x = global.screenWidth / 2;
     let y = spacing;
     if (global.mobile) {
-        y += global.canUpgrade ? (alcoveSize / 1.5 /*+ spacing * 2*/) * upgradeMenu.get() : 0;
+        if (global.canUpgrade) {
+            mobileUpgradeGlide.set(0 + (global.canUpgrade || global.upgradeHover));
+            y += (alcoveSize / 1.4 /*+ spacing * 2*/) * mobileUpgradeGlide.get();
+        }
         y += global.canSkill ? (alcoveSize / 2.5 /*+ spacing * 2*/) * statMenu.get() : 0;
     }
     // Draw each message
@@ -1683,7 +1697,7 @@ function drawMobileSkillUpgrades(spacing, alcoveSize) {
             drawText(`x${gui.points}`, x, spacing + 20, 20, color.guiwhite, "left");
         }
     }
-  }
+}
 function drawSelfInfo(spacing, alcoveSize, max) {
     //rendering information
     let vspacing = 4.5;
@@ -1720,6 +1734,10 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     let orangeColor = false;
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
+    if (global.mobile) {
+        height = (len / global.gameWidth / 1.9) * global.gameHeight
+        len = alcoveSize * 0.6;
+      }
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
         let ratio = [
             global.gameWidth / global.gameHeight,
@@ -1782,7 +1800,7 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     ctx.lineWidth = 1;
     ctx.strokeStyle = color.guiblack;
     ctx.fillStyle = color.guiblack;
-    drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 1, y + (global.player.cy / global.gameHeight) * height - 1, 2, false);
+    drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 0, y + (global.player.cy / global.gameHeight) * height - 1, !global.mobile ? 2 : 3, false);
     if (global.showDebug) {
         drawGuiRect(x, y - 40, len, 30);
         lagGraph(lag.get(), x, y - 40, len, 30, color.teal);
@@ -1819,9 +1837,13 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     let height = 14;
     let x = global.screenWidth - len - spacing;
     let y = spacing + height + 7;
+    mobileUpgradeGlide.set(0 + (global.canUpgrade || global.upgradeHover));
+    let mobileGlide = mobileUpgradeGlide.get();
     if (!lb.data.length) return; // dont show leaderboard when nothing is showing.
     if (global.mobile) {
-        y += global.canUpgrade ? (alcoveSize / 1.5 /*+ spacing * 2*/) * upgradeMenu.get() : 0;
+        if (global.canUpgrade) {
+            y += (alcoveSize / 1.4 /*+ spacing * 2*/) * mobileGlide;
+        }
         y += global.canSkill ? (alcoveSize / 2.5 /*+ spacing * 2*/) * statMenu.get() : 0;
     }
     drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 3.5, color.guiwhite, "center");
@@ -1854,10 +1876,10 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         let height = len;
 
         // Animation processing
-        let columnCount = Math.max(global.mobile ? 9 : 3, Math.floor(gui.upgrades.length ** 0.55));
+        global.columnCount = Math.max(global.mobile ? 9 : 3, Math.floor(gui.upgrades.length ** 0.55));
         upgradeMenu.set(0);
         if (!global.canUpgrade) {
-            upgradeMenu.force(-columnCount * 3)
+            upgradeMenu.force(-global.columnCount * 3)
             global.canUpgrade = true;
         }
         let glide = upgradeMenu.get();
@@ -1883,7 +1905,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             let model = upgrade[2];
 
             // Draw either in the next row or next column
-            if (ticker === columnCount || upgradeBranch != lastBranch) {
+            if (ticker === global.columnCount || upgradeBranch != lastBranch) {
                 x = xStart;
                 y += height + internalSpacing;
                 if (upgradeBranch != lastBranch) {
@@ -1906,7 +1928,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
             let upgradeKey = getClassUpgradeKey(upgradeNum);
 
-            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.6, colorIndex++, upgradeKey, upgradeNum == upgradeHoverIndex);
+            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.6, colorIndex++, !global.mobile ? upgradeKey : false, upgradeNum == upgradeHoverIndex);
 
             ticker++;
             upgradeNum++;
@@ -1958,9 +1980,9 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         global.clickables.skipUpgrades.hide();
     }
 }
+// MOBILE FUNCTIONS
 function drawMobileJoysticks() {
-    // draw joysticks if needed.
-    if (!global.mobile) return;
+    // Draw the joysticks.
     let radius = Math.min(
         global.screenWidth * 0.6,
         global.screenHeight * 0.12
@@ -2036,7 +2058,10 @@ const gameDrawAlive = (ratio, drawRatio) => {
     if (global.showTree) {
         drawUpgradeTree(spacing, alcoveSize);
     } else {
-        drawMobileJoysticks();
+        if (global.mobile) { // MOBILE UI
+            drawMobileJoysticks();
+            // drawMobileButtons(spacing, alcoveSize);
+        }
         drawMessages(spacing, alcoveSize);
         drawSkillBars(spacing, alcoveSize);
         drawSelfInfo(spacing, alcoveSize, max);

@@ -41,7 +41,7 @@ function close(socket) {
             }
         }
         // Disconnect everything
-        util.log("[INFO] " + (player.body ? "User " + player.body.name : "A user without an entity") + " disconnected!");
+        util.log("[INFO] " + (player.body ? `User ${player.body.name == "" ? "A unnamed player" : player.body.name}` : "A user without an entity") + " disconnected!");
         util.remove(players, index);
     } else {
         util.log("[INFO] A player disconnected before entering the game.");
@@ -920,6 +920,9 @@ const spawn = (socket, name) => {
         body.define(Config.SPAWN_CLASS);
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
+            socket.talk("z", body.nameColor);
+        } else {
+            body.nameColor = "#ffffff";
             socket.talk("z", body.nameColor);
         }
         body.become(player); // become it so it can speak and listen.
