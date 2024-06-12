@@ -61,90 +61,90 @@ class Canvas {
   }
   wheel(event) {
     if (!global.died && global.showTree) {
-      if (event.deltaY > 1) {
-        global.treeScale /= 1.1;
-      } else {
-        global.treeScale *= 1.1;
-      }
+        if (event.deltaY > 1) {
+            global.treeScale /= 1.1;
+        } else {
+            global.treeScale *= 1.1;
+        }
     }
   }
   keyPress(event) {
     switch (event.keyCode) {
-      case global.KEY_ZOOM_OUT:
-        if (!global.died && global.showTree) global.treeScale /= 1.1;
-        break;
-      case global.KEY_ZOOM_IN:
-        if (!global.died && global.showTree) global.treeScale *= 1.1;
-        break;
+        case global.KEY_ZOOM_OUT:
+            if (!global.died && global.showTree) global.treeScale /= 1.1;
+            break;
+        case global.KEY_ZOOM_IN:
+            if (!global.died && global.showTree) global.treeScale *= 1.1;
+            break;
     }
   }
   keyDown(event) {
     switch (event.keyCode) {
-      case global.KEY_SHIFT:
-        if (global.showTree) this.treeScrollSpeedMultiplier = 5;
-        else this.socket.cmd.set(6, true);
-        break;
-
-      case global.KEY_ENTER:
-        // Enter to respawn
-        if (global.died && !global.cannotRespawn) {
-          this.socket.talk("s", global.playerName, 0, 1 * settings.game.autoLevelUp);
-          global.died = false;
-          break;
-        }
-
-        // or to talk instead
-        if (this.chatInput.hidden && global.gameStart && !global.cannotRespawn) {
-            this.chatInput.hidden = false;
-            this.chatInput.focus();
+        case global.KEY_SHIFT:
+            if (global.showTree) this.treeScrollSpeedMultiplier = 5;
+            else this.socket.cmd.set(6, true);
             break;
-        }
-        break;
 
-      case global.KEY_UP_ARROW:
-        if (!global.died && global.showTree) return (global.scrollVelocityY =- this.treeScrollSpeed * this.treeScrollSpeedMultiplier);
-      case global.KEY_UP:
-        this.socket.cmd.set(0, true);
-        break;
-      case global.KEY_DOWN_ARROW:
-        if (!global.died && global.showTree) return (global.scrollVelocityY =+ this.treeScrollSpeed * this.treeScrollSpeedMultiplier);
-      case global.KEY_DOWN:
-        this.socket.cmd.set(1, true);
-        break;
-      case global.KEY_LEFT_ARROW:
-        if (!global.died && global.showTree) return (global.scrollVelocityX =- this.treeScrollSpeed * this.treeScrollSpeedMultiplier);
-      case global.KEY_LEFT:
-        this.socket.cmd.set(2, true);
-        break;
-      case global.KEY_RIGHT_ARROW:
-        if (!global.died && global.showTree) return (global.scrollVelocityX =+ this.treeScrollSpeed * this.treeScrollSpeedMultiplier);
-      case global.KEY_RIGHT:
-        this.socket.cmd.set(3, true);
-        break;
-      case global.KEY_MOUSE_0:
-        this.socket.cmd.set(4, true);
-        break;
-      case global.KEY_MOUSE_1:
-        this.socket.cmd.set(5, true);
-        break;
-      case global.KEY_MOUSE_2:
-        this.socket.cmd.set(6, true);
-        break;
-      case global.KEY_LEVEL_UP:
-        this.socket.talk("L");
-        break;
-      case global.KEY_FUCK_YOU:
-        this.socket.talk("0");
-        break;
-      case global.KEY_BECOME:
-        this.socket.talk("H");
-        break;
-      case global.KEY_MAX_STAT:
-        global.statMaxing = true;
-        break;
-      case global.KEY_SUICIDE:
-        this.socket.talk("1");
-        break;
+        case global.KEY_ENTER:
+            // Enter to respawn
+            if (global.died) {
+                this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp);
+                global.died = false;
+                break;
+            }
+
+            // or to talk instead
+            if (this.chatInput.hidden && global.gameStart) {
+                this.chatInput.hidden = false;
+                this.chatInput.focus();
+                break;
+            }
+            break;
+
+        case global.KEY_UP_ARROW:
+            if (!global.died && global.showTree) return global.scrollVelocityY = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+        case global.KEY_UP:
+            this.socket.cmd.set(0, true);
+            break;
+        case global.KEY_DOWN_ARROW:
+            if (!global.died && global.showTree) return global.scrollVelocityY = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+        case global.KEY_DOWN:
+            this.socket.cmd.set(1, true);
+            break;
+        case global.KEY_LEFT_ARROW:
+            if (!global.died && global.showTree) return global.scrollVelocityX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+        case global.KEY_LEFT:
+            this.socket.cmd.set(2, true);
+            break;
+        case global.KEY_RIGHT_ARROW:
+            if (!global.died && global.showTree) return global.scrollVelocityX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+        case global.KEY_RIGHT:
+            this.socket.cmd.set(3, true);
+            break;
+        case global.KEY_MOUSE_0:
+            this.socket.cmd.set(4, true);
+            break;
+        case global.KEY_MOUSE_1:
+            this.socket.cmd.set(5, true);
+            break;
+        case global.KEY_MOUSE_2:
+            this.socket.cmd.set(6, true);
+            break;
+        case global.KEY_LEVEL_UP:
+            this.socket.talk('L');
+            break;
+        case global.KEY_FUCK_YOU:
+            this.socket.talk('0');
+            break;
+        case global.KEY_BECOME:
+            this.socket.talk('H');
+            break;
+        case global.KEY_MAX_STAT:
+            global.statMaxing = true;
+            break;
+        case global.KEY_SUICIDE:
+            this.socket.talk('1');
+            break;
     }
     if (!event.repeat) {
         switch (event.keyCode) {
@@ -168,9 +168,6 @@ class Canvas {
                 break;
             case global.KEY_AUTO_ALT:
                 this.socket.talk('t', 5);
-                break;
-            case global.KEY_DEBUG:
-                global.showDebug = !global.showDebug;
                 break;
             case global.KEY_SPIN_LOCK:
                 this.spinLock = !this.spinLock;
@@ -210,49 +207,49 @@ class Canvas {
                 case global.KEY_CHOOSE_6:
                     this.socket.talk('U', 5, parseInt(gui.upgrades[5][0]));
                     break;
-            }
-        }
-    }
+             }
+         }
+     }
   }
   keyUp(event) {
     switch (event.keyCode) {
-      case global.KEY_SHIFT:
-        if (global.showTree) this.treeScrollSpeedMultiplier = 1;
-        else this.socket.cmd.set(6, false);
-        break;
-      case global.KEY_UP_ARROW:
-        global.scrollVelocityY = 0;
-      case global.KEY_UP:
-        this.socket.cmd.set(0, false);
-        break;
-      case global.KEY_DOWN_ARROW:
-        global.scrollVelocityY = 0;
-      case global.KEY_DOWN:
-        this.socket.cmd.set(1, false);
-        break;
-      case global.KEY_LEFT_ARROW:
-        global.scrollVelocityX = 0;
-      case global.KEY_LEFT:
-        this.socket.cmd.set(2, false);
-        break;
-      case global.KEY_RIGHT_ARROW:
-        global.scrollVelocityX = 0;
-      case global.KEY_RIGHT:
-        this.socket.cmd.set(3, false);
-        break;
-      case global.KEY_MOUSE_0:
-        this.socket.cmd.set(4, false);
-        break;
-      case global.KEY_MOUSE_1:
-        this.socket.cmd.set(5, false);
-        break;
-      case global.KEY_MOUSE_2:
-        this.socket.cmd.set(6, false);
-        break;
-      case global.KEY_MAX_STAT:
-        global.statMaxing = false;
-        break;
-    }
+        case global.KEY_SHIFT:
+            if (global.showTree) this.treeScrollSpeedMultiplier = 1;
+            else this.socket.cmd.set(6, false);
+            break;
+        case global.KEY_UP_ARROW:
+            global.scrollVelocityY = 0;
+        case global.KEY_UP:
+            this.socket.cmd.set(0, false);
+            break;
+        case global.KEY_DOWN_ARROW:
+            global.scrollVelocityY = 0;
+        case global.KEY_DOWN:
+            this.socket.cmd.set(1, false);
+            break;
+        case global.KEY_LEFT_ARROW:
+            global.scrollVelocityX = 0;
+        case global.KEY_LEFT:
+            this.socket.cmd.set(2, false);
+            break;
+        case global.KEY_RIGHT_ARROW:
+            global.scrollVelocityX = 0;
+        case global.KEY_RIGHT:
+            this.socket.cmd.set(3, false);
+            break;
+        case global.KEY_MOUSE_0:
+            this.socket.cmd.set(4, false);
+            break;
+        case global.KEY_MOUSE_1:
+            this.socket.cmd.set(5, false);
+            break;
+        case global.KEY_MOUSE_2:
+            this.socket.cmd.set(6, false);
+            break;
+        case global.KEY_MAX_STAT:
+            global.statMaxing = false;
+            break;
+     }
   }
   mouseDown(mouse) {
     if (!this.socket) return;
@@ -282,7 +279,7 @@ class Canvas {
         case 2:
             this.socket.cmd.set(secondaryFire, true);
             break;
-    }
+     }
   }
   mouseUp(mouse) {
     if (!this.socket) return;
@@ -302,11 +299,10 @@ class Canvas {
     }
   }
   mouseMove(mouse) {
-    global.statHover =
-      global.clickables.hover.check({
+    global.statHover = global.clickables.hover.check({
         x: mouse.clientX * global.ratio,
         y: mouse.clientY * global.ratio,
-      }) === 0;
+    }) === 0;
     if (!this.spinLock) return;
     global.mouse.x = mouse.clientX * global.ratio;
     global.mouse.y = mouse.clientY * global.ratio;
