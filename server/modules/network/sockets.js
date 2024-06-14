@@ -140,11 +140,12 @@ function incoming(message, socket) {
                 socket.key = key;
             }
             socket.verified = true;
+            util.log(`[INFO] A socket ( ${socket.ip} ) has been welcomed to the server room. Waiting for spawn request.`);
             util.log("Clients: " + clients.length);
             break;
         case "s":
             // spawn request
-            util.log(`[INFO] A socket ( ${socket.ip} ) is trying to spawn an player, checking all securities...`);
+            util.log(`[INFO] A socket ( ${socket.ip} ) is asking for spawn request, checking all securities...`);
             if (!socket.status.deceased) {
                 socket.kick("Trying to spawn while already alive.");
                 return 1;
@@ -209,6 +210,8 @@ function incoming(message, socket) {
                 Config.runSpeed,
                 Config.ARENA_TYPE
             );
+            // Give the server name
+            if (needsRoom) socket.talk("svInfo", Config.gameModeName, "?");
             // More important stuff
             socket.talk("updateName", socket.player.body.name);
             // Log it
@@ -320,7 +323,7 @@ function incoming(message, socket) {
             break;
         case "t":
             // player toggle
-            if (m.length !== 1) {
+            if (m.length !== 2) {
                 socket.kick("Ill-sized toggle.");
                 return 1;
             }
@@ -331,14 +334,12 @@ function incoming(message, socket) {
                 socket.kick("Weird toggle.");
                 return 1;
             }
-
+            let sendMessage = m[1];
             // ...what are we supposed to do?
             let given = [
                 "autospin",
                 "autofire",
                 "override",
-                "reverse mouse", //reverse mouse does nothing server-side, it's easier to make the client send swapped inputs
-                "reverse tank", //reverse tank does nothing server-side, it's easier to make the client turn around 180 degrees
                 "autoalt",
                 "spinlock" //spinlock does something both in client and server side
             ][tog];
@@ -352,7 +353,7 @@ function incoming(message, socket) {
             if (player.command != null && player.body != null) {
                 player.command[given] = !player.command[given];
                 // Send a message.
-                player.body.sendMessage(given.charAt(0).toUpperCase() + given.slice(1) + (player.command[given] ? " enabled." : " disabled."));
+                if (sendMessage) player.body.sendMessage(given.charAt(0).toUpperCase() + given.slice(1) + (player.command[given] ? " enabled." : " disabled."));
             }
             break;
         case "U":

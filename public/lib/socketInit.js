@@ -819,9 +819,13 @@ const socketInit = port => {
         switch (m.shift()) {
             case 'w': // welcome to the game
                 if (m[0]) { // Ask to spawn
-                    console.log('The server has welcomed us to the game room. Sending spawn request.');
-                    socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp);
-                    global.message = '';
+                    console.log('The server has welcomed us to the game room.');
+                    global.message = 'Loading mockups, this could take a bit...';
+                    global.mockupLoading.then(() => {
+                        console.log('Sending spawn request.');
+                        socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp);
+                        global.message = '';
+                    });
                 }
             break;
             case 'R': // room setup
@@ -892,24 +896,16 @@ const socketInit = port => {
                     global.canThrowSyncClockError = false;
                     // Start the game
                     console.log(sync);
-                    console.log('Syncing complete, calculated clock difference ' + clockDiff + 'ms.');
-                    global.message = 'Loading mockups, this could take a bit...';
-                    global.mockupLoading.then(() => {
-                        console.log('Beginning game.');
-                        global.gameStart = true;
-                        global.entities = [];
-                        global.message = '';
-                        global.canThrowClosedMessage = true;
-                    });
+                    console.log('Syncing complete, calculated clock difference ' + clockDiff + 'ms. Beginning game.');
+                    console.log('Beginning game.');
+                    global.gameStart = true;
+                    global.entities = [];
+                    global.message = '';
+                    global.canThrowClosedMessage = true;
                 }
                 break;
             case 'm': // message
-                global.messages.push({
-                    text: m[1],
-                    status: 2,
-                    alpha: 0,
-                    time: Date.now() + m[0],
-                });
+                global.createMessage(m[1], m[0]);
                 break;
             case 'u': // uplink
                 // Pull the camera info

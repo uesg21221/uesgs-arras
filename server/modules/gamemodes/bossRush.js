@@ -145,21 +145,9 @@ class BossRush {
         let o = new Entity(tile.loc);
         this.defineSanctuary(o, team, type);
         this.sanctuaries.push(o);
-    }
-
-    defineSanctuary(entity, team, type) {
-        entity.define(type);
-        entity.team = team;
-        entity.color.base = getTeamColor(team);
-        entity.skill.score = 111069;
-        entity.name = 'Sanctuary';
-        entity.SIZE = room.tileWidth / (Config.CLASSIC_SIEGE ? 10 : 17.5);
-        let spawnableTeam = room.spawnable[Object.keys(room.spawnable).find((key) => room.spawnable[key].includes(tile),)];
-        entity.isDominator = true;
-        entity.nameColor = "#ffffff";
-        entity.define({ DANGER: 11 });
-        entity.on('dead', () => {
-            if (entity.team === TEAM_ENEMIES) {
+        let spawnableTeam = room.spawnable[Object.keys(room.spawnable).find((key) => room.spawnable[key].includes(tile))];
+        o.on('dead', () => {
+            if (o.team === TEAM_ENEMIES) {
                 this.spawnSanctuary(tile, TEAM_BLUE, `sanctuaryTier${this.sanctuaryTier}`);
                 tile.color.interpret(getTeamColor(TEAM_BLUE));
                 this.leftSanctuaries++;
@@ -178,6 +166,18 @@ class BossRush {
             }
             sockets.broadcastRoom();
         });
+    }
+
+    defineSanctuary(entity, team, type) {
+        entity.define(type);
+        entity.team = team;
+        entity.color.base = getTeamColor(team);
+        entity.skill.score = 111069;
+        entity.name = 'Sanctuary';
+        entity.SIZE = room.tileWidth / (Config.CLASSIC_SIEGE ? 10 : 17.5);
+        entity.isDominator = true;
+        entity.nameColor = "#ffffff";
+        entity.define({ DANGER: 11 });
     }
 
     playerWin() {

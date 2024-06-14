@@ -697,6 +697,7 @@ Class.antiTankMachineGun = {
     UPGRADE_LABEL: "A.T.M.G.",
     CONTROLLERS: [['spin', {onlyWhenIdle: true}], 'nearestDifferentMaster'],
     LEVEL: 45,
+    SIZE: 12,
     BODY: {
         RESIST: 100,
         SPEED: 1.32,

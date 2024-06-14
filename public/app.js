@@ -122,11 +122,9 @@ global.enableSlideAnimation = false;
 global.mspt = "?";
 global.serverName = "Unknown";
 // Tips setup :D
-let tips = global.getTips[Math.floor(Math.random() * global.getTips.length)];
+let tips = global.tips[Math.floor(Math.random() * global.tips.length)];
 global.tips = tips[Math.floor(Math.random() * tips.length)];
 global.mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
-var serverName = "Connected";
-var provider = "Unknown";
 function getMockups() {
     global.mockupLoading = new Promise(Resolve => {
         util.pullJSON("mockups").then(data => {
@@ -324,7 +322,7 @@ function resizeEvent() {
     global.screenSize = Math.min(1920, Math.max(window.innerWidth, 1280));
 }
 window.resizeEvent = resizeEvent;
-window.canvas = new Canvas();
+window.canvas = new Canvas(); 
 var c = window.canvas.cv;
 var ctx = c.getContext("2d");
 var c2 = document.createElement("canvas");
@@ -518,6 +516,9 @@ function startGame() {
     settings.graphical.screenshotMode = document.getElementById("optScreenshotMode").checked;
     settings.graphical.coloredHealthbars = document.getElementById("coloredHealthbars").checked;
     settings.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
+    if (global.mobile) {
+        settings.graphical.fancyAnimations = false; // this basicly improves the performance.
+    }
     switch (document.getElementById("optBorders").value) {
         case "normal":
             settings.graphical.darkBorders = settings.graphical.neon = false;
@@ -1393,7 +1394,7 @@ function drawEntities(px, py, ratio) {
             let chat = global.chats[instance.id][i],
                 text = chat.text,
                 msgLengthHalf = measureText(text, 15 * ratioForChat) / 2,
-                alpha = Math.max(0, Math.min(1000, chat.expires - now) / 1000);
+                alpha = Math.max(!global.mobile ? 0 : 1, Math.min(1000, chat.expires - now) / 1000);
 
             ctx.globalAlpha = 0.5 * alpha;
             drawBar(x - msgLengthHalf, x + msgLengthHalf, y, 30 * ratioForChat, gameDraw.modifyColor(instance.color));
@@ -1980,7 +1981,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         global.clickables.skipUpgrades.hide();
     }
 }
-// MOBILE FUNCTIONS
+// MOBILE UI FUNCTIONS
 function drawMobileJoysticks() {
     // Draw the joysticks.
     let radius = Math.min(
@@ -2024,6 +2025,76 @@ function drawMobileJoysticks() {
     );
     ctx.fill();
 }
+function drawMobileButtons(spacing, alcoveSize) {
+    if (global.clickables.mobileButtons.active == null) global.clickables.mobileButtons.active = false;
+    if (global.clickables.mobileButtons.altFire == null) global.clickables.mobileButtons.altFire = false;
+    
+    // Hide the buttons
+    global.clickables.mobileButtons.hide();
+    
+    // Some sizing variables
+    let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
+    let upgradeColumns = Math.ceil(gui.upgrades.length / 9);
+    let yOffset = global.mobile ? global.canUpgrade ? (alcoveSize / 3.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 3.5 * (upgradeColumns + 3.55) + 67 : 0 + global.canSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0 : 0;
+    let buttons;
+    let baseSize = (alcoveSize - spacing * 2) / 3;
+    
+        function makeButton(index, x, y, width, height, text) {
+            // Set the clickable's position
+            global.clickables.mobileButtons.place(index, x * clickableRatio, y * clickableRatio, width * clickableRatio, height * clickableRatio);
+    
+            // Draw boxes
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = color.grey;
+            drawGuiRect(x, y, width, height);
+            ctx.globalAlpha = 0.1;
+            ctx.fillStyle = color.black;
+            drawGuiRect(x, y + height * 0.6, width, height * 0.4);
+            ctx.globalAlpha = 1;
+    
+            // Draw text
+            drawText(text, x + width / 2, y + height * 0.5, height * 0.6, color.guiwhite, "center", true);
+    
+            // Draw the borders
+            ctx.strokeStyle = color.black;
+            ctx.lineWidth = 3;
+            drawGuiRect(x, y, width, height, true);
+        };
+    
+        function makeButtons(buttons, startX, startY, baseSize) {
+            let x, y, index = 0;
+    
+            let resetX = () => x = startX;
+            let resetY = () => y = startY;
+    
+            resetX();
+            resetY();
+    
+            for (let row = 0; row < buttons.length; row++) {
+                for (let col = 0; col < buttons[row].length; col++) {
+                    makeButton(buttons[row][col][3] ?? index, x, y, baseSize * (buttons[row][col][1] ?? 1), baseSize * (buttons[row][col][2] ?? 1), buttons[row][col][0]);
+                    x += baseSize * (buttons[row][col][1] ?? 1) + spacing;
+                    index++;
+                }
+    
+                resetX();
+                y += Math.max(...buttons[row].map(b => baseSize * (b[2] ?? 1))) + spacing;
+            }
+        }
+        if (global.mobile) {
+        buttons = global.clickables.mobileButtons.active ? [
+            [[global.clickables.mobileButtons.active ? "-" : "+"], [`Alt ${global.clickables.mobileButtons.altFire ? "Manual" : "Disabled"}`, 6], [`${!document.fullscreenElement ? "Full" : "Exit Full"} Screen`, 5]],
+            [["Autofire", 3.5], ["Reverse", 3.5], ["Self-Destruct", 5]],
+            [["Autospin", 3.5], ["Override", 3.5], ["Level Up", 5]],
+            [["Action", 3.5], ["Special", 3.5], ["Chat", 5]],
+        ] : [
+            [[global.clickables.mobileButtons.active ? "-" : "+"]],
+        ];
+      }
+       if (global.clickables.mobileButtons.altFire) buttons.push([["\u2756", 2, 2]]);
+    
+       makeButtons(buttons, spacing * 2, yOffset + spacing, baseSize);
+}
 const gameDrawAlive = (ratio, drawRatio) => {
     let GRAPHDATA = 0;
     // Prep stuff
@@ -2060,7 +2131,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
     } else {
         if (global.mobile) { // MOBILE UI
             drawMobileJoysticks();
-            // drawMobileButtons(spacing, alcoveSize);
+            drawMobileButtons(spacing, alcoveSize);
         }
         drawMessages(spacing, alcoveSize);
         drawSkillBars(spacing, alcoveSize);
@@ -2153,8 +2224,7 @@ const gameDrawDead = () => {
     drawText(getDeath(), x - 170, y + 99, 16, color.guiwhite);
     drawText(getTips(), x - 170, y + 122, 16, color.guiwhite);
     drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active for the run!", x - 170, y + 144, 16, color.guiwhite);
-    drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center"); // uncomment this when mobile support finished.
-    //drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
+    drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
 const gameDrawOldDead = () => {

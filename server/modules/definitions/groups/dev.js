@@ -452,12 +452,6 @@ Class.mmaTest2 = {
 Class.mmaTest1 = {
     PARENT: "genericTank",
     COLOR: -1,
-    // Somehow, removing the gun below causes a crash when the tank is chosen ??????
-    GUNS: [
-        {
-            POSITION: [18, 8, 1, 0, 0, 0, 0],
-        }
-    ],
     TURRETS: [
         {
             POSITION: [10, 0, 0, 0, 360, 1],

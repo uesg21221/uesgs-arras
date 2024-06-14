@@ -87,14 +87,14 @@ class Canvas {
 
         case global.KEY_ENTER:
             // Enter to respawn
-            if (global.died) {
+            if (global.died && !global.cannotRespawn) {
                 this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp);
                 global.died = false;
                 break;
             }
 
             // or to talk instead
-            if (this.chatInput.hidden && global.gameStart) {
+            if (this.chatInput.hidden && global.gameStart && !global.cannotRespawn) {
                 this.chatInput.hidden = false;
                 this.chatInput.focus();
                 break;
@@ -150,28 +150,32 @@ class Canvas {
         switch (event.keyCode) {
             case global.KEY_AUTO_SPIN:
                 global.autoSpin = !global.autoSpin;
-                this.socket.talk('t', 0);
+                this.socket.talk('t', 0, true);
                 break;
             case global.KEY_AUTO_FIRE:
-                this.socket.talk('t', 1);
+                this.socket.talk('t', 1, true);
                 break;
             case global.KEY_OVER_RIDE:
-                this.socket.talk('t', 2);
-                break;
-            case global.KEY_REVERSE_MOUSE: //client side only, no server effects except message
-                this.inverseMouse = !this.inverseMouse;
-                this.socket.talk('t', 3);
-                break;
-            case global.KEY_REVERSE_TANK: //client side only, no server effects except message
-                this.reverseDirection = !this.reverseDirection;
-                this.socket.talk('t', 4);
+                this.socket.talk('t', 2, true);
                 break;
             case global.KEY_AUTO_ALT:
-                this.socket.talk('t', 5);
+                this.socket.talk('t', 3, true);
                 break;
             case global.KEY_SPIN_LOCK:
                 this.spinLock = !this.spinLock;
-                this.socket.talk('t', 6);
+                global.createMessage(this.spinLock ? 'Spinlock disabled.' : 'Spinlock enabled.');
+                this.socket.talk('t', 4, false);
+                break;
+            case global.KEY_REVERSE_MOUSE:
+                this.inverseMouse = !this.inverseMouse;
+                global.createMessage(this.inverseMouse ? 'Reverse mouse enabled.' : 'Reverse mouse disabled.');
+                break;
+            case global.KEY_REVERSE_TANK:
+                this.reverseDirection = !this.reverseDirection;
+                global.createMessage(this.reverseDirection ? 'Reverse tank enabled.' : 'Reverse tank disabled.');
+                break;
+              case global.KEY_DEBUG:
+                global.showDebug = !global.showDebug;
                 break;
             case global.KEY_CLASS_TREE:
                 global.treeScale = 1;
@@ -320,25 +324,61 @@ class Canvas {
           y: touch.clientY * global.ratio,
         };
         let id = touch.identifier;
-        let statIndex = global.clickables.stat.check(mpos);
-        if (statIndex !== -1) this.socket.talk("x", statIndex, 0);
-        else if (global.clickables.skipUpgrades.check(mpos) !== -1)
-          global.clearUpgrades();
+        let buttonIndex = global.clickables.mobileButtons.check(mpos);
+          if (buttonIndex !== -1) [
+              () => global.clickables.mobileButtons.active = !global.clickables.mobileButtons.active,
+              () => {
+                if (global.clickables.mobileButtons.active) {
+                  global.clickables.mobileButtons.altFire = !global.clickables.mobileButtons.altFire; 
+                  if (!global.clickables.mobileButtons.altFire) this.socket.cmd.set(6, false);
+                } else if (global.isInverted) global.isInverted = false, this.socket.cmd.set(6, false);
+                 else global.isInverted = true, this.socket.cmd.set(6, true);
+              },
+              () => { 
+                if (!document.fullscreenElement) {
+                  var d = document.body;
+                  d.requestFullscreen
+                  ? d.requestFullscreen()
+                  : d.msRequestFullscreen
+                  ? d.msRequestFullscreen()
+                  : d.mozRequestFullScreen
+                  ? d.mozRequestFullScreen()
+                  : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
+                } else { 
+                  document.exitFullscreen() 
+                }  
+              },
+              () => this.socket.talk('t', 1, true),
+              () => { this.reverseDirection = !this.reverseDirection; global.reverseTank = -global.reverseTank; global.createMessage(this.reverseDirection ? 'Reverse tank enabled.' : 'Reverse tank disabled.'); },
+              () => {global.clickables.mobileButtons.active = false; this.socket.talk('1')},
+              () => { global.autoSpin = !global.autoSpin; this.socket.talk('t', 0, true); },
+              () => this.socket.talk('t', 2, true),
+              () => this.socket.talk('L'),
+              () => this.socket.talk('H'),
+              () => this.socket.talk('0'),
+              () => { if (this.chatInput.hidden && global.gameStart && !global.cannotRespawn) { this.chatInput.hidden = false; this.chatInput.focus(); } else { this.chatInput.hidden = true; this.cv.focus(); } },
+            ][buttonIndex]();
         else {
-          let upgradeIndex = global.clickables.upgrade.check(mpos);
-          if (upgradeIndex !== -1)
-            this.socket.talk("U", upgradeIndex, parseInt(gui.upgrades[upgradeIndex][0]));
+          let statIndex = global.clickables.stat.check(mpos);
+          if (statIndex !== -1) this.socket.talk("x", statIndex, 0);
+          else if (global.clickables.skipUpgrades.check(mpos) !== -1)
+            global.clearUpgrades();
           else {
-            let onLeft = mpos.x < this.cv.width / 2;
-            if (this.movementTouch === null && onLeft) {
-              this.movementTouch = id;
-            } else if (this.controlTouch === null && !onLeft) {
-              this.controlTouch = id;
-              this.socket.cmd.set(4, true);
+            let upgradeIndex = global.clickables.upgrade.check(mpos);
+            if (upgradeIndex !== -1)
+              this.socket.talk("U", upgradeIndex, parseInt(gui.upgrades[upgradeIndex][0]));
+            else {
+              let onLeft = mpos.x < this.cv.width / 2;
+              if (this.movementTouch === null && onLeft) {
+                this.movementTouch = id;
+              } else if (this.controlTouch === null && !onLeft) {
+                this.controlTouch = id;
+                this.socket.cmd.set(4, true);
+              }
             }
           }
         }
-      }
+      } 
       this.touchMove(e);
     }
   }

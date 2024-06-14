@@ -3,9 +3,20 @@ import { util } from "./util.js";
 
 // You add stuff in here!
 
-// Tips for the client to show at the connecting screen.
+// functions.
 
-global.getTips = [[ // You can edit this!
+function createMessage(con, dur = 10_000) {
+    global.messages.push({
+        text: con,
+        status: 2,
+        alpha: 0,
+        time: Date.now() + dur,
+    });
+};
+
+// globals.
+
+global.tips = [[ // You can edit this!
          "Tip: You can view and edit your keybinds in the options menu.",
          "Tip: You can play on mobile by just going to arras.io on your phone!"
     ], [
@@ -20,6 +31,4 @@ global.getTips = [[ // You can edit this!
         "Multiboxing is when you use a script to control multiple tanks at the same time. This is considered CHEATING and will result in a ban."
     ]
 ];
-
-
-// Developers please add something more.
+global.createMessage = (content, duration) => createMessage(content, duration);
