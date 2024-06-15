@@ -332,23 +332,23 @@ class Canvas {
                   break;
                 case 1:
                   if (global.clickables.mobileButtons.active) {
-                      global.clickables.mobileButtons.altFire = !global.clickables.mobileButtons.altFire; 
-                      if (!global.clickables.mobileButtons.altFire) this.socket.cmd.set(6, false);
+                        global.clickables.mobileButtons.altFire = !global.clickables.mobileButtons.altFire; 
+                        if (!global.clickables.mobileButtons.altFire) this.socket.cmd.set(6, false);
                   } else if (global.isInverted) global.isInverted = false, this.socket.cmd.set(6, false);
                     else global.isInverted = true, this.socket.cmd.set(6, true);
                   break;
                 case 2:
                   if (!document.fullscreenElement) {
-                    var d = document.body;
-                    d.requestFullscreen
-                    ? d.requestFullscreen()
-                    : d.msRequestFullscreen
-                    ? d.msRequestFullscreen()
-                    : d.mozRequestFullScreen
-                    ? d.mozRequestFullScreen()
-                    : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
+                        var d = document.body;
+                        d.requestFullscreen
+                        ? d.requestFullscreen()
+                        : d.msRequestFullscreen
+                        ? d.msRequestFullscreen()
+                        : d.mozRequestFullScreen
+                        ? d.mozRequestFullScreen()
+                        : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
                   } else { 
-                    document.exitFullscreen() 
+                        document.exitFullscreen();
                   }
                   break;
                   case 3:
@@ -381,9 +381,9 @@ class Canvas {
                     break;
                   case 11:
                     if (this.chatInput.hidden && global.gameStart && !global.cannotRespawn) { 
-                      this.chatInput.hidden = false; this.chatInput.focus(); 
+                          this.chatInput.hidden = false; this.chatInput.focus(); 
                     } else { 
-                      this.chatInput.hidden = true; this.cv.focus(); 
+                          this.chatInput.hidden = true; this.cv.focus(); 
                     }
                     break;
                   default:
