@@ -325,39 +325,71 @@ class Canvas {
         };
         let id = touch.identifier;
         let buttonIndex = global.clickables.mobileButtons.check(mpos);
-          if (buttonIndex !== -1) [
-              () => global.clickables.mobileButtons.active = !global.clickables.mobileButtons.active,
-              () => {
-                if (global.clickables.mobileButtons.active) {
-                  global.clickables.mobileButtons.altFire = !global.clickables.mobileButtons.altFire; 
-                  if (!global.clickables.mobileButtons.altFire) this.socket.cmd.set(6, false);
-                } else if (global.isInverted) global.isInverted = false, this.socket.cmd.set(6, false);
-                 else global.isInverted = true, this.socket.cmd.set(6, true);
-              },
-              () => { 
-                if (!document.fullscreenElement) {
-                  var d = document.body;
-                  d.requestFullscreen
-                  ? d.requestFullscreen()
-                  : d.msRequestFullscreen
-                  ? d.msRequestFullscreen()
-                  : d.mozRequestFullScreen
-                  ? d.mozRequestFullScreen()
-                  : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
-                } else { 
-                  document.exitFullscreen() 
-                }  
-              },
-              () => this.socket.talk('t', 1, true),
-              () => { this.reverseDirection = !this.reverseDirection; global.reverseTank = -global.reverseTank; global.createMessage(this.reverseDirection ? 'Reverse tank enabled.' : 'Reverse tank disabled.'); },
-              () => {global.clickables.mobileButtons.active = false; this.socket.talk('1')},
-              () => { global.autoSpin = !global.autoSpin; this.socket.talk('t', 0, true); },
-              () => this.socket.talk('t', 2, true),
-              () => this.socket.talk('L'),
-              () => this.socket.talk('H'),
-              () => this.socket.talk('0'),
-              () => { if (this.chatInput.hidden && global.gameStart && !global.cannotRespawn) { this.chatInput.hidden = false; this.chatInput.focus(); } else { this.chatInput.hidden = true; this.cv.focus(); } },
-            ][buttonIndex]();
+          if (buttonIndex !== -1) {
+              switch (buttonIndex) {
+                case 0:
+                  global.clickables.mobileButtons.active = !global.clickables.mobileButtons.active;
+                  break;
+                case 1:
+                  if (global.clickables.mobileButtons.active) {
+                      global.clickables.mobileButtons.altFire = !global.clickables.mobileButtons.altFire; 
+                      if (!global.clickables.mobileButtons.altFire) this.socket.cmd.set(6, false);
+                  } else if (global.isInverted) global.isInverted = false, this.socket.cmd.set(6, false);
+                    else global.isInverted = true, this.socket.cmd.set(6, true);
+                  break;
+                case 2:
+                  if (!document.fullscreenElement) {
+                    var d = document.body;
+                    d.requestFullscreen
+                    ? d.requestFullscreen()
+                    : d.msRequestFullscreen
+                    ? d.msRequestFullscreen()
+                    : d.mozRequestFullScreen
+                    ? d.mozRequestFullScreen()
+                    : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
+                  } else { 
+                    document.exitFullscreen() 
+                  }
+                  break;
+                  case 3:
+                    this.socket.talk('t', 1, true);
+                    break;
+                  case 4:
+                    this.reverseDirection = !this.reverseDirection; 
+                    global.reverseTank = -global.reverseTank; 
+                    global.createMessage(this.reverseDirection ? 'Reverse tank enabled.' : 'Reverse tank disabled.');
+                    break;
+                  case 5:
+                    global.clickables.mobileButtons.active = false; 
+                    this.socket.talk('1');
+                    break;
+                  case 6:
+                    global.autoSpin = !global.autoSpin;
+                    this.socket.talk('t', 0, true);
+                    break;
+                  case 7:
+                    this.socket.talk('t', 2, true);
+                    break;
+                  case 8:
+                    this.socket.talk('L');
+                    break;
+                  case 9:
+                    this.socket.talk('H');
+                    break;
+                  case 10:
+                    this.socket.talk('0');
+                    break;
+                  case 11:
+                    if (this.chatInput.hidden && global.gameStart && !global.cannotRespawn) { 
+                      this.chatInput.hidden = false; this.chatInput.focus(); 
+                    } else { 
+                      this.chatInput.hidden = true; this.cv.focus(); 
+                    }
+                    break;
+                  default:
+                    throw new Error('Unknown button index.');
+              }
+            }
         else {
           let statIndex = global.clickables.stat.check(mpos);
           if (statIndex !== -1) this.socket.talk("x", statIndex, 0);
