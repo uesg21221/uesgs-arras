@@ -24,28 +24,28 @@ class Canvas {
 
     this.cv = document.getElementById("gameCanvas");
     if (global.mobile) {
-      // Mobile
-      let mobilecv = this.cv;
-      this.controlTouch = null;
-      this.movementTouch = null;
-      this.movementTop = false;
-      this.movementBottom = false;
-      this.movementLeft = false;
-      this.movementRight = false;
-      this.movementTouchPos = { x: 0, y: 0 };
-      this.controlTouchPos = { x: 0, y: 0 };
-      mobilecv.addEventListener("touchstart", (event) => this.touchStart(event), false);
-      mobilecv.addEventListener("touchmove", (event) => this.touchMove(event), false);
-      mobilecv.addEventListener("touchend", (event) => this.touchEnd(event), false);
-      mobilecv.addEventListener("touchcancel",(event) => this.touchEnd(event), false);
+        // Mobile
+        let mobilecv = this.cv;
+        this.controlTouch = null;
+        this.movementTouch = null;
+        this.movementTop = false;
+        this.movementBottom = false;
+        this.movementLeft = false;
+        this.movementRight = false;
+        this.movementTouchPos = { x: 0, y: 0 };
+        this.controlTouchPos = { x: 0, y: 0 };
+        mobilecv.addEventListener("touchstart", (event) => this.touchStart(event), false);
+        mobilecv.addEventListener("touchmove", (event) => this.touchMove(event), false);
+        mobilecv.addEventListener("touchend", (event) => this.touchEnd(event), false);
+        mobilecv.addEventListener("touchcancel",(event) => this.touchEnd(event), false);
     } else {
-      this.cv.addEventListener('mousemove', event => this.mouseMove(event), false);
-      this.cv.addEventListener('mousedown', event => this.mouseDown(event), false);
-      this.cv.addEventListener('mouseup', event => this.mouseUp(event), false);
-      this.cv.addEventListener('keypress', event => this.keyPress(event), false);
-      this.cv.addEventListener('keydown', event => this.keyDown(event), false);
-      this.cv.addEventListener('keyup', event => this.keyUp(event), false);
-      this.cv.addEventListener('wheel', event => this.wheel(event), false);
+        this.cv.addEventListener('mousemove', event => this.mouseMove(event), false);
+        this.cv.addEventListener('mousedown', event => this.mouseDown(event), false);
+        this.cv.addEventListener('mouseup', event => this.mouseUp(event), false);
+        this.cv.addEventListener('keypress', event => this.keyPress(event), false);
+        this.cv.addEventListener('keydown', event => this.keyDown(event), false);
+        this.cv.addEventListener('keyup', event => this.keyUp(event), false);
+        this.cv.addEventListener('wheel', event => this.wheel(event), false);
     }
     this.cv.resize = (width, height) => {
       this.cv.width = this.width = width;
@@ -61,29 +61,29 @@ class Canvas {
   }
   wheel(event) {
     if (!global.died && global.showTree) {
-        if (event.deltaY > 1) {
-            global.treeScale /= 1.1;
-        } else {
-            global.treeScale *= 1.1;
-        }
+      if (event.deltaY > 1) {
+        global.treeScale /= 1.1;
+      } else {
+        global.treeScale *= 1.1;
+      }
     }
   }
   keyPress(event) {
     switch (event.keyCode) {
-        case global.KEY_ZOOM_OUT:
-            if (!global.died && global.showTree) global.treeScale /= 1.1;
-            break;
-        case global.KEY_ZOOM_IN:
-            if (!global.died && global.showTree) global.treeScale *= 1.1;
-            break;
+      case global.KEY_ZOOM_OUT:
+        if (!global.died && global.showTree) global.treeScale /= 1.1;
+        break;
+      case global.KEY_ZOOM_IN:
+        if (!global.died && global.showTree) global.treeScale *= 1.1;
+        break;
     }
   }
   keyDown(event) {
     switch (event.keyCode) {
-        case global.KEY_SHIFT:
-            if (global.showTree) this.treeScrollSpeedMultiplier = 5;
-            else this.socket.cmd.set(6, true);
-            break;
+      case global.KEY_SHIFT:
+        if (global.showTree) this.treeScrollSpeedMultiplier = 5;
+        else this.socket.cmd.set(6, true);
+        break;
 
         case global.KEY_ENTER:
             // Enter to respawn
@@ -101,212 +101,221 @@ class Canvas {
             }
             break;
 
-        case global.KEY_UP_ARROW:
-            if (!global.died && global.showTree) return global.scrollVelocityY = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
-        case global.KEY_UP:
-            this.socket.cmd.set(0, true);
-            break;
-        case global.KEY_DOWN_ARROW:
-            if (!global.died && global.showTree) return global.scrollVelocityY = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
-        case global.KEY_DOWN:
-            this.socket.cmd.set(1, true);
-            break;
-        case global.KEY_LEFT_ARROW:
-            if (!global.died && global.showTree) return global.scrollVelocityX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
-        case global.KEY_LEFT:
-            this.socket.cmd.set(2, true);
-            break;
-        case global.KEY_RIGHT_ARROW:
-            if (!global.died && global.showTree) return global.scrollVelocityX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
-        case global.KEY_RIGHT:
-            this.socket.cmd.set(3, true);
-            break;
-        case global.KEY_MOUSE_0:
-            this.socket.cmd.set(4, true);
-            break;
-        case global.KEY_MOUSE_1:
-            this.socket.cmd.set(5, true);
-            break;
-        case global.KEY_MOUSE_2:
-            this.socket.cmd.set(6, true);
-            break;
-        case global.KEY_LEVEL_UP:
-            this.socket.talk('L');
-            break;
-        case global.KEY_FUCK_YOU:
-            this.socket.talk('0');
-            break;
-        case global.KEY_BECOME:
-            this.socket.talk('H');
-            break;
-        case global.KEY_MAX_STAT:
-            global.statMaxing = true;
-            break;
-        case global.KEY_SUICIDE:
-            this.socket.talk('1');
-            break;
+      case global.KEY_UP_ARROW:
+        if (!global.died && global.showTree) return global.scrollVelocityY = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+      case global.KEY_UP:
+        this.socket.cmd.set(0, true);
+        break;
+      case global.KEY_DOWN_ARROW:
+        if (!global.died && global.showTree) return global.scrollVelocityY = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+      case global.KEY_DOWN:
+        this.socket.cmd.set(1, true);
+        break;
+      case global.KEY_LEFT_ARROW:
+        if (!global.died && global.showTree) return global.scrollVelocityX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+      case global.KEY_LEFT:
+        this.socket.cmd.set(2, true);
+        break;
+      case global.KEY_RIGHT_ARROW:
+        if (!global.died && global.showTree) return global.scrollVelocityX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
+      case global.KEY_RIGHT:
+        this.socket.cmd.set(3, true);
+        break;
+      case global.KEY_MOUSE_0:
+        this.socket.cmd.set(4, true);
+        break;
+      case global.KEY_MOUSE_1:
+        this.socket.cmd.set(5, true);
+        break;
+      case global.KEY_MOUSE_2:
+        this.socket.cmd.set(6, true);
+        break;
+      case global.KEY_LEVEL_UP:
+        this.socket.talk("L");
+        break;
+      case global.KEY_FUCK_YOU:
+        this.socket.talk("0");
+        break;
+      case global.KEY_BECOME:
+        this.socket.talk("H");
+        break;
+      case global.KEY_MAX_STAT:
+        global.statMaxing = true;
+        break;
+      case global.KEY_SUICIDE:
+        this.socket.talk("1");
+        break;
     }
     if (!event.repeat) {
+      switch (event.keyCode) {
+        case global.KEY_AUTO_SPIN:
+          global.autoSpin = !global.autoSpin;
+          this.socket.talk("t", 0, true);
+          break;
+        case global.KEY_AUTO_FIRE:
+          this.socket.talk("t", 1, true);
+          break;
+        case global.KEY_OVER_RIDE:
+          this.socket.talk("t", 2, true);
+          break;
+        case global.KEY_AUTO_ALT:
+          this.socket.talk("t", 3, true);
+          break;
+        case global.KEY_SPIN_LOCK:
+          this.spinLock = !this.spinLock;
+          global.createMessage(this.spinLock ? "Spinlock disabled." : "Spinlock enabled.");
+          this.socket.talk("t", 4, false);
+          break;
+        case global.KEY_REVERSE_MOUSE:
+          this.inverseMouse = !this.inverseMouse;
+          global.createMessage(this.inverseMouse ? "Reverse mouse enabled." : "Reverse mouse disabled.");
+          break;
+        case global.KEY_REVERSE_TANK:
+          this.reverseDirection = !this.reverseDirection;
+          global.createMessage(this.reverseDirection ? "Reverse tank enabled." : "Reverse tank disabled.");
+          break;
+        case global.KEY_DEBUG:
+          global.showDebug = !global.showDebug;
+          break;
+        case global.KEY_CLASS_TREE:
+          global.treeScale = 1;
+          global.showTree = !global.showTree;
+          break;
+      }
+      if (global.canSkill) {
+        let skill = [
+          global.KEY_UPGRADE_ATK,
+          global.KEY_UPGRADE_HTL,
+          global.KEY_UPGRADE_SPD,
+          global.KEY_UPGRADE_STR,
+          global.KEY_UPGRADE_PEN,
+          global.KEY_UPGRADE_DAM,
+          global.KEY_UPGRADE_RLD,
+          global.KEY_UPGRADE_MOB,
+          global.KEY_UPGRADE_RGN,
+          global.KEY_UPGRADE_SHI,
+        ].indexOf(event.keyCode);
+        if (skill >= 0) this.socket.talk("x", skill, 1 * global.statMaxing);
+      }
+      if (global.canUpgrade) {
         switch (event.keyCode) {
-            case global.KEY_AUTO_SPIN:
-                global.autoSpin = !global.autoSpin;
-                this.socket.talk('t', 0, true);
-                break;
-            case global.KEY_AUTO_FIRE:
-                this.socket.talk('t', 1, true);
-                break;
-            case global.KEY_OVER_RIDE:
-                this.socket.talk('t', 2, true);
-                break;
-            case global.KEY_AUTO_ALT:
-                this.socket.talk('t', 3, true);
-                break;
-            case global.KEY_SPIN_LOCK:
-                this.spinLock = !this.spinLock;
-                global.createMessage(this.spinLock ? 'Spinlock disabled.' : 'Spinlock enabled.');
-                this.socket.talk('t', 4, false);
-                break;
-            case global.KEY_REVERSE_MOUSE:
-                this.inverseMouse = !this.inverseMouse;
-                global.createMessage(this.inverseMouse ? 'Reverse mouse enabled.' : 'Reverse mouse disabled.');
-                break;
-            case global.KEY_REVERSE_TANK:
-                this.reverseDirection = !this.reverseDirection;
-                global.createMessage(this.reverseDirection ? 'Reverse tank enabled.' : 'Reverse tank disabled.');
-                break;
-              case global.KEY_DEBUG:
-                global.showDebug = !global.showDebug;
-                break;
-            case global.KEY_CLASS_TREE:
-                global.treeScale = 1;
-                global.showTree = !global.showTree;
-                break;
+          case global.KEY_CHOOSE_1:
+            this.socket.talk("U", 0, parseInt(gui.upgrades[0][0]));
+            break;
+          case global.KEY_CHOOSE_2:
+            this.socket.talk("U", 1, parseInt(gui.upgrades[1][0]));
+            break;
+          case global.KEY_CHOOSE_3:
+            this.socket.talk("U", 2, parseInt(gui.upgrades[2][0]));
+            break;
+          case global.KEY_CHOOSE_4:
+            this.socket.talk("U", 3, parseInt(gui.upgrades[3][0]));
+            break;
+          case global.KEY_CHOOSE_5:
+            this.socket.talk("U", 4, parseInt(gui.upgrades[4][0]));
+            break;
+          case global.KEY_CHOOSE_6:
+            this.socket.talk("U", 5, parseInt(gui.upgrades[5][0]));
+            break;
         }
-        if (global.canSkill) {
-            let skill = [
-                global.KEY_UPGRADE_ATK, global.KEY_UPGRADE_HTL, global.KEY_UPGRADE_SPD,
-                global.KEY_UPGRADE_STR, global.KEY_UPGRADE_PEN, global.KEY_UPGRADE_DAM,
-                global.KEY_UPGRADE_RLD, global.KEY_UPGRADE_MOB, global.KEY_UPGRADE_RGN,
-                global.KEY_UPGRADE_SHI
-            ].indexOf(event.keyCode);
-            if (skill >= 0) this.socket.talk('x', skill, 1 * global.statMaxing);
-        }
-        if (global.canUpgrade) {
-            switch (event.keyCode) {
-                case global.KEY_CHOOSE_1:
-                    this.socket.talk('U', 0, parseInt(gui.upgrades[0][0]));
-                    break;
-                case global.KEY_CHOOSE_2:
-                    this.socket.talk('U', 1, parseInt(gui.upgrades[1][0]));
-                    break;
-                case global.KEY_CHOOSE_3:
-                    this.socket.talk('U', 2, parseInt(gui.upgrades[2][0]));
-                    break;
-                case global.KEY_CHOOSE_4:
-                    this.socket.talk('U', 3, parseInt(gui.upgrades[3][0]));
-                    break;
-                case global.KEY_CHOOSE_5:
-                    this.socket.talk('U', 4, parseInt(gui.upgrades[4][0]));
-                    break;
-                case global.KEY_CHOOSE_6:
-                    this.socket.talk('U', 5, parseInt(gui.upgrades[5][0]));
-                    break;
-             }
-         }
-     }
+      }
+    }
   }
   keyUp(event) {
     switch (event.keyCode) {
-        case global.KEY_SHIFT:
-            if (global.showTree) this.treeScrollSpeedMultiplier = 1;
-            else this.socket.cmd.set(6, false);
-            break;
-        case global.KEY_UP_ARROW:
-            global.scrollVelocityY = 0;
-        case global.KEY_UP:
-            this.socket.cmd.set(0, false);
-            break;
-        case global.KEY_DOWN_ARROW:
-            global.scrollVelocityY = 0;
-        case global.KEY_DOWN:
-            this.socket.cmd.set(1, false);
-            break;
-        case global.KEY_LEFT_ARROW:
-            global.scrollVelocityX = 0;
-        case global.KEY_LEFT:
-            this.socket.cmd.set(2, false);
-            break;
-        case global.KEY_RIGHT_ARROW:
-            global.scrollVelocityX = 0;
-        case global.KEY_RIGHT:
-            this.socket.cmd.set(3, false);
-            break;
-        case global.KEY_MOUSE_0:
-            this.socket.cmd.set(4, false);
-            break;
-        case global.KEY_MOUSE_1:
-            this.socket.cmd.set(5, false);
-            break;
-        case global.KEY_MOUSE_2:
-            this.socket.cmd.set(6, false);
-            break;
-        case global.KEY_MAX_STAT:
-            global.statMaxing = false;
-            break;
-     }
+      case global.KEY_SHIFT:
+        if (global.showTree) this.treeScrollSpeedMultiplier = 1;
+        else this.socket.cmd.set(6, false);
+        break;
+      case global.KEY_UP_ARROW:
+        global.scrollVelocityY = 0;
+      case global.KEY_UP:
+        this.socket.cmd.set(0, false);
+        break;
+      case global.KEY_DOWN_ARROW:
+        global.scrollVelocityY = 0;
+      case global.KEY_DOWN:
+        this.socket.cmd.set(1, false);
+        break;
+      case global.KEY_LEFT_ARROW:
+        global.scrollVelocityX = 0;
+      case global.KEY_LEFT:
+        this.socket.cmd.set(2, false);
+        break;
+      case global.KEY_RIGHT_ARROW:
+        global.scrollVelocityX = 0;
+      case global.KEY_RIGHT:
+        this.socket.cmd.set(3, false);
+        break;
+      case global.KEY_MOUSE_0:
+        this.socket.cmd.set(4, false);
+        break;
+      case global.KEY_MOUSE_1:
+        this.socket.cmd.set(5, false);
+        break;
+      case global.KEY_MOUSE_2:
+        this.socket.cmd.set(6, false);
+        break;
+      case global.KEY_MAX_STAT:
+        global.statMaxing = false;
+        break;
+    }
   }
   mouseDown(mouse) {
     if (!this.socket) return;
     let primaryFire = 4,
-        secondaryFire = 6;
-    if (this.inverseMouse) [primaryFire, secondaryFire] = [secondaryFire, primaryFire];
+      secondaryFire = 6;
+    if (this.inverseMouse)
+      [primaryFire, secondaryFire] = [secondaryFire, primaryFire];
     switch (mouse.button) {
-        case 0:
-            let mpos = {
-                x: mouse.clientX * global.ratio,
-                y: mouse.clientY * global.ratio,
-            };
-            let statIndex = global.clickables.stat.check(mpos);
-            if (statIndex !== -1) {
-                this.socket.talk('x', statIndex, 0);
-            } else if (global.clickables.skipUpgrades.check(mpos) !== -1) {
-                global.clearUpgrades();
-            } else {
-                let upgradeIndex = global.clickables.upgrade.check(mpos);
-                if (upgradeIndex !== -1 && upgradeIndex < gui.upgrades.length) this.socket.talk('U', upgradeIndex, parseInt(gui.upgrades[upgradeIndex][0]));
-                else this.socket.cmd.set(primaryFire, true);
-            }
-            break;
-        case 1:
-            this.socket.cmd.set(5, true);
-            break;
-        case 2:
-            this.socket.cmd.set(secondaryFire, true);
-            break;
-     }
+      case 0:
+        let mpos = {
+          x: mouse.clientX * global.ratio,
+          y: mouse.clientY * global.ratio,
+        };
+        let statIndex = global.clickables.stat.check(mpos);
+        if (statIndex !== -1) {
+          this.socket.talk("x", statIndex, 0);
+        } else if (global.clickables.skipUpgrades.check(mpos) !== -1) {
+          global.clearUpgrades();
+        } else {
+          let upgradeIndex = global.clickables.upgrade.check(mpos);
+          if (upgradeIndex !== -1 && upgradeIndex < gui.upgrades.length)
+            this.socket.talk("U", upgradeIndex, parseInt(gui.upgrades[upgradeIndex][0]));
+          else this.socket.cmd.set(primaryFire, true);
+        }
+        break;
+      case 1:
+        this.socket.cmd.set(5, true);
+        break;
+      case 2:
+        this.socket.cmd.set(secondaryFire, true);
+        break;
+    }
   }
   mouseUp(mouse) {
     if (!this.socket) return;
     let primaryFire = 4,
-        secondaryFire = 6;
+      secondaryFire = 6;
     if (this.inverseMouse) [primaryFire, secondaryFire] = [secondaryFire, primaryFire];
     switch (mouse.button) {
-        case 0:
-            this.socket.cmd.set(primaryFire, false);
-            break;
-        case 1:
-            this.socket.cmd.set(5, false);
-            break;
-        case 2:
-            this.socket.cmd.set(secondaryFire, false);
-            break;
+      case 0:
+        this.socket.cmd.set(primaryFire, false);
+        break;
+      case 1:
+        this.socket.cmd.set(5, false);
+        break;
+      case 2:
+        this.socket.cmd.set(secondaryFire, false);
+        break;
     }
   }
   mouseMove(mouse) {
-    global.statHover = global.clickables.hover.check({
+    global.statHover =
+      global.clickables.hover.check({
         x: mouse.clientX * global.ratio,
         y: mouse.clientY * global.ratio,
-    }) === 0;
+      }) === 0;
     if (!this.spinLock) return;
     global.mouse.x = mouse.clientX * global.ratio;
     global.mouse.y = mouse.clientY * global.ratio;
@@ -325,72 +334,74 @@ class Canvas {
         };
         let id = touch.identifier;
         let buttonIndex = global.clickables.mobileButtons.check(mpos);
-          if (buttonIndex !== -1) {
-              switch (buttonIndex) {
-                case 0:
-                  global.clickables.mobileButtons.active = !global.clickables.mobileButtons.active;
-                  break;
-                case 1:
-                  if (global.clickables.mobileButtons.active) {
-                        global.clickables.mobileButtons.altFire = !global.clickables.mobileButtons.altFire; 
-                        if (!global.clickables.mobileButtons.altFire) this.socket.cmd.set(6, false);
-                  } else if (global.isInverted) global.isInverted = false, this.socket.cmd.set(6, false);
-                    else global.isInverted = true, this.socket.cmd.set(6, true);
-                  break;
-                case 2:
-                  if (!document.fullscreenElement) {
-                        var d = document.body;
-                        d.requestFullscreen
-                        ? d.requestFullscreen()
-                        : d.msRequestFullscreen
-                        ? d.msRequestFullscreen()
-                        : d.mozRequestFullScreen
-                        ? d.mozRequestFullScreen()
-                        : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
-                  } else { 
-                        document.exitFullscreen();
-                  }
-                  break;
-                  case 3:
-                    this.socket.talk('t', 1, true);
-                    break;
-                  case 4:
-                    this.reverseDirection = !this.reverseDirection; 
-                    global.reverseTank = -global.reverseTank; 
-                    global.createMessage(this.reverseDirection ? 'Reverse tank enabled.' : 'Reverse tank disabled.');
-                    break;
-                  case 5:
-                    global.clickables.mobileButtons.active = false; 
-                    this.socket.talk('1');
-                    break;
-                  case 6:
-                    global.autoSpin = !global.autoSpin;
-                    this.socket.talk('t', 0, true);
-                    break;
-                  case 7:
-                    this.socket.talk('t', 2, true);
-                    break;
-                  case 8:
-                    this.socket.talk('L');
-                    break;
-                  case 9:
-                    this.socket.talk('H');
-                    break;
-                  case 10:
-                    this.socket.talk('0');
-                    break;
-                  case 11:
-                    if (this.chatInput.hidden && global.gameStart && !global.cannotRespawn) { 
-                          this.chatInput.hidden = false; this.chatInput.focus(); 
-                    } else { 
-                          this.chatInput.hidden = true; this.cv.focus(); 
-                    }
-                    break;
-                  default:
-                    throw new Error('Unknown button index.');
+        if (buttonIndex !== -1) {
+          switch (buttonIndex) {
+            case 0:
+              global.clickables.mobileButtons.active =!global.clickables.mobileButtons.active;
+              break;
+            case 1:
+              if (global.clickables.mobileButtons.active) {
+                global.clickables.mobileButtons.altFire = !global.clickables.mobileButtons.altFire;
+                if (!global.clickables.mobileButtons.altFire) this.socket.cmd.set(6, false);
+              } else if (global.isInverted)
+                (global.isInverted = false), this.socket.cmd.set(6, false);
+              else (global.isInverted = true), this.socket.cmd.set(6, true);
+              break;
+            case 2:
+              if (!document.fullscreenElement) {
+                var d = document.body;
+                d.requestFullscreen
+                  ? d.requestFullscreen()
+                  : d.msRequestFullscreen
+                  ? d.msRequestFullscreen()
+                  : d.mozRequestFullScreen
+                  ? d.mozRequestFullScreen()
+                  : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
+              } else {
+                document.exitFullscreen();
               }
-            }
-        else {
+              break;
+            case 3:
+              this.socket.talk("t", 1, true);
+              break;
+            case 4:
+              this.reverseDirection = !this.reverseDirection;
+              global.reverseTank = -global.reverseTank;
+              global.createMessage(this.reverseDirection ? "Reverse tank enabled." : "Reverse tank disabled.");
+              break;
+            case 5:
+              global.clickables.mobileButtons.active = false;
+              this.socket.talk("1");
+              break;
+            case 6:
+              global.autoSpin = !global.autoSpin;
+              this.socket.talk("t", 0, true);
+              break;
+            case 7:
+              this.socket.talk("t", 2, true);
+              break;
+            case 8:
+              this.socket.talk("L");
+              break;
+            case 9:
+              this.socket.talk("H");
+              break;
+            case 10:
+              this.socket.talk("0");
+              break;
+            case 11:
+              if (this.chatInput.hidden && global.gameStart && !global.cannotRespawn) {
+                this.chatInput.hidden = false;
+                this.chatInput.focus();
+              } else {
+                this.chatInput.hidden = true;
+                this.cv.focus();
+              }
+              break;
+            default:
+              throw new Error("Unknown button index.");
+          }
+        } else {
           let statIndex = global.clickables.stat.check(mpos);
           if (statIndex !== -1) this.socket.talk("x", statIndex, 0);
           else if (global.clickables.skipUpgrades.check(mpos) !== -1)
@@ -410,7 +421,7 @@ class Canvas {
             }
           }
         }
-      } 
+      }
       this.touchMove(e);
     }
   }
@@ -463,13 +474,6 @@ class Canvas {
         }
         this.controlTouchPos = { x: cx, y: cy };
         if (this.spinLock) {
-          /* let x = cx / radius * this.cv.width / 2;
-              let y = cy / radius * this.cv.height / 2;
-              if (x > this.cv.width / 2) x = this.cv.width / 2;
-              else if (x < -this.cv.width / 2) x = -this.cv.width / 2;
-              if (y > this.cv.height / 2) y = this.cv.height / 2;
-              else if (y < -this.cv.height / 2) y = -this.cv.height / 2;
-              */
           this.target.x = ((cx / radius) * global.screenWidth) / 2;
           this.target.y = ((cy / radius) * global.screenHeight) / 2;
         }
@@ -486,14 +490,10 @@ class Canvas {
       if (this.movementTouch === id) {
         this.movementTouch = null;
         this.movementTouchPos = { x: 0, y: 0 };
-        if (this.movementTop)
-          this.socket.cmd.set(0, (this.movementTop = false));
-        if (this.movementBottom)
-          this.socket.cmd.set(1, (this.movementBottom = false));
-        if (this.movementLeft)
-          this.socket.cmd.set(2, (this.movementLeft = false));
-        if (this.movementRight)
-          this.socket.cmd.set(3, (this.movementRight = false));
+        if (this.movementTop) this.socket.cmd.set(0, (this.movementTop = false));
+        if (this.movementBottom) this.socket.cmd.set(1, (this.movementBottom = false));
+        if (this.movementLeft) this.socket.cmd.set(2, (this.movementLeft = false));
+        if (this.movementRight) this.socket.cmd.set(3, (this.movementRight = false));
       } else if (this.controlTouch === id) {
         this.controlTouch = null;
         this.controlTouchPos = { x: 0, y: 0 };
