@@ -1100,6 +1100,7 @@ window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimatio
 const statMenu = Smoothbar(0, 0.7, 1.5, 0.1);
 const upgradeMenu = Smoothbar(0, 2, 3, 0.1);
 const mobileUpgradeGlide = Smoothbar(0, 2, 3, 0.1);
+const lbGlide = Smoothbar(0, 0.7, 1.5, 0.1);
 // Define the graph constructor
 function graph() {
     var data = [];
@@ -1510,7 +1511,7 @@ function drawMessages(spacing, alcoveSize) {
             mobileUpgradeGlide.set(0 + (global.canUpgrade || global.upgradeHover));
             y += (alcoveSize / 1.4 /*+ spacing * 2*/) * mobileUpgradeGlide.get();
         }
-        y += global.canSkill ? (alcoveSize / 2.5 /*+ spacing * 2*/) * statMenu.get() : 0;
+        y += global.canSkill || global.showSkill ? (alcoveSize / 2.2 /*+ spacing * 2*/) * statMenu.get() : 0;
     }
     // Draw each message
     for (let i = global.messages.length - 1; i >= 0; i--) {
@@ -1630,7 +1631,8 @@ function drawSkillBars(spacing, alcoveSize) {
 }
 function drawMobileSkillUpgrades(spacing, alcoveSize) {
     global.canSkill = gui.points > 0 && gui.skills.some(s => s.amount < s.cap) && !global.canUpgrade;
-    statMenu.set(global.canSkill || global.died || global.disconnected ? 1 : 0);
+    global.showSkill = !global.canUpgrade && !global.canSkill && global.died;
+    statMenu.set(global.canSkill || global.showSkill || global.disconnected ? 1 : 0);
     let n = statMenu.get();
     global.clickables.stat.hide();
     let t = alcoveSize / 2,
@@ -1638,7 +1640,7 @@ function drawMobileSkillUpgrades(spacing, alcoveSize) {
         x = 2 * n * spacing - spacing,
         statNames = gui.getStatNames(global.mockups[parseInt(gui.type.split("-")[0])].statnames),
         clickableRatio = canvas.height / global.screenHeight / global.ratio;
-    if (global.canSkill) {
+    if (global.canSkill || global.showSkill) {
         for (let i = 0; i < gui.skills.length; i++) {
             let skill = gui.skills[i],
                 softcap = skill.softcap;
@@ -1838,15 +1840,19 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     let height = 14;
     let x = global.screenWidth - len - spacing;
     let y = spacing + height + 7;
-    mobileUpgradeGlide.set(0 + (global.canUpgrade || global.upgradeHover));
+
+    // Animation things
+    lbGlide.set(0 + !lb.data.length);
+    let glide = lbGlide.get();
     let mobileGlide = mobileUpgradeGlide.get();
-    if (!lb.data.length) return; // dont show leaderboard when nothing is showing.
+    x += !lb.data.length ? (len / 1) * glide : (len) * glide;
     if (global.mobile) {
         if (global.canUpgrade) {
-            y += (alcoveSize / 1.4 /*+ spacing * 2*/) * mobileGlide;
+            y += (alcoveSize / 1.4) * mobileGlide;
         }
-        y += global.canSkill ? (alcoveSize / 2.5 /*+ spacing * 2*/) * statMenu.get() : 0;
+        y += global.canSkill || global.showSkill ? (alcoveSize / 2.2 /*+ spacing * 2*/) * statMenu.get() : 0;
     }
+    
     drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 3.5, color.guiwhite, "center");
     y += 7;
     for (let i = 0; i < lb.data.length; i++) {
@@ -2031,11 +2037,14 @@ function drawMobileButtons(spacing, alcoveSize) {
     
     // Hide the buttons
     global.clickables.mobileButtons.hide();
-    
+
+    // Some animations.
+    mobileUpgradeGlide.set(0 + (global.canUpgrade || global.upgradeHover));
+
     // Some sizing variables
     let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
     let upgradeColumns = Math.ceil(gui.upgrades.length / 9);
-    let yOffset = global.mobile ? global.canUpgrade ? (alcoveSize / 3.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 3.5 * (upgradeColumns + 3.55) + 67 : 0 + global.canSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0 : 0;
+    let yOffset = global.mobile ? global.canUpgrade ? (alcoveSize / 3.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 3.5 * (upgradeColumns + 3.55) + 67 : 0 + global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0 : 0;
     let buttons;
     let baseSize = (alcoveSize - spacing * 2) / 3;
     

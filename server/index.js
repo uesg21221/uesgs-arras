@@ -38,8 +38,8 @@ function collide(collision) {
         util.error("x: " + other.x + " y: " + other.y);
         util.error(other.collisionArray);
         util.error("health: " + other.health.amount);
-        util.warn("Ghost removed.");
         if (grid.checkIfInHSHG(other)) {
+            other.kill();
             util.warn("Ghost removed.");
             grid.removeObject(other);
         }
@@ -52,6 +52,7 @@ function collide(collision) {
         util.error(instance.collisionArray);
         util.error("health: " + instance.health.amount);
         if (grid.checkIfInHSHG(instance)) {
+            other.kill();
             util.warn("Ghost removed.");
             grid.removeObject(instance);
         }
