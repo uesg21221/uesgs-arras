@@ -1100,7 +1100,6 @@ window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimatio
 const statMenu = Smoothbar(0, 0.7, 1.5, 0.1);
 const upgradeMenu = Smoothbar(0, 2, 3, 0.1);
 const mobileUpgradeGlide = Smoothbar(0, 2, 3, 0.1);
-const lbGlide = Smoothbar(0, 0.7, 1.5, 0.1);
 // Define the graph constructor
 function graph() {
     var data = [];
@@ -1840,12 +1839,10 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     let height = 14;
     let x = global.screenWidth - len - spacing;
     let y = spacing + height + 7;
+    if (!lb.data.length) return;
 
     // Animation things
-    lbGlide.set(0 + !lb.data.length);
-    let glide = lbGlide.get();
     let mobileGlide = mobileUpgradeGlide.get();
-    x += !lb.data.length ? (len / 1) * glide : (len) * glide;
     if (global.mobile) {
         if (global.canUpgrade) {
             y += (alcoveSize / 1.4) * mobileGlide;
