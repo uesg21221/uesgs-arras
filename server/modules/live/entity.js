@@ -1,4 +1,4 @@
-const { combineStats } = require('../definitions/facilitators');
+const { combineStats, dereference } = require('../definitions/facilitators');
 
 let EventEmitter = require('events'),
     events,
@@ -60,6 +60,10 @@ class Gun extends EventEmitter {
                     util.flattenDefinition(flattenedType, type);
                 }
                 this.bulletType = flattenedType;
+                // Set final label to bullet
+                this.bulletType.LABEL = this.master.label + (this.label ? " " + this.label : "") + " " + this.bulletType.LABEL;
+                // Save a copy of the bullet definition for body stat defining
+                this.finalBulletType = dereference(this.bulletType);
             }
             this.autofire = info.PROPERTIES.AUTOFIRE ?? false;
             this.altFire = info.PROPERTIES.ALT_FIRE ?? false;
@@ -278,23 +282,19 @@ class Gun extends EventEmitter {
         return bullet;
     }
     defineIndependentBullet(bullet) {
-        bullet.define(this.bulletType);
+        bullet.define(this.bulletType); // Intentionally not this.finalBulletType to ignore body stat adjustments
         bullet.coreSize = bullet.SIZE;
         bullet.team = this.body.team;
     }
     defineBullet(bullet) {
-        // Define it by its natural properties
-        bullet.define(this.bulletType);
+        // Define bullet based on natural properties and skills
+        this.finalBulletType.SIZE = (this.body.size * this.width * this.shootSettings.size) / 2;
+
+        bullet.define(this.finalBulletType);
         if (bullet.color.base == '-1' || bullet.color.base == 'mirror') {
             bullet.color.base = this.body.master.color.base
         }
-        // Pass the gun attributes
-        bullet.define({
-            BODY: this.interpretedStats,
-            SKILL: this.getSkillRaw(),
-            SIZE: (this.body.size * this.width * this.shootSettings.size) / 2,
-            LABEL: this.master.label + (this.label ? " " + this.label : "") + " " + bullet.label
-        });
+        
         bullet.coreSize = bullet.SIZE;
 
         // Keep track of it for child counting
@@ -423,6 +423,16 @@ class Gun extends EventEmitter {
             out[property] *= this.bulletType.BODY[property];
         }
         this.interpretedStats = out;
+
+        if (this.independentChildren) {
+            return;
+        }
+        // Save in this.finalBulletType to be used for defining dependent bullets
+        this.finalBulletType.SKILL = this.getSkillRaw();
+        for (let stat in this.interpretedStats) {
+            // Do body stats one-by-one so all are defined properly and none are replaced with undefined
+            this.finalBulletType.BODY[stat] = this.interpretedStats[stat];
+        }
     }
     destroyOldest() {
         let oldestChild,

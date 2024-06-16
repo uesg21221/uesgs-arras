@@ -95,9 +95,21 @@ exports.flattenDefinition = (output, definition) => {
   }
 
   for (let key in definition) {
-      if (key !== "PARENT") {
-          output[key] = definition[key];
+    // Skip parents
+    if (key === "PARENT") {
+      continue;
+    }
+    // Handle body stats (prevent overwriting of undefined stats)
+    if (key === "BODY") {
+      let body = definition.BODY;
+      if (!output.BODY) output.BODY = {};
+      for (let stat in body) {
+        output.BODY[stat] = definition.BODY[stat];
       }
+      continue;
+    }
+    // Handle other properties
+    output[key] = definition[key];
   }
 
   return output;
