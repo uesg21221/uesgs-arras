@@ -63,7 +63,7 @@ class Gun extends EventEmitter {
                 // Set final label to bullet
                 this.bulletType.LABEL = this.master.label + (this.label ? " " + this.label : "") + " " + this.bulletType.LABEL;
                 // Save a copy of the bullet definition for body stat defining
-                this.finalBulletType = dereference(this.bulletType);
+                this.bulletBodyStats = JSON.parse(JSON.stringify(this.bulletType.BODY));
             }
             this.autofire = info.PROPERTIES.AUTOFIRE ?? false;
             this.altFire = info.PROPERTIES.ALT_FIRE ?? false;
@@ -282,19 +282,19 @@ class Gun extends EventEmitter {
         return bullet;
     }
     defineIndependentBullet(bullet) {
-        bullet.define(this.bulletType); // Intentionally not this.finalBulletType to ignore body stat adjustments
+        bullet.define(this.bulletType);
         bullet.coreSize = bullet.SIZE;
         bullet.team = this.body.team;
     }
     defineBullet(bullet) {
         // Define bullet based on natural properties and skills
-        this.finalBulletType.SIZE = (this.body.size * this.width * this.shootSettings.size) / 2;
+        this.bulletType.SIZE = (this.body.size * this.width * this.shootSettings.size) / 2;
+        bullet.define(this.bulletType);
 
-        bullet.define(this.finalBulletType);
+        // Fix color
         if (bullet.color.base == '-1' || bullet.color.base == 'mirror') {
             bullet.color.base = this.body.master.color.base
         }
-        
         bullet.coreSize = bullet.SIZE;
 
         // Keep track of it for child counting
@@ -353,7 +353,8 @@ class Gun extends EventEmitter {
     }
     syncGunStats() {
         this.calculateBulletStats();
-        if (!this.syncsSkills) return;
+        // Don't bother updating children if we shouldn't
+        if (!this.syncsSkills || this.independentChildren) return;
 
         for (let i = 0; i < this.children.length; i++) {
             let child = this.children[i];
@@ -365,7 +366,8 @@ class Gun extends EventEmitter {
         }
     }
     calculateBulletStats() {
-        if (!this.canShoot) return;
+        // Skip if unable to shoot or if we shouldn't care about body stats
+        if (!this.canShoot || this.independentChildren) return;
 
         let sizeFactor = this.master.size / this.master.SIZE;
         let shoot = this.shootSettings;
@@ -418,20 +420,17 @@ class Gun extends EventEmitter {
         }
         // Go through and make sure we respect its natural properties
         for (let property in out) {
-            if (this.bulletType.BODY[property] == null || !out.hasOwnProperty(property))
+            if (this.bulletBodyStats[property] == null || !out.hasOwnProperty(property))
                 continue;
-            out[property] *= this.bulletType.BODY[property];
+            out[property] *= this.bulletBodyStats[property];
         }
         this.interpretedStats = out;
 
-        if (this.independentChildren) {
-            return;
-        }
-        // Save in this.finalBulletType to be used for defining dependent bullets
-        this.finalBulletType.SKILL = this.getSkillRaw();
+        // Save in this.bulletType to be used for defining dependent bullets
+        this.bulletType.SKILL = this.getSkillRaw();
         for (let stat in this.interpretedStats) {
             // Do body stats one-by-one so all are defined properly and none are replaced with undefined
-            this.finalBulletType.BODY[stat] = this.interpretedStats[stat];
+            this.bulletType.BODY[stat] = this.interpretedStats[stat];
         }
     }
     destroyOldest() {
@@ -448,8 +447,8 @@ class Gun extends EventEmitter {
     }
     getTracking() {
         return {
-            speed: Config.runSpeed * this.bulletSkills.spd * this.shootSettings.maxSpeed * this.bulletType.BODY.SPEED,
-            range: Math.sqrt(this.bulletSkills.spd) * this.shootSettings.range * this.bulletType.BODY.RANGE
+            speed: Config.runSpeed * this.bulletSkills.spd * this.shootSettings.maxSpeed * this.bulletBodyStats.SPEED,
+            range: Math.sqrt(this.bulletSkills.spd) * this.shootSettings.range * this.bulletBodyStats.RANGE
         };
     }
     getSkillRaw() {
