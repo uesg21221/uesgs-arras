@@ -69,6 +69,7 @@ class Gun extends EventEmitter {
             this.altFire = info.PROPERTIES.ALT_FIRE ?? false;
             this.statCalculator = info.PROPERTIES.STAT_CALCULATOR ?? "default";
             this.waitToCycle = info.PROPERTIES.WAIT_TO_CYCLE ?? false;
+            this.delaySpawn = info.PROPERTIES.DELAY_SPAWN ?? this.waitToCycle;
             this.bulletSkills = (info.PROPERTIES.BULLET_STATS == null || info.PROPERTIES.BULLET_STATS == "master") ? "master" : new Skill(info.PROPERTIES.BULLET_STATS);
             this.useMasterSkills = this.bulletSkills === "master";
             this.shootSettings = info.PROPERTIES.SHOOT_SETTINGS == null ? [] : JSON.parse(JSON.stringify(info.PROPERTIES.SHOOT_SETTINGS));
@@ -120,7 +121,7 @@ class Gun extends EventEmitter {
         this.angle = (position.ANGLE * Math.PI) / 180;
         this.offsetDirection = _off.direction;
         this.offset = _off.length / 10;
-        this.maxCycleTimer = !this.waitToCycle - position.DELAY;
+        this.maxCycleTimer = !this.delaySpawn - position.DELAY;
         this.drawAbove = position.DRAW_ABOVE;
         this.recoilPosition = 0;
         this.recoilVelocity = 0;
@@ -309,26 +310,14 @@ class Gun extends EventEmitter {
         bullet.source = this.body;
         bullet.facing = bullet.velocity.direction;
 
-        // Necromancers.
-        let oo = bullet;
-        bullet.necro = (host) => {
-            if (this.checkShootPermission()) {
-                let save = {
-                    facing: host.facing,
-                    size: host.SIZE,
-                };
-                host.define("genericEntity");
-                this.defineBullet(host);
-                host.team = oo.master.master.team;
-                host.master = oo.master;
-                host.color.base = oo.color.base;
-                host.facing = save.facing;
-                host.SIZE = save.size;
-                host.health.amount = host.health.max;
-                return true;
-            }
-            return false;
-        };
+        if (!bullet.settings.necroTypes) {
+            return;
+        }
+        
+        // Set all necroType gun references to parent gun
+        for (let shape of bullet.settings.necroTypes) {
+            bullet.settings.necroDefineGuns[shape] = this;
+        }
     }
     recoil() {
         if (this.recoilVelocity || this.recoilPosition) {
@@ -1033,7 +1022,6 @@ class Entity extends EventEmitter {
         if (set.HEALTH_WITH_LEVEL != null) this.settings.healthWithLevel = set.HEALTH_WITH_LEVEL;
         if (set.ACCEPTS_SCORE != null) this.settings.acceptsScore = set.ACCEPTS_SCORE;
         if (set.OBSTACLE != null) this.settings.obstacle = set.OBSTACLE;
-        if (set.NECRO != null) this.settings.necroTypes = Array.isArray(set.NECRO) ? set.NECRO : set.NECRO ? [this.shape] : [];
         if (set.HAS_NO_RECOIL) this.RECOIL_MULTIPLIER = 0;
         if (set.CRAVES_ATTENTION != null) this.settings.attentionCraver = set.CRAVES_ATTENTION;
         if (set.KILL_MESSAGE != null) this.settings.killMessage = set.KILL_MESSAGE === "" ? "Killed" : set.KILL_MESSAGE;
@@ -1163,6 +1151,36 @@ class Entity extends EventEmitter {
         }
         if (set.GUN_STAT_SCALE) {
             this.gunStatScale = set.GUN_STAT_SCALE;
+        }
+        if (set.NECRO != null) {
+            this.settings.necroTypes = Array.isArray(set.NECRO) ? set.NECRO : set.NECRO ? [this.shape] : [];
+
+            // Necro function for tanks
+            this.settings.necroDefineGuns = {};
+            for (let shape of this.settings.necroTypes) {
+                // Pick the first gun with the right necroType to use for stats and use its defineBullet function
+                this.settings.necroDefineGuns[shape] = this.guns.filter((gun) => gun.bulletType.NECRO === shape || (gun.bulletType.NECRO === true && gun.bulletType.SHAPE === this.shape) || gun.bulletType.NECRO.includes(shape))[0];
+            }
+
+            this.necro = (host) => {
+                let gun = this.settings.necroDefineGuns[host.shape];
+                if (gun.checkShootPermission()) {
+                    let save = {
+                        facing: host.facing,
+                        size: host.SIZE,
+                    };
+                    host.define("genericEntity");
+                    gun.defineBullet(host);
+                    host.team = this.master.master.team;
+                    host.master = this.master;
+                    host.color.base = this.color.base;
+                    host.facing = save.facing;
+                    host.SIZE = save.size;
+                    host.health.amount = host.health.max;
+                    return true;
+                }
+                return false;
+            }
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
         if (set.RESET_CHILDREN) this.destroyAllChildren();

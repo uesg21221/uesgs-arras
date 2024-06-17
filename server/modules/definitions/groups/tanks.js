@@ -1528,20 +1528,24 @@ Class.underseer = {
     PARENT: "genericTank",
     LABEL: "Underseer",
     DANGER: 6,
+    NECRO: true,
     STAT_NAMES: statnames.drone,
     BODY: {
-        SPEED: 0.9 * base.SPEED,
+        SPEED: base.SPEED * 0.9,
+        FOV: base.FOV * 1.1,
     },
     SHAPE: 4,
     MAX_CHILDREN: 14,
     GUNS: weaponArray({
         POSITION: [5.25, 12, 1.2, 8, 0, 90, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+            SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {reload: 0.8}]),
             TYPE: "sunchip",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
             STAT_CALCULATOR: "necro",
+            WAIT_TO_CYCLE: true,
+            DELAY_SPAWN: false,
         }
     }, 2)
 }
@@ -1829,9 +1833,11 @@ Class.necromancer = {
     PARENT: "genericTank",
     LABEL: "Necromancer",
     DANGER: 7,
+    NECRO: true,
     STAT_NAMES: statnames.necro,
     BODY: {
         SPEED: 0.8 * base.SPEED,
+        FOV: base.FOV * 1.1,
     },
     SHAPE: 4,
     MAX_CHILDREN: 14,
@@ -1843,6 +1849,8 @@ Class.necromancer = {
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
             STAT_CALCULATOR: "necro",
+            WAIT_TO_CYCLE: true,
+            DELAY_SPAWN: false,
         },
     }, 4, 0.75),
 }
@@ -1850,10 +1858,12 @@ Class.maleficitor = {
     PARENT: "genericTank",
     LABEL: "Maleficitor",
     DANGER: 7,
+    NECRO: true,
     TOOLTIP: "Press R and wait to turn your drones invisible.",
     STAT_NAMES: statnames.necro,
     BODY: {
         SPEED: base.SPEED * 0.85,
+        FOV: base.FOV * 1.1,
     },
     SHAPE: 4,
     MAX_CHILDREN: 20,
@@ -1871,6 +1881,8 @@ Class.maleficitor = {
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
                 STAT_CALCULATOR: "necro",
+                WAIT_TO_CYCLE: true,
+                DELAY_SPAWN: false,
             },
         },
     ],
@@ -1879,30 +1891,36 @@ Class.infestor = {
     PARENT: "genericTank",
     LABEL: "Infestor",
     DANGER: 7,
+    NECRO: true,
     STAT_NAMES: statnames.drone,
     BODY: {
         SPEED: base.SPEED * 0.9,
+        FOV: base.FOV * 1.1,
     },
     MAX_CHILDREN: 20,
     GUNS: weaponArray([
         {
             POSITION: [7.25, 6, 1.2, 6, -5, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {reload: 0.5}]),
                 TYPE: "eggchip",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: "necro"
+                STAT_CALCULATOR: "necro",
+                WAIT_TO_CYCLE: true,
+                DELAY_SPAWN: false,
             }
         },
         {
             POSITION: [7.25, 6, 1.2, 6, 5, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {reload: 0.5}]),
                 TYPE: "eggchip",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: "necro"
+                STAT_CALCULATOR: "necro",
+                WAIT_TO_CYCLE: true,
+                DELAY_SPAWN: false,
             }
         }
     ], 2)
