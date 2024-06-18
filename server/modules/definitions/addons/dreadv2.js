@@ -645,7 +645,7 @@ Class.colossusBottomOfficialV2 = {
 }
 Class.colossusOfficialV2 = {
 	PARENT: "genericSquarenought",
-	LABEL: "colossus",
+	LABEL: "Colossus",
 	BODY: speedBuffBodyStats[0],
 	PROPS: [
 		{
