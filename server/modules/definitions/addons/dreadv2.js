@@ -1945,7 +1945,7 @@ Class.addons.UPGRADES_TIER_0.push("dreadOfficialV2");
 
 const hexDreadNames = {
 	Javelin: {
-		Javelin: 'Javelin',
+		Javelin: 'Javelin II',
 		Rapier: 'Lance',
 		Diplomat: 'Envoy',
 		Arbitrator: 'Cutlass',
@@ -1957,7 +1957,7 @@ const hexDreadNames = {
 		Lucifer: 'Kitsune',
 	},
 	Rapier: {
-		Rapier: 'Rapier',
+		Rapier: 'Rapier II',
 		Diplomat: 'Emissary',
 		Arbitrator: 'Umpire',
 		Retardant: 'Impeder',
@@ -1968,7 +1968,7 @@ const hexDreadNames = {
 		Lucifer: 'Damocles',
 	},
 	Diplomat: {
-		Diplomat: 'Diplomat',
+		Diplomat: 'Diplomat II',
 		Arbitrator: 'Moderator',
 		Retardant: 'Insurgent',
 		Tyrant: 'Dictator',
@@ -1978,7 +1978,7 @@ const hexDreadNames = {
 		Lucifer: 'Manticore',
 	},
 	Arbitrator: {
-		Arbitrator: 'Arbitrator',
+		Arbitrator: 'Arbitrator II',
 		Retardant: 'Extinguisher',
 		Tyrant: 'Shogun',
 		Raider: 'Buccaneer',
@@ -1987,7 +1987,7 @@ const hexDreadNames = {
 		Lucifer: 'Keres',
 	},
 	Retardant: {
-		Retardant: 'Retardant',
+		Retardant: 'Retardant II',
 		Tyrant: 'Anarchist',
 		Raider: 'Freebooter',
 		Gladiator: 'Combatant',
@@ -1995,29 +1995,29 @@ const hexDreadNames = {
 		Lucifer: 'Demogorgon',
 	},
 	Tyrant: {
-		Tyrant: 'Tyrant',
+		Tyrant: 'Tyrant II',
 		Raider: 'Corsair',
 		Gladiator: 'Amazon',
 		Cerberus: 'Ouroboros',
 		Lucifer: 'Raiju',
 	},
 	Raider: {
-		Raider: 'Raider',
+		Raider: 'Raider II',
 		Gladiator: 'Filibuster',
 		Cerberus: 'Wyvern',
 		Lucifer: 'Kraken',
 	},
 	Gladiator: {
-		Gladiator: 'Gladiator',
+		Gladiator: 'Gladiator II',
 		Cerberus: 'Ogre',
 		Lucifer: 'Wendigo',
 	},
 	Cerberus: {
-		Cerberus: 'Cerberus',
+		Cerberus: 'Cerberus II',
 		Lucifer: 'Oni',
 	},
 	Lucifer: {
-		Lucifer: 'Lucifer',
+		Lucifer: 'Lucifer II',
 	},
 };
 
