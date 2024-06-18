@@ -26,14 +26,14 @@ var serverStart = 0,
         ],
         skills: [
             { amount: 0, color: 'purple', cap: 1, softcap: 1 },
-            { amount: 0, color: 'pink'  , cap: 1, softcap: 1 },
-            { amount: 0, color: 'blue'  , cap: 1, softcap: 1 },
+            { amount: 0, color: 'pink', cap: 1, softcap: 1 },
+            { amount: 0, color: 'blue', cap: 1, softcap: 1 },
             { amount: 0, color: 'lgreen', cap: 1, softcap: 1 },
-            { amount: 0, color: 'red'   , cap: 1, softcap: 1 },
+            { amount: 0, color: 'red', cap: 1, softcap: 1 },
             { amount: 0, color: 'yellow', cap: 1, softcap: 1 },
-            { amount: 0, color: 'green' , cap: 1, softcap: 1 },
-            { amount: 0, color: 'teal'  , cap: 1, softcap: 1 },
-            { amount: 0, color: 'gold'  , cap: 1, softcap: 1 },
+            { amount: 0, color: 'green', cap: 1, softcap: 1 },
+            { amount: 0, color: 'teal', cap: 1, softcap: 1 },
+            { amount: 0, color: 'gold', cap: 1, softcap: 1 },
             { amount: 0, color: 'orange', cap: 1, softcap: 1 }
         ],
         points: 0,
@@ -332,8 +332,8 @@ const GunContainer = n => {
             color: "",
             alpha: 0,
             strokeWidth: 0,
-            borderless: false, 
-            drawFill: true, 
+            borderless: false,
+            drawFill: true,
             drawAbove: false,
             length: 0,
             width: 0,
@@ -352,7 +352,7 @@ const GunContainer = n => {
                 color: g.color,
                 alpha: g.alpha,
                 strokeWidth: g.strokeWidth,
-                borderless: g.borderless, 
+                borderless: g.borderless,
                 drawFill: g.drawFill,
                 drawAbove: g.drawAbove,
                 length: g.length,
@@ -370,7 +370,7 @@ const GunContainer = n => {
                 g.color = c.color;
                 g.alpha = c.alpha;
                 g.strokeWidth = c.strokeWidth
-                g.borderless = c.borderless; 
+                g.borderless = c.borderless;
                 g.drawFill = c.drawFill;
                 g.drawAbove = c.drawAbove;
                 g.length = c.length;
@@ -413,7 +413,7 @@ function Status() {
         getBlend: () => {
             let o = (statState === 'normal' || statState === 'dying') ? 0 :
                 statState === 'invuln' ? 0.125 + Math.sin((getNow() - statTime) / 33) / 8 :
-                1 - Math.min(1, (getNow() - statTime) / 80);
+                    1 - Math.min(1, (getNow() - statTime) / 80);
             if (getNow() - statTime > 500 && statState === 'injured') {
                 statState = 'normal';
             }
@@ -562,7 +562,7 @@ const process = (z = {}) => {
             angle = get.next(),
             direction = get.next(),
             offset = get.next();
-        z.guns.setConfig(i, {color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
+        z.guns.setConfig(i, { color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset }); // Load gun config into container
         if (time > global.player.lastUpdate - global.metrics.rendergap) z.guns.fire(i, power); // Shoot it
     }
     // Update turrets
@@ -666,11 +666,11 @@ const convert = {
         }
         if (indices.skills) {
             let skk = get.next();
-            gui.skills[0].amount = parseInt(skk.slice( 0,  2), 16);
-            gui.skills[1].amount = parseInt(skk.slice( 2,  4), 16);
-            gui.skills[2].amount = parseInt(skk.slice( 4,  6), 16);
-            gui.skills[3].amount = parseInt(skk.slice( 6,  8), 16);
-            gui.skills[4].amount = parseInt(skk.slice( 8, 10), 16);
+            gui.skills[0].amount = parseInt(skk.slice(0, 2), 16);
+            gui.skills[1].amount = parseInt(skk.slice(2, 4), 16);
+            gui.skills[2].amount = parseInt(skk.slice(4, 6), 16);
+            gui.skills[3].amount = parseInt(skk.slice(6, 8), 16);
+            gui.skills[4].amount = parseInt(skk.slice(8, 10), 16);
             gui.skills[5].amount = parseInt(skk.slice(10, 12), 16);
             gui.skills[6].amount = parseInt(skk.slice(12, 14), 16);
             gui.skills[7].amount = parseInt(skk.slice(14, 16), 16);
@@ -827,7 +827,7 @@ const socketInit = port => {
                         global.message = '';
                     });
                 }
-            break;
+                break;
             case 'R': // room setup
                 global.gameWidth = m[0];
                 global.gameHeight = m[1];

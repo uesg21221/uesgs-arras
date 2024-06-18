@@ -21,23 +21,23 @@ let { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow } = s
 // });
 
 fetch("changelog.html", { cache: "no-cache" })
-.then(async ChangelogsHTMLFile => {
-    let patchNotes = document.querySelector("#patchNotes");
-    try {
-        let parser = new DOMParser(),
-            RawHTMLString = await ChangelogsHTMLFile.text(),
-            ParsedHTML = parser.parseFromString(RawHTMLString, "text/html"),
-            titles = ParsedHTML.documentElement.getElementsByTagName('h1');
-        for (const title of titles) {
-            title.classList.add('title');
-        }
+    .then(async ChangelogsHTMLFile => {
+        let patchNotes = document.querySelector("#patchNotes");
+        try {
+            let parser = new DOMParser(),
+                RawHTMLString = await ChangelogsHTMLFile.text(),
+                ParsedHTML = parser.parseFromString(RawHTMLString, "text/html"),
+                titles = ParsedHTML.documentElement.getElementsByTagName('h1');
+            for (const title of titles) {
+                title.classList.add('title');
+            }
 
-        patchNotes.innerHTML += ParsedHTML.documentElement.innerHTML;
-    } catch (error) {
-        patchNotes.innerHTML = `<p>An error occured while trying to fetch 'changelogs.html'</p><p>${error}</p>`;
-        console.error(error);
-    }
-});
+            patchNotes.innerHTML += ParsedHTML.documentElement.innerHTML;
+        } catch (error) {
+            patchNotes.innerHTML = `<p>An error occured while trying to fetch 'changelogs.html'</p><p>${error}</p>`;
+            console.error(error);
+        }
+    });
 
 class Animation {
     constructor(start, to, smoothness = 0.05) {
@@ -322,7 +322,7 @@ function resizeEvent() {
     global.screenSize = Math.min(1920, Math.max(window.innerWidth, 1280));
 }
 window.resizeEvent = resizeEvent;
-window.canvas = new Canvas(); 
+window.canvas = new Canvas();
 var c = window.canvas.cv;
 var ctx = c.getContext("2d");
 var c2 = document.createElement("canvas");
@@ -377,10 +377,10 @@ function calculateTarget() {
     else global.reverseTank = 1;
     global.target.x *= global.screenWidth / window.canvas.width;
     global.target.y *= global.screenHeight / window.canvas.height;
-    if (settings.graphical.screenshotMode && Math.abs(Math.atan2(global.target.y, global.target.x) + Math.PI/2) < 0.035) global.target.x = 0; 
+    if (settings.graphical.screenshotMode && Math.abs(Math.atan2(global.target.y, global.target.x) + Math.PI / 2) < 0.035) global.target.x = 0;
     return global.target;
 }
-function parseTheme(string){
+function parseTheme(string) {
     // Decode from base64
     try {
         let stripped = string.replace(/\s+/g, '');
@@ -389,8 +389,8 @@ function parseTheme(string){
         else if (stripped.length % 4 == 3)
             stripped += '=';
         let data = atob(stripped);
-    
-        let name = 'Unknown Theme', 
+
+        let name = 'Unknown Theme',
             author = '';
         let index = data.indexOf('\x00');
         if (index === -1) return null;
@@ -413,33 +413,33 @@ function parseTheme(string){
             colorArray.push('#' + color.toString(16).padStart(6, '0'))
         }
         let content = {
-            teal:     colorArray[0],
-            lgreen:   colorArray[1],
-            orange:   colorArray[2],
-            yellow:   colorArray[3],
-            aqua:     colorArray[4],
-            pink:     colorArray[5],
-            vlgrey:   colorArray[6],
-            lgrey:    colorArray[7],
+            teal: colorArray[0],
+            lgreen: colorArray[1],
+            orange: colorArray[2],
+            yellow: colorArray[3],
+            aqua: colorArray[4],
+            pink: colorArray[5],
+            vlgrey: colorArray[6],
+            lgrey: colorArray[7],
             guiwhite: colorArray[8],
-            black:    colorArray[9],
-    
-            blue:     colorArray[10],
-            green:    colorArray[11],
-            red:      colorArray[12],
-            gold:     colorArray[13],
-            purple:   colorArray[14],
-            magenta:  colorArray[15],
-            grey:     colorArray[16],
-            dgrey:    colorArray[17],
-            white:    colorArray[18],
+            black: colorArray[9],
+
+            blue: colorArray[10],
+            green: colorArray[11],
+            red: colorArray[12],
+            gold: colorArray[13],
+            purple: colorArray[14],
+            magenta: colorArray[15],
+            grey: colorArray[16],
+            dgrey: colorArray[17],
+            white: colorArray[18],
             guiblack: colorArray[19],
-    
+
             paletteSize,
             border,
         }
         return { name, author, content };
-    } catch (e) {}
+    } catch (e) { }
 
     // Decode from JSON
     try {
@@ -447,7 +447,7 @@ function parseTheme(string){
         if (typeof output !== 'object')
             return null;
         let { name = 'Unknown Theme', author = '', content } = output;
-    
+
         for (let colorHex of [
             content.teal,
             content.lgreen,
@@ -459,7 +459,7 @@ function parseTheme(string){
             content.lgrey,
             content.guiwhite,
             content.black,
-    
+
             content.blue,
             content.green,
             content.red,
@@ -473,14 +473,14 @@ function parseTheme(string){
         ]) {
             if (!/^#[0-9a-fA-F]{6}$/.test(colorHex)) return null;
         }
-    
+
         return {
             name: (typeof name === 'string' && name) || 'Unknown Theme',
             author: (typeof author === 'string' && author) || '',
             content,
         }
-    } catch (e) {}
-    
+    } catch (e) { }
+
     return null;
 }
 // This starts the game and sets up the websocket
@@ -490,13 +490,10 @@ function startGame() {
     console.log('Started connecting.');
     if (global.mobile) {
         var d = document.body;
-        d.requestFullscreen
-          ? d.requestFullscreen()
-          : d.msRequestFullscreen
-          ? d.msRequestFullscreen()
-          : d.mozRequestFullScreen
-          ? d.mozRequestFullScreen()
-          : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
+        d.requestFullscreen ? d.requestFullscreen()
+            : d.msRequestFullscreen ? d.msRequestFullscreen()
+                : d.mozRequestFullScreen ? d.mozRequestFullScreen()
+                    : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
     }
     // Get options
     util.submitToLocalStorage("optFancy");
@@ -745,7 +742,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                     drawPolyImgs[sides] = new Image();
                     drawPolyImgs[sides].src = sides;
                     drawPolyImgs[sides].isBroken = false;
-                    drawPolyImgs[sides].onerror = function() {
+                    drawPolyImgs[sides].onerror = function () {
                         this.isBroken = true;
                     };
                 }
@@ -766,7 +763,7 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 context.translate(centerX, centerY);
                 context.rotate(angle);
                 context.imageSmoothingEnabled = imageInterpolation;
-                context.drawImage(img, -radius, -radius, radius*2, radius*2);
+                context.drawImage(img, -radius, -radius, radius * 2, radius * 2);
                 context.imageSmoothingEnabled = true;
                 context.rotate(-angle);
                 context.translate(-centerX, -centerY);
@@ -845,7 +842,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     points.push([length * 2 - position, -h[0]]);
     points.push([-position, -h[1]]);
     context.globalAlpha = alpha;
-    
+
     // Rotate it to the new angle via vector rotation
     context.beginPath();
     for (let point of points) {
@@ -895,7 +892,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         t.lerpedFacing == undefined
             ? (t.lerpedFacing = t.facing)
             : (t.lerpedFacing = util.lerpAngle(t.lerpedFacing, t.facing, 0.1, true));
-        
+
         // Break condition
         if (t.layer > 0) {
             upperTurretsIndex = i;
@@ -934,29 +931,29 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     context.globalAlpha = 1;
     context.lineWidth = initStrokeWidth * m.strokeWidth
     gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), blend));
-    
+
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
-    context.shadowColor = m.glow.color!=null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
+    context.shadowColor = m.glow.color != null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
         gameDraw.modifyColor(instance.color),
         render.status.getColor(),
         render.status.getBlend()
     );
-    if (m.glow.radius && m.glow.radius>0){
-      context.shadowBlur = m.glow.radius * ((drawSize / m.size) * m.realSize);
-      context.shadowOffsetX = 0;
-      context.shadowOffsetY = 0;
-      context.globalAlpha = m.glow.alpha;
-      for (var i = 0; i < m.glow.recursion; i++) {
-        drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, true, m.drawFill);
-      }
-      context.globalAlpha = 1;
+    if (m.glow.radius && m.glow.radius > 0) {
+        context.shadowBlur = m.glow.radius * ((drawSize / m.size) * m.realSize);
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.globalAlpha = m.glow.alpha;
+        for (var i = 0; i < m.glow.recursion; i++) {
+            drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, true, m.drawFill);
+        }
+        context.globalAlpha = 1;
     }
     context.shadowBlur = 0;
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
 
     drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, instance.borderless, instance.drawFill, m.imageInterpolation);
-    
+
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {
         context.lineWidth = initStrokeWidth
@@ -1054,7 +1051,7 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
         entityX = x + 0.5 * len,
         entityY = y + 0.5 * height,
         baseColor = picture.color;
-    
+
     // Find x and y shift for the entity image
     let xShift = position.middle.x * Math.cos(angle) - position.middle.y * Math.sin(angle),
         yShift = position.middle.x * Math.sin(angle) + position.middle.y * Math.cos(angle);
@@ -1351,7 +1348,7 @@ function drawEntities(px, py, ratio) {
         let x = ratio * instance.render.x - px,
             y = ratio * instance.render.y - py,
             baseColor = instance.color;
-        
+
         if (instance.id === gui.playerid) {
             x = settings.graphical.centerTank && !global.player.isScoping ? 0 : x;
             y = settings.graphical.centerTank && !global.player.isScoping ? 0 : y;
@@ -1423,10 +1420,10 @@ function drawUpgradeTree(spacing, alcoveSize) {
         let m = util.getEntityImageFromMockup(gui.type), // The mockup that corresponds to the player's tank
             rootName = m.rerootUpgradeTree, // The upgrade tree root of the player's tank
             rootIndex = [];
-            for (let name of rootName) {
-                let ind = name == undefined ? -1 : global.mockups.find(i => i.className == name).index;
-                rootIndex.push(ind); // The index of the mockup that corresponds to the root tank (-1 for no root)
-            }
+        for (let name of rootName) {
+            let ind = name == undefined ? -1 : global.mockups.find(i => i.className == name).index;
+            rootIndex.push(ind); // The index of the mockup that corresponds to the root tank (-1 for no root)
+        }
         if (!rootIndex.includes(-1)) {
             generateTankTree(rootIndex);
         }
@@ -1739,7 +1736,7 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     if (global.mobile) {
         height = (len / global.gameWidth / 1.9) * global.gameHeight
         len = alcoveSize * 0.6;
-      }
+    }
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
         let ratio = [
             global.gameWidth / global.gameHeight,
@@ -1849,7 +1846,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         }
         y += global.canSkill || global.showSkill ? (alcoveSize / 2.2 /*+ spacing * 2*/) * statMenu.get() : 0;
     }
-    
+
     drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 3.5, color.guiwhite, "center");
     y += 7;
     for (let i = 0; i < lb.data.length; i++) {
@@ -1899,7 +1896,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         let colorIndex = 0;
         let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
         let lastBranch = -1;
-        let upgradeHoverIndex = global.clickables.upgrade.check({x: global.mouse.x, y: global.mouse.y});
+        let upgradeHoverIndex = global.clickables.upgrade.check({ x: global.mouse.x, y: global.mouse.y });
         upgradeSpin += 0.01;
 
         for (let i = 0; i < gui.upgrades.length; i++) {
@@ -1960,7 +1957,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
                     boxPadding = 6,
                     splitTooltip = picture.upgradeTooltip.split("\n"),
                     textY = boxY + boxPadding + alcoveSize / 10;
-                
+
                 // Tooltip box width
                 for (let line of splitTooltip) boxWidth = Math.max(boxWidth, measureText(line, alcoveSize / 15));
 
@@ -2028,10 +2025,48 @@ function drawMobileJoysticks() {
     );
     ctx.fill();
 }
+
+function makeButton(index, x, y, width, height, text, clickableRatio) {
+    // Set the clickable's position
+    global.clickables.mobileButtons.place(index, x * clickableRatio, y * clickableRatio, width * clickableRatio, height * clickableRatio);
+
+    // Draw boxes
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = color.grey;
+    drawGuiRect(x, y, width, height);
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = color.black;
+    drawGuiRect(x, y + height * 0.6, width, height * 0.4);
+    ctx.globalAlpha = 1;
+
+    // Draw text
+    drawText(text, x + width / 2, y + height * 0.5, height * 0.6, color.guiwhite, "center", true);
+
+    // Draw the borders
+    ctx.strokeStyle = color.black;
+    ctx.lineWidth = 3;
+    drawGuiRect(x, y, width, height, true);
+}
+
+function makeButtons(buttons, startX, startY, baseSize, clickableRatio) {
+    let x = startX, y = startY, index = 0;
+
+    for (let row = 0; row < buttons.length; row++) {
+        for (let col = 0; col < buttons[row].length; col++) {
+            makeButton(buttons[row][col][3] ?? index, x, y, baseSize * (buttons[row][col][1] ?? 1), baseSize * (buttons[row][col][2] ?? 1), buttons[row][col][0], clickableRatio);
+            x += baseSize * (buttons[row][col][1] ?? 1) + spacing;
+            index++;
+        }
+
+        x = startX;
+        y += Math.max(...buttons[row].map(b => baseSize * (b[2] ?? 1))) + spacing;
+    }
+}
+
 function drawMobileButtons(spacing, alcoveSize) {
     if (global.clickables.mobileButtons.active == null) global.clickables.mobileButtons.active = false;
     if (global.clickables.mobileButtons.altFire == null) global.clickables.mobileButtons.altFire = false;
-    
+
     // Hide the buttons
     global.clickables.mobileButtons.hide();
 
@@ -2044,50 +2079,8 @@ function drawMobileButtons(spacing, alcoveSize) {
     let yOffset = global.mobile ? global.canUpgrade ? (alcoveSize / 3.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 3.5 * (upgradeColumns + 3.55) + 67 : 0 + global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0 : 0;
     let buttons;
     let baseSize = (alcoveSize - spacing * 2) / 3;
-    
-        function makeButton(index, x, y, width, height, text) {
-            // Set the clickable's position
-            global.clickables.mobileButtons.place(index, x * clickableRatio, y * clickableRatio, width * clickableRatio, height * clickableRatio);
-    
-            // Draw boxes
-            ctx.globalAlpha = 0.5;
-            ctx.fillStyle = color.grey;
-            drawGuiRect(x, y, width, height);
-            ctx.globalAlpha = 0.1;
-            ctx.fillStyle = color.black;
-            drawGuiRect(x, y + height * 0.6, width, height * 0.4);
-            ctx.globalAlpha = 1;
-    
-            // Draw text
-            drawText(text, x + width / 2, y + height * 0.5, height * 0.6, color.guiwhite, "center", true);
-    
-            // Draw the borders
-            ctx.strokeStyle = color.black;
-            ctx.lineWidth = 3;
-            drawGuiRect(x, y, width, height, true);
-        };
-    
-        function makeButtons(buttons, startX, startY, baseSize) {
-            let x, y, index = 0;
-    
-            let resetX = () => x = startX;
-            let resetY = () => y = startY;
-    
-            resetX();
-            resetY();
-    
-            for (let row = 0; row < buttons.length; row++) {
-                for (let col = 0; col < buttons[row].length; col++) {
-                    makeButton(buttons[row][col][3] ?? index, x, y, baseSize * (buttons[row][col][1] ?? 1), baseSize * (buttons[row][col][2] ?? 1), buttons[row][col][0]);
-                    x += baseSize * (buttons[row][col][1] ?? 1) + spacing;
-                    index++;
-                }
-    
-                resetX();
-                y += Math.max(...buttons[row].map(b => baseSize * (b[2] ?? 1))) + spacing;
-            }
-        }
-        if (global.mobile) {
+
+    if (global.mobile) {
         buttons = global.clickables.mobileButtons.active ? [
             [[global.clickables.mobileButtons.active ? "-" : "+"], [`Alt ${global.clickables.mobileButtons.altFire ? "Manual" : "Disabled"}`, 6], [`${!document.fullscreenElement ? "Full" : "Exit Full"} Screen`, 5]],
             [["Autofire", 3.5], ["Reverse", 3.5], ["Self-Destruct", 5]],
@@ -2096,10 +2089,10 @@ function drawMobileButtons(spacing, alcoveSize) {
         ] : [
             [[global.clickables.mobileButtons.active ? "-" : "+"]],
         ];
-      }
-       if (global.clickables.mobileButtons.altFire) buttons.push([["\u2756", 2, 2]]);
-    
-       makeButtons(buttons, spacing * 2, yOffset + spacing, baseSize);
+    }
+    if (global.clickables.mobileButtons.altFire) buttons.push([["\u2756", 2, 2]]);
+
+    makeButtons(buttons, spacing * 2, yOffset + spacing, baseSize, clickableRatio);
 }
 const gameDrawAlive = (ratio, drawRatio) => {
     let GRAPHDATA = 0;
@@ -2164,16 +2157,16 @@ let getKills = () => {
     }
     return (
         (destruction === 0 ? "🌼"
-        : destruction < 4 ? "🎯"
-        : destruction < 8 ? "💥"
-        : destruction < 15 ? "💢"
-        : destruction < 25 ? "🔥"
-        : destruction < 50 ? "💣"
-        : destruction < 75 ? "👺"
-        : destruction < 100 ? "🌶️" : "💯"
+            : destruction < 4 ? "🎯"
+                : destruction < 8 ? "💥"
+                    : destruction < 15 ? "💢"
+                        : destruction < 25 ? "🔥"
+                            : destruction < 50 ? "💣"
+                                : destruction < 75 ? "👺"
+                                    : destruction < 100 ? "🌶️" : "💯"
         ) + " " + (!killCountTexts.length ? "A true pacifist" :
-                    killCountTexts.length == 1 ? killCountTexts.join(" and ") :
-                    killCountTexts.slice(0, -1).join(", ") + " and " + killCountTexts[killCountTexts.length - 1])
+            killCountTexts.length == 1 ? killCountTexts.join(" and ") :
+                killCountTexts.slice(0, -1).join(", ") + " and " + killCountTexts[killCountTexts.length - 1])
     );
 };
 let getDeath = () => {
@@ -2207,8 +2200,8 @@ const gameDrawDead = () => {
     let shift = animations.deathScreen.get();
     ctx.translate(0, -shift * global.screenHeight);
     let x = global.screenWidth / 2,
-        y = global.screenHeight / 2 - 50;
-        let len = 140,
+        y = global.screenHeight / 2 - 50,
+        len = 140,
         position = global.mockups[parseInt(gui.type.split("-")[0])].position,
         scale = len / position.axis,
         xx = global.screenWidth / 2 - scale * position.middle.x * 0.707,
@@ -2331,7 +2324,7 @@ function animloop() {
         }
         ctx.translate(-0.5, -0.5);
 
-    //oh no we need to throw an error!
+        //oh no we need to throw an error!
     } catch (e) {
 
         //hold on....
