@@ -1,5 +1,5 @@
 const { combineStats, addAura, makeAuto, weaponArray, dereference } = require('../facilitators.js');
-const { gunCalcNames, smshskl, base } = require('../constants.js');
+const { smshskl, base } = require('../constants.js');
 const g = require('../gunvals.js');
 
 const eggnoughtBody = {

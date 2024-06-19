@@ -52,18 +52,7 @@ class Gun extends EventEmitter {
             if (info.PROPERTIES.TYPE != null) {
                 this.canShoot = true;
                 this.label = info.PROPERTIES.LABEL ?? "";
-                // Pre-flatten bullet types to save on doing the same define() sequence a million times
-                this.bulletType = Array.isArray(info.PROPERTIES.TYPE) ? info.PROPERTIES.TYPE : [info.PROPERTIES.TYPE];
-                let flattenedType = {};
-                for (let type of this.bulletType) {
-                    type = ensureIsClass(type);
-                    util.flattenDefinition(flattenedType, type);
-                }
-                this.bulletType = flattenedType;
-                // Set final label to bullet
-                this.bulletType.LABEL = this.master.label + (this.label ? " " + this.label : "") + " " + this.bulletType.LABEL;
-                // Save a copy of the bullet definition for body stat defining
-                this.bulletBodyStats = JSON.parse(JSON.stringify(this.bulletType.BODY));
+                this.setBulletType(info.PROPERTIES.TYPE);
             }
             this.autofire = info.PROPERTIES.AUTOFIRE ?? false;
             this.altFire = info.PROPERTIES.ALT_FIRE ?? false;
@@ -101,7 +90,7 @@ class Gun extends EventEmitter {
                 Y: position[4],
                 ANGLE: position[5],
                 DELAY: position[6],
-                DRAW_ABOVE: position[7] ?? this.drawAbove
+                DRAW_ABOVE: position[7],
             }
         }
         position = {
@@ -339,6 +328,20 @@ class Gun extends EventEmitter {
             this.body.accel.x += recoilForce * Math.cos(this.facing);
             this.body.accel.y += recoilForce * Math.sin(this.facing);
         }
+    }
+    setBulletType(type) {
+        // Pre-flatten bullet types to save on doing the same define() sequence a million times
+        this.bulletType = Array.isArray(type) ? type : [type];
+        let flattenedType = {};
+        for (let type of this.bulletType) {
+            type = ensureIsClass(type);
+            util.flattenDefinition(flattenedType, type);
+        }
+        this.bulletType = flattenedType;
+        // Set final label to bullet
+        this.bulletType.LABEL = this.master.label + (this.label ? " " + this.label : "") + " " + this.bulletType.LABEL;
+        // Save a copy of the bullet definition for body stat defining
+        this.bulletBodyStats = JSON.parse(JSON.stringify(this.bulletType.BODY));
     }
     syncGunStats() {
         this.calculateBulletStats();

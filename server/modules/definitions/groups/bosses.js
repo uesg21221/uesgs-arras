@@ -1,5 +1,5 @@
 const { combineStats, skillSet, makeAuto, addAura, LayeredBoss, makeDeco, weaponArray } = require('../facilitators.js');
-const { base, gunCalcNames, smshskl } = require('../constants.js');
+const { base, smshskl } = require('../constants.js');
 const g = require('../gunvals.js');
 require('./generics.js');
 

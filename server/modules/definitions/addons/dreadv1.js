@@ -1,5 +1,5 @@
 const { combineStats, makeAuto, weaponArray } = require('../facilitators.js');
-const { gunCalcNames, smshskl, base } = require('../constants.js');
+const { smshskl, base } = require('../constants.js');
 const g = require('../gunvals.js');
 const dreadnoughtBody = {
     SPEED: base.SPEED * 0.5,

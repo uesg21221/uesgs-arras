@@ -1,5 +1,5 @@
 const { combineStats, skillSet, makeAuto, weaponArray } = require('../facilitators.js')
-const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js')
+const { base, statnames, dfltskl, smshskl } = require('../constants.js')
 require('./generics.js')
 require('./tanks.js')
 const g = require('../gunvals.js')
