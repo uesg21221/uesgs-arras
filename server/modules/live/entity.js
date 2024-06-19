@@ -329,7 +329,7 @@ class Gun extends EventEmitter {
             this.body.accel.y += recoilForce * Math.sin(this.facing);
         }
     }
-    setBulletType(type) {
+    setBulletType(type, clearChildren = false) {
         // Pre-flatten bullet types to save on doing the same define() sequence a million times
         this.bulletType = Array.isArray(type) ? type : [type];
         let flattenedType = {};
@@ -342,6 +342,11 @@ class Gun extends EventEmitter {
         this.bulletType.LABEL = this.master.label + (this.label ? " " + this.label : "") + " " + this.bulletType.LABEL;
         // Save a copy of the bullet definition for body stat defining
         this.bulletBodyStats = JSON.parse(JSON.stringify(this.bulletType.BODY));
+
+        if (!clearChildren) return;
+        for (let child of this.children) {
+            child.kill();
+        }
     }
     syncGunStats() {
         this.calculateBulletStats();
