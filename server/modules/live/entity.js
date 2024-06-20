@@ -49,11 +49,6 @@ class Gun extends EventEmitter {
         this.drawFill = true;
         this.drawAbove = false;
         if (info.PROPERTIES != null) {
-            if (info.PROPERTIES.TYPE != null) {
-                this.canShoot = true;
-                this.label = info.PROPERTIES.LABEL ?? "";
-                this.setBulletType(info.PROPERTIES.TYPE);
-            }
             this.autofire = info.PROPERTIES.AUTOFIRE ?? false;
             this.altFire = info.PROPERTIES.ALT_FIRE ?? false;
             this.statCalculator = info.PROPERTIES.STAT_CALCULATOR ?? "default";
@@ -79,6 +74,11 @@ class Gun extends EventEmitter {
             this.shootOnDeath = info.PROPERTIES.SHOOT_ON_DEATH ?? false;
             this.stack = info.PROPERTIES.STACK_GUN ?? true ;
             this.identifier = info.PROPERTIES.IDENTIFIER ?? null;
+            if (info.PROPERTIES.TYPE != null) {
+                this.canShoot = true;
+                this.label = info.PROPERTIES.LABEL ?? "";
+                this.setBulletType(info.PROPERTIES.TYPE);
+            }
         }
         let position = info.POSITION;
         if (Array.isArray(position)) {
