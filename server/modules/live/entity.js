@@ -123,11 +123,9 @@ class Gun extends EventEmitter {
         }
     }
     live() {
-        if (!this.canShoot) return;
-        // Override if invulnerable
-        if (this.body.master.invuln) return;
+        if (!this.canShoot || this.body.master.invuln) return;
         
-        // Handle recoil
+        // Iterate recoil
         this.recoil();
 
         // Determine shoot permission based on child counting settings
@@ -176,6 +174,7 @@ class Gun extends EventEmitter {
         this.lastShot.time = util.time();
         this.lastShot.power = 3 * Math.log(Math.sqrt(this.bulletSkills.spd) + this.trueRecoil + 1) + 1;
         this.recoilVelocity += this.lastShot.power;
+        this.facing = this.body.facing + this.angle;
 
         // Initialize bullet
         let [spawnX, spawnY] = this.findBulletSpawnPosition();
@@ -188,11 +187,7 @@ class Gun extends EventEmitter {
         } else {
             this.defineBullet(bullet);
         }
-        bullet.refreshBodyAttributes();
         bullet.life();
-
-        // Set recoil facing
-        this.facing = this.body.facing + this.angle;
 
         // Emit fire event
         this.master.emit(this.altFire ? 'altFire' : 'fire', {
@@ -207,15 +202,14 @@ class Gun extends EventEmitter {
     }
     findBulletSpawnPosition() {
         // Find out some intermediate values
-        let angle1 = this.offsetDirection + this.angle + this.body.facing,
-            angle2 = this.angle + this.body.facing,
+        let offsetAngle = this.offsetDirection + this.angle + this.body.facing,
             gunlength = this.length - this.width * this.shootSettings.size / 2,
 
         // Calculate offset of gun base and gun end based
-            offsetBaseX = this.offset * Math.cos(angle1),
-            offsetBaseY = this.offset * Math.sin(angle1),
-            offsetEndX = gunlength * Math.cos(angle2),
-            offsetEndY = gunlength * Math.sin(angle2),
+            offsetBaseX = this.offset * Math.cos(offsetAngle),
+            offsetBaseY = this.offset * Math.sin(offsetAngle),
+            offsetEndX = gunlength * Math.cos(this.facing),
+            offsetEndY = gunlength * Math.sin(this.facing),
 
         // Combine offsets to get final values
             offsetFinalX = offsetBaseX + offsetEndX,
@@ -342,6 +336,7 @@ class Gun extends EventEmitter {
         this.bulletType.LABEL = this.master.label + (this.label ? " " + this.label : "") + " " + this.bulletType.LABEL;
         // Save a copy of the bullet definition for body stat defining
         this.bulletBodyStats = JSON.parse(JSON.stringify(this.bulletType.BODY));
+        this.calculateBulletStats();
 
         if (!clearChildren) return;
         for (let child of this.children) {
