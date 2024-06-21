@@ -119,7 +119,6 @@ class Gun extends EventEmitter {
             this.trueRecoil = this.shootSettings.recoil;
             this.facing = 0;
             this.childrenLimitFactor = 1;
-            this.calculateBulletStats();
         }
     }
     live() {
