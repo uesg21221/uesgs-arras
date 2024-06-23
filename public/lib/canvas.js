@@ -23,30 +23,6 @@ class Canvas {
     });
 
     this.cv = document.getElementById("gameCanvas");
-    if (global.mobile) {
-      // Mobile
-      let mobilecv = this.cv;
-      this.controlTouch = null;
-      this.movementTouch = null;
-      this.movementTop = false;
-      this.movementBottom = false;
-      this.movementLeft = false;
-      this.movementRight = false;
-      this.movementTouchPos = { x: 0, y: 0 };
-      this.controlTouchPos = { x: 0, y: 0 };
-      mobilecv.addEventListener("touchstart", (event) => this.touchStart(event), false);
-      mobilecv.addEventListener("touchmove", (event) => this.touchMove(event), false);
-      mobilecv.addEventListener("touchend", (event) => this.touchEnd(event), false);
-      mobilecv.addEventListener("touchcancel", (event) => this.touchEnd(event), false);
-    } else {
-      this.cv.addEventListener("mousemove", (event) => this.mouseMove(event), false);
-      this.cv.addEventListener("mousedown",(event) => this.mouseDown(event), false);
-      this.cv.addEventListener("mouseup", (event) => this.mouseUp(event), false);
-      this.cv.addEventListener("keypress", (event) => this.keyPress(event), false);
-      this.cv.addEventListener("keydown", (event) => this.keyDown(event), false);
-      this.cv.addEventListener("keyup", (event) => this.keyUp(event), false);
-      this.cv.addEventListener("wheel", (event) => this.wheel(event), false);
-    }
     this.cv.resize = (width, height) => {
       this.cv.width = this.width = width;
       this.cv.height = this.height = height;
@@ -57,7 +33,33 @@ class Canvas {
     this.spinLock = true;
     this.treeScrollSpeed = 0.5;
     this.treeScrollSpeedMultiplier = 1;
+    this.optMobile = document.getElementById("optMobile");
     global.canvas = this;
+  }
+  init() {
+    global.mobile && optMobile.value == "mobile" ? ( // Mobile
+        this.mobilecv = this.cv,
+        this.controlTouch = null,
+        this.movementTouch = null,
+        this.movementTop = false,
+        this.movementBottom = false,
+        this.movementLeft = false,
+        this.movementRight = false,
+        this.movementTouchPos = { x: 0, y: 0 },
+        this.controlTouchPos = { x: 0, y: 0 },
+        this.mobilecv.addEventListener("touchstart", (event) => this.touchStart(event), false),
+        this.mobilecv.addEventListener("touchmove", (event) => this.touchMove(event), false),
+        this.mobilecv.addEventListener("touchend", (event) => this.touchEnd(event), false),
+        this.mobilecv.addEventListener("touchcancel", (event) => this.touchEnd(event), false)
+    ) : ( // PC
+        this.cv.addEventListener("mousemove", (event) => this.mouseMove(event), false),
+        this.cv.addEventListener("mousedown",(event) => this.mouseDown(event), false),
+        this.cv.addEventListener("mouseup", (event) => this.mouseUp(event), false),
+        this.cv.addEventListener("keypress", (event) => this.keyPress(event), false),
+        this.cv.addEventListener("wheel", (event) => this.wheel(event), false)
+    );
+    this.cv.addEventListener("keydown", (event) => this.keyDown(event), false);
+    this.cv.addEventListener("keyup", (event) => this.keyUp(event), false);
   }
   wheel(event) {
     if (!global.died && global.showTree) {
@@ -332,12 +334,7 @@ class Canvas {
   touchStart(e) {
     e.preventDefault();
     if (global.died && !global.cannotRespawn) {
-      this.socket.talk(
-        "s",
-        global.playerName,
-        0,
-        1 * settings.game.autoLevelUp
-      );
+      this.socket.talk("s", global.playerName, 0, 1 * settings.game.autoLevelUp);
       global.died = false;
       global.autoSpin = false;
     } else {
@@ -351,8 +348,7 @@ class Canvas {
         if (buttonIndex !== -1) {
           switch (buttonIndex) {
             case 0:
-              global.clickables.mobileButtons.active =
-                !global.clickables.mobileButtons.active;
+              global.clickables.mobileButtons.active = !global.clickables.mobileButtons.active;
               break;
             case 1:
               if (global.clickables.mobileButtons.active) {

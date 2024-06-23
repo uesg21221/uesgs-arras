@@ -124,7 +124,9 @@ global.serverName = "Unknown";
 // Tips setup :D
 let tips = global.tips[Math.floor(Math.random() * global.tips.length)];
 global.tips = tips[Math.floor(Math.random() * tips.length)];
+// Window setup <3
 global.mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
+global.mobile && document.body.classList.add("mobile");
 function getMockups() {
     global.mockupLoading = new Promise(Resolve => {
         util.pullJSON("mockups").then(data => {
@@ -262,12 +264,17 @@ window.onload = async () => {
     util.retrieveFromLocalStorage("optBorders");
     util.retrieveFromLocalStorage("seperatedHealthbars");
     util.retrieveFromLocalStorage("autoLevelUp");
+    util.retrieveFromLocalStorage("optMobile");
     // Set default theme
     if (document.getElementById("optColors").value === "") {
         document.getElementById("optColors").value = "normal";
     }
     if (document.getElementById("optBorders").value === "") {
         document.getElementById("optBorders").value = "normal";
+    }
+    // Mobile Selection stuff.
+    if (document.getElementById("optMobile").value === "") {
+        document.getElementById("optMobile").value = "mobile";
     }
     // Keybinds stuff
     getKeybinds();
@@ -310,6 +317,31 @@ window.onload = async () => {
     window.addEventListener("resize", resizeEvent);
     resizeEvent();
 };
+// Sliding between options menu.
+function toggleOptionsMenu() {
+    let clicked = false,
+      a = document.getElementById("startMenuSlidingTrigger"), // Trigger ID
+      c = document.getElementById("optionArrow"), // Arrow
+      h = document.getElementById("viewOptionText"), // Text (view options)
+      u = document.getElementsByClassName("sliderHolder")[0], // Sliding.
+      y = document.getElementsByClassName("slider"), // For animations things.
+      toggle = () => {
+        c.style.transform = c.style.webkitTransform = clicked // Rotate the arrow.
+          ? "translate(2px, -2px) rotate(45deg)"
+          : "rotate(-45deg)";
+        h.innerText = clicked ? "close options" : "view options"; // Change the text.
+        clicked ? u.classList.add("slided") : u.classList.remove("slided"); // Slide it up.
+        y[0].style.opacity = clicked ? 0 : 1; // Fade it away.
+        y[2].style.opacity = clicked ? 1 : 0; // same for this.
+      };
+    a.onclick = () => { // When the button is triggered, This code runs.
+        clicked = !clicked;
+        toggle();
+    };
+    return () => {
+        clicked || ((clicked = !0), toggle());
+    };
+};
 function resizeEvent() {
     let scale = window.devicePixelRatio;
     if (!settings.graphical.fancyAnimations) {
@@ -328,6 +360,8 @@ var ctx = c.getContext("2d");
 var c2 = document.createElement("canvas");
 var ctx2 = c2.getContext("2d");
 ctx2.imageSmoothingEnabled = true;
+global.mobile && document.getElementById("controlsSection").remove();
+toggleOptionsMenu();
 // Animation things
 function Smoothbar(value, speed, sharpness = 3, lerpValue = 0.025) {
     let time = Date.now();
@@ -379,7 +413,7 @@ function calculateTarget() {
     global.target.y *= global.screenHeight / window.canvas.height;
     if (settings.graphical.screenshotMode && Math.abs(Math.atan2(global.target.y, global.target.x) + Math.PI / 2) < 0.035) global.target.x = 0;
     return global.target;
-}
+};
 function parseTheme(string) {
     // Decode from base64
     try {
@@ -501,6 +535,7 @@ function startGame() {
     util.submitToLocalStorage("optBorders");
     util.submitToLocalStorage("optNoPointy");
     util.submitToLocalStorage("autoLevelUp");
+    util.submitToLocalStorage("optMobile");
     util.submitToLocalStorage("optPredictive");
     util.submitToLocalStorage("optScreenshotMode");
     util.submitToLocalStorage("coloredHealthbars");
@@ -546,6 +581,7 @@ function startGame() {
     let playerKeyInput = document.getElementById("playerKeyInput");
     let autolevelUpInput = document.getElementById("autoLevelUp").checked;
     global.autolvlUp = autolevelUpInput;
+    if (document.getElementById("optMobile").value === "desktop") global.mobile = false;
     // Name and keys
     util.submitToLocalStorage("playerNameInput");
     util.submitToLocalStorage("playerKeyInput");
@@ -566,8 +602,10 @@ function startGame() {
     if (!global.animLoopHandle) {
         animloop();
     }
+    // initialize canvas.
     window.canvas.socket = global.socket;
     setInterval(() => moveCompensation.iterate(global.socket.cmd.getMotion()), 1000 / 30);
+    canvas.init();
     document.getElementById("gameCanvas").focus();
     window.onbeforeunload = () => true;
 }
@@ -2048,7 +2086,7 @@ function makeButton(index, x, y, width, height, text, clickableRatio) {
     drawGuiRect(x, y, width, height, true);
 }
 
-function makeButtons(buttons, startX, startY, baseSize, clickableRatio) {
+function makeButtons(buttons, startX, startY, baseSize, clickableRatio, spacing) {
     let x = startX, y = startY, index = 0;
 
     for (let row = 0; row < buttons.length; row++) {
@@ -2092,7 +2130,7 @@ function drawMobileButtons(spacing, alcoveSize) {
     }
     if (global.clickables.mobileButtons.altFire) buttons.push([["\u2756", 2, 2]]);
 
-    makeButtons(buttons, spacing * 2, yOffset + spacing, baseSize, clickableRatio);
+    makeButtons(buttons, spacing * 2, yOffset + spacing, baseSize, clickableRatio, spacing);
 }
 const gameDrawAlive = (ratio, drawRatio) => {
     let GRAPHDATA = 0;
@@ -2157,13 +2195,13 @@ let getKills = () => {
     }
     return (
         (destruction === 0 ? "🌼"
-            : destruction < 4 ? "🎯"
-                : destruction < 8 ? "💥"
-                    : destruction < 15 ? "💢"
-                        : destruction < 25 ? "🔥"
-                            : destruction < 50 ? "💣"
-                                : destruction < 75 ? "👺"
-                                    : destruction < 100 ? "🌶️" : "💯"
+        : destruction < 4 ? "🎯"
+        : destruction < 8 ? "💥"
+        : destruction < 15 ? "💢"
+        : destruction < 25 ? "🔥"
+        : destruction < 50 ? "💣"
+        : destruction < 75 ? "👺"
+        : destruction < 100 ? "🌶️" : "💯"
         ) + " " + (!killCountTexts.length ? "A true pacifist" :
             killCountTexts.length == 1 ? killCountTexts.join(" and ") :
                 killCountTexts.slice(0, -1).join(", ") + " and " + killCountTexts[killCountTexts.length - 1])
