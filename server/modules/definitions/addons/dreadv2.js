@@ -3,47 +3,47 @@ const { smshskl, base } = require('../constants.js');
 const g = require('../gunvals.js');
 
 const eggnoughtBody = {
-    SPEED: base.SPEED * 0.65,
-    HEALTH: base.HEALTH * 1.75,
+	SPEED: base.SPEED * 0.65,
+	HEALTH: base.HEALTH * 1.75,
 	SHIELD: base.SHIELD * 1.5,
 	REGEN: base.REGEN * 1.5,
-    FOV: base.FOV,
+	FOV: base.FOV,
 	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 1.5,
 };
 const squarenoughtBody = {
-    SPEED: base.SPEED * 0.6,
-    HEALTH: base.HEALTH * 2.5,
+	SPEED: base.SPEED * 0.6,
+	HEALTH: base.HEALTH * 2.5,
 	SHIELD: base.SHIELD * 2,
-	REGEN: base.REGEN,
-    FOV: base.FOV * 0.95 * 2,
+	REGEN: base.REGEN * 2,
+	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 2,
 };
 const trinoughtBody = {
-    SPEED: base.SPEED * 0.55,
-    HEALTH: base.HEALTH * 7.5,
+	SPEED: base.SPEED * 0.55,
+	HEALTH: base.HEALTH * 7.5,
 	SHIELD: base.SHIELD * 2.5,
 	REGEN: base.REGEN * 2.5,
-    FOV: base.FOV * 0.95,
+	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 2.5,
 };
 const pentanoughtBody = {
-    SPEED: base.SPEED * 0.5,
-    HEALTH: base.HEALTH * 4.25,
+	SPEED: base.SPEED * 0.5,
+	HEALTH: base.HEALTH * 4.25,
 	SHIELD: base.SHIELD * 3,
 	REGEN: base.REGEN * 3,
-    FOV: base.FOV * 0.95,
+	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 3,
 };
 const hexnoughtBody = {
-    SPEED: base.SPEED * 0.45,
-    HEALTH: base.HEALTH * 5,
+	SPEED: base.SPEED * 0.45,
+	HEALTH: base.HEALTH * 5,
 	SHIELD: base.SHIELD * 3.5,
 	REGEN: base.REGEN * 3.5,
-    FOV: base.FOV * 0.95,
+	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
 	DENSITY: base.DENSITY * 3.5,
 };
