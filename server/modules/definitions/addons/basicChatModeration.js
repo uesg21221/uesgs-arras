@@ -7,13 +7,16 @@ let recent = {},
 	decay = 10_000;
 
 module.exports = ({ Events }) => {
-	Events.on('chatMessage', ({ message, socket, preventDefault }) => {
+	Events.on('chatMessage', ({ message, socket, preventDefault, setMessage }) => {
 		let perms = socket.permissions,
 			id = socket.player.body.id;
 
+		// Here we block out some very bad and banned word by replacing it with asterisks,
+		// then we set the message that will be seen by others to that filtered message.
+		setMessage(message.replaceAll('someverybadandbannedword', '************************'));
+
 		// They are allowed to spam ANYTHING they want INFINITELY.
 		if (perms && perms.allowSpam) return;
-
 
 		// If they're talking too much, they can take a break.
 		// Fortunately, this returns false if 'recent[id] is 'undefined'.

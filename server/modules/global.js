@@ -46,7 +46,10 @@ global.getWeakestTeam = () => {
             teamcounts[o.team]++;
         }
     }
-    teamcounts = Object.entries(teamcounts);
+    teamcounts = Object.entries(teamcounts).map(([teamId, amount]) => {
+        let weight = teamId in Config.TEAM_WEIGHTS ? Config.TEAM_WEIGHTS[teamId] : 1;
+        return [teamId, amount / weight];
+    });
     let lowestTeamCount = Math.min(...teamcounts.map(x => x[1])),
         entries = teamcounts.filter(a => a[1] == lowestTeamCount);
     return parseInt(!entries.length ? -Math.ceil(Math.random() * Config.TEAMS) : ran.choose(entries)[0]);

@@ -137,6 +137,10 @@ module.exports = {
     // How every entity regenerates their health.
     REGENERATE_TICK: 200,
 
+    // How many members a team can have in comparison to an unweighed team.
+    // Example: Lets say we have team A and B. If the weigh of A is 2 and B is 1, then the game will try to give A twice as many members as B.
+    TEAM_WEIGHTS: {},
+
 
 
     // Natural Spawns

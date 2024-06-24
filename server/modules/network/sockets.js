@@ -545,19 +545,22 @@ function incoming(message, socket) {
 
         case "M":
             if (player.body == null) return 1;
-            let abort, message = m[0];
+            let abort, message = m[0], original = m[0];
 
             if ("string" !==  typeof message) {
                 socket.kick("Non-string chat message.");
                 return 1;
             }
 
-            events.emit('chatMessage', { message, socket, preventDefault: () => abort = true });
+            events.emit('chatMessage', { message: original, socket, preventDefault: () => abort = true, setMessage: str => message = str });
 
             // we are not anti-choice here.
             if (abort) break;
 
-            util.log(player.body.name + ': ' + message);
+            util.log(player.body.name + ': ' + original);
+            if (message !== original) {
+                util.log('changed to: ' + message);
+            }
 
             let id = player.body.id;
             if (!chats[id]) {
