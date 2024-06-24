@@ -1,8 +1,5 @@
-const { combineStats } = require('../definitions/facilitators');
-
-let EventEmitter = require('events'),
-    events,
-    init = g => events = g.events;
+const EventEmitter = require('events'),
+    { combineStats } = require('../definitions/facilitators');
 
 function setNatural(natural, type) {
     type = ensureIsClass(type);
@@ -964,7 +961,7 @@ class Entity extends EventEmitter {
         entities.push(this);
         for (let v of views) v.add(this);
         this.activation.update();
-        events.emit('spawn', this);
+        Events.emit('spawn', this);
     }
     addStatusEffect(effect) {
         this.emit('newStatusEffect', effect);
@@ -2386,4 +2383,4 @@ class Entity extends EventEmitter {
         return this.health.amount <= 0;
     }
 }
-module.exports = { init, StatusEffect, Gun, Entity };
+module.exports = { StatusEffect, Gun, Entity };

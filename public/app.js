@@ -609,14 +609,14 @@ function startGame() {
     document.getElementById("gameCanvas").focus();
     window.onbeforeunload = () => true;
 }
-// Background clearing
+
 function clearScreen(clearColor, alpha) {
     ctx.fillStyle = clearColor;
     ctx.globalAlpha = alpha;
     ctx.fillRect(0, 0, global.screenWidth, global.screenHeight);
     ctx.globalAlpha = 1;
 }
-// Text functions
+
 function arrayifyText(rawText) {
     //we want people to be able to use the section sign in writing too
     // string with double §           txt   col   txt                      txt
@@ -640,12 +640,14 @@ function arrayifyText(rawText) {
     }
     return textArray;
 }
-const measureText = (text, fontSize, withHeight = false) => {
+
+function measureText(text, fontSize, withHeight = false) {
     fontSize += settings.graphical.fontSizeBoost;
     ctx.font = "bold " + fontSize + "px Ubuntu";
     let measurement = ctx.measureText(arrayifyText(text).reduce((a, b, i) => (i & 1) ? a : a + b, ''));
     return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
-};
+}
+
 function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
     size += settings.graphical.fontSizeBoost;
     // Get text dimensions and resize/reset the canvas

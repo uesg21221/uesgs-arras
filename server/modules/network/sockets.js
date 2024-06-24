@@ -552,12 +552,19 @@ function incoming(message, socket) {
                 return 1;
             }
 
-            events.emit('chatMessage', { message: original, socket, preventDefault: () => abort = true, setMessage: str => message = str });
+            util.log(player.body.name + ': ' + original);
+
+            if (Config.SANITIZE_CHAT_MESSAGE_COLORS) {
+                // I thought it should be "§§" but it only works if you do "§§§§"?
+                message = message.replace(/§/g, "§§§§");
+                original = original.replace(/§/g, "§§§§");
+            }
+
+            Events.emit('chatMessage', { message: original, socket, preventDefault: () => abort = true, setMessage: str => message = str });
 
             // we are not anti-choice here.
             if (abort) break;
 
-            util.log(player.body.name + ': ' + original);
             if (message !== original) {
                 util.log('changed to: ' + message);
             }
@@ -565,11 +572,6 @@ function incoming(message, socket) {
             let id = player.body.id;
             if (!chats[id]) {
                 chats[id] = [];
-            }
-
-            if (Config.SANITIZE_CHAT_MESSAGE_COLORS) {
-                // I thought it should be "§§" but it only works if you do "§§§§"?
-                message = message.replace(/§/g, "§§§§");
             }
 
             // TODO: this needs to be lag compensated, so the message would not last 1 second less due to high ping

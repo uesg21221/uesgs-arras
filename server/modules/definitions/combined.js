@@ -28,7 +28,7 @@ function processAddonFolder(directory) {
         console.log(`Loading addon: ${filename}`);
         let result = require(filepath);
         if ('function' === typeof result) {
-            result({ Class, Config, Events: events });
+            result({ Class, Config, Events });
         }
         loadedAddons.push(filename.slice(0, -3));
     }

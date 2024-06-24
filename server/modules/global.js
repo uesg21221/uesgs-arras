@@ -1,6 +1,6 @@
 // Global Utilities Requires
 let EventEmitter = require('events');
-global.events = new EventEmitter();
+global.Events = new EventEmitter();
 global.ran = require(".././lib/random.js");
 global.util = require(".././lib/util.js");
 global.hshg = require(".././lib/hshg.js");
@@ -99,7 +99,7 @@ global.Config = new Proxy(new EventEmitter(), {
         let abort;
         prop = TO_SCREAMING_SNAKE_CASE(prop);
 
-        events.emit('change', {
+        obj.emit('change', {
             setting: prop,
             newValue: value,
             oldValue: obj[prop],
@@ -190,7 +190,6 @@ const requires = [
 
 for (let file of requires) {
     const module = require(file);
-    if (module.init) module.init(global);
     for (let key in module) {
         if (module.hasOwnProperty(key)) global[key] = module[key];
     }
