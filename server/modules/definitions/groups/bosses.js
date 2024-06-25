@@ -405,7 +405,7 @@ Class.summoner = {
         POSITION: [3.5, 8.65, 1.2, 8, 0, 0, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.drone, g.summoner, { size: 0.8 }]),
-            TYPE: ["sunchip"],
+            TYPE: "summonerDrone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
             STAT_CALCULATOR: "necro",
@@ -897,8 +897,8 @@ let ares = new LayeredBoss(null, "Ares", "terrestrial", 7, "purple", "terrestria
 ares.addLayer({gun: {
     POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, { speed: 0.5, maxSpeed: 0.5 }]),
-        TYPE: ["demonchip", { INDEPENDENT: true, }],
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, { speed: 0.8, maxSpeed: 0.8 }]),
+        TYPE: ["demonchip", { INDEPENDENT: true }],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
         STAT_CALCULATOR: "necro",
@@ -924,8 +924,8 @@ let ezekiel = new LayeredBoss(null, "Ezekiel", "terrestrial", 7, "orange", "terr
 ezekiel.addLayer({gun: {
     POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, { speed: 0.5, maxSpeed: 0.5 }]),
-        TYPE: ["dorito", { COLOR: "orange", INDEPENDENT: true, }],
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, { speed: 0.8, maxSpeed: 0.8 }]),
+        TYPE: ["dorito", { COLOR: "orange", INDEPENDENT: true }],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
         STAT_CALCULATOR: "necro",
@@ -942,7 +942,7 @@ eris.addLayer({gun: {
     POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
     PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.factory, { size: 0.5 }]),
-        TYPE: ["minion", { INDEPENDENT: true, COLOR: "pink", HAS_NO_RECOIL: true }],
+        TYPE: ["minion", { INDEPENDENT: true, COLOR: "pink" }],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
         STAT_CALCULATOR: "necro",
@@ -958,8 +958,8 @@ let selene = new LayeredBoss(null, "Selene", "terrestrial", 7, "gold", "terrestr
 selene.addLayer({gun: {
     POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, { speed: 0.5, maxSpeed: 0.5 }]),
-        TYPE: ["sunchip", { COLOR: "gold", INDEPENDENT: true }],
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, { speed: 0.8, maxSpeed: 0.8 }]),
+        TYPE: ["summonerDrone", { COLOR: "gold", INDEPENDENT: true }],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
         STAT_CALCULATOR: "necro",
@@ -976,7 +976,7 @@ let paladin = new LayeredBoss(null, "Paladin", "celestial", 9, "purple", "baseTr
 paladin.addLayer({gun: {
     POSITION: [3.8, 6, 1.4, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.overseer]),
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer]),
         TYPE: ["demonchip", {INDEPENDENT: true}],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
@@ -1005,8 +1005,8 @@ let zaphkiel = new LayeredBoss(null, "Zaphkiel", "celestial", 9, "orange", "base
 zaphkiel.addLayer({gun: {
     POSITION: [3.8, 6, 1.4, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.overseer]),
-        TYPE: ["drone", {INDEPENDENT: true,}],
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer]),
+        TYPE: ["dorito", {INDEPENDENT: true}],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
     },
@@ -1037,7 +1037,7 @@ let theia = new LayeredBoss(null, "Theia", "celestial", 9, "gold", "baseTrapTurr
 theia.addLayer({gun: {
     POSITION: [3.8, 6, 1.4, 8, 0, null, 1],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, { size: 0.5 }]),
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer]),
         TYPE: ["summonerDrone", {INDEPENDENT: true}],
         AUTOFIRE: true,
         WAIT_TO_CYCLE: true,
@@ -1046,7 +1046,7 @@ theia.addLayer({gun: {
 }}, true, null, 35);
 theia.addLayer({turret: {
     POSITION: [10, 7.5, 0, null, 160, 0],
-    TYPE: ["twisterTurret", {COLOR: "grey"}],
+    TYPE: ["twisterTurret", {INDEPENDENT: true, COLOR: "grey"}],
 }}, true, 6);
 
 // ATLAS
@@ -1123,8 +1123,8 @@ let odin = new LayeredBoss(null, "Odin", "eternal", 11, "aqua", "baseTrapTurret"
 odin.addLayer({gun: {
     POSITION: [2.25, 3.25, -1.6, 9, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.factory, { size: 0.5 }, g.pounder, {size: 1.7}]),
-        TYPE: ["gemDrone", {INDEPENDENT: true,}],
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.pounder, g.destroyer]),
+        TYPE: ["realchip", {INDEPENDENT: true, DRAW_HEALTH: true, COLOR: 'hexagon'}],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
     },

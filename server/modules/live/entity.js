@@ -992,6 +992,11 @@ class Entity extends EventEmitter {
                 recursion: set.GLOW.RECURSION ?? 1
             };
         }
+        if (set.IGNORED_BY_AI != null) this.ignoredByAi = set.IGNORED_BY_AI;
+        if (set.MOTION_TYPE != null) this.motionType = set.MOTION_TYPE;
+        if (typeof this.motionType == "string") this.motionType = [this.motionType, {}];
+        if (set.FACING_TYPE != null) this.facingType = set.FACING_TYPE;
+        if (typeof this.facingType == "string") this.facingType = [this.facingType, {}];
         if (set.CONTROLLERS != null) {
             let toAdd = [];
             for (let i = 0; i < set.CONTROLLERS.length; i++) {
@@ -1001,11 +1006,6 @@ class Entity extends EventEmitter {
             }
             this.addController(toAdd);
         }
-        if (set.IGNORED_BY_AI != null) this.ignoredByAi = set.IGNORED_BY_AI;
-        if (set.MOTION_TYPE != null) this.motionType = set.MOTION_TYPE;
-        if (typeof this.motionType == "string") this.motionType = [this.motionType, {}];
-        if (set.FACING_TYPE != null) this.facingType = set.FACING_TYPE;
-        if (typeof this.facingType == "string") this.facingType = [this.facingType, {}];
         if (set.MIRROR_MASTER_ANGLE != null) this.settings.mirrorMasterAngle = set.MIRROR_MASTER_ANGLE
         if (set.DRAW_HEALTH != null) this.settings.drawHealth = set.DRAW_HEALTH;
         if (set.DRAW_SELF != null) this.settings.drawShape = set.DRAW_SELF;
