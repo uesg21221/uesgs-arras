@@ -2777,7 +2777,7 @@ Class.toothlessBoss.TURRETS = Class.toothlessBoss.TURRETS.concat(weaponArray([{
     TYPE: "toothlessBossTurret",
 }], 3));
 
-Class.MKAura = addAura(5, 0.4, 0.1, 42);
+Class.MKAura = addAura(5, 0, 0.1, 42);
 Class.MKDoneAura = addAura(2, 1, 0.3, 32);
 Class.MKFactoryAura = addAura(2.6, 1, 0.3, "trans");
 Class.MKCarrierAura = addAura(2.1, 1, 0.3, 1);
