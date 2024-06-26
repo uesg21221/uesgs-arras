@@ -1,5 +1,5 @@
 const { combineStats, menu, addAura, makeDeco, LayeredBoss, newWeapon, weaponArray, makeRadialAuto, makeTurret } = require('../facilitators.js');
-const { base, gunCalcNames, basePolygonDamage, basePolygonHealth, dfltskl, statnames } = require('../constants.js');
+const { base, basePolygonDamage, basePolygonHealth, dfltskl, statnames } = require('../constants.js');
 const g = require('../gunvals.js');
 require('./tanks.js');
 require('./food.js');
@@ -363,7 +363,7 @@ Class.mummifier = {
             TYPE: "mummy",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.necro
+            STAT_CALCULATOR: "necro"
         }
     },{
         POSITION: [5.5, 13, 1.1, 8, 0, 270, 0],
@@ -372,7 +372,7 @@ Class.mummifier = {
             TYPE: "mummy",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.necro
+            STAT_CALCULATOR: "necro"
         }
     }],
     TURRETS: [{
@@ -576,7 +576,7 @@ Class.makeAutoTest = {
 Class.imageShapeTest = {
     PARENT: 'genericTank',
     LABEL: "Image Shape Test",
-    SHAPE: 'round.png',
+    SHAPE: '/round.png',
     GUNS: [
         {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
@@ -821,7 +821,7 @@ Class.vanquisher = {
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.trap, g.setTrap]),
             TYPE: "setTrap",
-            STAT_CALCULATOR: gunCalcNames.block
+            STAT_CALCULATOR: "block"
         }
 
     //launcher
@@ -829,7 +829,7 @@ Class.vanquisher = {
         POSITION: [10, 9, 1, 9, 0, 90, 0],
     },{
         POSITION: [17, 13, 1, 0, 0, 90, 0],
-        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery]), TYPE: "minimissile", STAT_CALCULATOR: gunCalcNames.sustained }
+        PROPERTIES: { SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery]), TYPE: "minimissile", STAT_CALCULATOR: "sustained" }
 
     //shotgun
     },{
@@ -1017,6 +1017,18 @@ Class.weaponArrayTest = {
     , 5),
 }
 
+Class.gunBenchmark = {
+    PARENT: 'genericTank',
+    LABEL: "Gun Benchmark",
+    GUNS: weaponArray({
+        POSITION: [60, 0.2, 0, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, {size: 0, reload: 0.15, range: 0.05}]),
+            TYPE: ["bullet", {DRAW_SELF: false}]
+        }
+    }, 720)
+}
+
 Class.levels = menu("Levels")
 Class.levels.UPGRADES_TIER_0 = []
 for (let i = 0; i < 12; i++) {
@@ -1089,7 +1101,7 @@ Class.snakeOld = {
             POSITION: [6, 12, 1.4, 8, 0, 180, 0],
             PROPERTIES: {
                 AUTOFIRE: true,
-                STAT_CALCULATOR: gunCalcNames.thruster,
+                STAT_CALCULATOR: "thruster",
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, g.snake, g.snakeskin]),
                 TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
             },
@@ -1099,7 +1111,7 @@ Class.snakeOld = {
             PROPERTIES: {
                 AUTOFIRE: true,
                 NEGATIVE_RECOIL: true,
-                STAT_CALCULATOR: gunCalcNames.thruster,
+                STAT_CALCULATOR: "thruster",
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, g.snake]),
                 TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
             },
@@ -1123,7 +1135,7 @@ Class.sidewinderOld = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder]),
                 TYPE: "snakeOld",
-                STAT_CALCULATOR: gunCalcNames.sustained,
+                STAT_CALCULATOR: "sustained",
             },
         },
     ],
@@ -1306,4 +1318,4 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"]
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss", "AEMKShipBoss"]
 
-    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "radialAutoTest", "makeAutoTest", "imageShapeTest", "turretStatScaleTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "radialAutoTest", "makeAutoTest", "imageShapeTest", "turretStatScaleTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "gunBenchmark", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]

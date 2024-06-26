@@ -768,67 +768,47 @@ function drawBar(x1, x2, y, width, color) {
 // Sub-drawing functions
 const drawPolyImgs = [];
 function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation) {
-    try {
-        // Start drawing
-        context.beginPath();
-        if (sides instanceof Array) {
-            let dx = Math.cos(angle);
-            let dy = Math.sin(angle);
-            for (let [x, y] of sides)
-                context.lineTo(
-                    centerX + radius * (x * dx - y * dy),
-                    centerY + radius * (y * dx + x * dy)
-                );
-        } else {
-            if ("string" === typeof sides) {
-                //ideally we'd preload images when mockups are loaded but im too lazy for that atm
-                if (!drawPolyImgs[sides]) {
-                    drawPolyImgs[sides] = new Image();
-                    drawPolyImgs[sides].src = sides;
-                    drawPolyImgs[sides].isBroken = false;
-                    drawPolyImgs[sides].onerror = function () {
-                        this.isBroken = true;
-                    };
+    // Start drawing
+    context.beginPath();
+    if (sides instanceof Array) {
+        let dx = Math.cos(angle);
+        let dy = Math.sin(angle);
+        for (let [x, y] of sides)
+            context.lineTo(
+                centerX + radius * (x * dx - y * dy),
+                centerY + radius * (y * dx + x * dy)
+            );
+    } else {
+        if ("string" === typeof sides) {
+            //ideally we'd preload images when mockups are loaded but im too lazy for that atm
+            if (sides.startsWith('/') | sides.startsWith('./') | sides.startsWith('http')) {
+                drawPolyImgs[sides] = new Image();
+                drawPolyImgs[sides].src = sides;
+                drawPolyImgs[sides].isBroken = false;
+                drawPolyImgs[sides].onerror = function() {
+                    this.isBroken = true;
                 }
+
                 let img = drawPolyImgs[sides];
-                if (img.isBroken || !img.complete) { // check if img is broken and draw as path2d if so
-                    let path = new Path2D(sides);
-                    context.save();
-                    context.translate(centerX, centerY);
-                    context.scale(radius, radius);
-                    context.lineWidth /= radius;
-                    context.rotate(angle);
-                    context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-                    if (!borderless) context.stroke(path);
-                    if (fill) context.fill(path);
-                    context.restore();
-                    return;
-                }
                 context.translate(centerX, centerY);
                 context.rotate(angle);
                 context.imageSmoothingEnabled = imageInterpolation;
-                context.drawImage(img, -radius, -radius, radius * 2, radius * 2);
+                context.drawImage(img, -radius, -radius, radius*2, radius*2);
                 context.imageSmoothingEnabled = true;
                 context.rotate(-angle);
                 context.translate(-centerX, -centerY);
                 return;
             }
-            angle += sides % 2 ? 0 : Math.PI / sides;
-        }
-        if (!sides) {
-            // Circle
-            let fillcolor = context.fillStyle;
-            let strokecolor = context.strokeStyle;
-            context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            context.fillStyle = strokecolor;
+            let path = new Path2D(sides);
+            context.save();
+            context.translate(centerX, centerY);
+            context.scale(radius, radius);
+            context.lineWidth /= radius;
+            context.rotate(angle);
             context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-            if (!borderless) context.stroke();
-            context.closePath();
-            context.beginPath();
-            context.fillStyle = fillcolor;
-            context.arc(centerX, centerY, radius * fill, 0, 2 * Math.PI);
-            if (fill) context.fill();
-            context.closePath();
+            if (!borderless) context.stroke(path);
+            if (fill) context.fill(path);
+            context.restore();
             return;
         } else if (sides < 0) {
             // Star
@@ -868,9 +848,6 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
         if (!borderless) context.stroke();
         if (fill) context.fill();
         context.lineJoin = "round";
-    } catch (e) { // this actually prevents to panic the client. so we will just call "resizeEvent()".
-        resizeEvent();
-        console.error("Uh oh, 'CanvasRenderingContext2D' has gotton an error! Error: " + e);
     }
 }
 function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha, strokeWidth, position) {

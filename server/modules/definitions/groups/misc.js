@@ -1,5 +1,5 @@
 const { combineStats, skillSet, makeAuto, weaponArray } = require('../facilitators.js')
-const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js')
+const { base, statnames, dfltskl, smshskl } = require('../constants.js')
 require('./generics.js')
 require('./tanks.js')
 const g = require('../gunvals.js')
@@ -156,7 +156,7 @@ Class.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
                 AUTOFIRE: true
             }
         }
@@ -226,7 +226,7 @@ for (let tier of sancTiers) {
                     PROPERTIES: {
                         SHOOT_SETTINGS: combineStats([g.trap, {shudder: 0.15, speed: 0.8, health: 3, reload: 1.5}]),
                         TYPE: "trap",
-                        STAT_CALCULATOR: gunCalcNames.trap,
+                        STAT_CALCULATOR: "trap",
                         AUTOFIRE: true,
                     },
                 })
@@ -297,7 +297,7 @@ Class.crasherSpawner = {
                 ],
                 SYNCS_SKILLS: true,
                 AUTOFIRE: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
             },
         },
     ],
@@ -355,7 +355,7 @@ Class.sentrySwarm = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
     ],
@@ -392,7 +392,7 @@ Class.shinySentrySwarm = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }, g.machineGun, { reload: 0.25 }]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
     ],
@@ -639,7 +639,7 @@ Class.mothership = {
                 TYPE: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 WAIT_TO_CYCLE: true,
             }
         }, {
@@ -654,7 +654,7 @@ Class.mothership = {
                     }],
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 WAIT_TO_CYCLE: true,
             }
         }
