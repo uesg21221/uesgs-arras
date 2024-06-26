@@ -54,7 +54,7 @@ class BossRush {
             // [ cost , definition reference ],
 
             //mysticals
-            [  1, "sorcerer"],
+            [  2, "sorcerer"],
             [  2, "summoner"],
             [  2, "enchantress"],
             [  2, "exorcistor"],
@@ -90,7 +90,7 @@ class BossRush {
             [ 35, "theia"],
 
             //eternals
-            [ 99, "legionaryCrasher"], // fucking mid
+            [100, "legionaryCrasher"],
             [100, "kronos"],
             [100, "odin"],
         ];
@@ -117,6 +117,7 @@ class BossRush {
 
             while (points > 0 && choices.length) {
                 choices = choices.filter(([ cost ]) => cost <= points);
+                if (!choices.length) break;
                 let [ cost, boss ] = ran.choose(choices);
                 points -= cost;
                 wave.push(boss);

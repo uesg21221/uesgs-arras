@@ -562,7 +562,7 @@ Class.sorcerer = {
     GUNS: weaponArray({
         POSITION: [3.5, 8.65, 1.2, 8, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.machineGun, g.machineGunner, { size: 0.4, spray: 150, speed: 2, shudder: 1.75 }]),
+            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.machineGun, g.machineGunner, { damage: 2, size: 0.4, spray: 150, speed: 2, shudder: 1.75 }]),
             TYPE: "minichip",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
