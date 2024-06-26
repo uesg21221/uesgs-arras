@@ -187,7 +187,7 @@ class Gun extends EventEmitter {
     findBulletSpawnPosition() {
         // Find out some intermediate values
         let offsetAngle = this.offsetDirection + this.angle + this.body.facing,
-            gunlength = this.length - this.width * this.shootSettings.size / 2,
+            gunlength = this.length + Config.bulletSpawnOffset * this.width * this.shootSettings.size / 2,
 
         // Calculate offset of gun base and gun end based
             offsetBaseX = this.offset * Math.cos(offsetAngle),
