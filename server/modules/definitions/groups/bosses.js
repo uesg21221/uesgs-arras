@@ -2833,7 +2833,6 @@ Class.MKTurretFactory = {
                 SHOOT_SETTINGS: combineStats([g.factory]),
                 TYPE: "MKMinion",
                 MAX_CHILDREN: 6,
-                STAT_CALCULATOR: gunCalcNames.drone,
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
             },
@@ -3002,7 +3001,7 @@ Class.AEMKShipBoss = {
                     TYPE: "MKDrone",
                     AUTOFIRE: true,
                     SYNCS_SKILLS: true,
-                    STAT_CALCULATOR: gunCalcNames.drone,
+                    STAT_CALCULATOR: "drone",
                     WAIT_TO_CYCLE: true,
                 };
             t % 2 == 0 &&
