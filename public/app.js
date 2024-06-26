@@ -72,7 +72,7 @@ class Animation {
     }
 }
 let controls = document.getElementById("controlSettings"),
-    resetButton = document.getElementById("controlReset"),
+    resetButton = document.getElementById("resetControls"),
     selectedElement = null,
     controlsArray = [],
     defaultKeybinds = {},
@@ -163,7 +163,7 @@ function selectElement(element) {
 }
 function setKeybind(key, keyCode) {
     selectedElement.element.parentNode.classList.remove("editing");
-    document.getElementById("controlReset").style.display = "block";
+    resetButton.classList.add("active");
     if (keyCode !== selectedElement.keyCode) {
         let otherElement = controlsArray.find(c => c.keyCode === keyCode);
         if (keyCode !== -1 && otherElement) {
@@ -191,7 +191,7 @@ function getElements(kb, storeInDefault) {
             if (kb[key]) {
                 element.innerText = kb[key][0];
                 global[key] = kb[key][1];
-                document.getElementById("controlReset").style.display = "block";
+                resetButton.classList.add("active");
             }
             let obj = {
                 element,
@@ -272,7 +272,7 @@ window.onload = async () => {
     if (document.getElementById("optBorders").value === "") {
         document.getElementById("optBorders").value = "normal";
     }
-    // Mobile Selection stuff.
+    // Mobile Selection stuff
     if (document.getElementById("optMobile").value === "") {
         document.getElementById("optMobile").value = "mobile";
     }
@@ -294,7 +294,11 @@ window.onload = async () => {
         setKeybinds();
         controlsArray = [];
         getElements(defaultKeybinds);
-        document.getElementById("controlReset").style.display = "none";
+        resetButton.classList.add("spin");
+        setTimeout(() => {
+            resetButton.classList.remove("active"); 
+            resetButton.classList.remove("spin");
+        }, 400);
     });
     // Game start stuff
     document.getElementById("startButton").onclick = () => startGame();

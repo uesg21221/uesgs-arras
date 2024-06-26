@@ -496,7 +496,21 @@ select:active {
 .container input:checked ~ .checkmark:after, .container input:checked ~ .radio:after {
     display: block;
 }
-
+.resetControls {
+    opacity: 0;
+    transform: rotate(0deg);
+    transition: opacity 1000ms, margin 1000ms;
+    margin: 0 -6px;
+}
+.resetControls.spin {
+    transition: transform 500ms, opacity 1000ms 150ms, margin 1000ms 150ms;
+    transform: rotate(360deg);
+}
+.resetControls.active {
+    opacity: 1;
+    margin: 0 5px;
+    cursor: pointer;
+}
 a.link {
     border-radius: 5px;
     box-sizing: border-box;
@@ -679,30 +693,6 @@ input [type="image"]:focus {
     outline: 1px solid transparent;
     border-style: none;
 }
-
-#controlReset {
-    width: 150px;
-    height: 20px;
-    font-size: medium;
-    color: white;
-    text-align: center;
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.2);
-    background: #e03e41;
-    border: 0;
-    border-bottom: #e03e41;
-    cursor: pointer;
-    box-shadow: inset 0 -2px #e03e41;
-    border-radius: 5px;
-    font: 16px Ubuntu;
-}
-#controlReset:hover {
-    top: 1px;
-    background: #7F0707;
-    outline: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
 td b {
     display: inline-block;
     cursor: pointer;
@@ -815,4 +805,32 @@ i.flag::before {
 }
 i.flag.down::before {
     margin-bottom: 2px;
+}
+.controlTable {
+    border-collapse: collapse;
+    margin: 0 2px;
+}
+.controlTable tr {
+    border: 0;
+    transition: opacity 500ms;
+}
+.controlTable tr.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.controlTable td {
+    transition: padding 500ms;
+}
+.controlTable div {
+    position: relative;
+    top: 0px;
+    height: 18px;
+    transition: height 500ms, top 500ms;
+}
+.controlTable tr.hidden td {
+    padding: 0 1px;
+}
+.controlTable tr.hidden div {
+    top: -20px;
+    height: 0;
 }

@@ -143,7 +143,7 @@ class BossRush {
     spawnSanctuary(tile, team, type = false) {
         type = type ? type : "sanctuaryTier3";
         let o = new Entity(tile.loc);
-        this.defineSanctuary(o, tile, team, type);
+        this.defineSanctuary(o, team, type);
         this.sanctuaries.push(o);
         let spawnableTeam = room.spawnable[Object.keys(room.spawnable).find((key) => room.spawnable[key].includes(tile))];
         o.on('dead', () => {
@@ -168,7 +168,7 @@ class BossRush {
         });
     }
 
-    defineSanctuary(entity, tile, team, type) {
+    defineSanctuary(entity, team, type) {
         entity.define(type);
         entity.team = team;
         entity.color.base = getTeamColor(team);
