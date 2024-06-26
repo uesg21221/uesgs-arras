@@ -268,7 +268,7 @@ function incoming(message, socket) {
             break;
         case "C":
             // command packet
-            if (m.length !== 4) {
+            if (m.length !== 5) {
                 socket.kick("Ill-sized command packet.");
                 return 1;
             }
@@ -278,11 +278,13 @@ function incoming(message, socket) {
                     y: m[1],
                 },
                 reverseTank = m[2],
-                commands = m[3];
+                movement = m[3],
+                commands = m[4];
             // Verify data
             if (
                 typeof target.x !== "number" ||
                 typeof target.y !== "number" ||
+                typeof movement !== "number" ||
                 typeof commands !== "number"
             ) {
                 socket.kick("Weird downlink.");
@@ -310,13 +312,14 @@ function incoming(message, socket) {
             if (player.body) player.body.reverseTank = reverseTank;
             // Process the commands
             if (player.command != null && player.body != null) {
-                player.command.up = commands & 1;
-                player.command.down = (commands & 2) >> 1;
-                player.command.left = (commands & 4) >> 2;
-                player.command.right = (commands & 8) >> 3;
-                player.command.lmb = (commands & 16) >> 4;
-                player.command.mmb = (commands & 32) >> 5;
-                player.command.rmb = (commands & 64) >> 6;
+                let moving = commands & 1;
+                player.command.movement = moving ? {
+                    x: Math.cos(movement),
+                    y: Math.sin(movement)
+                } : { x: 0, y: 0 };
+                player.command.lmb = (commands & 2) >> 1;
+                player.command.mmb = (commands & 4) >> 2;
+                player.command.rmb = (commands & 8) >> 3;
             }
             // Update the thingy
             socket.timeout.set(commands);
@@ -949,10 +952,7 @@ const spawn = (socket, name) => {
     player.teamColor = new Color(!Config.RANDOM_COLORS && (Config.GROUPS || (Config.MODE == 'ffa' && !Config.TAG)) ? 10 : getTeamColor(body.team)).compiled; // blue
     player.target = { x: 0, y: 0 };
     player.command = {
-        up: false,
-        down: false,
-        left: false,
-        right: false,
+        movement: { x: 0, y: 0 },
         lmb: false,
         mmb: false,
         rmb: false,

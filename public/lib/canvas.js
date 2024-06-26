@@ -9,6 +9,13 @@ class Canvas {
         this.target = global.target;
         this.socket = global.socket;
         this.directions = [];
+        this.movement = {
+            up: false,
+            down: false,
+            left: false,
+            right: false
+        };
+        this.moving = false;
 
         this.chatInput = document.getElementById("chatInput");
         this.chatInput.addEventListener("keydown", (event) => {
@@ -41,10 +48,6 @@ class Canvas {
             this.mobilecv = this.cv,
             this.controlTouch = null,
             this.movementTouch = null,
-            this.movementTop = false,
-            this.movementBottom = false,
-            this.movementLeft = false,
-            this.movementRight = false,
             this.movementTouchPos = { x: 0, y: 0 },
             this.controlTouchPos = { x: 0, y: 0 },
             this.mobilecv.addEventListener("touchstart", (event) => this.touchStart(event), false),
@@ -60,6 +63,25 @@ class Canvas {
         );
         this.cv.addEventListener("keydown", (event) => this.keyDown(event), false);
         this.cv.addEventListener("keyup", (event) => this.keyUp(event), false);
+    }
+    calculateMovement() {
+        let x = this.movement.right - this.movement.left;
+        let y = this.movement.down - this.movement.up;
+        global.motion = { x, y };
+        if (x === 0 && y === 0) {
+            global.movement = 0;
+            if (this.moving) {
+                this.socket.cmd.set(0, false);
+                this.moving = false;
+            }
+        }
+        else {
+            global.movement = Math.atan2(y, x);
+            if (!this.moving) {
+                this.socket.cmd.set(0, true);
+                this.moving = true;
+            }
+        }
     }
     wheel(event) {
         if (!global.died && global.showTree) {
@@ -81,10 +103,11 @@ class Canvas {
         }
     }
     keyDown(event) {
+        let changedMovement = false;
         switch (event.keyCode) {
             case global.KEY_SHIFT:
                 if (global.showTree) this.treeScrollSpeedMultiplier = 5;
-                else this.socket.cmd.set(6, true);
+                else this.socket.cmd.set(3, true);
                 break;
 
             case global.KEY_ENTER:
@@ -108,37 +131,41 @@ class Canvas {
                     return (global.scrollVelocityY =
                         -this.treeScrollSpeed * this.treeScrollSpeedMultiplier);
             case global.KEY_UP:
-                this.socket.cmd.set(0, true);
+                this.movement.up = true;
+                changedMovement = true;
                 break;
             case global.KEY_DOWN_ARROW:
                 if (!global.died && global.showTree)
                     return (global.scrollVelocityY =
                         +this.treeScrollSpeed * this.treeScrollSpeedMultiplier);
             case global.KEY_DOWN:
-                this.socket.cmd.set(1, true);
+                this.movement.down = true;
+                changedMovement = true;
                 break;
             case global.KEY_LEFT_ARROW:
                 if (!global.died && global.showTree)
                     return (global.scrollVelocityX =
                         -this.treeScrollSpeed * this.treeScrollSpeedMultiplier);
             case global.KEY_LEFT:
-                this.socket.cmd.set(2, true);
+                this.movement.left = true;
+                changedMovement = true;
                 break;
             case global.KEY_RIGHT_ARROW:
                 if (!global.died && global.showTree)
                     return (global.scrollVelocityX =
                         +this.treeScrollSpeed * this.treeScrollSpeedMultiplier);
             case global.KEY_RIGHT:
-                this.socket.cmd.set(3, true);
+                this.movement.right = true;
+                changedMovement = true;
                 break;
             case global.KEY_MOUSE_0:
-                this.socket.cmd.set(4, true);
+                this.socket.cmd.set(1, true);
                 break;
             case global.KEY_MOUSE_1:
-                this.socket.cmd.set(5, true);
+                this.socket.cmd.set(2, true);
                 break;
             case global.KEY_MOUSE_2:
-                this.socket.cmd.set(6, true);
+                this.socket.cmd.set(3, true);
                 break;
             case global.KEY_LEVEL_UP:
                 this.socket.talk("L");
@@ -230,51 +257,58 @@ class Canvas {
                 }
             }
         }
+        if (changedMovement) this.calculateMovement();
     }
     keyUp(event) {
+        let changedMovement = false;
         switch (event.keyCode) {
             case global.KEY_SHIFT:
                 if (global.showTree) this.treeScrollSpeedMultiplier = 1;
-                else this.socket.cmd.set(6, false);
+                else this.socket.cmd.set(3, false);
                 break;
             case global.KEY_UP_ARROW:
                 global.scrollVelocityY = 0;
             case global.KEY_UP:
-                this.socket.cmd.set(0, false);
+                this.movement.up = false;
+                changedMovement = true;
                 break;
             case global.KEY_DOWN_ARROW:
                 global.scrollVelocityY = 0;
             case global.KEY_DOWN:
-                this.socket.cmd.set(1, false);
+                this.movement.down = false;
+                changedMovement = true;
                 break;
             case global.KEY_LEFT_ARROW:
                 global.scrollVelocityX = 0;
             case global.KEY_LEFT:
-                this.socket.cmd.set(2, false);
+                this.movement.left = false;
+                changedMovement = true;
                 break;
             case global.KEY_RIGHT_ARROW:
                 global.scrollVelocityX = 0;
             case global.KEY_RIGHT:
-                this.socket.cmd.set(3, false);
+                this.movement.right = false;
+                changedMovement = true;
                 break;
             case global.KEY_MOUSE_0:
-                this.socket.cmd.set(4, false);
+                this.socket.cmd.set(1, false);
                 break;
             case global.KEY_MOUSE_1:
-                this.socket.cmd.set(5, false);
+                this.socket.cmd.set(2, false);
                 break;
             case global.KEY_MOUSE_2:
-                this.socket.cmd.set(6, false);
+                this.socket.cmd.set(3, false);
                 break;
             case global.KEY_MAX_STAT:
                 global.statMaxing = false;
                 break;
         }
+        if (changedMovement) this.calculateMovement();
     }
     mouseDown(mouse) {
         if (!this.socket) return;
-        let primaryFire = 4,
-            secondaryFire = 6;
+        let primaryFire = 1,
+            secondaryFire = 3;
         if (this.inverseMouse)
             [primaryFire, secondaryFire] = [secondaryFire, primaryFire];
         switch (mouse.button) {
@@ -296,7 +330,7 @@ class Canvas {
                 }
                 break;
             case 1:
-                this.socket.cmd.set(5, true);
+                this.socket.cmd.set(2, true);
                 break;
             case 2:
                 this.socket.cmd.set(secondaryFire, true);
@@ -305,8 +339,8 @@ class Canvas {
     }
     mouseUp(mouse) {
         if (!this.socket) return;
-        let primaryFire = 4,
-            secondaryFire = 6;
+        let primaryFire = 1,
+            secondaryFire = 3;
         if (this.inverseMouse)
             [primaryFire, secondaryFire] = [secondaryFire, primaryFire];
         switch (mouse.button) {
@@ -314,7 +348,7 @@ class Canvas {
                 this.socket.cmd.set(primaryFire, false);
                 break;
             case 1:
-                this.socket.cmd.set(5, false);
+                this.socket.cmd.set(2, false);
                 break;
             case 2:
                 this.socket.cmd.set(secondaryFire, false);
@@ -355,10 +389,10 @@ class Canvas {
                                 global.clickables.mobileButtons.altFire =
                                     !global.clickables.mobileButtons.altFire;
                                 if (!global.clickables.mobileButtons.altFire)
-                                    this.socket.cmd.set(6, false);
+                                    this.socket.cmd.set(3, false);
                             } else if (global.isInverted)
-                                (global.isInverted = false), this.socket.cmd.set(6, false);
-                            else (global.isInverted = true), this.socket.cmd.set(6, true);
+                                (global.isInverted = false), this.socket.cmd.set(3, false);
+                            else (global.isInverted = true), this.socket.cmd.set(3, true);
                             break;
                         case 2:
                             if (!document.fullscreenElement) {
@@ -429,7 +463,7 @@ class Canvas {
                                 this.movementTouch = id;
                             } else if (this.controlTouch === null && !onLeft) {
                                 this.controlTouch = id;
-                                this.socket.cmd.set(4, true);
+                                this.socket.cmd.set(1, true);
                             }
                         }
                     }
@@ -461,20 +495,15 @@ class Canvas {
                     cy = Math.sin(angle) * radius;
                 }
                 this.movementTouchPos = { x: cx, y: cy };
-                let x = mpos.x - (this.cv.width * 1) / 6;
-                let y = mpos.y - (this.cv.height * 2) / 3;
-                let norm = Math.sqrt(x * x + y * y);
-                x /= norm;
-                y /= norm;
-                let amount = 0.38268323650898;
-                if (y < -amount !== this.movementTop)
-                    this.socket.cmd.set(0, (this.movementTop = y < -amount));
-                if (y > amount !== this.movementBottom)
-                    this.socket.cmd.set(1, (this.movementBottom = y > amount));
-                if (x < -amount !== this.movementLeft)
-                    this.socket.cmd.set(2, (this.movementLeft = x < -amount));
-                if (x > amount !== this.movementRight)
-                    this.socket.cmd.set(3, (this.movementRight = x > amount));
+                global.movement = angle;
+                if (!this.moving) {
+                    global.motion = {
+                        x: Math.cos(global.movement),
+                        y: Math.sin(global.movement)
+                    };
+                    this.socket.cmd.set(0, true);
+                    this.moving = true;
+                }
             } else if (this.controlTouch === id) {
                 let radius = Math.min(
                     global.screenWidth * 0.6,
@@ -506,24 +535,21 @@ class Canvas {
     touchEnd(e) {
         e.preventDefault();
         for (let touch of e.changedTouches) {
-            let mpos = { x: touch.clientX, y: touch.clientY };
             let id = touch.identifier;
 
             if (this.movementTouch === id) {
                 this.movementTouch = null;
                 this.movementTouchPos = { x: 0, y: 0 };
-                if (this.movementTop)
-                    this.socket.cmd.set(0, (this.movementTop = false));
-                if (this.movementBottom)
-                    this.socket.cmd.set(1, (this.movementBottom = false));
-                if (this.movementLeft)
-                    this.socket.cmd.set(2, (this.movementLeft = false));
-                if (this.movementRight)
-                    this.socket.cmd.set(3, (this.movementRight = false));
+                global.movement = 0;
+                if (this.moving) {
+                    global.motion = { x: 0, y: 0 };
+                    this.socket.cmd.set(0, false);
+                    this.moving = false;
+                }
             } else if (this.controlTouch === id) {
                 this.controlTouch = null;
                 this.controlTouchPos = { x: 0, y: 0 };
-                this.socket.cmd.set(4, false);
+                this.socket.cmd.set(1, false);
             }
         }
     }

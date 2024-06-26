@@ -217,8 +217,8 @@ class io_listenToPlayer extends IO {
             fire,
             alt,
             goal: this.static ? null : {
-                x: this.body.x + this.player.command.right - this.player.command.left,
-                y: this.body.y + this.player.command.down - this.player.command.up,
+                x: this.body.x + this.player.command.movement.x,
+                y: this.body.y + this.player.command.movement.y,
             },
             main: fire,
         };

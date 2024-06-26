@@ -2777,7 +2777,7 @@ Class.toothlessBoss.TURRETS = Class.toothlessBoss.TURRETS.concat(weaponArray([{
     TYPE: "toothlessBossTurret",
 }], 3));
 
-Class.MKAura = addAura(5, 0, 0.1, 42);
+Class.MKAura = addAura(5, 0.4, 0.1, 42);
 Class.MKDoneAura = addAura(2, 1, 0.3, 32);
 Class.MKFactoryAura = addAura(2.6, 1, 0.3, "trans");
 Class.MKCarrierAura = addAura(2.1, 1, 0.3, 1);
@@ -2952,7 +2952,6 @@ Class.AEMKShipBoss = {
     UPGRADE_TOOLTIP: "Has 4 carrier's, 4 factories, and their own auras. NOW FACE MY DESTRUCTION!",
     COLOR: 32,
     UPGRADE_COLOR: 32,
-    FACING_TYPE: "spin",
     GLOW: {
         RADIUS: 1.5,
         COLOR: 32,

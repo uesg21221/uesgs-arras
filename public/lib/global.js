@@ -113,6 +113,8 @@ const global = {
     gameHeight: 0,
     xoffset: -0,
     yoffset: -0,
+    movement: false,
+    motion: { x: 0, y: 0 },
     gameLoading: false,
     gameStart: false,
     disconnected: false,

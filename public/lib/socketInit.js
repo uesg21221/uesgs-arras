@@ -756,14 +756,10 @@ const socketInit = port => {
     // Handle commands
     let flag = false;
     let commands = [
-        false, // up
-        false, // down
-        false, // left
-        false, // right
+        false, // moving
         false, // lmb
         false, // mmb
         false, // rmb
-        false,
     ];
     socket.cmd = {
         set: (index, value) => {
@@ -775,17 +771,13 @@ const socketInit = port => {
         talk: () => {
             flag = false;
             let o = 0;
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < commands.length; i++) {
                 if (commands[i]) o += Math.pow(2, i);
             }
             let ratio = util.getRatio();
-            socket.talk('C', Math.round(global.target.x / ratio), Math.round(global.target.y / ratio), global.reverseTank, o);
+            socket.talk('C', Math.round(global.target.x / ratio), Math.round(global.target.y / ratio), global.reverseTank, global.movement, o);
         },
         check: () => flag,
-        getMotion: () => ({
-            x: commands[3] - commands[2],
-            y: commands[1] - commands[0],
-        }),
     };
     // Learn how to talk
     socket.talk = async (...message) => {
