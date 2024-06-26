@@ -1,25 +1,8 @@
-const { combineStats, dereference } = require('../definitions/facilitators');
+const { combineStats } = require('../definitions/facilitators');
 
 let EventEmitter = require('events'),
     events,
     init = g => events = g.events;
-
-function setNatural(natural, type) {
-    type = ensureIsClass(type);
-    if (type.PARENT != null) {
-        if (typeof type.PARENT == 'string') setNatural(natural, type.PARENT)
-        else {
-            for (let i = 0; i < type.PARENT.length; i++) {
-                setNatural(natural, type.PARENT[i]);
-            }
-        }
-    }
-    if (type.BODY != null) {
-        for (let index in type.BODY) {
-            natural[index] = type.BODY[index];
-        }
-    }
-}
 
 class Gun extends EventEmitter {
     constructor(body, info) {
@@ -45,6 +28,7 @@ class Gun extends EventEmitter {
         this.alpha = 1;
         this.strokeWidth = 1;
         this.canShoot = false;
+        this.codeControlOnly = false;
         this.borderless = false;
         this.drawFill = true;
         this.drawAbove = false;
@@ -61,6 +45,7 @@ class Gun extends EventEmitter {
             this.syncsSkills = info.PROPERTIES.SYNCS_SKILLS ?? false;
             this.negativeRecoil = info.PROPERTIES.NEGATIVE_RECOIL ? -1 : 1;
             this.independentChildren = info.PROPERTIES.INDEPENDENT_CHILDREN ?? false;
+            this.codeControlOnly = info.PROPERTIES.CODE_CONTROLLED ?? false;
             if (info.PROPERTIES.COLOR != null) {
                 this.color.interpret(info.PROPERTIES.COLOR);
             }
@@ -122,7 +107,7 @@ class Gun extends EventEmitter {
         }
     }
     live() {
-        if (!this.canShoot || this.body.master.invuln) return;
+        if (!this.canShoot || this.codeControlOnly || this.body.master.invuln) return;
         
         // Iterate recoil
         this.recoil();
