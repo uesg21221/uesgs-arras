@@ -353,7 +353,7 @@ Class.sentrySwarm = {
         {
             POSITION: [7, 14, 0.6, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }]),
+                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15, range: 0.9 }]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: "swarm",
             },

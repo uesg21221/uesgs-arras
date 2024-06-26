@@ -101,6 +101,7 @@ class Gun extends EventEmitter {
         this.recoilVelocity = 0;
         if (this.canShoot) {
             this.cycleTimer = this.maxCycleTimer;
+            this.reloadRateFactor = 1;
             this.trueRecoil = this.shootSettings.recoil;
             this.facing = 0;
             this.childrenLimitFactor = 1;
@@ -251,6 +252,15 @@ class Gun extends EventEmitter {
     }
     defineIndependentBullet(bullet) {
         bullet.define(this.bulletType);
+        // Keep track of it for child counting
+        if (this.maxChildren) {
+            bullet.parent = this;
+            this.children.push(bullet);
+        } else if (this.body.maxChildren) {
+            bullet.parent = this.body;
+            this.body.children.push(bullet);
+            this.children.push(bullet);
+        }
         bullet.coreSize = bullet.SIZE;
         bullet.team = this.body.team;
     }
@@ -317,7 +327,9 @@ class Gun extends EventEmitter {
         }
         this.bulletType = flattenedType;
         // Set final label to bullet
-        this.bulletType.LABEL = this.master.label + (this.label ? " " + this.label : "") + " " + this.bulletType.LABEL;
+        if (!this.independentChildren) {
+            this.bulletType.LABEL = this.master.label + (this.label ? " " + this.label : "") + " " + this.bulletType.LABEL;
+        }
         // Save a copy of the bullet definition for body stat defining
         this.bulletBodyStats = JSON.parse(JSON.stringify(this.bulletType.BODY));
         this.calculateBulletStats();
