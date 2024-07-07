@@ -357,7 +357,7 @@ class Gun extends EventEmitter {
     }
     calculateBulletStats() {
         // Skip if unable to shoot or if we shouldn't care about body stats
-        if (!this.canShoot || this.independentChildren) return;
+        if (!this.canShoot) return;
 
         let sizeFactor = this.master.size / this.master.SIZE;
         let shoot = this.shootSettings;
@@ -408,6 +408,7 @@ class Gun extends EventEmitter {
                 out.RANGE = shoot.range * Math.sqrt(sizeFactor);
                 break;
         }
+        if (this.independentChildren) return;
         // Go through and make sure we respect its natural properties
         for (let property in out) {
             if (this.bulletBodyStats[property] == null)
