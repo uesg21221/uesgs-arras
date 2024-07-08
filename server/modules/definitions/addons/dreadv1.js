@@ -285,13 +285,13 @@ Class.appeaserOfficialV1 = {
 		{
 			POSITION: [6, 8, 1.3, 7, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.dreadv1Generic, g.dreadv1Slow, {health: 1.1, speed: 0.8, maxSpeed: 0.8, range: 0.8, size: 0.75}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.dreadv1Generic, g.dreadv1Slow, {health: 1.1, shudder: 1.05, speed: 0.8, maxSpeed: 0.8, range: 0.7, size: 0.75}]),
 				TYPE: "bullet"
 			}
 		}, {
 			POSITION: [6, 7.5, 1.2, 9, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.dreadv1Generic, g.dreadv1Slow, {health: 1.1, speed: 0.8, maxSpeed: 0.8, range: 0.8, size: 0.75 * 8 / 7.5}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.dreadv1Generic, g.dreadv1Slow, {health: 1.1, shudder: 1.05, speed: 0.8, maxSpeed: 0.8, range: 0.7, size: 0.75 * 8 / 7.5}]),
 				TYPE: "bullet"
 			}
 		}
