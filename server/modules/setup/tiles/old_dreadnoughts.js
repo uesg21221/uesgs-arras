@@ -57,10 +57,7 @@ labyrinth = new Tile({
 }),
 
 forge = new Tile({
-    color: "red",
-    tick: tile => {
-
-    }
+    color: "white",
 });
 
 module.exports = { labyrinth, forge };

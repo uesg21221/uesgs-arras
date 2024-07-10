@@ -1,6 +1,7 @@
 let { normal: ____, nest } = require('../tiles/misc.js'),
     { labyrinth, forge } = require('../tiles/old_dreadnoughts.js'),
     teams = require('../gamemodeconfigs/old_dreadnoughts.js').TEAMS,
+    { outside } = require('../tiles/siege.js'),
     bases = require('../tiles/tdm.js'),
 
 room = [
@@ -70,8 +71,15 @@ if (teams === 2) {
 	}
 }
 
+for (let row in room) {
+    if (row < 12 && row >= 3) {
+        room[row].unshift(...Array(3).fill(outside), ...Array(9).fill(forge), ...Array(3).fill(outside));
+    } else {
+        room[row].unshift(...Array(Config.roomWidth).fill(outside));
+    }
+}
 for (let row of room) {
-    row.unshift(...Array(Config.roomWidth).fill(labyrinth), ...Array(Config.roomWidth).fill(forge))
+    row.unshift(...Array(Config.roomWidth).fill(labyrinth));
 }
 
 Config.FOOD_TYPES_NEST = [
