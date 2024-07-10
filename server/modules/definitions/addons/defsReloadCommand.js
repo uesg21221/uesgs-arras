@@ -46,10 +46,10 @@ Events.on('chatMessage', ({ message, socket, preventDefault }) => {
     Class = {};
 
     // Purge all cache entries of every file in ../definitions
-    let splitterKey = __dirname.includes('//') ? '//' : '/';
+    let splitterKey = __dirname.includes('\\') ? '\\' : '/';
     let dir = __dirname.split(splitterKey);
     dir.splice(dir.length - 1, 1);
-    dir = dir.join('/')
+    dir = dir.join(splitterKey)
     requireCachePurge(dir);
 
     // Load all definitions
