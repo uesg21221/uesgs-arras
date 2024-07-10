@@ -74,7 +74,6 @@ let generateLabyrinth = (size) => {
     ];
     const holeRadius = 2;
     for (let [centerX, centerY] of holeCenters) {
-        console.log(centerX, centerY)
         for (let x = centerX - holeRadius; x <= centerX + holeRadius; x++) {
             for (let y = centerY - holeRadius; y <= centerY + holeRadius; y++) {
                 maze[y][x] = false;
