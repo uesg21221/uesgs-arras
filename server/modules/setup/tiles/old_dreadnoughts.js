@@ -49,7 +49,7 @@ labyrinth = new Tile({
     tick: tile => {
         if (++tile.data.foodSpawnCooldown > Config.FOOD_SPAWN_COOLDOWN * 5) {
             tile.data.foodSpawnCooldown = 0;
-            if (tile.data.foodCount < Config.FOOD_CAP / 3 && Math.random() < Config.FOOD_SPAWN_CHANCE) {
+            if (tile.data.foodCount < (Config.FOOD_CAP - 1) && Math.random() < Config.FOOD_SPAWN_CHANCE) {
                 spawnNatural(tile, labyrinthFoodTypes, 'food');
             }
         }

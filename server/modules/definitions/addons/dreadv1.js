@@ -226,7 +226,7 @@ Class.swordOfficialV1 = {
 	LABEL: "Sword",
 	UPGRADE_TOOLTIP: "Snipers",
 	GUNS: weaponArray({
-		POSITION: [19, 7, 1, 0, 0, 0, 0],
+		POSITION: [20, 7, 1, 0, 0, 0, 0],
 		PROPERTIES: {
 			SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.dreadv1Generic, g.dreadv1Sniper]),
 			TYPE: "bullet"
@@ -273,7 +273,7 @@ Class.centaurOfficialV1 = {
 		{
 			POSITION: [12.5, 7, 1, 0, 0, 0, 0],
 		}, {
-			POSITION: [2.5, 7, 1.6, 12.5, 0, 0, 0],
+			POSITION: [2.75, 7, 1.6, 12.5, 0, 0, 0],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
@@ -331,13 +331,13 @@ Class.sabreOfficialV1 = {
 	UPGRADE_TOOLTIP: "Assassins",
 	GUNS: weaponArray([
 		{
-			POSITION: [26, 7, 1, 0, 0, 0, 0],
+			POSITION: [27, 7, 1, 0, 0, 0, 0],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.dreadv1Generic, g.dreadv1Sniper]),
 				TYPE: "bullet"
 			}
 		}, {
-			POSITION: [4, 7, -1.4, 9, 0, 0, 0]
+			POSITION: [3.5, 7, -1.4, 9, 0, 0, 0]
 		}
 	], 3)
 }
@@ -543,9 +543,9 @@ Class.sirenOfficialV1 = {
 	LABEL: "Siren",
 	GUNS: weaponArray([
 		{
-			POSITION: [13, 7, -1.5, 0, 0, 0, 0],
+			POSITION: [6, 7, -1.5, 7, 0, 0, 0],
 		}, {
-			POSITION: [2.5, 7, 1.6, 13, 0, 0, 0],
+			POSITION: [2.75, 7, 1.6, 13, 0, 0, 0],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap]),
 				TYPE: ["turretedTrap", {HITS_OWN_TYPE: "never"} ],
