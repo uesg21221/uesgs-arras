@@ -30,7 +30,7 @@ Events.on('chatMessage', ({ message, socket, preventDefault }) => {
 
     // Purge all cache entries of every file in ../definitions
     for (let file in require.cache) {
-        if (!file.includes('definitions')) continue;
+        if (!file.includes('definitions') || file.includes(__filename)) continue;
         delete require.cache[file];
     }
 
