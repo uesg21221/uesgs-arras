@@ -1,5 +1,5 @@
 const { combineStats, makeAuto, weaponArray, makeTurret } = require('../facilitators.js');
-const { smshskl, base } = require('../constants.js');
+const { smshskl, base, basePolygonDamage, basePolygonHealth } = require('../constants.js');
 const g = require('../gunvals.js');
 const dreadnoughtBody = {
     SPEED: base.SPEED * 0.5,
@@ -56,6 +56,87 @@ g.dreadv1Trap = {
 
 // Set the below variable to true to enable the Medicare and Medicaid healing bodies.
 const enableHealers = true;
+
+// Food
+Class.hexagonOfficialV1 = {
+	PARENT: 'food',
+	COLOR: 'magenta',
+	LABEL: "Hexagon",
+	BODY: {
+        DAMAGE: 2 * basePolygonDamage,
+        DENSITY: 80,
+        HEALTH: 600 * basePolygonHealth,
+        RESIST: Math.pow(1.25, 3),
+        PENETRATION: 1.1,
+        SHIELD: 40 * basePolygonHealth,
+        ACCELERATION: 0.0025
+    },
+	VALUE: 21000,
+	SHAPE: 6,
+	SIZE: 70,
+	DRAW_HEALTH: true,
+    GIVE_KILL_MESSAGE: true,
+}
+Class.heptagonOfficialV1 = {
+	PARENT: 'food',
+	COLOR: 'green',
+	LABEL: "Heptagon",
+	BODY: {
+        DAMAGE: 2 * basePolygonDamage,
+        DENSITY: 80,
+        HEALTH: 750 * basePolygonHealth,
+        RESIST: Math.pow(1.25, 3),
+        PENETRATION: 1.1,
+        SHIELD: 50 * basePolygonHealth,
+        ACCELERATION: 0.0025
+    },
+	VALUE: 28000,
+	SHAPE: 7,
+	SIZE: 80,
+	DRAW_HEALTH: true,
+    GIVE_KILL_MESSAGE: true,
+}
+Class.octagonOfficialV1 = {
+	PARENT: 'food',
+	COLOR: 'hexagon',
+	BODY: {
+        DAMAGE: 2 * basePolygonDamage,
+        DENSITY: 80,
+        HEALTH: 900 * basePolygonHealth,
+        RESIST: Math.pow(1.25, 3),
+        PENETRATION: 1.1,
+        SHIELD: 60 * basePolygonHealth,
+        ACCELERATION: 0.0025
+    },
+	VALUE: 35000,
+	SHAPE: 8,
+	SIZE: 90,
+	DRAW_HEALTH: true,
+    GIVE_KILL_MESSAGE: true,
+}
+Class.nonagonOfficialV1 = {
+	PARENT: 'food',
+	COLOR: 'white',
+	BODY: {
+        DAMAGE: 2 * basePolygonDamage,
+        DENSITY: 80,
+        HEALTH: 1050 * basePolygonHealth,
+        RESIST: Math.pow(1.25, 3),
+        PENETRATION: 1.1,
+        SHIELD: 70 * basePolygonHealth,
+        ACCELERATION: 0.0025
+    },
+	VALUE: 42000,
+	SHAPE: 9,
+	SIZE: 100,
+	DRAW_HEALTH: true,
+    GIVE_KILL_MESSAGE: true,
+}
+
+// Map elements
+Class.spikyPortalOfficialV1 = {
+
+}
 
 // Misc
 Class.genericDreadnought1 = {
