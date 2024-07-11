@@ -134,16 +134,16 @@ class PortalLoop {
         this.initialized = false;
         this.spawnBuffer = 50;
         this.openBounds = {
-            xMin: 19000 + this.spawnBuffer,
-            xMax: 26000 - this.spawnBuffer,
-            yMin: 1000 + this.spawnBuffer,
-            yMax: 8000 - this.spawnBuffer,
+            xMin: 19050,
+            xMax: 25950,
+            yMin: 1050,
+            yMax: 7950,
         };
         this.labyrinthBounds = {
-            xMin: this.spawnBuffer,
-            xMax: 9000 - this.spawnBuffer,
-            yMin: this.spawnBuffer,
-            yMax: 9000 - this.spawnBuffer,
+            xMin: 50,
+            xMax: 8950,
+            yMin: 50,
+            yMax: 8950,
         };
         this.spawnBatches = [
             {
@@ -151,7 +151,8 @@ class PortalLoop {
                 types: [
                     {
                         type: "spikyPortalOfficialV1",
-                        destination: this.openBounds
+                        destination: this.openBounds,
+                        buffer: 1050,
                     }
                 ]
             },
@@ -160,20 +161,23 @@ class PortalLoop {
                 types: [
                     {
                         type: "spikyPortalOfficialV1",
-                        destination: this.labyrinthBounds
+                        destination: this.labyrinthBounds,
+                        buffer: 50,
                     }
                 ]
             }
         ]
     }
     spawnCycle() {
+        console.log('spawning')
         for (let batch of this.spawnBatches) {
             for (let portal of batch.types) {
                 let spawnX = ran.irandomRange(batch.bounds.xMin, batch.bounds.xMax);
                 let spawnY = ran.irandomRange(batch.bounds.yMin, batch.bounds.yMax);
                 let entity = new Entity({x: spawnX, y: spawnY});
                 entity.define(portal.type);
-                entity.diesAtRange = true; // Can't set this on define because then the portal dies immediately
+                entity.activation.set(true);
+                entity.settings.diesAtRange = true; // Can't set this on define because then the portal dies immediately
                 entity.on('collide', ({other}) => {
                     if (other.type != 'tank') return;
                     if ((other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 > 225) return;
@@ -182,10 +186,10 @@ class PortalLoop {
                     other.invuln = true;
                     
                     // Set new confinement
-                    other.confinement.xMin = portal.destination.xMin - this.spawnBuffer;
-                    other.confinement.xMax = portal.destination.xMax + this.spawnBuffer;
-                    other.confinement.yMin = portal.destination.yMin - this.spawnBuffer;
-                    other.confinement.yMax = portal.destination.yMax + this.spawnBuffer;
+                    other.confinement.xMin = portal.destination.xMin - portal.buffer;
+                    other.confinement.xMax = portal.destination.xMax + portal.buffer;
+                    other.confinement.yMin = portal.destination.yMin - portal.buffer;
+                    other.confinement.yMax = portal.destination.yMax + portal.buffer;
                 });
             }
         }

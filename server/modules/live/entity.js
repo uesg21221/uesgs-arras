@@ -720,6 +720,9 @@ class Entity extends EventEmitter {
                 check: () => {
                     return active;
                 },
+                set: (isActive) => {
+                    active = isActive;
+                }
             };
         })();
         this.autoOverride = false;
