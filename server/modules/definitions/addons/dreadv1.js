@@ -47,7 +47,6 @@ g.dreadv1Trap = {
 	damage: 1.2,
 	health: 1.15,
 	resist: 1.1,
-	recoil: 0,
 	size: 1.3,
 }
 
@@ -134,6 +133,43 @@ Class.nonagonOfficialV1 = {
 }
 
 // Map elements
+function portalRings(color = '#1c3766') {
+	return [
+		{
+			POSITION: [22, 0, 0, 0, 1],
+			TYPE: ['portalRing1OfficialV1', {COLOR: color}]
+		}, {
+			POSITION: [20.5, 0, 0, -45, 1],
+			TYPE: ['portalRing2OfficialV1', {COLOR: color}]
+		}, {
+			POSITION: [20.5, 0, 0, 135, 1],
+			TYPE: ['portalRing3OfficialV1', {COLOR: color}]
+		}, {
+			POSITION: [21.2, 0, 0, 0, 1],
+			TYPE: ['portalRing4OfficialV1', {COLOR: color}]
+		}
+	]
+}
+Class.portalRing1OfficialV1 = {
+	SHAPE: "M -1 0 A 1 1 90 0 0 1 0 L 0.7 0 A 0.7 0.7 90 0 1 -0.7 0 Z M -1 0 A 1 1 90 0 1 1 0 L 0.7 0 A 0.7 0.7 90 0 0 -0.7 0 Z",
+	COLOR: "#1c3766",
+	BORDERLESS: true,
+}
+Class.portalRing2OfficialV1 = {
+	SHAPE: "M -0.707 0.707 A 1 1 0 0 1 -0.707 -0.707 A 1 1.225 0 0 0 -0.707 0.707 Z",
+	COLOR: {BASE: "#1c3766", BRIGHTNESS_SHIFT: 16, SATURATION_SHIFT: 0.7},
+	BORDERLESS: true,
+}
+Class.portalRing3OfficialV1 = {
+	SHAPE: "M -0.5 0.866 A 1 1 0 0 1 -0.5 -0.866 A 1 1.1 0 0 0 -0.5 0.866 Z",
+	COLOR: {BASE: "#1c3766", BRIGHTNESS_SHIFT: -6, SATURATION_SHIFT: 1.1},
+	BORDERLESS: true,
+}
+Class.portalRing4OfficialV1 = {
+	SHAPE: "M -0.92 0 A 0.92 0.92 90 0 0 0.92 0 L 0.84 0 A 0.84 0.84 90 0 1 -0.84 0 Z M -0.92 0 A 0.92 0.92 90 0 1 0.92 0 L 0.84 0 A 0.84 0.84 90 0 0 -0.84 0 Z",
+	COLOR: {BASE: "#1c3766", BRIGHTNESS_SHIFT: 7, SATURATION_SHIFT: 0.9},
+	BORDERLESS: true,
+}
 Class.portalOfficialV1 = {
 	LABEL: "",
 	TYPE: 'portal',
@@ -151,20 +187,62 @@ Class.portalOfficialV1 = {
 	GIVE_KILL_MESSAGE: false,
 	DRAW_HEALTH: false,
 	TEAM: TEAM_ROOM,
+	COLOR: 'pureBlack',
+	FACING_TYPE: 'noFacing',
+	SIZE: 33,
+}
+Class.spikyPortalSpikesOfficialV1 = {
+	SHAPE: "",
+	INDEPENDENT: true,
+	FACING_TYPE: ["spin", {speed: 0.07}],
+	GUNS: weaponArray({
+		POSITION: [30, 8, 0.001, 0, 0, 0, 0],
+		PROPERTIES: {COLOR: 'egg'}
+	}, 5),
+}
+Class.spikyPortalBumpsOfficialV1 = {
+	SHAPE: "M 1 0 L 0.666 0.216 L 0.566 0.41 L 0.41 0.566 L 0.309 0.951 L 0 0.7 L -0.215 0.665 L -0.412 0.565 L -0.809 0.588 L -0.666 0.217 L -0.699 0.001 L -0.664 -0.217 L -0.809 -0.588 L -0.412 -0.566 L -0.217 -0.664 L 0.001 -0.699 L 0.309 -0.951 L 0.411 -0.567 L 0.565 -0.412 L 0.665 -0.215 Z",
 	COLOR: 'egg',
-	SIZE: 27,
+	INDEPENDENT: true,
+	FACING_TYPE: ["spin", {speed: 0.12}],
 }
 Class.spikyPortalOfficialV1 = {
 	PARENT: 'portalOfficialV1',
-	GUNS: weaponArray({
-		POSITION: [27, 12, 0.001, 0, 0, 0, 0],
-		PROPERTIES: {COLOR: 'egg'}
-	}, 5),
+	TURRETS: [
+		{
+			POSITION: [26, 0, 0, 0, 0, 0],
+			TYPE: "spikyPortalSpikesOfficialV1"
+		}, {
+			POSITION: [35, 0, 0, 0, 0, 0],
+			TYPE: "spikyPortalBumpsOfficialV1"
+		}
+	],
 	PROPS: [
 		{
-			POSITION: [16, 0, 0, 0, 1],
+			POSITION: [20, 0, 0, 0, 1],
 			TYPE: ['egg', {COLOR: 'black'}]
-		}
+		},
+		...portalRings('black')
+	]
+}
+Class.bluePortalOfficialV1 = {
+	PARENT: 'portalOfficialV1',
+	PROPS: [
+		{
+			POSITION: [20, 0, 0, 0, 1],
+			TYPE: ['egg', {COLOR: 'black'}]
+		},
+		...portalRings()
+	]
+}
+Class.greenPortalOfficialV1 = {
+	PARENT: 'portalOfficialV1',
+	PROPS: [
+		{
+			POSITION: [20, 0, 0, 0, 1],
+			TYPE: ['egg', {COLOR: 'black'}]
+		},
+		...portalRings('#1c6620')
 	]
 }
 
@@ -246,8 +324,7 @@ Class.dreadOfficialV1 = {
 	PARENT: "genericDreadnought1",
 	LABEL: "Dreadnought",
 	UPGRADE_LABEL: "Dreads V1",
-	LEVEL: 150,
-	EXTRA_SKILL: 47,
+	EXTRA_SKILL: 18,
 }
 
 // T1
@@ -627,14 +704,14 @@ Class.medicaidOfficialV1 = {
 }
 
 Class.addons.UPGRADES_TIER_0.push("dreadOfficialV1");
-	Class.dreadOfficialV1.UPGRADES_TIER_1 = ["swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1"];
-		Class.swordOfficialV1.UPGRADES_TIER_M1 = ["sabreOfficialV1", "gladiusOfficialV1"];
-		Class.pacifierOfficialV1.UPGRADES_TIER_M1 = ["appeaserOfficialV1", "peacekeeperOfficialV1", "diplomatOfficialV1"];
-		Class.invaderOfficialV1.UPGRADES_TIER_M1 = ["inquisitorOfficialV1", "assailantOfficialV1", "infiltratorOfficialV1"];
-		Class.centaurOfficialV1.UPGRADES_TIER_M1 = ["cerberusOfficialV1", "minotaurOfficialV1", "sirenOfficialV1"];
-		Class.automationOfficialV1.UPGRADES_TIER_M1 = ["mechanismOfficialV1"];
-		Class.juggernautOfficialV1.UPGRADES_TIER_M1 = ["behemothOfficialV1"];
-		Class.medicareOfficialV1.UPGRADES_TIER_M1 = ["medicaidOfficialV1"];
+	Class.dreadOfficialV1.UPGRADES_TIER_10 = ["swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1"];
+		Class.swordOfficialV1.UPGRADES_TIER_12 = ["sabreOfficialV1", "gladiusOfficialV1"];
+		Class.pacifierOfficialV1.UPGRADES_TIER_12 = ["appeaserOfficialV1", "peacekeeperOfficialV1", "diplomatOfficialV1"];
+		Class.invaderOfficialV1.UPGRADES_TIER_12 = ["inquisitorOfficialV1", "assailantOfficialV1", "infiltratorOfficialV1"];
+		Class.centaurOfficialV1.UPGRADES_TIER_12 = ["cerberusOfficialV1", "minotaurOfficialV1", "sirenOfficialV1"];
+		Class.automationOfficialV1.UPGRADES_TIER_12 = ["mechanismOfficialV1"];
+		Class.juggernautOfficialV1.UPGRADES_TIER_12 = ["behemothOfficialV1"];
+		Class.medicareOfficialV1.UPGRADES_TIER_12 = ["medicaidOfficialV1"];
 
 const t1Bodies = [ "swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1", "medicareOfficialV1", "automationOfficialV1", "juggernautOfficialV1" ];
 if (!enableHealers) {
@@ -642,10 +719,10 @@ if (!enableHealers) {
 }
 
 // Build both tiers of dreads
-for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_1) {
+for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_10) {
 	let primaryName = primary;
 	primary = ensureIsClass(primary);
-	primary.UPGRADES_TIER_1 = [];
+	primary.UPGRADES_TIER_10 = [];
 
 	for (let secondary of t1Bodies) {
 		let secondaryName = secondary;
@@ -684,17 +761,17 @@ for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_1) {
 		// Actually make that guy
 		Class[definitionName] = {
 			PARENT: "genericDreadnought1",
-			UPGRADES_TIER_2: [],
+			UPGRADES_TIER_12: [],
 			BODY, LABEL, UPGRADE_TOOLTIP, GUNS, TURRETS,
 		};
-		Class[primaryName].UPGRADES_TIER_1.push(definitionName);
+		Class[primaryName].UPGRADES_TIER_10.push(definitionName);
 
 		// Compile T2
-		for (let primary2 of primary.UPGRADES_TIER_M1) {
+		for (let primary2 of primary.UPGRADES_TIER_12) {
 			let primaryName2 = primary2;
 			primary2 = ensureIsClass(primary2);
 
-			for (let secondary2 of secondary.UPGRADES_TIER_M1) {
+			for (let secondary2 of secondary.UPGRADES_TIER_12) {
 				let secondaryName = secondary2;
 				secondary2 = ensureIsClass(secondary2);
 
@@ -733,7 +810,7 @@ for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_1) {
 					PARENT: "genericDreadnought1",
 					BODY, LABEL, UPGRADE_TOOLTIP, GUNS, TURRETS
 				};
-				Class[definitionName].UPGRADES_TIER_2.push(definitionName2);
+				Class[definitionName].UPGRADES_TIER_12.push(definitionName2);
 			}
 		}
 	}
