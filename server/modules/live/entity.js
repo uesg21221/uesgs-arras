@@ -748,6 +748,12 @@ class Entity extends EventEmitter {
         this.glow = { radius: null, color: new Color(-1).compiled, alpha: 1, recursion: 1 }
         this.invisible = [0, 0];
         this.alphaRange = [0, 1];
+        this.confinement = {
+            xMin: 0,
+            xMax: room.width,
+            yMin: 0,
+            yMax: room.height,
+        },
         // Define it
         this.SIZE = 1;
         this.sizeMultiplier = 1;
@@ -2009,8 +2015,8 @@ class Entity extends EventEmitter {
                 }
             } else {
                 let padding = this.realSize - 50;
-                this.accel.x -= Math.max(this.x + padding - room.width, Math.min(this.x - padding, 0)) * Config.ROOM_BOUND_FORCE / Config.runSpeed;
-                this.accel.y -= Math.max(this.y + padding - room.height, Math.min(this.y - padding, 0)) * Config.ROOM_BOUND_FORCE / Config.runSpeed;
+                this.accel.x -= Math.max(this.x + padding - this.confinement.xMax, Math.min(this.x - padding - this.confinement.xMin, 0)) * Config.ROOM_BOUND_FORCE / Config.runSpeed;
+                this.accel.y -= Math.max(this.y + padding - this.confinement.yMax, Math.min(this.y - padding - this.confinement.yMin, 0)) * Config.ROOM_BOUND_FORCE / Config.runSpeed;
             }
         }
     }
