@@ -503,19 +503,19 @@ Class.diplomatOfficialV1 = {
 	UPGRADE_TOOLTIP: "Triplets",
 	GUNS: weaponArray([
 		{
-			POSITION: [15.5, 4.75, 1, 0, 3, 0, 0.5],
+			POSITION: [15.25, 4.75, 1, 0, 3, 0, 0.5],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triplet, g.dreadv1Generic, g.dreadv1Slow, {range: 0.9}]),
 				TYPE: "bullet"
 			}
 		}, {
-			POSITION: [15.5, 4.75, 1, 0, -3, 0, 0.5],
+			POSITION: [15.25, 4.75, 1, 0, -3, 0, 0.5],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triplet, g.dreadv1Generic, g.dreadv1Slow, {range: 0.9}]),
 				TYPE: "bullet"
 			}
 		}, {
-			POSITION: [16.5, 4.75, 1, 0, 0, 0, 0],
+			POSITION: [16.25, 4.75, 1, 0, 0, 0, 0],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triplet, g.dreadv1Generic, g.dreadv1Slow, {range: 0.9}]),
 				TYPE: "bullet"
@@ -599,27 +599,27 @@ Class.cerberusOfficialV1 = {
 	UPGRADE_TOOLTIP: "Trap Spam",
 	GUNS: weaponArray([
 		{
-			POSITION: [13.5, 2.25, 1, 0, 4, 0, 0]
+			POSITION: [13.25, 2.25, 1, 0, 4, 0, 0]
 		}, {
-			POSITION: [1.75, 2.25, 1.7, 13.5, 4, 0, 2/3],
+			POSITION: [1.75, 2.25, 1.7, 13.25, 4, 0, 2/3],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.5, health: 0.75, damage: 0.8 }]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
 				STAT_CALCULATOR: "trap",
 			},
 		}, {
-			POSITION: [13.5, 2.25, 1, 0, -4, 0, 0]
+			POSITION: [13.25, 2.25, 1, 0, -4, 0, 0]
 		}, {
-			POSITION: [1.75, 2.25, 1.7, 13.5, -4, 0, 1/3],
+			POSITION: [1.75, 2.25, 1.7, 13.25, -4, 0, 1/3],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.5, health: 0.75, damage: 0.8 }]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
 				STAT_CALCULATOR: "trap"
 			}
 		}, {
-			POSITION: [15, 3, 1, 0, 0, 0, 0]
+			POSITION: [14.75, 3, 1, 0, 0, 0, 0]
 		}, {
-			POSITION: [2, 3, 1.7, 15, 0, 0, 0],
+			POSITION: [2, 3, 1.7, 14.75, 0, 0, 0],
 			PROPERTIES: {
 				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.5, health: 0.75, damage: 0.8 }]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
