@@ -192,6 +192,7 @@ class PortalLoop {
                                 ALPHA: [0, 1],
                             });
                             entity.destroyAllChildren();
+                            entity.upgrades = [];
                             entity.define('dreadOfficialV1');
                         },
                         entryBarrier: (entity) => {
