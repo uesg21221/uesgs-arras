@@ -148,6 +148,10 @@ module.exports = {
 
     // Natural Spawns
 
+    // Allow foods to be spawned or not.
+    // NOTE: Disabling it decreases lagness, also very usefull if you dont need foods to be spawned.
+    ENABLE_FOOD: true,
+
     FOOD_CAP: 3, // Max normal food per normal tile.
     FOOD_SPAWN_CHANCE: 0.875, // Likeliness of normal food spawn attempts succeeding.
     FOOD_SPAWN_COOLDOWN: 30, // Cooldown (in game ticks) of food spawn attempts being made.
