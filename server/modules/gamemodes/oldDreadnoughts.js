@@ -251,7 +251,12 @@ class PortalLoop {
                     if (other.type == 'portal') other = instance;
 
                     // Validity checking
-                    if (other.type != 'tank') return;
+                    if (other.type != 'tank') {
+                        if (other.type != "miniboss" && other.type != "food" && other.type != "aura" && type != "unknown") {
+                            other.kill();
+                        }
+                        return;
+                    }
                     if ((other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 > 225) return;
                     if (portal.entryBarrier && !portal.entryBarrier(other)) return;
 

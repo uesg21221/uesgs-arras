@@ -552,8 +552,8 @@ Class.assailantOfficialV1 = {
 			POSITION: [1.5, 10, 1, 14.25, 0, 0, 0],
 			PROPERTIES: {
 				MAX_CHILDREN: 4,
-				SHOOT_SETTINGS: combineStats([g.factory, g.overseer, g.dreadv1Drone, {damage: 0.6, speed: 0.85, maxSpeed: 0.85}]),
-				TYPE: ["minion", {GUN_STAT_SCALE: {health: 0.45, speed: 0.8, maxSpeed: 0.8}}],
+				SHOOT_SETTINGS: combineStats([g.factory, g.overseer, g.dreadv1Drone, {damage: 0.6}]),
+				TYPE: ["minion", {GUN_STAT_SCALE: {reload: 1.333, health: 0.7, speed: 0.8, maxSpeed: 0.8}}],
 				STAT_CALCULATOR: "drone",
 				AUTOFIRE: true,
 				SYNCS_SKILLS: true
