@@ -1,13 +1,16 @@
 // Labyrinth generation
+let validPositions;
 let generateLabyrinth = (size) => {
     const padding = 1;
 
     let maze = JSON.parse(JSON.stringify(Array(size).fill(Array(size).fill(true))));
+    validPositions = JSON.parse(JSON.stringify(Array(size + padding * 2).fill(Array(size + padding * 2).fill(true))))
     let bfsqx = [1];
     let bfsqy = [1];
     let intermediateQX = [1];
     let intermediateQY = [1];
     const offsets = [0, 1, 0, -1, 0];
+    let mazeWallScale = room.height / (size + 2 * padding);
     
     while (bfsqx.length) {
         // Delete walls where the search travels
@@ -82,40 +85,54 @@ let generateLabyrinth = (size) => {
         }
     }
 
+    // Open permanant corridors
+    const corridors = [7, 23];
+    for (let y of corridors) {
+        for (let x = corridors[0]; x <= corridors[1]; x++) {
+            maze[y][x] = false;
+            maze[x][y] = false;
+        }
+    }
+
     // Spawn the maze
     for (let x = padding; x < size + padding; x++) {
         for (let y = padding; y < size + padding; y++) {
-            let spawnWall = false,
-                d = {},
-                scale = room.height / (size + 2 * padding);
-
             // Find spawn location and size
-            for (let s = 5; s >= 1; s--) {
-                if (maze[x-1][y-1] == s) {
-                    d = {
-                        x: (x * scale) + (scale * s / 2),
-                        y: (y * scale) + (scale * s / 2),
-                        s: scale * s,
-                    };
-                    spawnWall = true;
-                    break
-                }
-            }
-            if (spawnWall && room.getAt(d).data.allowMazeWallSpawn) {
-                let o = new Entity({
-                    x: d.x,
-                    y: d.y
-                });
-                o.define("wall");
-                o.SIZE = d.s * 0.5 / lazyRealSizes[4] * Math.SQRT2 - 2;
-                o.team = TEAM_ENEMIES;
-                o.protect();
-                o.life();
-                makeHitbox(o);
-                walls.push(o);
-            }
+            if (!maze[x - 1][y - 1]) continue;
+
+            let d = {
+                x: x * mazeWallScale + mazeWallScale / 2,
+                y: y * mazeWallScale + mazeWallScale / 2,
+            };
+            
+            if (!room.getAt(d).data.allowMazeWallSpawn) continue;
+            
+            let o = new Entity({
+                x: d.x,
+                y: d.y
+            });
+            o.define("wall");
+            o.SIZE = mazeWallScale * 0.5 / lazyRealSizes[4] * Math.SQRT2 - 2;
+            o.team = TEAM_ENEMIES;
+            o.protect();
+            o.life();
+            makeHitbox(o);
+            walls.push(o);
+            validPositions[x][y] = false;
         }
     }
+
+    // Convert valid positions
+    let truePositions = [];
+    for (let y = 0; y < size + 2 * padding; y++) {
+        for (let x = 0; x < size + 2 * padding; x++) {
+            if (!validPositions[y][x]) continue;
+            let trueX = x * mazeWallScale + mazeWallScale / 2;
+            let trueY = y * mazeWallScale + mazeWallScale / 2;
+            truePositions.push([trueX, trueY]);
+        }
+    }
+    validPositions = truePositions;
 }
 
 // Big 3Ds
@@ -150,7 +167,8 @@ class PortalLoop {
             xMax: 15500,
             yMin: 2500,
             yMax: 6500,
-        }
+        };
+        this.locationArrayVariance = 100;
         this.spawnBatches = [
             {
                 bounds: this.labyrinthBounds,
@@ -159,11 +177,13 @@ class PortalLoop {
                         type: "spikyPortalOfficialV1",
                         destination: this.openBounds,
                         buffer: 1500,
+                        spawnArray: validPositions
                     },
                     {
                         type: "bluePortalOfficialV1",
                         destination: this.forgeBounds,
                         buffer: 0,
+                        spawnArray: validPositions,
                         handler: (entity) => {
                             entity.reset(); // Remove non-player controllers
                             entity.define({ // Purge all unwanted entity config
@@ -186,6 +206,7 @@ class PortalLoop {
                         type: "spikyPortalOfficialV1",
                         destination: this.labyrinthBounds,
                         buffer: 50,
+                        destinationArray: validPositions,
                     }
                 ]
             },
@@ -196,6 +217,7 @@ class PortalLoop {
                         type: "spikyPortalOfficialV1",
                         destination: this.labyrinthBounds,
                         buffer: 50,
+                        destinationArray: validPositions,
                     },
                     {
                         type: "greenPortalOfficialV1",
@@ -209,8 +231,15 @@ class PortalLoop {
     spawnCycle() {
         for (let batch of this.spawnBatches) {
             for (let portal of batch.types) {
-                let spawnX = ran.irandomRange(batch.bounds.xMin, batch.bounds.xMax);
-                let spawnY = ran.irandomRange(batch.bounds.yMin, batch.bounds.yMax);
+                let spawnX, spawnY;
+                if (portal.spawnArray) {
+                    let [x, y] = ran.choose(portal.spawnArray);
+                    spawnX = x + ran.irandomRange(-this.locationArrayVariance, this.locationArrayVariance);
+                    spawnY = y + ran.irandomRange(-this.locationArrayVariance, this.locationArrayVariance);
+                } else {
+                    spawnX = ran.irandomRange(batch.bounds.xMin, batch.bounds.xMax);
+                    spawnY = ran.irandomRange(batch.bounds.yMin, batch.bounds.yMax);
+                }
                 let entity = new Entity({x: spawnX, y: spawnY});
                 entity.define(portal.type);
                 entity.activation.set(true);
@@ -225,8 +254,14 @@ class PortalLoop {
                     if (portal.entryBarrier && !portal.entryBarrier(other)) return;
 
                     // Spawn in target region
-                    other.x = ran.irandomRange(portal.destination.xMin, portal.destination.xMax);
-                    other.y = ran.irandomRange(portal.destination.yMin, portal.destination.yMax);
+                    if (portal.destinationArray) {
+                        let [x, y] = ran.choose(portal.destinationArray);
+                        other.x = x + ran.irandomRange(-this.locationArrayVariance, this.locationArrayVariance);
+                        other.y = y + ran.irandomRange(-this.locationArrayVariance, this.locationArrayVariance);
+                    } else {
+                        other.x = ran.irandomRange(portal.destination.xMin, portal.destination.xMax);
+                        other.y = ran.irandomRange(portal.destination.yMin, portal.destination.yMax);
+                    }
                     other.invuln = true;
                     
                     // Set new confinement
