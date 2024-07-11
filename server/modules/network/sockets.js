@@ -1291,7 +1291,7 @@ let minimapAll = new Delta(5, args => {
         if (my.allowedOnMinimap && (
             my.alwaysShowOnMinimap ||
             (my.type === "wall" && my.alpha > 0.2) ||
-            my.type === "miniboss" ||
+            my.type === "miniboss" || my.type == "portal" || 
             my.isMothership
         )) {
             all.push({

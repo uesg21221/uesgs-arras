@@ -134,8 +134,38 @@ Class.nonagonOfficialV1 = {
 }
 
 // Map elements
+Class.portalOfficialV1 = {
+	LABEL: "",
+	TYPE: 'portal',
+	BODY: {
+		HEALTH: 1e10,
+		SHIELD: 1e10,
+		REGEN: 1e10,
+		DAMAGE: 0,
+		PENETRATION: 1e10,
+		DENSITY: 1e10,
+		RANGE: 2000,
+	},
+	ALWAYS_ACTIVE: true,
+	HITS_OWN_TYPE: 'never',
+	GIVE_KILL_MESSAGE: false,
+	DRAW_HEALTH: false,
+	TEAM: TEAM_ROOM,
+	COLOR: 'egg',
+	SIZE: 27,
+}
 Class.spikyPortalOfficialV1 = {
-
+	PARENT: 'portalOfficialV1',
+	GUNS: weaponArray({
+		POSITION: [27, 12, 0.001, 0, 0, 0, 0],
+		PROPERTIES: {COLOR: 'egg'}
+	}, 5),
+	PROPS: [
+		{
+			POSITION: [16, 0, 0, 0, 1],
+			TYPE: ['egg', {COLOR: 'black'}]
+		}
+	]
 }
 
 // Misc

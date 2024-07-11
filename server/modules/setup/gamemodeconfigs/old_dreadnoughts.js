@@ -5,4 +5,5 @@ module.exports = {
     MAZE: 31,
     TILE_WIDTH: 600,
     TILE_HEIGHT: 600,
+    PORTAL_SPAWNS: true,
 };
