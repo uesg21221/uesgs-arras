@@ -67,10 +67,10 @@ let generateLabyrinth = (size) => {
     // Punch holes in the maze
     const holeCenters = [
         [5, 5],
-        [5, 21],
-        [21, 5],
-        [21, 21],
-        [13, 13],
+        [5, 25],
+        [25, 5],
+        [25, 25],
+        [15, 15],
     ];
     const holeRadius = 2;
     for (let [centerX, centerY] of holeCenters) {
