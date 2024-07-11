@@ -952,8 +952,8 @@ const spawn = (socket, name) => {
     }
 
     // Dread v1 confinement
-    if (Config.GAME_MODES.includes("old_dreadnoughts")) {
-        player.body.confinement.xMin = 18000;
+    for (let bounds in Config.SPAWN_CONFINEMENT) {
+        player.body.confinement[bounds] = Config.SPAWN_CONFINEMENT[bounds];
     }
 
     // Decide what to do about colors when sending updates and stuff

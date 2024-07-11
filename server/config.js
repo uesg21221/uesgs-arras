@@ -247,5 +247,6 @@ module.exports = {
     MAZE: false,
     HUNT: false,
     MODE: "ffa",
-    TAG: false
+    TAG: false,
+    SPAWN_CONFINEMENT: {},
 }
