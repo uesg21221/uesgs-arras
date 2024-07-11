@@ -950,6 +950,12 @@ const spawn = (socket, name) => {
             ? Config.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : TEAM_RED
             : player.body.team);
     }
+
+    // Dread v1 confinement
+    if (Config.GAME_MODES.includes("old_dreadnoughts")) {
+        player.body.confinement.xMin = 18000;
+    }
+
     // Decide what to do about colors when sending updates and stuff
     player.teamColor = new Color(!Config.RANDOM_COLORS && (Config.GROUPS || (Config.MODE == 'ffa' && !Config.TAG)) ? 10 : getTeamColor(body.team)).compiled; // blue
     player.target = { x: 0, y: 0 };

@@ -130,14 +130,14 @@ Class.tesseract.SIZE = 39;
 // Portal loop
 class PortalLoop {
     constructor() {
-        this.spawnInterval = 50000;
+        this.spawnInterval = 120_000;
         this.initialized = false;
         this.spawnBuffer = 50;
         this.openBounds = {
-            xMin: 19050,
-            xMax: 25950,
-            yMin: 1050,
-            yMax: 7950,
+            xMin: 19500,
+            xMax: 25500,
+            yMin: 1500,
+            yMax: 7500,
         };
         this.labyrinthBounds = {
             xMin: 50,
@@ -145,6 +145,12 @@ class PortalLoop {
             yMin: 50,
             yMax: 8950,
         };
+        this.forgeBounds = {
+            xMin: 11000,
+            xMax: 16000,
+            yMin: 2000,
+            yMax: 7000,
+        }
         this.spawnBatches = [
             {
                 bounds: this.labyrinthBounds,
@@ -152,7 +158,24 @@ class PortalLoop {
                     {
                         type: "spikyPortalOfficialV1",
                         destination: this.openBounds,
-                        buffer: 1050,
+                        buffer: 1500,
+                    },
+                    {
+                        type: "bluePortalOfficialV1",
+                        destination: this.forgeBounds,
+                        buffer: 0,
+                        handler: (entity) => {
+                            entity.reset(); // Remove non-player controllers
+                            entity.define({ // Purge all unwanted entity config
+                                STAT_NAMES: {},
+                                IS_SMASHER: false,
+                                ALPHA: [0, 1],
+                            });
+                            entity.define('dreadOfficialV1');
+                        },
+                        entryBarrier: (entity) => {
+                            return entity.skill.level >= 150;
+                        }
                     }
                 ]
             },
@@ -165,11 +188,25 @@ class PortalLoop {
                         buffer: 50,
                     }
                 ]
-            }
+            },
+            {
+                bounds: this.forgeBounds,
+                types: [
+                    {
+                        type: "spikyPortalOfficialV1",
+                        destination: this.labyrinthBounds,
+                        buffer: 50,
+                    },
+                    {
+                        type: "greenPortalOfficialV1",
+                        destination: this.openBounds,
+                        buffer: 1500,
+                    }
+                ]
+            },
         ]
     }
     spawnCycle() {
-        console.log('spawning')
         for (let batch of this.spawnBatches) {
             for (let portal of batch.types) {
                 let spawnX = ran.irandomRange(batch.bounds.xMin, batch.bounds.xMax);
@@ -178,9 +215,16 @@ class PortalLoop {
                 entity.define(portal.type);
                 entity.activation.set(true);
                 entity.settings.diesAtRange = true; // Can't set this on define because then the portal dies immediately
-                entity.on('collide', ({other}) => {
+                entity.on('collide', ({instance, other}) => {
+                    // Swap order if the portal is the 'other' in the pair
+                    if (other.type == 'portal') other = instance;
+
+                    // Validity checking
                     if (other.type != 'tank') return;
                     if ((other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 > 225) return;
+                    if (portal.entryBarrier && !portal.entryBarrier(other)) return;
+
+                    // Spawn in target region
                     other.x = ran.irandomRange(portal.destination.xMin, portal.destination.xMax);
                     other.y = ran.irandomRange(portal.destination.yMin, portal.destination.yMax);
                     other.invuln = true;
@@ -190,6 +234,11 @@ class PortalLoop {
                     other.confinement.xMax = portal.destination.xMax + portal.buffer;
                     other.confinement.yMin = portal.destination.yMin - portal.buffer;
                     other.confinement.yMax = portal.destination.yMax + portal.buffer;
+
+                    // Special portal properties
+                    if (portal.handler) {
+                        portal.handler(other);
+                    }
                 });
             }
         }

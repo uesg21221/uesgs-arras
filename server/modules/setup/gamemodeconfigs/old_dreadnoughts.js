@@ -6,4 +6,5 @@ module.exports = {
     TILE_WIDTH: 600,
     TILE_HEIGHT: 600,
     PORTAL_SPAWNS: true,
+    MAX_UPGRADE_TIER: 13,
 };
