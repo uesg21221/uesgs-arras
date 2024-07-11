@@ -146,10 +146,10 @@ class PortalLoop {
             yMax: 8950,
         };
         this.forgeBounds = {
-            xMin: 11000,
-            xMax: 16000,
-            yMin: 2000,
-            yMax: 7000,
+            xMin: 11500,
+            xMax: 15500,
+            yMin: 2500,
+            yMax: 6500,
         }
         this.spawnBatches = [
             {

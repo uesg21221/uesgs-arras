@@ -72,8 +72,8 @@ if (teams === 2) {
 }
 
 for (let row in room) {
-    if (row < 12 && row >= 3) {
-        room[row].unshift(...Array(3).fill(outside), ...Array(9).fill(forge), ...Array(3).fill(outside));
+    if (row < 11 && row >= 4) {
+        room[row].unshift(...Array(4).fill(outside), ...Array(7).fill(forge), ...Array(4).fill(outside));
     } else {
         room[row].unshift(...Array(Config.roomWidth).fill(outside));
     }
