@@ -220,9 +220,9 @@ Class.spikyPortalOfficialV1 = {
 	PROPS: [
 		{
 			POSITION: [20, 0, 0, 0, 1],
-			TYPE: ['egg', {COLOR: 'black'}]
+			TYPE: ['egg', {COLOR: '#212121'}]
 		},
-		...portalRings('black')
+		...portalRings('#1c1c1c')
 	]
 }
 Class.bluePortalOfficialV1 = {
@@ -552,14 +552,14 @@ Class.assailantOfficialV1 = {
 			POSITION: [1.5, 10, 1, 14.25, 0, 0, 0],
 			PROPERTIES: {
 				MAX_CHILDREN: 4,
-				SHOOT_SETTINGS: combineStats([g.factory, g.overseer, g.dreadv1Drone, {damage: 0.6, speed: 0.85, maxSpeed: 0.85}]),
-				TYPE: ["minion", {GUN_STAT_SCALE: {health: 0.45, speed: 0.8, maxSpeed: 0.8}}],
+				SHOOT_SETTINGS: combineStats([g.factory, g.overseer, g.dreadv1Drone, {damage: 0.6}]),
+				TYPE: ["minion", {GUN_STAT_SCALE: {reload: 1.333, health: 0.7, speed: 0.8, maxSpeed: 0.8}}],
 				STAT_CALCULATOR: "drone",
 				AUTOFIRE: true,
 				SYNCS_SKILLS: true
 			}
 		}, {
-			POSITION: [11.75, 10, 1, 0, 0, 0, 0]
+			POSITION: [11.5, 10, 1, 0, 0, 0, 0]
 		}
 	], 3)
 }
@@ -705,13 +705,13 @@ Class.medicaidOfficialV1 = {
 
 Class.addons.UPGRADES_TIER_0.push("dreadOfficialV1");
 	Class.dreadOfficialV1.UPGRADES_TIER_10 = ["swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1"];
-		Class.swordOfficialV1.UPGRADES_TIER_12 = ["sabreOfficialV1", "gladiusOfficialV1"];
-		Class.pacifierOfficialV1.UPGRADES_TIER_12 = ["appeaserOfficialV1", "peacekeeperOfficialV1", "diplomatOfficialV1"];
-		Class.invaderOfficialV1.UPGRADES_TIER_12 = ["inquisitorOfficialV1", "assailantOfficialV1", "infiltratorOfficialV1"];
-		Class.centaurOfficialV1.UPGRADES_TIER_12 = ["cerberusOfficialV1", "minotaurOfficialV1", "sirenOfficialV1"];
-		Class.automationOfficialV1.UPGRADES_TIER_12 = ["mechanismOfficialV1"];
-		Class.juggernautOfficialV1.UPGRADES_TIER_12 = ["behemothOfficialV1"];
-		Class.medicareOfficialV1.UPGRADES_TIER_12 = ["medicaidOfficialV1"];
+		Class.swordOfficialV1.UPGRADES_TIER_M1 = ["sabreOfficialV1", "gladiusOfficialV1"];
+		Class.pacifierOfficialV1.UPGRADES_TIER_M1 = ["appeaserOfficialV1", "peacekeeperOfficialV1", "diplomatOfficialV1"];
+		Class.invaderOfficialV1.UPGRADES_TIER_M1 = ["inquisitorOfficialV1", "assailantOfficialV1", "infiltratorOfficialV1"];
+		Class.centaurOfficialV1.UPGRADES_TIER_M1 = ["cerberusOfficialV1", "minotaurOfficialV1", "sirenOfficialV1"];
+		Class.automationOfficialV1.UPGRADES_TIER_M1 = ["mechanismOfficialV1"];
+		Class.juggernautOfficialV1.UPGRADES_TIER_M1 = ["behemothOfficialV1"];
+		Class.medicareOfficialV1.UPGRADES_TIER_M1 = ["medicaidOfficialV1"];
 
 const t1Bodies = [ "swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1", "medicareOfficialV1", "automationOfficialV1", "juggernautOfficialV1" ];
 if (!enableHealers) {
@@ -767,11 +767,11 @@ for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_10) {
 		Class[primaryName].UPGRADES_TIER_10.push(definitionName);
 
 		// Compile T2
-		for (let primary2 of primary.UPGRADES_TIER_12) {
+		for (let primary2 of primary.UPGRADES_TIER_M1) {
 			let primaryName2 = primary2;
 			primary2 = ensureIsClass(primary2);
 
-			for (let secondary2 of secondary.UPGRADES_TIER_12) {
+			for (let secondary2 of secondary.UPGRADES_TIER_M1) {
 				let secondaryName = secondary2;
 				secondary2 = ensureIsClass(secondary2);
 
