@@ -98,6 +98,7 @@ Class.heptagonOfficialV1 = {
 Class.octagonOfficialV1 = {
 	PARENT: 'food',
 	COLOR: 'hexagon',
+	LABEL: "Octagon",
 	BODY: {
         DAMAGE: 2 * basePolygonDamage,
         DENSITY: 80,
@@ -116,6 +117,7 @@ Class.octagonOfficialV1 = {
 Class.nonagonOfficialV1 = {
 	PARENT: 'food',
 	COLOR: 'white',
+	LABEL: "Nonagon",
 	BODY: {
         DAMAGE: 2 * basePolygonDamage,
         DENSITY: 80,
