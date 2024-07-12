@@ -1223,7 +1223,7 @@ Class.flailBall = {
                     health: 1,
                 }]),
                 TYPE: ["bullet", {
-                    ALPHA: 0,
+                    //ALPHA: 0,
                     ON: [{
                         event: 'tick',
                         handler: ({body}) => {
@@ -1279,7 +1279,6 @@ Class.genericFlail = {
     PARENT: "genericTank",
     STAT_NAMES: statnames.flail,
     SYNC_WITH_TANK: true,
-    TOOLTIP: "[DEV NOTE] The Flail is not finished yet. This tank is currently just a mockup.",
     SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
 }
 Class.flail = {
