@@ -220,9 +220,9 @@ Class.spikyPortalOfficialV1 = {
 	PROPS: [
 		{
 			POSITION: [20, 0, 0, 0, 1],
-			TYPE: ['egg', {COLOR: 'black'}]
+			TYPE: ['egg', {COLOR: '#212121'}]
 		},
-		...portalRings('black')
+		...portalRings('#1c1c1c')
 	]
 }
 Class.bluePortalOfficialV1 = {

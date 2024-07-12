@@ -939,6 +939,11 @@ const spawn = (socket, name) => {
         body.become(player); // become it so it can speak and listen.
         socket.spectateEntity = null; // Dont break the camera.
         body.invuln = true; // Make it safe 
+
+        // Default confinement
+        for (let bounds in Config.SPAWN_CONFINEMENT) {
+            body.confinement[bounds] = Config.SPAWN_CONFINEMENT[bounds];
+        }
     }
     body.name = name; // Define the name.
 
@@ -949,11 +954,6 @@ const spawn = (socket, name) => {
         body.color.base = getTeamColor(Config.GROUPS || (Config.MODE == 'ffa' && !Config.TAG)
             ? Config.RANDOM_COLORS ? ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : TEAM_RED
             : player.body.team);
-    }
-
-    // Dread v1 confinement
-    for (let bounds in Config.SPAWN_CONFINEMENT) {
-        player.body.confinement[bounds] = Config.SPAWN_CONFINEMENT[bounds];
     }
 
     // Decide what to do about colors when sending updates and stuff
