@@ -168,7 +168,7 @@ class PortalLoop {
             yMin: 2500,
             yMax: 6500,
         };
-        this.locationArrayVariance = 100;
+        this.locationArrayVariance = 80;
         this.spawnBatches = [
             {
                 bounds: this.labyrinthBounds,
