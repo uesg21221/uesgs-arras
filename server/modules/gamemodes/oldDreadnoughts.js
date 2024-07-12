@@ -253,12 +253,15 @@ class PortalLoop {
 
                     // Validity checking
                     if (other.type != 'tank') {
-                        if (other.type != "miniboss" && other.type != "food" && other.type != "aura" && other.type != "wall" && other.type != "unknown") {
+                        if (
+                            other.type != "miniboss" && other.type != "food" && other.type != "aura" && other.type != "wall" && other.type != "unknown" &&
+                            (other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 <= 625
+                        ) {
                             other.kill();
                         }
                         return;
                     }
-                    if ((other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 > 225) return;
+                    if ((other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 > 625) return;
                     if (portal.entryBarrier && !portal.entryBarrier(other)) return;
 
                     // Spawn in target region
