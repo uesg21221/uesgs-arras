@@ -135,14 +135,15 @@ let generateLabyrinth = (size) => {
     validPositions = truePositions;
 }
 
-// Big 3Ds
-Class.sphere.SIZE = 17;
-Class.cube.SIZE = 22;
-Class.tetrahedron.SIZE = 27;
-Class.octahedron.SIZE = 28;
-Class.dodecahedron.SIZE = 30;
-Class.icosahedron.SIZE = 32;
-Class.tesseract.SIZE = 39;
+// Big food
+// Class.sphere.SIZE = 17;
+// Class.cube.SIZE = 22;
+// Class.tetrahedron.SIZE = 27;
+// Class.octahedron.SIZE = 28;
+// Class.dodecahedron.SIZE = 30;
+// Class.icosahedron.SIZE = 32;
+// Class.tesseract.SIZE = 39;
+delete Class.food.LEVEL_CAP;
 
 // Portal loop
 class PortalLoop {
