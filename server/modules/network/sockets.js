@@ -1115,7 +1115,7 @@ const eyes = (socket) => {
             return check(socket.camera, e);
         }, //Math.abs(e.x - x) < e.size + f*fov && Math.abs(e.y - y) < e.size + f*fov; },
         gazeUpon: () => {
-            logs.network.set();
+            logs.network.startTracking();
             let player = socket.player,
                 camera = socket.camera;
             // If nothing has changed since the last update, wait (approximately) until then to update
@@ -1221,7 +1221,7 @@ const eyes = (socket) => {
                 visible.length,
                 ...view
             );
-            logs.network.mark();
+            logs.network.endTracking();
         },
     };
     views.push(o);
@@ -1399,7 +1399,7 @@ let leaderboard = new Delta(7, args => {
 // Periodically give out updates
 let subscribers = [];
 setInterval(() => {
-    logs.minimap.set();
+    logs.minimap.startTracking();
     let minimapUpdate = minimapAll.update(),
         leaderboardUpdate,
         teamUpdate;
@@ -1423,7 +1423,7 @@ setInterval(() => {
             socket.status.needsNewBroadcast = false;
         }
     }
-    logs.minimap.mark();
+    logs.minimap.endTracking();
     let time = util.time();
     for (let socket of clients) {
         if (socket.timeout.check(time)) socket.lastWords("K");

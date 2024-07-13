@@ -191,11 +191,11 @@ function collide(collision) {
 let time, ticks = 0;
 const gameloop = () => {
     logs.loops.tally();
-    logs.master.set();
-    logs.activation.set();
-    logs.activation.mark();
+    logs.master.startTracking();
+    logs.activation.startTracking();
+    logs.activation.endTracking();
     // Do collisions
-    logs.collide.set();
+    logs.collide.startTracking();
     if (entities.length > 1) {
         // Load the grid
         grid.update();
@@ -205,9 +205,9 @@ const gameloop = () => {
             collide(pairs[i]);
         }
     }
-    logs.collide.mark();
+    logs.collide.endTracking();
     // Do entities life
-    logs.entities.set();
+    logs.entities.startTracking();
     for (let my of entities) {
         // Consider death.
         if (my.contemplationOfMortality()) {
@@ -215,22 +215,22 @@ const gameloop = () => {
         } else {
             if (my.bond == null) {
                 // Resolve the physical behavior from the last collision cycle.
-                logs.physics.set();
+                logs.physics.startTracking();
                 my.physics();
-                logs.physics.mark();
+                logs.physics.endTracking();
             }
             if (my.activation.check() || my.isPlayer) {
                 logs.entities.tally();
                 // Think about my actions.
-                logs.life.set();
+                logs.life.startTracking();
                 my.life();
-                logs.life.mark();
+                logs.life.endTracking();
                 // Apply friction.
                 my.friction();
                 my.confinementToTheseEarthlyShackles();
-                logs.selfie.set();
+                logs.selfie.startTracking();
                 my.takeSelfie();
-                logs.selfie.mark();
+                logs.selfie.endTracking();
             }
             // Update collisions.
             my.collisionArray = [];
@@ -242,8 +242,8 @@ const gameloop = () => {
         my.collisionArray = [];
         my.emit('tick', { body: my });
     }
-    logs.entities.mark();
-    logs.master.mark();
+    logs.entities.endTracking();
+    logs.master.endTracking();
     // Remove dead entities
     purgeEntities();
     room.lastCycle = util.time();
