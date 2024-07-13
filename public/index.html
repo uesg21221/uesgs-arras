@@ -45,7 +45,7 @@
                             </h3>
                         </div>
                         <div class="slider">
-                            <div id="controlsSection">
+                            <!--<div id="controlsSection">
                                 <options_header>Advanced Controls:<i id="resetControls" class="reset resetControls" title="Reset controls"></i></options_header>
                                 <table class="controlTable" id="controlSettings">
                                     <tbody>
@@ -58,8 +58,33 @@
                                         <tr> <td><b data-key="KEY_BECOME">F</b> - action</td>               <td class="greyText"><b>*</b> = requires valid token</td> </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <options_header>Themes & Graphics</options_header>
+                            </div>-->
+                            <div class="controlTable optionsHeader">Advanced Controls <i id="resetControls" class="reset resetControls" title="Reset controls"></i><i id="moreControls" class="moreControls cross"></i></div>
+                            <table class="controlTable" id="controlSettings">
+                                <tbody>
+                                    <tr> 
+                                        <td><div><b data-key="KEY_AUTO_FIRE">E</b> - auto-fire</div></td>
+                                        <td><div><b data-key="KEY_AUTO_SPIN">C</b> - auto-spin</div></td> 
+                                        <td><div><b data-key="KEY_OVER_RIDE">R</b> - disable AI</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div><b data-key="KEY_LEVEL_UP">N</b> - level up</div></td>
+                                        <td><div><b data-key="KEY_REVERSE_TANK">V</b> - reverse tank</div></td>
+                                        <td><div><b data-key="KEY_REVERSE_MOUSE">B</b> - reverse mouse</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div><b data-key="KEY_AUTO_ALT">G</b> - auto-alt</div></td>
+                                        <td><div><b data-key="KEY_SUICIDE">O</b> - self-destruct</div></td>
+                                        <td><div><b data-key="KEY_CLASS_TREE">T</b> - show tank tree</div></td>
+                                    </tr>
+                                    <tr class="hidden">
+                                        <td><div><b data-key="KEY_BECOME">F</b> - action</div></td>
+                                        <td><div><b data-key="KEY_MAX_STAT">M</b> - maximize stat</div></td>
+                                        <td><div><b data-key="KEY_SPIN_LOCK">X</b> - spin lock</div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="optionsHeader">Themes & Graphics</div>
                             <select id="optColors" tabindex="-1">
                                 <option value="normal">Light Colors (by Neph)</option>
                                 <option value="dark">Dark Colors (by Neph)</option>
@@ -86,6 +111,7 @@
                             </select>
                             <select id="optMobile" tabindex="-1">
                                 <option value="mobile">Mobile</option>
+                                <option value="mobileWithBigJoysticks">Mobile + Big joysticks</option>
                                 <option value="desktop">Desktop</option>
                             <select>
                             <select id="optBorders" tabindex="-1">
@@ -111,6 +137,10 @@
                                 <tr>
                                     <td><div><label class="container"><input id="autoLevelUp"         tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Auto-Level Up</label></div></td>
                                     <td><div><label class="container"><input id="centerTank"          tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Center Camera</label></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div><label class="container"><input id="showHealthText"      tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Show healthbar text</label></div></td>
+                                    <td><div><label class="container"><input id="optSharpEdges"      tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark"></span> Sharp edges</label></div></td>
                                 </tr>
                             </table>
                         </div>

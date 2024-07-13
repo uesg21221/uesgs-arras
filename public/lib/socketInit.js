@@ -482,11 +482,15 @@ const process = (z = {}) => {
         // Update health, flagging as injured if needed
         if (isNew) {
             z.health = get.next() / 65535;
+            z.healthN = get.next();
+            z.maxHealthN = get.next();
             z.shield = get.next() / 65535;
         } else {
             let hh = z.health,
                 ss = z.shield;
             z.health = get.next() / 65535;
+            z.healthN = get.next();
+            z.maxHealthN = get.next();
             z.shield = get.next() / 65535;
             // Update stuff
             if (z.health < hh || z.shield < ss) {

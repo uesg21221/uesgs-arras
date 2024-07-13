@@ -44,7 +44,7 @@ class Canvas {
         global.canvas = this;
     }
     init() {
-        global.mobile && optMobile.value == "mobile" ? ( // Mobile
+        global.mobile && optMobile.value == "mobile" || optMobile.value == "mobileWithBigJoysticks" ? ( // Mobile
             this.mobilecv = this.cv,
             this.controlTouch = null,
             this.movementTouch = null,
@@ -371,6 +371,7 @@ class Canvas {
             this.socket.talk("s", global.playerName, 0, 1 * settings.game.autoLevelUp);
             global.died = false;
             global.autoSpin = false;
+            global.resetTarget();
         } else {
             for (let touch of e.changedTouches) {
                 let mpos = {
@@ -491,8 +492,8 @@ class Canvas {
                 let r = Math.sqrt(cx ** 2 + cy ** 2);
                 let angle = Math.atan2(cy, cx);
                 if (r > radius) {
-                    cx = Math.cos(angle) * radius / 1.25;
-                    cy = Math.sin(angle) * radius / 1.25;
+                    cx = Math.cos(angle) * radius / 1.05;
+                    cy = Math.sin(angle) * radius / 1.05;
                 }
                 this.movementTouchPos = { x: cx, y: cy };
                 global.movement = angle;
@@ -505,19 +506,20 @@ class Canvas {
                     this.moving = true;
                 }
             } else if (this.controlTouch === id) {
+                global.mobileStatus.showCrosshair = true;
                 let radius = Math.min(
                     global.screenWidth * 0.6,
                     global.screenHeight * 0.12
                 );
-                let cx = mpos.x - (this.cv.width * 5) / 6;
-                let cy = mpos.y - (this.cv.height * 2) / 3;
+                let cx = (mpos.x - (this.cv.width * 5) / 6)  / (radius / 64);
+                let cy = (mpos.y - (this.cv.height * 2) / 3)  / (radius / 64);
                 let touchX = cx / (radius / 64);
                 let touchY = cy / (radius / 64);
                 let r = Math.sqrt(cx ** 2 + cy ** 2);
                 let angle = Math.atan2(cy, cx);
                 if (r > radius) {
-                    touchX = Math.cos(angle) * radius / 1.25;
-                    touchY = Math.sin(angle) * radius / 1.25;
+                    touchX = Math.cos(angle) * radius / 1.05;
+                    touchY = Math.sin(angle) * radius / 1.05;
                 }
                 this.controlTouchPos = { x: touchX, y: touchY };
                 if (this.spinLock) {
@@ -550,6 +552,7 @@ class Canvas {
                 this.controlTouch = null;
                 this.controlTouchPos = { x: 0, y: 0 };
                 this.socket.cmd.set(1, false);
+                global.mobileStatus.showCrosshair = false;
             }
         }
     }

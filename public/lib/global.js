@@ -157,6 +157,10 @@ const global = {
         rendergap: 0,
         lastuplink: 0,
     },
+    mobileStatus: {
+        showCrosshair: false,
+        useBigJoysticks: false,
+    },
     mouse: { x: 0, y: 0},
     target: { x: 0, y: 0 },
     reverseTank: 1,

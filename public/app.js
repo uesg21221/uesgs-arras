@@ -147,12 +147,12 @@ function unselectElement() {
     if (window.getSelection) {
         window.getSelection().removeAllRanges();
     }
-    selectedElement.element.parentNode.classList.remove("editing");
+    selectedElement.element.parentNode.parentNode.classList.remove("editing");
     selectedElement = null;
 }
 function selectElement(element) {
     selectedElement = element;
-    selectedElement.element.parentNode.classList.add("editing");
+    selectedElement.element.parentNode.parentNode.classList.add("editing");
     if (selectedElement.keyCode !== -1 && window.getSelection) {
         let selection = window.getSelection();
         selection.removeAllRanges();
@@ -162,7 +162,7 @@ function selectElement(element) {
     }
 }
 function setKeybind(key, keyCode) {
-    selectedElement.element.parentNode.classList.remove("editing");
+    selectedElement.element.parentNode.parentNode.classList.remove("editing");
     resetButton.classList.add("active");
     if (keyCode !== selectedElement.keyCode) {
         let otherElement = controlsArray.find(c => c.keyCode === keyCode);
@@ -552,9 +552,7 @@ function startGame() {
     settings.graphical.screenshotMode = document.getElementById("optScreenshotMode").checked;
     settings.graphical.coloredHealthbars = document.getElementById("coloredHealthbars").checked;
     settings.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
-    if (global.mobile) {
-        settings.graphical.fancyAnimations = false; // this basicly improves the performance.
-    }
+    settings.graphical.showHealthText = document.getElementById("showHealthText").checked;
     switch (document.getElementById("optBorders").value) {
         case "normal":
             settings.graphical.darkBorders = settings.graphical.neon = false;
@@ -571,6 +569,14 @@ function startGame() {
             settings.graphical.darkBorders = settings.graphical.neon = true;
             break;
     }
+    switch (document.getElementById("optMobile").value) {
+        case "desktop":
+            global.mobile = false;
+            break;
+        case "mobileWithBigJoysticks":
+            global.mobileStatus.useBigJoysticks = true;
+            break;
+    }
     util.submitToLocalStorage("optColors");
     let a = document.getElementById("optColors").value;
     color = color[a === "" ? "normal" : a];
@@ -585,7 +591,6 @@ function startGame() {
     let playerKeyInput = document.getElementById("playerKeyInput");
     let autolevelUpInput = document.getElementById("autoLevelUp").checked;
     global.autolvlUp = autolevelUpInput;
-    if (document.getElementById("optMobile").value === "desktop") global.mobile = false;
     // Name and keys
     util.submitToLocalStorage("playerNameInput");
     util.submitToLocalStorage("playerKeyInput");
@@ -1070,6 +1075,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
                 drawBar(x - size, x - size + 2 * size * shield, yy, barWidth, settings.graphical.coloredHealthbars ? gameDraw.mixColors(col, color.guiblack, 0.25) : color.teal);
                 ctx.globalAlpha = 1;
             }
+            if (settings.graphical.showHealthText) drawText(Math.round(instance.healthN) + "/" + Math.round(instance.maxHealthN), x, yy + barWidth * 2 + barWidth * settings.graphical.seperatedHealthbars * 2 + 10, 12 * ratio, color.guiwhite, "center");
         }
     }
     if (instance.id !== gui.playerid && instance.nameplate) {
@@ -1773,17 +1779,12 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     ctx.lineWidth = 4;
     drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor = "#ffffff" ? color.guiwhite : global.nameColor, "center");
 }
-
 function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     // Draw minimap and FPS monitors
     //minimap stuff starts here
     let orangeColor = false;
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
-    if (global.mobile) {
-        height = (len / global.gameWidth / 1.9) * global.gameHeight
-        len = alcoveSize * 0.6;
-    }
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
         let ratio = [
             global.gameWidth / global.gameHeight,
@@ -1801,8 +1802,9 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
         len /= ratio;
         height /= ratio;
     }
-    let x = global.screenWidth - spacing - len;
-    let y = global.screenHeight - height - spacing;
+    let upgradeColumns = Math.ceil(gui.upgrades.length / 9);
+    let x = global.mobile ? spacing : global.screenWidth - spacing - len;
+    let y = global.mobile ? (global.mobile ? global.canUpgrade ? (alcoveSize / 3.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 3.5 * (upgradeColumns + 3.55) + 67 : 0 + global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0 : 0) + spacing: global.screenHeight - height - spacing;
     ctx.globalAlpha = 0.4;
     let W = global.roomSetup[0].length,
         H = global.roomSetup.length,
@@ -1846,7 +1848,7 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
                 drawGuiCircle(x + (entity.x / global.gameWidth) * len, y + (entity.y / global.gameHeight) * height, (entity.size / global.gameWidth) * len + 0.2);
                 break;
             case 0:
-                if (entity.id !== gui.playerid) drawGuiCircle(x + (entity.x / global.gameWidth) * len, y + (entity.y / global.gameHeight) * height, 2);
+                if (entity.id !== gui.playerid) drawGuiCircle(x + (entity.x / global.gameWidth) * len, y + (entity.y / global.gameHeight) * height, !global.mobile ? 2 : 3.5);
                 break;
         }
     }
@@ -1854,7 +1856,11 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     ctx.lineWidth = 1;
     ctx.strokeStyle = color.guiblack;
     ctx.fillStyle = color.guiblack;
-    drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 0, y + (global.player.cy / global.gameHeight) * height - 1, !global.mobile ? 2 : 3, false);
+    drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 0, y + (global.player.cy / global.gameHeight) * height - 1, !global.mobile ? 2 : 3.5, false);
+    if (global.mobile) {
+        x = global.screenWidth - spacing - len;
+        y = global.screenHeight - spacing;
+    }
     if (global.showDebug) {
         drawGuiRect(x, y - 40, len, 30);
         lagGraph(lag.get(), x, y - 40, len, 30, color.teal);
@@ -1984,7 +1990,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             global.clickables.upgrade.place(i, x * clickableRatio, y * clickableRatio, len * clickableRatio, height * clickableRatio);
             let upgradeKey = getClassUpgradeKey(upgradeNum);
 
-            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.6, colorIndex++, !global.mobile ? upgradeKey : false, upgradeNum == upgradeHoverIndex);
+            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.6, colorIndex++, !global.mobile ? upgradeKey : false, !global.mobile ? upgradeNum == upgradeHoverIndex : false);
 
             ticker++;
             upgradeNum++;
@@ -2003,7 +2009,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
 
         // Upgrade tooltip
-        if (upgradeHoverIndex > -1 && upgradeHoverIndex < gui.upgrades.length) {
+        if (upgradeHoverIndex > -1 && upgradeHoverIndex < gui.upgrades.length && !global.mobile) {
             let picture = gui.upgrades[upgradeHoverIndex][2];
             if (picture.upgradeTooltip.length > 0) {
                 let boxWidth = measureText(picture.name, alcoveSize / 10),
@@ -2040,8 +2046,8 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
 function drawMobileJoysticks() {
     // Draw the joysticks.
     let radius = Math.min(
-        global.screenWidth * 0.8,
-        global.screenHeight * 0.16
+        global.mobileStatus.useBigJoysticks ? global.screenWidth * 0.8 : global.screenWidth * 0.6,
+        global.mobileStatus.useBigJoysticks ? global.screenHeight * 0.16 : global.screenHeight * 0.12
     );
     ctx.globalAlpha = 0.3;
     ctx.fillStyle = "#ffffff";
@@ -2080,20 +2086,22 @@ function drawMobileJoysticks() {
     );
     ctx.fill();
     // crosshair
-    const crosshairpos = {
-        x: global.screenWidth / 2 + global.player.target.x,
-        y: global.screenHeight / 2 + global.player.target.y
-    };
-    ctx.lineWidth = 1;
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = "#202020"
-    ctx.beginPath();
-    ctx.moveTo(crosshairpos.x, crosshairpos.y - 20);
-    ctx.lineTo(crosshairpos.x, crosshairpos.y + 20);
-    ctx.moveTo(crosshairpos.x - 20, crosshairpos.y);
-    ctx.lineTo(crosshairpos.x + 20, crosshairpos.y);
-    ctx.closePath();
-    ctx.stroke();
+    if (global.mobileStatus.showCrosshair) {
+        const crosshairpos = {
+            x: global.screenWidth / 2 + global.player.target.x,
+            y: global.screenHeight / 2 + global.player.target.y
+        };
+        ctx.lineWidth = 1;
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = "#202020"
+        ctx.beginPath();
+        ctx.moveTo(crosshairpos.x, crosshairpos.y - 20);
+        ctx.lineTo(crosshairpos.x, crosshairpos.y + 20);
+        ctx.moveTo(crosshairpos.x - 20, crosshairpos.y);
+        ctx.lineTo(crosshairpos.x + 20, crosshairpos.y);
+        ctx.closePath();
+        ctx.stroke();
+    }
 }
 
 function makeButton(index, x, y, width, height, text, clickableRatio) {
@@ -2162,7 +2170,7 @@ function drawMobileButtons(spacing, alcoveSize) {
     }
     if (global.clickables.mobileButtons.altFire) buttons.push([["\u2756", 2, 2]]);
 
-    makeButtons(buttons, spacing * 2, yOffset + spacing, baseSize, clickableRatio, spacing);
+    makeButtons(buttons, alcoveSize * 1 + spacing * 2, yOffset + spacing, baseSize, clickableRatio, spacing);
 }
 const gameDrawAlive = (ratio, drawRatio) => {
     let GRAPHDATA = 0;

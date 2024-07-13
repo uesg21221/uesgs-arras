@@ -13,7 +13,8 @@ const settings = {
         fontStrokeRatio: 4.5,
         neon: false,
         coloredHealthbars: false,
-        seperatedHealthbars: false
+        seperatedHealthbars: false,
+        showHealthText: false,
     },
     lag: {
         unresponsive: false,

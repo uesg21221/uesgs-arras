@@ -188,6 +188,13 @@ div {
     -ms-user-select: none;
     /* IE10+ */
 }
+div.optionsHeader {
+    display: block;
+    margin: 10px 0 4px;
+    font: bold 13px/1 Ubuntu;
+    color: #000000;
+    text-align: center;
+}
 .serverSelector {
     height: 25px;
     text-align: center;
@@ -226,7 +233,9 @@ div {
     box-sizing: border-box;
     overflow: hidden;
 }
-
+body.mobile #startMenu {
+    width: 770px;
+}
 #startMenuHeader {
     text-align: left;
     width: 100%;
@@ -241,7 +250,7 @@ div {
     display: inline-block;
     vertical-align: text-top;
 }
-
+body.mobile .linkHolder { display: none; }
 .sliderHolder {
     width: 350px;
     height: 325px;
@@ -252,10 +261,6 @@ tfoot {
     text-align: center;
     opacity: 0.5;
     margin: 10px;
-}
-
-td {
-    width: 50%;
 }
 
 table {
@@ -496,21 +501,6 @@ select:active {
 .container input:checked ~ .checkmark:after, .container input:checked ~ .radio:after {
     display: block;
 }
-.resetControls {
-    opacity: 0;
-    transform: rotate(0deg);
-    transition: opacity 1000ms, margin 1000ms;
-    margin: 0 -6px;
-}
-.resetControls.spin {
-    transition: transform 500ms, opacity 1000ms 150ms, margin 1000ms 150ms;
-    transform: rotate(360deg);
-}
-.resetControls.active {
-    opacity: 1;
-    margin: 0 5px;
-    cursor: pointer;
-}
 a.link {
     border-radius: 5px;
     box-sizing: border-box;
@@ -702,23 +692,6 @@ td b {
 td b:hover {
     color: #777;
 }
-td.editing b {
-    background: #fff;
-    color: #333;
-    border: 1px solid #dcdcdc;
-    border-radius: 4px;
-    padding: 1px 4px;
-    margin: -2px -7px -2px -3px;
-    text-align: center;
-    cursor: text;
-    -webkit-user-select: auto;
-    -moz-user-select: auto;
-    -ms-user-select: auto;
-    user-select: auto;
-}
-td.editing span {
-    visibility: hidden;
-}
 td b {
     display: inline-block;
     width: 12px;
@@ -806,6 +779,27 @@ i.flag::before {
 i.flag.down::before {
     margin-bottom: 2px;
 }
+.resetControls {
+    opacity: 0;
+    transform: rotate(0deg);
+    transition: opacity 1000ms, margin 1000ms;
+    margin: 0 -6px;
+}
+.resetControls.spin {
+    transition: transform 500ms, opacity 1000ms 150ms, margin 1000ms 150ms;
+    transform: rotate(360deg);
+}
+.resetControls.active {
+    opacity: 1;
+    margin: 0 5px;
+    cursor: pointer;
+}
+body.mobile .controlTable {
+    display: none;
+}
+.moreControls {
+    cursor: pointer;
+}
 .controlTable {
     border-collapse: collapse;
     margin: 0 2px;
@@ -833,4 +827,32 @@ i.flag.down::before {
 .controlTable tr.hidden div {
     top: -20px;
     height: 0;
+}
+.controlTable td b {
+    display: inline-block;
+    width: 12px;
+    height: 16px;
+    cursor: pointer;
+    text-align: right;
+    vertical-align: bottom;
+}
+.controlTable td b:hover {
+    color: #777;
+}
+.controlTable td.editing b {
+    background: #fff;
+    color: #333;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    padding: 1px 4px;
+    margin: -2px -7px -2px -3px;
+    text-align: center;
+    cursor: text;
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+}
+.controlTable td.editing span {
+    visibility: hidden;
 }
