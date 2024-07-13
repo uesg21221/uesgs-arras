@@ -246,7 +246,7 @@ const gameloop = () => {
     logs.master.endTracking();
     // Remove dead entities
     purgeEntities();
-    room.lastCycle = util.time();
+    room.lastCycle = performance.now();
     ticks++;
     if (ticks & 1) {
         for (let i = 0; i < sockets.players.length; i++) {

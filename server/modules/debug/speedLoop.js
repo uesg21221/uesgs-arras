@@ -8,7 +8,7 @@ const speedcheckloop = () => {
         physicstime = logs.physics.sumLogTimes(),
         lifetime = logs.life.sumLogTimes(),
         selfietime = logs.selfie.sumLogTimes();
-    let sum = logs.master.sumLogTimes();
+    let sum = logs.master.averageLogTimes();
     let loops = logs.loops.getTallyCount(),
         active = logs.entities.getTallyCount();
     global.fps = (1000 / sum).toFixed(2);

@@ -10,7 +10,7 @@ class Logger {
     endTracking() {
         this.logTimes.push(performance.now() - this.trackingStart);
     }
-    averageLogTime() {
+    averageLogTimes() {
         let average = util.averageArray(this.logTimes);
         this.logTimes = [];
         return average;
