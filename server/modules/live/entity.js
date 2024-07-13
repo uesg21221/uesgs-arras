@@ -541,7 +541,7 @@ class Activation {
             this.lastActive = false;
         } else if (this.active && !this.lastActive) {
             this.body.addToGrid();
-            this.active = views.some((v) => v.check(this, 0.6));
+            this.active = views.some((v) => v.check(this.body, 0.6));
             this.lastActive = true;
         }
     }
