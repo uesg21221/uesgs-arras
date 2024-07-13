@@ -1,14 +1,14 @@
 class Logger {
     constructor() {
         this.logTimes = [];
-        this.trackingStart = util.time();
+        this.trackingStart = performance.now();
         this.tallyCount = 0;
     }
     startTracking() {
-        this.trackingStart = util.time();
+        this.trackingStart = performance.now();
     }
     endTracking() {
-        this.logTimes.push(util.time() - this.trackingStart);
+        this.logTimes.push(performance.now() - this.trackingStart);
     }
     averageLogTime() {
         let average = util.averageArray(this.logTimes);

@@ -233,7 +233,7 @@ function incoming(message, socket) {
                 return 1;
             }
             // Bounce it back
-            socket.talk("S", synctick, util.time());
+            socket.talk("S", synctick, performance.now());
             break;
         case "p":
             // ping
@@ -250,7 +250,7 @@ function incoming(message, socket) {
             }
             // Pong
             socket.talk("p", m[0]); // Just pong it right back
-            socket.status.lastHeartbeat = util.time();
+            socket.status.lastHeartbeat = performance.now();
             break;
         case "d":
             // downlink
@@ -597,7 +597,7 @@ function traffic(socket) {
     // This function wiSl be called in the slow loop
     return () => {
         // Kick if it's d/c'd
-        if (util.time() - socket.status.lastHeartbeat > Config.maxHeartbeatInterval) {
+        if (performance.now() - socket.status.lastHeartbeat > Config.maxHeartbeatInterval) {
             socket.kick("Heartbeat lost.");
             return 0;
         }
@@ -971,10 +971,10 @@ const spawn = (socket, name) => {
         spinlock: false
     };
     // Set up the recording commands
-    let begin = util.time();
+    let begin = performance.now();
     player.records = () => [
         player.body.skill.score,
-        Math.floor((util.time() - begin) / 1000),
+        Math.floor((performance.now() - begin) / 1000),
         Config.RESPAWN_TIMEOUT,
         player.body.killCount.solo,
         player.body.killCount.assists,
@@ -1424,7 +1424,7 @@ setInterval(() => {
         }
     }
     logs.minimap.endTracking();
-    let time = util.time();
+    let time = performance.now();
     for (let socket of clients) {
         if (socket.timeout.check(time)) socket.lastWords("K");
         if (time - socket.statuslastHeartbeat > Config.maxHeartbeatInterval) socket.kick("Lost heartbeat.");
@@ -1482,7 +1482,7 @@ const sockets = {
             set: (val) => {
                 if (mem !== val) {
                     mem = val;
-                    timer = util.time();
+                    timer = performance.now();
                 }
             },
         };
@@ -1513,7 +1513,7 @@ const sockets = {
             hasSpawned: false,
             needsFullMap: true,
             needsNewBroadcast: true,
-            lastHeartbeat: util.time(),
+            lastHeartbeat: performance.now(),
         };
         // Set up loops
         let nextUpdateCall = null; // has to be started manually
@@ -1538,7 +1538,7 @@ const sockets = {
             y: undefined,
             vx: 0,
             vy: 0,
-            lastUpdate: util.time(),
+            lastUpdate: performance.now(),
             lastDowndate: undefined,
             fov: 2000,
         };

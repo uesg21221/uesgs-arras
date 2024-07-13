@@ -34,7 +34,7 @@ const gamemodeLoop = function() {
         console.log(`Gamemode loop took ${logTime}ms to complete!`);
         console.log(`Gamemode loop log history: (Last ${logHistory.length} entries)`);
 
-        logHistory.push({at: util.time(), time: logTime});
+        logHistory.push({at: performance.now(), time: logTime});
         if (logHistory.length > 10) {
             logHistory.shift();
         }

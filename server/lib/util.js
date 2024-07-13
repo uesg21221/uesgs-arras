@@ -51,10 +51,10 @@ exports.signedSqrt = x => Math.sign(x) * Math.sqrt(Math.abs(x))
 
 exports.getJackpot = x => x > 39450 ? Math.pow(x - 26300, 0.85) + 26300 : x / 1.5
 
-exports.serverStartTime = Date.now()
+exports.serverStartTime = Date.now();
 
-// Get a better logging function
-exports.time = () => Date.now() - exports.serverStartTime
+// backwards compatability
+exports.time = performance.now;
 
 // create a custom timestamp format for log statements
 exports.log = text => console.log("[" + (exports.time() / 1000).toFixed(3) + "]: " + text)

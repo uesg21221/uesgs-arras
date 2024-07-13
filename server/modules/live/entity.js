@@ -157,7 +157,7 @@ class Gun extends EventEmitter {
     }
     fire() {
         // Recoil
-        this.lastShot.time = util.time();
+        this.lastShot.time = performance.now();
         this.lastShot.power = 3 * Math.log(Math.sqrt(this.bulletSkills.spd) + this.trueRecoil + 1) + 1;
         this.recoilVelocity += this.lastShot.power;
         this.facing = this.body.facing + this.angle;
