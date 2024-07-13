@@ -54,7 +54,7 @@ exports.getJackpot = x => x > 39450 ? Math.pow(x - 26300, 0.85) + 26300 : x / 1.
 exports.serverStartTime = Date.now();
 
 // backwards compatability
-exports.time = performance.now;
+exports.time = performance.now.bind(performance);
 
 // create a custom timestamp format for log statements
 exports.log = text => console.log("[" + (exports.time() / 1000).toFixed(3) + "]: " + text)
