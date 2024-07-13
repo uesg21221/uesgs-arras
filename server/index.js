@@ -60,7 +60,7 @@ function collide(collision) {
         return 0;
     }
     if (
-        (!instance.activation.check() && !other.activation.check()) ||
+        (!instance.activation.active && !other.activation.active) ||
         (instance.isArenaCloser && !instance.alpha) ||
         (other.isArenaCloser && !other.alpha)
     ) return 0;
@@ -219,7 +219,7 @@ const gameloop = () => {
                 my.physics();
                 logs.physics.endTracking();
             }
-            if (my.activation.check() || my.isPlayer) {
+            if (my.activation.active || my.isPlayer) {
                 logs.entities.tally();
                 // Think about my actions.
                 logs.life.startTracking();
@@ -236,7 +236,7 @@ const gameloop = () => {
             my.collisionArray = [];
             // Activation
             my.activation.update();
-            my.updateAABB(my.activation.check());
+            my.updateAABB(my.activation.active);
         }
         // Update collisions.
         my.collisionArray = [];

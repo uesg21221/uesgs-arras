@@ -12,7 +12,7 @@ for (let filename of groups) {
 }
 
 let definitionGroupsLoadEnd = performance.now();
-console.log("Loaded definitions in " + rounder(definitionGroupsLoadEnd - definitionGroupsLoadStart, 3) + " milliseconds. \n");
+console.log("Loaded definitions in " + util.rounder(definitionGroupsLoadEnd - definitionGroupsLoadStart, 3) + " milliseconds. \n");
 
 console.log(`Loading addons...`);
 
@@ -39,7 +39,7 @@ processAddonFolder(path.join(__dirname, './addons'));
 definitionCount = Object.keys(Class).length;
 
 let addonsLoadEnd = performance.now();
-console.log("Loaded addons in " + rounder(addonsLoadEnd - definitionGroupsLoadEnd, 3) + " milliseconds. \n");
+console.log("Loaded addons in " + util.rounder(addonsLoadEnd - definitionGroupsLoadEnd, 3) + " milliseconds. \n");
 
 // "Flattening" refers to removing PARENT attributes and applying the parents' attributes to the definition themselves, if not overwritten later on.
 if (Config.flattenDefintions) {
