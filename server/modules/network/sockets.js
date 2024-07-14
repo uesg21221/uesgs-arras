@@ -1169,10 +1169,6 @@ class View {
             }
         }
         // Smoothly transition view size
-        // camera.fov += Math.max(
-        //     (setFov - camera.fov) / 30,
-        //     setFov - camera.fov
-        // );
         camera.fov = setFov;
         // Find what the user can see.
         // Update which entities are nearby
