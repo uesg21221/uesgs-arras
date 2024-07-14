@@ -2,9 +2,7 @@
 
 <img alt="Logo" src="public/favicon.ico" width="120" />
 
-![GitHub Release](https://img.shields.io/github/v/release/Taureon/aps-plus-plus)
-![Discord](https://img.shields.io/discord/1004907608018264094)
-![GitHub repo size](https://img.shields.io/github/repo-size/Taureon/aps-plus-plus)
+![GitHub Release](https://img.shields.io/github/v/release/Taureon/aps-plus-plus) ![Discord](https://img.shields.io/discord/1004907608018264094) ![GitHub repo size](https://img.shields.io/github/repo-size/Taureon/aps-plus-plus)
 
 **Open Source Arras is beta software.** This build is **not** representative of the final product. Expect bugs and missing features.
 
@@ -18,7 +16,8 @@ You'll first need to install [Node.js](https://nodejs.org). It doesn't matter if
 
 Once `Node.js` is installed, open Terminal and run the command `npm i ws`. This will install the WebSocket library that Open Source Arras uses.
 
-After installing `ws`, [download the source code of the latest release of Open Source Arras](https://github.com/Taureon/aps-plus-plus/releases). Extract it once it's downloaded and open either `run.bat` (if you're on Windows) or `run.sh` (if you're not). If there aren't any errors, your server will start up. Go to `localhost:26301` in your favourite web browser (keep the terminal window open, closing it will shut down the server) to play.
+After installing `ws`, [download the source code of the latest release of Open Source Arras](https://github.com/Taureon/aps-plus-plus/releases). Extract it once it's downloaded and open either `run.bat` (if you're on Windows) or `run.sh` (if you're not). If there aren't any errors, your server will
+start up. Go to `localhost:26301` in your favourite web browser (keep the terminal window open, closing it will shut down the server) to play.
 
 [If you need a more detailed guide, click here for a step by step list.](https://github.com/Taureon/aps-plus-plus/wiki/Frequently-Asked-Questions#how-do-i-set-up-my-server)
 
@@ -37,12 +36,14 @@ Navigate to `server/config.js` and replace `localhost:26301` with the URL for yo
 After doing that, your server should be ready!
 
 ## Useful Tools
-- [Create a custom shape](https://arras.io/ext/custom-shape)
-- [Create a custom tank](https://zyrafaq.com/arras-tank-builder)
-- [Official Addon list](https://github.com/Taureon/aps-plus-plus-addons)
-- [Unofficial Server list](https://zyrafaq.com/arras-server-list/)
+
+-   [Create a custom shape](https://arras.io/ext/custom-shape)
+-   [Create a custom tank](https://zyrafaq.com/arras-tank-builder)
+-   [Official Addon list](https://github.com/Taureon/aps-plus-plus-addons)
+-   [Unofficial Server list](https://zyrafaq.com/arras-server-list/)
 
 ## Other Links
-- [Our Discord server](https://discord.gg/kvCAZfUCjy)
 
-*p.s. if something goes terribly wrong it's not our fault*
+-   [Our Discord server](https://discord.gg/kvCAZfUCjy)
+
+_p.s. if something goes terribly wrong it's not our fault_

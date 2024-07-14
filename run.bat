@@ -1,2 +1,2 @@
-"C:\Program Files\nodejs\node.exe" ".\server\index.js"
+"C:\Program Files\nodejs\node.exe" ".\src\index.js"
 pause

@@ -1,20 +1,33 @@
 {
-  "name": "Open Source Arras",
-  "version": "1.0.0",
-  "main": "server/index.js",
-  "scripts": {
-    "startOptimized": "node --optimize-for-size --no-lazy --gc_interval=120 server/index",
-    "restartOnSaveOptimized": "node --optimize-for-size --no-lazy --gc_interval=120 --watch server/index",
-    "start": "node server/index",
-    "restartOnSave": "node --watch server/index",
-    "host": "node standaloneClient/index",
-    "build": "node standaloneClient/build minify"
-  },
-  "dependencies": {
-    "ws": "^8.13.0"
-  },
-  "engines": {
-    "node": "18.x"
-  },
-  "license": "GPL-3.0"
+    "name": "Open Source Arras",
+    "version": "1.0.0",
+    "main": "src/index.js",
+    "scripts": {
+        "startOptimized": "node --optimize-for-size --no-lazy --gc_interval=120 src/index",
+        "restartOnSaveOptimized": "node --optimize-for-size --no-lazy --gc_interval=120 --watch src/index",
+        "start": "node src/index",
+        "dev": "node --watch src/index",
+        "prettier": "prettier --write --config ./.prettierrc './'",
+        "lint": "eslint ./src/**/*.js",
+        "host": "node standaloneClient/index",
+        "build": "node standaloneClient/build minify"
+    },
+    "dependencies": {
+        "ws": "^8.13.0"
+    },
+    "license": "GPL-3.0",
+    "devDependencies": {
+        "@eslint/js": "^9.7.0",
+        "@types/bun": "latest",
+        "eslint": "9.x",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-plugin-html": "^8.1.1",
+        "eslint-plugin-simple-import-sort": "^12.1.1",
+        "eslint-plugin-unused-imports": "^4.0.0",
+        "globals": "^15.8.0",
+        "prettier": "^3.3.3"
+    },
+    "engines": {
+        "node": "18.x"
+    }
 }

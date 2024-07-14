@@ -1,12 +1,12 @@
-import { global } from "./global.js";
-import { settings } from "./settings.js";
+import {global} from './global.js';
+import {settings} from './settings.js';
 const util = {
-    submitToLocalStorage: name => {
+    submitToLocalStorage: (name) => {
         localStorage.setItem(name + 'Value', document.getElementById(name).value);
         localStorage.setItem(name + 'Checked', document.getElementById(name).checked);
         return false;
     },
-    retrieveFromLocalStorage: name => {
+    retrieveFromLocalStorage: (name) => {
         document.getElementById(name).value = localStorage.getItem(name + 'Value');
         document.getElementById(name).checked = localStorage.getItem(name + 'Checked') === 'true';
         return false;
@@ -19,20 +19,20 @@ const util = {
             return '' + a.toFixed(0);
         }
         if (a < Math.pow(10, 6)) {
-            return (a / Math.pow(10, 3)).toFixed(2) + "k";
+            return (a / Math.pow(10, 3)).toFixed(2) + 'k';
         }
         if (a < Math.pow(10, 9)) {
-            return (a / Math.pow(10, 6)).toFixed(2) + "m";
+            return (a / Math.pow(10, 6)).toFixed(2) + 'm';
         }
         if (a < Math.pow(10, 12)) {
-            return (a / Math.pow(10, 9)).toFixed(2) + "b";
+            return (a / Math.pow(10, 9)).toFixed(2) + 'b';
         }
         if (a < Math.pow(10, 15)) {
-            return (a / Math.pow(10, 12)).toFixed(2) + "t";
+            return (a / Math.pow(10, 12)).toFixed(2) + 't';
         }
-        return (a / Math.pow(10, 15)).toFixed(2) + "q";
+        return (a / Math.pow(10, 15)).toFixed(2) + 'q';
     },
-    timeForHumans: x => {
+    timeForHumans: (x) => {
         // ought to be in seconds
         let seconds = x % 60;
         x /= 60;
@@ -48,7 +48,7 @@ const util = {
 
         function weh(z, text) {
             if (z) {
-                y = y + ((y === '') ? '' : ', ') + z + ' ' + text + ((z > 1) ? 's' : '');
+                y = y + (y === '' ? '' : ', ') + z + ' ' + text + (z > 1 ? 's' : '');
             }
         }
         weh(days, 'day');
@@ -60,23 +60,26 @@ const util = {
         }
         return y;
     },
-    addArticle: string => {
-        return (/[aeiouAEIOU]/.test(string[0])) ? 'an ' + string : 'a ' + string;
+    addArticle: (string) => {
+        return /[aeiouAEIOU]/.test(string[0]) ? 'an ' + string : 'a ' + string;
     },
-    formatLargeNumber: x => {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    formatLargeNumber: (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },
-    pullJSON: fileName => {
+    pullJSON: (fileName) => {
         return new Promise((resolve, reject) => {
             const url = `${location.protocol}//${window.serverAdd}/lib/json/${fileName}.json`;
-            console.log("Loading JSON from " + url);
-            fetch(url).then(response => response.json()).then(json => {
-                console.log("JSON load from " + url + " complete");
-                resolve(json);
-            }).catch(error => {
-                console.log("JSON load from " + url + " complete");
-                reject(error);
-            });
+            console.log('Loading JSON from ' + url);
+            fetch(url)
+                .then((response) => response.json())
+                .then((json) => {
+                    console.log('JSON load from ' + url + ' complete');
+                    resolve(json);
+                })
+                .catch((error) => {
+                    console.log('JSON load from ' + url + ' complete');
+                    reject(error);
+                });
         });
     },
     lerp: (a, b, x, syncWithFps = false) => {
@@ -89,26 +92,26 @@ const util = {
     lerpAngle: (is, to, amount, syncWithFps) => {
         var normal = {
             x: Math.cos(is),
-            y: Math.sin(is)
+            y: Math.sin(is),
         };
         var normal2 = {
             x: Math.cos(to),
-            y: Math.sin(to)
+            y: Math.sin(to),
         };
         var res = {
             x: util.lerp(normal.x, normal2.x, amount, syncWithFps),
-            y: util.lerp(normal.y, normal2.y, amount, syncWithFps)
+            y: util.lerp(normal.y, normal2.y, amount, syncWithFps),
         };
         return Math.atan2(res.y, res.x);
     },
-    getRatio: () => Math.max(global.screenWidth, 16 * global.screenHeight / 9) / global.player.renderv,
-    getScreenRatio: () => Math.max(global.screenWidth, 16 * global.screenHeight / 9) / global.screenSize,
-    Smoothbar: (value, speed, sharpness = 3, lerpValue = .05) => {
+    getRatio: () => Math.max(global.screenWidth, (16 * global.screenHeight) / 9) / global.player.renderv,
+    getScreenRatio: () => Math.max(global.screenWidth, (16 * global.screenHeight) / 9) / global.screenSize,
+    Smoothbar: (value, speed, sharpness = 3, lerpValue = 0.05) => {
         let time = Date.now();
         let display = value;
         let oldvalue = value;
         return {
-            set: val => {
+            set: (val) => {
                 if (value !== val) {
                     oldvalue = display;
                     value = val;
@@ -132,31 +135,30 @@ const util = {
         return x > -r && x < global.screenWidth / ratio + r && y > -r && y < global.screenHeight / ratio + r;
     },
     getEntityImageFromMockup: (index, color) => {
-        let firstIndex = parseInt(index.split("-")[0]),
+        let firstIndex = parseInt(index.split('-')[0]),
             mainMockup = global.mockups[firstIndex],
             guns = [],
             turrets = [],
-            name = "",
-            upgradeTooltip = "",
+            name = '',
+            upgradeTooltip = '',
             positionData = [],
             rerootUpgradeTree = [],
             allRoots = [],
-            trueColor = mainMockup.color.split(" ");
+            trueColor = mainMockup.color.split(' ');
         if ((trueColor[0] == '-1' || trueColor[0] == 'mirror') && color) trueColor[0] = color.split(' ')[0];
         let finalColor = trueColor.join(' ');
-        
-        for (let i of index.split("-")) {
+
+        for (let i of index.split('-')) {
             let mockup = global.mockups[parseInt(i)];
             guns.push(...mockup.guns);
             turrets.push(...mockup.turrets);
             positionData.push(mockup.position);
-            name += mockup.name.length > 0 ? "-" + mockup.name : "";
-            upgradeTooltip += mockup.upgradeTooltip ? "\n" + mockup.upgradeTooltip : "";
-            if (mockup.rerootUpgradeTree) allRoots.push(...mockup.rerootUpgradeTree.split("\\/"));
+            name += mockup.name.length > 0 ? '-' + mockup.name : '';
+            upgradeTooltip += mockup.upgradeTooltip ? '\n' + mockup.upgradeTooltip : '';
+            if (mockup.rerootUpgradeTree) allRoots.push(...mockup.rerootUpgradeTree.split('\\/'));
         }
         for (let root of allRoots) {
-            if (!rerootUpgradeTree.includes(root))
-                rerootUpgradeTree.push(root);
+            if (!rerootUpgradeTree.includes(root)) rerootUpgradeTree.push(root);
         }
         turrets.sort((a, b) => a.layer - b.layer);
         return {
@@ -209,22 +211,23 @@ const util = {
             guns: {
                 length: guns.length,
                 getPositions: () => Array(guns.length).fill(0),
-                getConfig: () => guns.map(g => {
-                    return {
-                        color: g.color,
-                        alpha: g.alpha,
-                        strokeWidth: g.strokeWidth,
-                        borderless: g.borderless, 
-                        drawFill: g.drawFill,
-                        drawAbove: g.drawAbove,
-                        length: g.length,
-                        width: g.width,
-                        aspect: g.aspect,
-                        angle: g.angle,
-                        direction: g.direction,
-                        offset: g.offset,
-                    };
-                }),
+                getConfig: () =>
+                    guns.map((g) => {
+                        return {
+                            color: g.color,
+                            alpha: g.alpha,
+                            strokeWidth: g.strokeWidth,
+                            borderless: g.borderless,
+                            drawFill: g.drawFill,
+                            drawAbove: g.drawAbove,
+                            length: g.length,
+                            width: g.width,
+                            aspect: g.aspect,
+                            angle: g.angle,
+                            direction: g.direction,
+                            offset: g.offset,
+                        };
+                    }),
                 update: () => {},
             },
             turrets: turrets.map((t) => {
@@ -232,7 +235,7 @@ const util = {
                 o.color = t.color;
                 o.borderless = t.borderless;
                 o.drawFill = t.drawFill;
-                o.realSize = o.realSize / o.size * mainMockup.size * t.sizeFactor;
+                o.realSize = (o.realSize / o.size) * mainMockup.size * t.sizeFactor;
                 o.size = mainMockup.size * t.sizeFactor;
                 o.sizeFactor = t.sizeFactor;
                 o.angle = t.angle;
@@ -253,7 +256,7 @@ const util = {
             if (Math.abs(val) < 0.00001) val = 0;
             return +val.toPrecision(6);
         }
-        
+
         function getFurthestFrom(x, y) {
             let furthestDistance = 0,
                 furthestPoint = [x, y],
@@ -270,20 +273,20 @@ const util = {
             endPoints.splice(furthestIndex, 1);
             return [rounder(furthestPoint[0]), rounder(furthestPoint[1])];
         }
-        
+
         function checkIfSamePoint(p1, p2) {
             return p1[0] == p2[0] && p1[1] == p2[1];
         }
-        
+
         function checkIfOnLine(endpoint1, endpoint2, checkPoint) {
             let xDiff = endpoint2[0] - endpoint1[0],
                 yDiff = endpoint2[1] - endpoint1[1];
-            
+
             // Endpoints on the same vertical line
             if (xDiff == 0) {
-                return (checkPoint[0] == endpoint1[0]);
+                return checkPoint[0] == endpoint1[0];
             }
-        
+
             let slope = yDiff / xDiff,
                 xLengthToCheck = checkPoint[0] - endpoint1[0],
                 predictedY = endpoint1[1] + xLengthToCheck * slope;
@@ -305,7 +308,7 @@ const util = {
             if (x3 == x1 || x3 == x2) {
                 x3 += 1e-5;
             }
-            
+
             let numer1 = x3 ** 2 + y3 ** 2 - x1 ** 2 - y1 ** 2;
             let numer2 = x2 ** 2 + y2 ** 2 - x1 ** 2 - y1 ** 2;
             let factorX1 = 2 * x2 - 2 * x1;
@@ -318,35 +321,35 @@ const util = {
 
             return {x, y, r};
         }
-        
+
         // Draw each mockup circumcircle as a ring of 32 points
         for (let position of positionData) {
             let {axis, middle} = position;
             for (let i = 0; i < 32; i++) {
-                let theta = Math.PI / 16 * i;
-                endPoints.push([middle.x + Math.cos(theta) * axis / 2, middle.y + Math.sin(theta) * axis / 2]);
+                let theta = (Math.PI / 16) * i;
+                endPoints.push([middle.x + (Math.cos(theta) * axis) / 2, middle.y + (Math.sin(theta) * axis) / 2]);
             }
         }
 
         // Convert to useful info
-        endPoints.sort((a, b) => (b[0] ** 2 + b[1] ** 2 - a[0] ** 2 - a[1] ** 2));
+        endPoints.sort((a, b) => b[0] ** 2 + b[1] ** 2 - a[0] ** 2 - a[1] ** 2);
         let point1 = getFurthestFrom(0, 0),
             point2 = getFurthestFrom(...point1);
-        
+
         // Repeat selecting the second point until at least one of the first two points is off the centerline
-        while (point1[0] == 0 && point2[0] == 0 || point1[1] == 0 && point2[1] == 0) {
+        while ((point1[0] == 0 && point2[0] == 0) || (point1[1] == 0 && point2[1] == 0)) {
             point2 = getFurthestFrom(...point1);
         }
 
         let avgX = (point1[0] + point2[0]) / 2,
             avgY = (point1[1] + point2[1]) / 2,
             point3 = getFurthestFrom(avgX, avgY);
-        
+
         // Repeat selecting the third point until it's actually different from the other points and it's not collinear with them
         while (checkIfSamePoint(point3, point1) || checkIfSamePoint(point3, point2) || checkIfOnLine(point1, point2, point3)) {
             point3 = getFurthestFrom(avgX, avgY);
         }
-        
+
         let {x, y, r} = constructCircumcirle(point1, point2, point3);
 
         return {
@@ -354,5 +357,5 @@ const util = {
             middle: {x, y},
         };
     },
-}
-export { util }
+};
+export {util};

@@ -13,14 +13,14 @@ const settings = {
         fontStrokeRatio: 4.5,
         neon: false,
         coloredHealthbars: false,
-        seperatedHealthbars: false
+        seperatedHealthbars: false,
     },
     lag: {
         unresponsive: false,
-        memory: 500
+        memory: 500,
     },
     game: {
-        autoLevelUp: false
-    }
+        autoLevelUp: false,
+    },
 };
-export { settings }
+export {settings};

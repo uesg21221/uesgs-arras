@@ -1,7 +1,7 @@
-import { global } from "./global.js";
-import { util } from "./util.js";
-import { settings } from "./settings.js";
-import { protocol } from "./protocol.js";
+import {global} from './global.js';
+import {util} from './util.js';
+import {settings} from './settings.js';
+import {protocol} from './protocol.js';
 window.fakeLagMS = 0;
 var sync = [];
 var clockDiff = 0;
@@ -12,7 +12,7 @@ let level = 0;
 let sscore = util.Smoothbar(0, 10);
 var serverStart = 0,
     gui = {
-        getStatNames: data => [
+        getStatNames: (data) => [
             data?.body_damage ?? 'Body Damage',
             data?.max_health ?? 'Max Health',
             data?.bullet_speed ?? 'Bullet Speed',
@@ -25,22 +25,22 @@ var serverStart = 0,
             data?.shield_cap ?? 'Shield Capacity',
         ],
         skills: [
-            { amount: 0, color: 'purple', cap: 1, softcap: 1 },
-            { amount: 0, color: 'pink', cap: 1, softcap: 1 },
-            { amount: 0, color: 'blue', cap: 1, softcap: 1 },
-            { amount: 0, color: 'lgreen', cap: 1, softcap: 1 },
-            { amount: 0, color: 'red', cap: 1, softcap: 1 },
-            { amount: 0, color: 'yellow', cap: 1, softcap: 1 },
-            { amount: 0, color: 'green', cap: 1, softcap: 1 },
-            { amount: 0, color: 'teal', cap: 1, softcap: 1 },
-            { amount: 0, color: 'gold', cap: 1, softcap: 1 },
-            { amount: 0, color: 'orange', cap: 1, softcap: 1 }
+            {amount: 0, color: 'purple', cap: 1, softcap: 1},
+            {amount: 0, color: 'pink', cap: 1, softcap: 1},
+            {amount: 0, color: 'blue', cap: 1, softcap: 1},
+            {amount: 0, color: 'lgreen', cap: 1, softcap: 1},
+            {amount: 0, color: 'red', cap: 1, softcap: 1},
+            {amount: 0, color: 'yellow', cap: 1, softcap: 1},
+            {amount: 0, color: 'green', cap: 1, softcap: 1},
+            {amount: 0, color: 'teal', cap: 1, softcap: 1},
+            {amount: 0, color: 'gold', cap: 1, softcap: 1},
+            {amount: 0, color: 'orange', cap: 1, softcap: 1},
         ],
         points: 0,
         upgrades: [],
         playerid: -1,
         __s: {
-            setScore: s => {
+            setScore: (s) => {
                 if (s) {
                     sscore.set(s);
                     if (deduction > sscore.get()) {
@@ -59,13 +59,13 @@ var serverStart = 0,
                     level += 1;
                 }
             },
-            getProgress: () => levelscore ? Math.min(1, Math.max(0, (sscore.get() - deduction) / levelscore)) : 0,
+            getProgress: () => (levelscore ? Math.min(1, Math.max(0, (sscore.get() - deduction) / levelscore)) : 0),
             getScore: () => sscore.get(),
             getLevel: () => level,
         },
         type: 0,
-        root: "",
-        class: "",
+        root: '',
+        class: '',
         fps: 0,
         color: 0,
         accel: 0,
@@ -97,14 +97,14 @@ var moveCompensation = {
         // Add motion
         let damp = gui.accel / gui.topSpeed,
             len = Math.sqrt(g.x * g.x + g.y * g.y);
-        _vx += gui.accel * g.x / len;
-        _vy += gui.accel * g.y / len;
+        _vx += (gui.accel * g.x) / len;
+        _vy += (gui.accel * g.y) / len;
         // Dampen motion
         let motion = Math.sqrt(_vx * _vx + _vy * _vy);
         if (motion > 0 && damp) {
             let finalvelocity = motion / (damp / settings.roomSpeed + 1);
-            _vx = finalvelocity * _vx / motion;
-            _vy = finalvelocity * _vy / motion;
+            _vx = (finalvelocity * _vx) / motion;
+            _vy = (finalvelocity * _vy) / motion;
         }
         xx += _vx;
         yy += _vy;
@@ -119,75 +119,77 @@ const Integrate = class {
         this.elements = {};
     }
     update(delta, index = 0) {
-        let deletedLength = delta[index++]
-        for (let i = 0; i < deletedLength; i++) delete this.elements[delta[index++]]
-        let updatedLength = delta[index++]
+        let deletedLength = delta[index++];
+        for (let i = 0; i < deletedLength; i++) delete this.elements[delta[index++]];
+        let updatedLength = delta[index++];
         for (let i = 0; i < updatedLength; i++) {
-            let id = delta[index++]
-            let data = delta.slice(index, index + this.dataLength)
-            index += this.dataLength
-            this.elements[id] = data
+            let id = delta[index++];
+            let data = delta.slice(index, index + this.dataLength);
+            index += this.dataLength;
+            this.elements[id] = data;
         }
-        return index
+        return index;
     }
     entries() {
         return Object.entries(this.elements).map(([id, data]) => ({
             id: +id,
-            data
-        }))
+            data,
+        }));
     }
-}
+};
 const Minimap = class {
     constructor(speed = 250) {
-        this.speed = speed
-        this.map = {}
-        this.lastUpdate = Date.now()
+        this.speed = speed;
+        this.map = {};
+        this.lastUpdate = Date.now();
     }
     update(elements) {
-        this.lastUpdate = Date.now()
+        this.lastUpdate = Date.now();
         for (let [key, value] of Object.entries(this.map))
             if (value.now) {
-                value.old = value.now
-                value.now = null
+                value.old = value.now;
+                value.now = null;
             } else {
-                delete this.map[key]
+                delete this.map[key];
             }
         for (let element of elements)
             if (this.map[element.id]) {
-                this.map[element.id].now = element
+                this.map[element.id].now = element;
             } else {
                 this.map[element.id] = {
                     old: null,
-                    now: element
-                }
+                    now: element,
+                };
             }
     }
     get() {
-        let state = Math.min(1, (Date.now() - this.lastUpdate) / this.speed)
-        let stateOld = 1 - state
-        return Object.values(this.map).map(({ old, now }) => {
-            if (!now) return {
-                type: old.type,
-                id: old.id,
-                x: old.x,
-                y: old.y,
-                color: old.color,
-                size: old.size,
-                alpha: stateOld,
-                width: old.width,
-                height: old.height
-            }
-            if (!old) return {
-                type: now.type,
-                id: now.id,
-                x: now.x,
-                y: now.y,
-                color: now.color,
-                size: now.size,
-                alpha: state,
-                width: now.width,
-                height: now.height
-            }
+        let state = Math.min(1, (Date.now() - this.lastUpdate) / this.speed);
+        let stateOld = 1 - state;
+        return Object.values(this.map).map(({old, now}) => {
+            if (!now)
+                return {
+                    type: old.type,
+                    id: old.id,
+                    x: old.x,
+                    y: old.y,
+                    color: old.color,
+                    size: old.size,
+                    alpha: stateOld,
+                    width: old.width,
+                    height: old.height,
+                };
+            if (!old)
+                return {
+                    type: now.type,
+                    id: now.id,
+                    x: now.x,
+                    y: now.y,
+                    color: now.color,
+                    size: now.size,
+                    alpha: state,
+                    width: now.width,
+                    height: now.height,
+                };
             return {
                 type: now.type,
                 id: now.id,
@@ -197,21 +199,21 @@ const Minimap = class {
                 size: state * now.size + stateOld * old.size,
                 alpha: 1,
                 width: state * now.width + stateOld * old.width,
-                height: state * now.height + stateOld * old.height
-            }
-        })
+                height: state * now.height + stateOld * old.height,
+            };
+        });
     }
-}
+};
 // Build the leaderboard object
 const Entry = class {
     constructor(to) {
-        this.score = util.Smoothbar(0, 10, 3, .03);
+        this.score = util.Smoothbar(0, 10, 3, 0.03);
         this.update(to);
     }
     update(to) {
         this.name = to.name;
         this.bar = to.bar;
-        if (typeof to.bar === "string" && to.bar.includes(", ")) this.bar = +to.bar.split(", ")[0];
+        if (typeof to.bar === 'string' && to.bar.includes(', ')) this.bar = +to.bar.split(', ')[0];
         this.color = to.color;
         this.index = to.index;
         this.score.set(to.score);
@@ -221,14 +223,14 @@ const Entry = class {
         this.label = to.label;
     }
     publish() {
-        let indexes = this.index.split("-"),
+        let indexes = this.index.split('-'),
             ref = global.mockups[parseInt(indexes[0])];
         return {
             id: this.id,
             image: util.getEntityImageFromMockup(this.index, this.color),
             position: ref.position,
             barColor: this.bar,
-            label: this.name ? this.name + " - " + this.label : this.label,
+            label: this.name ? this.name + ' - ' + this.label : this.label,
             score: this.score.get(),
             nameColor: this.nameColor,
         };
@@ -249,7 +251,7 @@ const Leaderboard = class {
         out.sort((a, b) => b.score - a.score);
         return {
             data: out,
-            max
+            max,
         };
     }
     update(elements) {
@@ -258,8 +260,7 @@ const Leaderboard = class {
         for (let element of elements)
             if (this.entries[element.id]) this.entries[element.id].update(element);
             else this.entries[element.id] = new Entry(element);
-        for (let [id, value] of Object.entries(this.entries))
-            if (value.old) delete this.entries[id];
+        for (let [id, value] of Object.entries(this.entries)) if (value.old) delete this.entries[id];
     }
 };
 let minimapAllInt = new Integrate(5),
@@ -269,13 +270,13 @@ let minimapAllInt = new Integrate(5),
     minimap = new Minimap(200);
 let lags = [];
 var lag = {
-    get: () => lags.length ? lags.reduce((a, b) => a + b) / lags.length : 0,
-    add: l => {
+    get: () => (lags.length ? lags.reduce((a, b) => a + b) / lags.length : 0),
+    add: (l) => {
         lags.push(l);
         if (lags.length > settings.lag.memory) {
             lags.splice(0, 1);
         }
-    }
+    },
 };
 var getNow = () => Date.now() - clockDiff - serverStart;
 // Inital setup stuff
@@ -297,13 +298,13 @@ const get = {
         crawlIndex = 0;
     },
     all: () => crawlData.slice(crawlIndex),
-    take: amount => {
+    take: (amount) => {
         crawlIndex += amount;
         if (crawlIndex > crawlData.length) {
             console.error(crawlData);
-            throw new Error("Trying to crawl past the end of the provided data!");
+            throw new Error('Trying to crawl past the end of the provided data!');
         }
-    }
+    },
 };
 function physics(g) {
     g.isUpdated = true;
@@ -311,7 +312,8 @@ function physics(g) {
         // Simulate recoil
         g.motion -= 0.2 * g.position;
         g.position += g.motion;
-        if (g.position < 0) { // Bouncing off the back
+        if (g.position < 0) {
+            // Bouncing off the back
             g.position = 0;
             g.motion = -g.motion;
         }
@@ -321,7 +323,7 @@ function physics(g) {
     }
 }
 // Some status manager constructors
-const GunContainer = n => {
+const GunContainer = (n) => {
     let a = [];
     for (let i = 0; i < n; i++) {
         a.push({
@@ -329,7 +331,7 @@ const GunContainer = n => {
             position: 0,
             isUpdated: true,
             configLoaded: false,
-            color: "",
+            color: '',
             alpha: 0,
             strokeWidth: 0,
             borderless: false,
@@ -344,32 +346,34 @@ const GunContainer = n => {
         });
     }
     return {
-        getPositions: () => a.map(g => {
-            return g.position;
-        }),
-        getConfig: () => a.map(g => {
-            return {
-                color: g.color,
-                alpha: g.alpha,
-                strokeWidth: g.strokeWidth,
-                borderless: g.borderless,
-                drawFill: g.drawFill,
-                drawAbove: g.drawAbove,
-                length: g.length,
-                width: g.width,
-                aspect: g.aspect,
-                angle: g.angle,
-                direction: g.direction,
-                offset: g.offset,
-            };
-        }),
+        getPositions: () =>
+            a.map((g) => {
+                return g.position;
+            }),
+        getConfig: () =>
+            a.map((g) => {
+                return {
+                    color: g.color,
+                    alpha: g.alpha,
+                    strokeWidth: g.strokeWidth,
+                    borderless: g.borderless,
+                    drawFill: g.drawFill,
+                    drawAbove: g.drawAbove,
+                    length: g.length,
+                    width: g.width,
+                    aspect: g.aspect,
+                    angle: g.angle,
+                    direction: g.direction,
+                    offset: g.offset,
+                };
+            }),
         setConfig: (ind, c) => {
             let g = a[ind];
             if (!g.configLoaded) {
                 g.configLoaded = true;
                 g.color = c.color;
                 g.alpha = c.alpha;
-                g.strokeWidth = c.strokeWidth
+                g.strokeWidth = c.strokeWidth;
                 g.borderless = c.borderless;
                 g.drawFill = c.drawFill;
                 g.drawAbove = c.drawAbove;
@@ -397,7 +401,7 @@ function Status() {
     let statState = 'normal',
         statTime = getNow();
     return {
-        set: val => {
+        set: (val) => {
             if (val !== statState || statState === 'injured') {
                 if (statState !== 'dying') statTime = getNow();
                 statState = val;
@@ -405,20 +409,18 @@ function Status() {
         },
         getState: () => statState,
         getFade: () => {
-            return (statState === 'dying' || statState === 'killed') ? 1 - Math.min(1, (getNow() - statTime) / 300) : 1;
+            return statState === 'dying' || statState === 'killed' ? 1 - Math.min(1, (getNow() - statTime) / 300) : 1;
         },
         getColor: () => {
             return '#FFFFFF';
         },
         getBlend: () => {
-            let o = (statState === 'normal' || statState === 'dying') ? 0 :
-                statState === 'invuln' ? 0.125 + Math.sin((getNow() - statTime) / 33) / 8 :
-                    1 - Math.min(1, (getNow() - statTime) / 80);
+            let o = statState === 'normal' || statState === 'dying' ? 0 : statState === 'invuln' ? 0.125 + Math.sin((getNow() - statTime) / 33) / 8 : 1 - Math.min(1, (getNow() - statTime) / 80);
             if (getNow() - statTime > 500 && statState === 'injured') {
                 statState = 'normal';
             }
             return o;
-        }
+        },
     };
 }
 // Make a converter
@@ -427,7 +429,8 @@ const process = (z = {}) => {
     // Figure out what kind of data we're looking at
     let type = get.next();
     // Handle it appropiately
-    if (type & 0x01) { // issa turret
+    if (type & 0x01) {
+        // issa turret
         z.facing = get.next();
         z.layer = get.next();
         z.index = get.next();
@@ -442,11 +445,12 @@ const process = (z = {}) => {
         z.direction = get.next();
         z.offset = get.next();
         z.mirrorMasterAngle = get.next();
-    } else { // issa something real
+    } else {
+        // issa something real
         z.interval = global.metrics.rendergap;
         z.id = get.next();
         // Determine if this is an new entity or if we already know about it
-        let i = global.entities.findIndex(x => x.id === z.id);
+        let i = global.entities.findIndex((x) => x.id === z.id);
         if (i !== -1) {
             // remove it if needed (this way we'll only be left with the dead/unused entities)
             z = global.entities.splice(i, 1)[0];
@@ -499,7 +503,8 @@ const process = (z = {}) => {
         z.alpha = get.next() / 255;
         z.drawsHealth = !!(type & 0x02); // force to boolean
         // Nameplates
-        if (type & 0x04) { // has a nameplate
+        if (type & 0x04) {
+            // has a nameplate
             z.name = get.next();
             z.score = get.next();
         }
@@ -523,8 +528,8 @@ const process = (z = {}) => {
                 interval: global.metrics.rendergap,
                 slip: 0,
                 status: Status(),
-                health: util.Smoothbar(z.health, 0.5, 5, .15),
-                shield: util.Smoothbar(z.shield, 0.5, 5, .15),
+                health: util.Smoothbar(z.health, 0.5, 5, 0.15),
+                shield: util.Smoothbar(z.shield, 0.5, 5, 0.15),
             };
         }
         if (invuln) {
@@ -562,7 +567,7 @@ const process = (z = {}) => {
             angle = get.next(),
             direction = get.next(),
             offset = get.next();
-        z.guns.setConfig(i, { color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset }); // Load gun config into container
+        z.guns.setConfig(i, {color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
         if (time > global.player.lastUpdate - global.metrics.rendergap) z.guns.fire(i, power); // Shoot it
     }
     // Update turrets
@@ -585,7 +590,7 @@ const process = (z = {}) => {
 };
 // This is what we use to figure out what the hell the server is telling us to look at
 const convert = {
-    begin: data => get.set(data),
+    begin: (data) => get.set(data),
     // Make a data convertor
     data: () => {
         // Set up the output thingy+
@@ -653,7 +658,7 @@ const convert = {
         if (indices.upgrades) {
             gui.upgrades = [];
             for (let i = 0, len = get.next(); i < len; i++) {
-                gui.upgrades.push(get.next().split("\\\\//"));
+                gui.upgrades.push(get.next().split('\\\\//'));
                 gui.upgrades[i][2] = util.getEntityImageFromMockup(gui.upgrades[i][2], gui.color);
             }
         }
@@ -697,38 +702,29 @@ const convert = {
         by = leaderboardInt.update(all, by);
         get.take(by);
         let map = [];
-        for (let {
-            id,
-            data
-        } of minimapAllInt.entries()) {
+        for (let {id, data} of minimapAllInt.entries()) {
             map.push({
                 id,
                 type: data[0],
                 x: (data[1] * global.gameWidth) / 255,
                 y: (data[2] * global.gameHeight) / 255,
                 color: data[3],
-                size: data[4]
+                size: data[4],
             });
         }
-        for (let {
-            id,
-            data
-        } of minimapTeamInt.entries()) {
+        for (let {id, data} of minimapTeamInt.entries()) {
             map.push({
                 id,
                 type: 0,
                 x: (data[0] * global.gameWidth) / 255,
                 y: (data[1] * global.gameHeight) / 255,
                 color: data[2],
-                size: 0
+                size: 0,
             });
         }
         minimap.update(map);
         let entries = [];
-        for (let {
-            id,
-            data
-        } of leaderboardInt.entries()) {
+        for (let {id, data} of leaderboardInt.entries()) {
             entries.push({
                 id,
                 score: data[0],
@@ -738,16 +734,16 @@ const convert = {
                 bar: data[4],
                 nameColor: data[5],
                 label: data[6],
-            })
+            });
         }
         leaderboard.update(entries);
-    }
+    },
 };
 const protocols = {
-    "http:": "ws://",
-    "https:": "wss://"
+    'http:': 'ws://',
+    'https:': 'wss://',
 };
-const socketInit = port => {
+const socketInit = (port) => {
     window.resizeEvent();
     let socket = new WebSocket(protocols[location.protocol] + window.serverAdd);
     // Set up our socket
@@ -781,7 +777,7 @@ const socketInit = port => {
     };
     // Learn how to talk
     socket.talk = async (...message) => {
-        await new Promise(Resolve => setTimeout(Resolve, window.fakeLagMS));
+        await new Promise((Resolve) => setTimeout(Resolve, window.fakeLagMS));
         // Make sure the socket is open before we do anything
         if (!socket.open) return 1;
         socket.send(protocol.encode(message));
@@ -794,14 +790,14 @@ const socketInit = port => {
         socket.talk('k', global.playerKey);
         console.log('Token submitted to the server for validation.');
         // define a pinging function
-        socket.ping = payload => socket.talk('p', payload);
+        socket.ping = (payload) => socket.talk('p', payload);
         socket.commandCycle = setInterval(() => {
             if (socket.cmd.check()) socket.cmd.talk();
         });
     };
     // Handle incoming messages
     socket.onmessage = async function socketMessage(message) {
-        await new Promise(Resolve => setTimeout(Resolve, window.fakeLagMS));
+        await new Promise((Resolve) => setTimeout(Resolve, window.fakeLagMS));
         // Make sure it looks legit.
         let m = protocol.decode(message.data);
         if (m === -1) {
@@ -810,7 +806,8 @@ const socketInit = port => {
         // Decide how to interpret it
         switch (m.shift()) {
             case 'w': // welcome to the game
-                if (m[0]) { // Ask to spawn
+                if (m[0]) {
+                    // Ask to spawn
                     console.log('The server has welcomed us to the game room.');
                     global.message = 'Loading mockups, this could take a bit...';
                     global.mockupLoading.then(() => {
@@ -830,7 +827,7 @@ const socketInit = port => {
                 // Start the syncing process
                 socket.talk('S', getNow());
                 break;
-            case "r":
+            case 'r':
                 global.gameWidth = m[0];
                 global.gameHeight = m[1];
                 global.roomSetup = JSON.parse(m[2]);
@@ -839,12 +836,12 @@ const socketInit = port => {
                 global.message = m[0];
                 console.log(m[0]);
                 break;
-            case "svInfo": // For debugging.
+            case 'svInfo': // For debugging.
                 global.serverName = m[0];
                 global.mspt = m[1];
-                if (global.showDebug) console.log(`mspt: ${global.mspt} total entities on screen: ${global.entities.length} Player X: ${(global.player.renderx).toFixed(1)} Player Y: ${(global.player.rendery).toFixed(1)}`);
+                if (global.showDebug) console.log(`mspt: ${global.mspt} total entities on screen: ${global.entities.length} Player X: ${global.player.renderx.toFixed(1)} Player Y: ${global.player.rendery.toFixed(1)}`);
                 break;
-            case "updateName": // Update the name if needed.
+            case 'updateName': // Update the name if needed.
                 global.player.name = m[0];
                 break;
             case 'c': // force camera move
@@ -860,13 +857,13 @@ const socketInit = port => {
                     laten = (getNow() - clientTime) / 2,
                     delta = getNow() - laten - serverTime;
                 // Add the datapoint to the syncing data
-                sync.push({ delta: delta, latency: laten, });
+                sync.push({delta: delta, latency: laten});
                 // Do it again a couple times
                 if (sync.length < 10) {
                     // Wait a bit just to space things out
                     setTimeout(() => socket.talk('S', getNow()), 10);
                     global.canThrowSyncClockError = true;
-                    global.message = "Syncing clocks, please do not tab away. " + sync.length + "/10...";
+                    global.message = 'Syncing clocks, please do not tab away. ' + sync.length + '/10...';
                 } else {
                     // Calculate the clock error
                     sync.sort((e, f) => e.latency - f.latency);
@@ -911,7 +908,8 @@ const socketInit = port => {
                     // We'll have to do protocol decoding on the remaining data
                     theshit = m.slice(7);
                 // Process the data
-                if (camtime > global.player.lastUpdate) { // Don't accept out-of-date information.
+                if (camtime > global.player.lastUpdate) {
+                    // Don't accept out-of-date information.
                     // Time shenanigans
                     lag.add(getNow() - camtime);
                     global.player.time = camtime + lag.get();
@@ -953,14 +951,14 @@ const socketInit = port => {
                     global.metrics.lastlag = global.metrics.lag;
                     global.metrics.lastuplink = getNow();
                 } else {
-                    console.log("Old data! Last given time: " + global.player.time + "; offered packet timestamp: " + camtime + ".");
+                    console.log('Old data! Last given time: ' + global.player.time + '; offered packet timestamp: ' + camtime + '.');
                 }
                 // Send the downlink and the target
                 socket.talk('d', Math.max(global.player.lastUpdate, camtime));
                 socket.cmd.talk();
                 global.updateTimes++; // metrics
                 break;
-            case "b":
+            case 'b':
                 convert.begin(m);
                 convert.broadcast();
                 break;
@@ -1025,7 +1023,7 @@ const socketInit = port => {
                     for (let j = get.next(); j; j--) {
                         spamCollection.push({
                             text: get.next(),
-                            expires: parseFloat(get.next())
+                            expires: parseFloat(get.next()),
                         });
                     }
                 }
@@ -1041,11 +1039,11 @@ const socketInit = port => {
         clearInterval(socket.commandCycle);
         window.onbeforeunload = () => false;
         console.log('The connection has closed.');
-        if (global.canThrowSyncClockError) global.message = "Failed to sync with the server. Please try again."
-        if (global.canThrowClosedMessage) global.message = "The connection has closed. Refresh to continue playing!"
+        if (global.canThrowSyncClockError) global.message = 'Failed to sync with the server. Please try again.';
+        if (global.canThrowClosedMessage) global.message = 'The connection has closed. Refresh to continue playing!';
     };
     // Notify about errors
-    socket.onerror = error => {
+    socket.onerror = (error) => {
         console.log('WebSocket error: ' + error);
         global.message = 'Socket error. Maybe another server will work.';
     };
@@ -1053,4 +1051,4 @@ const socketInit = port => {
     return socket;
 };
 
-export { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow };
+export {socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow};
