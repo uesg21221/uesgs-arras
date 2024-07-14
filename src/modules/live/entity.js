@@ -505,8 +505,9 @@ class Activation {
     constructor(body) {
         this.body = body;
         this.active = true;
-        this.lastActive = false;
+        this.timer = ran.irandom(15);
     }
+
     update() {
         // Force activation conditions
         if (this.body.alwaysActive || this.body.isPlayer || this.body.isBot) {
@@ -516,17 +517,23 @@ class Activation {
             return (this.active = false);
         }
 
+        if (this.body.isDead()) {
+            return 0;
+        }
+
         // Update activity and other properties based on views
-        if (!this.active && this.lastActive) {
+        if (!this.active) {
             this.body.removeFromGrid();
             if (this.body.settings.diesAtRange) {
                 this.body.kill();
             }
-            this.lastActive = false;
-        } else if (this.active && !this.lastActive) {
+            if (!this.timer--) {
+                this.active = true;
+            }
+        } else {
             this.body.addToGrid();
-            this.active = views.some((v) => v.check(this.body, 0.6));
-            this.lastActive = true;
+            this.timer = 15;
+            this.active = this.body.alwaysActive || this.body.isPlayer || this.body.isBot || views.some((v) => v.check(this.body, 0.6));
         }
     }
 }
