@@ -365,7 +365,7 @@ setInterval(() => {
     regenerateHealthAndShield();
 }, room.regenerateTick);
 setInterval(() => {
-    gameloop()
+    gameloop();
     gamemodeLoop();
     roomLoop();
 
