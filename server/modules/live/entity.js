@@ -533,16 +533,21 @@ class Activation {
         }
 
         // Update activity and other properties based on views
+        this.active = views.some((v) => v.check(this.body));
+
         if (!this.active && this.lastActive) {
             this.body.removeFromGrid();
-            if (this.body.settings.diesAtRange) {
-                this.body.kill();
-            }
             this.lastActive = false;
+            // Save range ticking
+            this.deactivationTime = performance.now();
         } else if (this.active && !this.lastActive) {
-            this.body.addToGrid();
-            this.active = views.some((v) => v.check(this.body, 0.6));
             this.lastActive = true;
+            this.body.addToGrid();
+            // Retrieve range ticking
+            if (this.body.diesAtRange) {
+                // Time since deactivation, converted to number of ticks, factoring in the run speed
+                this.body.range -= (performance.now() - this.deactivationTime) / room.cycleSpeed / Config.runSpeed;
+            }
         }
     }
 }

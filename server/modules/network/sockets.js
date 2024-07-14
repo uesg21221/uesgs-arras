@@ -1111,7 +1111,7 @@ const eyes = (socket) => {
             let i = nearby.indexOf(e);
             if (i !== -1) util.remove(nearby, i);
         },
-        check: (e, f) => {
+        check: (e) => {
             return check(socket.camera, e);
         }, //Math.abs(e.x - x) < e.size + f*fov && Math.abs(e.y - y) < e.size + f*fov; },
         gazeUpon: () => {

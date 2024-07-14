@@ -213,13 +213,13 @@ const gameloop = () => {
         if (my.contemplationOfMortality()) {
             my.destroy();
         } else {
-            if (my.bond == null) {
-                // Resolve the physical behavior from the last collision cycle.
-                logs.physics.startTracking();
-                my.physics();
-                logs.physics.endTracking();
-            }
             if (my.activation.active || my.isPlayer) {
+                if (my.bond == null) {
+                    // Resolve the physical behavior from the last collision cycle.
+                    logs.physics.startTracking();
+                    my.physics();
+                    logs.physics.endTracking();
+                }
                 logs.entities.tally();
                 // Think about my actions.
                 logs.life.startTracking();
@@ -365,7 +365,7 @@ setInterval(() => {
     regenerateHealthAndShield();
 }, room.regenerateTick);
 setInterval(() => {
-    gameloop()
+    gameloop();
     gamemodeLoop();
     roomLoop();
 
