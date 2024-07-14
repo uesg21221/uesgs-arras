@@ -5,8 +5,8 @@ let pickFromChanceSet = set => {
     return set;
 },
 
-spawnNatural = (tile, layeredSet, kind, bounds, spawn = false) => {
-    if (!spawn) return;
+spawnNatural = (tile, layeredSet, kind, bounds) => {
+    if (!Config.ENABLE_FOOD) return;
     let o = new Entity(tile.randomInside());
     o.define(pickFromChanceSet(layeredSet));
     o.facing = ran.randomAngle();
@@ -65,7 +65,7 @@ open = new Tile({
         if (++tile.data.foodSpawnCooldown > Config.FOOD_SPAWN_COOLDOWN) {
             tile.data.foodSpawnCooldown = 0;
             if (tile.data.foodCount < Config.FOOD_CAP && Math.random() < Config.FOOD_SPAWN_CHANCE) {
-                spawnNatural(tile, Config.FOOD_TYPES, 'food', openConfinement, Config.ENABLE_FOOD);
+                spawnNatural(tile, Config.FOOD_TYPES, 'food', openConfinement);
             }
         }
     }
@@ -82,7 +82,7 @@ labyrinth = new Tile({
         if (++tile.data.foodSpawnCooldown > Config.FOOD_SPAWN_COOLDOWN * 5) {
             tile.data.foodSpawnCooldown = 0;
             if (tile.data.foodCount < (Config.FOOD_CAP - 1) && Math.random() < Config.FOOD_SPAWN_CHANCE) {
-                spawnNatural(tile, labyrinthFoodTypes, 'food', labyrinthConfinement, Config.ENABLE_FOOD);
+                spawnNatural(tile, labyrinthFoodTypes, 'food', labyrinthConfinement);
             }
         }
     }
