@@ -517,10 +517,6 @@ class Activation {
             return (this.active = false);
         }
 
-        if (this.body.isDead()) {
-            return 0;
-        }
-
         // Update activity and other properties based on views
         if (!this.active) {
             this.body.removeFromGrid();
