@@ -783,6 +783,7 @@ function update(gui) {
     // Update other
     gui.root.update(b.rerootUpgradeTree);
     gui.class.update(b.label);
+    gui.showhealthtext.update(Config.SHOW_HEALTHBAR_TEXT ? 1 : 0);
 }
 
 function publish(gui) {
@@ -799,6 +800,7 @@ function publish(gui) {
         top: gui.topspeed.publish(),
         root: gui.root.publish(),
         class: gui.class.publish(),
+        showhealthtext: gui.showhealthtext.publish(),
     };
     // Encode which we'll be updating and capture those values only
     let oo = [0];
@@ -848,6 +850,10 @@ function publish(gui) {
         oo[0] += 0x0400;
         oo.push(o.class);
     }
+    if (o.showhealthtext != null) {
+        oo[0] += 0x0800;
+        oo.push(o.showhealthtext);
+    }
     // Output it
     return oo;
 }
@@ -870,6 +876,7 @@ let newgui = (player) => {
         bodyid: -1,
         root: floppy(),
         class: floppy(),
+        showhealthtext: floppy(),
     };
     // This is the gui itself
     return {

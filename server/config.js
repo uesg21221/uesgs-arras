@@ -100,6 +100,8 @@ module.exports = {
         if (level <= 45 && level & 1 == 1) return 1;
         return 0;
     },
+    // Show the health bar text or not.
+    SHOW_HEALTHBAR_TEXT: true,
 
     // Default skill caps.
     MAX_SKILL: 9,
