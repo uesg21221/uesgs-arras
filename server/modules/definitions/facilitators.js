@@ -776,14 +776,14 @@ exports.makeRare = (type, level) => {
         COLOR: ["lightGreen", "teal", "darkGrey", "rainbow", "trans"][level],
         ALPHA: level == 2 ? 0.25 : 1,
         BODY: {
-            DAMAGE: type.BODY.DAMAGE + level,
-            DENSITY: type.BODY.DENSITY + level,
+            DAMAGE: [1, 1, 2, 2.5, 2.5][level] * type.BODY.DAMAGE,
+            DENSITY: [1, 1, 2, 2.5, 2.5][level] * type.BODY.DENSITY,
             HEALTH: [2, 3, 5, 8, 10][level] * type.BODY.HEALTH,
-            PENETRATION: type.BODY.PENETRATION + level,
+            PENETRATION: [1.5, 1.5, 2, 2.5, 2.5][level] * type.BODY.PENETRATION,
             ACCELERATION: type.BODY.ACCELERATION
         },
         DRAW_HEALTH: true,
-        INTANGIBLE: false,
+        INTANGIBLE: type.INTANGIBLE,
         GIVE_KILL_MESSAGE: true,
     }
 }
