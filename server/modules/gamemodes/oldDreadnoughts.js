@@ -300,5 +300,7 @@ class PortalLoop {
     }
 }
 
-global.generateMaze = generateLabyrinth;
+if (Config.GAME_MODES.includes('old_dreadnoughts')) {
+    global.generateMaze = generateLabyrinth;
+}
 module.exports = { generateLabyrinth, PortalLoop };
