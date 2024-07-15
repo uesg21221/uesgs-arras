@@ -178,7 +178,14 @@ class PortalLoop {
                         type: "spikyPortalOfficialV1",
                         destination: this.openBounds,
                         buffer: 1500,
-                        spawnArray: validPositions
+                        spawnArray: validPositions,
+                        handler: (entity) => {
+                            // Spawn in default spawnable area if on a tank team
+                            if (entity.team == TEAM_DREADNOUGHTS) return;
+                            let {x, y} = getSpawnableArea(entity.team);
+                            entity.x = x;
+                            entity.y = y;
+                        }
                     },
                     {
                         type: "bluePortalOfficialV1",
@@ -196,7 +203,7 @@ class PortalLoop {
                             entity.destroyAllChildren();
                             entity.upgrades = [];
                             entity.define('dreadOfficialV1');
-                            entity.team = 10;
+                            entity.team = TEAM_DREADNOUGHTS;
                         },
                         entryBarrier: (entity) => {
                             return entity.skill.level >= 150;
