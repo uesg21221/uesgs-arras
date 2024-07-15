@@ -778,7 +778,7 @@ exports.makeRare = (type, level) => {
         BODY: {
             DAMAGE: type.BODY.DAMAGE + level,
             DENSITY: type.BODY.DENSITY + level,
-            HEALTH: [10, 20, 40, 80, 100][level] * type.BODY.HEALTH,
+            HEALTH: [2, 3, 5, 8, 10][level] * type.BODY.HEALTH,
             PENETRATION: type.BODY.PENETRATION + level,
             ACCELERATION: type.BODY.ACCELERATION
         },
