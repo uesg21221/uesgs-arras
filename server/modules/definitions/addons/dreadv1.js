@@ -3,11 +3,11 @@ const { smshskl, base, basePolygonDamage, basePolygonHealth } = require('../cons
 const g = require('../gunvals.js');
 const dreadnoughtBody = {
     SPEED: base.SPEED * 0.5,
-    HEALTH: base.HEALTH * 5,
-    DAMAGE: base.DAMAGE * 2.5,
+    HEALTH: base.HEALTH * 7,
+    DAMAGE: base.DAMAGE * 3.5,
     PENETRATION: base.PENETRATION * 2,
     SHIELD: base.SHIELD * 2.5,
-    FOV: base.FOV * 1.4,
+    FOV: base.FOV * 1.25,
     DENSITY: base.DENSITY * 6,
 	REGEN: base.REGEN,
 };
