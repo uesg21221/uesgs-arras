@@ -262,7 +262,8 @@ class PortalLoop {
                         }
                         return;
                     }
-                    if ((other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 > 625) return;
+                    if (other.invuln) return;
+                    if ((other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 > (other.size ** 2)) return;
                     if (portal.entryBarrier && !portal.entryBarrier(other)) return;
 
                     // Spawn in target region
