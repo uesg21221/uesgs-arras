@@ -98,7 +98,7 @@ let generateLabyrinth = (size) => {
     for (let x = padding; x < size + padding; x++) {
         for (let y = padding; y < size + padding; y++) {
             // Find spawn location and size
-            if (!maze[x - 1][y - 1]) continue;
+            if (!maze[y - 1][x - 1]) continue;
 
             let d = {
                 x: x * mazeWallScale + mazeWallScale / 2,
@@ -118,7 +118,7 @@ let generateLabyrinth = (size) => {
             o.life();
             makeHitbox(o);
             walls.push(o);
-            validPositions[x][y] = false;
+            validPositions[y][x] = false;
         }
     }
 
