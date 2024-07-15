@@ -148,7 +148,6 @@ delete Class.food.LEVEL_CAP;
 // Portal loop
 class PortalLoop {
     constructor() {
-        this.spawnInterval = 120_000;
         this.initialized = false;
         this.spawnBuffer = 50;
         this.openBounds = {
@@ -170,6 +169,7 @@ class PortalLoop {
             yMax: 6500,
         };
         this.locationArrayVariance = 80;
+        this.readyToSpawn = true;
         this.spawnBatches = [
             {
                 bounds: this.labyrinthBounds,
@@ -191,10 +191,12 @@ class PortalLoop {
                                 STAT_NAMES: {},
                                 IS_SMASHER: false,
                                 ALPHA: [0, 1],
+                                INVISIBLE: [0, 0],
                             });
                             entity.destroyAllChildren();
                             entity.upgrades = [];
                             entity.define('dreadOfficialV1');
+                            entity.team = 10;
                         },
                         entryBarrier: (entity) => {
                             return entity.skill.level >= 150;
@@ -232,6 +234,7 @@ class PortalLoop {
         ]
     }
     spawnCycle() {
+        this.readyToSpawn = true;
         for (let batch of this.spawnBatches) {
             for (let portal of batch.types) {
                 let spawnX, spawnY;
@@ -284,19 +287,20 @@ class PortalLoop {
                         portal.handler(other);
                     }
                 });
+                entity.on('death', ({body}) => {
+                    if (arenaClosed || !this.readyToSpawn) return;
+
+                    // Spawn after 20 seconds if a portal dies
+                    this.readyToSpawn = false;
+                    setTimeout(() => {
+                        this.spawnCycle();
+                    }, 20_000);
+                });
             }
         }
     }
-    spawnLoop() {
-        if (global.arenaCosed) return;
-        setTimeout(() => {
-            this.spawnCycle();
-            this.spawnLoop();
-        }, this.spawnInterval);
-    }
     init() {
         this.spawnCycle();
-        this.spawnLoop();
     }
 }
 
