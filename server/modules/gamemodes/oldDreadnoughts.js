@@ -262,7 +262,7 @@ class PortalLoop {
                     // Validity checking
                     if (other.type != 'tank') {
                         if (
-                            other.type != "miniboss" && other.type != "food" && other.type != "aura" && other.type != "wall" && other.type != "unknown" &&
+                            other.type != "miniboss" && other.type != "food" && other.type != "crasher" && other.type != "aura" && other.type != "wall" && other.type != "unknown" &&
                             (other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 <= 625
                         ) {
                             other.kill();
