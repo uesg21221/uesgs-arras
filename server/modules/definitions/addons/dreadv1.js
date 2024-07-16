@@ -3,11 +3,11 @@ const { smshskl, base, basePolygonDamage, basePolygonHealth } = require('../cons
 const g = require('../gunvals.js');
 const dreadnoughtBody = {
     SPEED: base.SPEED * 0.5,
-    HEALTH: base.HEALTH * 5,
-    DAMAGE: base.DAMAGE * 2.5,
+    HEALTH: base.HEALTH * 7,
+    DAMAGE: base.DAMAGE * 3.5,
     PENETRATION: base.PENETRATION * 2,
     SHIELD: base.SHIELD * 2.5,
-    FOV: base.FOV * 1.4,
+    FOV: base.FOV * 1.25,
     DENSITY: base.DENSITY * 6,
 	REGEN: base.REGEN,
 };
@@ -40,14 +40,14 @@ g.dreadv1Drone = {
 	recoil: 0,
 }
 g.dreadv1Trap = {
-	range: 0.9,
+	range: 1.3,
 	shudder: 0.2,
 	speed: 1.05,
-	reload: 1.6,
-	damage: 1.2,
-	health: 1.15,
+	reload: 2.8,
+	damage: 1.8,
+	health: 1.35,
 	resist: 1.1,
-	size: 1.3,
+	size: 1.25,
 }
 
 // Comment out the line below to enable this addon, uncomment it to disable this addon.
@@ -192,7 +192,8 @@ Class.portalOfficialV1 = {
 	COLOR: 'pureBlack',
 	FACING_TYPE: 'noFacing',
 	SIZE: 33,
-	DIE_AT_RANGE: true
+	DIE_AT_RANGE: true,
+	INTANGIBLE: true
 }
 Class.spikyPortalSpikesOfficialV1 = {
 	SHAPE: "",
@@ -606,7 +607,7 @@ Class.cerberusOfficialV1 = {
 		}, {
 			POSITION: [1.75, 2.25, 1.7, 13.25, 4, 0, 2/3],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.5, health: 0.75, damage: 0.8 }]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.22, health: 0.67, damage: 0.7 }]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
 				STAT_CALCULATOR: "trap",
 			},
@@ -615,7 +616,7 @@ Class.cerberusOfficialV1 = {
 		}, {
 			POSITION: [1.75, 2.25, 1.7, 13.25, -4, 0, 1/3],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.5, health: 0.75, damage: 0.8 }]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.22, health: 0.67, damage: 0.7 }]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
 				STAT_CALCULATOR: "trap"
 			}
@@ -624,7 +625,7 @@ Class.cerberusOfficialV1 = {
 		}, {
 			POSITION: [2, 3, 1.7, 14.75, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.5, health: 0.75, damage: 0.8 }]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.22, health: 0.67, damage: 0.7 }]),
 				TYPE: ["trap", {HITS_OWN_TYPE: "never"} ],
 				STAT_CALCULATOR: "trap"
 			}
@@ -641,7 +642,7 @@ Class.minotaurOfficialV1 = {
 		}, {
 			POSITION: [3, 9.5, 1.6, 13, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.59, range: 1.05, health: 1.55 }]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap, { reload: 1.55, range: 0.93, health: 1.55 }]),
 				TYPE: ["unsetTrap", {HITS_OWN_TYPE: "never"} ],
 				STAT_CALCULATOR: "block"
 			}
@@ -651,6 +652,7 @@ Class.minotaurOfficialV1 = {
 Class.sirenOfficialV1 = {
 	PARENT: "genericDreadnought1",
 	LABEL: "Siren",
+	UPGRADE_TOOLTIP: "Auto-Traps",
 	GUNS: weaponArray([
 		{
 			POSITION: [6, 7, -1.5, 7, 0, 0, 0],
