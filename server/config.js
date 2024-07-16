@@ -101,7 +101,7 @@ module.exports = {
         return 0;
     },
     // Show the health bar text or not.
-    SHOW_HEALTHBAR_TEXT: true,
+    SHOW_HEALTHBAR_TEXT: false,
 
     // Default skill caps.
     MAX_SKILL: 9,
@@ -152,7 +152,7 @@ module.exports = {
 
     // Allow foods to be spawned or not.
     // NOTE: Disabling it decreases lagness, also very usefull if you dont need foods to be spawned.
-    ENABLE_FOOD: true,
+    ENABLE_FOOD: false,
 
     FOOD_CAP: 3, // Max normal food per normal tile.
     FOOD_SPAWN_CHANCE: 0.875, // Likeliness of normal food spawn attempts succeeding.

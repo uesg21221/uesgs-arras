@@ -280,10 +280,28 @@ table {
 #startMenuSlidingContent {
     height: 305px;
 }
-
+body.mobile .desktopControlTab {
+    display: none;
+}
+.mobileOptions {
+    display: none;
+}
+body.mobile .mobileOptions {
+    display: block;
+}
+.mobileOptionsHeader {
+    display: none;
+}
+body.mobile .mobileOptionsHeader {
+    display: block;
+    margin: 10px 0 4px;
+    font: bold 13px/1 Ubuntu;
+    color: #000000;
+    text-align: center;
+}
 #startMenuSlidingTrigger {
     cursor: pointer;
-    height: 15px;
+    height: 25px;
 }
 
 #startMenuSlidingTrigger:hover {
@@ -301,7 +319,29 @@ update {
     font-weight: bold;
     text-align: center;
 }
-
+.horizontalSelector {
+    padding: 4px 0;
+    margin-bottom: 4px;
+    font: bold 12px Ubuntu;
+    text-align: center;
+    overflow: auto hidden;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}
+.horizontalSelector span {
+    padding: 4px 10px;
+    color: #343434;
+    cursor: pointer;
+}
+.horizontalSelector span:hover {
+    color: #5f5f5f;
+}
+.horizontalSelector span.active {
+    background: #0074DA;
+    color: #ffffff;
+    border-radius: 5px;
+    cursor: default;
+}
 .shrinkable {
     padding-left: 0px;
     width: 360px;
@@ -623,7 +663,9 @@ a.link {
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-
+.moreLinks {
+    text-align: center;
+}
 #startMenuWrapper {
     transition: top 1s;
     top: 0px;

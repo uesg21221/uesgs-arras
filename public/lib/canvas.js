@@ -218,6 +218,12 @@ class Canvas {
                     global.treeScale = 1;
                     global.showTree = !global.showTree;
                     break;
+                case global.KEY_RECORD:
+                    this.record();
+                    break;
+                case global.KEY_SCREENSHOT:
+                    this.screenshot();
+                    break;
             }
             if (global.canSkill) {
                 let skill = [
@@ -556,5 +562,63 @@ class Canvas {
             }
         }
     }
+    record() {
+        if (this.cv.captureStream && window.MediaRecorder)
+              if (this.videoRecorder)
+                switch (this.videoRecorder.state) {
+                  case "inactive":
+                    global.createMessage("Recorder Started!", 2_000);
+                    this.videoRecorder.start();
+                    break;
+                  case "recording":
+                    global.createMessage("Recorder Stopped! Saving file...", 5_000);
+                    this.videoRecorder.stop();
+                }
+              else {
+                if (!global.gameStart) return;
+                let e = [];
+                this.videoRecorder = new MediaRecorder(this.cv.captureStream(60));
+                this.videoRecorder.ondataavailable = (a) => e.push(a.data);
+                this.videoRecorder.onstop = () => {
+                  let a = new Blob(e, {
+                    type: this.videoRecorder.mimeType,
+                  });
+                  e.length = 0;
+                  let k = URL.createObjectURL(a),
+                    q = document.createElement("a");
+                  q.style.display = "none";
+                  q.setAttribute("download", "arras.mp4");
+                  q.setAttribute("href", k);
+                  document.body.appendChild(q);
+                  setTimeout(() => {
+                    URL.revokeObjectURL(k);
+                    document.body.removeChild(q);
+                  }, 100);
+                  q.click();
+                };
+                global.createMessage("Recorder Started!", 2_000);
+                this.videoRecorder.start();
+              }
+            else
+            global.createMessage("Cannot record due to outdated/unsupported browser. Please update your browser!", 6_000);
+      }
+      screenshot() {
+        var x = this.cv.toDataURL(),
+            k = atob(x.split(",")[1]);
+        x = x.split(",")[0].split(":")[1].split(";")[0];
+        let p = new Uint8Array(k.length);
+        for (let a = 0; a < k.length; a++) p[a] = k.charCodeAt(a);
+        let q = URL.createObjectURL(new Blob([p], {type: x})),
+        w = document.createElement("a");
+        w.style.display = "none";
+        w.setAttribute("download", "arras.png");
+        w.setAttribute("href", q);
+        document.body.appendChild(w);
+        setTimeout(() => {
+            URL.revokeObjectURL(q);
+            document.body.removeChild(w);
+        }, 100);
+        w.click();
+      }
 }
 export { Canvas };

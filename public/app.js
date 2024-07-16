@@ -73,6 +73,8 @@ class Animation {
 }
 let controls = document.getElementById("controlSettings"),
     resetButton = document.getElementById("resetControls"),
+    moreControls = document.getElementById("moreControls"),
+    moreControlsLength = null,
     selectedElement = null,
     controlsArray = [],
     defaultKeybinds = {},
@@ -184,7 +186,7 @@ function setKeybind(key, keyCode) {
 function getElements(kb, storeInDefault) {
     for (let row of controls.rows) {
         for (let cell of row.cells) {
-            let element = cell.firstChild;
+            let element = cell.firstChild.firstChild;
             if (!element) continue;
             let key = element.dataset.key;
             if (storeInDefault) defaultKeybinds[key] = [element.innerText, global[key]];
@@ -256,18 +258,37 @@ window.onload = async () => {
     util.retrieveFromLocalStorage("optScreenshotMode");
     util.retrieveFromLocalStorage("optPredictive");
     util.retrieveFromLocalStorage("optFancy");
+    util.retrieveFromLocalStorage("optLowResolution");
     util.retrieveFromLocalStorage("coloredHealthbars");
     util.retrieveFromLocalStorage("centerTank");
     util.retrieveFromLocalStorage("optColors");
     util.retrieveFromLocalStorage("optCustom");
     util.retrieveFromLocalStorage("optNoPointy");
     util.retrieveFromLocalStorage("optBorders");
+    util.retrieveFromLocalStorage("optNoGrid");
     util.retrieveFromLocalStorage("seperatedHealthbars");
     util.retrieveFromLocalStorage("autoLevelUp");
     util.retrieveFromLocalStorage("optMobile");
+    // GUI
+    util.retrieveFromLocalStorage("optRenderGui");
+    util.retrieveFromLocalStorage("optRenderLeaderboard");
+    util.retrieveFromLocalStorage("optRenderNames");
+    util.retrieveFromLocalStorage("optRenderHealth");
+    util.retrieveFromLocalStorage("optRenderScores");
+    util.retrieveFromLocalStorage("optReducedInfo");
+    util.retrieveFromLocalStorage("showCrosshair");
+    util.retrieveFromLocalStorage("showJoystick");
     // Set default theme
     if (document.getElementById("optColors").value === "") {
         document.getElementById("optColors").value = "normal";
+        // Also do auto check for GUI stuff.
+        document.getElementById("optRenderGui").checked = true;
+        document.getElementById("optRenderLeaderboard").checked = true;
+        document.getElementById("optRenderNames").checked = true;
+        document.getElementById("optRenderHealth").checked = true;
+        document.getElementById("optRenderScores").checked = true;
+        document.getElementById("optFancy").checked = true;
+        if (global.mobile) document.getElementById("showCrosshair").checked = true, document.getElementById("showJoystick").checked = true;
     }
     if (document.getElementById("optBorders").value === "") {
         document.getElementById("optBorders").value = "normal";
@@ -299,6 +320,17 @@ window.onload = async () => {
             resetButton.classList.remove("active"); 
             resetButton.classList.remove("spin");
         }, 400);
+    });
+    moreControls.addEventListener("click", () => {
+      if (moreControlsLength) {
+        for (var b = 0; b < moreControlsLength.length; b++) moreControlsLength[b].classList.add("hidden");
+        moreControlsLength = null;
+        moreControls.classList.remove("x");
+      } else {
+        moreControlsLength = document.querySelectorAll("#controlSettings tr.hidden");
+        for (b = 0; b < moreControlsLength.length; b++) moreControlsLength[b].classList.remove("hidden");
+        moreControls.classList.add("x");
+      }
     });
     // Game start stuff
     document.getElementById("startButton").onclick = () => startGame();
@@ -346,9 +378,30 @@ function toggleOptionsMenu() {
         clicked || ((clicked = !0), toggle());
     };
 };
+// Tab options
+function tabOptionsMenuSwitcher() {
+    let buttonTabs = document.getElementById("optionMenuTabs"),
+    tabOptions = [
+      document.getElementById("tabAppearance"),
+      document.getElementById("tabOptions"),
+      document.getElementById("tabControls"),
+      document.getElementById("tabAbout"),
+    ];
+    for (let g = 1; g < tabOptions.length; g++) tabOptions[g].style.display = "none";
+    let e = 0;
+    for (let g = 0; g < buttonTabs.children.length; g++)
+        buttonTabs.children[g].addEventListener("click", () => {
+            e !== g &&
+            (buttonTabs.children[e].classList.remove("active"), // Remove the active class
+            buttonTabs.children[g].classList.add("active"), // Add the clicked active class
+            (tabOptions[e].style.display = "none"), // Dont display the old menu.
+            (tabOptions[g].style.display = "block"), // Display the menu.
+            (e = g))
+      });
+}
 function resizeEvent() {
     let scale = window.devicePixelRatio;
-    if (!settings.graphical.fancyAnimations) {
+    if (settings.graphical.lowResolution) {
         scale *= 0.5;
     }
     global.screenWidth = window.innerWidth * scale;
@@ -364,7 +417,8 @@ var ctx = c.getContext("2d");
 var c2 = document.createElement("canvas");
 var ctx2 = c2.getContext("2d");
 ctx2.imageSmoothingEnabled = true;
-global.mobile && document.getElementById("controlsSection").remove();
+// important functions
+tabOptionsMenuSwitcher();
 toggleOptionsMenu();
 // Animation things
 function Smoothbar(value, speed, sharpness = 3, lerpValue = 0.025) {
@@ -535,6 +589,7 @@ function startGame() {
     }
     // Get options
     util.submitToLocalStorage("optFancy");
+    util.submitToLocalStorage("optLowResolution");
     util.submitToLocalStorage("centerTank");
     util.submitToLocalStorage("optBorders");
     util.submitToLocalStorage("optNoPointy");
@@ -544,7 +599,17 @@ function startGame() {
     util.submitToLocalStorage("optScreenshotMode");
     util.submitToLocalStorage("coloredHealthbars");
     util.submitToLocalStorage("seperatedHealthbars");
-    settings.graphical.fancyAnimations = !document.getElementById("optFancy").checked;
+    util.submitToLocalStorage("optNoGrid");
+    // GUI
+    util.submitToLocalStorage("optRenderGui");
+    util.submitToLocalStorage("optRenderLeaderboard");
+    util.submitToLocalStorage("optRenderNames");
+    util.submitToLocalStorage("optRenderHealth");
+    util.submitToLocalStorage("optRenderScores");
+    util.submitToLocalStorage("optReducedInfo");
+    util.submitToLocalStorage("showCrosshair");
+    util.submitToLocalStorage("showJoystick");
+    settings.graphical.fancyAnimations = document.getElementById("optFancy").checked;
     settings.graphical.centerTank = document.getElementById("centerTank").checked;
     settings.graphical.pointy = !document.getElementById("optNoPointy").checked;
     settings.game.autoLevelUp = document.getElementById("autoLevelUp").checked;
@@ -552,6 +617,17 @@ function startGame() {
     settings.graphical.screenshotMode = document.getElementById("optScreenshotMode").checked;
     settings.graphical.coloredHealthbars = document.getElementById("coloredHealthbars").checked;
     settings.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
+    settings.graphical.lowResolution = document.getElementById("optLowResolution").checked;
+    settings.graphical.showGrid = !document.getElementById("optNoGrid").checked;
+    // GUI
+    global.GUIStatus.renderGUI = document.getElementById("optRenderGui").checked;
+    global.GUIStatus.renderLeaderboard = document.getElementById("optRenderLeaderboard").checked;
+    global.GUIStatus.renderPlayerNames = document.getElementById("optRenderNames").checked;
+    global.GUIStatus.renderPlayerScores = document.getElementById("optRenderScores").checked;
+    global.GUIStatus.renderhealth = document.getElementById("optRenderHealth").checked;
+    global.GUIStatus.minimapReducedInfo = document.getElementById("optReducedInfo").checked;
+    global.mobileStatus.enableCrosshair = document.getElementById("showCrosshair").checked;
+    global.mobileStatus.showJoysticks = document.getElementById("showJoystick").checked;
     switch (document.getElementById("optBorders").value) {
         case "normal":
             settings.graphical.darkBorders = settings.graphical.neon = false;
@@ -918,7 +994,8 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         initStrokeWidth = lineWidthMult * Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
     source.guns.update();
     if (fade === 0 || alpha === 0) return;
-    if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
+    if (render.expandsWithDeath && settings.graphical.fancyAnimations) drawSize *= 1 + 0.5 * (1 - fade);
+    if (!settings.graphical.fancyAnimations) drawSize *= 1 + -1.5 * (1 - fade);
     if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
         context = ctx2;
         context.canvas.width = context.canvas.height = drawSize * m.position.axis / ratio * 2 + initStrokeWidth;
@@ -1054,7 +1131,7 @@ function drawHealth(x, y, instance, ratio, alpha) {
     if (instance.drawsHealth) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
-        if (health < 0.99 || shield < 0.99) {
+        if (health < 0.99 || shield < 0.99 && global.GUIStatus.renderhealth) {
             let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(gameDraw.modifyColor(instance.color), color.guiwhite, 0.5) : color.lgreen;
             let yy = y + realSize + 15 * ratio;
             let barWidth = 3 * ratio;
@@ -1081,8 +1158,8 @@ function drawHealth(x, y, instance, ratio, alpha) {
         var name = instance.name.substring(7, instance.name.length + 1);
         var namecolor = instance.name.substring(0, 7);
         ctx.globalAlpha = fade * (alpha ** 2);
-        drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
-        drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
+        if (global.GUIStatus.renderPlayerNames) drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
+        if (global.GUIStatus.renderPlayerScores) drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
     }
 }
 
@@ -1363,22 +1440,24 @@ function drawFloor(px, py, ratio) {
             ctx.fillRect(left, top, right - left, bottom - top);
         }
     }
-    let gridsize = 30 * ratio;
-    if (gridsize < 7) return;
-    ctx.lineWidth = ratio;
-    ctx.strokeStyle = settings.graphical.screenshotMode ? color.guiwhite : color.guiblack;
-    ctx.globalAlpha = 0.04;
-    ctx.beginPath();
-    for (let x = (global.screenWidth / 2 - px) % gridsize; x < global.screenWidth; x += gridsize) {
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, global.screenHeight);
+    if (settings.graphical.showGrid) {
+        let gridsize = 30 * ratio;
+        if (gridsize < 7) return;
+        ctx.lineWidth = ratio;
+        ctx.strokeStyle = settings.graphical.screenshotMode ? color.guiwhite : color.guiblack;
+        ctx.globalAlpha = 0.04;
+        ctx.beginPath();
+        for (let x = (global.screenWidth / 2 - px) % gridsize; x < global.screenWidth; x += gridsize) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, global.screenHeight);
+        }
+        for (let y = (global.screenHeight / 2 - py) % gridsize; y < global.screenHeight; y += gridsize) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(global.screenWidth, y);
+        }
+        ctx.stroke();
+        ctx.globalAlpha = 1;
     }
-    for (let y = (global.screenHeight / 2 - py) % gridsize; y < global.screenHeight; y += gridsize) {
-        ctx.moveTo(0, y);
-        ctx.lineTo(global.screenWidth, y);
-    }
-    ctx.stroke();
-    ctx.globalAlpha = 1;
 }
 
 function drawEntities(px, py, ratio) {
@@ -1879,12 +1958,11 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
         drawText("Update Rate: " + global.metrics.updatetime + "Hz", x + len, y - 50 - 2 * 14, 10, color.guiwhite, "right");
         drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText(global.metrics.latency + " ms - " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
-    } else {
+    } else if (!global.GUIStatus.minimapReducedInfo) {
         drawText("Open Source Arras", x + len, y - 50 - 2 * 14 - 2, 15, "#1081E5", "right");
         drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText(global.metrics.latency + " ms : " + global.metrics.updatetime + "Hz", x + len, y - 50, 10, color.guiwhite, "right");
-    }
-    global.fps = global.metrics.rendertime;
+    } else drawText("Open Source Arras", x + len, y - 22 - 2 * 14 - 2, 15, "#1081E5", "right");
 }
 
 function drawLeaderboard(spacing, alcoveSize, max) {
@@ -2068,23 +2146,25 @@ function drawMobileJoysticks() {
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.arc(
-        canvas.movementTouchPos.x + (global.screenWidth * 1) / 6,
-        canvas.movementTouchPos.y + (global.screenHeight * 2) / 3,
-        radius / 2.5,
-        0,
-        2 * Math.PI
-    );
-    ctx.arc(
-        canvas.controlTouchPos.x + (global.screenWidth * 5) / 6,
-        canvas.controlTouchPos.y + (global.screenHeight * 2) / 3,
-        radius / 2.5,
-        0,
-        2 * Math.PI
-    );
+    if (global.mobileStatus.showJoysticks) {
+        ctx.arc(
+            canvas.movementTouchPos.x + (global.screenWidth * 1) / 6,
+            canvas.movementTouchPos.y + (global.screenHeight * 2) / 3,
+            radius / 2.5,
+            0,
+            2 * Math.PI
+        );
+        ctx.arc(
+            canvas.controlTouchPos.x + (global.screenWidth * 5) / 6,
+            canvas.controlTouchPos.y + (global.screenHeight * 2) / 3,
+            radius / 2.5,
+            0,
+            2 * Math.PI
+        );
+    }
     ctx.fill();
     // crosshair
-    if (global.mobileStatus.showCrosshair) {
+    if (global.mobileStatus.showCrosshair && global.mobileStatus.enableCrosshair) {
         const crosshairpos = {
             x: global.screenWidth / 2 + global.player.target.x,
             y: global.screenHeight / 2 + global.player.target.y
@@ -2201,6 +2281,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
     let lb = leaderboard.get();
     let max = lb.max;
     global.canSkill = !!gui.points && !global.showTree;
+    global.fps = global.metrics.rendertime;
     if (global.showTree) {
         drawUpgradeTree(spacing, alcoveSize);
     } else {
@@ -2208,12 +2289,14 @@ const gameDrawAlive = (ratio, drawRatio) => {
             drawMobileJoysticks();
             drawMobileButtons(spacing, alcoveSize);
         }
-        drawMessages(spacing, alcoveSize);
-        drawSkillBars(spacing, alcoveSize);
-        drawSelfInfo(spacing, alcoveSize, max);
-        drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA);
-        drawLeaderboard(spacing, alcoveSize, max, lb);
-        drawAvailableUpgrades(spacing, alcoveSize);
+        if (global.GUIStatus.renderGUI) {
+            drawMessages(spacing, alcoveSize);
+            drawSkillBars(spacing, alcoveSize);
+            drawSelfInfo(spacing, alcoveSize, max);
+            drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA);
+            if (global.GUIStatus.renderLeaderboard) drawLeaderboard(spacing, alcoveSize, max, lb);
+            drawAvailableUpgrades(spacing, alcoveSize);
+        } else drawAvailableUpgrades(spacing, alcoveSize);
     }
     global.metrics.lastrender = getNow();
 };
