@@ -995,7 +995,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     source.guns.update();
     if (fade === 0 || alpha === 0) return;
     if (render.expandsWithDeath && settings.graphical.fancyAnimations) drawSize *= 1 + 0.5 * (1 - fade);
-    if (!settings.graphical.fancyAnimations) drawSize *= 1 + -1.5 * (1 - fade);
+    if (!settings.graphical.fancyAnimations) drawSize *= 1 + -2 * (1 - fade);
     if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
         context = ctx2;
         context.canvas.width = context.canvas.height = drawSize * m.position.axis / ratio * 2 + initStrokeWidth;
