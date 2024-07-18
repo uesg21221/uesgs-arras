@@ -517,6 +517,7 @@ function incoming(message, socket) {
                 body.kill();
                 if (!player.body.dontIncreaseFov) player.body.FOV += 0.5;
                 player.body.dontIncreaseFov = true;
+                player.body.skill.points = 0;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
                 player.body.sendMessage("You are now controlling the mothership.");
@@ -538,6 +539,7 @@ function incoming(message, socket) {
                 body.kill();
                 if (!player.body.dontIncreaseFov) player.body.FOV += 0.5;
                 player.body.dontIncreaseFov = true;
+                player.body.skill.points = 0;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
                 player.body.sendMessage("You are now controlling the dominator.");
