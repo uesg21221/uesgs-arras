@@ -63,6 +63,7 @@ var serverStart = 0,
             getScore: () => sscore.get(),
             getLevel: () => level,
         },
+        showhealthtext: false,
         type: 0,
         root: "",
         class: "",
@@ -482,11 +483,15 @@ const process = (z = {}) => {
         // Update health, flagging as injured if needed
         if (isNew) {
             z.health = get.next() / 65535;
+            z.healthN = get.next();
+            z.maxHealthN = get.next();
             z.shield = get.next() / 65535;
         } else {
             let hh = z.health,
                 ss = z.shield;
             z.health = get.next() / 65535;
+            z.healthN = get.next();
+            z.maxHealthN = get.next();
             z.shield = get.next() / 65535;
             // Update stuff
             if (z.health < hh || z.shield < ss) {
@@ -623,6 +628,7 @@ const convert = {
         let index = get.next(),
             // Translate the encoded index
             indices = {
+                showhealthtext: index & 0x0800,
                 class: index & 0x0400,
                 root: index & 0x0200,
                 topspeed: index & 0x0100,
@@ -688,6 +694,9 @@ const convert = {
         }
         if (indices.class) {
             gui.class = get.next();
+        }
+        if (indices.showhealthtext) {
+            gui.showhealthtext = get.next();
         }
     },
     broadcast: () => {

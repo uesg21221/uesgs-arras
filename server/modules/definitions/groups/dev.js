@@ -1202,6 +1202,37 @@ Class.flailBall = {
         POSITION: [21.5, 0, 0, 0, 360, 0],
         TYPE: "flailBallSpike",
     }],
+    GUNS: [
+        { 
+            POSITION: {WIDTH: 8, LENGTH: 10},
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, {
+                    range: 0.1,
+                    speed: 0,
+                    maxSpeed: 0,
+                    recoil: 0,
+                    reload: 0.1,
+                    damage: 4,
+                    size: 2,
+                    health: 1,
+                }]),
+                TYPE: ["bullet", {
+                    //ALPHA: 0,
+                    ON: [{
+                        event: 'tick',
+                        handler: ({body}) => {
+                            body.DAMAGE -= 1;
+                            body.SIZE -= 0.6;
+                            if (body.SIZE < 1) body.kill();
+                        }
+                    }],
+                }], 
+                AUTOFIRE: true,
+                BORDERLESS: true,
+                DRAW_FILL: false,
+            }
+        }
+    ]
 };
 Class.flailBolt1 = {
     PARENT: "genericTank",
@@ -1241,7 +1272,7 @@ Class.flailBolt3 = {
 Class.genericFlail = {
     PARENT: "genericTank",
     STAT_NAMES: statnames.flail,
-    TOOLTIP: "[DEV NOTE] The Flail is not finished yet. This tank is currently just a mockup.",
+    SYNC_WITH_TANK: true,
     SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
 }
 Class.flail = {
