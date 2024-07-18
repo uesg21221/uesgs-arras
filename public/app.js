@@ -2248,7 +2248,26 @@ function drawMobileButtons(spacing, alcoveSize) {
     }
     if (global.clickables.mobileButtons.altFire) buttons.push([["\u2756", 2, 2]]);
 
-    makeButtons(buttons, alcoveSize * 1 + spacing * 2, yOffset + spacing, baseSize, clickableRatio, spacing);
+    let len = alcoveSize;
+    let height = (len / global.gameWidth) * global.gameHeight;
+    if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
+        let ratio = [
+            global.gameWidth / global.gameHeight,
+            global.gameHeight / global.gameWidth,
+        ];
+        len /= ratio[1] * 1.5;
+        height /= ratio[1] * 1.5;
+        if (len > alcoveSize * 2) {
+            ratio = len / (alcoveSize * 2);
+       } else if (height > alcoveSize * 2) {
+            ratio = height / (alcoveSize * 2);
+        } else {
+            ratio = 1;
+        }
+        len /= ratio;
+        height /= ratio;
+   }
+    makeButtons(buttons, len + spacing * 2, yOffset + spacing, baseSize, clickableRatio, spacing);
 }
 const gameDrawAlive = (ratio, drawRatio) => {
     let GRAPHDATA = 0;
