@@ -207,17 +207,17 @@ Class.desmos = {
     STAT_NAMES: statnames.desmos,
     GUNS: [
         {
-            POSITION: [20, 10, 0.8, 0, 0, 0, 0],
+            POSITION: [20, 8, -1.333, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
                 TYPE: ["bullet", {CONTROLLERS: ['snake']}]
             }
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 90, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, -6.25, 90, 0]
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -90, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, 6.25, -90, 0]
         }
     ]
 }
@@ -2827,14 +2827,14 @@ Class.helix = {
     STAT_NAMES: statnames.desmos,
     GUNS: [
         {
-            POSITION: [20, 8, 0.75, 0, -5, 0, 0],
+            POSITION: [20, 6, -1.333, 0, -5, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
                 TYPE: ["bullet", {CONTROLLERS: ['snake']}]
             },
         },
         {
-            POSITION: [20, 8, 0.75, 0, 5, 0, 0],
+            POSITION: [20, 6, -1.333, 0, 5, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
                 TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: true}]]}]
@@ -2862,10 +2862,10 @@ Class.sidewinder = {
             POSITION: [10, 8.5, 1.4, 7, 0, 0, 0]
         },
         {
-            POSITION: [20, 10, 0.8, 0, 0, 0, 0],
+            POSITION: [20, 8, -1.333, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
-                TYPE: ["bullet", {MOTION_TYPE: "desmos"}]
+                TYPE: ["bullet", {CONTROLLERS: ['snake']}]
             }
         },
         {
@@ -2905,7 +2905,7 @@ Class.repeater = {
             POSITION: [20, 10, 0.8, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
-                TYPE: ["splitterBullet", {MOTION_TYPE: "desmos"}]
+                TYPE: ["splitterBullet", {CONTROLLERS: ['snake']}]
             }
         },
         {
@@ -2931,21 +2931,21 @@ Class.triplex = {
     STAT_NAMES: statnames.desmos,
     GUNS: [
         {
-            POSITION: [18, 10, 0.7, 0, 0, 0, 0],
+            POSITION: [18, 7, -1.333, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot, {shudder: 0, spray: 0, size: 0.8}]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot, {speed: 1.25, maxSpeed: 1.25}]),
                 TYPE: "bullet",
             },
         },
         {
-            POSITION: [18, 10, 0.7, 0, 0, 45, 0.5],
+            POSITION: [18, 7, -1.333, 0, 0, 45, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot, g.desmos]),
                 TYPE: ["bullet", {CONTROLLERS: ['snake']}]
             },
         },
         {
-            POSITION: [18, 10, 0.7, 0, 0, -45, 0.5],
+            POSITION: [18, 7, -1.333, 0, 0, -45, 0.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot, g.desmos]),
                 TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: true}]]}]
@@ -2972,56 +2972,56 @@ Class.quadruplex = {
     STAT_NAMES: statnames.desmos,
     GUNS: [
         {
-            POSITION: [20, 10, 0.8, 0, 0, 45, 0],
+            POSITION: [20, 8, -1.333, 0, 0, 45, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.desmos, g.twin, { reload: 2 }]),
-                TYPE: ["bullet", {CONTROLLERS: ['snake']}]
+                TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: true, amplitude: 180, yOffset: 50}]]}]
             }
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 135, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, -6.25, 135, 0]
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -45, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, 6.25, -45, 0]
         },
         {
-            POSITION: [20, 10, 0.8, 0, 0, -45, 0],
+            POSITION: [20, 8, -1.333, 0, 0, -45, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.desmos, g.twin, { reload: 2 }]),
-                TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: true}]]}]
+                TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: false, amplitude: 180, yOffset: -50}]]}]
             }
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 45, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, -6.25, 45, 0]
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -135, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, 6.25, -135, 0]
         },
         {
-            POSITION: [20, 10, 0.8, 0, 0, 135, 0],
+            POSITION: [20, 8, -1.333, 0, 0, 135, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.desmos, g.twin, { reload: 2 }]),
-                TYPE: ["bullet", {CONTROLLERS: ['snake']}]
+                TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: false, amplitude: 180, yOffset: 50}]]}]
             }
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, -135, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, -6.25, -135, 0]
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, 45, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, 6.25, 45, 0]
         },
         {
-            POSITION: [20, 10, 0.8, 0, 0, -135, 0],
+            POSITION: [20, 8, -1.333, 0, 0, -135, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.desmos, g.twin, { reload: 2 }]),
-                TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: true}]]}]
+                TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: true, amplitude: 180, yOffset: -50}]]}]
             }
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, -45, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, -6.25, -45, 0]
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, 135, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, 6.25, 135, 0]
         },
     ],
 }
@@ -3038,14 +3038,14 @@ Class.coil = {
             POSITION: [20, 8, 0.75, 0, -5, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
-                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: false}]}]
+                TYPE: ["bullet", {CONTROLLERS: [["snake", {invert: false}]]}]
             },
         },
         {
             POSITION: [20, 8, 0.75, 0, 5, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
-                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: true}]}]
+                TYPE: ["bullet", {CONTROLLERS: [["snake", {invert: true}]]}]
             },
         },
         {
@@ -3211,10 +3211,10 @@ Class.iterator = {
     STAT_NAMES: statnames.desmos,
     GUNS: [
         {
-            POSITION: [22, 10, 0.8, 0, 0, 0, 0],
+            POSITION: [22, 8, -1.333, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
-                TYPE: ["superSplitterBullet", {MOTION_TYPE: "desmos"}]
+                TYPE: ["superSplitterBullet", {CONTROLLERS: ['snake']}]
             }
         },
         {
@@ -3244,17 +3244,17 @@ Class.duplicator = {
     STAT_NAMES: statnames.desmos,
     GUNS: [
         {
-            POSITION: [20, 10, 0.8, 0, 0, 20, 0],
+            POSITION: [20, 8, -1.333, 0, 0, 20, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
-                TYPE: ["splitterBullet", {MOTION_TYPE: ["desmos", {invert: false}]}]
+                TYPE: ["splitterBullet", {CONTROLLERS: [["snake", {invert: false}]]}]
             }
         },
         {
-            POSITION: [20, 10, 0.8, 0, 0, -20, 0],
+            POSITION: [20, 8, -1.333, 0, 0, -20, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
-                TYPE: ["splitterBullet", {MOTION_TYPE: ["desmos", {invert: true}]}]
+                TYPE: ["splitterBullet", {CONTROLLERS: [["snake", {invert: true}]]}]
             }
         },
         {
