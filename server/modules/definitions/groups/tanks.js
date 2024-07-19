@@ -1076,6 +1076,7 @@ Class.revolver = {
     BODY: {
         FOV: base.FOV * 1.225
     },
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
     GUNS: [
         {
             POSITION: {
