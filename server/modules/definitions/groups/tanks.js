@@ -1074,41 +1074,38 @@ Class.revolver = {
     LABEL: "Revolver",
     DANGER: 7,
     BODY: {
-        FOV: 1.2 * base.FOV
+        FOV: base.FOV * 1.225
     },
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!",
     GUNS: [
         {
             POSITION: {
                 LENGTH: 5,
-                WIDTH: 8.5,
-                ASPECT: 1.3,
+                WIDTH: 12,
+                ASPECT: 1.25,
                 X: 8
             }
         },
         {
             POSITION: {
                 LENGTH: 5,
-                WIDTH: 8.5,
-                ASPECT: 1.3,
+                WIDTH: 12,
+                ASPECT: 1.25,
                 X: 13
             }
         },
         {
             POSITION: {
-                LENGTH: 5,
-                WIDTH: 8.5,
-                ASPECT: 1.3,
-                X: 18
+                LENGTH: 20,
+                WIDTH: 12
             }
         },
         {
             POSITION: {
                 LENGTH: 24,
-                WIDTH: 8.5
+                WIDTH: 7
             },
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle]),
                 TYPE: "bullet"
             }
         }
