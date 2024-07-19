@@ -985,7 +985,6 @@ Class.deadeye = {
         SPEED: 0.85 * base.SPEED,
         FOV: 1.4 * base.FOV
     },
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
     GUNS: [
         {
             POSITION: {
@@ -1009,7 +1008,7 @@ Class.deadeye = {
                 WIDTH: 8,
             },
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, { pen: 2 }]),
                 TYPE: "bullet"
             }
         },
@@ -1028,7 +1027,6 @@ Class.nimrod = {
     },
     CONTROLLERS: ["zoom"],
     TOOLTIP: "Hold right click to zoom.",
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
     GUNS: [
         {
             POSITION: {
@@ -1052,7 +1050,7 @@ Class.nimrod = {
                 WIDTH: 8
             },
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, { pen: 2 }]),
                 TYPE: "bullet"
             }
         },
@@ -1063,7 +1061,7 @@ Class.nimrod = {
                 DELAY: 0.25
             },
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, { pen: 2 }]),
                 TYPE: "bullet"
             }
         }
@@ -1076,7 +1074,6 @@ Class.revolver = {
     BODY: {
         FOV: base.FOV * 1.225
     },
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
     GUNS: [
         {
             POSITION: {
@@ -1106,7 +1103,7 @@ Class.revolver = {
                 WIDTH: 7
             },
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, { pen: 2 }]),
                 TYPE: "bullet"
             }
         }
@@ -1159,7 +1156,7 @@ Class.fork = {
                 WIDTH: 8.5
             },
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, { pen: 2 }]),
                 TYPE: "bullet"
             }
         }
