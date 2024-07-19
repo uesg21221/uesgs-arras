@@ -976,6 +976,192 @@ Class.crossbow = {
     ]
 }
 
+// Marksman upgrades
+Class.deadeye = {
+    PARENT: "genericTank",
+    LABEL: "Deadeye",
+    DANGER: 7,
+    BODY: {
+        SPEED: 0.85 * base.SPEED,
+        FOV: 1.4 * base.FOV
+    },
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8,
+                ASPECT: 1.3,
+                X: 10
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8,
+                ASPECT: 1.3,
+                X: 15
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 23,
+                WIDTH: 8,
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin]),
+                TYPE: "bullet"
+            }
+        },
+        {
+            POSITION: [5, 8, -1.4, 8, 0, 0, 0]
+        }
+    ]
+}
+Class.nimrod = {
+    PARENT: "genericTank",
+    LABEL: "Nimrod",
+    DANGER: 7,
+    BODY: {
+        FOV: 1.2 * base.FOV
+    },
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!",
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 8
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 13
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 18
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 24,
+                WIDTH: 8.5
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                TYPE: "bullet"
+            }
+        }
+    ]
+}
+Class.revolver = {
+    PARENT: "genericTank",
+    LABEL: "Revolver",
+    DANGER: 7,
+    BODY: {
+        FOV: 1.2 * base.FOV
+    },
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!",
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 8
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 13
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 18
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 24,
+                WIDTH: 8.5
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                TYPE: "bullet"
+            }
+        }
+    ]
+}
+Class.fork = {
+    PARENT: "genericTank",
+    LABEL: "Fork",
+    DANGER: 7,
+    BODY: {
+        FOV: 1.2 * base.FOV
+    },
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 8
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 13
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 18
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 23
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 29,
+                WIDTH: 8.5
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                TYPE: "bullet"
+            }
+        }
+    ]
+}
+
 // Machine Gun upgrades
 Class.minigun = {
     PARENT: "genericTank",
@@ -3666,9 +3852,10 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
 
     Class.sniper.UPGRADES_TIER_2 = ["assassin", "hunter", "minigun", "rifle", "marksman"]
         Class.sniper.UPGRADES_TIER_3 = ["bushwhacker"]
-        Class.assassin.UPGRADES_TIER_3 = ["ranger", "falcon", "stalker", "autoAssassin", "single"]
-        Class.hunter.UPGRADES_TIER_3 = ["predator", "xHunter", "poacher", "ordnance", "dual"]
-        Class.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman"]
+        Class.assassin.UPGRADES_TIER_3 = ["ranger", "falcon", "stalker", "autoAssassin", "single", "deadeye"]
+        Class.hunter.UPGRADES_TIER_3 = ["predator", "xHunter", "poacher", "ordnance", "dual", "nimrod"]
+        Class.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman", "revolver"]
+        Class.marksman.UPGRADES_TIER_3 = ["deadeye", "nimrod", "revolver", "fork"]
 
     Class.machineGun.UPGRADES_TIER_2 = ["artillery", "minigun", "gunner", "sprayer"]
         Class.minigun.UPGRADES_TIER_3 = ["streamliner", "nailgun", "cropDuster", "barricade", "vulture"]
