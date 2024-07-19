@@ -1137,6 +1137,24 @@ Class.sidewinderOld = {
 }
 Class.whirlwindDeco = makeDeco(6)
 Class.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
+Class.tornadoDeco = makeDeco(4)
+Class.tornadoDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
+Class.megaTornadoDeco = makeDeco([[0,-1],[0.5,0],[0,1],[-0.5,0]])
+Class.megaTornadoDeco.CONTROLLERS = [["spin", { independent: true }]]
+Class.thunderboltDeco = makeDeco(4)
+Class.thunderboltDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.16 }]]
+Class.hurricaneDeco = makeDeco(8)
+Class.hurricaneDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
+Class.typhoonDeco = makeDeco(10)
+Class.typhoonDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
+Class.tempestDeco1 = makeDeco(3)
+Class.tempestDeco1.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
+Class.tempestDeco2 = makeDeco(3)
+Class.tempestDeco2.CONTROLLERS = [["spin", { independent: true, speed: -0.128 }]]
+Class.blizzardDeco1 = makeDeco(5)
+Class.blizzardDeco1.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
+Class.blizzardDeco2 = makeDeco(5)
+Class.blizzardDeco2.CONTROLLERS = [["spin", { independent: true, speed: -0.128 }]]
 Class.whirlwind = {
     PARENT: "genericTank",
     LABEL: "Whirlwind",
@@ -1171,6 +1189,292 @@ Class.whirlwind = {
         return output
     })()
 }
+
+// Whirlwind upgrades
+Class.tornado = {
+    PARENT: "genericTank",
+    LABEL: "Tornado",
+    DANGER: 6,
+    TURRETS: [
+        {
+            POSITION: [10, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco",
+        },
+    ],
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 12, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pounder]), 
+                    TYPE: ["satellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.hurricane = {
+    PARENT: "genericTank",
+    LABEL: "Hurricane",
+    DANGER: 6,
+    ANGLE: 45,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "hurricaneDeco",
+        },
+    ],
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 8; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", {ANGLE: i * 45}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+
+// Tornado upgrades
+Class.megaTornado = {
+    PARENT: "genericTank",
+    LABEL: "Mega Tornado",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [16, 0, 0, 0, 360, 1],
+            TYPE: "megaTornadoDeco",
+        },
+    ],
+    ANGLE: 180,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 2; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 16, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pounder, g.destroyer]), 
+                    TYPE: ["satellite", {ANGLE: i * 180}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.tempest = {
+    PARENT: "genericTank",
+    LABEL: "Tempest",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "tempestDeco1",
+        },
+        {
+            POSITION: [4, 0, 0, 180, 360, 1],
+            TYPE: "tempestDeco2",
+        },
+    ],
+    ANGLE: 120,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 3; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 12, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pounder]), 
+                    TYPE: ["satellite", {ANGLE: i * 120}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        for (let i = 0; i < 3; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 12, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pounder]), 
+                    TYPE: ["satellite", { ANGLE: i * 120, CONTROLLERS: [['orbit', {invert: true}]] }], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.thunderbolt = {
+    PARENT: "genericTank",
+    LABEL: "Thunderbolt",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [10, 0, 0, 0, 360, 1],
+            TYPE: "thunderboltDeco",
+        },
+    ],
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2.5, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 12, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite, g.pounder]), 
+                    TYPE: ["satellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+
+// Hurricane upgrades
+Class.typhoon = {
+    PARENT: "genericTank",
+    LABEL: "Typhoon",
+    DANGER: 7,
+    ANGLE: 36,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "typhoonDeco",
+        },
+    ],
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 10; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", {ANGLE: i * 36}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.blizzard = {
+    PARENT: "genericTank",
+    LABEL: "Blizzard",
+    DANGER: 7,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "blizzardDeco1",
+        },
+        {
+            POSITION: [6, 0, 0, 180, 360, 1],
+            TYPE: "blizzardDeco2",
+        },
+    ],
+    ANGLE: 72,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    AI: {
+        SPEED: 2, 
+    }, 
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 5; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", {ANGLE: i * 72}], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        for (let i = 0; i < 5; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", { ANGLE: i * 72, CONTROLLERS: [['orbit', {invert: true}]] }], 
+                    MAX_CHILDREN: 1,   
+                    AUTOFIRE: true,  
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+
 let testLayeredBoss = new LayeredBoss("testLayeredBoss", "Test Layered Boss", "terrestrial", 7, 3, "terrestrialTrapTurret", 5, 7, {SPEED: 10});
 testLayeredBoss.addLayer({gun: {
     POSITION: [3.6, 7, -1.4, 8, 0, null, 0],
@@ -1677,6 +1981,9 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
                 Class.mace.UPGRADES_TIER_3 = ["bigMama", "itHurtsDontTouchIt", "flace"]
                 Class.flangle.UPGRADES_TIER_3 = ["flooster", "flace"]
             Class.volute.UPGRADES_TIER_3 = ["sidewinderOld"]
+            Class.whirlwind.UPGRADES_TIER_2 = ["tornado", "hurricane"]
+                Class.tornado.UPGRADES_TIER_3 = ["megaTornado", "tempest", "thunderbolt"]
+                Class.hurricane.UPGRADES_TIER_3 = ["typhoon", "blizzard"]
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"]
 
