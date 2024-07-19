@@ -1719,7 +1719,8 @@ Class.whirlGuard.GUNS.push(
         }
     }
 )
-Class.prophet = {
+// prophet temporarily disabled because it breaks the game for some reason
+/*Class.prophet = {
     PARENT: "genericTank",
     LABEL: "Prophet",
     DANGER: 7,
@@ -1785,7 +1786,7 @@ Class.prophet.GUNS.push({
             DELAY_SPAWN: false,
             MAX_CHILDREN: 7,
         }
-    })
+})*/
 Class.vortex = {
     PARENT: "genericTank",
     LABEL: "Vortex",
@@ -2345,7 +2346,7 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
                 Class.flangle.UPGRADES_TIER_3 = ["flooster", "flace"]
             Class.volute.UPGRADES_TIER_3 = ["sidewinderOld"]
             Class.whirlwind.UPGRADES_TIER_2 = ["tornado", "hurricane"]
-                Class.whirlwind.UPGRADES_TIER_3 = ["hexaWhirl", "munition", "whirl3", "whirlGuard", "prophet", "vortex"]
+                Class.whirlwind.UPGRADES_TIER_3 = ["hexaWhirl", "munition", "whirl3", "whirlGuard", /*"prophet",*/ "vortex"]
                 Class.tornado.UPGRADES_TIER_3 = ["megaTornado", "tempest", "thunderbolt"]
                 Class.hurricane.UPGRADES_TIER_3 = ["typhoon", "blizzard"]
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]
