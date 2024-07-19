@@ -287,21 +287,35 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
 
 }
 
-function mooncollide(moon, n) {
-    let dx = moon.x - n.x;
-    let dy = moon.y - n.y;
-    let d2 = dx * dx + dy * dy;
-    let totalRadius = moon.realSize + n.realSize;
-    if (d2 > totalRadius ** 2) {
-        return;
-    }
+function mooncollide(moon, bounce) {
+    let collisionRadius = util.getDistance(moon, bounce);
+    let properCollisionRadius = moon.size + bounce.size
+    // Exit if too far
+    if (collisionRadius >= properCollisionRadius) return;
+    
+    // Get elasticity
+    let elasticity = bounce.type == 'tank' ? 0 : bounce.type == "bullet" ? 1 : bounce.pushability;
 
-    let dist = Math.sqrt(d2);
-    let sink = totalRadius - dist;
-    dx /= dist;
-    dy /= dist;
-    n.x -= dx * n.pushability * sink;
-    n.y -= dy * n.pushability * sink;
+    // Place at edge of the moon
+    let angleFromMoonToBounce = Math.atan2(bounce.y - moon.y, bounce.x - moon.x);
+    bounce.x = moon.x + properCollisionRadius * Math.cos(angleFromMoonToBounce);
+    bounce.y = moon.y + properCollisionRadius * Math.sin(angleFromMoonToBounce);
+    
+    // Find relative velocity vectors to the moon's surface
+    let velocityDirection = bounce.velocity.direction;
+    let tangentVelocity = bounce.velocity.length * Math.sin(angleFromMoonToBounce - velocityDirection);
+    let perpendicularVelocity = bounce.velocity.length * Math.cos(angleFromMoonToBounce - velocityDirection) * elasticity * -1;
+
+    // Exit if the reflection moves the bounced entity closer to the moon
+    if (perpendicularVelocity < 0) return;
+
+    // Get angle and magnitude of new velocity
+    let newVelocityMagnitude = Math.sqrt(tangentVelocity ** 2 + perpendicularVelocity ** 2);
+    let relativeVelocityAngle = Math.atan2(perpendicularVelocity, tangentVelocity);
+
+    // Assign velocity after rotating to the new angle
+    bounce.velocity.x = newVelocityMagnitude * Math.sin(Math.PI - relativeVelocityAngle - angleFromMoonToBounce);
+    bounce.velocity.y = newVelocityMagnitude * Math.cos(Math.PI - relativeVelocityAngle - angleFromMoonToBounce);
 }
 
 function mazewallcollidekill(bounce, wall) {
