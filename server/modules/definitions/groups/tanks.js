@@ -1023,41 +1023,47 @@ Class.nimrod = {
     LABEL: "Nimrod",
     DANGER: 7,
     BODY: {
-        FOV: 1.2 * base.FOV
+        SPEED: base.SPEED * 0.9,
+        FOV: base.FOV * 1.25
     },
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!",
+    CONTROLLERS: ["zoom"],
+    TOOLTIP: "Hold right click to zoom.",
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
     GUNS: [
         {
             POSITION: {
                 LENGTH: 5,
-                WIDTH: 8.5,
-                ASPECT: 1.3,
+                WIDTH: 12,
+                ASPECT: 1.25,
                 X: 8
             }
         },
         {
             POSITION: {
                 LENGTH: 5,
-                WIDTH: 8.5,
-                ASPECT: 1.3,
+                WIDTH: 12,
+                ASPECT: 1.25,
                 X: 13
             }
         },
         {
             POSITION: {
-                LENGTH: 5,
-                WIDTH: 8.5,
-                ASPECT: 1.3,
-                X: 18
+                LENGTH: 24,
+                WIDTH: 8
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary]),
+                TYPE: "bullet"
             }
         },
         {
             POSITION: {
-                LENGTH: 24,
-                WIDTH: 8.5
+                LENGTH: 21,
+                WIDTH: 12,
+                DELAY: 0.25
             },
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter]),
                 TYPE: "bullet"
             }
         }
