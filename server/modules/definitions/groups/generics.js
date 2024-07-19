@@ -317,6 +317,10 @@ Class.satellite = {
     BUFF_VS_FOOD: true,
     MOTION_TYPE: 'motor'
 }
+Class.squareSatellite = {
+    PARENT: "satellite",
+    SHAPE: 4
+}
 
 Class.auraBase = {
     TYPE: "aura",

@@ -1135,6 +1135,8 @@ Class.sidewinderOld = {
         },
     ],
 }
+
+// Whirlwind
 Class.whirlwindDeco = makeDeco(6)
 Class.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
 Class.tornadoDeco = makeDeco(4)
@@ -1155,6 +1157,7 @@ Class.blizzardDeco1 = makeDeco(5)
 Class.blizzardDeco1.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
 Class.blizzardDeco2 = makeDeco(5)
 Class.blizzardDeco2.CONTROLLERS = [["spin", { independent: true, speed: -0.128 }]]
+
 Class.whirlwind = {
     PARENT: "genericTank",
     LABEL: "Whirlwind",
@@ -1170,7 +1173,7 @@ Class.whirlwind = {
     ],
     AI: {
         SPEED: 2, 
-    }, 
+    },
     GUNS: (() => { 
         let output = []
         for (let i = 0; i < 6; i++) { 
@@ -1474,6 +1477,369 @@ Class.blizzard = {
         return output
     })()
 }
+
+// Whirlwind hybrids
+Class.hexaWhirl = {
+    PARENT: "genericTank",
+    LABEL: "Hexa Whirl",
+    DANGER: 7,
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco"
+        }
+    ],
+    AI: {
+        SPEED: 2, 
+    },
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,
+                    AUTOFIRE: true,
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.hexaWhirl.GUNS.push([
+    {
+        POSITION: [18, 8, 1, 0, 0, 60, 0.5],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
+            TYPE: "bullet"
+        }
+    },
+    {
+        POSITION: [18, 8, 1, 0, 0, 180, 0.5],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
+            TYPE: "bullet"
+        }
+    },
+    {
+        POSITION: [18, 8, 1, 0, 0, 300, 0.5],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
+            TYPE: "bullet"
+        }
+    },
+    {
+        POSITION: [18, 8, 1, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
+            TYPE: "bullet"
+        }
+    },
+    {
+        POSITION: [18, 8, 1, 0, 0, 120, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
+            TYPE: "bullet"
+        }
+    },
+    {
+        POSITION: [18, 8, 1, 0, 0, 240, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
+            TYPE: "bullet"
+        }
+    }
+])
+Class.munition = {
+    PARENT: "genericTank",
+    LABEL: "Munition",
+    DANGER: 7,
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco"
+        }
+    ],
+    AI: {
+        SPEED: 2, 
+    },
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,
+                    AUTOFIRE: true,
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.munition.GUNS.push([
+    {
+        POSITION: [17, 3, 1, 0, -6, -7, 0.25],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery]),
+            TYPE: "bullet",
+            LABEL: "Secondary",
+        },
+    },
+    {
+        POSITION: [17, 3, 1, 0, 6, 7, 0.75],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery]),
+            TYPE: "bullet",
+            LABEL: "Secondary",
+        },
+    },
+    {
+        POSITION: [19, 12, 1, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery]),
+            TYPE: "bullet",
+            LABEL: "Heavy",
+        },
+    },
+])
+Class.whirl3 = {
+    PARENT: "genericTank",
+    LABEL: "Whirl-3",
+    DANGER: 7,
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco"
+        },
+        {
+            POSITION: [11, 8, 0, 0, 190, 0],
+            TYPE: "autoTankGun",
+        },
+        {
+            POSITION: [11, 8, 0, 120, 190, 0],
+            TYPE: "autoTankGun",
+        },
+        {
+            POSITION: [11, 8, 0, 240, 190, 0],
+            TYPE: "autoTankGun",
+        }
+    ],
+    AI: {
+        SPEED: 2, 
+    },
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,
+                    AUTOFIRE: true,
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.whirlGuard = {
+    PARENT: "genericTank",
+    LABEL: "Whirl Guard",
+    DANGER: 7,
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco"
+        }
+    ],
+    AI: {
+        SPEED: 2, 
+    },
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,
+                    AUTOFIRE: true,
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.whirlGuard.GUNS.push([
+    {
+        POSITION: [20, 8, 1, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
+            TYPE: "bullet"
+        }
+    }
+    {
+        POSITION: [13, 8, 1, 0, 0, 180, 0]
+    },
+    {
+        POSITION: [4, 8, 1.7, 13, 0, 180, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.trap]),
+            TYPE: "trap",
+            STAT_CALCULATOR: gunCalcNames.trap
+        }
+    }
+])
+Class.prophet = {
+    PARENT: "genericTank",
+    LABEL: "Prophet",
+    DANGER: 7,
+    BODY: {
+        SPEED: base.SPEED * 0.9,
+        FOV: base.FOV * 1.1,
+    },
+    SHAPE: 4,
+    MAX_CHILDREN: 14,
+    NECRO: true,
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco"
+        }
+    ],
+    AI: {
+        SPEED: 2, 
+    },
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["squareSatellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,
+                    AUTOFIRE: true,
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.prophet.GUNS.push([
+    {
+        POSITION: [5.25, 12, 1.2, 8, 0, 90, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {reload: 0.8}]),
+            TYPE: "sunchip",
+            AUTOFIRE: true,
+            SYNCS_SKILLS: true,
+            STAT_CALCULATOR: "necro",
+            WAIT_TO_CYCLE: true,
+            DELAY_SPAWN: false,
+        }
+    },
+    {
+        POSITION: [5.25, 12, 1.2, 8, 0, 270, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {reload: 0.8}]),
+            TYPE: "sunchip",
+            AUTOFIRE: true,
+            SYNCS_SKILLS: true,
+            STAT_CALCULATOR: "necro",
+            WAIT_TO_CYCLE: true,
+            DELAY_SPAWN: false,
+        }
+    }
+])
+Class.vortex = {
+    PARENT: "genericTank",
+    LABEL: "Vortex",
+    DANGER: 7,
+    BODY: {
+        FOV: base.FOV * 1.1,
+    },
+    ANGLE: 90,
+    CONTROLLERS: ["whirlwind"],
+    HAS_NO_RECOIL: true,
+    STAT_NAMES: statnames.whirlwind,
+    TURRETS: [
+        {
+            POSITION: [8, 0, 0, 0, 360, 1],
+            TYPE: "tornadoDeco"
+        }
+    ],
+    AI: {
+        SPEED: 2, 
+    },
+    GUNS: (() => { 
+        let output = []
+        for (let i = 0; i < 4; i++) { 
+            output.push({ 
+                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.satellite]), 
+                    TYPE: ["satellite", {ANGLE: i * 90}], 
+                    MAX_CHILDREN: 1,
+                    AUTOFIRE: true,
+                    SYNCS_SKILLS: false,
+                    WAIT_TO_CYCLE: true
+                }
+            }) 
+        }
+        return output
+    })()
+}
+Class.vortex.GUNS.push([
+    {
+        POSITION: [10, 9, 1, 9, 0, 0, 0],
+    },
+    {
+        POSITION: [17, 13, 1, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher]),
+            TYPE: "minimissile",
+            STAT_CALCULATOR: "sustained",
+        },
+    }
+])
 
 let testLayeredBoss = new LayeredBoss("testLayeredBoss", "Test Layered Boss", "terrestrial", 7, 3, "terrestrialTrapTurret", 5, 7, {SPEED: 10});
 testLayeredBoss.addLayer({gun: {
@@ -1982,6 +2348,7 @@ Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "te
                 Class.flangle.UPGRADES_TIER_3 = ["flooster", "flace"]
             Class.volute.UPGRADES_TIER_3 = ["sidewinderOld"]
             Class.whirlwind.UPGRADES_TIER_2 = ["tornado", "hurricane"]
+                Class.whirlwind.UPGRADES_TIER_3 = ["hexaWhirl", "munition", "whirl3", "whirlGuard", "prophet", "vortex"]
                 Class.tornado.UPGRADES_TIER_3 = ["megaTornado", "tempest", "thunderbolt"]
                 Class.hurricane.UPGRADES_TIER_3 = ["typhoon", "blizzard"]
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]
