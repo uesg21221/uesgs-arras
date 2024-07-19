@@ -681,7 +681,32 @@ Class.marksman = {
     BODY: {
         FOV: 1.2 * base.FOV
     },
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
     GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 8
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 13
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 18
+            }
+        },
         {
             POSITION: {
                 LENGTH: 24,
@@ -691,14 +716,6 @@ Class.marksman = {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
                 TYPE: "bullet"
             }
-        },
-        {
-            POSITION: {
-                LENGTH: 8,
-                WIDTH: 8,
-                ASPECT: 1.4,
-                X: 8
-            },
         }
     ]
 }
