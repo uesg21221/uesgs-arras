@@ -1514,8 +1514,7 @@ Class.hexaWhirl = {
         return output
     })()
 }
-Class.hexaWhirl.GUNS.push([
-    {
+Class.hexaWhirl.GUNS.push({
         POSITION: [18, 8, 1, 0, 0, 60, 0.5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
@@ -1556,8 +1555,7 @@ Class.hexaWhirl.GUNS.push([
             SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
             TYPE: "bullet"
         }
-    }
-])
+    })
 Class.munition = {
     PARENT: "genericTank",
     LABEL: "Munition",
@@ -1593,7 +1591,7 @@ Class.munition = {
         return output
     })()
 }
-Class.munition.GUNS.push([
+Class.munition.GUNS.push(
     {
         POSITION: [17, 3, 1, 0, -6, -7, 0.25],
         PROPERTIES: {
@@ -1618,7 +1616,7 @@ Class.munition.GUNS.push([
             LABEL: "Heavy",
         },
     },
-])
+)
 Class.whirl3 = {
     PARENT: "genericTank",
     LABEL: "Whirl-3",
@@ -1701,14 +1699,14 @@ Class.whirlGuard = {
         return output
     })()
 }
-Class.whirlGuard.GUNS.push([
+Class.whirlGuard.GUNS.push(
     {
         POSITION: [20, 8, 1, 0, 0, 0, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard]),
             TYPE: "bullet"
         }
-    }
+    },
     {
         POSITION: [13, 8, 1, 0, 0, 180, 0]
     },
@@ -1717,10 +1715,10 @@ Class.whirlGuard.GUNS.push([
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.trap]),
             TYPE: "trap",
-            STAT_CALCULATOR: gunCalcNames.trap
+            STAT_CALCULATOR: "trap"
         }
     }
-])
+)
 Class.prophet = {
     PARENT: "genericTank",
     LABEL: "Prophet",
@@ -1730,7 +1728,6 @@ Class.prophet = {
         FOV: base.FOV * 1.1,
     },
     SHAPE: 4,
-    MAX_CHILDREN: 14,
     NECRO: true,
     ANGLE: 90,
     CONTROLLERS: ["whirlwind"],
@@ -1763,8 +1760,7 @@ Class.prophet = {
         return output
     })()
 }
-Class.prophet.GUNS.push([
-    {
+Class.prophet.GUNS.push({
         POSITION: [5.25, 12, 1.2, 8, 0, 90, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {reload: 0.8}]),
@@ -1774,6 +1770,7 @@ Class.prophet.GUNS.push([
             STAT_CALCULATOR: "necro",
             WAIT_TO_CYCLE: true,
             DELAY_SPAWN: false,
+            MAX_CHILDREN: 7,
         }
     },
     {
@@ -1786,9 +1783,9 @@ Class.prophet.GUNS.push([
             STAT_CALCULATOR: "necro",
             WAIT_TO_CYCLE: true,
             DELAY_SPAWN: false,
+            MAX_CHILDREN: 7,
         }
-    }
-])
+    })
 Class.vortex = {
     PARENT: "genericTank",
     LABEL: "Vortex",
@@ -1827,7 +1824,7 @@ Class.vortex = {
         return output
     })()
 }
-Class.vortex.GUNS.push([
+Class.vortex.GUNS.push(
     {
         POSITION: [10, 9, 1, 9, 0, 0, 0],
     },
@@ -1839,7 +1836,7 @@ Class.vortex.GUNS.push([
             STAT_CALCULATOR: "sustained",
         },
     }
-])
+)
 
 let testLayeredBoss = new LayeredBoss("testLayeredBoss", "Test Layered Boss", "terrestrial", 7, 3, "terrestrialTrapTurret", 5, 7, {SPEED: 10});
 testLayeredBoss.addLayer({gun: {
