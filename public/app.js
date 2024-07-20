@@ -2385,11 +2385,12 @@ const gameDrawDead = () => {
         xx = global.screenWidth / 2 - scale * position.middle.x * 0.707,
         yy = global.screenHeight / 2 - 35 + scale * position.middle.y * 0.707,
         picture = util.getEntityImageFromMockup(gui.type, gui.color),
-        baseColor = picture.color;
+        baseColor = picture.color,
+        timestamp = Math.floor(Date.now() /1000);
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
     drawText("Level " + gui.__s.getLevel(), x - 275, y - -80, 14, color.guiwhite, "center");
     drawText(picture.name, x - 275, y - -110, 24, color.guiwhite, "center");
-    drawText("If you need instructions on how to get through the hotels, check out the enclosed instruction book.", x, y - 80, 8, color.guiwhite, "center");
+    drawText(timestamp + '', x, y - 80, 10, color.guiwhite, "center");
     if (global.player.name == "") {
         drawText("Your Score: ", x - 170, y - 30, 24, color.guiwhite);
     } else {
