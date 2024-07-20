@@ -2363,11 +2363,11 @@ let getDeath = () => {
 let getTips = () => {
     let txt = "❓ ";
     if (global.finalKillers.length) {
-        txt += "Try to get revenge on your enemy to get your score back!";
+        txt += "lol you died";
     } else if (!global.autolvlUp) {
-        txt += "Enable auto level up at the options menu to get instant level 45!";
+        txt += "Enable auto-level up in the options menu to get level 45";
     } else {
-        txt += "Try killing players to earn XP!";
+        txt += "Kill players and polygons to get more score";
     }
     return txt;
 };
@@ -2389,7 +2389,7 @@ const gameDrawDead = () => {
     drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
     drawText("Level " + gui.__s.getLevel(), x - 275, y - -80, 14, color.guiwhite, "center");
     drawText(picture.name, x - 275, y - -110, 24, color.guiwhite, "center");
-    drawText("Game over, try again!", x, y - 80, 8, color.guiwhite, "center");
+    drawText("If you need instructions on how to get through the hotels, check out the enclosed instruction book.", x, y - 80, 8, color.guiwhite, "center");
     if (global.player.name == "") {
         drawText("Your Score: ", x - 170, y - 30, 24, color.guiwhite);
     } else {
@@ -2400,7 +2400,7 @@ const gameDrawDead = () => {
     drawText(getKills(), x - 170, y + 77, 16, color.guiwhite);
     drawText(getDeath(), x - 170, y + 99, 16, color.guiwhite);
     drawText(getTips(), x - 170, y + 122, 16, color.guiwhite);
-    drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active for the run!", x - 170, y + 144, 16, color.guiwhite);
+    drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active", x - 170, y + 144, 16, color.guiwhite);
     drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
