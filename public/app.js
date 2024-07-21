@@ -206,51 +206,52 @@ function getElements(kb, storeInDefault) {
     }
 }
 window.onload = async () => {
-    window.serverAdd = (await (await fetch("/serverData.json")).json()).ip;
-    if (Array.isArray(window.serverAdd)) {
-        window.isMultiserver = true;
-        const servers = window.serverAdd;
-        let serverSelector = document.getElementById("serverSelector"),
-            tbody = document.createElement("tbody");
-        serverSelector.style.display = "block";
-        document.getElementById("startMenuSlidingContent").removeChild(document.getElementById("serverName"));
-        serverSelector.classList.add("serverSelector");
-        serverSelector.classList.add("shadowscroll");
-        serverSelector.appendChild(tbody);
-        let myServer = {
-            classList: {
-                contains: () => false,
-            },
-        };
-        for (let server of servers) {
-            try {
-                const tr = document.createElement("tr");
-                const td = document.createElement("td");
-                td.textContent = `${server.gameMode} | ${server.players} Players`;
-                td.onclick = () => {
-                    if (myServer.classList.contains("selected")) {
-                        myServer.classList.remove("selected");
-                    }
-                    tr.classList.add("selected");
-                    myServer = tr;
-                    window.serverAdd = server.ip;
-                    getMockups();
-                };
-                tr.appendChild(td);
-                tbody.appendChild(tr);
+    let servers = await (await fetch("/browserData.json")).json(),
+        serverSelector = document.getElementById("serverSelector"),
+        tbody = document.createElement("tbody");
+    serverSelector.style.display = "block";
+    document.getElementById("serverName").remove();
+    serverSelector.classList.add("serverSelector");
+    serverSelector.classList.add("shadowscroll");
+    serverSelector.appendChild(tbody);
+    let myServer = {
+        classList: {
+            contains: () => false,
+        },
+    };
+    for (let server of servers) {
+        if (Array.isArray(server)) {
+            server = await (await fetch(`${server[1] ? "https" : "http"}://${server[0]}/serverData.json`)).json();
+        } else {
+            console.log(server);
+            throw new Error("Invalid server browser data");
+        }
+        if (typeof server != "object") {
+            console.log(server);
+            throw new Error("Invalid server data");
+        }
+        try {
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+            td.textContent = `${server.gameMode} | ${server.players} Players`;
+            td.onclick = () => {
+                if (myServer.classList.contains("selected")) {
+                    myServer.classList.remove("selected");
+                }
+                tr.classList.add("selected");
                 myServer = tr;
-            } catch (e) {
-                console.log(e);
-            }
+                window.serverAdd = server.ip;
+                getMockups();
+            };
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            myServer = tr;
+        } catch (e) {
+            console.log(e);
         }
-        if (Array.from(myServer.children)[0].onclick) {
-            Array.from(myServer.children)[0].onclick();
-        }
-    } else {
-        getMockups();
-        util.pullJSON("gamemodeData").then((json) => {
-            document.getElementById("serverName").innerHTML = `<h4 class="nopadding">${json.gameMode} | ${json.players} Players</h4>`;
-        });
+    }
+    if (Array.from(myServer.children)[0].onclick) {
+        Array.from(myServer.children)[0].onclick();
     }
     // Save forms
     util.retrieveFromLocalStorage("playerNameInput");

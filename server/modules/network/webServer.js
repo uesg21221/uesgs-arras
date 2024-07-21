@@ -1,5 +1,6 @@
 let fs = require('fs'),
     path = require('path'),
+    ips = require("./discoverability.js"),
     publicRoot = path.join(__dirname, "../../../public"),
     sharedRoot = path.join(__dirname, "../../../shared"),
     mimeSet = {
@@ -46,11 +47,12 @@ server = require('http').createServer((req, res) => {
         case "/lib/json/mockups.json":
             resStr = mockupJsonData;
             break;
-        case "/lib/json/gamemodeData.json":
-            resStr = JSON.stringify({ gameMode: Config.gameModeName, players: views.length });
-            break;
         case "/serverData.json":
-            resStr = JSON.stringify({ ip: Config.host });
+            resStr = JSON.stringify({ ip: Config.host, gameMode: Config.gameModeName, players: views.length });
+            break;
+        case "/browserData.json":
+            ips.push([ Config.host, "false" ]); // Is behind https proxy?
+            resStr = JSON.stringify(ips);
             break;
         default:
             let fileToGet = path.join(publicRoot, req.url);
