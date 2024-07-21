@@ -51,7 +51,7 @@ server = require('http').createServer((req, res) => {
             resStr = JSON.stringify({ ip: Config.host, gameMode: Config.gameModeName, players: views.length });
             break;
         case "/browserData.json":
-            ips.push([ Config.host, "false" ]); // Is behind https proxy?
+            ips.push([ Config.host, false ]); // Is behind https proxy?
             resStr = JSON.stringify(ips);
             break;
         default:

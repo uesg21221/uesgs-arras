@@ -132,8 +132,8 @@ input {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 8px;
+    margin-bottom: -10px;
     outline: none;
 }
 
@@ -196,11 +196,11 @@ div.optionsHeader {
     text-align: center;
 }
 .serverSelector {
-    height: 25px;
+    height: 50px;
     text-align: center;
     font-size: 14px;
     font-weight: bold;
-    line-height: 13px;
+    line-height: 14px;
     padding-left: 10px;
     overflow-y: scroll;
     scroll-behavior: smooth;
@@ -216,6 +216,14 @@ div.optionsHeader {
 .serverSelector tr.selected {
     color: #1B3353;
     /*color: #8ABC3F;*/
+    cursor: default;
+}
+
+.serverSelector tr:hover {
+    color: #8ABC3F;
+}
+.serverSelector tr.selected:hover {
+    color: #1B3353;
     cursor: default;
 }
 
@@ -741,6 +749,13 @@ td b {
     cursor: pointer;
     text-align: right;
     vertical-align: bottom;
+}
+
+.tdLeft {
+    width: 25%;
+}
+.tdCenter {
+    width: 50%;
 }
 
 *:focus {

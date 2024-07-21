@@ -208,20 +208,28 @@ function getElements(kb, storeInDefault) {
 window.onload = async () => {
     let servers = await (await fetch("/browserData.json")).json(),
         serverSelector = document.getElementById("serverSelector"),
-        tbody = document.createElement("tbody");
+        tbody = document.createElement("tbody"),
+        myServer = {
+            classList: {
+                contains: () => false,
+            },
+        },
+        ping = 0;
+
     serverSelector.style.display = "block";
     document.getElementById("serverName").remove();
     serverSelector.classList.add("serverSelector");
     serverSelector.classList.add("shadowscroll");
     serverSelector.appendChild(tbody);
-    let myServer = {
-        classList: {
-            contains: () => false,
-        },
-    };
+
     for (let server of servers) {
+        let minPing,
+            time;
+
         if (Array.isArray(server)) {
+            time = Date.now();
             server = await (await fetch(`${server[1] ? "https" : "http"}://${server[0]}/serverData.json`)).json();
+            minPing = Date.now() - time;
         } else {
             console.log(server);
             throw new Error("Invalid server browser data");
@@ -231,10 +239,21 @@ window.onload = async () => {
             throw new Error("Invalid server data");
         }
         try {
-            const tr = document.createElement("tr");
-            const td = document.createElement("td");
-            td.textContent = `${server.gameMode} | ${server.players} Players`;
-            td.onclick = () => {
+            let tdPlayers = document.createElement("td"),
+                tdMode = document.createElement("td"),
+                tdIp = document.createElement("td"),
+                tr = document.createElement("tr");
+
+            tdPlayers.textContent = `${server.players} Players`;
+            tdPlayers.classList.add("tdLeft");
+            tdMode.textContent = server.gameMode;
+            tdMode.classList.add("tdCenter");
+            tdIp.textContent = server.ip;
+            tdIp.classList.add("tdLeft");
+            tr.appendChild(tdIp);
+            tr.appendChild(tdMode);
+            tr.appendChild(tdPlayers);
+            tr.onclick = () => {
                 if (myServer.classList.contains("selected")) {
                     myServer.classList.remove("selected");
                 }
@@ -243,16 +262,20 @@ window.onload = async () => {
                 window.serverAdd = server.ip;
                 getMockups();
             };
-            tr.appendChild(td);
             tbody.appendChild(tr);
-            myServer = tr;
+            if (!ping || ping > minPing) {
+                ping = minPing;
+                myServer = tr;
+                serverSelector.scrollTop = tr.offsetTop;
+            }
         } catch (e) {
             console.log(e);
         }
     }
-    if (Array.from(myServer.children)[0].onclick) {
-        Array.from(myServer.children)[0].onclick();
+    if (myServer.onclick) {
+        myServer.onclick();
     }
+
     // Save forms
     util.retrieveFromLocalStorage("playerNameInput");
     util.retrieveFromLocalStorage("playerKeyInput");
