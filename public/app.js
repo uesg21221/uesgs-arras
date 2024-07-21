@@ -227,6 +227,7 @@ window.onload = async () => {
             time;
 
         if (Array.isArray(server)) {
+            if (!server.length) continue;
             time = Date.now();
             server = await (await fetch(`${server[1] ? "https" : "http"}://${server[0]}/serverData.json`)).json();
             minPing = Date.now() - time;
