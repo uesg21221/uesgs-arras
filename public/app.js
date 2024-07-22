@@ -223,7 +223,7 @@ window.onload = async () => {
     serverSelector.appendChild(tbody);
 
     for (let server of servers) {
-        let protocol = server[2] ? "https" : "http",
+        let protocol = server[2] ? "https:" : "http:",
             location = server[1],
             ip = server[0],
             minPing,
@@ -232,7 +232,7 @@ window.onload = async () => {
         if (Array.isArray(server)) {
             if (!server.length) continue;
             time = Date.now();
-            server = await (await fetch(`${protocol}://${ip}/serverData.json`)).json();
+            server = await (await fetch(`${protocol}//${ip}/serverData.json`)).json();
             minPing = Date.now() - time;
         } else {
             console.log(server);
