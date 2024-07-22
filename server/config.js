@@ -5,6 +5,13 @@ module.exports = {
     // If the host is 'localhost:NUMBER', the NUMBER must be the port setting.
     host: "localhost:26301",
 
+    // Behind https proxy
+    https: false,
+
+    // World-wide location
+    // Leave empty to show host name instead
+    location: "",
+
     // Which port to run the web server on.
     port: 26301,
 

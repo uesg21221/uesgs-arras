@@ -223,13 +223,16 @@ window.onload = async () => {
     serverSelector.appendChild(tbody);
 
     for (let server of servers) {
-        let minPing,
+        let protocol = server[2] ? "https" : "http",
+            location = server[1],
+            ip = server[0],
+            minPing,
             time;
 
         if (Array.isArray(server)) {
             if (!server.length) continue;
             time = Date.now();
-            server = await (await fetch(`${server[1] ? "https" : "http"}://${server[0]}/serverData.json`)).json();
+            server = await (await fetch(`${protocol}://${ip}/serverData.json`)).json();
             minPing = Date.now() - time;
         } else {
             console.log(server);
@@ -249,7 +252,7 @@ window.onload = async () => {
             tdPlayers.classList.add("tdLeft");
             tdMode.textContent = server.gameMode;
             tdMode.classList.add("tdCenter");
-            tdIp.textContent = server.ip;
+            tdIp.textContent = location == "" ? ip : location;
             tdIp.classList.add("tdLeft");
             tr.appendChild(tdIp);
             tr.appendChild(tdMode);
@@ -260,7 +263,8 @@ window.onload = async () => {
                 }
                 tr.classList.add("selected");
                 myServer = tr;
-                window.serverAdd = server.ip;
+                window.connectionAdd = protocol;
+                window.serverAdd = ip;
                 getMockups();
             };
             tbody.appendChild(tr);

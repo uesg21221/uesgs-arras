@@ -27,6 +27,7 @@ if (Config.host === 'localhost') {
 if (Config.host.match(/localhost:(\d)/) && Config.host !== 'localhost:' + Config.port) {
     util.warn('[WEB SERVER] config.host is a localhost domain but its port is different to config.port!');
 }
+ips.push([ Config.host, Config.location, Config.https ]);
 
 server = require('http').createServer((req, res) => {
     let resStr = "";
@@ -48,10 +49,9 @@ server = require('http').createServer((req, res) => {
             resStr = mockupJsonData;
             break;
         case "/serverData.json":
-            resStr = JSON.stringify({ ip: Config.host, gameMode: Config.gameModeName, players: views.length });
+            resStr = JSON.stringify({ gameMode: Config.gameModeName, players: views.length });
             break;
         case "/browserData.json":
-            ips.push([ Config.host, false ]); // Is behind https proxy?
             resStr = JSON.stringify(ips);
             break;
         default:
