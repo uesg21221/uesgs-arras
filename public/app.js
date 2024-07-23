@@ -1887,7 +1887,7 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     let y = global.mobile ? spacing : global.screenHeight - height - spacing;
     if (global.mobile) {
       y += global.canUpgrade ? (alcoveSize / 1.5) * mobileUpgradeGlide.get() * upgradeColumns / 1.5 + spacing * (upgradeColumns + 1.55) + 9 : 0;
-      y += global.canSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0;
+      y += global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0;
     }
     ctx.globalAlpha = 0.4;
     let W = global.roomSetup[0].length,
@@ -2242,7 +2242,7 @@ function drawMobileButtons(spacing, alcoveSize) {
     let yOffset = 0;
     if (global.mobile) {
       yOffset += global.canUpgrade ? (alcoveSize / 1.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 1.5 + spacing * (upgradeColumns + 1.55) + -17.5 : 0;
-      yOffset += global.canSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0;
+      yOffset += global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0;
     }
     let buttons;
     let baseSize = (alcoveSize - spacing * 2) / 3;
