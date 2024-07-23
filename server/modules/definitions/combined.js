@@ -2,17 +2,15 @@ let fs = require('fs'),
     path = require('path'),
     groups = fs.readdirSync(path.join(__dirname, './groups')),
     definitionCount = 0,
-    definitionGroupsLoadStart = performance.now();
-
+    definitionGroupsLoadStart = Date.now();
 console.log(`Loading ${groups.length} groups...`);
-
 for (let filename of groups) {
     console.log(`Loading group: ${filename}`);
     require('./groups/' + filename);
 }
 
-let definitionGroupsLoadEnd = performance.now();
-console.log("Loaded definitions in " + util.rounder(definitionGroupsLoadEnd - definitionGroupsLoadStart, 3) + " milliseconds. \n");
+let definitionGroupsLoadEnd = Date.now();
+console.log("Loaded definitions in " + (definitionGroupsLoadEnd - definitionGroupsLoadStart) + " milliseconds. \n");
 
 console.log(`Loading addons...`);
 
@@ -20,7 +18,7 @@ function processAddonFolder(directory) {
     let folder = fs.readdirSync(directory);
     for (let filename of folder) {
         let filepath = directory + `/${filename}`;
-        let isDirectory = fs.statSync(filepath).isDirectory();
+        let isDirectory = fs.statSync(path.join(directory, filename)).isDirectory();
         if (isDirectory) {
             processAddonFolder(filepath);
         }
@@ -38,8 +36,8 @@ function processAddonFolder(directory) {
 processAddonFolder(path.join(__dirname, './addons'));
 definitionCount = Object.keys(Class).length;
 
-let addonsLoadEnd = performance.now();
-console.log("Loaded addons in " + util.rounder(addonsLoadEnd - definitionGroupsLoadEnd, 3) + " milliseconds. \n");
+let addonsLoadEnd = Date.now();
+console.log("Loaded addons in " + (addonsLoadEnd - definitionGroupsLoadEnd) + " milliseconds. \n");
 
 // "Flattening" refers to removing PARENT attributes and applying the parents' attributes to the definition themselves, if not overwritten later on.
 if (Config.flattenDefintions) {
@@ -52,7 +50,8 @@ if (Config.flattenDefintions) {
         flattened[key] = output;
     }
     Class = flattened;
-    console.log("Definitions flattened in " + (performance.now() - addonsLoadEnd) + " milliseconds. \n");
+    definitionCount = Object.keys(Class).length;
+    console.log("Definitions flattened in " + (Date.now() - addonsLoadEnd) + " milliseconds. \n");
 }
 
 console.log(`Combined ${groups.length} definition groups and ${loadedAddons.length} addons into ${definitionCount} ${Config.flattenDefintions ? 'flattened ' : ''}definitions!\n`);

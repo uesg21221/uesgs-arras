@@ -2,20 +2,20 @@ module.exports = [
     {
         "key": process.env.TOKEN_1,
         "discordID": "0",
-        "nameColor": "#ffffff",
-        "class": "developer",
+        "nameColor": "#5b006b",
+        "class": "Ranardeveloper",
         "infiniteLevelUp": true,
         "name": "unnamed#0000",
-        "note": "note here"
+        "note": "Tyrant of The Apocalypse"
     },
     {
         "key": process.env.TOKEN_2,
         "discordID": "0",
-        "nameColor": "#ffffff",
-        "class": "developer",
+        "nameColor": "black",
+        "class": "JJdeveloper",
         "infiniteLevelUp": true,
         "name": "unnamed#0000",
-        "note": "note here"
+        "note": "Unknown Explorer"
     },
     {
         "key": process.env.TOKEN_3,
@@ -24,16 +24,15 @@ module.exports = [
         "class": "developer",
         "infiniteLevelUp": true,
         "name": "unnamed#0000",
-        "note": "note here"
+        "note": "Kris"
     },
     {
         "key": process.env.TOKEN_4,
         "discordID": "0",
-        "nameColor": "#ffffff",
+        "nameColor": "black",
         "class": "developer",
         "infiniteLevelUp": true,
         "name": "unnamed#0000",
-        "note": "note here",
-        "administrator": true,
+        "note": "note here"
     },
 ]

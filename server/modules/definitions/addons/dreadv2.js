@@ -5,47 +5,47 @@ const g = require('../gunvals.js');
 const eggnoughtBody = {
 	SPEED: base.SPEED * 0.65,
 	HEALTH: base.HEALTH * 1.75,
-	SHIELD: base.SHIELD * 2.5,
+	SHIELD: base.SHIELD * 1.5,
 	REGEN: base.REGEN * 1.25,
 	FOV: base.FOV,
 	RESIST: base.RESIST,
-	DENSITY: base.DENSITY * 2.5,
+	DENSITY: base.DENSITY * 1.5,
 	ACCELERATION: base.ACCEL * 0.8,
 };
 const squarenoughtBody = {
 	SPEED: base.SPEED * 0.6,
 	HEALTH: base.HEALTH * 2.5,
-	SHIELD: base.SHIELD * 2.7,
+	SHIELD: base.SHIELD * 2,
 	REGEN: base.REGEN * 1.4,
 	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
-	DENSITY: base.DENSITY * 2.75,
-	ACCELERATION: base.ACCEL * 0.65,
+	DENSITY: base.DENSITY * 2,
+	ACCELERATION: base.ACCEL * 0.6,
 };
 const trinoughtBody = {
 	SPEED: base.SPEED * 0.55,
-	HEALTH: base.HEALTH * 3.5,
-	SHIELD: base.SHIELD * 2.9,
+	HEALTH: base.HEALTH * 7.5,
+	SHIELD: base.SHIELD * 2.5,
 	REGEN: base.REGEN * 1.5,
 	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
-	DENSITY: base.DENSITY * 3,
-	ACCELERATION: base.ACCEL * 0.55,
+	DENSITY: base.DENSITY * 2.5,
+	ACCELERATION: base.ACCEL * 0.5,
 };
 const pentanoughtBody = {
 	SPEED: base.SPEED * 0.5,
 	HEALTH: base.HEALTH * 4.25,
-	SHIELD: base.SHIELD * 3.1,
+	SHIELD: base.SHIELD * 3,
 	REGEN: base.REGEN * 1.55,
 	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
-	DENSITY: base.DENSITY * 3.25,
-	ACCELERATION: base.ACCEL * 0.45,
+	DENSITY: base.DENSITY * 3,
+	ACCELERATION: base.ACCEL * 0.4,
 };
 const hexnoughtBody = {
 	SPEED: base.SPEED * 0.45,
 	HEALTH: base.HEALTH * 5,
-	SHIELD: base.SHIELD * 3.3,
+	SHIELD: base.SHIELD * 3.5,
 	REGEN: base.REGEN * 1.6,
 	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
@@ -150,7 +150,7 @@ Class.spamAutoTurret = {
 		{
 			POSITION: [22, 10, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard, g.flankGuard, g.autoTurret, {recoil: 0.125}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.flankGuard, g.flankGuard, g.autoTurret, {recoil: 0.2}]),
 				TYPE: "bullet",
 			},
 		},
@@ -203,28 +203,22 @@ Class.betadrone = {
 // Auras
 Class.atmosphereAuraOfficialV2 = addAura(1, 1, 0.15);
 Class.coronaAuraOfficialV2 = addAura(1.15, 0.8, 0.15);
-Class.trinoughtBigAura = addAura(0.7, 1.5);
-Class.trinoughtSmallAura = addAura(0.7, 2.1, 0.15);
-Class.pentanoughtBigAura = addAura(1.2, 1.45);
-Class.pentanoughtSmallAura = addAura(1.2, 1.6, 0.15);
+Class.trinoughtBigAura = addAura(1.15, 1.5);
+Class.trinoughtSmallAura = addAura(1.15, 2.1, 0.15);
+Class.pentanoughtBigAura = addAura(1.25, 1.45);
+Class.pentanoughtSmallAura = addAura(1.25, 1.6, 0.15);
 if (useOldPhotosphere) {
 	Class.photosphereSmallAuraOfficialV2 = addAura(1.25, 1.85, 0.15);
 	Class.photosphereBigAuraOfficialV2 = addAura(0.25, 4);
 }
-Class.gladiatorAuraMinionAuraOfficialV2 = addAura(0.333, 1.2);
+Class.gladiatorAuraMinionAuraOfficialV2 = addAura(0.35, 1.2);
 
 Class.thermosphereAuraOfficialV2 = addAura(-1, 1.5);
-Class.trinoughtBigHealAura = addAura(-0.7, 1.5);
-Class.trinoughtSmallHealAura = addAura(-0.7, 2.1, 0.15);
-Class.pentanoughtBigHealAura = addAura(-0.8, 1.45);
-Class.pentanoughtSmallHealAura = addAura(-0.8, 1.6, 0.15);
-Class.gladiatorHealAuraMinionAuraOfficialV2 = addAura(-0.333, 1.2);
-
-// gStat turret modifiers
-g.triSecondaryAuto = {reload: 1.1, health: 0.83};
-g.pentaSecondaryAuto = {reload: 1.1, health: 0.88}
-g.triKilobyte = {reload: 1.05, health: 0.9, speed: 0.95, maxSpeed: 0.95};
-g.pentaMegabyte = {reload: 1.05, health: 0.95, speed: 0.9, maxSpeed: 0.9};
+Class.trinoughtBigHealAura = addAura(-1.15, 1.5);
+Class.trinoughtSmallHealAura = addAura(-1.05, 2.1, 0.15);
+Class.pentanoughtBigHealAura = addAura(-1.3, 1.45);
+Class.pentanoughtSmallHealAura = addAura(-1.2, 1.6, 0.15);
+Class.gladiatorHealAuraMinionAuraOfficialV2 = addAura(-0.25, 1.2);
 
 // T0
 Class.dreadOfficialV2 = {
@@ -304,7 +298,7 @@ Class.invaderOfficialV2 = {
 	GUNS: weaponArray({
 		POSITION: [5, 9, 1.2, 8, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.drone, g.overseer, {reload: 0.85, health: 1.08, maxSpeed: 0.95}]),
+			SHOOT_SETTINGS: combineStats([g.drone, g.overseer, {reload: 0.85, health: 1.05}]),
 			TYPE: "drone",
 			MAX_CHILDREN: 4,
 			AUTOFIRE: true,
@@ -347,7 +341,7 @@ Class.byteTurretOfficialV2 = {
 		{
 			POSITION: [22, 10, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, {size: 0.9, health: 1.3, speed: 0.85, recoil: 0.8, range: 0.45}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, {health: 1.2, speed: 0.85, recoil: 1.15}]),
 				TYPE: "bullet",
 			},
 		},
@@ -413,7 +407,7 @@ Class.gladiusOfficialV2 = {
 		}, {
 			POSITION: [19.5, 5, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, {speed: 1.05, maxSpeed: 1.05, damage: 1.12, range: 0.65}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, {speed: 1.05, maxSpeed: 1.05, health: 1.12, range: 0.65}]),
 				TYPE: "bullet",
 			},
 		},
@@ -430,7 +424,7 @@ Class.sabreOfficialV2 = {
 		{
 			POSITION: [24, 7, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, {reload: 1.23, health: 1.33, speed: 1.1, maxSpeed: 1.1, density: 1.2, range: 0.65}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, {reload: 1.23, health: 1.38, speed: 1.1, maxSpeed: 1.1, density: 1.2, range: 0.65}]),
 				TYPE: "bullet",
 			},
 		}, {
@@ -463,7 +457,7 @@ Class.negotiatorOfficialV2 = {
 	GUNS: weaponArray({
 		POSITION: [9, 8, 1.4, 6, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, {size: 0.85, speed: 0.85, maxSpeed: 0.75, health: 1.23, range: 0.75}]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, {size: 0.8, speed: 0.85, maxSpeed: 0.85, health: 1.23, range: 0.8}]),
 			TYPE: "bullet",
 		},
 	}, 4),
@@ -474,7 +468,7 @@ Class.enforcerOfficialV2 = {
 	GUNS: weaponArray({
 		POSITION: [17, 9, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.pounder, {reload: 1.25, health: 1.37, range: 0.9}]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pounder, {reload: 1.13, health: 1.27, range: 0.9}]),
 			TYPE: "bullet",
 		},
 	}, 4),
@@ -505,7 +499,7 @@ Class.inquisitorOfficialV2 = {
 	GUNS: weaponArray({
 		POSITION: [5, 11, 1.1, 8, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.drone, g.overseer, {reload: 0.9, health: 0.8, maxSpeed: 0.9}]),
+			SHOOT_SETTINGS: combineStats([g.drone, g.overseer, {reload: 0.9, health: 0.75}]),
 			TYPE: "drone",
 			MAX_CHILDREN: 3,
 			AUTOFIRE: true,
@@ -522,7 +516,7 @@ Class.assailantMinionOfficialV2 = {
 	GUNS: weaponArray({
 		POSITION: [15, 7.5, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.assassin, g.minionGun, {reload: 1.8, health: 1.1}]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.assassin, g.minionGun, {reload: 1.7, health: 1.1}]),
 			WAIT_TO_CYCLE: true,
 			TYPE: "bullet",
 		},
@@ -542,13 +536,12 @@ Class.assailantOfficialV2 = {
 			POSITION: [1.5, 11, 1, 15, 0, 0, 0],
 			PROPERTIES: {
 				MAX_CHILDREN: 4,
-				SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 1.95, health: 1.3, damage: 0.65, pen: 0.9, speed: 0.8, maxSpeed: 0.8, density: 1.5}]),
+				SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 1.95, health: 1.3, damage: 0.7, speed: 0.8, maxSpeed: 0.8}]),
 				TYPE: "assailantMinionOfficialV2",
 				STAT_CALCULATOR: "drone",
 				AUTOFIRE: true,
 				SYNCS_SKILLS: true,
 				MAX_CHILDREN: 2,
-				WAIT_TO_CYCLE: true,
 			},
 		}, {
 			POSITION: [12, 11, 1, 0, 0, 0, 0],
@@ -589,7 +582,7 @@ Class.minotaurOfficialV2 = {
 		}, {
 			POSITION: [3.75, 7, 1.75, 13, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.pounder, {health: 0.85, shudder: 0.7, range: 0.67}]),
+				SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.pounder, {health: 0.95, shudder: 0.7, range: 0.6}]),
 				TYPE: "unsetTrap",
 				STAT_CALCULATOR: "block"
 			},
@@ -603,7 +596,7 @@ Class.automationOfficialV2 = {
 	LABEL: "Automation",
 	TURRETS: weaponArray({
 		POSITION: [4, 9, 0, 45, 180, 2],
-		TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: {reload: 0.9, health: 1.2}}],
+		TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: {reload: 0.85, health: 1.2}}],
 	}, 4), 
 	PROPS: [
 		{
@@ -619,7 +612,7 @@ Class.kilobyteTurretOfficialV2 = {
 		{
 			POSITION: [26, 10, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, g.assassin, {size: 0.9, health: 1.39, speed: 0.63, recoil: 1.25, range: 0.5}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, g.assassin, {health: 1.39, speed: 0.69, recoil: 1.8, range: 0.55}]),
 				TYPE: "bullet",
 			},
 		},
@@ -731,13 +724,13 @@ Class.bladeOfficialV2 = {
 		}, {
 			POSITION: [18, 5, 1, 0, 3, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin, {speed: 1.09, maxSpeed: 1.09, health: 1.09, range: 0.65}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin, {speed: 1.09, maxSpeed: 1.09, health: 1.15, range: 0.65}]),
 				TYPE: "bullet",
 			},
 		}, {
 			POSITION: [18, 5, 1, 0, -3, 0, 0.5],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin, {speed: 1.09, maxSpeed: 1.09, health: 1.09, range: 0.65}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin, {speed: 1.09, maxSpeed: 1.09, health: 1.15, range: 0.65}]),
 				TYPE: "bullet",
 			},
 		},
@@ -788,13 +781,13 @@ Class.appeaserOfficialV2 = {
 		{
 			POSITION: [7, 11, 1.35, 6, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.spam, {size: 0.7, health: 1.03, range: 0.75}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.spam, {size: 0.7, health: 0.96, range: 0.8}]),
 				TYPE: "bullet",
 			},
 		}, {
 			POSITION: [7, 10, 1.3, 8, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.spam, {size: 0.6, health: 1.03, range: 0.75, reload: 1.05}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.spam, {size: 0.6, health: 0.95, range: 0.8, reload: 1.1}]),
 				TYPE: "bullet",
 			},
 		},
@@ -878,7 +871,7 @@ Class.aggressorMinionOfficialV2 = {
 	GUNS: weaponArray({
 		POSITION: [16, 8.5, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.assassin, g.minionGun, {speed: 1.06, maxSpeed: 1.06, reload: 1.75, health: 1.25}]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.assassin, g.minionGun, {speed: 1.06, maxSpeed: 1.06, reload: 1.8, health: 1.25}]),
 			WAIT_TO_CYCLE: true,
 			TYPE: "bullet",
 		},
@@ -897,13 +890,12 @@ Class.aggressorOfficialV2 = {
 		}, {
 			POSITION: [1.5, 13, 1, 15, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 1.8, health: 1.72, damage: 0.67, pen: 0.9, speed: 0.8, maxSpeed: 0.8, density: 1.6}]),
+				SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 1.65, health: 1.72, damage: 0.7, speed: 0.8, maxSpeed: 0.8}]),
 				TYPE: "aggressorMinionOfficialV2",
 				STAT_CALCULATOR: "drone",
 				AUTOFIRE: true,
 				SYNCS_SKILLS: true,
 				MAX_CHILDREN: 2,
-				WAIT_TO_CYCLE: true,
 			},
 		}, {
 			POSITION: [12, 13, 1, 0, 0, 0, 0],
@@ -987,7 +979,7 @@ Class.fusionOfficialV2 = {
 	TURRETS: [
 		...weaponArray({
 			POSITION: [3.5, 10.5, 0, 60, 180, 2],
-			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: g.triSecondaryAuto}],
+			TYPE: "spamAutoTurret",
 		}, 3),
 		{
 			POSITION: [9.5, 0, 0, 0, 360, 2],
@@ -1007,11 +999,11 @@ Class.binaryOfficialV2 = {
 	TURRETS: [
 		...weaponArray({
 			POSITION: [3.5, 10.5, 0, 60, 180, 2],
-			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: g.triSecondaryAuto}],
+			TYPE: "spamAutoTurret",
 		}, 3),
 		{
 			POSITION: [10, 0, 0, 0, 360, 2],
-			TYPE: ["kilobyteTurretOfficialV2", {GUN_STAT_SCALE: g.triKilobyte}],
+			TYPE: "kilobyteTurretOfficialV2",
 		},
 	],
 	PROPS: [
@@ -1028,7 +1020,7 @@ Class.exosphereOfficialV2 = {
 	TURRETS: [
 		...weaponArray({
 			POSITION: [3.5, 10.5, 0, 60, 180, 2],
-			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: g.triSecondaryAuto}],
+			TYPE: "spamAutoTurret",
 		}, 3),
 		{
 			POSITION: [9.5, 0, 0, 0, 360, 2],
@@ -1049,7 +1041,7 @@ Class.megabyteTurretOfficialV2 = {
 		{
 			POSITION: [26, 13, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, g.assassin, g.pounder, {size: 0.85, health: 1.31, speed: 0.62, recoil: 1.4, range: 0.52}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, g.assassin, g.pounder, {health: 1.35, speed: 0.7, recoil: 2, range: 0.6}]),
 				TYPE: "bullet",
 			},
 		},
@@ -1081,7 +1073,7 @@ Class.trojanOfficialV2 = {
 		}, 3),
 		{
 			POSITION: [10, 0, 0, 0, 360, 2],
-			TYPE: ["kilobyteTurretOfficialV2", {GUN_STAT_SCALE: g.triKilobyte}],
+			TYPE: "kilobyteTurretOfficialV2",
 		},
 	],
 	PROPS: [
@@ -1102,7 +1094,7 @@ Class.hardwareOfficialV2 = {
 		}, 3),
 		{
 			POSITION: [10, 0, 0, 0, 360, 2],
-			TYPE: ["kilobyteTurretOfficialV2", {GUN_STAT_SCALE: g.triKilobyte}],
+			TYPE: "kilobyteTurretOfficialV2",
 		},
 	],
 	PROPS: [
@@ -1276,13 +1268,13 @@ Class.rapierOfficialV2 = {
 		}, {
 			POSITION: [18, 5, 1, 0, 3, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin, {speed: 1.13, maxSpeed: 1.13, health: 1.15, range: 0.65}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin, {speed: 1.13, maxSpeed: 1.13, health: 1.21, range: 0.65}]),
 				TYPE: "bullet",
 			},
 		}, {
 			POSITION: [18, 5, 1, 0, -3, 0, 0.5],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin, {speed: 1.13, maxSpeed: 1.13, health: 1.15, range: 0.65}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, g.twin, {speed: 1.13, maxSpeed: 1.13, health: 1.21, range: 0.65}]),
 				TYPE: "bullet",
 			},
 		},
@@ -1299,7 +1291,7 @@ Class.javelinOfficialV2 = {
 		{
 			POSITION: [28, 7, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.assassin, {reload: 1.13, health: 1.1, density: 0.55, range: 0.65}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.assassin, {reload: 1.13, health: 1.12, density: 0.55, range: 0.65}]),
 				TYPE: "bullet",
 			},
 		}, {
@@ -1314,19 +1306,19 @@ Class.diplomatOfficialV2 = {
 		{
 			POSITION: [13, 7, 1, 0, 3.25, 0, 0.5],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triplet, {health: 1.15}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triplet, {health: 1.24}]),
 				TYPE: "bullet",
 			},
 		}, {
 			POSITION: [13, 7, 1, 0, -3.25, 0, 0.5],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triplet, {health: 1.15}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triplet, {health: 1.24}]),
 				TYPE: "bullet",
 			},
 		}, {
 			POSITION: [15, 7, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triplet, {health: 1.15}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.triplet, {health: 1.24}]),
 				TYPE: "bullet",
 			},
 		},
@@ -1339,19 +1331,19 @@ Class.arbitratorOfficialV2 = {
 		{
 			POSITION: [7.5, 10.75, 1.33, 5.5, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.triplet, g.spam, g.spam, {size: 0.7,  health: 1.05, range: 0.8, reload: 1}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.triplet, g.spam, g.spam, {size: 0.7,  health: 1.33, range: 0.8, reload: 1}]),
 				TYPE: "bullet",
 			},
 		}, {
 			POSITION: [7.5, 9.5, 1.33, 7.5, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.triplet, g.spam, g.spam, {size: 0.65, health: 1.05, range: 0.8, reload: 1.05}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.triplet, g.spam, g.spam, {size: 0.65, health: 1.33, range: 0.8, reload: 1.1}]),
 				TYPE: "bullet",
 			},
 		}, {
 			POSITION: [7.5, 7.25, 1.25, 9.5, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.triplet, g.spam, g.spam, {size: 0.7,  health: 1.05, range: 0.8, reload: 1.1}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.twin, g.triplet, g.spam, g.spam, {size: 0.7,  health: 1.33, range: 0.8, reload: 1.2}]),
 				TYPE: "bullet",
 			},
 		},
@@ -1377,7 +1369,7 @@ Class.tyrantOfficialV2 = {
 		}, {
 			POSITION: [15, 12, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, {reload: 1.18, health: 1.39, speed: 0.7, maxSpeed: 0.7, range: 0.4}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, {reload: 1.18, health: 1.41, speed: 0.7, maxSpeed: 0.7, range: 0.4}]),
 				TYPE: "supermissile",
 				STAT_CALCULATOR: "sustained",
 			},
@@ -1395,7 +1387,7 @@ Class.raiderOfficialV2 = {
 		{
 			POSITION: [4, 5, 2.1, 8, 3, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, {damage: 0.9, health: 0.63, maxSpeed: 0.9, size: 1.5, reload: 1.5}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, {damage: 0.9, health: 0.75, maxSpeed: 0.9, size: 1.5, reload: 1.2}]),
 				TYPE: "drone",
 				MAX_CHILDREN: 2,
 				AUTOFIRE: true,
@@ -1406,7 +1398,7 @@ Class.raiderOfficialV2 = {
 		}, {
 			POSITION: [4, 5, 2.1, 8, -3, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, {damage: 0.9, health: 0.63, maxSpeed: 0.9, size: 1.5, reload: 1.5}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, {damage: 0.9, health: 0.75, maxSpeed: 0.9, size: 1.5, reload: 1.2}]),
 				TYPE: "drone",
 				MAX_CHILDREN: 2,
 				AUTOFIRE: true,
@@ -1417,7 +1409,7 @@ Class.raiderOfficialV2 = {
 		}, {
 			POSITION: [6, 6.5, 1.4, 8, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, g.pounder, {damage: 1.06, maxSpeed: 0.9, size: 2, reload: 1.5}]),
+				SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.overseer, g.pounder, {damage: 1.04, maxSpeed: 0.9, size: 2, reload: 1.2}]),
 				TYPE: "betadrone",
 				MAX_CHILDREN: 1,
 				AUTOFIRE: true,
@@ -1505,13 +1497,12 @@ Class.gladiatorOfficialV2 = {
 		}, {
 			POSITION: [1.5, 13, 1, 14.75, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 2.1, health: 1.16, damage: 0.62, pen: 0.9, speed: 0.8, maxSpeed: 0.8, density: 1.6}]),
+				SHOOT_SETTINGS: combineStats([g.factory, {size: 0.9, reload: 1.65, health: 1.16, damage: 0.7, speed: 0.8, maxSpeed: 0.8}]),
 				TYPE: "minion",
 				STAT_CALCULATOR: "drone",
 				AUTOFIRE: true,
 				SYNCS_SKILLS: true,
 				MAX_CHILDREN: 2,
-				WAIT_TO_CYCLE: true,
 			},
 		}, {
 			POSITION: [12, 13, 1, 0, 0, 0, 0],
@@ -1580,11 +1571,11 @@ Class.skynetOfficialV2 = {
 	TURRETS: [
 		...weaponArray({
 			POSITION: [3.25, 4.5, 0, 0, 180, 2],
-			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: {reload: 1.1, health: 0.93, damage: 0.8}}],
+			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: {reload: 1.1, health: 0.87, damage: 0.8}}],
 		}, 5),
 		...weaponArray({
 			POSITION: [3.25, 8, 0, 36, 180, 2],
-			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: {reload: 1.1, health: 0.93, damage: 0.8}}],
+			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: {reload: 1.1, health: 0.87, damage: 0.8}}],
 		}, 5)
 	],
 	PROPS: [
@@ -1600,7 +1591,7 @@ Class.supernovaOfficialV2 = {
 	TURRETS: [
 		...weaponArray({
 			POSITION: [3.25, 9, 0, 36, 180, 2],
-			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: g.pentaSecondaryAuto}],
+			TYPE: "spamAutoTurret",
 		}, 5),
 		{
 			POSITION: [9, 0, 0, 0, 360, 2],
@@ -1620,11 +1611,11 @@ Class.cipherOfficialV2 = {
 	TURRETS: [
 		...weaponArray({
 			POSITION: [3.25, 9, 0, 36, 180, 2],
-			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: g.pentaSecondaryAuto}],
+			TYPE: "spamAutoTurret",
 		}, 5),
 		{
 			POSITION: [11.5, 0, 0, 0, 360, 2],
-			TYPE: ["megabyteTurretOfficialV2", {GUN_STAT_SCALE: g.pentaMegabyte}],
+			TYPE: "megabyteTurretOfficialV2",
 		},
 	],
 	PROPS: [
@@ -1641,7 +1632,7 @@ Class.interstellarOfficialV2 = {
 	TURRETS: [
 		...weaponArray({
 			POSITION: [3.25, 9, 0, 36, 180, 2],
-			TYPE: ["spamAutoTurret", {GUN_STAT_SCALE: g.pentaSecondaryAuto}],
+			TYPE: "spamAutoTurret",
 		}, 5),
 		{
 			POSITION: [9.5, 0, 0, 0, 360, 2],
@@ -1662,7 +1653,7 @@ Class.gigabyteTurretOfficialV2 = {
 		{
 			POSITION: [26, 16, 1, 0, 0, 0, 0],
 			PROPERTIES: {
-				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, g.assassin, g.pounder, g.destroyer, {size: 0.75, health: 1.24, speed: 0.9, recoil: 1.4, range: 0.9}]),
+				SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, g.assassin, g.pounder, g.destroyer, {size: 0.8, health: 1.2, speed: 0.9, recoil: 2, range: 1.15}]),
 				TYPE: "bullet",
 			},
 		},
@@ -1694,7 +1685,7 @@ Class.malwareOfficialV2 = {
 		}, 5),
 		{
 			POSITION: [11.5, 0, 0, 0, 360, 2],
-			TYPE: ["megabyteTurretOfficialV2", {GUN_STAT_SCALE: g.pentaMegabyte}],
+			TYPE: "megabyteTurretOfficialV2",
 		},
 	],
 	PROPS: [
@@ -1715,7 +1706,7 @@ Class.softwareOfficialV2 = {
 		}, 5),
 		{
 			POSITION: [11.5, 0, 0, 0, 360, 2],
-			TYPE: ["megabyteTurretOfficialV2", {GUN_STAT_SCALE: g.pentaMegabyte}],
+			TYPE: "megabyteTurretOfficialV2",
 		},
 	],
 	PROPS: [

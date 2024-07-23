@@ -31,7 +31,6 @@ function collide(collision) {
     let instance = collision[0],
         other = collision[1];
     instance.emit('collide', { body: instance, instance, other });
-    other.emit('collide', { body: other, instance: other, other: instance });
     // Check for ghosts...
     if (other.isGhost) {
         util.error("GHOST FOUND");
@@ -60,7 +59,7 @@ function collide(collision) {
         return 0;
     }
     if (
-        (!instance.activation.active && !other.activation.active) ||
+        (!instance.activation.check() && !other.activation.check()) ||
         (instance.isArenaCloser && !instance.alpha) ||
         (other.isArenaCloser && !other.alpha)
     ) return 0;
@@ -191,11 +190,11 @@ function collide(collision) {
 let time, ticks = 0;
 const gameloop = () => {
     logs.loops.tally();
-    logs.master.startTracking();
-    logs.activation.startTracking();
-    logs.activation.endTracking();
+    logs.master.set();
+    logs.activation.set();
+    logs.activation.mark();
     // Do collisions
-    logs.collide.startTracking();
+    logs.collide.set();
     if (entities.length > 1) {
         // Load the grid
         grid.update();
@@ -205,48 +204,48 @@ const gameloop = () => {
             collide(pairs[i]);
         }
     }
-    logs.collide.endTracking();
+    logs.collide.mark();
     // Do entities life
-    logs.entities.startTracking();
+    logs.entities.set();
     for (let my of entities) {
         // Consider death.
         if (my.contemplationOfMortality()) {
             my.destroy();
         } else {
-            if (my.activation.active || my.isPlayer) {
-                if (my.bond == null) {
-                    // Resolve the physical behavior from the last collision cycle.
-                    logs.physics.startTracking();
-                    my.physics();
-                    logs.physics.endTracking();
-                }
+            if (my.bond == null) {
+                // Resolve the physical behavior from the last collision cycle.
+                logs.physics.set();
+                my.physics();
+                logs.physics.mark();
+            }
+            if (my.activation.check() || my.isPlayer) {
                 logs.entities.tally();
                 // Think about my actions.
-                logs.life.startTracking();
+                logs.life.set();
                 my.life();
-                logs.life.endTracking();
+                logs.life.mark();
                 // Apply friction.
                 my.friction();
                 my.confinementToTheseEarthlyShackles();
-                logs.selfie.startTracking();
+                logs.selfie.set();
                 my.takeSelfie();
-                logs.selfie.endTracking();
+                logs.selfie.mark();
             }
             // Update collisions.
             my.collisionArray = [];
             // Activation
             my.activation.update();
-            my.updateAABB(my.activation.active);
+            my.updateAABB(my.activation.check());
         }
         // Update collisions.
         my.collisionArray = [];
         my.emit('tick', { body: my });
     }
-    logs.entities.endTracking();
-    logs.master.endTracking();
+    logs.entities.mark();
+    logs.master.mark();
     // Remove dead entities
     purgeEntities();
-    room.lastCycle = performance.now();
+    room.lastCycle = util.time();
     ticks++;
     if (ticks & 1) {
         for (let i = 0; i < sockets.players.length; i++) {
@@ -365,7 +364,7 @@ setInterval(() => {
     regenerateHealthAndShield();
 }, room.regenerateTick);
 setInterval(() => {
-    gameloop();
+    gameloop()
     gamemodeLoop();
     roomLoop();
 
