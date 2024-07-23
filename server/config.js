@@ -3,10 +3,11 @@ module.exports = {
 
     // Game server domain.
     // If the host is 'localhost:NUMBER', the NUMBER must be the port setting.
-    host: "localhost:26301",
+    //host: "the-new-prophecy.glitch.me",
+    host: "upcoming-update-tnp.glitch.me",
 
     // Which port to run the web server on.
-    port: 26301,
+    port: 8080,
 
     // How often to update the list of the entities that players can see.
     // Has effects of when entities are activated.
@@ -100,8 +101,6 @@ module.exports = {
         if (level <= 45 && level & 1 == 1) return 1;
         return 0;
     },
-    // Show the health bar text or not.
-    SHOW_HEALTHBAR_TEXT: false,
 
     // Default skill caps.
     MAX_SKILL: 9,
@@ -149,10 +148,6 @@ module.exports = {
 
 
     // Natural Spawns
-
-    // Allow foods to be spawned or not.
-    // NOTE: Disabling it decreases lagness, also very useful if you don't need foods to be spawned.
-    ENABLE_FOOD: true,
 
     FOOD_CAP: 3, // Max normal food per normal tile.
     FOOD_SPAWN_CHANCE: 0.875, // Likeliness of normal food spawn attempts succeeding.
@@ -253,6 +248,5 @@ module.exports = {
     MAZE: false,
     HUNT: false,
     MODE: "ffa",
-    TAG: false,
-    SPAWN_CONFINEMENT: {},
+    TAG: false
 }

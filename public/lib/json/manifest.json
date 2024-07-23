@@ -1,14 +1,14 @@
 {
-    "name": "Open Source Arras",
+    "name": "Prophisized",
     "theme_color": "#454b7f",
-    "background_color": "#484948",
-    "description": "This server runs on Open Source Arras.",
+    "background_color": "#200091",
+    "description": "Welcome.",
     "orientation": "landscape",
     "start_url": "/",
     "scope": "/",
     "display": "fullscreen",
     "icons": [{
-        "src": "round.png",
+        "src": "https://cdn.glitch.global/9416e13f-d678-4d7b-9e37-83f65ce1e7d3/ranar's%20prophecy.webp?v=1720987872896",
         "sizes": "96x96",
         "type": "image/png"
     }]

@@ -157,7 +157,7 @@ class Gun extends EventEmitter {
     }
     fire() {
         // Recoil
-        this.lastShot.time = performance.now();
+        this.lastShot.time = util.time();
         this.lastShot.power = 3 * Math.log(Math.sqrt(this.bulletSkills.spd) + this.trueRecoil + 1) + 1;
         this.recoilVelocity += this.lastShot.power;
         this.facing = this.body.facing + this.angle;
@@ -517,41 +517,6 @@ class antiNaN {
     }
 }
 
-class Activation {
-    constructor(body) {
-        this.body = body;
-        this.active = true;
-        this.lastActive = false;
-    }
-    update() {
-        // Force activation conditions
-        if (this.body.alwaysActive || this.body.isPlayer || this.body.isBot) {
-            return this.active = true;
-        }
-        if (this.body.skipLife || this.body.isDead()) {
-            return this.active = false;
-        }
-
-        // Update activity and other properties based on views
-        this.active = views.some((v) => v.check(this.body));
-
-        if (!this.active && this.lastActive) {
-            this.body.removeFromGrid();
-            this.lastActive = false;
-            // Save range ticking
-            this.deactivationTime = performance.now();
-        } else if (this.active && !this.lastActive) {
-            this.lastActive = true;
-            this.body.addToGrid();
-            // Retrieve range ticking
-            if (this.body.diesAtRange) {
-                // Time since deactivation, converted to number of ticks, factoring in the run speed
-                this.body.range -= (performance.now() - this.deactivationTime) / room.cycleSpeed / Config.runSpeed;
-            }
-        }
-    }
-}
-
 function getValidated(obj, prop, allowedType, from, optional = true) {
     let type = typeof obj[prop];
     if (allowedType === type || (optional && 'undefined' === type)) {
@@ -727,7 +692,36 @@ class Entity extends EventEmitter {
                 this.isInGrid = true;
             }
         };
-        this.activation = new Activation(this);
+        this.activation = (() => {
+            let active = true;
+            let timer = ran.irandom(15);
+            return {
+                update: () => {
+                    if (this.skipLife) {
+                        return active = false;
+                    }
+                    if (this.isDead()) {
+                        return 0;
+                    }
+                    if (!active) {
+                        this.removeFromGrid();
+                        if (this.settings.diesAtRange) {
+                            this.kill();
+                        }
+                        if (!timer--) {
+                            active = true;
+                        }
+                    } else {
+                        this.addToGrid();
+                        timer = 15;
+                        active = this.alwaysActive || this.isPlayer || this.isBot || views.some((v) => v.check(this, 0.6));
+                    }
+                },
+                check: () => {
+                    return active;
+                },
+            };
+        })();
         this.autoOverride = false;
         this.healer = false;
         this.controllers = [];
@@ -754,12 +748,6 @@ class Entity extends EventEmitter {
         this.glow = { radius: null, color: new Color(-1).compiled, alpha: 1, recursion: 1 }
         this.invisible = [0, 0];
         this.alphaRange = [0, 1];
-        this.confinement = {
-            xMin: 0,
-            xMax: room.width,
-            yMin: 0,
-            yMax: room.height,
-        },
         // Define it
         this.SIZE = 1;
         this.sizeMultiplier = 1;
@@ -1035,7 +1023,6 @@ class Entity extends EventEmitter {
             }
             this.addController(toAdd);
         }
-        if (set.ALWAYS_ACTIVE != null) this.alwaysActive = set.ALWAYS_ACTIVE;
         if (set.MIRROR_MASTER_ANGLE != null) this.settings.mirrorMasterAngle = set.MIRROR_MASTER_ANGLE
         if (set.DRAW_HEALTH != null) this.settings.drawHealth = set.DRAW_HEALTH;
         if (set.DRAW_SELF != null) this.settings.drawShape = set.DRAW_SELF;
@@ -1102,7 +1089,7 @@ class Entity extends EventEmitter {
             if (sockets.players.length) {
                 for (let i = 0; i < sockets.players.length; i++) {
                     const player = sockets.players[i];
-                    if (player.body && player.body.id == this.id) {
+                    if (player.body.id == this.id) {
                         player.team = this.team;
                     }
                 }
@@ -1631,8 +1618,6 @@ class Entity extends EventEmitter {
             status: 1,
             health: this.health.display(),
             shield: this.shield.display(),
-            healthN: this.health.amount,
-            maxHealthN: this.health.max,
             alpha: this.alpha,
             facing: this.facing,
             direction: this.bound ? this.bound.direction : 0,
@@ -2024,8 +2009,8 @@ class Entity extends EventEmitter {
                 }
             } else {
                 let padding = this.realSize - 50;
-                this.accel.x -= Math.max(this.x + padding - this.confinement.xMax, Math.min(this.x - padding - this.confinement.xMin, 0)) * Config.ROOM_BOUND_FORCE / Config.runSpeed;
-                this.accel.y -= Math.max(this.y + padding - this.confinement.yMax, Math.min(this.y - padding - this.confinement.yMin, 0)) * Config.ROOM_BOUND_FORCE / Config.runSpeed;
+                this.accel.x -= Math.max(this.x + padding - room.width, Math.min(this.x - padding, 0)) * Config.ROOM_BOUND_FORCE / Config.runSpeed;
+                this.accel.y -= Math.max(this.y + padding - room.height, Math.min(this.y - padding, 0)) * Config.ROOM_BOUND_FORCE / Config.runSpeed;
             }
         }
     }
