@@ -3,8 +3,8 @@ module.exports = {
 
     // Game server domain.
     // If the host is 'localhost:NUMBER', the NUMBER must be the port setting.
-    //host: "the-new-prophecy.glitch.me",
-    host: "upcoming-update-tnp.glitch.me",
+    //host: "the-prophecy-paradox.glitch.me",
+    host: "upcoming-update-tpp.glitch.me",
 
     // Which port to run the web server on.
     port: 8080,
@@ -20,7 +20,7 @@ module.exports = {
     flattenDefintions: false,
 
     // Log speed loop warnings
-    LOGS: true,
+    LOGS: false,
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
@@ -118,7 +118,7 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 0,
+    BOTS: 10,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
