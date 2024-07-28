@@ -118,7 +118,7 @@ Class.baseTrapTurret = makeTurret({
         }, {
             POSITION: [4, 14, 1.8, 16, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.pounder, g.hexaTrapper, {size: 1.2, speed: 0.9, shudder: 0.1}]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.pounder, g.hexaTrapper, {reload: 1.3, size: 1.2, health: 1.35, damage: 1.4, speed: 0.9, shudder: 0.1}]),
                 TYPE: "trap",
                 STAT_CALCULATOR: "trap",
                 AUTOFIRE: true,
@@ -133,7 +133,7 @@ Class.terrestrialTrapTurret = makeTurret({
         }, {
             POSITION: [4, 14, 1.8, 13, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.pounder, g.hexaTrapper, {size: 1.2, speed: 0.9, shudder: 0.1}]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.pounder, g.hexaTrapper, {reload: 1.3, size: 1.2, health: 1.35, damage: 1.4, speed: 0.9, shudder: 0.1}]),
                 TYPE: "trap",
                 STAT_CALCULATOR: "trap",
                 AUTOFIRE: true,
@@ -142,7 +142,7 @@ Class.terrestrialTrapTurret = makeTurret({
     ],
 }, {independent: true, hasAI: false, extraStats: []})
 const shottrapTurretProperties = {
-    SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, { speed: 0.7, maxSpeed: 0.2, damage: 1.5, range: 0.6 }]),
+    SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, { reload: 0.65, speed: 0.7, maxSpeed: 0.1, damage: 0.7, range: 0.5 }]),
     AUTOFIRE: true,
     TYPE: "shotTrapBox",
     STAT_CALCULATOR: "block",
@@ -178,7 +178,7 @@ Class.shottrapTurret = makeTurret({
         POSITION: [ 16, 14, -1.4,  0, 0, 0, 0 ], 
     }, {
         POSITION: [  6, 14,  1.6, 16, 0, 0, 0 ], PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, g.fake]),
+            SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.shotgun, g.machineGun, {reload: 0.65}, g.fake]),
             AUTOFIRE: true,
             TYPE: "bullet"
         }
@@ -207,7 +207,7 @@ Class.kronosSkimmerTurret = makeTurret({
         }, {
             POSITION: [15, 18, -0.8, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, { reload: 2 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, { reload: 2, health: 1.7, damage: 1.4, resist: 1.2 }]),
                 TYPE: "kronosMissile",
             },
         },
@@ -220,7 +220,7 @@ Class.autoSmasherLauncherTurret = makeTurret({
         }, {
             POSITION: [18, 20, -0.7, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, { reload: 2, speed: 1.5, maxSpeed: 1.5, range: 2.5 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, { reload: 2, health: 1.9, damage: 1.2, resist: 1.2, speed: 1.3, maxSpeed: 1.3, range: 2.5 }]),
                 TYPE: "autoSmasherMissile",
             },
         },
@@ -269,7 +269,7 @@ Class.triTrapGuardTurret = {
 Class.eliteSpinnerCyclone = {
     PARENT: "genericTank",
     COLOR: -1,
-    FACING_TYPE: ["spin", { speed: 0.1, independent: true }],
+    FACING_TYPE: ["spin", { speed: -0.1, independent: true }],
     GUNS: weaponArray([
         {
             POSITION: [15, 3.5, 1, 0, 0, 0, 0],
@@ -315,13 +315,13 @@ Class.crowbarTurret = makeTurret({
     TURRETS: [
         {
             POSITION: [6, 38, 0, 0, 360, 1],
-            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: [g.flankGuard], INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: g.flankGuard, INDEPENDENT: true, HAS_NO_RECOIL: true } ],
         }, {
             POSITION: [6, 28, 0, 0, 360, 1],
-            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: [g.flankGuard], INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: g.flankGuard, INDEPENDENT: true, HAS_NO_RECOIL: true } ],
         }, {
             POSITION: [6, 18, 0, 0, 360, 1],
-            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: [g.flankGuard], INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: g.flankGuard, INDEPENDENT: true, HAS_NO_RECOIL: true } ],
         },
     ],
 }, {canRepel: true, limitFov: true, extraStats: []})
@@ -336,13 +336,13 @@ Class.wrenchTurret = makeTurret({
     TURRETS: [
         {
             POSITION: [6, 68, 0, 0, 360, 1],
-            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: [g.flankGuard], INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: g.flankGuard, INDEPENDENT: true, HAS_NO_RECOIL: true } ],
         }, {
             POSITION: [6, 58, 0, 0, 360, 1],
-            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: [g.flankGuard], INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: g.flankGuard, INDEPENDENT: true, HAS_NO_RECOIL: true } ],
         }, {
             POSITION: [6, 48, 0, 0, 360, 1],
-            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: [g.flankGuard], INDEPENDENT: true, HAS_NO_RECOIL: true } ],
+            TYPE: [ "autoTankGun", { GUN_STAT_SCALE: g.flankGuard, INDEPENDENT: true, HAS_NO_RECOIL: true } ],
         },
     ],
 }, {canRepel: true, limitFov: true, extraStats: []})
@@ -351,7 +351,7 @@ Class.protoSwarmerTurret = makeTurret({
         {
             POSITION: [10, 14, -1.2, 5, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.hive]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.hive, {speed: 1.3, maxSpeed: 0.5, health: 1.3, range: 1.3}]),
                 TYPE: "protoHive",
             },
         }, {
@@ -379,7 +379,7 @@ Class.genghisLowerTurret = makeTurret({
         }, {
             POSITION: [2, 12, 1, 13, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.babyfactory, { reload: 1.5 }]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.babyfactory, { reload: 1.5, health: 2, damage: 2, range: 2 }]),
                 TYPE: ["tinyMinion", {INDEPENDENT: true}],
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -394,14 +394,14 @@ Class.napoleonLowerTurret = makeTurret({
         {
             POSITION: [8, 8, 0.6, 6, 0, 30, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.bee, g.pounder, { speed: 1.3, maxSpeed: 1.3 }]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.bee, g.pounder]),
                 TYPE: ["bee", { INDEPENDENT: true }],
                 STAT_CALCULATOR: "swarm",
             },
         }, {
             POSITION: [8, 8, 0.6, 6, 0, -30, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.bee, g.pounder, { speed: 1.3, maxSpeed: 1.3 }]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.bee, g.pounder]),
                 TYPE: ["bee", { INDEPENDENT: true }],
                 STAT_CALCULATOR: "swarm",
             },
@@ -413,27 +413,27 @@ Class.gunnerCruiserTurret = makeTurret({
         {
             POSITION: [4, 7.5, 0.6, 6, 4.5, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, {maxSpeed: 1.1}]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: "swarm",
             },
         }, {
             POSITION: [4, 7.5, 0.6, 6, -4.5, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, {maxSpeed: 1.1}]),
                 TYPE: "swarm",
                 STAT_CALCULATOR: "swarm",
             },
         }, {
             POSITION: [16, 3, 1, 0, -3, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.twin]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.twin, {health: 1.2, damage: 1.2, speed: 1.2, maxSpeed: 0.9}]),
                 TYPE: "bullet",
             },
         }, {
             POSITION: [16, 3, 1, 0, 3, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.twin]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.twin, {health: 1.2, damage: 1.2, speed: 1.2, maxSpeed: 0.9}]),
                 TYPE: "bullet",
             },
         },
@@ -445,7 +445,7 @@ Class.juliusLowerTurret = makeTurret({
         {
             POSITION: [8.5, 11, 0.6, 6, 0, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.sunchip]),
+                SHOOT_SETTINGS: combineStats([g.swarm, g.pounder, {size: 1.2, reload: 0.6, maxSpeed: 1.2}]),
                 TYPE: "minichip",
                 STAT_CALCULATOR: "drone",
             },
@@ -494,7 +494,7 @@ Class.napoleonUpperTurret = makeTurret({
         }, {
             POSITION: [16, 12, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { speed: 0.93, maxSpeed: 0.93 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { reload: 1.2, health: 1.2, damage: 1.2, speed: 0.93, maxSpeed: 0.93, range: 1.5 }]),
                 TYPE: ["turretedBullet", {COLOR: "veryLightGrey"}],
             },
         },
@@ -523,6 +523,17 @@ Class.droneAutoTurret = makeTurret({
             },
         },
     ],
+}, {label: "Turret", fov: 0.8, extraStats: []})
+Class.bulletAutoTurret = makeTurret({
+    GUNS: [
+        {
+            POSITION: [22, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, g.turret, {speed: 0.8, maxSpeed: 0.8, reload: 1.2, health: 1.4}]),
+                TYPE: "bullet",
+            },
+        },
+    ]
 }, {label: "Turret", fov: 0.8, extraStats: []})
 Class.autoSmasherTurret = makeTurret({
     GUNS: [

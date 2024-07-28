@@ -1601,7 +1601,7 @@ class Entity extends EventEmitter {
         return (this.velocity.y + this.accel.y) / Config.runSpeed;
     }
     set gunStatScale(gunStatScale) {
-        if (typeof gunStatScale == "object") {
+        if (!Array.isArray(gunStatScale)) {
             gunStatScale = [gunStatScale];
         }
         for (let gun of this.guns) {

@@ -278,12 +278,11 @@ Class.crasherSpawner = {
         {
             POSITION: [6, 12, 1.2, 8, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, {health: 1.1}]),
                 TYPE: [
                     "drone",
                     {
                         LABEL: "Crasher",
-                        VARIES_IN_SIZE: true,
                         DRAW_HEALTH: true,
                     },
                 ],
