@@ -283,10 +283,10 @@ const maintainloop = () => {
         }
         sockets.broadcast(amount > 1 ? "Visitors are coming." : "A visitor is coming.");
         setSyncedTimeout(() => {
-            let names = [];
+            let names = ran.chooseBossName(selection.nameType, amount);
 
             for (let i = 0; i < amount; i++) {
-                let spot, attempts = 30, name = ran.chooseBossName(selection.nameType);
+                let spot, attempts = 30, name = names[i];
                 do { spot = getSpawnableArea(TEAM_ENEMIES); } while (attempts-- && dirtyCheck(spot, 500));
 
                 let boss = new Entity(spot);
@@ -296,7 +296,6 @@ const maintainloop = () => {
                     boss.name = name;
                 }
 
-                names.push(boss.name);
                 naturallySpawnedBosses.push(boss);
                 boss.on('dead', () => util.remove(naturallySpawnedBosses, naturallySpawnedBosses.indexOf(boss)));
             }
