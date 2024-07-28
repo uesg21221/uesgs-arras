@@ -73,7 +73,6 @@ class Animation {
 }
 let controls = document.getElementById("controlSettings"),
     resetButton = document.getElementById("resetControls"),
-    moreControls = document.getElementById("moreControls"),
     moreControlsLength = null,
     selectedElement = null,
     controlsArray = [],
@@ -320,17 +319,6 @@ window.onload = async () => {
             resetButton.classList.remove("active"); 
             resetButton.classList.remove("spin");
         }, 400);
-    });
-    moreControls.addEventListener("click", () => {
-      if (moreControlsLength) {
-        for (var b = 0; b < moreControlsLength.length; b++) moreControlsLength[b].classList.add("hidden");
-        moreControlsLength = null;
-        moreControls.classList.remove("x");
-      } else {
-        moreControlsLength = document.querySelectorAll("#controlSettings tr.hidden");
-        for (b = 0; b < moreControlsLength.length; b++) moreControlsLength[b].classList.remove("hidden");
-        moreControls.classList.add("x");
-      }
     });
     // Game start stuff
     document.getElementById("startButton").onclick = () => startGame();
