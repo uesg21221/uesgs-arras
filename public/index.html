@@ -134,62 +134,78 @@
                                 </table>
                             </div>
                             <div id="tabControls">
-                                <div class="controlTable optionsHeader">All Controls <i id="resetControls"
-                                        class="reset resetControls" title="Reset controls"></i></div>
-                                <table class="controlTable" id="controlSettings">
-                                    <tbody>
-                                        <tr>
-                                            <td><div></div></td>
-                                            <td class="greyText"><div><e>*</e> = Needs token</div></td>
-                                            <td><div></div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div><b data-key="KEY_AUTO_FIRE">E</b><span> - </span>Auto-fire</div></td>
-                                            <td><div><b data-key="KEY_AUTO_SPIN">C</b><span> - </span>Auto-spin</div></td>
-                                            <td><div><b data-key="KEY_OVER_RIDE">R</b><span> - </span>Disable AI</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div><b data-key="KEY_LEVEL_UP">N</b><span> - </span>Level up</div></td>
-                                            <td><div><b data-key="KEY_REVERSE_TANK">V</b><span> - </span>Reverse tank</div></td>
-                                            <td><div><b data-key="KEY_REVERSE_MOUSE">B</b><span> - </span>Reverse mouse</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div><b data-key="KEY_AUTO_ALT">G</b><span> - </span>Auto-alt</div></td>
-                                            <td><div><b data-key="KEY_SUICIDE">O</b><span> - </span>Self-destruct</div></td>
-                                            <td><div><b data-key="KEY_CLASS_TREE">T</b><span> - </span>Show tank tree</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div><b data-key="KEY_BECOME">F</b><span> - </span>Action</div></td>
-                                            <td><div><b data-key="KEY_MAX_STAT">M</b><span> - </span>Maximize stat</div></td>
-                                            <td><div><b data-key="KEY_SPIN_LOCK">X</b><span> - </span>Spin lock</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div><b data-key="KEY_FUCK_YOU">P</b><span> - </span>Special Tank*</div></td>
-                                            <td><div><b data-key="KEY_RECORD">Z</b><span> - </span>Record</div></td>
-                                            <td><div><b data-key="KEY_SCREENSHOT">Q</b><span> - </span>Screenshot</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div></div></td>
-                                            <td><div><b data-key="KEY_UP">W</b><span> - </span>Move up</div></td>
-                                            <td><div></div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div><b data-key="KEY_LEFT">A</b><span> - </span>Move left</div></td>
-                                            <td><div><b data-key="KEY_DOWN">S</b><span> - </span>Move down</div></td>
-                                            <td><div><b data-key="KEY_RIGHT">D</b><span> - </span>Move right</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div><b data-key="KEY_CHOOSE_1">Y</b><span> - </span>Upgrade 1</div></td>
-                                            <td><div><b data-key="KEY_CHOOSE_2">U</b><span> - </span>Upgrade 2</div></td>
-                                            <td><div><b data-key="KEY_CHOOSE_3">I</b><span> - </span>Upgrade 3</div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div><b data-key="KEY_CHOOSE_4">H</b><span> - </span>Upgrade 4</div></td>
-                                            <td><div><b data-key="KEY_CHOOSE_5">J</b><span> - </span>Upgrade 5</div></td>
-                                            <td><div><b data-key="KEY_CHOOSE_6">K</b><span> - </span>Upgrade 6</div></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="controlTable optionsHeader">All Controls <i id="resetControls" class="reset resetControls" title="Reset controls"></i><table style="width: 100%"><td class="greyText"><e>*</e> = Needs token</td></table></div>
+                                <div class="shadowScroll" style="height: 225px;">
+                                    <table class="controlTable" id="controlSettings">
+                                        <tbody>
+                                            <tr>
+                                                <td><div><b data-key="KEY_AUTO_FIRE">E</b><span> - </span>Auto-fire</div></td>
+                                                <td><div><b data-key="KEY_AUTO_SPIN">C</b><span> - </span>Auto-spin</div></td>
+                                                <td><div><b data-key="KEY_OVER_RIDE">R</b><span> - </span>Disable AI</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_LEVEL_UP">N</b><span> - </span>Level up</div></td>
+                                                <td><div><b data-key="KEY_REVERSE_TANK">V</b><span> - </span>Reverse tank</div></td>
+                                                <td><div><b data-key="KEY_REVERSE_MOUSE">B</b><span> - </span>Reverse mouse</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_AUTO_ALT">G</b><span> - </span>Auto-alt</div></td>
+                                                <td><div><b data-key="KEY_SUICIDE">O</b><span> - </span>Self-destruct</div></td>
+                                                <td><div><b data-key="KEY_CLASS_TREE">T</b><span> - </span>Show tank tree</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_BECOME">F</b><span> - </span>Action</div></td>
+                                                <td><div><b data-key="KEY_MAX_STAT">M</b><span> - </span>Maximize stat</div></td>
+                                                <td><div><b data-key="KEY_SPIN_LOCK">X</b><span> - </span>Spin lock</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_FUCK_YOU">P</b><span> - </span>Token tank*</div></td>
+                                                <td><div><b data-key="KEY_RECORD">Z</b><span> - </span>Record</div></td>
+                                                <td><div><b data-key="KEY_SCREENSHOT">Q</b><span> - </span>Screenshot</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div></div></td>
+                                                <td><div><b data-key="KEY_UP">W</b><span> - </span>Move up</div></td>
+                                                <td><div></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_LEFT">A</b><span> - </span>Move left</div></td>
+                                                <td><div><b data-key="KEY_DOWN">S</b><span> - </span>Move down</div></td>
+                                                <td><div><b data-key="KEY_RIGHT">D</b><span> - </span>Move right</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_CHOOSE_1">Y</b><span> - </span>Upgrade 1</div></td>
+                                                <td><div><b data-key="KEY_CHOOSE_2">U</b><span> - </span>Upgrade 2</div></td>
+                                                <td><div><b data-key="KEY_CHOOSE_3">I</b><span> - </span>Upgrade 3</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_CHOOSE_4">H</b><span> - </span>Upgrade 4</div></td>
+                                                <td><div><b data-key="KEY_CHOOSE_5">J</b><span> - </span>Upgrade 5</div></td>
+                                                <td><div><b data-key="KEY_CHOOSE_6">K</b><span> - </span>Upgrade 6</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_UPGRADE_ATK">1</b><span> - </span>Skill ATK 1</div></td>
+                                                <td><div><b data-key="KEY_UPGRADE_HTL">2</b><span> - </span>Skill HTL 2</div></td>
+                                                <td><div><b data-key="KEY_UPGRADE_SPD">3</b><span> - </span>Skill SPD 3</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_UPGRADE_STR">4</b><span> - </span>Skill STR 4</div></td>
+                                                <td><div><b data-key="KEY_UPGRADE_PEN">5</b><span> - </span>Skill PEN 5</div></td>
+                                                <td><div><b data-key="KEY_UPGRADE_DAM">6</b><span> - </span>Skill DAM 6</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div><b data-key="KEY_UPGRADE_RLD">4</b><span> - </span>Skill RLD 7</div></td>
+                                                <td><div><b data-key="KEY_UPGRADE_MOB">5</b><span> - </span>Skill MOB 8</div></td>
+                                                <td><div><b data-key="KEY_UPGRADE_RGN">6</b><span> - </span>Skill RGN 9</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div></div></td>
+                                                <td><div><b data-key="KEY_UPGRADE_SHI">0</b><span> - </span>Skill SHI 0</div></td>
+                                                <td><div></div></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div id="tabAbout">
                                 <div class="optionsHeader">Community</div>

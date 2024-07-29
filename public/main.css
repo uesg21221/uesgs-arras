@@ -25,7 +25,6 @@
     border-radius: 3px;
     background: oklch(0% 0 0 / 30%);
 }
-
 html,
 body {
     overflow: hidden;
@@ -856,6 +855,7 @@ body.mobile .controlTable {
 }
 .controlTable td {
     transition: padding 500ms;
+    font-size: 14px;
 }
 .controlTable div {
     position: relative;
