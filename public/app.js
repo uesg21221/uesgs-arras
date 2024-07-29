@@ -323,10 +323,11 @@ window.onload = async () => {
     // Game start stuff
     document.getElementById("startButton").onclick = () => startGame();
     document.onkeydown = (e) => {
+        console.log(e)
         if (!(global.gameStart || e.shiftKey || e.ctrlKey || e.altKey)) {
             let key = e.which || e.keyCode;
             if (selectedElement) {
-                if (1 !== e.key.length || /[0-9]/.test(e.key) || 3 === e.location) {
+                if (1 !== e.key.length /*|| /[0-9]/.test(e.key) // this code prevents numbers */ || 3 === e.location) {
                     if (!("Backspace" !== e.key && "Delete" !== e.key)) {
                         setKeybind("", -1);
                     }
