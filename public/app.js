@@ -323,7 +323,6 @@ window.onload = async () => {
     // Game start stuff
     document.getElementById("startButton").onclick = () => startGame();
     document.onkeydown = (e) => {
-        console.log(e)
         if (!(global.gameStart || e.shiftKey || e.ctrlKey || e.altKey)) {
             let key = e.which || e.keyCode;
             if (selectedElement) {
