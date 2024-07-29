@@ -445,7 +445,7 @@ Class.juliusLowerTurret = makeTurret({
         {
             POSITION: [8.5, 11, 0.6, 6, 0, 0, 0.5],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, g.pounder, {size: 1.2, reload: 0.6, maxSpeed: 1.2}]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {size: 0.8, health: 1.5, damage: 1.5, density: 1.2, maxSpeed: 0.8}]),
                 TYPE: "minichip",
                 STAT_CALCULATOR: "drone",
             },

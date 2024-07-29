@@ -649,7 +649,7 @@ Class.exorcistor = {
     GUNS: weaponArray({
         POSITION: [3.5, 8.65, 1.2, 8, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {maxSpeed: 1.35}]),
+            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {maxSpeed: 1.2}]),
             TYPE: "demonchip",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
@@ -677,7 +677,7 @@ Class.shaman = {
     GUNS: weaponArray({
         POSITION: [3.5, 8.65, 1.2, 8, 0, 0, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, { size: 1.1, maxSpeed: 1.35, damage: 1.1 }]),
+            SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, { size: 1.1, maxSpeed: 1.2, damage: 1.1 }]),
             TYPE: "realchip",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
@@ -1089,7 +1089,7 @@ let ares = new LayeredBoss(null, "Ares", "terrestrial", 7, "purple", "terrestria
 ares.addLayer({gun: {
     POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {maxSpeed: 1.15}]),
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {health: 1.2, damage: 1.1, resist: 1.1, density: 1.5, maxSpeed: 1.25}]),
         TYPE: ["demonchip", { INDEPENDENT: true }],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
@@ -1116,7 +1116,7 @@ let ezekiel = new LayeredBoss(null, "Ezekiel", "terrestrial", 7, "orange", "terr
 ezekiel.addLayer({gun: {
     POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {maxSpeed: 1.15}]),
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {health: 1.2, damage: 1.1, resist: 1.1, density: 1.5, maxSpeed: 1.25}]),
         TYPE: ["dorito", { COLOR: "orange", INDEPENDENT: true }],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
@@ -1150,7 +1150,7 @@ let selene = new LayeredBoss(null, "Selene", "terrestrial", 7, "gold", "terrestr
 selene.addLayer({gun: {
     POSITION: [3.75, 7, 1.2, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {maxSpeed: 1.15}]),
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {health: 1.2, damage: 1.1, resist: 1.1, density: 1.5, maxSpeed: 1.25}]),
         TYPE: ["summonerDrone", { COLOR: "gold", INDEPENDENT: true }],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
@@ -1168,7 +1168,7 @@ let paladin = new LayeredBoss(null, "Paladin", "celestial", 9, "purple", "baseTr
 paladin.addLayer({gun: {
     POSITION: [3.8, 6, 1.4, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {maxSpeed: 1.2}]),
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {health: 1.4, damage: 1.4, resist: 1.2, density: 1.8, maxSpeed: 1.325}]),
         TYPE: ["demonchip", {INDEPENDENT: true}],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
@@ -1197,7 +1197,7 @@ let zaphkiel = new LayeredBoss(null, "Zaphkiel", "celestial", 9, "orange", "base
 zaphkiel.addLayer({gun: {
     POSITION: [3.8, 6, 1.4, 8, 0, null, 0],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {maxSpeed: 1.2}]),
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {health: 1.4, damage: 1.4, resist: 1.2, density: 1.8, maxSpeed: 1.325}]),
         TYPE: ["dorito", {INDEPENDENT: true}],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
@@ -1229,7 +1229,7 @@ let theia = new LayeredBoss(null, "Theia", "celestial", 9, "gold", "baseTrapTurr
 theia.addLayer({gun: {
     POSITION: [3.8, 6, 1.4, 8, 0, null, 1],
     PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {maxSpeed: 1.2}]),
+        SHOOT_SETTINGS: combineStats([g.drone, g.summoner, g.destroyer, {health: 1.4, damage: 1.4, resist: 1.2, density: 1.8, maxSpeed: 1.325}]),
         TYPE: ["summonerDrone", {INDEPENDENT: true}],
         AUTOFIRE: true,
         WAIT_TO_CYCLE: true,
@@ -1271,7 +1271,7 @@ julius.addLayer({turret: {
 }});
 julius.addLayer({turret: {
     POSITION: [10.5, 8, 0, null, 160, 0],
-    TYPE: [setTurretProjectileRecoil("launcherTurret", 0.75), {GUN_STAT_SCALE: {health: 1.3, damage: 1.2, maxSpeed: 0.75}}],
+    TYPE: [setTurretProjectileRecoil("launcherTurret", 0.82), {GUN_STAT_SCALE: {health: 1.3, damage: 1.3, maxSpeed: 0.82}}],
 }}, true, 6);
 
 // GENGHIS
