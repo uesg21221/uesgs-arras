@@ -371,6 +371,27 @@ Class.swarmTurret = makeTurret({
         },
     ],
 }, {canRepel: true, limitFov: true, extraStats: []})
+Class.crasherSpawner = makeTurret({
+    MAX_CHILDREN: 4,
+    GUNS: [
+        {
+            POSITION: [6, 12, 1.2, 8, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, {health: 1.1}]),
+                TYPE: [
+                    "drone",
+                    {
+                        LABEL: "Crasher",
+                        DRAW_HEALTH: true,
+                    },
+                ],
+                SYNCS_SKILLS: true,
+                AUTOFIRE: true,
+                STAT_CALCULATOR: "drone",
+            },
+        },
+    ],
+}, {independent: true, aiSettings: {chase: true}, label: 'Spawned', color: 'pink'})
 Class.genghisLowerTurret = makeTurret({
     MAX_CHILDREN: 4,
     GUNS: [

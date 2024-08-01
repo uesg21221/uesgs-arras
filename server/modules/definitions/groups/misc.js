@@ -262,37 +262,7 @@ Class.crasher = {
     HITS_OWN_TYPE: "hard",
     HAS_NO_MASTER: true,
     DRAW_HEALTH: true,
-};
-Class.crasherSpawner = {
-    PARENT: "genericTank",
-    LABEL: "Spawned",
-    STAT_NAMES: statnames.drone,
-    CONTROLLERS: ["nearestDifferentMaster"],
-    COLOR: "pink",
-    INDEPENDENT: true,
-    AI: {
-        chase: true,
-    },
-    MAX_CHILDREN: 4,
-    GUNS: [
-        {
-            POSITION: [6, 12, 1.2, 8, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak, {health: 1.1}]),
-                TYPE: [
-                    "drone",
-                    {
-                        LABEL: "Crasher",
-                        DRAW_HEALTH: true,
-                    },
-                ],
-                SYNCS_SKILLS: true,
-                AUTOFIRE: true,
-                STAT_CALCULATOR: "drone",
-            },
-        },
-    ],
-};
+}
 
 // SENTRIES
 Class.sentry = {
