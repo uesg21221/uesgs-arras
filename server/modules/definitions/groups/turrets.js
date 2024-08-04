@@ -87,7 +87,7 @@ Class.architectGun = makeTurret({
         {
             POSITION: [2, 16, 1.1, 20, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.trap, g.setTrap]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.flank]),
                 TYPE: "setTrap",
                 STAT_CALCULATOR: "block"
             },
