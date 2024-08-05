@@ -342,7 +342,10 @@ const maintainloop = () => {
         bots.push(o);
         setTimeout(() => {
             // allow them to move
+            // Save index so it isn't overwritten by the bot Class's index
+            let index = o.index;
             o.define('bot');
+            o.index = index;
             o.refreshBodyAttributes();
             o.invuln = false;
         }, 3000 + Math.floor(Math.random() * 7000));
