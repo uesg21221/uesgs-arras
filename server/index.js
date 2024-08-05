@@ -342,7 +342,7 @@ const maintainloop = () => {
         bots.push(o);
         setTimeout(() => {
             // allow them to move
-            o.define([o.defs, 'bot']);
+            o.define('bot');
             o.refreshBodyAttributes();
             o.invuln = false;
         }, 3000 + Math.floor(Math.random() * 7000));
