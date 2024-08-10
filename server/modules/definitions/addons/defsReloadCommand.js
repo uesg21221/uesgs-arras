@@ -1,5 +1,6 @@
 let lastReloadTime = 1;
 const validCommands = ['**reload definitions', '**reload defs', '**redefs'];
+
 Events.on('chatMessage', ({ message, socket, preventDefault }) => {
 	let perms = socket.permissions;
     // No perms restriction
@@ -47,15 +48,22 @@ Events.on('chatMessage', ({ message, socket, preventDefault }) => {
 
     // Redefine all tanks and bosses
     for (let entity of entities) {
-        if (entity.type != 'tank' && entity.type != 'miniboss') continue;
+        // If it's a valid type and it's not a turret
+        if (!['tank', 'miniboss', 'food'].includes(entity.type)) continue;
+        if (entity.bond) continue;
 
         let entityDefs = JSON.parse(JSON.stringify(entity.defs));
+        // Save color to put it back later
+        let entityColor = entity.color.compiled;
+
+        // Redefine all properties and update values to match
         entity.upgrades = [];
         entity.define(entityDefs);
         entity.destroyAllChildren();
         entity.skill.update();
         entity.syncTurrets();
         entity.refreshBodyAttributes();
+        entity.color.interpret(entityColor);
     }
 
     // Tell the command sender

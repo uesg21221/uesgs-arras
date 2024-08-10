@@ -1464,9 +1464,12 @@ function drawFloor(px, py, ratio) {
             ctx.globalAlpha = 1;
             ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : color.white;
             ctx.fillRect(left, top, right - left, bottom - top);
+
+            if (settings.graphical.screenshotMode) continue;
+            
             ctx.globalAlpha = 0.3;
-            ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : gameDraw.modifyColor(tile);
-            ctx.fillRect(left, top, right - left, bottom - top);
+            ctx.fillStyle = gameDraw.modifyColor(tile);
+            ctx.fillRect(left, top, right - left + 1, bottom - top + 1);
         }
     }
     if (settings.graphical.showGrid) {
@@ -1910,7 +1913,11 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     }
     let upgradeColumns = Math.ceil(gui.upgrades.length / 9);
     let x = global.mobile ? spacing : global.screenWidth - spacing - len;
-    let y = global.mobile ? (global.mobile ? global.canUpgrade ? (alcoveSize / 3.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 3.5 * (upgradeColumns + 3.55) + 67 : 0 + global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0 : 0) + spacing: global.screenHeight - height - spacing;
+    let y = global.mobile ? spacing : global.screenHeight - height - spacing;
+    if (global.mobile) {
+      y += global.canUpgrade ? (alcoveSize / 1.5) * mobileUpgradeGlide.get() * upgradeColumns / 1.5 + spacing * (upgradeColumns + 1.55) + 9 : 0;
+      y += global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0;
+    }
     ctx.globalAlpha = 0.4;
     let W = global.roomSetup[0].length,
         H = global.roomSetup.length,
@@ -2261,7 +2268,11 @@ function drawMobileButtons(spacing, alcoveSize) {
     // Some sizing variables
     let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
     let upgradeColumns = Math.ceil(gui.upgrades.length / 9);
-    let yOffset = global.mobile ? global.canUpgrade ? (alcoveSize / 3.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 3.5 * (upgradeColumns + 3.55) + 67 : 0 + global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0 : 0;
+    let yOffset = 0;
+    if (global.mobile) {
+      yOffset += global.canUpgrade ? (alcoveSize / 1.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 1.5 + spacing * (upgradeColumns + 1.55) + -17.5 : 0;
+      yOffset += global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0;
+    }
     let buttons;
     let baseSize = (alcoveSize - spacing * 2) / 3;
 

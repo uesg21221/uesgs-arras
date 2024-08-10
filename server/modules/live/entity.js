@@ -322,7 +322,8 @@ class Gun extends EventEmitter {
     setBulletType(type, clearChildren = false) {
         // Pre-flatten bullet types to save on doing the same define() sequence a million times
         this.bulletType = Array.isArray(type) ? type : [type];
-        let flattenedType = {};
+        // Preset BODY because not all definitions have BODY defined when flattened
+        let flattenedType = {BODY: {}};
         for (let type of this.bulletType) {
             type = ensureIsClass(type);
             util.flattenDefinition(flattenedType, type);
@@ -1600,7 +1601,7 @@ class Entity extends EventEmitter {
         return (this.velocity.y + this.accel.y) / Config.runSpeed;
     }
     set gunStatScale(gunStatScale) {
-        if (typeof gunStatScale == "object") {
+        if (!Array.isArray(gunStatScale)) {
             gunStatScale = [gunStatScale];
         }
         for (let gun of this.guns) {
