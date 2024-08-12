@@ -649,6 +649,21 @@ a.link {
     box-shadow: none;
 }
 
+.codeberg {
+    background: #2C90DD;
+    border-bottom: 2px solid #247EC3;
+    -webkit-box-shadow: inset 0 -2px #247EC3;
+    box-shadow: inset 0 -2px #247EC3;
+}
+.codeberg:active,
+.codeberg:hover {
+    top: 1px;
+    background: #247EC3;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 .github {
     background: #666666;
     border-bottom: 2px solid #333333;
