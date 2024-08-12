@@ -1,2 +1,2 @@
 #!/usr/bin/sh
-node server/index
+node --trace-warnings server/index
