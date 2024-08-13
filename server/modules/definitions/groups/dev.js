@@ -28,6 +28,7 @@ Class.developer = {
     INVISIBLE: [0, 0],
     ALPHA: [0, 1],
     HITS_OWN_TYPE: "hardOnlyTanks",
+    NECRO: false,
     SHAPE: [
         [-1, -0.8],
         [-0.8, -1],

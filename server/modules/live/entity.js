@@ -1205,23 +1205,21 @@ class Entity extends EventEmitter {
 
             this.necro = (host) => {
                 let gun = this.settings.necroDefineGuns[host.shape];
-                if (gun && gun.checkShootPermission()) {
-                    let save = {
-                        facing: host.facing,
-                        size: host.SIZE,
-                    };
-                    host.controllers = [];
-                    host.define("genericEntity");
-                    gun.defineBullet(host);
-                    host.team = this.master.master.team;
-                    host.master = this.master;
-                    host.color.base = this.color.base;
-                    host.facing = save.facing;
-                    host.SIZE = save.size;
-                    host.health.amount = host.health.max;
-                    return true;
-                }
-                return false;
+                if (!gun || !gun.checkShootPermission()) return false;
+
+                let savedFacing = host.facing;
+                let savedSize = host.SIZE;
+                
+                host.controllers = [];
+                host.define("genericEntity");
+                gun.defineBullet(host);
+                host.team = this.master.master.team;
+                host.master = this.master;
+                host.color.base = this.color.base;
+                host.facing = savedFacing;
+                host.SIZE = savedSize;
+                host.health.amount = host.health.max;
+                return true;
             }
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
