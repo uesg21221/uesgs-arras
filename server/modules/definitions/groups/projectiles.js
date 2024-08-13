@@ -47,7 +47,7 @@ Class.superSplitterBullet = {
         },
     ]
 }
-Class.turretedBullet = makeAuto('bullet', "Auto-Bullet", {size: 14, color: "veryLightGrey", angle: 0});
+Class.turretedBullet = makeAuto('bullet', "Auto-Bullet", {type: "bulletAutoTurret", size: 14, color: "veryLightGrey", angle: 0});
 Class.speedBullet = {
     PARENT: "bullet",
     MOTION_TYPE: "accel",
@@ -222,7 +222,7 @@ Class.protoHive = {
             STAT_CALCULATOR: "swarm",
             AUTOFIRE: true
         },
-    }, 5, 1/3)
+    }, 3, 1/3)
 }
 Class.snake = {
     PARENT: "bullet",
@@ -284,7 +284,7 @@ Class.kronosMissile = {
             POSITION: [4, 6, 1.6, 13, 0, 90, 0.5],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([g.trap, { range: 0.5 }, {reload: 3}]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.lowPower, {reload: 2, speed: 1.3, maxSpeed: 1.3, range: 0.5}]),
                 TYPE: [ "trap", { PERSISTS_AFTER_DEATH: true } ],
                 STAT_CALCULATOR: "trap",
             },
@@ -292,7 +292,7 @@ Class.kronosMissile = {
             POSITION: [4, 6, 1.6, 13, 0, -90, 0.5],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([g.trap, { range: 0.5 }, {reload: 3}]),
+                SHOOT_SETTINGS: combineStats([g.trap, g.lowPower, {reload: 2, speed: 1.3, maxSpeed: 1.3, range: 0.5}]),
                 TYPE: [ "trap", { PERSISTS_AFTER_DEATH: true } ],
                 STAT_CALCULATOR: "trap",
             },
@@ -300,7 +300,7 @@ Class.kronosMissile = {
             POSITION: [14, 6, 1, 0, -2, 150, 0],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([g.basic, g.weak, {reload: 3}]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.lowPower, {speed: 1.3, maxSpeed: 1.3}]),
                 TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
                 STAT_CALCULATOR: "thruster",
             },
@@ -308,7 +308,7 @@ Class.kronosMissile = {
             POSITION: [14, 6, 1, 0, 2, 210, 0],
             PROPERTIES: {
                 AUTOFIRE: true,
-                SHOOT_SETTINGS: combineStats([g.basic, g.weak, {reload: 3}]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.lowPower, {speed: 1.3, maxSpeed: 1.3}]),
                 TYPE: [ "bullet", { PERSISTS_AFTER_DEATH: true } ],
                 STAT_CALCULATOR: "thruster",
             },
@@ -437,7 +437,7 @@ Class.minion = {
     LABEL: "Minion",
     TYPE: "minion",
     DAMAGE_CLASS: 0,
-    HITS_OWN_TYPE: "hardWithBuffer",
+    HITS_OWN_TYPE: "hard",
     FACING_TYPE: "smoothToTarget",
     BODY: {
         FOV: 0.5,

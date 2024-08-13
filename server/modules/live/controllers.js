@@ -682,7 +682,7 @@ class io_hangOutNearMaster extends IO {
     }
     think(input) {
         if (this.body.invisible[1]) return {}
-        if (this.body.source !== this.body) {
+        if (this.body.source.id !== this.body.id) {
             let bound1 = this.orbit * 0.8 + this.body.source.size + this.body.size
             let bound2 = this.orbit * 1.5 + this.body.source.size + this.body.size
             let dist = util.getDistance(this.body, this.body.source) + Math.PI / 8;

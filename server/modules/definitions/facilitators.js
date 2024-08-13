@@ -540,6 +540,35 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor) =
         ]
     };
 }
+exports.setTurretProjectileRecoil = (type, recoilFactor) => {
+    type = exports.dereference(ensureIsClass(type));
+
+    if (!type.GUNS) return;
+    
+    // Sets the recoil of each of the turret's guns to the desired value.
+    for (let gun of type.GUNS) {
+        if (!gun.PROPERTIES) continue;
+
+        // Set gun type to account for recoil factor
+        let finalType = gun.PROPERTIES.TYPE;
+        if (!Array.isArray(finalType)) {
+            finalType = [finalType, {}];
+        }
+        if (typeof finalType[1] != "object") {
+            finalType[1] = {};
+        }
+        // Set via BODY.RECOIL_FACTOR
+        if (!finalType[1].BODY) {
+            finalType[1].BODY = {};
+        }
+        finalType[1].BODY.RECOIL_MULTIPLIER = recoilFactor;
+
+        // Save changes
+        gun.PROPERTIES.TYPE = finalType;
+    }
+
+    return type;
+}
 
 // misc functions
 exports.menu = (name = -1, color = -1, shape = 0) => {
@@ -622,7 +651,7 @@ class LayeredBoss {
             SHAPE: this.shape,
             COLOR: -1,
             INDEPENDENT: true,
-            CONTROLLERS: [["spin", { independent: true, speed: 0.02 / Config.runSpeed * (this.layerID % 2 ? -1 : 1) }]],
+            FACING_TYPE: ["spin", { speed: 0.02 / Config.runSpeed * (this.layerID % 2 ? -1 : 1) }],
             MAX_CHILDREN, 
             GUNS: [],
             TURRETS: [],
@@ -772,7 +801,7 @@ exports.makeRare = (type, level) => {
         LABEL: ["Shiny", "Legendary", "Shadow", "Rainbow", "Trans"][level] + " " + type.LABEL,
         VALUE: [100, 500, 2000, 4000, 5000][level] * type.VALUE,
         SHAPE: type.SHAPE,
-        SIZE: type.SIZE + level,
+        SIZE: type.SIZE,
         COLOR: ["lightGreen", "teal", "darkGrey", "rainbow", "trans"][level],
         ALPHA: level == 2 ? 0.25 : 1,
         BODY: {
