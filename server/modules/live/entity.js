@@ -267,6 +267,9 @@ class Gun extends EventEmitter {
         bullet.team = this.body.team;
     }
     defineBullet(bullet) {
+        // Set bullet source
+        bullet.source = this.body;
+        
         // Define bullet based on natural properties and skills
         this.bulletType.SIZE = (this.body.size * this.width * this.shootSettings.size) / 2;
         bullet.define(this.bulletType);
@@ -286,7 +289,6 @@ class Gun extends EventEmitter {
             this.body.children.push(bullet);
             this.children.push(bullet);
         }
-        bullet.source = this.body;
         bullet.facing = bullet.velocity.direction;
 
         if (!bullet.settings.necroTypes) {
@@ -1208,6 +1210,7 @@ class Entity extends EventEmitter {
                         facing: host.facing,
                         size: host.SIZE,
                     };
+                    host.controllers = [];
                     host.define("genericEntity");
                     gun.defineBullet(host);
                     host.team = this.master.master.team;
