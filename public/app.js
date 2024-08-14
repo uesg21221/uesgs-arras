@@ -265,6 +265,7 @@ window.onload = async () => {
     util.retrieveFromLocalStorage("optNoPointy");
     util.retrieveFromLocalStorage("optBorders");
     util.retrieveFromLocalStorage("optNoGrid");
+    util.retrieveFromLocalStorage("optSharpEdges");
     util.retrieveFromLocalStorage("seperatedHealthbars");
     util.retrieveFromLocalStorage("autoLevelUp");
     util.retrieveFromLocalStorage("optMobile");
@@ -585,6 +586,7 @@ function startGame() {
     util.submitToLocalStorage("optMobile");
     util.submitToLocalStorage("optPredictive");
     util.submitToLocalStorage("optScreenshotMode");
+    util.submitToLocalStorage("optSharpEdges");
     util.submitToLocalStorage("coloredHealthbars");
     util.submitToLocalStorage("seperatedHealthbars");
     util.submitToLocalStorage("optNoGrid");
@@ -607,6 +609,7 @@ function startGame() {
     settings.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
     settings.graphical.lowResolution = document.getElementById("optLowResolution").checked;
     settings.graphical.showGrid = !document.getElementById("optNoGrid").checked;
+    settings.graphical.sharpedges = document.getElementById("optSharpEdges").checked;
     // GUI
     global.GUIStatus.renderGUI = document.getElementById("optRenderGui").checked;
     global.GUIStatus.renderLeaderboard = document.getElementById("optRenderLeaderboard").checked;
@@ -830,7 +833,7 @@ function drawBar(x1, x2, y, width, color) {
     ctx.lineTo(x2, y);
     ctx.lineWidth = width;
     ctx.strokeStyle = color;
-    ctx.closePath();
+    if (!settings.graphical.sharpedges) ctx.closePath();
     ctx.stroke();
 }
 // Sub-drawing functions
@@ -992,9 +995,9 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     } else {
         if (fade * alpha < 0.5) return;
     }
-    context.lineCap = "round";
-    context.lineJoin = "round";
-    context.lineWidth = initStrokeWidth
+    context.lineCap = settings.graphical.sharpedges ? "miter" : "round";
+    context.lineJoin = settings.graphical.sharpedges ? "miter" : "round";
+    context.lineWidth = initStrokeWidth;
 
     let upperTurretsIndex = source.turrets.length;
     // Draw turrets beneath us
@@ -2220,9 +2223,6 @@ function drawMobileButtons(spacing, alcoveSize) {
 
     // Hide the buttons
     global.clickables.mobileButtons.hide();
-
-    // Some animations.
-    mobileUpgradeGlide.set(0 + (global.canUpgrade || global.upgradeHover));
 
     // Some sizing variables
     let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
