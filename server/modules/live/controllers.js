@@ -392,10 +392,9 @@ class io_onlyAcceptInArc extends IO {
 class io_stackGuns extends IO {
     constructor(body, opts = {}) {
         super(body);
-        this.timeUntilFire = opts.timeUntilFire || 0;
+        this.timeUntilFire = opts.timeUntilFire || 0.7;
     }
     think ({ target }) {
-
         //why even bother?
         if (!target) {
             return;
@@ -407,8 +406,8 @@ class io_stackGuns extends IO {
         for (let i = 0; i < this.body.guns.length; i++) {
             let gun = this.body.guns[i];
             if (!gun.canShoot || !gun.stack) continue;
-            let reloadStat = (gun.calculator == "necro" || gun.calculator == "fixed reload") ? 1 : gun.bulletSkills.rld,
-                readiness = (1 - gun.cycle) / (gun.shootSettings.reload * reloadStat);
+            
+            let readiness = 1 - gun.cycleTimer;
             if (lowestReadiness > readiness) {
                 lowestReadiness = readiness;
                 readiestGun = gun;
