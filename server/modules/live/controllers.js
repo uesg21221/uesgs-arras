@@ -392,7 +392,7 @@ class io_onlyAcceptInArc extends IO {
 class io_stackGuns extends IO {
     constructor(body, opts = {}) {
         super(body);
-        this.timeUntilFire = opts.timeUntilFire || 0.7;
+        this.timeUntilFire = opts.timeUntilFire || 0.3;
     }
     think ({ target }) {
         //why even bother?
@@ -415,7 +415,7 @@ class io_stackGuns extends IO {
         }
 
         //if we aren't ready, don't spin yet
-        if (!readiestGun || (this.timeUntilFire && this.timeUntilFire > lowestReadiness)) {
+        if (!readiestGun || (this.timeUntilFire && this.timeUntilFire < lowestReadiness)) {
             return;
         }
 
