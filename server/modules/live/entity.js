@@ -267,6 +267,9 @@ class Gun extends EventEmitter {
         bullet.team = this.body.team;
     }
     defineBullet(bullet) {
+        // Set bullet source
+        bullet.source = this.body;
+        
         // Define bullet based on natural properties and skills
         this.bulletType.SIZE = (this.body.size * this.width * this.shootSettings.size) / 2;
         bullet.define(this.bulletType);
@@ -286,7 +289,6 @@ class Gun extends EventEmitter {
             this.body.children.push(bullet);
             this.children.push(bullet);
         }
-        bullet.source = this.body;
         bullet.facing = bullet.velocity.direction;
 
         if (!bullet.settings.necroTypes) {
@@ -1198,27 +1200,26 @@ class Entity extends EventEmitter {
             this.settings.necroDefineGuns = {};
             for (let shape of this.settings.necroTypes) {
                 // Pick the first gun with the right necroType to use for stats and use its defineBullet function
-                this.settings.necroDefineGuns[shape] = this.guns.filter((gun) => gun.bulletType.NECRO === shape || (gun.bulletType.NECRO === true && gun.bulletType.SHAPE === this.shape) || gun.bulletType.NECRO.includes(shape))[0];
+                this.settings.necroDefineGuns[shape] = this.guns.filter((gun) => gun.bulletType.NECRO && (gun.bulletType.NECRO === shape || (gun.bulletType.NECRO === true && gun.bulletType.SHAPE === this.shape) || gun.bulletType.NECRO.includes(shape)))[0];
             }
 
             this.necro = (host) => {
                 let gun = this.settings.necroDefineGuns[host.shape];
-                if (gun.checkShootPermission()) {
-                    let save = {
-                        facing: host.facing,
-                        size: host.SIZE,
-                    };
-                    host.define("genericEntity");
-                    gun.defineBullet(host);
-                    host.team = this.master.master.team;
-                    host.master = this.master;
-                    host.color.base = this.color.base;
-                    host.facing = save.facing;
-                    host.SIZE = save.size;
-                    host.health.amount = host.health.max;
-                    return true;
-                }
-                return false;
+                if (!gun || !gun.checkShootPermission()) return false;
+
+                let savedFacing = host.facing;
+                let savedSize = host.SIZE;
+                
+                host.controllers = [];
+                host.define("genericEntity");
+                gun.defineBullet(host);
+                host.team = this.master.master.team;
+                host.master = this.master;
+                host.color.base = this.color.base;
+                host.facing = savedFacing;
+                host.SIZE = savedSize;
+                host.health.amount = host.health.max;
+                return true;
             }
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;

@@ -140,11 +140,11 @@ module.exports = {
     // The chances of a player-bot upgrading a specific amount of times before it stops upgrading.
     BOT_CLASS_UPGRADE_CHANCES: [ 1, 5, 20, 37, 37],
 
-    // The prefix of the bot's name.
-    BOT_NAME_PREFIX: "[AI] ",
+    // The prefix of the player-bots' names.
+    BOT_NAME_PREFIX: '§#888§[AI]§reset§ ',
 
     // The class that players and player-bots spawn as.
-    SPAWN_CLASS: "basic",
+    SPAWN_CLASS: 'basic',
 
     // How every entity regenerates their health.
     REGENERATE_TICK: 200,

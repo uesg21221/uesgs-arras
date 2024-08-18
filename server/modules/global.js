@@ -87,12 +87,13 @@ global.tickEvents = new EventEmitter();
 global.syncedDelaysLoop = () => tickEvents.emit(tickIndex++);
 global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.once(tickIndex + Math.round(ticks), () => callback(...args));
 
+const lowercaseRegex = /[a-z]/,
+    uppercaseRegexG = /[A-Z]/g;
 function TO_SCREAMING_SNAKE_CASE(TEXT) {
-    if (/^[A-Z_]*[A-Z]$/.test(TEXT)) {
-        return TEXT;
-    } else if (/[a-zA-Z]+/.test(TEXT)) {
-        return TEXT.replace(/[A-Z]/g, _ => '_' + _).toUpperCase();
+    if (lowercaseRegex.test(TEXT)) {
+        return TEXT.replace(uppercaseRegexG, _ => '_' + _).toUpperCase();
     }
+    return TEXT;
 }
 
 global.Config = new Proxy(new EventEmitter(), {

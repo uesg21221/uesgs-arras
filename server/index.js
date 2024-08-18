@@ -30,6 +30,10 @@ function collide(collision) {
     // Pull the two objects from the collision grid
     let instance = collision[0],
         other = collision[1];
+    if (instance.noclip || other.noclip) {
+        return 0;
+    }
+
     instance.emit('collide', { body: instance, instance, other });
     other.emit('collide', { body: other, instance: other, other: instance });
     // Check for ghosts...
@@ -188,7 +192,7 @@ function collide(collision) {
 }
 
 // The most important loop. Lots of looping.
-let time, ticks = 0;
+let ticks = 0;
 const gameloop = () => {
     logs.loops.tally();
     logs.master.startTracking();
@@ -256,7 +260,7 @@ const gameloop = () => {
     }
 };
 
-setTimeout(closeArena, 2 * 60 * 60 * 1000); // Restart every 2 hours
+setTimeout(closeArena, 24 * 60 * 60 * 1000); // Restart every 2 hours
 
 global.naturallySpawnedBosses = [];
 global.bots = [];
