@@ -377,7 +377,7 @@ class Gun extends EventEmitter {
             RANGE: shoot.range / Math.sqrt(this.bulletSkills.spd),
             DENSITY: (shoot.density * this.bulletSkills.pen * this.bulletSkills.pen) / sizeFactor,
             PUSHABILITY: 1 / this.bulletSkills.pen,
-            HETERO: 3 - 2.8 * this.bulletSkills.ghost,
+            HETERO: Math.max(0, 3 - 1.2 * this.bulletSkills.ghost),
         };
         this.reloadRateFactor = this.bulletSkills.rld;
         // Special cases
@@ -407,8 +407,7 @@ class Gun extends EventEmitter {
                 out.PUSHABILITY = 1;
                 out.PENETRATION = Math.max(1, shoot.pen * (0.5 * (this.bulletSkills.pen - 1) + 1));
                 out.HEALTH = (shoot.health * this.bulletSkills.str + sizeFactor) / Math.pow(this.bulletSkills.pen, 0.8);
-                out.DAMAGE = shoot.damage * this.bulletSkills.dam * Math.sqrt(sizeFactor) * shoot.pen * this.bulletSkills.pen;
-                out.RANGE = shoot.range * Math.sqrt(sizeFactor);
+                out.DAMAGE = shoot.damage * this.bulletSkills.dam * Math.sqrt(sizeFactor) * Math.sqrt(shoot.pen * this.bulletSkills.pen);
                 break;
         }
         if (this.independentChildren) return;
