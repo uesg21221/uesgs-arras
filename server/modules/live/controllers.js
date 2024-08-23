@@ -411,7 +411,6 @@ class io_stackGuns extends IO {
             if (lowestTimeToFire > timeToFire) {
                 lowestTimeToFire = timeToFire;
                 readiestGun = gun;
-                console.log(timeToFire)
             }
         }
 
