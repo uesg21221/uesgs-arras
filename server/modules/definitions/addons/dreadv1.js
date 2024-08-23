@@ -53,11 +53,6 @@ g.dreadv1Trap = {
 	size: 1.25,
 }
 
-console.log(JSON.stringify(combineStats([g.dreadv1Generic, g.dreadv1Sniper])))
-console.log(JSON.stringify(combineStats([g.dreadv1Generic, g.dreadv1Slow])))
-console.log(JSON.stringify(combineStats([g.dreadv1Generic, g.dreadv1Slow, g.dreadv1Trap])))
-console.log(JSON.stringify(combineStats([g.dreadv1Drone])))
-
 // Comment out the line below to enable this addon, uncomment it to disable this addon.
 // return console.log('--- Dreadnoughts v1 addon [dreadv1.js] is disabled. See lines 32-33 to enable it. ---');
 
