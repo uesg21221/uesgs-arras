@@ -1028,7 +1028,7 @@ Class.gunBenchmark = {
 Class.levels = menu("Levels")
 Class.levels.UPGRADES_TIER_0 = []
 for (let i = 0; i < 12; i++) {
-    let LEVEL = i * Config.TIER_MULTIPLIER;
+    let LEVEL = i * c.TIER_MULTIPLIER;
     Class["level" + LEVEL] = {
         PARENT: "levels",
         LEVEL,

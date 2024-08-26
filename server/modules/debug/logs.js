@@ -1,49 +1,95 @@
-class Logger {
+let logs = (function() {
+    let logger = (function() {
+        // The two basic functions
+        function set(obj) {
+            obj.time = util.time();
+        }
+
+        function mark(obj) {
+            obj.data.push(util.time() - obj.time);
+        }
+
+        function record(obj) {
+            let o = util.averageArray(obj.data);
+            obj.data = [];
+            return o;
+        }
+
+        function sum(obj) {
+            let o = util.sumArray(obj.data);
+            obj.data = [];
+            return o;
+        }
+
+        function tally(obj) {
+            obj.count++;
+        }
+
+        function count(obj) {
+            let o = obj.count;
+            obj.count = 0;
+            return o;
+        }
+        // Return the logger creator
+        return function() {
+            let internal = {
+                data: [],
+                time: util.time(),
+                count: 0,
+            };
+            // Return the new logger
+            return {
+                set: () => set(internal),
+                mark: () => mark(internal),
+                record: () => record(internal),
+                sum: () => sum(internal),
+                count: () => count(internal),
+                tally: () => tally(internal),
+            };
+        };
+    })();
+    // Return our loggers
+    return {
+        entities: logger(),
+        collide: logger(),
+        network: logger(),
+        minimap: logger(),
+        misc2: logger(),
+        misc3: logger(),
+        physics: logger(),
+        life: logger(),
+        selfie: logger(),
+        master: logger(),
+        activation: logger(),
+        loops: logger(),
+    };
+})();
+
+class LagLogger {
     constructor() {
-        this.logTimes = [];
-        this.trackingStart = performance.now();
-        this.tallyCount = 0;
+        this.startTime = 0;
+        this.endTime = 0;
+        this.totalTime = 0;
+        this.history = [];
     }
-    startTracking() {
-        this.trackingStart = performance.now();
+    set() {
+        this.startTime = new Date().getTime();
     }
-    endTracking() {
-        this.logTimes.push(performance.now() - this.trackingStart);
+    mark() {
+        this.endTime = new Date().getTime();
+        this.totalTime = this.endTime - this.startTime;
+        this.history.push({
+            at: new Date(),
+            time: this.totalTime
+        });
+        if (this.history.length > 10) this.history.shift();
     }
-    averageLogTimes() {
-        let average = util.averageArray(this.logTimes);
-        this.logTimes = [];
-        return average;
-    }
-    sumLogTimes() {
-        let sum = util.sumArray(this.logTimes);
-        this.logTimes = [];
-        return sum;
-    }
-    tally() {
-        this.tallyCount++;
-    }
-    getTallyCount() {
-        let tally = this.tallyCount;
-        this.tallyCount = 0;
-        return tally;
+    get sum() {
+        return this.history;
     }
 }
 
-let logs = {
-    entities: new Logger(),
-    collide: new Logger(),
-    network: new Logger(),
-    minimap: new Logger(),
-    misc2: new Logger(),
-    misc3: new Logger(),
-    physics: new Logger(),
-    life: new Logger(),
-    selfie: new Logger(),
-    master: new Logger(),
-    activation: new Logger(),
-    loops: new Logger(),
-    gamemodeLoop: new Logger(),
+module.exports = {
+    logs,
+    LagLogger
 };
-
-module.exports = { logs };

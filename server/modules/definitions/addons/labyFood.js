@@ -5,12 +5,12 @@ module.exports = ({ Config }) => {
 	const disableCrashers = false;
 
 	// there is no `ENEMY_CAP`, so we are "reconstructing them"
-	Config.ENEMY_CAP_NEST = 0;
+	c.ENEMY_CAP_NEST = 0;
 
 	// Constructs a four-dimensional array of shape types
 
 	// 3-wide dimension of the 3 base shape types - egg, square, triangle
-	Config.FOOD_TYPES = Array(3).fill().map((_, i, a) => [
+	c.FOOD_TYPES = Array(3).fill().map((_, i, a) => [
 		// Chance of spawning in exponents of 4
 		4 ** (a.length - i),
 		// 4-wide dimension of the 4 shape tiers - regular, beta, alpha, omega
@@ -35,7 +35,7 @@ module.exports = ({ Config }) => {
 	//laby_${poly}_${tier}_${shiny}_${rank}
 
 	// 2-wide dimension of the 2 base shape types - pentagon, hexagon
-	Config.FOOD_TYPES_NEST = Array(2).fill().map((_, i, a) => [
+	c.FOOD_TYPES_NEST = Array(2).fill().map((_, i, a) => [
 		// Chance of spawning in exponents of 4
 		4 ** (a.length - i),
 		// 4-wide dimension of the 4 shape tiers - regular, beta, alpha, omega

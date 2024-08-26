@@ -199,7 +199,7 @@ Class.machineTripleTurret = {
     }, 3)
 }
 Class.launcherTurret = makeTurret('launcher', {canRepel: true, limitFov: true, extraStats: []})
-Class.skimmerTurret = makeTurret('skimmer', {canRepel: true, limitFov: true, extraStats: [], color: 'mirror'})
+Class.skimmerTurret = makeTurret('skimmer', {canRepel: true, limitFov: true, extraStats: []})
 Class.kronosSkimmerTurret = makeTurret({
     GUNS: [
         {
@@ -226,7 +226,7 @@ Class.autoSmasherLauncherTurret = makeTurret({
         },
     ],
 }, {canRepel: true, limitFov: true, fov: 10, independent: true, extraStats: []})
-Class.twisterTurret = makeTurret('twister', {canRepel: true, limitFov: true, color: 'mirror', extraStats: [{speed: 1.3, maxSpeed: 1.3}]})
+Class.twisterTurret = makeTurret('twister', {canRepel: true, limitFov: true, extraStats: [{speed: 1.3, maxSpeed: 1.3}]})
 Class.hyperTwisterTurret = makeTurret({
     GUNS: [
         {
@@ -240,9 +240,9 @@ Class.hyperTwisterTurret = makeTurret({
             },
         },
     ],
-}, {canRepel: true, limitFov: true, color: 'mirror', extraStats: []})
+}, {canRepel: true, limitFov: true, extraStats: []})
 Class.rocketeerTurret = makeTurret('rocketeer', {canRepel: true, limitFov: true})
-Class.boomerTurret = makeTurret('boomer', {canRepel: true, limitFov: true, color: 'mirror', extraStats: []})
+Class.boomerTurret = makeTurret('boomer', {canRepel: true, limitFov: true, extraStats: []})
 Class.triTrapGuardTurret = {
     PARENT: "genericTank",
     COLOR: -1,
@@ -781,8 +781,8 @@ Class.spikeBody = {
 }
 Class.dominationBody = {
     LABEL: "",
-    FACING_TYPE: ["noFacing", { angle: Math.PI / 2 }],
+    CONTROLLERS: [["spin", { startAngle: Math.PI / 2, speed: 0, independent: true }]],
     COLOR: "black",
     SHAPE: 6,
-    INDEPENDENT: true
+    INDEPENDENT: true,
 }

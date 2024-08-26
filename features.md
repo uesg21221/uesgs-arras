@@ -91,6 +91,9 @@ It includes all features up to the latest release version.
 * Entity Definition Attribute: `REROOT_UPGRADE_TREE`.
   * Changes the root tank of the player's Upgrade Tree.
 
+* Entity Definition Attribute: `UPGRADE_LABEL`.
+  * Overrides `LABEL` in the upgrade picker.
+
 * Gun Definition Attribute: `SHOOT_ON_DEATH`.
   * Makes the gun shoot if the entity it is attached to dies.
 
@@ -119,12 +122,6 @@ It includes all features up to the latest release version.
 * More Gamemodes: Train Wars, Manhunt, Space.
 
 * Better Controllers, like `io_wanderAroundMap`, `io_stackGuns`, `io_spin` or `io_zoom`.
-
-* Props - improved decorative turret system.
-  * Turrets with `MIRROR_MASTER_ANGLE` forced to `true`.
-  * Behaves identically to turrets but are less performance-heavy.
-  * Can be placed on turrets but nothing can be placed on them.
-  * FOV `ARC` value in `POSITION` omitted.
 
 * Shape kill counter in the death screen.
 * Auto LVL up.
@@ -174,8 +171,9 @@ It includes all features up to the latest release version.
 * Definitions Management
   * Split up into numerous other files, all located in `server/modules/definitions`.
   * Entity definitions are in `/groups`.
-  * "Facilitators" (makeAuto, combineStats, etc.), constants and gun values are in their own files.
-  * As a requirement, you can now put `"strings"` as references instead of `Class.entity` references.
+  * "Facilitators" (makeHybrid, combineStats, etc.), constants and gun values are in their own files.
+  * Facilitators require `exports.entity` references.
+  * As a requirement, you can now put `"strings"` as references instead of `exports.entity` references.
   * Added definition flattening, which would improve performance a bit by applying `PARENT`'s definitions directly to the definition.
   * Definition flattening also checks for entities that do not exist.
   * Needs `flattenDefintions` to be true in the configuration.
@@ -212,10 +210,10 @@ It includes all features up to the latest release version.
 
 * `COLOR`
   * Can now support strings.
-  * Can now use color names like `"red"`, `"animatedTrans"` or `"pureBlack"`.
+  * Can now use color names like `"red"`, `animatedTrans` or `pureBlack`.
   * Which now allows you to enter CSS color codes like `#F08842`.
   * Can also be an Object which contains HSL modification instructions for a basis color.
-  * Can be `-1` or `mirror` to copy their parent's color.
+  * Can be `-1` to copy their parent's color.
 
 * `ALPHA`
   * Can now be an array of 2 numbers.
@@ -268,7 +266,7 @@ It includes all features up to the latest release version.
 * Turrets no longer shoot multiple times as fast than intended.
 * Entities with 0 body damage don't get assist credit when they happen to ram something as it dies.
 * Entities now die if they are dead but are touching a rock.
-* Gun.shootSettings no longer is tied to the gun's definition.
+* Gun.settings no longer is tied to the gun's definition.
 * Bots spawn in their team's bases if there are bases.
 * Bots fire alt-fire barrels.
 * Bots can now use Trapper classes.

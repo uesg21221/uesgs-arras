@@ -21,23 +21,23 @@ let { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow } = s
 // });
 
 fetch("changelog.html", { cache: "no-cache" })
-    .then(async ChangelogsHTMLFile => {
-        let patchNotes = document.querySelector("#patchNotes");
-        try {
-            let parser = new DOMParser(),
-                RawHTMLString = await ChangelogsHTMLFile.text(),
-                ParsedHTML = parser.parseFromString(RawHTMLString, "text/html"),
-                titles = ParsedHTML.documentElement.getElementsByTagName('h1');
-            for (const title of titles) {
-                title.classList.add('title');
-            }
-
-            patchNotes.innerHTML += ParsedHTML.documentElement.innerHTML;
-        } catch (error) {
-            patchNotes.innerHTML = `<p>An error occured while trying to fetch 'changelogs.html'</p><p>${error}</p>`;
-            console.error(error);
+.then(async ChangelogsHTMLFile => {
+    let patchNotes = document.querySelector("#patchNotes");
+    try {
+        let parser = new DOMParser(),
+            RawHTMLString = await ChangelogsHTMLFile.text(),
+            ParsedHTML = parser.parseFromString(RawHTMLString, "text/html"),
+            titles = ParsedHTML.documentElement.getElementsByTagName('h1');
+        for (const title of titles) {
+            title.classList.add('title');
         }
-    });
+
+        patchNotes.innerHTML += ParsedHTML.documentElement.innerHTML;
+    } catch (error) {
+        patchNotes.innerHTML = `<p>An error occured while trying to fetch 'changelogs.html'</p><p>${error}</p>`;
+        console.error(error);
+    }
+});
 
 class Animation {
     constructor(start, to, smoothness = 0.05) {
@@ -73,8 +73,6 @@ class Animation {
 }
 let controls = document.getElementById("controlSettings"),
     resetButton = document.getElementById("resetControls"),
-    moreControls = document.getElementById("moreControls"),
-    moreControlsLength = null,
     selectedElement = null,
     controlsArray = [],
     defaultKeybinds = {},
@@ -99,9 +97,6 @@ global.player = {
     cy: 0,
     renderx: global.screenWidth / 2,
     rendery: global.screenHeight / 2,
-    isScoping: false,
-    screenx: 0,
-    screeny: 0,
     renderv: 1,
     slip: 0,
     view: 1,
@@ -116,13 +111,13 @@ var upgradeSpin = 0,
 global.clearUpgrades = () => gui.upgrades = [];
 // Build the leaderboard object
 global.player = global.player;
+global.enableSlideAnimation = false;
+global.serverName = "Unknown";
 global.canUpgrade = false;
 global.canSkill = false;
 global.message = "";
-global.time = 0;
-global.enableSlideAnimation = false;
 global.mspt = "?";
-global.serverName = "Unknown";
+global.time = 0;
 // Tips setup :D
 let tips = global.tips[Math.floor(Math.random() * global.tips.length)];
 global.tips = tips[Math.floor(Math.random() * tips.length)];
@@ -266,6 +261,7 @@ window.onload = async () => {
     util.retrieveFromLocalStorage("optNoPointy");
     util.retrieveFromLocalStorage("optBorders");
     util.retrieveFromLocalStorage("optNoGrid");
+    util.retrieveFromLocalStorage("optSharpEdges");
     util.retrieveFromLocalStorage("seperatedHealthbars");
     util.retrieveFromLocalStorage("autoLevelUp");
     util.retrieveFromLocalStorage("optMobile");
@@ -321,24 +317,13 @@ window.onload = async () => {
             resetButton.classList.remove("spin");
         }, 400);
     });
-    moreControls.addEventListener("click", () => {
-      if (moreControlsLength) {
-        for (var b = 0; b < moreControlsLength.length; b++) moreControlsLength[b].classList.add("hidden");
-        moreControlsLength = null;
-        moreControls.classList.remove("x");
-      } else {
-        moreControlsLength = document.querySelectorAll("#controlSettings tr.hidden");
-        for (b = 0; b < moreControlsLength.length; b++) moreControlsLength[b].classList.remove("hidden");
-        moreControls.classList.add("x");
-      }
-    });
     // Game start stuff
     document.getElementById("startButton").onclick = () => startGame();
     document.onkeydown = (e) => {
         if (!(global.gameStart || e.shiftKey || e.ctrlKey || e.altKey)) {
             let key = e.which || e.keyCode;
             if (selectedElement) {
-                if (1 !== e.key.length || /[0-9]/.test(e.key) || 3 === e.location) {
+                if (1 !== e.key.length /*|| /[0-9]/.test(e.key) // this code prevents numbers */ || 3 === e.location) {
                     if (!("Backspace" !== e.key && "Delete" !== e.key)) {
                         setKeybind("", -1);
                     }
@@ -416,7 +401,7 @@ var c = window.canvas.cv;
 var ctx = c.getContext("2d");
 var c2 = document.createElement("canvas");
 var ctx2 = c2.getContext("2d");
-ctx2.imageSmoothingEnabled = true;
+ctx2.imageSmoothingEnabled = false;
 // important functions
 tabOptionsMenuSwitcher();
 toggleOptionsMenu();
@@ -443,6 +428,25 @@ function Smoothbar(value, speed, sharpness = 3, lerpValue = 0.025) {
         },
     };
 }
+global.player = {
+    vx: 0,
+    vy: 0,
+    lastvx: 0,
+    lastvy: 0,
+    renderx: global.player.cx,
+    rendery: global.player.cy,
+    lastx: global.player.x,
+    lasty: global.player.y,
+    cx: 0,
+    cy: 0,
+    screenx: 0,
+    screeny: 0,
+    target: global.mobile ? window.canvas.target : calculateTarget(),
+    name: "",
+    lastUpdate: 0,
+    time: 0,
+    nameColor: "#ffffff",
+};
 global.player = {
     vx: 0,
     vy: 0,
@@ -597,6 +601,7 @@ function startGame() {
     util.submitToLocalStorage("optMobile");
     util.submitToLocalStorage("optPredictive");
     util.submitToLocalStorage("optScreenshotMode");
+    util.submitToLocalStorage("optSharpEdges");
     util.submitToLocalStorage("coloredHealthbars");
     util.submitToLocalStorage("seperatedHealthbars");
     util.submitToLocalStorage("optNoGrid");
@@ -619,6 +624,7 @@ function startGame() {
     settings.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
     settings.graphical.lowResolution = document.getElementById("optLowResolution").checked;
     settings.graphical.showGrid = !document.getElementById("optNoGrid").checked;
+    settings.graphical.sharpedges = document.getElementById("optSharpEdges").checked;
     // GUI
     global.GUIStatus.renderGUI = document.getElementById("optRenderGui").checked;
     global.GUIStatus.renderLeaderboard = document.getElementById("optRenderLeaderboard").checked;
@@ -693,14 +699,14 @@ function startGame() {
     document.getElementById("gameCanvas").focus();
     window.onbeforeunload = () => true;
 }
-
+// Background clearing
 function clearScreen(clearColor, alpha) {
     ctx.fillStyle = clearColor;
     ctx.globalAlpha = alpha;
     ctx.fillRect(0, 0, global.screenWidth, global.screenHeight);
     ctx.globalAlpha = 1;
 }
-
+// Text functions
 function arrayifyText(rawText) {
     //we want people to be able to use the section sign in writing too
     // string with double §           txt   col   txt                      txt
@@ -724,14 +730,12 @@ function arrayifyText(rawText) {
     }
     return textArray;
 }
-
-function measureText(text, fontSize, withHeight = false) {
+const measureText = (text, fontSize, withHeight = false) => {
     fontSize += settings.graphical.fontSizeBoost;
     ctx.font = "bold " + fontSize + "px Ubuntu";
     let measurement = ctx.measureText(arrayifyText(text).reduce((a, b, i) => (i & 1) ? a : a + b, ''));
     return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
-}
-
+};
 function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
     size += settings.graphical.fontSizeBoost;
     // Get text dimensions and resize/reset the canvas
@@ -790,6 +794,10 @@ function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center 
             if (str === "reset") {
                 context.fillStyle = defaultFillStyle;
             } else {
+                // try your best to get a valid color out of it
+                if (!isNaN(str)) {
+                    str = parseInt(str);
+                }
                 str = gameDraw.getColor(str) ?? str;
             }
             context.fillStyle = str;
@@ -842,7 +850,7 @@ function drawBar(x1, x2, y, width, color) {
     ctx.lineTo(x2, y);
     ctx.lineWidth = width;
     ctx.strokeStyle = color;
-    ctx.closePath();
+    if (!settings.graphical.sharpedges) ctx.closePath();
     ctx.stroke();
 }
 // Sub-drawing functions
@@ -965,7 +973,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     points.push([length * 2 - position, -h[0]]);
     points.push([-position, -h[1]]);
     context.globalAlpha = alpha;
-
+    
     // Rotate it to the new angle via vector rotation
     context.beginPath();
     for (let point of points) {
@@ -1004,8 +1012,8 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     } else {
         if (fade * alpha < 0.5) return;
     }
-    context.lineCap = "round";
-    context.lineJoin = "round";
+    context.lineCap = settings.graphical.sharpedges ? "miter" : "round";
+    context.lineJoin = settings.graphical.sharpedges ? "miter" : "round";
     context.lineWidth = initStrokeWidth
 
     let upperTurretsIndex = source.turrets.length;
@@ -1016,7 +1024,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         t.lerpedFacing == undefined
             ? (t.lerpedFacing = t.facing)
             : (t.lerpedFacing = util.lerpAngle(t.lerpedFacing, t.facing, 0.1, true));
-
+        
         // Break condition
         if (t.layer > 0) {
             upperTurretsIndex = i;
@@ -1055,29 +1063,29 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     context.globalAlpha = 1;
     context.lineWidth = initStrokeWidth * m.strokeWidth
     gameDraw.setColor(context, gameDraw.mixColors(gameDraw.modifyColor(instance.color, baseColor), render.status.getColor(), blend));
-
+    
     //just so you know, the glow implimentation is REALLY bad and subject to change in the future
-    context.shadowColor = m.glow.color != null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
+    context.shadowColor = m.glow.color!=null ? gameDraw.modifyColor(m.glow.color) : gameDraw.mixColors(
         gameDraw.modifyColor(instance.color),
         render.status.getColor(),
         render.status.getBlend()
     );
-    if (m.glow.radius && m.glow.radius > 0) {
-        context.shadowBlur = m.glow.radius * ((drawSize / m.size) * m.realSize);
-        context.shadowOffsetX = 0;
-        context.shadowOffsetY = 0;
-        context.globalAlpha = m.glow.alpha;
-        for (var i = 0; i < m.glow.recursion; i++) {
-            drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, true, m.drawFill);
-        }
-        context.globalAlpha = 1;
+    if (m.glow.radius && m.glow.radius>0){
+      context.shadowBlur = m.glow.radius * ((drawSize / m.size) * m.realSize);
+      context.shadowOffsetX = 0;
+      context.shadowOffsetY = 0;
+      context.globalAlpha = m.glow.alpha;
+      for (var i = 0; i < m.glow.recursion; i++) {
+        drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, true, m.drawFill);
+      }
+      context.globalAlpha = 1;
     }
     context.shadowBlur = 0;
     context.shadowOffsetX = 0;
     context.shadowOffsetY = 0;
 
     drawPoly(context, xx, yy, (drawSize / m.size) * m.realSize, m.shape, rot, instance.borderless, instance.drawFill, m.imageInterpolation);
-
+    
     // Draw guns above us
     for (let i = 0; i < source.guns.length; i++) {
         context.lineWidth = initStrokeWidth
@@ -1114,7 +1122,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     if (assignedContext == false && context != ctx && context.canvas.width > 0 && context.canvas.height > 0) {
         ctx.save();
         ctx.globalAlpha = alpha * fade;
-        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingEnabled = false;
         //ctx.globalCompositeOperation = "overlay";
         ctx.drawImage(context.canvas, x - xx, y - yy);
         ctx.restore();
@@ -1131,10 +1139,23 @@ function drawHealth(x, y, instance, ratio, alpha) {
     if (instance.drawsHealth) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
-        if (health < 0.99 || shield < 0.99 && global.GUIStatus.renderhealth) {
-            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(gameDraw.modifyColor(instance.color), color.guiwhite, 0.5) : color.lgreen;
+        if (health < 0.99 || shield < 0.99) {
+            let instanceColor = null;
+            let getColor = true;
+            if (typeof instance.color == 'string') {
+                instanceColor = instance.color.split(' ')[0];
+                if (instanceColor[0] == '#') {
+                    getColor = false;
+                } else if (!isNaN(parseInt(instanceColor))) {
+                    instanceColor = parseInt(instanceColor);
+                }
+            } else {
+                instanceColor = instance.color;
+            }
+            let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(getColor ? gameDraw.getColor(instanceColor) : instanceColor, color.guiwhite, 0.5) : color.lgreen;
             let yy = y + realSize + 15 * ratio;
             let barWidth = 3 * ratio;
+            ctx.globalAlpha = fade * (alpha ** 2);
             //TODO: seperate option for hp bars
             // function drawBar(x1, x2, y, width, color) {
 
@@ -1150,16 +1171,15 @@ function drawHealth(x, y, instance, ratio, alpha) {
                 drawBar(x - size, x - size + 2 * size * shield, yy, barWidth, settings.graphical.coloredHealthbars ? gameDraw.mixColors(col, color.guiblack, 0.25) : color.teal);
                 ctx.globalAlpha = 1;
             }
-            if (gui.showhealthtext) drawText(Math.round(instance.healthN) + "/" + Math.round(instance.maxHealthN), x, yy + barWidth * 2 + barWidth * settings.graphical.seperatedHealthbars * 2 + 10, 12 * ratio, color.guiwhite, "center");
-            ctx.globalAlpha = fade * (alpha ** 2);
         }
     }
     if (instance.id !== gui.playerid && instance.nameplate) {
         var name = instance.name.substring(7, instance.name.length + 1);
         var namecolor = instance.name.substring(0, 7);
-        ctx.globalAlpha = fade * (alpha ** 2);
-        if (global.GUIStatus.renderPlayerNames) drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
-        if (global.GUIStatus.renderPlayerScores) drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
+        ctx.globalAlpha = alpha;
+        drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor, "center");
+        drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor, "center");
+        ctx.globalAlpha = 1;
     }
 }
 
@@ -1218,9 +1238,8 @@ function drawEntityIcon(model, x, y, len, height, lineWidthMult, angle, alpha, c
 window.requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || (callback => setTimeout(callback, 1000 / 60));
 window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 // Drawing states
-const statMenu = Smoothbar(0, 0.7, 1.5, 0.1);
-const upgradeMenu = Smoothbar(0, 2, 3, 0.1);
-const mobileUpgradeGlide = Smoothbar(0, 2, 3, 0.1);
+const statMenu = Smoothbar(0, 0.7, 1.5, 0.05);
+const upgradeMenu = Smoothbar(0, 2, 3, 0.05);
 // Define the graph constructor
 function graph() {
     var data = [];
@@ -1324,17 +1343,17 @@ let scaleScreenRatio = (by, unset) => {
 var getClassUpgradeKey = function (number) {
     switch (number) {
         case 0:
-            return "Y";
+            return "y";
         case 1:
-            return "U";
+            return "u";
         case 2:
-            return "I";
+            return "i";
         case 3:
-            return "H";
+            return "h";
         case 4:
-            return "J";
+            return "j";
         case 5:
-            return "K";
+            return "k";
         default:
             return null;
     }
@@ -1362,7 +1381,7 @@ let tiles,
         for (let i = 0; i < hasUpgrades.length; i++) {
             let upgrade = hasUpgrades[i],
                 spacing = 2 * Math.max(1, upgrade.tier - tier),
-                measure = measureSize(x, y + spacing, upgrade.upgradeColor ?? i, upgrade);
+                measure = measureSize(x, y + spacing, upgrade.upgradeColor ?? 10 + i, upgrade);
             branches.push([{ x, y: y + Math.sign(i) }, { x, y: y + spacing + 1 }]);
             if (i === hasUpgrades.length - 1 && !noUpgrades.length) {
                 branches.push([{ x: xStart, y: y + 1 }, { x, y: y + 1 }]);
@@ -1375,7 +1394,7 @@ let tiles,
         for (let i = 0; i < noUpgrades.length; i++) {
             let upgrade = noUpgrades[i],
                 height = 2 + upgrades.length;
-            measureSize(x, y + 1 + i + Math.sign(hasUpgrades.length) * 2, upgrade.upgradeColor ?? i, upgrade);
+            measureSize(x, y + 1 + i + Math.sign(hasUpgrades.length) * 2, upgrade.upgradeColor ?? 10 + i, upgrade);
             if (i === noUpgrades.length - 1) {
                 if (hasUpgrades.length > 1) cumulativeWidth++;
                 branches.push([{ x: xStart, y }, { x, y }]);
@@ -1392,10 +1411,10 @@ function generateTankTree(indexes) {
     tiles = [];
     branches = [];
     tankTree = { width: 0, height: 0 };
-    let rightmostSoFar = 0;
+    let rightestSoFar = 0;
     if (!Array.isArray(indexes)) indexes = [indexes];
     for (let index of indexes) {
-        rightmostSoFar += 3 + measureSize(rightmostSoFar, 0, 0, { index }).width;
+        rightestSoFar += 3 + measureSize(rightestSoFar, 0, 10, { index }).width;
     }
     for (let { x, y } of tiles) {
         tankTree.width = Math.max(tankTree.width, x);
@@ -1481,7 +1500,7 @@ function drawEntities(px, py, ratio) {
         let x = ratio * instance.render.x - px,
             y = ratio * instance.render.y - py,
             baseColor = instance.color;
-
+        
         if (instance.id === gui.playerid) {
             x = settings.graphical.centerTank && !global.player.isScoping ? 0 : x;
             y = settings.graphical.centerTank && !global.player.isScoping ? 0 : y;
@@ -1490,7 +1509,7 @@ function drawEntities(px, py, ratio) {
         }
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
-        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1, 1, instance.render.f);
+        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1.1, 1, instance.render.f);
     }
 
     //dont draw healthbars and chat messages in screenshot mode
@@ -1513,8 +1532,8 @@ function drawEntities(px, py, ratio) {
             indexes = instance.index.split("-"),
             m = global.mockups[parseInt(indexes[0])],
             realSize = (size / m.size) * m.realSize,
-            x = instance.id === gui.playerid ? global.player.screenx : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid ? global.player.screeny : ratio * instance.render.y - py;
+            x = instance.id === gui.playerid ? 0 : ratio * instance.render.x - px,
+            y = instance.id === gui.playerid ? 0 : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
         y += global.screenHeight / 2 - realSize - 46 * ratio;
         if (instance.id !== gui.playerid && instance.nameplate) y -= 8 * ratio;
@@ -1524,7 +1543,7 @@ function drawEntities(px, py, ratio) {
             let chat = global.chats[instance.id][i],
                 text = chat.text,
                 msgLengthHalf = measureText(text, 15 * ratioForChat) / 2,
-                alpha = Math.max(!global.mobile ? 0 : 1, Math.min(1000, chat.expires - now) / 1000);
+                alpha = Math.max(0, Math.min(1000, chat.expires - now) / 1000);
 
             ctx.globalAlpha = 0.5 * alpha;
             drawBar(x - msgLengthHalf, x + msgLengthHalf, y, 30 * ratioForChat, gameDraw.modifyColor(instance.color));
@@ -1542,21 +1561,21 @@ global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = -1
 global.scrollVelocityY = global.scrollVelocityX = 0;
 let lastGuiType = null;
 function drawUpgradeTree(spacing, alcoveSize) {
-    /*if (global.died) {
+    if (global.died) {
         global.showTree = false;
         global.scrollX = global.scrollY = global.fixedScrollX = global.fixedScrollY = global.scrollVelocityY = global.scrollVelocityX = 0;
         global.treeScale = 1;
         return;
-    }*/ // Hide the tree on death
+    }
 
     if (lastGuiType != gui.type) {
         let m = util.getEntityImageFromMockup(gui.type), // The mockup that corresponds to the player's tank
             rootName = m.rerootUpgradeTree, // The upgrade tree root of the player's tank
             rootIndex = [];
-        for (let name of rootName) {
-            let ind = name == undefined ? -1 : global.mockups.find(i => i.className == name).index;
-            rootIndex.push(ind); // The index of the mockup that corresponds to the root tank (-1 for no root)
-        }
+            for (let name of rootName) {
+                let ind = name == undefined ? -1 : global.mockups.find(i => i.className == name).index;
+                rootIndex.push(ind); // The index of the mockup that corresponds to the root tank (-1 for no root)
+            }
         if (!rootIndex.includes(-1)) {
             generateTankTree(rootIndex);
         }
@@ -1680,7 +1699,7 @@ function drawMessages(spacing, alcoveSize) {
 
 function drawSkillBars(spacing, alcoveSize) {
     // Draw skill bars
-    if (global.mobile) return drawMobileSkillUpgrades(spacing, alcoveSize);
+    global.canSkill = !!gui.points;
     statMenu.set(0 + (global.died || global.statHover || (global.canSkill && !gui.skills.every(skill => skill.cap === skill.amount))));
     global.clickables.stat.hide();
     let vspacing = 4;
@@ -1758,78 +1777,7 @@ function drawSkillBars(spacing, alcoveSize) {
         drawText("x" + gui.points, Math.round(x + len - 2) + 0.5, Math.round(y + height - 4) + 0.5, 20, color.guiwhite, "right");
     }
 }
-function drawMobileSkillUpgrades(spacing, alcoveSize) {
-    global.canSkill = gui.points > 0 && gui.skills.some(s => s.amount < s.cap) && !global.canUpgrade;
-    global.showSkill = !global.canUpgrade && !global.canSkill && global.died;
-    statMenu.set(global.canSkill || global.showSkill || global.disconnected ? 1 : 0);
-    let n = statMenu.get();
-    global.clickables.stat.hide();
-    let t = alcoveSize / 2,
-        q = alcoveSize / 3,
-        x = 2 * n * spacing - spacing,
-        statNames = gui.getStatNames(global.mockups[parseInt(gui.type.split("-")[0])].statnames),
-        clickableRatio = canvas.height / global.screenHeight / global.ratio;
-    if (global.canSkill || global.showSkill) {
-        for (let i = 0; i < gui.skills.length; i++) {
-            let skill = gui.skills[i],
-                softcap = skill.softcap;
-            if (softcap <= 0) continue;
-            let amount = skill.amount,
-                skillColor = color[skill.color],
-                cap = skill.cap,
-                name = statNames[9 - i].split(/\s+/),
-                halfNameLength = Math.floor(name.length / 2),
-                [name1, name2] = name.length === 1 ? [name[0], null] : [name.slice(0, halfNameLength).join(" "), name.slice(halfNameLength).join(" ")];
 
-            ctx.globalAlpha = 0.5;
-            ctx.fillStyle = skillColor;
-            drawGuiRect(x, spacing, t, 2 * q / 3);
-
-            ctx.globalAlpha = 0.1;
-            ctx.fillStyle = color.black;
-            drawGuiRect(x, spacing + q * 2 / 3 * 2 / 3, t, q * 2 / 3 / 3);
-
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = color.guiwhite;
-            drawGuiRect(x, spacing + q * 2 / 3, t, q / 3);
-
-            ctx.fillStyle = skillColor;
-            drawGuiRect(x, spacing + q * 2 / 3, t * amount / softcap, q / 3);
-
-            ctx.strokeStyle = color.black;
-            ctx.lineWidth = 1;
-            for (let j = 1; j < cap; j++) {
-                let width = x + j / softcap * t;
-                drawGuiLine(width, spacing + q * 2 / 3, width, spacing + q);
-            }
-
-            cap === 0 || !gui.points || softcap !== cap && amount === softcap || global.clickables.stat.place(9 - i, x * clickableRatio, spacing * clickableRatio, t * clickableRatio, q * clickableRatio);
-
-            if (name2) {
-                drawText(name2, x + t / 2, spacing + q * 0.55, q / 5, color.guiwhite, "center");
-                drawText(name1, x + t / 2, spacing + q * 0.3, q / 5, color.guiwhite, "center");
-            } else {
-                drawText(name1, x + t / 2, spacing + q * 0.425, q / 5, color.guiwhite, "center");
-            }
-
-            if (amount > 0) {
-                drawText(amount < softcap ? `+${amount}` : "MAX", x + t / 2, spacing + q * 1.3, q / 4, skillColor, "center");
-            }
-
-            ctx.strokeStyle = color.black;
-            ctx.globalAlpha = 1;
-            ctx.lineWidth = 3;
-            drawGuiLine(x, spacing + q * 2 / 3, x + t, spacing + q * 2 / 3);
-            drawGuiRect(x, spacing, t, q, true);
-
-            x += n * (t + 14);
-        }
-
-        if (gui.points > 1) {
-            drawText(`x${gui.points}`, x, spacing + 20, 20, color.guiwhite, "left");
-        }
-    }
-}
 function drawSelfInfo(spacing, alcoveSize, max) {
     //rendering information
     let vspacing = 4.5;
@@ -1855,10 +1803,11 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     drawBar(x + len * 0.1, x + len * (0.1 + 0.8 * (max ? Math.min(1, gui.__s.getScore() / max) : 1)), y + height / 2, height - 3 - settings.graphical.barChunk / 4, color.green);
 
     //write the score and name
-    drawText("Score: " + util.formatLargeNumber(Math.round(gui.__s.getScore())), x + len / 2, y + height / 2 + 1, height - 3.5, color.guiwhite, "center", true);
+    drawText("Score: " + util.formatLargeNumber(Math.floor(gui.__s.getScore())), x + len / 2, y + height / 2 + 1, height - 3.5, color.guiwhite, "center", true);
     ctx.lineWidth = 4;
-    drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor = "#ffffff" ? color.guiwhite : global.nameColor, "center");
+    drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor, "center");
 }
+
 function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     // Draw minimap and FPS monitors
     //minimap stuff starts here
@@ -1958,17 +1907,19 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     if (global.metrics.rendertime < 10) orangeColor = true;
     // Text
     if (global.showDebug) {
-        drawText("Open Source Arras", x + len, y - 50 - 5 * 14 - 2, 15, "#1081E5", "right");
-        drawText("Prediction: " + Math.round(GRAPHDATA) + "ms : " + global.mspt + " mspt", x + len, y - 50 - 4 * 14, 10, color.guiwhite, "right");
-        // drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
-        drawText("Memory: " + global.metrics.rendergap.toFixed(1) + " Mib : " + "Class: " + gui.class, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
+        drawText("Open Source Arras", x + len, y - 50 - 6 * 14 - 2, 15, "#1081E5", "right");
+        drawText("Prediction: " + Math.round(GRAPHDATA) + "ms / " + (100 * gui.fps).toFixed(2) + "%", x + len, y - 50 - 5 * 14, 10, color.guiwhite, "right");
+        drawText(`Bandwidth: ${global.player.renderx.toFixed(2)} in, ${global.player.rendery.toFixed(2)} out`, x + len, y - 50 - 4 * 14, 10, color.guiwhite, "right");
+        drawText("Memory: " + global.metrics.rendergap.toFixed(1) + " Mib / " + "Class: " + gui.class, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
         drawText("Update Rate: " + global.metrics.updatetime + "Hz", x + len, y - 50 - 2 * 14, 10, color.guiwhite, "right");
-        drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
-        drawText(global.metrics.latency + " ms - " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
+        //drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
+        drawText(global.metrics.rendertime + " FPS / " + global.mspt + " mspt", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
+        drawText(global.metrics.latency + " ms / " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
     } else if (!global.GUIStatus.minimapReducedInfo) {
         drawText("Open Source Arras", x + len, y - 50 - 2 * 14 - 2, 15, "#1081E5", "right");
-        drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
-        drawText(global.metrics.latency + " ms : " + global.metrics.updatetime + "Hz", x + len, y - 50, 10, color.guiwhite, "right");
+        //drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
+        drawText(global.metrics.rendertime + " FPS / " + global.mspt + " mspt", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
+        drawText(global.metrics.latency + " ms / " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
     } else drawText("Open Source Arras", x + len, y - 22 - 2 * 14 - 2, 15, "#1081E5", "right");
 }
 
@@ -1980,17 +1931,6 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     let height = 14;
     let x = global.screenWidth - len - spacing;
     let y = spacing + height + 7;
-    if (!lb.data.length) return;
-
-    // Animation things
-    let mobileGlide = mobileUpgradeGlide.get();
-    if (global.mobile) {
-        if (global.canUpgrade) {
-            y += (alcoveSize / 1.4) * mobileGlide;
-        }
-        y += global.canSkill || global.showSkill ? (alcoveSize / 2.2 /*+ spacing * 2*/) * statMenu.get() : 0;
-    }
-
     drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 3.5, color.guiwhite, "center");
     y += 7;
     for (let i = 0; i < lb.data.length; i++) {
@@ -2001,12 +1941,12 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         drawBar(x, x + len * shift, y + height / 2, height - 3.5, gameDraw.modifyColor(entry.barColor));
         // Leadboard name + score
         let nameColor = entry.nameColor || "#FFFFFF";
-        drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor == "#ffffff" ? color.guiwhite : nameColor, "center", true);
+        drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor, "center", true);
         // Mini-image
         let scale = height / entry.position.axis,
-            xx = x - 1.5 * height - scale * entry.position.middle.x * Math.SQRT1_2,
-            yy = y + 0.5 * height - scale * entry.position.middle.y * Math.SQRT1_2,
-            baseColor = entry.color;
+            xx = x - 1.5 * height - scale * entry.position.middle.x * 0.707,
+            yy = y + 0.5 * height + scale * entry.position.middle.x * 0.707,
+            baseColor = entry.image.color;
         drawEntity(baseColor, xx, yy, entry.image, 1 / scale, 1, (scale * scale) / entry.image.size, 1, -Math.PI / 4, true);
         // Move down
         y += vspacing + height;
@@ -2125,162 +2065,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         global.clickables.skipUpgrades.hide();
     }
 }
-// MOBILE UI FUNCTIONS
-function drawMobileJoysticks() {
-    // Draw the joysticks.
-    let radius = Math.min(
-        global.mobileStatus.useBigJoysticks ? global.screenWidth * 0.8 : global.screenWidth * 0.6,
-        global.mobileStatus.useBigJoysticks ? global.screenHeight * 0.16 : global.screenHeight * 0.12
-    );
-    ctx.globalAlpha = 0.3;
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    ctx.arc(
-        (global.screenWidth * 1) / 6,
-        (global.screenHeight * 2) / 3,
-        radius,
-        0,
-        2 * Math.PI
-    );
-    ctx.arc(
-        (global.screenWidth * 5) / 6,
-        (global.screenHeight * 2) / 3,
-        radius,
-        0,
-        2 * Math.PI
-    );
-    ctx.fill();
-    ctx.globalAlpha = 0.5;
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    if (global.mobileStatus.showJoysticks) {
-        ctx.arc(
-            canvas.movementTouchPos.x + (global.screenWidth * 1) / 6,
-            canvas.movementTouchPos.y + (global.screenHeight * 2) / 3,
-            radius / 2.5,
-            0,
-            2 * Math.PI
-        );
-        ctx.arc(
-            canvas.controlTouchPos.x + (global.screenWidth * 5) / 6,
-            canvas.controlTouchPos.y + (global.screenHeight * 2) / 3,
-            radius / 2.5,
-            0,
-            2 * Math.PI
-        );
-    }
-    ctx.fill();
-    // crosshair
-    if (global.mobileStatus.showCrosshair && global.mobileStatus.enableCrosshair) {
-        const crosshairpos = {
-            x: global.screenWidth / 2 + global.player.target.x,
-            y: global.screenHeight / 2 + global.player.target.y
-        };
-        ctx.lineWidth = 1;
-        ctx.globalAlpha = 1;
-        ctx.strokeStyle = "#202020"
-        ctx.beginPath();
-        ctx.moveTo(crosshairpos.x, crosshairpos.y - 20);
-        ctx.lineTo(crosshairpos.x, crosshairpos.y + 20);
-        ctx.moveTo(crosshairpos.x - 20, crosshairpos.y);
-        ctx.lineTo(crosshairpos.x + 20, crosshairpos.y);
-        ctx.closePath();
-        ctx.stroke();
-    }
-}
-
-function makeButton(index, x, y, width, height, text, clickableRatio) {
-    // Set the clickable's position
-    global.clickables.mobileButtons.place(index, x * clickableRatio, y * clickableRatio, width * clickableRatio, height * clickableRatio);
-
-    // Draw boxes
-    ctx.globalAlpha = 0.5;
-    ctx.fillStyle = color.grey;
-    drawGuiRect(x, y, width, height);
-    ctx.globalAlpha = 0.1;
-    ctx.fillStyle = color.black;
-    drawGuiRect(x, y + height * 0.6, width, height * 0.4);
-    ctx.globalAlpha = 1;
-
-    // Draw text
-    drawText(text, x + width / 2, y + height * 0.5, height * 0.6, color.guiwhite, "center", true);
-
-    // Draw the borders
-    ctx.strokeStyle = color.black;
-    ctx.lineWidth = 3;
-    drawGuiRect(x, y, width, height, true);
-}
-
-function makeButtons(buttons, startX, startY, baseSize, clickableRatio, spacing) {
-    let x = startX, y = startY, index = 0;
-
-    for (let row = 0; row < buttons.length; row++) {
-        for (let col = 0; col < buttons[row].length; col++) {
-            makeButton(buttons[row][col][3] ?? index, x, y, baseSize * (buttons[row][col][1] ?? 1), baseSize * (buttons[row][col][2] ?? 1), buttons[row][col][0], clickableRatio);
-            x += baseSize * (buttons[row][col][1] ?? 1) + spacing;
-            index++;
-        }
-
-        x = startX;
-        y += Math.max(...buttons[row].map(b => baseSize * (b[2] ?? 1))) + spacing;
-    }
-}
-
-function drawMobileButtons(spacing, alcoveSize) {
-    if (global.clickables.mobileButtons.active == null) global.clickables.mobileButtons.active = false;
-    if (global.clickables.mobileButtons.altFire == null) global.clickables.mobileButtons.altFire = false;
-
-    // Hide the buttons
-    global.clickables.mobileButtons.hide();
-
-    // Some animations.
-    mobileUpgradeGlide.set(0 + (global.canUpgrade || global.upgradeHover));
-
-    // Some sizing variables
-    let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
-    let upgradeColumns = Math.ceil(gui.upgrades.length / 9);
-    let yOffset = 0;
-    if (global.mobile) {
-      yOffset += global.canUpgrade ? (alcoveSize / 1.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 1.5 + spacing * (upgradeColumns + 1.55) + -17.5 : 0;
-      yOffset += global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0;
-    }
-    let buttons;
-    let baseSize = (alcoveSize - spacing * 2) / 3;
-
-    if (global.mobile) {
-        buttons = global.clickables.mobileButtons.active ? [
-            [[global.clickables.mobileButtons.active ? "-" : "+"], [`Alt ${global.clickables.mobileButtons.altFire ? "Manual" : "Disabled"}`, 6], [`${!document.fullscreenElement ? "Full" : "Exit Full"} Screen`, 5]],
-            [["Autofire", 3.5], ["Reverse", 3.5], ["Self-Destruct", 5]],
-            [["Autospin", 3.5], ["Override", 3.5], ["Level Up", 5]],
-            [["Action", 3.5], ["Special", 3.5], ["Chat", 5]],
-        ] : [
-            [[global.clickables.mobileButtons.active ? "-" : "+"]],
-        ];
-    }
-    if (global.clickables.mobileButtons.altFire) buttons.push([["\u2756", 2, 2]]);
-
-    let len = alcoveSize;
-    let height = (len / global.gameWidth) * global.gameHeight;
-    if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
-        let ratio = [
-            global.gameWidth / global.gameHeight,
-            global.gameHeight / global.gameWidth,
-        ];
-        len /= ratio[1] * 1.5;
-        height /= ratio[1] * 1.5;
-        if (len > alcoveSize * 2) {
-            ratio = len / (alcoveSize * 2);
-       } else if (height > alcoveSize * 2) {
-            ratio = height / (alcoveSize * 2);
-        } else {
-            ratio = 1;
-        }
-        len /= ratio;
-        height /= ratio;
-   }
-    makeButtons(buttons, len + spacing * 2, yOffset + spacing, baseSize, clickableRatio, spacing);
-}
-const gameDrawAlive = (ratio, drawRatio) => {
+const gameDrawAlive = (ratio) => {
     let GRAPHDATA = 0;
     // Prep stuff
     renderTimes++;
@@ -2303,6 +2088,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
     drawEntities(px, py, ratio);
     ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
+    global.fps = global.metrics.rendertime;
 
     //draw hud
     let alcoveSize = 200 / ratio; // drawRatio * global.screenWidth;
@@ -2310,23 +2096,15 @@ const gameDrawAlive = (ratio, drawRatio) => {
     gui.__s.update();
     let lb = leaderboard.get();
     let max = lb.max;
-    global.canSkill = !!gui.points && !global.showTree;
-    global.fps = global.metrics.rendertime;
     if (global.showTree) {
         drawUpgradeTree(spacing, alcoveSize);
     } else {
-        if (global.mobile) { // MOBILE UI
-            drawMobileJoysticks();
-            drawMobileButtons(spacing, alcoveSize);
-        }
-        if (global.GUIStatus.renderGUI) {
-            drawMessages(spacing, alcoveSize);
-            drawSkillBars(spacing, alcoveSize);
-            drawSelfInfo(spacing, alcoveSize, max);
-            drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA);
-            if (global.GUIStatus.renderLeaderboard) drawLeaderboard(spacing, alcoveSize, max, lb);
-            drawAvailableUpgrades(spacing, alcoveSize);
-        } else drawAvailableUpgrades(spacing, alcoveSize);
+        drawMessages(spacing);
+        drawSkillBars(spacing, alcoveSize);
+        drawSelfInfo(spacing, alcoveSize, max);
+        drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA);
+        drawLeaderboard(spacing, alcoveSize, max, lb);
+        drawAvailableUpgrades(spacing, alcoveSize);
     }
     global.metrics.lastrender = getNow();
 };
@@ -2354,8 +2132,8 @@ let getKills = () => {
         : destruction < 75 ? "👺"
         : destruction < 100 ? "🌶️" : "💯"
         ) + " " + (!killCountTexts.length ? "A true pacifist" :
-            killCountTexts.length == 1 ? killCountTexts.join(" and ") :
-                killCountTexts.slice(0, -1).join(", ") + " and " + killCountTexts[killCountTexts.length - 1])
+                    killCountTexts.length == 1 ? killCountTexts.join(" and ") :
+                    killCountTexts.slice(0, -1).join(", ") + " and " + killCountTexts[killCountTexts.length - 1])
     );
 };
 let getDeath = () => {

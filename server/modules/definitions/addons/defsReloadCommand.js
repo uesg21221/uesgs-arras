@@ -16,7 +16,7 @@ Events.on('chatMessage', ({ message, socket, preventDefault }) => {
     let time = performance.now();
     let sinceLastReload = time - lastReloadTime;
     if (sinceLastReload < 5000) {
-        socket.talk('m', Config.MESSAGE_DISPLAY_TIME, `Wait ${Math.floor((5000 - sinceLastReload) / 100) / 10} seconds and try again.`);
+        socket.talk('m', c.MESSAGE_DISPLAY_TIME, `Wait ${Math.floor((5000 - sinceLastReload) / 100) / 10} seconds and try again.`);
         return;
     }
     
@@ -67,7 +67,7 @@ Events.on('chatMessage', ({ message, socket, preventDefault }) => {
     }
 
     // Tell the command sender
-    socket.talk('m', Config.MESSAGE_DISPLAY_TIME, "Successfully reloaded all definitions.")
+    socket.talk('m', c.MESSAGE_DISPLAY_TIME, "Successfully reloaded all definitions.")
 });
 
 console.log('[defsReloadCommand.js] Loaded hot definitions reloader.');

@@ -13,9 +13,9 @@ const skcnv = {
 
 let curvePoints = [];
 for (let i = 0; i < 256; i++) {
-    curvePoints.push(Math.log(4 * (i / Config.MAX_SKILL) + 1) / 1.6);
+    curvePoints.push(Math.log(4 * (i / c.MAX_SKILL) + 1) / 1.6);
 }
-let curve = x => curvePoints[x * Config.MAX_SKILL];
+let curve = x => curvePoints[x * c.MAX_SKILL];
 function apply(f, x) {
     return x < 0 ? 1 / (1 - x * f) : f * x + 1;
 }
@@ -25,7 +25,7 @@ class Skill {
         // Just skill stuff.
         this.raw = inital;
         this.caps = [];
-        this.setCaps([ Config.MAX_SKILL, Config.MAX_SKILL, Config.MAX_SKILL, Config.MAX_SKILL, Config.MAX_SKILL, Config.MAX_SKILL, Config.MAX_SKILL, Config.MAX_SKILL, Config.MAX_SKILL, Config.MAX_SKILL ]);
+        this.setCaps([ c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL, c.MAX_SKILL ]);
         this.name = [
             "Reload",
             "Bullet Penetration",
@@ -54,13 +54,13 @@ class Skill {
         this.acl = 0;
         this.reset();
     }
-    reset(resetLSPF = true) {
+    reset() {
         this.points = 0;
         this.score = 0;
         this.deduction = 0;
         this.level = 0;
-        this.levelUpScore = 1;
-        if (resetLSPF) this.LSPF = null;
+        this.canUpgrade = false;
+        this.LSPF = null;
         this.set([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         this.maintain();
     }
@@ -73,7 +73,7 @@ class Skill {
         }
         let attrib = [];
         for (let i = 0; i < 10; i++) {
-            attrib[i] = curve(this.raw[i] / Config.MAX_SKILL);
+            attrib[i] = curve(this.raw[i] / c.MAX_SKILL);
         }
         this.rld = Math.pow(0.5, attrib[skcnv.rld]);
         this.pen = apply(2.5, attrib[skcnv.pen]);
@@ -83,9 +83,9 @@ class Skill {
         this.acl = apply(0.5, attrib[skcnv.rld]);
         this.rst = 0.5 * attrib[skcnv.str] + 2.5 * attrib[skcnv.pen];
         this.ghost = attrib[skcnv.pen];
-        this.shi = Config.GLASS_HEALTH_FACTOR * apply(3 / Config.GLASS_HEALTH_FACTOR - 1, attrib[skcnv.shi]);
+        this.shi = c.GLASS_HEALTH_FACTOR * apply(3 / c.GLASS_HEALTH_FACTOR - 1, attrib[skcnv.shi]);
         this.atk = apply(0.021, attrib[skcnv.atk]);
-        this.hlt = Config.GLASS_HEALTH_FACTOR * apply(2 / Config.GLASS_HEALTH_FACTOR - 1, attrib[skcnv.hlt]);
+        this.hlt = c.GLASS_HEALTH_FACTOR * apply(2 / c.GLASS_HEALTH_FACTOR - 1, attrib[skcnv.hlt]);
         this.mob = apply(0.8, attrib[skcnv.mob]);
         this.rgn = apply(25, attrib[skcnv.rgn]);
         this.brst = 0.3 * (0.5 * attrib[skcnv.atk] + 0.5 * attrib[skcnv.hlt] + attrib[skcnv.rgn]);
@@ -117,26 +117,28 @@ class Skill {
         this.update();
     }
     maintain() {
-        if (this.score - this.deduction < this.levelScore) return false;
-
-        this.deduction = this.levelUpScore;
-        this.level += 1;
-        this.levelUpScore = this.scoreForLevel;
-        this.points += this.levelPoints;
-        this.update();
-        return true;
-    }
-    get scoreForLevel() {
-        return Math.ceil(Math.pow(this.level, 3) * 0.3083);
+        if (this.score - this.deduction >= this.levelScore) {
+            this.deduction += this.levelScore;
+            this.level += 1;
+            this.points += this.levelPoints;
+            if (this.level < c.LEVEL_CAP) {
+                if (this.level % c.TIER_MULTIPLIER && this.level <= c.MAX_UPGRADE_TIER * c.TIER_MULTIPLIER) {
+                    this.canUpgrade = true;
+                }
+                this.update();
+                return true;
+            }
+        }
+        return false;
     }
     get levelScore() {
-        return this.levelUpScore - this.deduction;
+        return Math.ceil(1.8 * Math.pow(this.level + 1, 1.8) - 2 * this.level + 1);
     }
     get progress() {
         return this.levelScore ? (this.score - this.deduction) / this.levelScore : 0;
     }
     get levelPoints() {
-        return this.LSPF ? this.LSPF(this.level) : Config.LEVEL_SKILL_POINT_FUNCTION(this.level);
+        return this.LSPF ? this.LSPF(this.level) : c.LEVEL_SKILL_POINT_FUNCTION(this.level);
     }
     cap(skill, real = false) {
         return this.caps[skcnv[skill]];
@@ -196,18 +198,17 @@ class HealthType {
         switch (this.type) {
             case "static":
                 if (this.amount >= this.max || !this.amount) break;
-                this.amount += cons * boost;
+                this.amount += cons * (this.max / 10 / 60 / 2.5 + boost);
                 break;
             case "dynamic":
-                let r = this.amount / this.max;
-                if (r <= 0) {
+                let r = util.clamp(this.amount / this.max, 0, 1);
+                if (!r) {
                     this.amount = 0.0001;
-                } else if (r >= 1) {
+                }
+                if (r === 1) {
                     this.amount = this.max;
                 } else {
-                    // this regen multiplier is this curve: https://www.desmos.com/calculator/ghjggwdp6h
-                    let regenMultiplier = Math.exp(Math.pow(Math.sqrt(r / 2) - 0.4, 2) * -50);
-                    this.amount += cons * (this.regen * regenMultiplier / 3 + (r * this.max) / 150 + boost);
+                    this.amount += cons * ((this.regen * Math.exp(-50 * Math.pow(Math.sqrt(0.5 * r) - 0.4, 2))) / 3 + (r * this.max) / 10 / 15 + boost);
                 }
                 break;
         }

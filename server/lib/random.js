@@ -58,26 +58,11 @@ exports.dice = sides => exports.random(sides) < 1
 
 exports.choose = (arr) => arr[exports.irandom(arr.length - 1)]
 
-exports.chooseN = (arr, num) => {
-    let result = [],
-        extendedArr = [];
-    while (extendedArr.length < num) {
-        extendedArr.push(...exports.shuffle(arr));
-    }
-    for (var i = 0; i < num; i++) {
-        result.push(extendedArr[i]);
-    }
-    return result;
-};
-
-exports.shuffle = (arr) => {
-    arr = arr.slice(); //avoid changing the original array
-    for (let i = arr.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * i);
-        [arr[j], arr[i]] = [arr[i], arr[j]];
-    }
-    return arr;
-};
+exports.chooseN = (arr, n) => {
+    let o = []
+    for (let i = 0; i < n; i++) o.push(arr.splice(exports.irandom(arr.length - 1), 1)[0])
+    return o
+}
 
 exports.chooseChance = (...arg) => {
     let totalProb = 0
@@ -91,13 +76,17 @@ exports.chooseChance = (...arg) => {
     }
 }
 
-exports.nameLists = {
-    bots: [ "Alice", "Bob", "Carmen", "David", "Edith", "Freddy", "Gustav", "Helga", "Janet", "Lorenzo", "Mary", "Nora", "Olivia", "Peter", "Queen", "Roger", "Suzanne", "Tommy", "Ursula", "Vincent", "Wilhelm", "Xerxes", "Yvonne", "Zachary", "Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Hotel", "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo", "Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-Ray", "Yankee", "Zulu" ],
-    a: [ "Archimedes", "Akilina", "Anastasios", "Athena", "Alkaios", "Amyntas", "Aniketos", "Artemis", "Anaxagoras", "Apollon" ],
-    castle: [ "Berezhany", "Lutsk", "Dobromyl", "Akkerman", "Palanok", "Zolochiv", "Palanok", "Mangup", "Olseko", "Brody", "Isiaslav", "Kaffa", "Bilhorod" ],
-    legion: [ "Vesta", "Juno", "Orcus", "Janus", "Minerva", "Ceres" ]
-};
+exports.chooseBotName = () => {
+    return exports.choose([ "Alice", "Bob", "Carmen", "David", "Edith", "Freddy", "Gustav", "Helga", "Janet", "Lorenzo", "Mary", "Nora", "Olivia", "Peter", "Queen", "Roger", "Suzanne", "Tommy", "Ursula", "Vincent", "Wilhelm", "Xerxes", "Yvonne", "Zachary", "Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Hotel", "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo", "Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-Ray", "Yankee", "Zulu" ])
+}
 
-exports.chooseBotName = () => exports.choose(exports.nameLists.bots);
-
-exports.chooseBossName = (code, amount) => code in exports.nameLists ? exports.chooseN(exports.nameLists[code], amount) : undefined;
+exports.chooseBossName = code => {
+    switch (code) {
+        case "a":
+            return exports.choose([ "Archimedes", "Akilina", "Anastasios", "Athena", "Alkaios", "Amyntas", "Aniketos", "Artemis", "Anaxagoras", "Apollon" ]);
+        case "castle":
+            return exports.choose([ "Berezhany", "Lutsk", "Dobromyl", "Akkerman", "Palanok", "Zolochiv", "Palanok", "Mangup", "Olseko", "Brody", "Isiaslav", "Kaffa", "Bilhorod" ]);
+        case "legion":
+            return exports.choose([ "Vesta", "Juno", "Orcus", "Janus", "Minerva", "Ceres" ]);
+    }
+}

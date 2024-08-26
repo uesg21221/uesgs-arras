@@ -1,7 +1,8 @@
 let activeGroups = [];
 const getID = () => {
-    for (let i = 1; i < 1e3; i++) {
-        if (!activeGroups.find(e => e.teamID === -i)) return -i;
+    let i = 0;
+    for (let i = 0; i < 1e3; i++) {
+        if (!activeGroups.find(e => e.teamID === i)) return i;
     }
     return -Number(Math.random().toString().replace("0.", ""));
 };
@@ -13,6 +14,7 @@ class Group {
         this.private = false;
         this.teamID = getID();
         activeGroups.push(this);
+        console.log("New group created.");
     }
     setPrivate() {
         if (this.private) this.private = false;
@@ -32,6 +34,7 @@ class Group {
     delete() {
         for (let i = 0; i < this.members.length; i++) removeMember(this.members[i]);
         activeGroups = activeGroups.filter(entry => entry !== this);
+        console.log("Group deleted.");
     }
     getSpawn() {
         let validMembers = this.members.map(entry => entry).filter(a => !!a.player).filter(b => !!b.player.body);
@@ -44,7 +47,7 @@ class Group {
 const addMember = (socket, party = -1) => {
     let group = activeGroups.find(entry => entry.members.length < entry.size);
     if (party !== -1) group = activeGroups.find(entry => (entry.teamID === party / room.partyHash && entry.members.length < entry.size));
-    if (!group) group = new Group(Config.GROUPS || 0);
+    if (!group) group = new Group(c.GROUPS || 0);
     group.addMember(socket);
 };
 

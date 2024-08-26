@@ -1,4 +1,4 @@
-let launchForce = 1500,
+let launchForce = 1250,
     gravity = 13500,
     minibossPush = 30000,
 
@@ -9,11 +9,11 @@ portal = new Tile({
     init: tile => portals.push(tile),
     tick: tile => {
         for (let entity of tile.entities) {
-            if (entity.passive || entity.settings.goThruObstacle || entity.facingType === "bound") continue;
+            if (entity.passive || entity.settings.goThruObstacle || entity.facingType[0] === "bound") continue;
             let dx = entity.x - tile.loc.x,
                 dy = entity.y - tile.loc.y,
                 dist2 = dx ** 2 + dy ** 2,
-                force = Config.ROOM_BOUND_FORCE;
+                force = c.ROOM_BOUND_FORCE;
 
             //push away big boys
             if (entity.type === "miniboss" || entity.isMothership) {
@@ -47,13 +47,13 @@ portal = new Tile({
             //launch that idiot from the outportal
             entity.velocity.x = ax * force;
             entity.velocity.y = ay * force;
-            entity.x = exitport.loc.x + ax * room.tileWidth / 2;
-            entity.y = exitport.loc.y + ay * room.tileHeight / 2;
+            entity.x = exitport.loc.x + ax * room.tileWidth;
+            entity.y = exitport.loc.y + ay * room.tileHeight;
             entity.protect()
 
             //also don't forget to bring her kids along the ride
             for (let o of entities) {
-                if (o.id !== entity.id && o.master.master.id === entity.id && (o.type === "drone" || o.type === "minion" || o.type === "satellite")) {
+                if (o.id !== entity.id && o.master.master.id === entity.id && (o.type === "drone" || o.type === "minion")) {
                     o.velocity.x += entity.velocity.x;
                     o.velocity.y += entity.velocity.y;
                     o.x = entity.x;

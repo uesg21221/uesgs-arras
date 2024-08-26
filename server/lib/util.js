@@ -10,8 +10,6 @@ exports.addArticle = string => {
 
 exports.getDistance = (p1, p2) => Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2))
 
-exports.getDistanceSquared = (p1, p2) => Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2)
-
 exports.getDirection = (p1, p2) => Math.atan2(p2.y - p1.y, p2.x - p1.x)
 
 exports.clamp = (value, min, max) => Math.min(Math.max(value, min), max)
@@ -33,7 +31,7 @@ exports.listify = list => {
 
 exports.angleDifference = (a1, a2) => ((a2 - a1) % (2 * Math.PI) + Math.PI * 3) % (2 * Math.PI) - Math.PI
 
-exports.interpolateAngle = (angle, desired, step) => angle + exports.angleDifference(angle, desired) * step
+exports.loopSmooth = (angle, desired, slowness) => exports.angleDifference(angle, desired) / slowness
 
 exports.averageArray = arr => {
   if (!arr.length) return 0
@@ -51,15 +49,15 @@ exports.signedSqrt = x => Math.sign(x) * Math.sqrt(Math.abs(x))
 
 exports.getJackpot = x => x > 39450 ? Math.pow(x - 26300, 0.85) + 26300 : x / 1.5
 
-exports.serverStartTime = Date.now();
+exports.serverStartTime = Date.now()
 
 exports.rounder = (val, precision = 6) => {
   if (Math.abs(val) < 0.00001) val = 0;
   return +val.toPrecision(precision);
 }
 
-// backwards compatability
-exports.time = performance.now.bind(performance);
+// Get a better logging function
+exports.time = () => Date.now() - exports.serverStartTime
 
 // create a custom timestamp format for log statements
 exports.log = text => console.log("[" + (exports.time() / 1000).toFixed(3) + "]: " + text)
@@ -86,37 +84,3 @@ exports.forcePush = (object, property, ...items) => {
     object[property] = [...items];
   }
 }
-
-// Performance savings for define()
-exports.flattenDefinition = (output, definition) => {
-  definition = ensureIsClass(definition);
-
-  if (definition.PARENT) {
-      if (!Array.isArray(definition.PARENT)) {
-        exports.flattenDefinition(output, definition.PARENT);
-      } else for (let parent of definition.PARENT) {
-        if(mockupsLoaded) for (let k in parent) console.log(k, parent[k])
-        exports.flattenDefinition(output, parent);
-      }
-  }
-
-  for (let key in definition) {
-    // Skip parents
-    if (key === "PARENT") {
-      continue;
-    }
-    // Handle body stats (prevent overwriting of undefined stats)
-    if (key === "BODY") {
-      let body = definition.BODY;
-      if (!output.BODY) output.BODY = {};
-      for (let stat in body) {
-        output.BODY[stat] = body[stat];
-      }
-      continue;
-    }
-    // Handle other properties
-    output[key] = definition[key];
-  }
-
-  return output;
-};

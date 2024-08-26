@@ -6,9 +6,9 @@ let pickFromChanceSet = set => {
 },
 
 spawnNatural = (tile, layeredSet, kind) => {
-    if (!Config.ENABLE_FOOD) return;
+    return;
     let o = new Entity(tile.randomInside());
-    o.define(pickFromChanceSet(layeredSet));
+    o.define(pickFromChanceSet(pickFromChanceSet(layeredSet)));
     o.facing = ran.randomAngle();
     o.team = TEAM_ENEMIES;
     o.on('dead', () => tile.data[kind + 'Count']--);
@@ -24,34 +24,33 @@ normal = new Tile({
     },
     init: tile => room.spawnableDefault.push(tile),
     tick: tile => {
-        if (++tile.data.foodSpawnCooldown > Config.FOOD_SPAWN_COOLDOWN) {
+        if (++tile.data.foodSpawnCooldown > c.FOOD_SPAWN_COOLDOWN) {
             tile.data.foodSpawnCooldown = 0;
-            if (tile.data.foodCount < Config.FOOD_CAP && Math.random() < Config.FOOD_SPAWN_CHANCE) {
-                spawnNatural(tile, Config.FOOD_TYPES, 'food');
+            if (tile.data.foodCount < c.FOOD_CAP && Math.random() < c.FOOD_SPAWN_CHANCE) {
+                spawnNatural(tile, c.FOOD_TYPES, 'food');
             }
         }
     }
 }),
 
 nestTick = tile => {
-    if (++tile.data.enemySpawnCooldown > Config.ENEMY_SPAWN_COOLDOWN_NEST) {
+    if (++tile.data.enemySpawnCooldown > c.ENEMY_SPAWN_COOLDOWN_NEST) {
         tile.data.enemySpawnCooldown = 0;
-        if (tile.data.enemyCount < Config.ENEMY_CAP_NEST && Math.random() < Config.ENEMY_SPAWN_CHANCE_NEST) {
-            spawnNatural(tile, Config.ENEMY_TYPES_NEST, 'enemy');
+        if (tile.data.enemyCount < c.ENEMY_CAP_NEST && Math.random() < c.ENEMY_SPAWN_CHANCE_NEST) {
+            spawnNatural(tile, c.ENEMY_TYPES_NEST, 'enemy');
         }
     }
 
-    if (++tile.data.foodSpawnCooldown > Config.FOOD_SPAWN_COOLDOWN_NEST) {
+    if (++tile.data.foodSpawnCooldown > c.FOOD_SPAWN_COOLDOWN_NEST) {
         tile.data.foodSpawnCooldown = 0;
-        if (tile.data.foodCount < Config.FOOD_CAP_NEST && Math.random() < Config.FOOD_SPAWN_CHANCE_NEST) {
-            spawnNatural(tile, Config.FOOD_TYPES_NEST, 'food');
+        if (tile.data.foodCount < c.FOOD_CAP_NEST && Math.random() < c.FOOD_SPAWN_CHANCE_NEST) {
+            spawnNatural(tile, c.FOOD_TYPES_NEST, 'food');
         }
     }
 },
 
-nestColor = {BASE: "purple", BRIGHTNESS_SHIFT: 10, SATURATION_SHIFT: 0.8},
 nest = new Tile({
-    color: nestColor,
+    color: "purple",
     data: {
         allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,
@@ -65,7 +64,7 @@ nest = new Tile({
 }),
 
 nestNoBoss = new Tile({
-    color: nestColor,
+    color: "purple",
     data: {
         allowMazeWallSpawn: true,
         foodSpawnCooldown: 0, foodCount: 0,
@@ -77,15 +76,14 @@ nestNoBoss = new Tile({
 wall = new Tile({
     color: "white",
     init: tile => {
-        let o = new Entity(tile.loc);
-        o.define("wall");
-        o.team = TEAM_ROOM;
-        o.SIZE = room.tileWidth / 2 / lazyRealSizes[4] * Math.SQRT2 - 2;
-        o.protect();
-        o.life();
-        makeHitbox(o);
-        walls.push(o);
+	    let o = new Entity(tile.loc);
+	    o.define("wall");
+	    o.team = TEAM_ROOM;
+	    o.SIZE = room.tileWidth / 2;
+	    o.protect();
+	    o.life();
     }
 });
+
 
 module.exports = { normal, nest, wall, nestNoBoss };

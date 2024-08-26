@@ -30,7 +30,7 @@ function processAddonFolder(directory) {
         console.log(`Loading addon: ${filename}`);
         let result = require(filepath);
         if ('function' === typeof result) {
-            result({ Class, Config, Events });
+            result({ Class, Config: c, Events });
         }
         loadedAddons.push(filename.slice(0, -3));
     }
@@ -42,7 +42,7 @@ let addonsLoadEnd = performance.now();
 console.log("Loaded addons in " + util.rounder(addonsLoadEnd - definitionGroupsLoadEnd, 3) + " milliseconds. \n");
 
 // "Flattening" refers to removing PARENT attributes and applying the parents' attributes to the definition themselves, if not overwritten later on.
-if (Config.flattenDefintions) {
+if (c.flattenDefintions) {
     console.log(`Flattening ${definitionCount} definitions...`);
     
     let flattened = {};
@@ -55,7 +55,7 @@ if (Config.flattenDefintions) {
     console.log("Definitions flattened in " + (performance.now() - addonsLoadEnd) + " milliseconds. \n");
 }
 
-console.log(`Combined ${groups.length} definition groups and ${loadedAddons.length} addons into ${definitionCount} ${Config.flattenDefintions ? 'flattened ' : ''}definitions!\n`);
+console.log(`Combined ${groups.length} definition groups and ${loadedAddons.length} addons into ${definitionCount} ${c.flattenDefintions ? 'flattened ' : ''}definitions!\n`);
 // Index the definitions
 let i = 0;
 for (let key in Class) {

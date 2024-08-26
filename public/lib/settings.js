@@ -11,6 +11,7 @@ const settings = {
         colors: 'normal',
         pointy: true,
         showGrid: true,
+        sharpedges: false,
         fontSizeBoost: 1.4,
         fontStrokeRatio: 4.5,
         neon: false,

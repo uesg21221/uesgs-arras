@@ -1,7 +1,6 @@
 let fs = require('fs'),
     path = require('path'),
     publicRoot = path.join(__dirname, "../../../public"),
-    sharedRoot = path.join(__dirname, "../../../shared"),
     mimeSet = {
         "js": "application/javascript",
         "json": "application/json",
@@ -11,55 +10,35 @@ let fs = require('fs'),
         "png": "image/png",
         "ico": "image/x-icon"
     },
-    wsServer;
+wsServer = new (require('ws').WebSocketServer)({ noServer: true });
 
-try {
-    wsServer = new (require('../../lib/ws/index.js').WebSocketServer)({ noServer: true });
-} catch (err) {
-    wsServer = new (require('ws').WebSocketServer)({ noServer: true });
+if (c.host === 'localhost') {
+    util.warn(`config.host is just "localhost", are you sure you don't mean "localhost:${c.port}"?`);
 }
-
-console.log("Web Server initialized.");
-if (Config.host === 'localhost') {
-    util.warn(`[WEB SERVER] config.host is just "localhost", are you sure you don't mean "localhost:${Config.port}"?`);
-}
-if (Config.host.match(/localhost:(\d)/) && Config.host !== 'localhost:' + Config.port) {
-    util.warn('[WEB SERVER] config.host is a localhost domain but its port is different to config.port!');
+if (c.host.match(/localhost:(\d)/) && c.host !== 'localhost:' + c.port) {
+    util.warn('config.host is a localhost domain but its port is different to config.port!');
 }
 
 server = require('http').createServer((req, res) => {
     let resStr = "";
-    if (req.url.startsWith('/shared/')) {
-        let fileToGet = path.join(sharedRoot, req.url.slice(7));
-
-        //if this file does not exist, return the default;
-        if (!fs.existsSync(fileToGet)) {
-            fileToGet = path.join(sharedRoot, Config.DEFAULT_FILE);
-        } else if (!fs.lstatSync(fileToGet).isFile()) {
-            fileToGet = path.join(sharedRoot, Config.DEFAULT_FILE);
-        }
-
-        //return the file
-        res.writeHead(200, { 'Content-Type': mimeSet[ fileToGet.split('.').pop() ] || 'text/html' });
-        return fs.createReadStream(fileToGet).pipe(res);
-    } else switch (req.url) {
+    switch (req.url) {
         case "/lib/json/mockups.json":
             resStr = mockupJsonData;
             break;
         case "/lib/json/gamemodeData.json":
-            resStr = JSON.stringify({ gameMode: Config.gameModeName, players: views.length });
+            resStr = JSON.stringify({ gameMode: c.gameModeName, players: views.length });
             break;
         case "/serverData.json":
-            resStr = JSON.stringify({ ip: Config.host });
+            resStr = JSON.stringify({ ip: c.host });
             break;
         default:
             let fileToGet = path.join(publicRoot, req.url);
 
-            //if this file does not exist, return the default;
+            //if this FILE does not exist, return the default;
             if (!fs.existsSync(fileToGet)) {
-                fileToGet = path.join(publicRoot, Config.DEFAULT_FILE);
+                fileToGet = path.join(publicRoot, c.DEFAULT_FILE);
             } else if (!fs.lstatSync(fileToGet).isFile()) {
-                fileToGet = path.join(publicRoot, Config.DEFAULT_FILE);
+                fileToGet = path.join(publicRoot, c.DEFAULT_FILE);
             }
 
             //return the file
@@ -70,5 +49,5 @@ server = require('http').createServer((req, res) => {
     res.end(resStr);
 });
 server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, head, ws => sockets.connect(ws, req)));
-server.listen(Config.port, () => console.log("[WEB SERVER] Server listening on port", Config.port));
+server.listen(c.port, () => console.log("Server listening on port", c.port));
 module.exports = { server };

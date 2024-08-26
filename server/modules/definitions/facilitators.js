@@ -651,7 +651,7 @@ class LayeredBoss {
             SHAPE: this.shape,
             COLOR: -1,
             INDEPENDENT: true,
-            FACING_TYPE: ["spin", { speed: 0.02 / Config.runSpeed * (this.layerID % 2 ? -1 : 1) }],
+            FACING_TYPE: ["spin", { speed: 0.02 / c.runSpeed * (this.layerID % 2 ? -1 : 1) }],
             MAX_CHILDREN, 
             GUNS: [],
             TURRETS: [],
@@ -846,7 +846,7 @@ exports.makeLaby = (type, level, baseScale = 1) => {
         TURRETS: type.TURRETS ?? [],
         PROPS: Array(level).fill().map((_, i) => ({
             POSITION: [20 * downscale ** (i + 1), 0, 0, !(i & 1) ? 180 / usableSHAPE : 0, 1],
-            TYPE: [type, { COLOR: 'mirror' }]
+            TYPE: type
         }))
     };
 }

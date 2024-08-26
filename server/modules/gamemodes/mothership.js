@@ -5,36 +5,36 @@ let choices = ['mothership'];
 
 function spawn() {
     let locs = [{
-        x: Config.WIDTH * 0.1,
-        y: Config.HEIGHT * 0.1
+        x: c.WIDTH * 0.1,
+        y: c.HEIGHT * 0.1
     }, {
-        x: Config.WIDTH * 0.9,
-        y: Config.HEIGHT * 0.9
+        x: c.WIDTH * 0.9,
+        y: c.HEIGHT * 0.9
     }, {
-        x: Config.WIDTH * 0.9,
-        y: Config.HEIGHT * 0.1
+        x: c.WIDTH * 0.9,
+        y: c.HEIGHT * 0.1
     }, {
-        x: Config.WIDTH * 0.1,
-        y: Config.HEIGHT * 0.9
+        x: c.WIDTH * 0.1,
+        y: c.HEIGHT * 0.9
     }, {
-        x: Config.WIDTH * 0.9,
-        y: Config.HEIGHT * 0.5
+        x: c.WIDTH * 0.9,
+        y: c.HEIGHT * 0.5
     }, {
-        x: Config.WIDTH * 0.1,
-        y: Config.HEIGHT * 0.5
+        x: c.WIDTH * 0.1,
+        y: c.HEIGHT * 0.5
     }, {
-        x: Config.WIDTH * 0.5,
-        y: Config.HEIGHT * 0.9
+        x: c.WIDTH * 0.5,
+        y: c.HEIGHT * 0.9
     }, {
-        x: Config.WIDTH * 0.5,
-        y: Config.HEIGHT * 0.1
+        x: c.WIDTH * 0.5,
+        y: c.HEIGHT * 0.1
     }].sort(() => 0.5 - Math.random());
-    for (let i = 0; i < Config.TEAMS; i++) {
+    for (let i = 0; i < c.TEAMS; i++) {
         let o = new Entity(locs[i]),
             team = -i - 1;
         o.define(ran.choose(choices));
         o.define({ ACCEPTS_SCORE: false, VALUE: 643890 });
-        o.color.base = getTeamColor(team);
+        o.color = getTeamColor(team);
         o.team = team;
         o.name = "Mothership";
         o.isMothership = true;

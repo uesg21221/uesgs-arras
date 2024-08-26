@@ -92,13 +92,6 @@ Class.genericTank = {
     TYPE: "tank",
     DAMAGE_CLASS: 2,
     DANGER: 5,
-    COLOR: {
-        BASE: "mirror",
-        HUE_SHIFT: 0,
-        SATURATION_SHIFT: 1,
-        BRIGHTNESS_SHIFT: 0,
-        ALLOW_BRIGHTNESS_INVERT: true,
-    },
     SHAPE: 0,
     MOTION_TYPE: "motor",
     FACING_TYPE: "toTarget",
@@ -124,7 +117,6 @@ Class.genericTank = {
     },
     GUNS: [],
     TURRETS: [],
-    PROPS: [],
     ON: [],
     ARENA_CLOSER: false, // don't remove this, it stops dev basics going through walls
     GIVE_KILL_MESSAGE: true,
@@ -200,7 +192,6 @@ Class.bullet = {
         DAMAGE: 6,
         PUSHABILITY: 0.3,
     },
-    COLOR: 'mirror',
     FACING_TYPE: "smoothWithMotion",
     CAN_GO_OUTSIDE_ROOM: true,
     HITS_OWN_TYPE: "never",
@@ -225,7 +216,6 @@ Class.drone = {
     AI: {
         BLIND: true,
     },
-    COLOR: 'mirror',
     BODY: {
         PENETRATION: 1.2,
         PUSHABILITY: 0.6,
@@ -253,7 +243,6 @@ Class.swarm = {
     FACING_TYPE: "smoothWithMotion",
     CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal"],
     CRAVES_ATTENTION: true,
-    COLOR: 'mirror',
     BODY: {
         ACCELERATION: 3,
         PENETRATION: 1.5,
@@ -287,7 +276,6 @@ Class.trap = {
         RESIST: 2.5,
         SPEED: 0,
     },
-    COLOR: 'mirror',
 };
 
 Class.satellite = { 
@@ -311,7 +299,6 @@ Class.satellite = {
         RESIST: 1.5,
         FOV: 0.5,
     },
-    COLOR: 'mirror',
     DRAW_HEALTH: false,
     CLEAR_ON_MASTER_UPGRADE: true,
     BUFF_VS_FOOD: true,

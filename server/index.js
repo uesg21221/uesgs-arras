@@ -20,22 +20,16 @@ Array.prototype.remove = function (index) {
 
 //console window title
 // https://stackoverflow.com/questions/29548477/how-do-you-set-the-terminal-tab-title-from-node-js
-process.stdout.write(String.fromCharCode(27) + "]0;" + Config.WINDOW_NAME + String.fromCharCode(7));
+process.stdout.write(String.fromCharCode(27) + "]0;" + c.WINDOW_NAME + String.fromCharCode(7));
 
 util.log(room.width + " x " + room.height + " room initalized.");
 
 // Collision stuff
-const auraCollideTypes = ["miniboss", "tank", "food", "crasher"]
 function collide(collision) {
     // Pull the two objects from the collision grid
     let instance = collision[0],
         other = collision[1];
-    if (instance.noclip || other.noclip) {
-        return 0;
-    }
-
-    instance.emit('collide', { body: instance, instance, other });
-    other.emit('collide', { body: other, instance: other, other: instance });
+    instance.emit('collide', { body: instance, instance, other })
     // Check for ghosts...
     if (other.isGhost) {
         util.error("GHOST FOUND");
@@ -43,8 +37,8 @@ function collide(collision) {
         util.error("x: " + other.x + " y: " + other.y);
         util.error(other.collisionArray);
         util.error("health: " + other.health.amount);
+        util.warn("Ghost removed.");
         if (grid.checkIfInHSHG(other)) {
-            other.kill();
             util.warn("Ghost removed.");
             grid.removeObject(other);
         }
@@ -57,31 +51,33 @@ function collide(collision) {
         util.error(instance.collisionArray);
         util.error("health: " + instance.health.amount);
         if (grid.checkIfInHSHG(instance)) {
-            other.kill();
             util.warn("Ghost removed.");
             grid.removeObject(instance);
         }
         return 0;
     }
     if (
-        (!instance.activation.active && !other.activation.active) ||
-        (instance.isArenaCloser && !instance.alpha) ||
-        (other.isArenaCloser && !other.alpha)
+        (!instance.activation.check() && !other.activation.check()) ||
+        (instance.ac && !instance.alpha) ||
+        (other.ac && !other.alpha)
     ) return 0;
     switch (true) {
         case instance.type === "wall" || other.type === "wall":
             if (instance.type === "wall" && other.type === "wall") return;
             if (instance.type === "aura" || other.type === "aura") return;
-            if (instance.type === "satellite" || other.type === "satellite") return;
             let wall = instance.type === "wall" ? instance : other;
             let entity = instance.type === "wall" ? other : instance;
-            if (entity.isArenaCloser || entity.master.isArenaCloser) return;
+            if (entity.ac || entity.master.ac) return;
             switch (wall.shape) {
                 case 4:
-                    mazewallcollide(wall, entity);
+                    reflectCollide(wall, entity);
+                    break;
+                case 0:
+                    mooncollide(wall, entity);
                     break;
                 default:
-                    mooncollide(wall, entity);
+                    let a = entity.type === "bullet" ? 1 + 10 / (entity.velocity.length + 10) : 1;
+                    advancedcollide(wall, entity, false, false, a);
                     break;
             }
             break;
@@ -100,8 +96,8 @@ function collide(collision) {
                 advancedcollide(pusher, entity, false, false, a);
             }
             break;
-        case (instance.type === "crasher" && other.type === "food" && instance.team === other.team) ||
-            (other.type === "crasher" && instance.type === "food" && other.team === instance.team):
+        case (instance.type === "crasher" && other.type === "food") ||
+            (other.type === "crasher" && instance.type === "food"):
             firmcollide(instance, other);
             break;
         case instance.team !== other.team ||
@@ -110,11 +106,11 @@ function collide(collision) {
                 instance.healer ||
                 other.healer
             )):
-            // Exits if the aura is not hitting a boss, tank, food, or crasher
+            // Exits if the aura is not hitting a boss or tank
             if (instance.type === "aura") {
-                if (!(auraCollideTypes.includes(other.type))) return;
+                if (!(other.type === "tank" || other.type === "miniboss" || other.type == "food")) return;
             } else if (other.type === "aura") {
-                if (!(auraCollideTypes.includes(instance.type))) return;
+                if (!(instance.type === "tank" || instance.type === "miniboss" || instance.type == "food")) return;
             }
             advancedcollide(instance, other, true, true);
             break;
@@ -192,14 +188,14 @@ function collide(collision) {
 }
 
 // The most important loop. Lots of looping.
-let ticks = 0;
+let time, ticks = 0;
 const gameloop = () => {
     logs.loops.tally();
-    logs.master.startTracking();
-    logs.activation.startTracking();
-    logs.activation.endTracking();
+    logs.master.set();
+    logs.activation.set();
+    logs.activation.mark();
     // Do collisions
-    logs.collide.startTracking();
+    logs.collide.set();
     if (entities.length > 1) {
         // Load the grid
         grid.update();
@@ -209,48 +205,48 @@ const gameloop = () => {
             collide(pairs[i]);
         }
     }
-    logs.collide.endTracking();
+    logs.collide.mark();
     // Do entities life
-    logs.entities.startTracking();
+    logs.entities.set();
     for (let my of entities) {
         // Consider death.
         if (my.contemplationOfMortality()) {
             my.destroy();
         } else {
-            if (my.activation.active || my.isPlayer) {
-                if (my.bond == null) {
-                    // Resolve the physical behavior from the last collision cycle.
-                    logs.physics.startTracking();
-                    my.physics();
-                    logs.physics.endTracking();
-                }
+            if (my.bond == null) {
+                // Resolve the physical behavior from the last collision cycle.
+                logs.physics.set();
+                my.physics();
+                logs.physics.mark();
+            }
+            if (my.activation.check() || my.isPlayer) {
                 logs.entities.tally();
                 // Think about my actions.
-                logs.life.startTracking();
+                logs.life.set();
                 my.life();
-                logs.life.endTracking();
+                logs.life.mark();
                 // Apply friction.
                 my.friction();
                 my.confinementToTheseEarthlyShackles();
-                logs.selfie.startTracking();
+                logs.selfie.set();
                 my.takeSelfie();
-                logs.selfie.endTracking();
+                logs.selfie.mark();
             }
             // Update collisions.
             my.collisionArray = [];
             // Activation
             my.activation.update();
-            my.updateAABB(my.activation.active);
+            my.updateAABB(my.activation.check());
         }
         // Update collisions.
         my.collisionArray = [];
         my.emit('tick', { body: my });
     }
-    logs.entities.endTracking();
-    logs.master.endTracking();
+    logs.entities.mark();
+    logs.master.mark();
     // Remove dead entities
     purgeEntities();
-    room.lastCycle = performance.now();
+    room.lastCycle = util.time();
     ticks++;
     if (ticks & 1) {
         for (let i = 0; i < sockets.players.length; i++) {
@@ -260,37 +256,36 @@ const gameloop = () => {
     }
 };
 
-setTimeout(closeArena, 24 * 60 * 60 * 1000); // Restart every 2 hours
+setTimeout(closeArena, 60000 * 120); // Restart every 2 hours
 
 global.naturallySpawnedBosses = [];
 global.bots = [];
 let bossTimer = 0;
-let regenerateHealthAndShield = () => {
+// A less important loop.
+let maintainloop = () => {
+    // Regen health and update the grid
     for (let i = 0; i < entities.length; i++) {
         let instance = entities[i];
         if (instance.shield.max) {
             instance.shield.regenerate();
         }
-        if (instance.health.max) {
+        if (instance.health.amount) {
             instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
         }
     }
-}
-const maintainloop = () => {
-    // Update the grid
-    if (!naturallySpawnedBosses.length && bossTimer++ > Config.BOSS_SPAWN_COOLDOWN) {
-        bossTimer = -Config.BOSS_SPAWN_DURATION;
-        let selection = Config.BOSS_TYPES[ran.chooseChance(...Config.BOSS_TYPES.map((selection) => selection.chance))],
+    if (!naturallySpawnedBosses.length && bossTimer++ > c.BOSS_SPAWN_COOLDOWN) {
+        bossTimer = -c.BOSS_SPAWN_DURATION;
+        let selection = c.BOSS_TYPES[ran.chooseChance(...c.BOSS_TYPES.map((selection) => selection.chance))],
             amount = ran.chooseChance(...selection.amount) + 1;
         if (selection.message) {
             sockets.broadcast(selection.message);
         }
         sockets.broadcast(amount > 1 ? "Visitors are coming." : "A visitor is coming.");
         setSyncedTimeout(() => {
-            let names = ran.chooseBossName(selection.nameType, amount);
+            let names = [];
 
             for (let i = 0; i < amount; i++) {
-                let spot, attempts = 30, name = names[i];
+                let spot, attempts = 30, name = ran.chooseBossName(selection.nameType);
                 do { spot = getSpawnableArea(TEAM_ENEMIES); } while (attempts-- && dirtyCheck(spot, 500));
 
                 let boss = new Entity(spot);
@@ -300,65 +295,52 @@ const maintainloop = () => {
                     boss.name = name;
                 }
 
+                names.push(boss.name);
                 naturallySpawnedBosses.push(boss);
                 boss.on('dead', () => util.remove(naturallySpawnedBosses, naturallySpawnedBosses.indexOf(boss)));
             }
 
             sockets.broadcast(`${util.listify(names)} ${names.length == 1 ? 'has' : 'have'} arrived!`);
-        }, Config.BOSS_SPAWN_DURATION * 30);
+        }, c.BOSS_SPAWN_DURATION * 30);
     }
 
     // upgrade existing ones
     for (let i = 0; i < bots.length; i++) {
         let o = bots[i];
-        if (o.skill.level < Config.LEVEL_CAP) {
-            o.skill.score += Config.BOT_XP;
+        if (o.skill.level < c.LEVEL_CAP) {
+            o.skill.score += c.BOT_XP;
         }
         o.skill.maintain();
-        o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(...Config.BOT_SKILL_UPGRADE_CHANCES)]);
+        o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(...c.BOT_SKILL_UPGRADE_CHANCES)]);
         if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) {
             o.leftoverUpgrades--;
         }
     }
 
     // then add new bots if arena is open
-    if (!global.arenaClosed && bots.length < Config.BOTS) {
-        let botName = Config.BOT_NAME_PREFIX + ran.chooseBotName(),
-            team = Config.MODE === "tdm" ? getWeakestTeam() : undefined,
+    if (!global.arenaClosed && bots.length < c.BOTS) {
+        let team = c.MODE === "tdm" ? getWeakestTeam() : undefined,
             limit = 20, // give up after 20 attempts and just pick whatever is currently chosen
             loc;
         do {
             loc = getSpawnableArea(team);
         } while (limit-- && dirtyCheck(loc, 50))
         let o = new Entity(loc);
-        o.define(Config.SPAWN_CLASS);
-        o.define({ CONTROLLERS: ["nearestDifferentMaster"] });
+        o.define('bot');
+        o.define(c.SPAWN_CLASS);
         o.refreshBodyAttributes();
-        o.skill.score = Config.BOT_START_XP;
         o.isBot = true;
-        o.name = botName;
-        o.invuln = true;
-        o.nameColor = "#ffffff";
-        o.leftoverUpgrades = ran.chooseChance(...Config.BOT_CLASS_UPGRADE_CHANCES);
-        let color = Config.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : "darkGrey";
-        o.color.base = color;
+        o.name += ran.chooseBotName();
+        o.leftoverUpgrades = ran.chooseChance(...c.BOT_CLASS_UPGRADE_CHANCES);
+        o.color = c.RANDOM_COLORS ? Math.floor(Math.random() * 20) : team ? getTeamColor(team) : 17;
         if (team) o.team = team;
         bots.push(o);
-        setTimeout(() => {
-            // allow them to move
-            // Save index so it isn't overwritten by the bot Class's index
-            let index = o.index;
-            o.define('bot');
-            o.index = index;
-            o.refreshBodyAttributes();
-            o.invuln = false;
-        }, 3000 + Math.floor(Math.random() * 7000));
         o.on('dead', () => util.remove(bots, bots.indexOf(o)));
     }
 };
 
 //evaluating js with a seperate console window if enabled
-if (Config.REPL_WINDOW) {
+if (c.REPL_WINDOW) {
     util.log('Starting REPL Terminal.');
     //TODO: figure out how to spawn a seperate window and put the REPL stdio in there instead
     //let { stdin, stdout, stderr } = (require('child_process').spawn("cmd.exe", ["/c", "node", "blank.js"], { detached: true }));
@@ -368,14 +350,11 @@ if (Config.REPL_WINDOW) {
 // Bring it to life
 let counter = 0;
 setInterval(() => {
-    regenerateHealthAndShield();
-}, room.regenerateTick);
-setInterval(() => {
-    gameloop();
+    gameloop()
     gamemodeLoop();
     roomLoop();
 
-    if (counter++ / Config.runSpeed > 30) {
+    if (counter++ / c.runSpeed > 30) {
         chatLoop();
         maintainloop();
         speedcheckloop();

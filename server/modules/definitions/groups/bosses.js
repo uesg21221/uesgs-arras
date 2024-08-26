@@ -1990,7 +1990,6 @@ Class.trplnrBossAuraBullet = {
     COLOR: '#F49EFF',
     GLOW: {
         STRENGTH: 25,
-        COLOR: 'mirror',
         ALPHA: 1
     },
     DRAW_HEALTH: true,
@@ -2021,7 +2020,6 @@ const trplnrBossDecor = {
     DANGER: 10,
     GLOW: {
         RADIUS: 15,
-        COLOR: 'mirror',
         ALPHA: 1,
         RECURSION: 5
     },
@@ -2718,7 +2716,7 @@ class io_nearestDifferentMaster2 extends ioTypes.nearestDifferentMaster {
             this.tick = 100;
         }
         // Think damn hard
-        if (this.tick++ > 15 * Config.runSpeed) {
+        if (this.tick++ > 15 * c.runSpeed) {
             this.tick = 0;
             this.validTargets = this.buildList(range);
             // Ditch our old target if it's invalid

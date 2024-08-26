@@ -26,14 +26,14 @@ var serverStart = 0,
         ],
         skills: [
             { amount: 0, color: 'purple', cap: 1, softcap: 1 },
-            { amount: 0, color: 'pink', cap: 1, softcap: 1 },
-            { amount: 0, color: 'blue', cap: 1, softcap: 1 },
+            { amount: 0, color: 'pink'  , cap: 1, softcap: 1 },
+            { amount: 0, color: 'blue'  , cap: 1, softcap: 1 },
             { amount: 0, color: 'lgreen', cap: 1, softcap: 1 },
-            { amount: 0, color: 'red', cap: 1, softcap: 1 },
+            { amount: 0, color: 'red'   , cap: 1, softcap: 1 },
             { amount: 0, color: 'yellow', cap: 1, softcap: 1 },
-            { amount: 0, color: 'green', cap: 1, softcap: 1 },
-            { amount: 0, color: 'teal', cap: 1, softcap: 1 },
-            { amount: 0, color: 'gold', cap: 1, softcap: 1 },
+            { amount: 0, color: 'green' , cap: 1, softcap: 1 },
+            { amount: 0, color: 'teal'  , cap: 1, softcap: 1 },
+            { amount: 0, color: 'gold'  , cap: 1, softcap: 1 },
             { amount: 0, color: 'orange', cap: 1, softcap: 1 }
         ],
         points: 0,
@@ -53,17 +53,16 @@ var serverStart = 0,
                 }
             },
             update: () => {
-                levelscore = Math.ceil(Math.pow(level, 3) * 0.3083);
-                if (sscore.get() >= levelscore - 0.01) {
-                    deduction = levelscore;
+                levelscore = Math.ceil(1.8 * Math.pow(level + 1, 1.8) - 2 * level + 1);
+                if (sscore.get() - deduction >= levelscore - 0.001) {
+                    deduction += levelscore;
                     level += 1;
                 }
             },
-            getProgress: () => levelscore ? Math.min(1, Math.max(0, (sscore.get() - deduction) / (levelscore - deduction))) : 0,
+            getProgress: () => levelscore ? Math.min(1, Math.max(0, (sscore.get() - deduction) / levelscore)) : 0,
             getScore: () => sscore.get(),
             getLevel: () => level,
         },
-        showhealthtext: false,
         type: 0,
         root: "",
         class: "",
@@ -225,7 +224,6 @@ const Entry = class {
         let indexes = this.index.split("-"),
             ref = global.mockups[parseInt(indexes[0])];
         return {
-            id: this.id,
             image: util.getEntityImageFromMockup(this.index, this.color),
             position: ref.position,
             barColor: this.bar,
@@ -333,8 +331,8 @@ const GunContainer = n => {
             color: "",
             alpha: 0,
             strokeWidth: 0,
-            borderless: false,
-            drawFill: true,
+            borderless: false, 
+            drawFill: true, 
             drawAbove: false,
             length: 0,
             width: 0,
@@ -353,7 +351,7 @@ const GunContainer = n => {
                 color: g.color,
                 alpha: g.alpha,
                 strokeWidth: g.strokeWidth,
-                borderless: g.borderless,
+                borderless: g.borderless, 
                 drawFill: g.drawFill,
                 drawAbove: g.drawAbove,
                 length: g.length,
@@ -371,7 +369,7 @@ const GunContainer = n => {
                 g.color = c.color;
                 g.alpha = c.alpha;
                 g.strokeWidth = c.strokeWidth
-                g.borderless = c.borderless;
+                g.borderless = c.borderless; 
                 g.drawFill = c.drawFill;
                 g.drawAbove = c.drawAbove;
                 g.length = c.length;
@@ -414,7 +412,7 @@ function Status() {
         getBlend: () => {
             let o = (statState === 'normal' || statState === 'dying') ? 0 :
                 statState === 'invuln' ? 0.125 + Math.sin((getNow() - statTime) / 33) / 8 :
-                    1 - Math.min(1, (getNow() - statTime) / 80);
+                1 - Math.min(1, (getNow() - statTime) / 80);
             if (getNow() - statTime > 500 && statState === 'injured') {
                 statState = 'normal';
             }
@@ -472,7 +470,7 @@ const process = (z = {}) => {
         z.vy = get.next();
         z.size = get.next();
         z.facing = get.next();
-        z.perceptionAngleIndependence = get.next();
+        z.perceptionAngleIndependence = get.next(); //z.vfacing = get.next();
         z.defaultAngle = get.next();
         z.twiggle = get.next();
         z.layer = get.next();
@@ -483,15 +481,11 @@ const process = (z = {}) => {
         // Update health, flagging as injured if needed
         if (isNew) {
             z.health = get.next() / 65535;
-            z.healthN = get.next();
-            z.maxHealthN = get.next();
             z.shield = get.next() / 65535;
         } else {
             let hh = z.health,
                 ss = z.shield;
             z.health = get.next() / 65535;
-            z.healthN = get.next();
-            z.maxHealthN = get.next();
             z.shield = get.next() / 65535;
             // Update stuff
             if (z.health < hh || z.shield < ss) {
@@ -567,20 +561,23 @@ const process = (z = {}) => {
             angle = get.next(),
             direction = get.next(),
             offset = get.next();
-        z.guns.setConfig(i, { color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset }); // Load gun config into container
+        z.guns.setConfig(i, {color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
         if (time > global.player.lastUpdate - global.metrics.rendergap) z.guns.fire(i, power); // Shoot it
     }
     // Update turrets
     let turnumb = get.next();
-    if (isNew || z.turrets.length !== turnumb) {
+    if (turnumb) {
+        let b = 1;
+    }
+    if (isNew) {
         z.turrets = [];
         for (let i = 0; i < turnumb; i++) {
             z.turrets.push(process());
         }
     } else {
-        // if (z.turrets.length !== turnumb) {
-        //     throw new Error('Mismatch between data turret number and remembered turret number!');
-        // }
+        if (z.turrets.length !== turnumb) {
+            throw new Error('Mismatch between data turret number and remembered turret number!');
+        }
         for (let tur of z.turrets) {
             tur = process(tur);
         }
@@ -628,7 +625,6 @@ const convert = {
         let index = get.next(),
             // Translate the encoded index
             indices = {
-                showhealthtext: index & 0x0800,
                 class: index & 0x0400,
                 root: index & 0x0200,
                 topspeed: index & 0x0100,
@@ -672,11 +668,11 @@ const convert = {
         }
         if (indices.skills) {
             let skk = get.next();
-            gui.skills[0].amount = parseInt(skk.slice(0, 2), 16);
-            gui.skills[1].amount = parseInt(skk.slice(2, 4), 16);
-            gui.skills[2].amount = parseInt(skk.slice(4, 6), 16);
-            gui.skills[3].amount = parseInt(skk.slice(6, 8), 16);
-            gui.skills[4].amount = parseInt(skk.slice(8, 10), 16);
+            gui.skills[0].amount = parseInt(skk.slice( 0,  2), 16);
+            gui.skills[1].amount = parseInt(skk.slice( 2,  4), 16);
+            gui.skills[2].amount = parseInt(skk.slice( 4,  6), 16);
+            gui.skills[3].amount = parseInt(skk.slice( 6,  8), 16);
+            gui.skills[4].amount = parseInt(skk.slice( 8, 10), 16);
             gui.skills[5].amount = parseInt(skk.slice(10, 12), 16);
             gui.skills[6].amount = parseInt(skk.slice(12, 14), 16);
             gui.skills[7].amount = parseInt(skk.slice(14, 16), 16);
@@ -694,9 +690,6 @@ const convert = {
         }
         if (indices.class) {
             gui.class = get.next();
-        }
-        if (indices.showhealthtext) {
-            gui.showhealthtext = get.next();
         }
     },
     broadcast: () => {
@@ -765,10 +758,14 @@ const socketInit = port => {
     // Handle commands
     let flag = false;
     let commands = [
-        false, // moving
+        false, // up
+        false, // down
+        false, // left
+        false, // right
         false, // lmb
         false, // mmb
         false, // rmb
+        false,
     ];
     socket.cmd = {
         set: (index, value) => {
@@ -780,13 +777,17 @@ const socketInit = port => {
         talk: () => {
             flag = false;
             let o = 0;
-            for (let i = 0; i < commands.length; i++) {
+            for (let i = 0; i < 8; i++) {
                 if (commands[i]) o += Math.pow(2, i);
             }
             let ratio = util.getRatio();
-            socket.talk('C', Math.round(global.target.x / ratio), Math.round(global.target.y / ratio), global.reverseTank, global.movement, o);
+            socket.talk('C', Math.round(global.target.x / ratio), Math.round(global.target.y / ratio), global.reverseTank, o);
         },
         check: () => flag,
+        getMotion: () => ({
+            x: commands[3] - commands[2],
+            y: commands[1] - commands[0],
+        }),
     };
     // Learn how to talk
     socket.talk = async (...message) => {
@@ -906,6 +907,7 @@ const socketInit = port => {
                 }
                 break;
             case 'm': // message
+                console.log(m[1], m[0])
                 global.createMessage(m[1], m[0]);
                 break;
             case 'u': // uplink
@@ -982,32 +984,17 @@ const socketInit = port => {
                 global.finalLifetime = util.Smoothbar(0, 5);
                 global.finalLifetime.set(m[1]);
                 global.finalKills = [util.Smoothbar(0, 3), util.Smoothbar(0, 4.5), util.Smoothbar(0, 2.5), util.Smoothbar(0, 10)];
-                global.respawnTimeout = m[2];
-                if (global.respawnTimeout > 0) {
-                    global.cannotRespawn = true;
-                    let respawnTimeoutloop = setInterval(() => {
-                        if (global.respawnTimeout <= 1) {
-                            global.cannotRespawn = false;
-                            global.respawnTimeout = false;
-                            clearInterval(respawnTimeoutloop);
-                        } else {
-                            global.respawnTimeout--;
-                        }
-                    }, 1000); // One second.
-                }
-                global.finalKills[0].set(m[3]);
-                global.finalKills[1].set(m[4]);
-                global.finalKills[2].set(m[5]);
-                global.finalKills[3].set(m[6]);
+                global.finalKills[0].set(m[2]);
+                global.finalKills[1].set(m[3]);
+                global.finalKills[2].set(m[4]);
+                global.finalKills[3].set(m[5]);
                 global.finalKillers = [];
-                for (let i = 0; i < m[7]; i++) {
-                    global.finalKillers.push(m[8 + i]);
+                for (let i = 0; i < m[6]; i++) {
+                    global.finalKillers.push(m[7 + i]);
                 }
                 window.animations.deathScreen.reset();
-                window.canvas.reverseDirection = false;
                 global.died = true;
-                global.autoSpin = false;
-                global.syncingWithTank = false;
+                global.reverseTank = false;
                 window.onbeforeunload = () => false;
                 break;
             case 'I': // sync with the tank
@@ -1050,8 +1037,6 @@ const socketInit = port => {
         clearInterval(socket.commandCycle);
         window.onbeforeunload = () => false;
         console.log('The connection has closed.');
-        if (global.canThrowSyncClockError) global.message = "Failed to sync with the server. Please try again."
-        if (global.canThrowClosedMessage) global.message = "The connection has closed. Refresh to continue playing!"
     };
     // Notify about errors
     socket.onerror = error => {

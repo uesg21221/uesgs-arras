@@ -25,7 +25,6 @@
     border-radius: 3px;
     background: oklch(0% 0 0 / 30%);
 }
-
 html,
 body {
     overflow: hidden;
@@ -40,7 +39,7 @@ body {
 body {
     font-family: Ubuntu;
     font-size: 14px;
-    background-image: url('./backgroundTile.png');
+    background-image: url('./osa_background_tile.png');
     background-repeat: repeat;
     background-color: gray;
 }
@@ -649,21 +648,6 @@ a.link {
     box-shadow: none;
 }
 
-.codeberg {
-    background: #2C90DD;
-    border-bottom: 2px solid #247EC3;
-    -webkit-box-shadow: inset 0 -2px #247EC3;
-    box-shadow: inset 0 -2px #247EC3;
-}
-.codeberg:active,
-.codeberg:hover {
-    top: 1px;
-    background: #247EC3;
-    outline: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
 .github {
     background: #666666;
     border-bottom: 2px solid #333333;
@@ -871,6 +855,7 @@ body.mobile .controlTable {
 }
 .controlTable td {
     transition: padding 500ms;
+    font-size: 14px;
 }
 .controlTable div {
     position: relative;

@@ -1,5 +1,5 @@
 function simplecollide(my, n) {
-    let difference = (1 + util.getDistance(my, n) / 2) * Config.runSpeed;
+    let difference = (1 + util.getDistance(my, n) / 2) * c.runSpeed;
     let pushability1 = (my.intangibility) ? 1 : my.pushability,
         pushability2 = (n.intangibility) ? 1 : n.pushability,
         differenceX = 0.05 * (my.x - n.x) / difference,
@@ -24,7 +24,7 @@ function firmcollide(my, n, buffer = 0) {
     let s2 = Math.max(n.velocity.length, n.topSpeed);
     let strike1, strike2;
     if (buffer > 0 && dist <= my.realSize + n.realSize + buffer) {
-        let repel = (my.acceleration + n.acceleration) * (my.realSize + n.realSize + buffer - dist) / buffer / Config.runSpeed;
+        let repel = (my.acceleration + n.acceleration) * (my.realSize + n.realSize + buffer - dist) / buffer / c.runSpeed;
         my.accel.x += repel * (item1.x - item2.x) / dist;
         my.accel.y += repel * (item1.y - item2.y) / dist;
         n.accel.x -= repel * (item1.x - item2.x) / dist;
@@ -34,14 +34,14 @@ function firmcollide(my, n, buffer = 0) {
         strike1 = false;
         strike2 = false;
         if (my.velocity.length <= s1) {
-            my.velocity.x -= 0.05 * (item2.x - item1.x) / dist / Config.runSpeed;
-            my.velocity.y -= 0.05 * (item2.y - item1.y) / dist / Config.runSpeed;
+            my.velocity.x -= 0.05 * (item2.x - item1.x) / dist / c.runSpeed;
+            my.velocity.y -= 0.05 * (item2.y - item1.y) / dist / c.runSpeed;
         } else {
             strike1 = true;
         }
         if (n.velocity.length <= s2) {
-            n.velocity.x += 0.05 * (item2.x - item1.x) / dist / Config.runSpeed;
-            n.velocity.y += 0.05 * (item2.y - item1.y) / dist / Config.runSpeed;
+            n.velocity.x += 0.05 * (item2.x - item1.x) / dist / c.runSpeed;
+            n.velocity.y += 0.05 * (item2.y - item1.y) / dist / c.runSpeed;
         } else {
             strike2 = true;
         }
@@ -190,8 +190,8 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
             // Calculate base damage
             let resistDiff = my.health.resist - n.health.resist,
                 damage = {
-                    _me: Config.DAMAGE_CONSTANT * my.damage * (1 + resistDiff) * (1 + n.heteroMultiplier  * (my.settings.damageClass === n.settings.damageClass)) * ((my.settings.buffVsFood && n.settings.damageType === 1) ? 3 : 1) * my.damageMultiplier() * Math.min(2, Math.max(speedFactor._me, 1) * speedFactor._me),
-                    _n:  Config.DAMAGE_CONSTANT * n.damage  * (1 - resistDiff) * (1 + my.heteroMultiplier * (my.settings.damageClass === n.settings.damageClass)) * ((n.settings.buffVsFood && my.settings.damageType === 1) ? 3 : 1) * n.damageMultiplier()  * Math.min(2, Math.max(speedFactor._n , 1) * speedFactor._n ),
+                    _me: c.DAMAGE_CONSTANT * my.damage * (1 + resistDiff) * (1 + n.heteroMultiplier  * (my.settings.damageClass === n.settings.damageClass)) * ((my.settings.buffVsFood && n.settings.damageType === 1) ? 3 : 1) * my.damageMultiplier() * Math.min(2, Math.max(speedFactor._me, 1) * speedFactor._me),
+                    _n:  c.DAMAGE_CONSTANT * n.damage  * (1 - resistDiff) * (1 + my.heteroMultiplier * (my.settings.damageClass === n.settings.damageClass)) * ((n.settings.buffVsFood && my.settings.damageType === 1) ? 3 : 1) * n.damageMultiplier()  * Math.min(2, Math.max(speedFactor._n , 1) * speedFactor._n ),
                 };
             // Advanced damage calculations
             if (my.settings.ratioEffects) {
@@ -229,14 +229,14 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
             deathFactor._n = (stuff > n.health.amount) ? n.health.amount / stuff : 1;
             reductionFactor = Math.min(deathFactor._me, deathFactor._n);
             // Now apply it
-            // my.damageReceived += damage._n * deathFactor._n;
-            // n.damageReceived += damage._me * deathFactor._me;
+            // my.damageRecieved += damage._n * deathFactor._n;
+            // n.damageRecieved += damage._me * deathFactor._me;
             const __my = damage._n * deathFactor._n;
             const __n = damage._me * deathFactor._me;
-            my.damageReceived += __my * Number(__my > 0
+            my.damageRecieved += __my * Number(__my > 0
                 ? my.team != n.team
                 : n.healer && n.team == my.team && my.type == "tank" && n.master.id != my.id);
-            n.damageReceived += __n * Number(__n > 0
+            n.damageRecieved += __n * Number(__n > 0
                 ? my.team != n.team
                 : my.healer && n.team == my.team && n.type == "tank" && my.master.id != n.id);
         }
@@ -262,21 +262,21 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
         } else {
             elasticity *= 2;
         }
-        let spring = 2 * Math.sqrt(savedHealthRatio._me * savedHealthRatio._n) / Config.runSpeed,
+        let spring = 2 * Math.sqrt(savedHealthRatio._me * savedHealthRatio._n) / c.runSpeed,
             elasticImpulse =
             Math.pow(combinedDepth.down, 2) *
             elasticity * component *
             my.mass * n.mass / (my.mass + n.mass),
             springImpulse =
-            Config.KNOCKBACK_CONSTANT * spring * combinedDepth.up,
+            c.KNOCKBACK_CONSTANT * spring * combinedDepth.up,
             impulse = -(elasticImpulse + springImpulse) * (1 - my.intangibility) * (1 - n.intangibility),
             force = {
                 x: impulse * direction.x,
                 y: impulse * direction.y,
             },
             modifiers = {
-                _me: Config.KNOCKBACK_CONSTANT * my.pushability / my.mass * deathFactor._n,
-                _n: Config.KNOCKBACK_CONSTANT * n.pushability / n.mass * deathFactor._me,
+                _me: c.KNOCKBACK_CONSTANT * my.pushability / my.mass * deathFactor._n,
+                _n: c.KNOCKBACK_CONSTANT * n.pushability / n.mass * deathFactor._me,
             };
         // Apply impulse as force
         my.accel.x += modifiers._me * force.x;
@@ -287,127 +287,103 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
 
 }
 
-function mooncollide(moon, bounce) {
-    let collisionRadius = util.getDistance(moon, bounce);
-    let properCollisionRadius = moon.size + bounce.size
-    // Exit if too far
-    if (collisionRadius >= properCollisionRadius) return;
-    
-    // Get elasticity
-    let elasticity = bounce.type == 'tank' ? 0 : bounce.type == "bullet" ? 1 : bounce.pushability;
-
-    // Place at edge of the moon
-    let angleFromMoonToBounce = Math.atan2(bounce.y - moon.y, bounce.x - moon.x);
-    bounce.x = moon.x + properCollisionRadius * Math.cos(angleFromMoonToBounce);
-    bounce.y = moon.y + properCollisionRadius * Math.sin(angleFromMoonToBounce);
-    
-    // Find relative velocity vectors to the moon's surface
-    let velocityDirection = bounce.velocity.direction;
-    let tangentVelocity = bounce.velocity.length * Math.sin(angleFromMoonToBounce - velocityDirection);
-    let perpendicularVelocity = bounce.velocity.length * Math.cos(angleFromMoonToBounce - velocityDirection) * elasticity * -1;
-
-    // Exit if the reflection moves the bounced entity closer to the moon
-    if (perpendicularVelocity < 0) return;
-
-    // Get angle and magnitude of new velocity
-    let newVelocityMagnitude = Math.sqrt(tangentVelocity ** 2 + perpendicularVelocity ** 2);
-    let relativeVelocityAngle = Math.atan2(perpendicularVelocity, tangentVelocity);
-
-    // Assign velocity after rotating to the new angle
-    bounce.velocity.x = newVelocityMagnitude * Math.sin(Math.PI - relativeVelocityAngle - angleFromMoonToBounce);
-    bounce.velocity.y = newVelocityMagnitude * Math.cos(Math.PI - relativeVelocityAngle - angleFromMoonToBounce);
+function mooncollide(moon, n) {
+    let dx = moon.x - n.x;
+    let dy = moon.y - n.y;
+    let d2 = dx * dx + dy * dy;
+    let totalRadius = moon.realSize + n.realSize;
+    if (d2 > totalRadius * totalRadius)
+        return;
+    let dist = Math.sqrt(d2);
+    let sink = totalRadius - dist;
+    dx /= dist;
+    dy /= dist;
+    n.accel.x -= dx * n.pushability * 0.05 * sink * 2;
+    n.accel.y -= dy * n.pushability * 0.05 * sink * 2;
 }
 
-function mazewallcollidekill(bounce, wall) {
-    if (bounce.type !== 'tank' && bounce.type !== 'miniboss' && bounce.type !== 'food' && bounce.type !== 'crasher') {
-        bounce.kill();
-    } else {
-        bounce.collisionArray.push(wall);
-    }
-}
-
-function mazewallcollide(wall, bounce) {
-    if (bounce.god === true || bounce.passive === true || bounce.isArenaCloser || bounce.master.isArenaCloser) return;
+function reflectCollide(wall, bounce) {
+    if (bounce.god === true || bounce.passive === true || bounce.ac || bounce.master.ac) return;
     if (bounce.store.noWallCollision) return;
     if (bounce.team === wall.team && bounce.type === "tank") return;
-    let trueWallSize = wall.size * lazyRealSizes[4] / Math.SQRT2 + 2;
-    if (bounce.x + bounce.size < wall.x - trueWallSize ||
-        bounce.x - bounce.size > wall.x + trueWallSize ||
-        bounce.y + bounce.size < wall.y - trueWallSize ||
-        bounce.y - bounce.size > wall.y + trueWallSize) return 0;
-    if (wall.intangibility) return 0;
-    
-    // Get collision face
-    // [left, top, right, bottom]
-    let collisionFaces = [
-        bounce.x < wall.x,
-        bounce.y < wall.y,
-        bounce.x >= wall.x, // Biased just in case something ends up directly at the center of the wall
-        bounce.y > wall.y,
-    ];
-    
-    // For corner checking
-    // [left, top, right, bottom]
-    let extendedOverFaces = [
-        bounce.x < wall.x - trueWallSize,
-        bounce.y < wall.y - trueWallSize,
-        bounce.x > wall.x + trueWallSize,
-        bounce.y > wall.y + trueWallSize,
-    ];
+    if (bounce.x + bounce.size < wall.x - wall.size ||
+        bounce.x - bounce.size > wall.x + wall.size ||
+        bounce.y + bounce.size < wall.y - wall.size ||
+        bounce.y - bounce.size > wall.y + wall.size) return 0;
+    if (wall.intangibility) return 0
+    let bounceBy = bounce.type === 'tank' ? 1.0 : bounce.type === 'miniboss' ? 2.5 : 0.1
+    let left = bounce.x < wall.x - wall.size
+    let right = bounce.x > wall.x + wall.size
+    let top = bounce.y < wall.y - wall.size
+    let bottom = bounce.y > wall.y + wall.size
+    let leftExposed = bounce.x - bounce.size < wall.x - wall.size
+    let rightExposed = bounce.x + bounce.size > wall.x + wall.size
+    let topExposed = bounce.y - bounce.size < wall.y - wall.size
+    let bottomExposed = bounce.y + bounce.size > wall.y + wall.size
 
-    // Push to position if colliding with a given face
-    let wallPushPositions = [
-        {x: wall.x - trueWallSize - bounce.size},
-        {y: wall.y - trueWallSize - bounce.size},
-        {x: wall.x + trueWallSize + bounce.size},
-        {y: wall.y + trueWallSize + bounce.size},
-    ]
+    let intersected = true
 
-    // Face collisions
-    for (let i = 0; i < 4; i++) {
-        // if not hitting a face or extending over neighboring faces, continue to the next face
-        if (!collisionFaces[i] | extendedOverFaces[(i + 3) % 4] | extendedOverFaces[(i + 1) % 4]) continue;
+    if (left && right) {
+        left = right = false
+    }
+    if (top && bottom) {
+        top = bottom = false
+    }
+    if (leftExposed && rightExposed) {
+        leftExposed = rightExposed = false
+    }
+    if (topExposed && bottomExposed) {
+        topExposed = bottomExposed = false
+    }
+    if ((left && !top && !bottom) || (leftExposed && !topExposed && !bottomExposed)) {
+        bounce.accel.x -= (bounce.x + bounce.size - wall.x + wall.size) * bounceBy
+    } else if ((right && !top && !bottom) || (rightExposed && !topExposed && !bottomExposed)) {
+        bounce.accel.x -= (bounce.x - bounce.size - wall.x - wall.size) * bounceBy
+    } else if ((top && !left && !right) || (topExposed && !leftExposed && !rightExposed)) {
+        bounce.accel.y -= (bounce.y + bounce.size - wall.y + wall.size) * bounceBy
+    } else if ((bottom && !left && !right) || (bottomExposed && !leftExposed && !rightExposed)) {
+        bounce.accel.y -= (bounce.y - bounce.size - wall.y - wall.size) * bounceBy
+    } else {
+        let x = leftExposed ? -wall.size : rightExposed ? wall.size : 0
+        let y = topExposed ? -wall.size : bottomExposed ? wall.size : 0
 
-        // Decide to kill bounce type
-        mazewallcollidekill(bounce, wall);
+        let point = new Vector(wall.x + x - bounce.x, wall.y + y - bounce.y)
 
-        // Push and fix velocity to zero
-        for (let axis in wallPushPositions[i]) {
-            bounce[axis] = wallPushPositions[i][axis];
-            bounce.velocity[axis] = 0;
-            return true;
+        if (!x || !y) {
+            if (bounce.x + bounce.y < wall.x + wall.y) { // top left
+                if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
+                    bounce.accel.x -= (bounce.x + bounce.size - wall.x + wall.size) * bounceBy
+                } else { // top right
+                    bounce.accel.y -= (bounce.y + bounce.size - wall.y + wall.size) * bounceBy
+                }
+            } else { // bottom right
+                if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
+                    bounce.accel.y -= (bounce.y - bounce.size - wall.y - wall.size) * bounceBy
+                } else { // top right
+                    bounce.accel.x -= (bounce.x - bounce.size - wall.x - wall.size) * bounceBy
+                }
+            }
+        } else if (!(left || right || top || bottom)) {
+            let force = (bounce.size / point.length - 1) * bounceBy / 2
+            bounce.accel.x += point.x * force
+            bounce.accel.y += point.y * force
+        } else if (point.isShorterThan(bounce.size)) {
+            //let force = (bounce.size - point.length) / point.length * bounceBy
+            // once to get collision amount, once to norm
+            let force = (bounce.size / point.length - 1) * bounceBy / 2 // simplified
+            bounce.accel.x -= point.x * force
+            bounce.accel.y -= point.y * force
+        } else {
+            intersected = false
         }
     }
 
-    // Corner collision points
-    // [left & top, top & right, right & bottom, bottom & left]
-    let cornerPositions = [
-        {x: wall.x - trueWallSize, y: wall.y - trueWallSize},
-        {x: wall.x + trueWallSize, y: wall.y - trueWallSize},
-        {x: wall.x + trueWallSize, y: wall.y + trueWallSize},
-        {x: wall.x - trueWallSize, y: wall.y + trueWallSize},
-    ]
-
-    // Corner collisions
-    for (let i = 0; i < 4; i++) {
-        // Check for current face and next face simultanously, as well as if we're sticking over that face
-        if (
-            !collisionFaces[i] | !collisionFaces[(i + 1) % 4] | 
-            !extendedOverFaces[i] | !extendedOverFaces[(i + 1) % 4]
-        ) continue;
-
-        let cornerX = cornerPositions[i].x;
-        let cornerY = cornerPositions[i].y;
-        // Exit if too far away from the corner
-        if (util.getDistance(bounce, {x: cornerX, y: cornerY}) > bounce.size) return;
-
-        // Decide to kill bounce type
-        mazewallcollidekill(bounce, wall);
-        
-        let angleFromCornerToBounce = Math.atan2(bounce.y - cornerY, bounce.x - cornerX);
-        bounce.x = cornerX + bounce.size * Math.cos(angleFromCornerToBounce);
-        bounce.y = cornerY + bounce.size * Math.sin(angleFromCornerToBounce);
-        return true;
+    if (intersected) {
+        if (bounce.type !== 'tank' && bounce.type !== 'miniboss' && bounce.type !== 'food') {
+            bounce.kill();
+        } else {
+            bounce.collisionArray.push(wall);
+        }
     }
 };
 
@@ -417,5 +393,5 @@ module.exports = {
     reflectcollide,
     advancedcollide,
     mooncollide,
-    mazewallcollide
+    reflectCollide
 };

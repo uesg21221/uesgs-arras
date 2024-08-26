@@ -7,6 +7,7 @@ let recent = {},
 	decay = 10_000;
 
 Events.on('chatMessage', ({ message, socket, preventDefault, setMessage }) => {
+	console.log(setMessage)
 	let perms = socket.permissions,
 		id = socket.player.body.id;
 
@@ -21,7 +22,7 @@ Events.on('chatMessage', ({ message, socket, preventDefault, setMessage }) => {
 	// Fortunately, this returns false if 'recent[id] is 'undefined'.
 	if (recent[id] >= ratelimit) {
 		preventDefault(); // 'preventDefault()' prevents the message from being sent.
-		socket.talk('m', Config.MESSAGE_DISPLAY_TIME, 'Please slow down!');
+		socket.talk('m', c.MESSAGE_DISPLAY_TIME, 'Please slow down!');
 		return;
 	}
 
@@ -44,7 +45,7 @@ Events.on('chatMessage', ({ message, socket, preventDefault, setMessage }) => {
 	// If message above the character limit, lets stop that from getting through
 	if (message.length > 256) {
 		preventDefault();
-		socket.talk('m', Config.MESSAGE_DISPLAY_TIME, 'Too long!')
+		socket.talk('m', c.MESSAGE_DISPLAY_TIME, 'Too long!')
 	}
 });
 

@@ -103,7 +103,7 @@ const util = {
     },
     getRatio: () => Math.max(global.screenWidth, 16 * global.screenHeight / 9) / global.player.renderv,
     getScreenRatio: () => Math.max(global.screenWidth, 16 * global.screenHeight / 9) / global.screenSize,
-    Smoothbar: (value, speed, sharpness = 3, lerpValue = .05) => {
+    Smoothbar: (value, speed, sharpness = 3, lerpValue = .025) => {
         let time = Date.now();
         let display = value;
         let oldvalue = value;
@@ -138,18 +138,15 @@ const util = {
             turrets = [],
             name = "",
             upgradeTooltip = "",
-            positionData = [],
             rerootUpgradeTree = [],
             allRoots = [],
-            trueColor = mainMockup.color.split(" ");
-        if ((trueColor[0] == '-1' || trueColor[0] == 'mirror') && color) trueColor[0] = color.split(' ')[0];
-        let finalColor = trueColor.join(' ');
+            trueColor = mainMockup.color;
+        if (trueColor == '16 0 1 0 false' && color) trueColor = color;
         
         for (let i of index.split("-")) {
             let mockup = global.mockups[parseInt(i)];
             guns.push(...mockup.guns);
             turrets.push(...mockup.turrets);
-            positionData.push(mockup.position);
             name += mockup.name.length > 0 ? "-" + mockup.name : "";
             upgradeTooltip += mockup.upgradeTooltip ? "\n" + mockup.upgradeTooltip : "";
             if (mockup.rerootUpgradeTree) allRoots.push(...mockup.rerootUpgradeTree.split("\\/"));
@@ -158,7 +155,7 @@ const util = {
             if (!rerootUpgradeTree.includes(root))
                 rerootUpgradeTree.push(root);
         }
-        turrets.sort((a, b) => a.layer - b.layer);
+        turrets.sort(a => a.layer);
         return {
             time: 0,
             index: index,
@@ -168,10 +165,10 @@ const util = {
             vy: 0,
             size: mainMockup.size,
             realSize: mainMockup.realSize,
-            color: finalColor,
+            color: trueColor,
             borderless: mainMockup.borderless,
             drawFill: mainMockup.drawFill,
-            upgradeColor: mainMockup.upgradeColor ? mainMockup.upgradeColor : null,
+            upgradeColor: mainMockup.upgradeColor,
             glow: mainMockup.glow,
             render: {
                 status: {
@@ -204,7 +201,7 @@ const util = {
             score: 0,
             tiggle: 0,
             layer: mainMockup.layer,
-            position: util.sizeMultipleMockups(positionData),
+            position: mainMockup.position,
             rerootUpgradeTree,
             guns: {
                 length: guns.length,
@@ -244,114 +241,6 @@ const util = {
                 o.mirrorMasterAngle = t.mirrorMasterAngle;
                 return o;
             }),
-        };
-    },
-    sizeMultipleMockups: (positionData) => {
-        let endPoints = [];
-
-        function rounder(val) {
-            if (Math.abs(val) < 0.00001) val = 0;
-            return +val.toPrecision(6);
-        }
-        
-        function getFurthestFrom(x, y) {
-            let furthestDistance = 0,
-                furthestPoint = [x, y],
-                furthestIndex = 0;
-            for (let i = 0; i < endPoints.length; i++) {
-                let point = endPoints[i];
-                let distance = (point[0] - x) ** 2 + (point[1] - y) ** 2;
-                if (distance > furthestDistance) {
-                    furthestDistance = distance;
-                    furthestPoint = point;
-                    furthestIndex = i;
-                }
-            }
-            endPoints.splice(furthestIndex, 1);
-            return [rounder(furthestPoint[0]), rounder(furthestPoint[1])];
-        }
-        
-        function checkIfSamePoint(p1, p2) {
-            return p1[0] == p2[0] && p1[1] == p2[1];
-        }
-        
-        function checkIfOnLine(endpoint1, endpoint2, checkPoint) {
-            let xDiff = endpoint2[0] - endpoint1[0],
-                yDiff = endpoint2[1] - endpoint1[1];
-            
-            // Endpoints on the same vertical line
-            if (xDiff == 0) {
-                return (checkPoint[0] == endpoint1[0]);
-            }
-        
-            let slope = yDiff / xDiff,
-                xLengthToCheck = checkPoint[0] - endpoint1[0],
-                predictedY = endpoint1[1] + xLengthToCheck * slope;
-            // Check point is on the line with a small margin
-            return Math.abs(checkPoint[1] - predictedY) <= 1e-5;
-        }
-
-        // Find circumcircle and circumcenter
-        function constructCircumcirle(point1, point2, point3) {
-            // Rounder to avoid floating point nonsense
-            let x1 = rounder(point1[0]);
-            let y1 = rounder(point1[1]);
-            let x2 = rounder(point2[0]);
-            let y2 = rounder(point2[1]);
-            let x3 = rounder(point3[0]);
-            let y3 = rounder(point3[1]);
-
-            // Invalid math protection
-            if (x3 == x1 || x3 == x2) {
-                x3 += 1e-5;
-            }
-            
-            let numer1 = x3 ** 2 + y3 ** 2 - x1 ** 2 - y1 ** 2;
-            let numer2 = x2 ** 2 + y2 ** 2 - x1 ** 2 - y1 ** 2;
-            let factorX1 = 2 * x2 - 2 * x1;
-            let factorX2 = 2 * x3 - 2 * x1;
-            let factorY1 = 2 * y1 - 2 * y2;
-            let factorY2 = 2 * y1 - 2 * y3;
-            let y = (numer1 * factorX1 - numer2 * factorX2) / (factorY1 * factorX2 - factorY2 * factorX1);
-            let x = ((y - y3) ** 2 - (y - y1) ** 2 - x1 ** 2 + x3 ** 2) / factorX2;
-            let r = Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2));
-
-            return {x, y, r};
-        }
-        
-        // Draw each mockup circumcircle as a ring of 32 points
-        for (let position of positionData) {
-            let {axis, middle} = position;
-            for (let i = 0; i < 32; i++) {
-                let theta = Math.PI / 16 * i;
-                endPoints.push([middle.x + Math.cos(theta) * axis / 2, middle.y + Math.sin(theta) * axis / 2]);
-            }
-        }
-
-        // Convert to useful info
-        endPoints.sort((a, b) => (b[0] ** 2 + b[1] ** 2 - a[0] ** 2 - a[1] ** 2));
-        let point1 = getFurthestFrom(0, 0),
-            point2 = getFurthestFrom(...point1);
-        
-        // Repeat selecting the second point until at least one of the first two points is off the centerline
-        while (point1[0] == 0 && point2[0] == 0 || point1[1] == 0 && point2[1] == 0) {
-            point2 = getFurthestFrom(...point1);
-        }
-
-        let avgX = (point1[0] + point2[0]) / 2,
-            avgY = (point1[1] + point2[1]) / 2,
-            point3 = getFurthestFrom(avgX, avgY);
-        
-        // Repeat selecting the third point until it's actually different from the other points and it's not collinear with them
-        while (checkIfSamePoint(point3, point1) || checkIfSamePoint(point3, point2) || checkIfOnLine(point1, point2, point3)) {
-            point3 = getFurthestFrom(avgX, avgY);
-        }
-        
-        let {x, y, r} = constructCircumcirle(point1, point2, point3);
-
-        return {
-            axis: r * 2,
-            middle: {x, y},
         };
     },
 }

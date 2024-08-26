@@ -2,11 +2,14 @@ module.exports = {
     // Server
 
     // Game server domain.
-    // If the host is 'localhost:NUMBER', the NUMBER must be the port setting.
-    host: "localhost:26301",
+    // If 'localhost:NUMBER', the port must equal the port setting.
+    host: "localhost:3000",
 
     // Which port to run the web server on.
-    port: 26301,
+    port: 3000,
+
+    // Ticks per second. 1 is 30 tps, 2 is 60, etc.
+    gameSpeed: 1,
 
     // How often to update the list of the entities that players can see.
     // Has effects of when entities are activated.
@@ -17,9 +20,6 @@ module.exports = {
 
     // Flatten entity definition, which gets rid of PARENT attributes and applies the parents' attributes to the entity definition, if they're not set in the entity already.
     flattenDefintions: false,
-
-    // Log speed loop warnings
-    LOGS: true,
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
@@ -39,7 +39,7 @@ module.exports = {
 
     // Miscellaneous
 
-    // How long a chat message lasts in milliseconds.
+    // How long a entity chat message lasts in milliseconds.
     // Includes the fade-out period.
     CHAT_MESSAGE_DURATION: 30_000,
 
@@ -60,22 +60,18 @@ module.exports = {
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
                     +"Please report any bugs you encounter!",
-    
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
 
     // How long you have to wait to respawn in seconds.
-    RESPAWN_TIMEOUT: 0,
-    
+    RESPAWN_TIMEOUT: 0, /*  NOT READY  */
+
 
 
     // Physics
 
     // General multiplier for acceleration and max speeds.
     runSpeed: 1.5,
-
-    // Where the bullet spawns, where 1 is fully outside the barrel and -1 is fully inside the barrel, and 0 is halfway between.
-    bulletSpawnOffset: -1,
 
     // General damage multiplier everytime damage is dealt.
     DAMAGE_CONSTANT: 0.5,
@@ -100,8 +96,6 @@ module.exports = {
         if (level <= 45 && level & 1 == 1) return 1;
         return 0;
     },
-    // Show the health bar text or not.
-    SHOW_HEALTHBAR_TEXT: false,
 
     // Default skill caps.
     MAX_SKILL: 9,
@@ -112,10 +106,10 @@ module.exports = {
     // Level difference between each tier.
     TIER_MULTIPLIER: 15,
 
-    // Maximum normally achievable level.
+    // Max normally achievable level.
     LEVEL_CAP: 45,
 
-    // Maximum level via the level-up key and auto-level-up.
+    // Max level you get by level-up key and auto-level-up.
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
@@ -124,38 +118,21 @@ module.exports = {
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
 
-    // How much XP player-bots will receive when first created.
-    BOT_START_XP: 0,
-
     // The chances of a player-bot upgrading a specific skill when skill upgrades are available.
     BOT_SKILL_UPGRADE_CHANCES: [ 1, 1, 3, 4, 4, 4, 4, 2, 1, 1],
 
     // The chances of a player-bot upgrading a specific amount of times before it stops upgrading.
     BOT_CLASS_UPGRADE_CHANCES: [ 1, 5, 20, 37, 37],
 
-    // The prefix of the player-bots' names.
-    BOT_NAME_PREFIX: '§#888§[AI]§reset§ ',
-
     // The class that players and player-bots spawn as.
-    SPAWN_CLASS: 'basic',
-
-    // How every entity regenerates their health.
-    REGENERATE_TICK: 200,
-
-    // How many members a team can have in comparison to an unweighed team.
-    // Example: Lets say we have team A and B. If the weigh of A is 2 and B is 1, then the game will try to give A twice as many members as B.
-    TEAM_WEIGHTS: {},
+    SPAWN_CLASS: "basic",
 
 
 
     // Natural Spawns
 
-    // Allow foods to be spawned or not.
-    // NOTE: Disabling it decreases lagness, also very useful if you don't need foods to be spawned.
-    ENABLE_FOOD: true,
-
     FOOD_CAP: 3, // Max normal food per normal tile.
-    FOOD_SPAWN_CHANCE: 0.875, // Likeliness of normal food spawn attempts succeeding.
+    FOOD_SPAWN_CHANCE: 0.875, // Likeliness of normal food spawn attempts succeedingg.
     FOOD_SPAWN_COOLDOWN: 30, // Cooldown (in game ticks) of food spawn attempts being made.
 
     FOOD_CAP_NEST: 3, // Max nest food per nest tile.
@@ -228,7 +205,7 @@ module.exports = {
         message: "A strange trembling...",
     },{
         bosses: ["paladin", "freyja", "zaphkiel", "nyx", "theia"],
-        amount: [1], chance: 0.01,
+        amount: [1], chance: 0.1,
         message: "The world tremors as the celestials are reborn anew!",
     },{
         bosses: ["julius", "genghis", "napoleon"],
@@ -238,8 +215,8 @@ module.exports = {
 
 
 
-    // Default values for gamemode related things.
-    // Do not change these, you'll likely break stuff!
+    // Gamemode related.
+    // Do not change these, you'll likely break stuff.
     // Change GAME_MODES instead.
     GAMEMODE_NAME_PREFIXES: [],
     SPECIAL_BOSS_SPAWNS: false,

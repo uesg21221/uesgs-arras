@@ -38,7 +38,7 @@ function closeArena() {
             LEVEL: 45,
             CAN_GO_OUTSIDE_ROOM: true,
         });
-        o.color.base = 3;
+        o.color = 3;
         o.team = TEAM_ROOM;
         o.name = "Arena Closer";
     }
