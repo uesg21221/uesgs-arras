@@ -193,6 +193,8 @@ class PortalLoop {
                         buffer: 0,
                         spawnArray: validPositions,
                         handler: (entity) => {
+                            if (entity.team == TEAM_DREADNOUGHTS) return;
+
                             entity.reset(); // Remove non-player controllers
                             entity.define({ // Purge all unwanted entity config
                                 STAT_NAMES: {},
@@ -200,7 +202,6 @@ class PortalLoop {
                                 ALPHA: [0, 1],
                                 INVISIBLE: [0, 0],
                             });
-                            entity.destroyAllChildren();
                             entity.upgrades = [];
                             entity.define('dreadOfficialV1');
                             entity.team = TEAM_DREADNOUGHTS;
@@ -283,6 +284,7 @@ class PortalLoop {
                         other.y = ran.irandomRange(portal.destination.yMin, portal.destination.yMax);
                     }
                     other.invuln = true;
+                    other.destroyAllChildren();
                     
                     // Set new confinement
                     other.confinement.xMin = portal.destination.xMin - portal.buffer;
