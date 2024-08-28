@@ -196,6 +196,7 @@ class PortalLoop {
                             if (entity.team == TEAM_DREADNOUGHTS) return;
 
                             entity.reset(); // Remove non-player controllers
+                            entity.skill.set(Array(10).fill(0)); // Purge skill upgrades
                             entity.define({ // Purge all unwanted entity config
                                 STAT_NAMES: {},
                                 IS_SMASHER: false,
@@ -205,6 +206,11 @@ class PortalLoop {
                             entity.upgrades = [];
                             entity.define('dreadOfficialV1');
                             entity.team = TEAM_DREADNOUGHTS;
+
+                            // Fix minimap
+                            if (entity.socket) {
+                                entity.socket.player.team = entity.team;
+                            }
                         },
                         entryBarrier: (entity) => {
                             return entity.skill.level >= 150;
