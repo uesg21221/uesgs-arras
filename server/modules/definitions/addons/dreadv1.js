@@ -271,7 +271,7 @@ Class.dreadv1BodyTurret = makeTurret({
 	GUNS: [{
 		POSITION: [22, 10, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 0.7 }, g.turret, { size: 0.8, health: 0.75, speed: 0.4, maxSpeed: 0.4, reload: 0.7 }]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 0.7 }, g.turret, { size: 0.8, damage: 1.05, speed: 0.4, maxSpeed: 0.4, reload: 0.7 }]),
 			TYPE: "bullet"
 		}
 	}]
