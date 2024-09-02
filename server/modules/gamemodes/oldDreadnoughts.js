@@ -270,7 +270,7 @@ class PortalLoop {
                     if (other.type != 'tank') {
                         if (
                             other.type != "miniboss" && other.type != "food" && other.type != "crasher" && other.type != "aura" && other.type != "wall" && other.type != "unknown" &&
-                            (other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 <= 625
+                            (other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 <= (other.size + entity.size) ** 2
                         ) {
                             other.kill();
                         }
