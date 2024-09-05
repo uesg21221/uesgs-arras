@@ -1090,7 +1090,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
                 alpha = g.alpha,
                 strokeWidth = g.strokeWidth,
                 borderless = g.borderless,
-                overrideBorderToBodyColor = g.overrideBorderToBodyColor
+                overrideBorderToBodyColor = g.overrideBorderToBodyColor,
                 fill = g.drawFill;
             gameDraw.setColor(context, gameDraw.mixColors(gunColor, render.status.getColor(), blend), overrideBorderToBodyColor);
             drawTrapezoid(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * g.length / 2, drawSize * g.width / 2, g.aspect, g.angle + rot, borderless, fill, alpha, strokeWidth, drawSize * positions[i]);
