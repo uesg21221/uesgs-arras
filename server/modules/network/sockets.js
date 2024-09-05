@@ -1018,7 +1018,7 @@ function flatten(data) {
             /*  4 */ data.color,
             /*  5 */ data.strokeWidth,
             /*  6 */ data.borderless,
-            /*  7 */ data.overrideBorderToBodyColor.
+            /*  7 */ data.overrideBorderToBodyColor,
             /*  8 */ data.drawFill,
             /*  9 */ data.size,
             /* 10 */ data.realSize,
