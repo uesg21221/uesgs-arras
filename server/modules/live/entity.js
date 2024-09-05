@@ -30,6 +30,7 @@ class Gun extends EventEmitter {
         this.canShoot = false;
         this.codeControlOnly = false;
         this.borderless = false;
+        this.overrideBorderToBodyColor = false;
         this.drawFill = true;
         this.drawAbove = false;
         if (info.PROPERTIES != null) {
@@ -52,6 +53,7 @@ class Gun extends EventEmitter {
             if (info.PROPERTIES.ALPHA != null) this.alpha = info.PROPERTIES.ALPHA;
             if (info.PROPERTIES.STROKE_WIDTH != null) this.strokeWidth = info.PROPERTIES.STROKE_WIDTH;
             if (info.PROPERTIES.BORDERLESS != null) this.borderless = info.PROPERTIES.BORDERLESS;
+            if (info.PROPERTIES.OVERRIDE_BORDER_TO_BODY_COLOR != null) this.overrideBorderToBodyColor = info.PROPERTIES.OVERRIDE_BORDER_TO_BODY_COLOR;
             if (info.PROPERTIES.DRAW_FILL != null) this.drawFill = info.PROPERTIES.DRAW_FILL;
             if (info.PROPERTIES.DRAW_ABOVE) this.drawAbove = info.PROPERTIES.DRAW_ABOVE;
             this.destroyOldestChild = info.PROPERTIES.DESTROY_OLDEST_CHILD ?? false;
@@ -468,6 +470,7 @@ class Gun extends EventEmitter {
             alpha: this.alpha,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless, 
+            overrideBorderToBodyColor: this.overrideBorderToBodyColor,
             drawFill: this.drawFill, 
             drawAbove: this.drawAbove,
             length: this.length,
@@ -589,6 +592,7 @@ class Prop {
         this.guns = [];
         this.color = new Color(16);
         this.borderless = false;
+        this.overrideBorderToBodyColor = false;
         this.drawFill = true;
         this.strokeWidth = 1;
 
@@ -653,6 +657,7 @@ class Prop {
         }
         if (set.STROKE_WIDTH != null) this.strokeWidth = set.STROKE_WIDTH
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
+        if (set.OVERRIDE_BORDER_TO_BODY_COLOR != null) this.overrideBorderToBodyColor = set.OVERRIDE_BORDER_TO_BODY_COLOR;
         if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
         if (set.GUNS != null) {
             let newGuns = [];
@@ -679,6 +684,7 @@ class Prop {
             color: this.color.compiled,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless,
+            overrideBorderToBodyColor: this.overrideBorderToBodyColor,
             drawFill: this.drawFill,
             guns: this.guns.map((gun) => gun.getPhotoInfo()),
             turrets: this.turrets,
@@ -1097,6 +1103,7 @@ class Entity extends EventEmitter {
         if (set.DANGER != null) this.dangerValue = set.DANGER;
         if (set.SHOOT_ON_DEATH != null) this.shootOnDeath = set.SHOOT_ON_DEATH;
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
+        if (set.OVERRIDE_BORDER_TO_BODY_COLOR != null) this.overrideBorderToBodyColor = set.OVERRIDE_BORDER_TO_BODY_COLOR;
         if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
         if (set.IS_IMMUNE_TO_TILES) this.immuneToTiles = set.IS_IMMUNE_TO_TILES;
         if (set.TEAM != null) {
@@ -1648,6 +1655,7 @@ class Entity extends EventEmitter {
             color: this.color.compiled,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless,
+            overrideBorderToBodyColor: this.overrideBorderToBodyColor,
             drawFill: this.drawFill,
             name: (this.nameColor || "#FFFFFF") + this.name,
             score: this.skill.score,

@@ -13,6 +13,7 @@ function getMockup(e, positionInfo) {
         upgradeColor: e.upgradeColor,
         glow: e.glow,
         borderless: e.borderless,
+        overrideBorderToBodyColor: e.overrideBorderToBodyColor,
         drawFill: e.drawFill,
         shape: e.shapeData,
         imageInterpolation: e.imageInterpolation,
@@ -41,6 +42,7 @@ function getMockup(e, positionInfo) {
                 strokeWidth: gun.strokeWidth,
                 alpha: gun.alpha,
                 borderless: gun.borderless,
+                overrideBorderToBodyColor: gun.overrideBorderToBodyColor,
                 drawFill: gun.drawFill,
                 drawAbove: gun.drawAbove,
             };

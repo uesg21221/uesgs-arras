@@ -170,6 +170,7 @@ const util = {
             realSize: mainMockup.realSize,
             color: finalColor,
             borderless: mainMockup.borderless,
+            overrideBorderToBodyColor: mainMockup.overrideBorderToBodyColor,
             drawFill: mainMockup.drawFill,
             upgradeColor: mainMockup.upgradeColor ? mainMockup.upgradeColor : null,
             glow: mainMockup.glow,
@@ -214,7 +215,8 @@ const util = {
                         color: g.color,
                         alpha: g.alpha,
                         strokeWidth: g.strokeWidth,
-                        borderless: g.borderless, 
+                        borderless: g.borderless,
+                        overrideBorderToBodyColor: g.overrideBorderToBodyColor,
                         drawFill: g.drawFill,
                         drawAbove: g.drawAbove,
                         length: g.length,
@@ -231,6 +233,7 @@ const util = {
                 let o = util.getEntityImageFromMockup(t.index);
                 o.color = t.color;
                 o.borderless = t.borderless;
+                o.overrideBorderToBodyColor = t.overrideBorderToBodyColor;
                 o.drawFill = t.drawFill;
                 o.realSize = o.realSize / o.size * mainMockup.size * t.sizeFactor;
                 o.size = mainMockup.size * t.sizeFactor;

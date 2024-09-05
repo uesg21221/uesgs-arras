@@ -61,6 +61,7 @@ Class.genericEntity = {
     GUNS: [],
     MAX_CHILDREN: 0,
     BORDERLESS: false,
+    OVERRIDE_BORDER_TO_BODY_COLOR: false,
     DRAW_FILL: true,
     REROOT_UPGRADE_TREE: null,
     DISPLAY_NAME: true,

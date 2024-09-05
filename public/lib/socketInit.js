@@ -354,6 +354,7 @@ const GunContainer = n => {
                 alpha: g.alpha,
                 strokeWidth: g.strokeWidth,
                 borderless: g.borderless,
+                overrideBorderToBodyColor: g.overrideBorderToBodyColor,
                 drawFill: g.drawFill,
                 drawAbove: g.drawAbove,
                 length: g.length,
@@ -372,6 +373,7 @@ const GunContainer = n => {
                 g.alpha = c.alpha;
                 g.strokeWidth = c.strokeWidth
                 g.borderless = c.borderless;
+                g.overrideBorderToBodyColor = c.overrideBorderToBodyColor;
                 g.drawFill = c.drawFill;
                 g.drawAbove = c.drawAbove;
                 g.length = c.length;
@@ -435,6 +437,7 @@ const process = (z = {}) => {
         z.color = get.next();
         z.strokeWidth = get.next();
         z.borderless = get.next();
+        z.overrideBorderToBodyColor = get.next();
         z.drawFill = get.next();
         z.size = get.next();
         z.realSize = get.next();
@@ -478,6 +481,7 @@ const process = (z = {}) => {
         z.layer = get.next();
         z.color = get.next();
         z.borderless = get.next();
+        z.overrideBorderToBodyColor = get.next()
         z.drawFill = get.next();
         let invuln = get.next();
         // Update health, flagging as injured if needed
@@ -560,6 +564,7 @@ const process = (z = {}) => {
             strokeWidth = get.next(),
             borderless = get.next(),
             drawFill = get.next(),
+            overrideBorderToBodyColor = get.next()
             drawAbove = get.next(),
             length = get.next(),
             width = get.next(),
@@ -567,7 +572,7 @@ const process = (z = {}) => {
             angle = get.next(),
             direction = get.next(),
             offset = get.next();
-        z.guns.setConfig(i, { color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset }); // Load gun config into container
+        z.guns.setConfig(i, { color, alpha, strokeWidth, borderless, overrideBorderToBodyColor, drawFill, drawAbove, length, width, aspect, angle, direction, offset }); // Load gun config into container
         if (time > global.player.lastUpdate - global.metrics.rendergap) z.guns.fire(i, power); // Shoot it
     }
     // Update turrets

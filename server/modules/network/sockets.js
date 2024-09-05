@@ -1018,14 +1018,15 @@ function flatten(data) {
             /*  4 */ data.color,
             /*  5 */ data.strokeWidth,
             /*  6 */ data.borderless,
-            /*  7 */ data.drawFill,
-            /*  8 */ data.size,
-            /*  9 */ data.realSize,
-            /* 10 */ data.sizeFactor,
-            /* 11 */ data.angle,
-            /* 12 */ data.direction,
-            /* 13 */ data.offset,
-            /* 14 */ data.mirrorMasterAngle,
+            /*  7 */ data.overrideBorderToBodyColor.
+            /*  8 */ data.drawFill,
+            /*  9 */ data.size,
+            /* 10 */ data.realSize,
+            /* 11 */ data.sizeFactor,
+            /* 12 */ data.angle,
+            /* 13 */ data.direction,
+            /* 14 */ data.offset,
+            /* 15 */ data.mirrorMasterAngle,
         );
     } else {
         output.push(
@@ -1043,18 +1044,19 @@ function flatten(data) {
             /* 12 */ data.layer,
             /* 13 */ data.color,
             /* 14 */ data.borderless,
-            /* 15 */ data.drawFill,
-            /* 16 */ data.invuln,
-            /* 17 */ Math.ceil(65535 * data.health),
-            /* 18 */ data.healthN,
-            /* 19 */ data.maxHealthN,
-            /* 19 */ Math.round(65535 * data.shield),
-            /* 20 */ Math.round(255 * data.alpha),
+            /* 15 */ data.overrideBorderToBodyColor,
+            /* 16 */ data.drawFill,
+            /* 17 */ data.invuln,
+            /* 18 */ Math.ceil(65535 * data.health),
+            /* 19 */ data.healthN,
+            /* 20 */ data.maxHealthN,
+            /* 21 */ Math.round(65535 * data.shield),
+            /* 22 */ Math.round(255 * data.alpha),
         );
         if (data.type & 0x04) {
             output.push(
-                /* 21 */ data.name,
-                /* 22 */ data.score
+                /* 23 */ data.name,
+                /* 24 */ data.score
             );
         }
     }
