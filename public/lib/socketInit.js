@@ -334,6 +334,7 @@ const GunContainer = n => {
             alpha: 0,
             strokeWidth: 0,
             borderless: false,
+            overrideBorderToBodyColor: false,
             drawFill: true,
             drawAbove: false,
             length: 0,
@@ -564,7 +565,7 @@ const process = (z = {}) => {
             strokeWidth = get.next(),
             borderless = get.next(),
             drawFill = get.next(),
-            overrideBorderToBodyColor = get.next()
+            overrideBorderToBodyColor = get.next(),
             drawAbove = get.next(),
             length = get.next(),
             width = get.next(),
