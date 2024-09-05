@@ -465,13 +465,13 @@ var gameDraw = {
                 return real ? gameDraw.color.white : gameDraw.color.lgrey;
         }
     },
-    setColor: (context, givenColor) => {
+    setColor: (context, givenColor, borderMirrorsTankColor) => {
         if (settings.graphical.neon) {
             context.fillStyle = gameDraw.getColorDark(givenColor);
-            context.strokeStyle = givenColor;
+            context.strokeStyle = borderMirrorsTankColor ? gameDraw.getColorDark(givenColor) : givenColor;
         } else {
             context.fillStyle = givenColor;
-            context.strokeStyle = gameDraw.getColorDark(givenColor);
+            context.strokeStyle = borderMirrorsTankColor == true ? givenColor : gameDraw.getColorDark(givenColor);
         }
     }
 }
