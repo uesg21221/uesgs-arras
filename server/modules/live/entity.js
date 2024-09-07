@@ -1366,6 +1366,7 @@ class Entity extends EventEmitter {
                     for (let j = 0; j < type.length; j++) {
                         o.define(type[j]);
                         if (type.TURRET_DANGER) turretDanger = true;
+                        o.isTurret = true;
                     }
                     if (!turretDanger) o.define({ DANGER: 0 });
                     o.bindToMaster(def.POSITION, this);
