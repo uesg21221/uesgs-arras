@@ -173,6 +173,10 @@ class Gun extends EventEmitter {
         } else {
             this.defineBullet(bullet);
         }
+        // Set confinement
+        for (let k in this.master.confinement) {
+            bullet.confinement[k] = this.master.confinement[k];
+        }
         bullet.life();
 
         // Emit fire event

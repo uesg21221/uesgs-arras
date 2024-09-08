@@ -35,16 +35,16 @@ g.dreadv1Slow = {
 }
 g.dreadv1Drone = {
 	health: 1.1,
-	speed: 0.68,
-	maxSpeed: 0.68,
-	reload: 1.4,
+	speed: 0.77,
+	maxSpeed: 0.77,
+	reload: 1.65,
 	size: 1.2,
 	recoil: 0,
 }
 g.dreadv1Trap = {
 	range: 1.3,
 	shudder: 0.2,
-	speed: 1.05,
+	speed: 0.95,
 	reload: 2.8,
 	damage: 1.45,
 	health: 1.35,
