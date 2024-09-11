@@ -981,7 +981,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     if (fill) context.fill();
     context.globalAlpha = 1;
 }
-const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, lineWidthMult = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render, overrideBorderToBodyColor) => {
+const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, lineWidthMult = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
     let context = assignedContext ? assignedContext : ctx;
     let fade = turretInfo ? 1 : render.status.getFade(),
         drawSize = scale * ratio * instance.size,
@@ -1031,7 +1031,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         } else {
             facing = t.lerpedFacing;
         }
-        drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render, overrideBorderToBodyColor);
+        drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render,);
     }
     // Draw guns below us
     let positions = source.guns.getPositions(),
@@ -1111,7 +1111,7 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         } else {
             facing = t.lerpedFacing;
         }
-        drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render, overrideBorderToBodyColor);
+        drawEntity(baseColor, xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, 1, (drawSize / ratio / t.size) * t.sizeFactor, lineWidthMult, facing, turretsObeyRot, context, t, render);
     }
     if (assignedContext == false && context != ctx && context.canvas.width > 0 && context.canvas.height > 0) {
         ctx.save();
@@ -1492,7 +1492,7 @@ function drawEntities(px, py, ratio) {
         }
         x += global.screenWidth / 2;
         y += global.screenHeight / 2;
-        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1, 1, instance.render.f, instance.overrideBorderToBodyColor);
+        drawEntity(baseColor, x, y, instance, ratio, instance.id === gui.playerid || global.showInvisible ? instance.alpha ? instance.alpha * 0.75 + 0.25 : 0.25 : instance.alpha, 1, 1, instance.render.f);
     }
 
     //dont draw healthbars and chat messages in screenshot mode
