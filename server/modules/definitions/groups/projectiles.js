@@ -598,7 +598,6 @@ Class.shotTrapBox = {
 Class.pillbox = {
     PARENT: "setTrap",
     LABEL: "Pillbox",
-    CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     DIE_AT_RANGE: true,
     TURRETS: [
@@ -611,7 +610,6 @@ Class.pillbox = {
 Class.unsetPillbox = {
     PARENT: "unsetTrap",
     LABEL: "Pillbox",
-    CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     DIE_AT_RANGE: true,
     TURRETS: [
