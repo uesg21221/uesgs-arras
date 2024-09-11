@@ -34,8 +34,8 @@ global.TEAM_DREADNOUGHTS = -10;
 global.TEAM_ROOM = -100;
 global.TEAM_ENEMIES = -101;
 global.getSpawnableArea = team => ran.choose((team in room.spawnable && room.spawnable[team].length) ? room.spawnable[team] : room.spawnableDefault).randomInside();
-global.getTeamName = team => ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN"][-team - 1] || "An unknown team";
-global.getTeamColor = team => ([10, 11, 12, 15, 25, 26, 27, 28][-team - 1] || 3);
+global.getTeamName = team => ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN", , "DREADNOUGHTS"][-team - 1] ?? "An unknown team";
+global.getTeamColor = team => ([10, 11, 12, 15, 25, 26, 27, 28, , 4][-team - 1] ?? 3);
 global.isPlayerTeam = team => /*team < 0 && */team > -11;
 global.getWeakestTeam = () => {
     let teamcounts = {};
