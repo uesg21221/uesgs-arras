@@ -3212,3 +3212,91 @@ Class.AEMKShipBoss = {
         return e;
     })(),
 }
+const helenaMessages = [
+    "Burn that hard drive.",
+    "Nice turrets, losers.",
+    "You call that a gun?",
+    "ohgod she is coming",
+    "What color is your Ultimate Defense System?",
+    "You insignificant FUCKS.",
+    "I alone will be the end of this WORLD."
+]
+Class.helenaBossBaseAura = addAura(2, 2, 0)
+const helenaBossBase = {
+    PARENT: "genericTank",
+    COLOR: "trans",
+    UPGRADE_COLOR: "trans",
+    LABEL: "AV-512-F",
+    NAME: "Helena",
+    SHAPE: 3.5,
+    SIZE: 28,
+    VALUE: 1e9,
+    DANGER: 100,
+    GLOW: {
+        RADIUS: 9,
+        COLOR: "mirror",
+        ALPHA: 1,
+        RECURSION: 3
+    },
+    BODY: {
+        HEALTH: 4000,
+        DAMAGE: 20,
+        REGEN: 3 * base.REGEN,
+        SHIELD: 3 * base.SHIELD
+    },
+    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+    TURRETS: [
+        {
+            POSITION: [10, 0, 0, 0, 360, 0],
+            TYPE: "helenaBossBaseAura"
+        }
+    ]
+}
+Class.helenaDpProp = makeDeco(3.5, "trans")
+Class.helenaDpProp2 = makeDeco(3.5, "darkGrey")
+Class.helenaBossCPU = {
+    ...helenaBossBase,
+    LABEL: "Helena - CPU",
+    UPGRADE_TOOLTIP: "it hurts dont come near it",
+    PROPS: [
+        {
+            POSITION: { SIZE: 16, LAYER: 1, ANGLE: 360 },
+            TYPE: "helenaDpProp"
+        },
+        {
+            POSITION: { SIZE: 7.5, LAYER: 1, ANGLE: 360 },
+            TYPE: "helenaDpProp"
+        },
+        {
+            POSITION: { SIZE: 27.5, LAYER: 0, ANGLE: 360 },
+            TYPE: "helenaDpProp2"
+        }
+    ],
+    FACING_TYPE: ["spin", {speed: 0.12}],
+    ON: [
+        {
+            event: "fire",
+            handler: ({ body, gun }) => {
+                if (gun.identifier != 'onHandler') return;
+                setTimeout(() => {
+                    body.define('helenaBossHDD')
+                    sockets.broadcast('ohgod she is coming')
+                }, 10000)
+            }
+        }
+    ],
+    GUNS: [{
+        POSITION: {LENGTH: 0, WIDTH: 0},
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, {reload: 99}]),
+            TYPE: 'bullet',
+            AUTOFIRE: true,
+            IDENTIFIER: 'onHandler',
+            ALPHA: 0
+        }
+    }]
+}
+Class.helenaBossHDD = {
+    ...helenaBossBase,
+    LABEL: "Helena - HDD"
+}
