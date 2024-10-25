@@ -3254,6 +3254,19 @@ const helenaBossBase = {
 }
 Class.helenaDpProp = makeDeco(3.5, "trans")
 Class.helenaDpProp2 = makeDeco(3.5, "darkGrey")
+Class.helenaDpPropArmed = {
+    PARENT: "genericTank",
+    COLOR: "trans",
+    SHAPE: 3.5,
+    GUNS: weaponArray(
+        {
+            POSITION: [15, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                COLOR: "trans",
+            }
+        }, 3
+    )
+}
 Class.helenaBossCPU = {
     ...helenaBossBase,
     LABEL: "Helena - CPU",
@@ -3264,13 +3277,13 @@ Class.helenaBossCPU = {
             TYPE: "helenaDpProp"
         },
         {
-            POSITION: { SIZE: 7.5, LAYER: 1, ANGLE: 360 },
-            TYPE: "helenaDpProp"
+            POSITION: { SIZE: 7.5, LAYER: 1, ANGLE: 180 },
+            TYPE: "helenaDpPropArmed"
         },
         {
             POSITION: { SIZE: 27.5, LAYER: 0, ANGLE: 360 },
             TYPE: "helenaDpProp2"
-        }
+        },
     ],
     FACING_TYPE: ["spin", {speed: 0.12}],
     ON: [
