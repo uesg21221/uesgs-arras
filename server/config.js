@@ -41,7 +41,7 @@ module.exports = {
 
     // How long a chat message lasts in milliseconds.
     // Includes the fade-out period.
-    CHAT_MESSAGE_DURATION: 30_000,
+    CHAT_MESSAGE_DURATION: 10_000,
 
     // If you don't want your players to color their messages.
     // They get sanitized after addons interpret them, but before they're added to the chat message dictionary.
@@ -78,7 +78,7 @@ module.exports = {
     bulletSpawnOffset: -1,
 
     // General damage multiplier everytime damage is dealt.
-    DAMAGE_CONSTANT: 0.5,
+    DAMAGE_CONSTANT: 1,
 
     // General knockback multiplier everytime knockback is applied.
     KNOCKBACK_CONSTANT: 1.5,
