@@ -3212,23 +3212,14 @@ Class.AEMKShipBoss = {
         return e;
     })(),
 }
-const helenaMessages = [
-    "Burn that hard drive.",
-    "Nice turrets, losers.",
-    "You call that a gun?",
-    "ohgod she is coming",
-    "What color is your Ultimate Defense System?",
-    "You insignificant FUCKS.",
-    "I alone will be the end of this WORLD."
-]
 Class.helenaBossBaseAura = addAura(2, 2, 0)
 const helenaBossBase = {
     PARENT: "genericTank",
-    COLOR: "trans",
-    UPGRADE_COLOR: "trans",
+    COLOR: "crasher",
+    UPGRADE_COLOR: "crasher",
     LABEL: "AV-512-F",
     NAME: "Helena",
-    SHAPE: 3.5,
+    SHAPE: 3,
     SIZE: 28,
     VALUE: 1e9,
     DANGER: 100,
@@ -3239,8 +3230,8 @@ const helenaBossBase = {
         RECURSION: 3
     },
     BODY: {
-        HEALTH: 4000,
-        DAMAGE: 20,
+        HEALTH: 900,
+        DAMAGE: 9,
         REGEN: 3 * base.REGEN,
         SHIELD: 3 * base.SHIELD
     },
@@ -3252,64 +3243,224 @@ const helenaBossBase = {
         }
     ]
 }
-Class.helenaDpProp = makeDeco(3.5, "trans")
-Class.helenaDpProp2 = makeDeco(3.5, "darkGrey")
-Class.helenaDpPropArmed = {
+Class.helenaDpProp = makeDeco(3, "crasher")
+Class.helenaBossDpProp2 = makeDeco(3, "black")
+Class.helenaBossDpPropArmed = {
     PARENT: "genericTank",
-    COLOR: "trans",
-    SHAPE: 3.5,
+    COLOR: "crasher",
+    SHAPE: 3,
     GUNS: weaponArray(
         {
-            POSITION: [15, 8, 1, 0, 0, 0, 0],
+            POSITION: [15, 8, 1, 0, 0, 60, 0],
             PROPERTIES: {
-                COLOR: "trans",
+                COLOR: "crasher",
             }
         }, 3
     )
 }
-Class.helenaBossCPU = {
-    ...helenaBossBase,
-    LABEL: "Helena - CPU",
-    UPGRADE_TOOLTIP: "it hurts dont come near it",
+Class.helenaBossHDDProp = makeDeco(3, "darkGrey")
+Class.helenaBossHDDProp2 = makeDeco(3, "crasher")
+Class.helenaBossMinionProp = makeDeco(3.5, "black")
+Class.helenaBossHDDMinion = {
+    PARENT: "minion",
+    LABEL: "AV-16-X",
+    SHAPE: 3.5,
+    BODY: {
+        FOV: 0.5,
+        SPEED: 3,
+        ACCELERATION: 1,
+        HEALTH: 18,
+        SHIELD: 0,
+        DAMAGE: 1.2,
+        RESIST: 1,
+        PENETRATION: 1,
+        DENSITY: 0.4,
+    },
+    DRAW_HEALTH: true,
     PROPS: [
         {
-            POSITION: { SIZE: 16, LAYER: 1, ANGLE: 360 },
-            TYPE: "helenaDpProp"
+            POSITION: { SIZE: 30, LAYER: 0, ANGLE: 360 },
+            TYPE: "helenaBossMinionProp"
         },
         {
-            POSITION: { SIZE: 7.5, LAYER: 1, ANGLE: 180 },
-            TYPE: "helenaDpPropArmed"
+            POSITION: { SIZE: 25, LAYER: 0, ANGLE: 360 },
+            TYPE: ["helenaBossMinionProp", { COLOR: "white"}]
         },
         {
-            POSITION: { SIZE: 27.5, LAYER: 0, ANGLE: 360 },
-            TYPE: "helenaDpProp2"
-        },
+            POSITION: { SIZE: 11, LAYER: 1, ANGLE: 360 },
+            TYPE: "helenaBossMinionProp"
+        }
     ],
-    FACING_TYPE: ["spin", {speed: 0.12}],
+    GUNS: [
+        ...weaponArray([
+            {
+                POSITION: [10.5, 7.5, 1.3, 7, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.swarm, g.pounder, { reload: 1.15 }]),
+                    TYPE: "swarm",
+                    STAT_CALCULATOR: "swarm",
+                    COLOR: "white"
+                },
+            }
+        ], 3
+        )
+    ]
+}
+Class.helenaBossAuraBulletAura = addAura(0.333, 1.5, 0.3, "crasher")
+Class.helenaBossAuraBullet = {
+    PARENT: "bullet",
+    TURRETS: [
+        {
+            POSITION: [10, 0, 0, 0, 360, 1],
+            TYPE: "helenaBossAuraBulletAura"
+        }
+    ]
+}
+Class.helenaBossChip = {
+    PARENT: "drone",
+    LABEL: "Helenchip",
+    PROPS: [
+        {
+            POSITION: { SIZE: 10, LAYER: 1, ANGLE: 180 },
+            TYPE: ["helenaBossDpProp2", { COLOR: "crasher" }]
+        }
+    ]
+}
+Class.helenaBossBlock = {
+    PARENT: "unsetPillbox",
+    INDEPENDENT: true,
+    GUNS: weaponArray([{
+        POSITION: [4, 4, 1, 0, 0, 180, 0],
+        PROPERTIES: {
+          SHOOT_SETTINGS: combineStats([g.trap, g.lowPower]),
+          TYPE: ["trap", { PERSISTS_AFTER_DEATH: true }],
+          SHOOT_ON_DEATH: true,
+          STAT_CALCULATOR: "trap",
+            },
+        }], 5
+    ),
+}
+Class.helenaBoss = {
+    ...helenaBossBase,
+    UPGRADE_TOOLTIP: "A crasher that descended upon the Universe, from the Crasher Heavens.\nAlso known as the \"Prime Crasher\".\nMore stories are to be told about her...",
+    PROPS: [
+        {
+            POSITION: { SIZE: 25, LAYER: 0, ANGLE: 360 },
+            TYPE: "helenaBossDpProp2"
+        },
+        {
+            POSITION: { SIZE: 16, LAYER: 1, ANGLE: 360 },
+            TYPE: "helenaBossHDDProp"
+        },
+        {
+            POSITION: { SIZE: 12.5, LAYER: 1, ANGLE: 360 },
+            TYPE: "helenaBossHDDProp2"
+        },
+        {
+            POSITION: { SIZE: 7.75, LAYER: 1, ANGLE: 360 },
+            TYPE: "helenaBossHDDProp"
+        },
+        {
+            POSITION: { SIZE: 5.25, LAYER: 1, ANGLE: 360 },
+            TYPE: ["helenaBossHDDProp", { COLOR: "white" }]
+        },
+        {
+            POSITION: { SIZE: 3, LAYER: 1, ANGLE: 360 },
+            TYPE: "helenaBossHDDProp2"
+        }
+    ],
+    GUNS: [
+        ...weaponArray(
+            [{
+                POSITION: [7.5, 11.75, 1.33, 5.5, 0, 60, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.factory, { reload: 3 }]),
+                    TYPE: ["helenaBossHDDMinion", { INDEPENDENT: true }],
+                    COLOR: "black",
+                    MAX_CHILDREN: 2
+                },
+            },
+            {
+                POSITION: [8.5, 5, 1.25, 8.5, 0, 60, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.single, g.pounder, { reload: 0.7, size: 1.5 }]),
+				    TYPE: "helenaBossAuraBullet",
+                    ALPHA: 0
+                }
+            },
+            {
+                POSITION: [8.5, 5, 1.25, 8.5, 0, 60, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.machineGun]),
+				    TYPE: "bullet",
+                    COLOR: "white"
+                }
+            },
+            {
+                POSITION: [8.5, 5, 1.25, 8.5, 0, 60, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.twin, g.pounder, {reload: 1.15, health: 0.85, speed: 0.5, maxSpeed: 0.5, range: 0.25, size: 1.5}]),
+				    TYPE: "helenaBossBlock",
+				    STAT_CALCULATOR: "block",
+                    ALPHA: 0
+                }
+            },
+            {
+                POSITION: [8.5, 5, 1.25, 6.5, 5.5, 75, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pounder, {shudder: 0.6, health: 0.55, reload: 1.2, speed: 1, maxSpeed: 1, range: 0.33}]),
+				    TYPE: "trap",
+				    STAT_CALCULATOR: "trap",
+                    COLOR: "white"
+                }
+            },
+            {
+                POSITION: [8.5, 5, 1.25, 6.5, -5.5, -75, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, g.twin, g.pounder, {shudder: 0.6, health: 0.55, reload: 1.2, speed: 1, maxSpeed: 1, range: 0.33}]),
+				    TYPE: "trap",
+				    STAT_CALCULATOR: "trap",
+                    COLOR: "white"
+                }
+            },
+            {
+                POSITION: [8.5, 5, 1.25, 6.5, 5.5, 75, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.pounder, { size: 1.75, speed: 1.6, maxSpeed: 1.6 }]),
+				    TYPE: "helenaBossChip",
+                    STAT_CALCULATOR: "drone",
+                    ALPHA: 0,
+                    MAX_CHILDREN: 2
+                }
+            },
+            {
+                POSITION: [8.5, 5, 1.25, 6.5, -5.5, -75, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.pounder, { size: 1.75, speed: 1.6, maxSpeed: 1.6 }]),
+				    TYPE: "helenaBossChip",
+                    STAT_CALCULATOR: "drone",
+                    ALPHA: 0,
+                    MAX_CHILDREN: 2
+                }
+            },
+        ], 3
+        )
+    ],
     ON: [
         {
-            event: "fire",
-            handler: ({ body, gun }) => {
-                if (gun.identifier != 'onHandler') return;
-                setTimeout(() => {
-                    body.define('helenaBossHDD')
-                    sockets.broadcast('ohgod she is coming')
-                }, 10000)
+            event: "tick",
+            handler: ({ body }) => {
+                body.store.ticks ??= 0
+                body.store.ticks++
+                const spawnCrashers = body.store.ticks % 6 == 0 // a lot
+                const spawnSentries = body.store.ticks % 240 == 0 // ~8 seconds
+                const spawnLegions = body.store.ticks % 1300 == 0 // about every minute
+                const sentries = ["sentrySwarm", "sentryGun", "sentryTrap"]
+                const legions = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "guardian", "defender", "sprayerLegion"]
+                if (spawnCrashers) new Entity(body, body).define("crasher")
+                if (spawnSentries) new Entity(body, body).define(sentries[Math.floor(Math.random() * sentries.length)])
+                if (spawnLegions) new Entity(body, body).define(legions[Math.floor(Math.random() * legions.length)])
             }
-        }
-    ],
-    GUNS: [{
-        POSITION: {LENGTH: 0, WIDTH: 0},
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, {reload: 99}]),
-            TYPE: 'bullet',
-            AUTOFIRE: true,
-            IDENTIFIER: 'onHandler',
-            ALPHA: 0
-        }
-    }]
-}
-Class.helenaBossHDD = {
-    ...helenaBossBase,
-    LABEL: "Helena - HDD"
+        },
+    ]
 }
