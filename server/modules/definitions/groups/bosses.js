@@ -3385,14 +3385,6 @@ Class.helenaBoss = {
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.basic, g.single, g.pounder, { reload: 0.7, size: 1.5 }]),
 				    TYPE: "helenaBossAuraBullet",
-                    ALPHA: 0
-                }
-            },
-            {
-                POSITION: [8.5, 5, 1.25, 8.5, 0, 60, 0],
-                PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.basic, g.machineGun]),
-				    TYPE: "bullet",
                     COLOR: "white"
                 }
             },
