@@ -1,6 +1,7 @@
 const { combineStats, makeDeco, weaponArray, makeTurret } = require('../facilitators.js');
 const { base } = require('../constants.js');
 const g = require('../gunvals.js');
+require('../addons/arras/tanks.js'); // temp to make sure nothing breaks yet
 
 // Radial Auto Guns
 Class.autoTankGun = makeTurret({
