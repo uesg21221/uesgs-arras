@@ -6,9 +6,10 @@ Class.znpHlnAR_placeholder = { LABEL: "PLACEHOLDER", COLOR: "black", UPGRADE_COL
 // YES I KNOW THE LINE COUNT IS RIDICULOUS I'LL IMPROVE IT LATER OK - zenphia
 // return
 
-// Set this to false to disable desmos branch
+// Set this to FALSE to DISABLE desmos branch
 const desmosAllowed = true;
-//Set this to false to enable undertow
+
+//Set this to FALSE to ENABLE undertow
 const noUndertow = true;
 
 // Cannon Functions
