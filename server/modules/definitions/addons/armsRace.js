@@ -466,12 +466,12 @@ const clusterDeco = {
     TYPE: "genericEntity"
 }
 // gunvals
-g.less_reload = { reload: 1.5, recoil: 0.8, shudder: 1, size: 1, health: 1, damage: 1, pen: 1, speed: 1, maxSpeed: 1, range: 1, density: 1, spray: 1, resist: 1 },
-g.half_range = { reload: 1, recoil: 1, shudder: 1, size: 1, health: 1, damage: 1, pen: 1, speed: 1, maxSpeed: 1, range: 0.5, density: 1, spray: 1, resist: 1 },
-g.half_half_range = { reload: 1, recoil: 1, shudder: 1, size: 1, health: 1, damage: 1, pen: 1, speed: 1, maxSpeed: 1, range: 0.25, density: 1, spray: 1, resist: 1 },
-g.half_halfrange = { reload: 1, recoil: 1, shudder: 1, size: 1, health: 1, damage: 1, pen: 1, speed: 1, maxSpeed: 1, range: 0.2, density: 1, spray: 1, resist: 1 },
-g.half_half_half_range = { reload: 1, recoil: 1, shudder: 1, size: 1, health: 1, damage: 1, pen: 1, speed: 1, maxSpeed: 1, range: 0.1125, density: 1, spray: 1, resist: 1 }, 
-g.more_health = { reload: 1, recoil: 1, shudder: 1, size: 1, health: 1.15, damage: 1, pen: 1, speed: 1, maxSpeed: 1, range: 1, density: 1, spray: 1, resist: 1 },
+g.less_reload = { reload: 1.5, recoil: 0.8 },
+g.half_range = { range: 0.5 },
+g.half_half_range = { range: 0.25 },
+g.half_halfrange = { range: 0.2 },
+g.half_half_half_range = { range: 0.1125 }, 
+g.more_health = { health: 1.15 },
 
 // Missiles
 Class.znpHlnAR_autoMiniMissile = makeAuto('minimissile')
@@ -516,7 +516,7 @@ Class.znpHlnAR_pitcherMissile = {
 }
 Class.znpHlnAR_projectorMissile = makeMulti('minimissile', 2, "Missile")
 
-Class.weakminimissile = {
+Class.znpHlnAR_weakminimissile = {
     PARENT: "missile",
     GUNS: [
         {
@@ -530,7 +530,7 @@ Class.weakminimissile = {
         },
     ],
 }
-Class.clustermissile = {
+Class.znpHlnAR_clustermissile = {
    PARENT: 'missile',
    TURRETS: [...clusterDeco],
    GUNS: [ 
@@ -546,7 +546,7 @@ Class.clustermissile = {
         ...clusterGuns
      ],
 };
-Class.flockmissile = {
+Class.znpHlnAR_flockmissile = {
    PARENT: 'missile',
    TURRETS: [...clusterDeco],
    GUNS: [ {
@@ -561,7 +561,7 @@ Class.flockmissile = {
         ...clusterGuns
      ],
 };
-Class.neutronmissile = {
+Class.znpHlnAR_neutronmissile = {
    PARENT: 'missile',
    TURRETS: [...clusterDeco],
    GUNS: weaponArray([
@@ -575,7 +575,7 @@ Class.neutronmissile = {
          }, },
      ], 4)
 };
-Class.flankClusterMissile = {
+Class.znpHlnAR_flankClusterMissile = {
    PARENT: 'missile',
    TURRETS: [...clusterDeco],
    GUNS: [ {
@@ -598,7 +598,7 @@ Class.flankClusterMissile = {
          ...clusterGuns
      ],
 };
-Class.twinclustermissile = {
+Class.znpHlnAR_twinclustermissile = {
    PARENT: 'missile',
    TURRETS: [...clusterDeco],
    GUNS: [ {
@@ -619,7 +619,7 @@ Class.twinclustermissile = {
         ...clusterGuns
      ],
 };
-Class.hyperclustermissile = {
+Class.znpHlnAR_hyperclustermissile = {
    PARENT: 'missile',
    TURRETS: [
         ...clusterDeco,
@@ -650,12 +650,12 @@ Class.hyperclustermissile = {
         )
     ],
 };
-Class.miniClusterMissile = {
+Class.znpHlnAR_miniClusterMissile = {
    PARENT: 'missile',
    TURRETS: [...clusterDeco],
    GUNS: [...clusterGuns]
 };
-Class.autoClusterMissile = {
+Class.znpHlnAR_autoClusterMissile = {
    PARENT: 'missile',
    TURRETS: [
         ...clusterDeco,
@@ -675,7 +675,7 @@ Class.autoClusterMissile = {
         ...clusterGuns
      ],
 };
-Class.explodingSpinMissile = {
+Class.znpHlnAR_explodingSpinMissile = {
    PARENT: 'missile',
    CONTROLLERS: [["spin2", {speed: 0.1}]],
    TURRETS: [...clusterDeco],
@@ -710,7 +710,7 @@ Class.explodingSpinMissile = {
             }, }, 12)
      ],
 };
-Class.hiveClusterMissile = {
+Class.znpHlnAR_hiveClusterMissile = {
     PARENT: "missile",
     BODY: {
         RANGE: 90,
@@ -738,7 +738,7 @@ Class.hiveClusterMissile = {
         ...clusterGuns
     ],
 };
-Class.skimclustermissile = {
+Class.znpHlnAR_skimclustermissile = {
     PARENT: "bullet",
     LABEL: "Missile",
     INDEPENDENT: true,
@@ -767,7 +767,7 @@ Class.skimclustermissile = {
     ...clusterGuns
 ]
 };
-Class.rocketeerCluster = {
+Class.znpHlnAR_rocketeerCluster = {
     PARENT: "missile",
     TURRETS: [{
         POSITION: [9, 0, 0, 0, 0, 1],
@@ -4329,7 +4329,7 @@ Class.znpHlnAR_sealer = makeMulti("znpHlnAR_cog", 2, "Sealer")
 Class.znpHlnAR_setup = makeMulti("znpHlnAR_expeller", 2, "Setup")
 Class.znpHlnAR_doubleDual = makeMulti("dual", 2, "Double Dual")
 Class.znpHlnAR_doubleMusket = makeMulti("musket", 2, "Double Musket")
-Class.recursor = {
+Class.znpHlnAR_recursor = {
     PARENT: 'genericTank',
     LABEL: 'Recursor',
     BODY: {
@@ -4341,19 +4341,19 @@ Class.recursor = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.pounder, g.launcher, g.less_reload, g.half_half_range]),
-             TYPE: "clustermissile",
+             TYPE: "znpHlnAR_clustermissile",
              STAT_CALCULATOR: "sustained",
           }, }, {
           POSITION: [ 17, 13, 1.25, -4.5, 0, 0, 1/2, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.pounder, g.launcher, g.less_reload, g.half_half_range]),
-             TYPE: "clustermissile",
+             TYPE: "znpHlnAR_clustermissile",
              STAT_CALCULATOR: "sustained",
           }, }, 
       ],
  };
  
-Class.flock = {
+Class.znpHlnAR_flock = {
     PARENT: 'genericTank',
     LABEL: 'Flock',
     BODY: {
@@ -4365,7 +4365,7 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.half_half_range]),
-             TYPE: "flockmissile",
+             TYPE: "znpHlnAR_flockmissile",
              STAT_CALCULATOR: "sustained",
           }, }, {
           POSITION: [ 4, 5, -0.6, 13, -4, 0, 0, ],
@@ -4382,7 +4382,7 @@ Class.flock = {
           }, }, 
       ],
  };
- Class.bombard = {
+ Class.znpHlnAR_bombard = {
     PARENT: 'genericTank',
     LABEL: 'Bombard',
     BODY: {
@@ -4394,12 +4394,12 @@ Class.flock = {
           POSITION: [ 17, 15.5, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.launcher, g.less_reload, g.half_half_range, {size: 1.15, recoil: 0.5}]),
-             TYPE: "clustermissile",
+             TYPE: "znpHlnAR_clustermissile",
              STAT_CALCULATOR: "sustained",
           }, }, 
       ],
  };
- Class.neutron = {
+ Class.znpHlnAR_neutron = {
     PARENT: 'genericTank',
     LABEL: 'Neutron',
     BODY: {
@@ -4413,12 +4413,12 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.half_half_range]),
-             TYPE: "neutronmissile",
+             TYPE: "znpHlnAR_neutronmissile",
              STAT_CALCULATOR: "sustained",
           }, }, 
       ],
  };
- Class.shell = {
+ Class.znpHlnAR_shell = {
     PARENT: 'genericTank',
     LABEL: 'Shell',
     BODY: {
@@ -4434,12 +4434,12 @@ Class.flock = {
           POSITION: [ 15.7, 9.5, 1, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.half_half_range, {size: 1.4}]),
-             TYPE: "flankClusterMissile",
+             TYPE: "znpHlnAR_flankClusterMissile",
              STAT_CALCULATOR: "sustained",
           }, }, 
       ],
  };
- Class.mine = {
+ Class.znpHlnAR_mine = {
     PARENT: 'genericTank',
     LABEL: 'Mine',
     BODY: {
@@ -4451,7 +4451,7 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.half_half_range]),
-             TYPE: "twinclustermissile",
+             TYPE: "znpHlnAR_twinclustermissile",
              STAT_CALCULATOR: "sustained",
           }, }, {
           POSITION: [ 13, 5.15, 1, 0, -3.85, 0, 0, ],
@@ -4460,7 +4460,7 @@ Class.flock = {
           }, 
       ],
  };
- Class.ticker = {
+ Class.znpHlnAR_ticker = {
     PARENT: 'genericTank',
     LABEL: 'Ticker',
     BODY: {
@@ -4472,12 +4472,12 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.half_half_range]),
-             TYPE: "skimclustermissile",
+             TYPE: "znpHlnAR_skimclustermissile",
              STAT_CALCULATOR: "sustained",
           }, }, 
       ],
  };
- Class.molotov = {
+ Class.znpHlnAR_molotov = {
     PARENT: 'genericTank',
     LABEL: 'Molotov',
     BODY: {
@@ -4489,14 +4489,14 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.hive, g.half_range, {size: 1.5}]),
-             TYPE: "hiveClusterMissile",
+             TYPE: "znpHlnAR_hiveClusterMissile",
              STAT_CALCULATOR: "sustained",
           }, }, {
           POSITION: [ 17, 12, 1, 0, 0, 0, 0, ],
           }, 
       ],
  };
- Class.strafe = {
+ Class.znpHlnAR_strafe = {
     PARENT: 'genericTank',
     LABEL: 'Strafe',
     BODY: {
@@ -4518,12 +4518,12 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.half_half_range]),
-             TYPE: "clustermissile",
+             TYPE: "znpHlnAR_clustermissile",
              STAT_CALCULATOR: "sustained",
           }, }, 
       ],
  };
- Class.hypercluster = {
+ Class.znpHlnAR_hypercluster = {
     PARENT: 'genericTank',
     LABEL: 'Hypercluster',
     BODY: {
@@ -4537,7 +4537,7 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.half_half_range, g.more_health]),
-             TYPE: "hyperclustermissile",
+             TYPE: "znpHlnAR_hyperclustermissile",
              STAT_CALCULATOR: "sustained",
           }, }, {
           POSITION: [ 17, 7.3, 1.35, 0, 0, 0, 0, ],
@@ -4547,7 +4547,7 @@ Class.flock = {
           }, }, 
       ],
  };
- Class.gimmicker = {
+ Class.znpHlnAR_gimmicker = {
     PARENT: 'genericTank',
     LABEL: 'Gimmicker',
     BODY: {
@@ -4559,7 +4559,7 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.half_half_range]),
-             TYPE: "autoClusterMissile",
+             TYPE: "znpHlnAR_autoClusterMissile",
              STAT_CALCULATOR: "sustained",
           }, }, {
           POSITION: [ 3.7, 8, 1, 13.3, 0, 0, 0, ],
@@ -4582,12 +4582,12 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.less_reload, g.half_half_range]),
-             TYPE: "explodingSpinMissile",
+             TYPE: "znpHlnAR_explodingSpinMissile",
              STAT_CALCULATOR: "sustained",
           }, }, 
       ],
  };
- Class.firework = {
+ Class.znpHlnAR_firework = {
     PARENT: 'genericTank',
     LABEL: 'Firework',
     BODY: {
@@ -4599,13 +4599,13 @@ Class.flock = {
           POSITION: [ 17, 13, 1.25, 0, 0, 0, 0, ],
           PROPERTIES: {
              SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.rocketeer, g.less_reload, g.half_halfrange]),
-             TYPE: "rocketeerCluster", // DESTROY EVERYTHING!!!
+             TYPE: "znpHlnAR_rocketeerCluster",
              STAT_CALCULATOR: "sustained",
           }, }, 
       ],
  };
- Class.autoCluster = makeAuto("cluster", "Auto-Cluster")
- Class.nesterTank = makeOver('cluster', "Nester", {count: 1, independent: true, cycle: false})
+ Class.znpHlnAR_autoCluster = makeAuto("cluster", "Auto-Cluster")
+ Class.znpHlnAR_nesterTank = makeOver('cluster', "Nester", {count: 1, independent: true, cycle: false})
  
 
 // Tier 4 hybrid/over tanks
