@@ -3,7 +3,7 @@ const { base, statnames, dfltskl, smshskl } = require('../constants.js');
 require('./generics.js');
 const g = require('../gunvals.js');
 
-// Basic & starting upgrades
+// Basic tank for basic stuff
 Class.basic = {
     PARENT: "genericTank",
     LABEL: "Basic",
