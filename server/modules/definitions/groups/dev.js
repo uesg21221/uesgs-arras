@@ -1088,7 +1088,6 @@ testLayeredBoss.addLayer({turret: {
     TYPE: "crowbarTurret",
 }}, true);
 
-
 Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"]
     Class.tanks.UPGRADES_TIER_0 = ["basic", "dominators", "sanctuaries", "baseProtector", "arenaCloser", "mothership", "antiTankMachineGun"]
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]

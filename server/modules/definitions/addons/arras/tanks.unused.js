@@ -9,6 +9,7 @@ const addJumpSmasher = false
 const addLAMG = false
 const addLAT = false
 const addMaster = false
+const addTetraGunner = false
 const addVolute = false
 const addWhirlwind = false
 
@@ -1380,6 +1381,34 @@ Class.sidewinderOld = {
         },
     ],
 }
+Class.tetraGunner = {
+  PARENT: "genericTank",
+  LABEL: "Tetra Gunner",
+  DANGER: 7,
+   GUNS: weaponArray([
+    {
+      POSITION: [14, 3.5, 1, 0, 4, 0, 1 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.gunner, { speed: 1.2 }]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [14, 3.5, 1, 0, -4, 0, 2 / 3],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.gunner, { speed: 1.2 }]),
+        TYPE: "bullet",
+      },
+    },
+    {
+      POSITION: [18, 3.5, 1, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.gunner, { speed: 1.2 }]),
+        TYPE: "bullet",
+      },
+    }
+  ], 4)
+}
 Class.tripleFlail = {
     PARENT: "genericFlail",
     LABEL: "Triple Flail",
@@ -1659,6 +1688,7 @@ if (addMaster) {Class.basic.UPGRADES_TIER_3.push("master")}
 if (addLAT) {Class.basic.UPGRADES_TIER_3.push("literallyATank")}
 if (addJumpSmasher) {Class.smasher.UPGRADES_TIER_3.push("jumpSmasher")}
 if (addLAMG) {Class.minigun.UPGRADES_TIER_3.push("literallyAMachineGun")}
+if (addTetraGunner) {Class.gunner.UPGRADES_TIER_3.push("tetraGunner")}
 if (addVolute) {
 	Class.pounder.UPGRADES_TIER_2.push("volute")
 	Class.desmos.UPGRADES_TIER_2.push("volute")
