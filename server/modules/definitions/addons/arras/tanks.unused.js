@@ -11,6 +11,7 @@ const addLAT = false
 const addMaster = false
 const addTetraGunner = false
 const addVolute = false
+const addWeirdSpike = 0 // set to 1 to add weird spike to branch, set to 2 or higher to replace normal spike
 const addWhirlwind = false
 
 // menus
@@ -1516,6 +1517,33 @@ Class.vortex.GUNS.push(
         },
     }
 )
+Class.weirdSpikeBody1 = {
+    PARENT: "smasherBody",
+    FACING_TYPE: ["spin", { independent: true, speed: 0.08 }],
+    SHAPE: 3,
+}
+Class.weirdSpikeBody2 = {
+    PARENT: "weirdSpikeBody1",
+    FACING_TYPE: ["spin", { independent: true, speed: -0.05 }],
+}
+Class.weirdSpike = {
+    PARENT: "genericSmasher",
+    LABEL: "Weird Spike",
+    BODY: {
+        DAMAGE: 1.15 * base.DAMAGE,
+        DENSITY: 1.5 * base.DENSITY,
+    },
+    TURRETS: [
+        {
+            POSITION: [20.5, 0, 0, 0, 360, 0],
+            TYPE: "weirdSpikeBody1",
+        },
+        {
+            POSITION: [20.5, 0, 0, 180, 360, 0],
+            TYPE: "weirdSpikeBody2",
+        },
+    ],
+}
 Class.whirl3 = {
     PARENT: "genericTank",
     LABEL: "Whirl-3",
@@ -1682,6 +1710,7 @@ Class.literallyATank = {
     ]
 }
 
+// "i hope she brought lotsa spaghetti"
 if (addWhirlwind) {Class.basic.UPGRADES_TIER_1.push("whirlwind")}
 if (addFlail) {Class.basic.UPGRADES_TIER_1.push("flail")}
 if (addMaster) {Class.basic.UPGRADES_TIER_3.push("master")}
@@ -1692,6 +1721,11 @@ if (addTetraGunner) {Class.gunner.UPGRADES_TIER_3.push("tetraGunner")}
 if (addVolute) {
 	Class.pounder.UPGRADES_TIER_2.push("volute")
 	Class.desmos.UPGRADES_TIER_2.push("volute")
+}
+if (addWeirdSpike == 1) {Class.smasher.UPGRADES_TIER_3.push("weirdSpike")}
+if (addWeirdSpike >= 2) {
+	Class.smasher.UPGRADES_TIER_3.splice(1, 1, "weirdSpike")
+	Class.weirdSpike.LABEL = "Spike"
 }
 
 Class.flail.UPGRADES_TIER_2 = ["doubleFlail", "mace", "flangle"]
