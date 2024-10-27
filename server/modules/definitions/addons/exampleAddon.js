@@ -25,10 +25,10 @@ while (next.length && limit--) {
 	next = [];
 	for (let i = 0; i < current.length; i++) {
 
-		// Handle string definition references
+		// Handle string definition references.
 		let now = ensureIsClass(current[i]);
 
-		// Handles tanks with multiple ways to upgrade to them, like Overgunner.
+		// Handles tanks with multiple ways to upgrade to them, like diep.io's Streamliner.
 		if (alreadySeen.includes(now.LABEL)) continue;
 		alreadySeen.push(now.LABEL);
 

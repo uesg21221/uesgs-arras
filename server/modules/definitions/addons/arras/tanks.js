@@ -1,7 +1,12 @@
-const { combineStats, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRadialAuto, weaponArray } = require('../../facilitators.js');
+const { combineStats, menu, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRadialAuto, weaponArray } = require('../../facilitators.js');
 const { base, statnames, dfltskl, smshskl } = require('../../constants.js');
-require('../../groups/generics.js');
+require('../../groups/dev.js');
 const g = require('../../gunvals.js');
+
+// menus
+Class.arras = menu("Arras")
+Class.arras.UPGRADES_TIER_0 = []
+Class.addons.UPGRADES_TIER_0.push("arras")
 
 // move me!!!
 Class.cocciPart1 = {

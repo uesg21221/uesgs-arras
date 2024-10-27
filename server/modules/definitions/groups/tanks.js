@@ -48,3 +48,7 @@ Class.basic = {
         }
     ]
 }
+
+Class.basic.UPGRADES_TIER_1 = []
+    Class.basic.UPGRADES_TIER_2 = []
+        Class.basic.UPGRADES_TIER_3 = []
