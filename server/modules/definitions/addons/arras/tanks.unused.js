@@ -4,13 +4,13 @@ const g = require('../../gunvals.js');
 
 // SETUP
 // Configure what unused tanks to enable/disable.
-const addFlail = true
-const addJumpSmasher = true
-const addLAMG = true
-const addLAT = true
-const addMaster = true
-const addVolute = true
-const addWhirlwind = true
+const addFlail = false
+const addJumpSmasher = false
+const addLAMG = false
+const addLAT = false
+const addMaster = false
+const addVolute = false
+const addWhirlwind = false
 
 // menus
 Class.arras_unused = menu("Unused")
