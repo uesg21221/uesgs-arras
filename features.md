@@ -1,8 +1,8 @@
 # List of added, changed or removed features
 
-The list of all features that OSA/APS++ has included in the base template that are not in other templates.
+The list of all features that LibreTanks has included that are not in similar server templates.
 
-It includes all features up to the latest release version.
+It includes almost all features up to the latest release version.
 
 ## Added
 

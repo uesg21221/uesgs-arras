@@ -28,7 +28,7 @@ module.exports = {
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
     // NOTE: Files starting with `map_` are maps. files starting with `overlay_` are overlays that get added on.
-    // NOTE: These prefixes are only for categorisation, a room file would work the same regardless of its prefix. APS++ does nothing based on file name prefixes.
+    // NOTE: These prefixes are only for categorisation, a room file would work the same regardless of its prefix. LibreTanks does nothing based on file name prefixes.
     ROOM_SETUP: ['map_apspp_default'],
 
     // The dimensions of a single tile on the map.
@@ -51,7 +51,7 @@ module.exports = {
     DEFAULT_FILE: 'index.html',
 
     // Window name of the server terminal.
-    WINDOW_NAME: 'OSA Game Server Instance',
+    WINDOW_NAME: 'LibreTanks Server Instance',
 
     // Allows you to type and run javascript code in the terminal.
     REPL_WINDOW: false,
@@ -60,7 +60,7 @@ module.exports = {
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
                     +"Please report any bugs you encounter!\n"
-                    +"[NOTE: The arras tanks are being moved to their own addon and may not be present in future releases of this project.]",
+                    +"[NOTE: All arras-related content is being moved to its own addon and may not be present in future releases of this project.]",
     
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
@@ -224,7 +224,7 @@ module.exports = {
         amount: [4, 1], chance: 1, nameType: "castle",
         message: "A strange trembling...",
     },{
-        bosses: ["summoner", "eliteSkimmer", "nestKeeper"],
+        bosses: ["arras_summoner", "eliteSkimmer", "nestKeeper"],
         amount: [2, 2, 1], chance: 1, nameType: "a",
         message: "A strange trembling...",
     },{
