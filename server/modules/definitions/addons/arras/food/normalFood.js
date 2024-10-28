@@ -1,5 +1,5 @@
-const { makeRare } = require('../../facilitators.js')
-const { base, basePolygonDamage, basePolygonHealth } = require('../../constants.js')
+const { makeRare } = require('../../../facilitators.js')
+const { base, basePolygonDamage, basePolygonHealth } = require('../../../constants.js')
 
 // eggs
 Class.arras_egg = {

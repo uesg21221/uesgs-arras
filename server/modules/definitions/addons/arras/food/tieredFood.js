@@ -2,6 +2,8 @@ module.exports = ({ Config }) => {
 	// To enable this addon, simply comment out the line below.
 	return console.log('[tieredFood.js] Addon disabled by default');
 
+	// someone fix this addon so it doesnt pull from libretanks' default foods -zenphia
+
 	const disableCrashers = false;
 
 	// there is no `ENEMY_CAP`, so we are "reconstructing them"
