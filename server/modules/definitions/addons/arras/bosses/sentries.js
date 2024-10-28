@@ -1,5 +1,5 @@
-const { combineStats, makeAuto, skillSet, menu, weaponArray } = require('../../../facilitators.js')
-const { base, statnames } = require('../../../constants.js')
+const { combineStats, makeAuto, skillSet, menu } = require('../../../facilitators.js')
+const { base } = require('../../../constants.js')
 const g = require('../../../gunvals.js')
 
 Class.arras_sentries = menu("Sentries", "pink", 3.5)
@@ -12,7 +12,7 @@ Class.arras_sentries.PROPS = [
 Class.arras_bosses.UPGRADES_TIER_0.push("arras_sentries")
     Class.arras_sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap", "sentinelMinigun", "sentinelLauncher", "sentinelCrossbow"]
 
-// sentries
+// shared stats
 Class.arras_genericSentry = {
     PARENT: "genericTank",
     TYPE: "crasher",
@@ -54,6 +54,57 @@ Class.arras_genericSentry = {
     DRAW_HEALTH: true,
     GIVE_KILL_MESSAGE: true,
 }
+Class.arras_genericShinySentry = {
+    PARENT: "arras_genericSentry",
+    COLOR: "lightGreen",
+    UPGRADE_COLOR: "lightGreen",
+    DANGER: 4,
+    SIZE: 12,
+    VALUE: 50000,
+    SHAPE: 3,
+    BODY: {
+        HEALTH: 0.6 * base.HEALTH
+    },
+}
+Class.arras_genericSentinel = {
+    PARENT: "genericTank",
+    TYPE: "crasher",
+    LABEL: "Sentinel",
+    DANGER: 7,
+    COLOR: "purple",
+    SHAPE: 5,
+    SIZE: 13,
+    SKILL: skillSet({
+        rld: 0.7, //reload
+        dam: 0.45, //bullet damage
+        pen: 0.6, //bullet penetration
+        str: 0.6, //bullet health
+        atk: 0.5, //bullet speed
+        spd: 0.6, //body damage
+        hlt: 0.85, //max health
+        shi: 0.45, //shield capacity
+        rgn: 0.35, //shield regeneration
+        mob: 0, //movement speed
+    }),
+    VALUE: 26668,
+    VARIES_IN_SIZE: true,
+    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal", "minion"],
+    AI: { NO_LEAD: true },
+    BODY: {
+        FOV: 0.8,
+        ACCEL: 0.003,
+        DAMAGE: base.DAMAGE * 2.1,
+        SPEED: base.SPEED * 0.4,
+        HEALTH: base.HEALTH * 2.1,
+        SHIELD: base.SHIELD * 2.1,
+        REGEN: base.REGEN * 0.15,
+    },
+    MOTION_TYPE: "motor",
+    FACING_TYPE: "smoothToTarget",
+    HITS_OWN_TYPE: "hard",
+}
+
+// sentries
 Class.sentrySwarm = {
     PARENT: "arras_genericSentry",
     UPGRADE_LABEL: "Swarm Sentry",
@@ -116,18 +167,6 @@ Class.sentryTrapMinion = {
 }
 
 // shiny sentries
-Class.arras_genericShinySentry = {
-    PARENT: "arras_genericSentry",
-    COLOR: "lightGreen",
-    UPGRADE_COLOR: "lightGreen",
-    DANGER: 4,
-    SIZE: 12,
-    VALUE: 50000,
-    SHAPE: 3,
-    BODY: {
-        HEALTH: 0.6 * base.HEALTH
-    },
-}
 Class.shinySentrySwarm = {
     PARENT: "arras_genericShinySentry",
     UPGRADE_LABEL: "Shiny Swarm Sentry",
@@ -155,43 +194,6 @@ Class.shinySentryTrap = makeAuto("arras_genericShinySentry", "Sentry", {
 Class.shinySentryTrap.UPGRADE_LABEL = "Shiny Trap Sentry";
 
 // sentinels
-Class.arras_genericSentinel = {
-    PARENT: "genericTank",
-    TYPE: "crasher",
-    LABEL: "Sentinel",
-    DANGER: 7,
-    COLOR: "purple",
-    SHAPE: 5,
-    SIZE: 13,
-    SKILL: skillSet({
-        rld: 0.7, //reload
-        dam: 0.45, //bullet damage
-        pen: 0.6, //bullet penetration
-        str: 0.6, //bullet health
-        atk: 0.5, //bullet speed
-        spd: 0.6, //body damage
-        hlt: 0.85, //max health
-        shi: 0.45, //shield capacity
-        rgn: 0.35, //shield regeneration
-        mob: 0, //movement speed
-    }),
-    VALUE: 26668,
-    VARIES_IN_SIZE: true,
-    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal", "minion"],
-    AI: { NO_LEAD: true },
-    BODY: {
-        FOV: 0.8,
-        ACCEL: 0.003,
-        DAMAGE: base.DAMAGE * 2.1,
-        SPEED: base.SPEED * 0.4,
-        HEALTH: base.HEALTH * 2.1,
-        SHIELD: base.SHIELD * 2.1,
-        REGEN: base.REGEN * 0.15,
-    },
-    MOTION_TYPE: "motor",
-    FACING_TYPE: "smoothToTarget",
-    HITS_OWN_TYPE: "hard",
-}
 Class.sentinelLauncher = {
     PARENT: "arras_genericSentinel",
     UPGRADE_LABEL: "Missile Sentinel",
