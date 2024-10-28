@@ -3,7 +3,7 @@ const { base, statnames, dfltskl, smshskl } = require('../../constants.js');
 const g = require('../../gunvals.js');
 
 // SETUP
-// Configure what unused tanks to enable/disable.
+// Quickly configure what unused tanks to enable/disable.
 const addAutoTrapper = false
 const addBlunderbuss = 0 // set to 1 to add blunderbuss to rifle branch, set to 2 to replace crossbow
 const addFlail = false

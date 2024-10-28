@@ -541,18 +541,6 @@ Class.legionaryCrasher = {
     ],
 }
 
-// STRANGE BOSSES
-Class.eliteSkimmer = {
-    PARENT: "elite",
-    LABEL: "Elite Skimmer",
-    COLOR: "orange",
-    UPGRADE_COLOR: "orange",
-    TURRETS: weaponArray({
-            POSITION: [15, 5, 0, 60, 170, 0],
-            TYPE: "skimmerTurret",
-        }, 3)
-};
-
 // Nesters
 Class.nestKeeper = {
     PARENT: "miniboss",
@@ -3237,7 +3225,7 @@ Class.helenaBoss = {
                 const spawnSentries = body.store.ticks % 240 == 0 // ~8 seconds
                 const spawnLegions = body.store.ticks % 1300 == 0 // about every minute
                 const sentries = ["sentrySwarm", "sentryGun", "sentryTrap"]
-                const legions = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "guardian", "defender", "sprayerLegion"]
+                const legions = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "arras_eliteSkimmer", "guardian", "defender", "sprayerLegion"]
                 if (spawnCrashers) new Entity(body, body).define("crasher")
                 if (spawnSentries) new Entity(body, body).define(sentries[Math.floor(Math.random() * sentries.length)])
                 if (spawnLegions) new Entity(body, body).define(legions[Math.floor(Math.random() * legions.length)])

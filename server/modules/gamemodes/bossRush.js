@@ -7,7 +7,7 @@ let calculatePoints = wave => 5 + wave * 3;
 
 let oldGroups = {
     elites: [ "eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner" ],
-    strange: [ "arras_summoner", "eliteSkimmer", "nestKeeper", "roguePalisade" ],
+    strange: [ "arras_summoner", "arras_eliteSkimmer", "nestKeeper", "roguePalisade" ],
     celestials: [ "paladin", "freyja", "zaphkiel", "nyx", "theia" ],
     eternals: [ "legionaryCrasher", "kronos", "odin" ],
 };
@@ -68,7 +68,7 @@ class BossRush {
             [  2, "eliteSpawner"],
             [  2, "eliteTrapGuard"],
             [  2, "eliteSpinner"],
-            [  2, "eliteSkimmer"],
+            [  2, "arras_eliteSkimmer"],
 
             //nesters
             [  3, "nestKeeper"],
