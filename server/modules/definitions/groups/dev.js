@@ -208,15 +208,15 @@ function connectMatrix(matrix, matrix2Entrance) {
 }
 let generatorMatrix = [
     [ "egg"           , "gem"                , "jewel"                  , "crasher"             , "arras_genericSentry"  , "arras_genericShinySentry", "EggRelic"      , "sphere"       ],
-    [ "square"        , "shinySquare"        , "legendarySquare"        , "shadowSquare"        , "rainbowSquare"        , "transSquare"        , "SquareRelic"        , "cube"         ],
     [ "triangle"      , "shinyTriangle"      , "legendaryTriangle"      , "shadowTriangle"      , "rainbowTriangle"      , "transTriangle"      , "TriangleRelic"      , "tetrahedron"  ],
+    [ "square"        , "shinySquare"        , "legendarySquare"        , "shadowSquare"        , "rainbowSquare"        , "transSquare"        , "SquareRelic"        , "cube"         ],
     [ "pentagon"      , "shinyPentagon"      , "legendaryPentagon"      , "shadowPentagon"      , "rainbowPentagon"      , "transPentagon"      , "PentagonRelic"      , "octahedron"   ],
     [ "betaPentagon"  , "shinyBetaPentagon"  , "legendaryBetaPentagon"  , "shadowBetaPentagon"  , "rainbowBetaPentagon"  , "transBetaPentagon"  , "BetaPentagonRelic"  , "dodecahedron" ],
     [ "alphaPentagon" , "shinyAlphaPentagon" , "legendaryAlphaPentagon" , "shadowAlphaPentagon" , "rainbowAlphaPentagon" , "transAlphaPentagon" , "AlphaPentagonRelic" , "icosahedron"  ],
     [ "hexagon"       , "shinyHexagon"       , "legendaryHexagon"       , "shadowHexagon"       , "rainbowHexagon"       , "transHexagon"       , "HexagonRelic"       , "tesseract"    ],
 ],
 gemRelicMatrix = [];
-for (let tier of [ "", "Egg", "Square", "Triangle", "Pentagon", "BetaPentagon", "AlphaPentagon", "Hexagon" ]) {
+for (let tier of [ "", "Egg", "Triangle", "Square", "Pentagon", "BetaPentagon", "AlphaPentagon", "Hexagon" ]) {
     let row = [];
     for (let gem of [ "Power", "Space", "Reality", "Soul", "Time", "Mind" ]) {
         row.push(gem + (tier ? tier + 'Relic' : 'Gem'));
