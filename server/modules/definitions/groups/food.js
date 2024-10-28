@@ -66,14 +66,14 @@ Class.shadowEgg = makeRare("egg", 2);
 Class.rainbowEgg = makeRare("egg", 3);
 Class.transEgg = makeRare("egg", 4); //ironic
 
-// SQUARES
-Class.square = {
+// TRIANGLES
+Class.triangle = {
     PARENT: "food",
-    LABEL: "Square",
+    LABEL: "Triangle",
     VALUE: 30,
-    SHAPE: 4,
-    SIZE: 14,
-    COLOR: "gold",
+    SHAPE: 3,
+    SIZE: 8,
+    COLOR: "orange",
     BODY: {
         DAMAGE: basePolygonDamage,
         DENSITY: 4,
@@ -82,22 +82,22 @@ Class.square = {
         ACCELERATION: 0.0075
     },
     DRAW_HEALTH: true,
-    INTANGIBLE: false,
+    INTANGIBLE: false
 };
-Class.shinySquare = makeRare("square", 0);
-Class.legendarySquare = makeRare("square", 1);
-Class.shadowSquare = makeRare("square", 2);
-Class.rainbowSquare = makeRare("square", 3);
-Class.transSquare = makeRare("square", 4);
+Class.shinyTriangle = makeRare("triangle", 0);
+Class.legendaryTriangle = makeRare("triangle", 1);
+Class.shadowTriangle = makeRare("triangle", 2);
+Class.rainbowTriangle = makeRare("triangle", 3);
+Class.transTriangle = makeRare("triangle", 4);
 
-// TRIANGLES
-Class.triangle = {
+// SQUARES
+Class.square = {
     PARENT: "food",
-    LABEL: "Triangle",
+    LABEL: "Square",
     VALUE: 120,
-    SHAPE: 3,
-    SIZE: 10,
-    COLOR: "orange",
+    SHAPE: 4,
+    SIZE: 18,
+    COLOR: "gold",
     BODY: {
         DAMAGE: basePolygonDamage,
         DENSITY: 6,
@@ -108,11 +108,11 @@ Class.triangle = {
     },
     DRAW_HEALTH: true,
 };
-Class.shinyTriangle = makeRare("triangle", 0);
-Class.legendaryTriangle = makeRare("triangle", 1);
-Class.shadowTriangle = makeRare("triangle", 2);
-Class.rainbowTriangle = makeRare("triangle", 3);
-Class.transTriangle = makeRare("triangle", 4);
+Class.shinySquare = makeRare("square", 0);
+Class.legendarySquare = makeRare("square", 1);
+Class.shadowSquare = makeRare("square", 2);
+Class.rainbowSquare = makeRare("square", 3);
+Class.transSquare = makeRare("square", 4);
 
 // PENTAGONS
 Class.pentagon = {

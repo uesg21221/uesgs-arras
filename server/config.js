@@ -123,10 +123,10 @@ module.exports = {
     BOTS: 0,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
-    BOT_XP: 125,
+    BOT_XP: 0,
 
     // How much XP player-bots will receive when first created.
-    BOT_START_XP: 0,
+    BOT_START_XP: 26301,
 
     // The chances of a player-bot upgrading a specific skill when skill upgrades are available.
     BOT_SKILL_UPGRADE_CHANCES: [ 1, 1, 3, 4, 4, 4, 4, 2, 1, 1],
@@ -176,22 +176,22 @@ module.exports = {
     // The possible food types that can spawn.
     FOOD_TYPES: [
         [2000, [
-            [1024, 'egg'], [256, 'square'], [64, 'triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
+            [1024, 'egg'], [256, 'triangle'], [64, 'square'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
         ]],
         [1, [
-            [3125, 'gem'], [625, 'shinySquare'], [125, 'shinyTriangle'], [25, 'shinyPentagon'], [5, 'shinyBetaPentagon'], [1, 'shinyAlphaPentagon']
+            [3125, 'gem'], [625, 'shinyTriangle'], [125, 'shinySquare'], [25, 'shinyPentagon'], [5, 'shinyBetaPentagon'], [1, 'shinyAlphaPentagon']
         ]],
         [0.1, [
-            [6836, 'jewel'], [1296, 'legendarySquare'], [216, 'legendaryTriangle'], [36, 'legendaryPentagon'], [6, 'legendaryBetaPentagon'], [1, 'legendaryAlphaPentagon']
+            [6836, 'jewel'], [1296, 'legendaryTriangle'], [216, 'legendarySquare'], [36, 'legendaryPentagon'], [6, 'legendaryBetaPentagon'], [1, 'legendaryAlphaPentagon']
         ]],
         [0.005, [
-            /*[16807, 'egg'], */[2401, 'shadowSquare'], [343, 'shadowTriangle'], [49, 'shadowPentagon'], [7, 'shadowBetaPentagon'], [1, 'shadowAlphaPentagon']
+            /*[16807, 'egg'], */[2401, 'shadowTriangle'], [343, 'shadowSquare'], [49, 'shadowPentagon'], [7, 'shadowBetaPentagon'], [1, 'shadowAlphaPentagon']
         ]],
         [0.001, [
-            /*[65536, 'egg'], */[8192, 'rainbowSquare'], [1024, 'rainbowTriangle'], [64, 'rainbowPentagon'], [8, 'rainbowBetaPentagon'], [1, 'rainbowAlphaPentagon']
+            /*[65536, 'egg'], */[8192, 'rainbowTriangle'], [1024, 'rainbowSquare'], [64, 'rainbowPentagon'], [8, 'rainbowBetaPentagon'], [1, 'rainbowAlphaPentagon']
         ]],
         [0.0005, [
-            [59549, 'egg'], [6561, 'transSquare'], [729, 'transTriangle'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
+            [59549, 'egg'], [6561, 'transTriangle'], [729, 'transSquare'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
         ]],
         [0.0001, [
             [100000, 'sphere'], [10000, 'cube'], [1000, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']

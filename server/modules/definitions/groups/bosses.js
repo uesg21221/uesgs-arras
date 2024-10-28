@@ -3131,7 +3131,7 @@ Class.helenaBossChip = {
 Class.helenaBoss = {
     ...helenaBossBase,
     UPGRADE_TOOLTIP: "A crasher that descended upon the Universe, from the Crasher Heavens.\nAlso known as the \"Prime Crasher\".\nMore stories are to be told about her...",
-    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal", ["minion", { orbit: 240 }]],
+    CONTROLLERS: ["nearestDifferentMaster", "mapTargetToGoal", "minion"],
     PROPS: [
         {
             POSITION: { SIZE: 25, LAYER: 0, ANGLE: 360 },
@@ -3164,7 +3164,7 @@ Class.helenaBoss = {
                 POSITION: [7.5, 11.75, 1.33, 5.5, 0, 0, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.factory, { reload: 3, health: 2 }]),
-                    TYPE: ["helenaBossHDDMinion", { INDEPENDENT: true }],
+                    TYPE: ["helenaBossHDDMinion", { INDEPENDENT: true, AI: {skynet: true}}],
                     COLOR: "black",
                     MAX_CHILDREN: 2
                 },
