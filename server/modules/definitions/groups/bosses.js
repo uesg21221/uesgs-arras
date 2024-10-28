@@ -3037,7 +3037,7 @@ const helenaBossBase = {
     DANGER: 100,
     GLOW: {
         RADIUS: 9,
-        COLOR: "mirror",
+        COLOR: "crasher",
         ALPHA: 1,
         RECURSION: 3
     },
