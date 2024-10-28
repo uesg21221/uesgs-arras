@@ -114,6 +114,45 @@ Class.arras_shadowTriangle = makeRare("triangle", 2)
 Class.arras_rainbowTriangle = makeRare("triangle", 3)
 Class.arras_transTriangle = makeRare("triangle", 4)
 
+// 3d
+Class.arras_cube = {
+    PARENT: "food",
+    LABEL: "The Cube",
+    VALUE: 2e7,
+    SIZE: 10,
+    COLOR: "egg",
+    SHAPE: "M -0.065 0.037 L -0.866 -0.425 L -0.866 0.5 L -0.065 0.962 Z M 0.065 0.037 L 0.065 0.962 L 0.866 0.5 L 0.866 -0.425 Z M 0 -0.075 L 0.801 -0.537 L 0 -1 L -0.801 -0.537 Z",
+    BODY: {
+        DAMAGE: 4.8,
+        DENSITY: 20,
+        HEALTH: 40,
+        RESIST: 1.25,
+        PENETRATION: 17.5,
+        ACCELERATION: 0.002
+    },
+    DRAW_HEALTH: true,
+    INTANGIBLE: false,
+    GIVE_KILL_MESSAGE: true,
+};
+Class.arras_tetrahedron = {
+    PARENT: "food",
+    LABEL: "The Tetrahedron",
+    VALUE: 3e7,
+    SIZE: 12,
+    COLOR: "egg",
+    SHAPE: "M -0.065 0.037 L -0.934 -0.477 L -0.054 1.047 Z M 0.065 0.037 L 0.054 1.047 L 0.934 -0.477 Z M 0 -0.075 L 0.88 -0.57 L -0.88 -0.57 Z",
+    BODY: {
+        DAMAGE: 6,
+        DENSITY: 23,
+        HEALTH: 50,
+        RESIST: 1.25,
+        PENETRATION: 22.5,
+        ACCELERATION: 0.002
+    },
+    DRAW_HEALTH: true,
+    GIVE_KILL_MESSAGE: true
+};
+
 Config.FOOD_TYPES = [
         [2000, [
             [1024, 'arras_egg'], [256, 'arras_square'], [64, 'arras_triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
@@ -134,6 +173,6 @@ Config.FOOD_TYPES = [
             [59549, 'arras_egg'], [6561, 'arras_transSquare'], [729, 'arras_transTriangle'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
         ]],
         [0.0001, [
-            [100000, 'sphere'], [10000, 'cube'], [1000, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
+            [100000, 'sphere'], [10000, 'arras_cube'], [1000, 'arras_tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
         ]]
     ]

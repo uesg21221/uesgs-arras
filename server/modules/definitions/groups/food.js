@@ -4,7 +4,7 @@ const { makeRelic, makeRare, makeCrasher, makeLaby } = require('../facilitators.
 // EGGS
 Class.egg = {
     PARENT: "food",
-    LABEL: "Egg",
+    LABEL: "Circle",
     VALUE: 10,
     SHAPE: 0,
     SIZE: 4.5,
@@ -257,30 +257,11 @@ Class.sphere = {
         TYPE: ["egg", { COLOR: { BRIGHTNESS_SHIFT: 9 }, BORDERLESS: true }]
     }]
 };
-Class.cube = {
-    PARENT: "food",
-    LABEL: "The Cube",
-    VALUE: 2e7,
-    SIZE: 10,
-    COLOR: "egg",
-    SHAPE: "M -0.065 0.037 L -0.866 -0.425 L -0.866 0.5 L -0.065 0.962 Z M 0.065 0.037 L 0.065 0.962 L 0.866 0.5 L 0.866 -0.425 Z M 0 -0.075 L 0.801 -0.537 L 0 -1 L -0.801 -0.537 Z",
-    BODY: {
-        DAMAGE: 4.8,
-        DENSITY: 20,
-        HEALTH: 40,
-        RESIST: 1.25,
-        PENETRATION: 17.5,
-        ACCELERATION: 0.002
-    },
-    DRAW_HEALTH: true,
-    INTANGIBLE: false,
-    GIVE_KILL_MESSAGE: true,
-};
 Class.tetrahedron = {
     PARENT: "food",
     LABEL: "The Tetrahedron",
-    VALUE: 3e7,
-    SIZE: 12,
+    VALUE: 2e7,
+    SIZE: 10,
     COLOR: "egg",
     SHAPE: "M -0.065 0.037 L -0.934 -0.477 L -0.054 1.047 Z M 0.065 0.037 L 0.054 1.047 L 0.934 -0.477 Z M 0 -0.075 L 0.88 -0.57 L -0.88 -0.57 Z",
     BODY: {
@@ -289,6 +270,25 @@ Class.tetrahedron = {
         HEALTH: 50,
         RESIST: 1.25,
         PENETRATION: 22.5,
+        ACCELERATION: 0.002
+    },
+    DRAW_HEALTH: true,
+    INTANGIBLE: false,
+    GIVE_KILL_MESSAGE: true,
+};
+Class.cube = {
+    PARENT: "food",
+    LABEL: "The Cube",
+    VALUE: 3e7,
+    SIZE: 12,
+    COLOR: "egg",
+    SHAPE: "M -0.065 0.037 L -0.866 -0.425 L -0.866 0.5 L -0.065 0.962 Z M 0.065 0.037 L 0.065 0.962 L 0.866 0.5 L 0.866 -0.425 Z M 0 -0.075 L 0.801 -0.537 L 0 -1 L -0.801 -0.537 Z",
+    BODY: {
+        DAMAGE: 4.8,
+        DENSITY: 20,
+        HEALTH: 40,
+        RESIST: 1.25,
+        PENETRATION: 17.5,
         ACCELERATION: 0.002
     },
     DRAW_HEALTH: true,
