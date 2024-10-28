@@ -194,7 +194,7 @@ module.exports = {
             [59549, 'egg'], [6561, 'transTriangle'], [729, 'transSquare'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
         ]],
         [0.0001, [
-            [100000, 'sphere'], [10000, 'cube'], [1000, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
+            [100000, 'sphere'], [10000, 'tetrahedron'], [1000, 'cube'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
         ]]
     ],
 
