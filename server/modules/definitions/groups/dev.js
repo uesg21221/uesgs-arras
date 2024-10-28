@@ -124,13 +124,6 @@ Class.generatorBase = {
 
 Class.bosses = menu("Bosses")
 Class.bosses.REROOT_UPGRADE_TREE = "bosses"
-Class.sentries = menu("Sentries", "pink", 3.5)
-Class.sentries.PROPS = [
-    {
-        POSITION: [9, 0, 0, 0, 360, 1],
-        TYPE: "genericEntity"
-    }
-]
 Class.elites = menu("Elites", "pink", 3.5)
 Class.nesters = menu("Nesters", "purple", 5.5)
 Class.rogues = menu("Rogues", "darkGrey", 6)
@@ -221,7 +214,7 @@ function connectMatrix(matrix, matrix2Entrance) {
     }
 }
 let generatorMatrix = [
-    [ "egg"           , "gem"                , "jewel"                  , "crasher"             , "sentry"               , "shinySentry"        , "EggRelic"           , "sphere"       ],
+    [ "egg"           , "gem"                , "jewel"                  , "crasher"             , "arras_genericSentry"  , "arras_genericShinySentry", "EggRelic"      , "sphere"       ],
     [ "square"        , "shinySquare"        , "legendarySquare"        , "shadowSquare"        , "rainbowSquare"        , "transSquare"        , "SquareRelic"        , "cube"         ],
     [ "triangle"      , "shinyTriangle"      , "legendaryTriangle"      , "shadowTriangle"      , "rainbowTriangle"      , "transTriangle"      , "TriangleRelic"      , "tetrahedron"  ],
     [ "pentagon"      , "shinyPentagon"      , "legendaryPentagon"      , "shadowPentagon"      , "rainbowPentagon"      , "transPentagon"      , "PentagonRelic"      , "octahedron"   ],
@@ -1092,8 +1085,7 @@ Class.developer.UPGRADES_TIER_0 = ["basic", "addons", "spectator", "levels", "te
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"]
 
-    Class.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses"]
-        Class.sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap", "sentinelMinigun", "sentinelLauncher", "sentinelCrossbow"]
+    Class.bosses.UPGRADES_TIER_0 = ["elites", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses"]
         Class.elites.UPGRADES_TIER_0 = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "legionaryCrasher", "guardian", "defender", "sprayerLegion"]
         Class.nesters.UPGRADES_TIER_0 = ["nestKeeper", "nestWarden", "nestGuardian"]
         Class.rogues.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "julius", "genghis", "napoleon"]
