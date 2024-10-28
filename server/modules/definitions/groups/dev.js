@@ -62,7 +62,7 @@ Class.spectator = {
     ARENA_CLOSER: true,
     IS_IMMUNE_TO_TILES: true,
     TOOLTIP: "Left click to teleport, Right click above or below the screen to change FOV",
-    SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 255],
+    SKILL_CAP: [0, 0, 0, 0, 0, 0, 0, 0, 0, 15],
     BODY: {
         PUSHABILITY: 0,
         SPEED: 5,
@@ -132,7 +132,6 @@ Class.sentries.PROPS = [
     }
 ]
 Class.elites = menu("Elites", "pink", 3.5)
-Class.mysticals = menu("Mysticals", "gold", 4)
 Class.nesters = menu("Nesters", "purple", 5.5)
 Class.rogues = menu("Rogues", "darkGrey", 6)
 Class.rammers = menu("Rammers", "aqua")
@@ -148,7 +147,7 @@ Class.eternals = menu("Eternals", "veryLightGrey", 11)
 Class.devBosses = menu("Developers", "lightGreen", 4)
 Class.devBosses.UPGRADE_COLOR = "rainbow"
 
-Class.tanks = menu("Tanks")
+Class.specialTanks = menu("Special Tanks")
 Class.dominators = menu("Dominators")
 Class.dominators.PROPS = [
     {
@@ -1070,7 +1069,7 @@ Class.teams.UPGRADES_TIER_0.push('Team' + TEAM_DREADNOUGHTS, 'Team' + TEAM_ROOM,
 
 Class.testing = menu("Testing")
 
-Class.addons = menu("Addon Entities")
+Class.addons = menu("Addon Content")
 Class.addons.UPGRADES_TIER_0 = []
 
 let testLayeredBoss = new LayeredBoss("testLayeredBoss", "Test Layered Boss", "terrestrial", 7, 3, "terrestrialTrapTurret", 5, 7, {SPEED: 10});
@@ -1088,15 +1087,14 @@ testLayeredBoss.addLayer({turret: {
     TYPE: "crowbarTurret",
 }}, true);
 
-Class.developer.UPGRADES_TIER_0 = ["tanks", "bosses", "spectator", "levels", "teams", "eggGenerator", "testing", "addons"]
-    Class.tanks.UPGRADES_TIER_0 = ["basic", "dominators", "sanctuaries", "baseProtector", "arenaCloser", "mothership", "antiTankMachineGun"]
+Class.developer.UPGRADES_TIER_0 = ["basic", "addons", "spectator", "levels", "teams", "specialTanks", "eggGenerator", "testing", "bosses"]
+    Class.specialTanks.UPGRADES_TIER_0 = ["dominators", "baseProtector", "arenaCloser", "sanctuaries", "antiTankMachineGun", "mothership"]
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"]
 
-    Class.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "mysticals", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses"]
+    Class.bosses.UPGRADES_TIER_0 = ["sentries", "elites", "nesters", "rogues", "rammers", "terrestrials", "celestials", "eternals", "devBosses"]
         Class.sentries.UPGRADES_TIER_0 = ["sentrySwarm", "sentryGun", "sentryTrap", "shinySentrySwarm", "shinySentryGun", "shinySentryTrap", "sentinelMinigun", "sentinelLauncher", "sentinelCrossbow"]
         Class.elites.UPGRADES_TIER_0 = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "legionaryCrasher", "guardian", "defender", "sprayerLegion"]
-        Class.mysticals.UPGRADES_TIER_0 = ["sorcerer", "summoner", "enchantress", "exorcistor", "shaman"]
         Class.nesters.UPGRADES_TIER_0 = ["nestKeeper", "nestWarden", "nestGuardian"]
         Class.rogues.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "julius", "genghis", "napoleon"]
 	    Class.rammers.UPGRADES_TIER_0 = ["bob", "nemesis"]

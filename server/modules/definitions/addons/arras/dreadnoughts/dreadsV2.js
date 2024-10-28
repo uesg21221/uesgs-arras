@@ -1,6 +1,6 @@
-const { combineStats, addAura, makeAuto, weaponArray, dereference } = require('../facilitators.js');
-const { smshskl, base } = require('../constants.js');
-const g = require('../gunvals.js');
+const { combineStats, addAura, makeAuto, weaponArray, dereference } = require('../../../facilitators.js');
+const { smshskl, base } = require('../../../constants.js');
+const g = require('../../../gunvals.js');
 
 const eggnoughtBody = {
 	SPEED: base.SPEED * 0.65,
@@ -85,7 +85,7 @@ function combineBodyStats(...bodies) {
 }
 
 // Comment out the line below to enable this addon, uncomment it to disable this addon.
-// return console.log('--- Dreadnoughts v2 addon [dreadv2.js] is disabled. See lines 60-61 to enable it. ---');
+// return console.log('--- Dreadnoughts v2 addon [dreadsV2.js] is disabled. See lines 60-61 to enable it. ---');
 
 // Set the below variable to true to enable hex dreadnought building.
 const buildHexnoughts = true;
@@ -1919,7 +1919,7 @@ Class.dreadOfficialV2.UPGRADES_TIER_0 = [
 Class.dreadWeaponOfficialV2.UPGRADES_TIER_0 = ["swordOfficialV2", "pacifierOfficialV2", "peacekeeperOfficialV2", "invaderOfficialV2", "centaurOfficialV2"];
 */
 
-Class.addons.UPGRADES_TIER_0.push("dreadOfficialV2");
+Class.arras.UPGRADES_TIER_0.push("dreadOfficialV2");
 
 	Class.sword2OfficialV2.UPGRADES_TIER_0 = ["swordOfficialV2"];
 	Class.pacifier2OfficialV2.UPGRADES_TIER_0 = ["pacifierOfficialV2"];

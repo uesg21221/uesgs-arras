@@ -1,6 +1,6 @@
-const { combineStats, makeAuto, weaponArray, makeTurret } = require('../facilitators.js');
-const { smshskl, base, basePolygonDamage, basePolygonHealth } = require('../constants.js');
-const g = require('../gunvals.js');
+const { combineStats, makeAuto, weaponArray, makeTurret } = require('../../../facilitators.js');
+const { smshskl, base, basePolygonDamage, basePolygonHealth } = require('../../../constants.js');
+const g = require('../../../gunvals.js');
 const dreadnoughtBody = {
     SPEED: base.SPEED * 0.6,
     HEALTH: base.HEALTH * 4,
@@ -53,7 +53,7 @@ g.dreadv1Trap = {
 }
 
 // Comment out the line below to enable this addon, uncomment it to disable this addon.
-// return console.log('--- Dreadnoughts v1 addon [dreadv1.js] is disabled. See lines 32-33 to enable it. ---');
+// return console.log('--- Dreadnoughts v1 addon [dreadsV1.js] is disabled. See lines 32-33 to enable it. ---');
 
 // Set the below variable to true to enable the Medicare and Medicaid healing bodies.
 const enableHealers = true;
@@ -715,11 +715,11 @@ Class.medicaidOfficialV1 = {
 let tier1 = 10;
 let tier2 = 12;
 if (Config.MAX_UPGRADE_TIER < 10) {
-	tier1 = 0;
-	tier2 = 0;
+	tier1 = Config.MAX_UPGRADE_TIER;
+	tier2 = Config.MAX_UPGRADE_TIER + 3;
 }
 
-Class.addons.UPGRADES_TIER_0.push("dreadOfficialV1");
+Class.arras.UPGRADES_TIER_0.push("dreadOfficialV1");
 	Class.dreadOfficialV1[`UPGRADES_TIER_${tier1}`] = ["swordOfficialV1", "pacifierOfficialV1", "invaderOfficialV1", "centaurOfficialV1"];
 		Class.swordOfficialV1.UPGRADES_TIER_M1 = ["sabreOfficialV1", "gladiusOfficialV1"];
 		Class.pacifierOfficialV1.UPGRADES_TIER_M1 = ["appeaserOfficialV1", "peacekeeperOfficialV1", "diplomatOfficialV1"];
