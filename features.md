@@ -15,7 +15,7 @@ It includes almost all features up to the latest release version.
     * basicChatModeration*: Basic antispam which adds a ratelimit and chat message length limit to chat.
     * dreadv1 & dreadv2: Adds V1 and V2 dreadnoughts.
     * exampleAddon*: Showcases how addons can add custom definitions and interact with already existing ones.
-    * labyFood*: Sets the food spawns to the Labyrinth ones.
+    * tieredFood*: Sets the food spawns to the Labyrinth ones.
     * \* = disabled by default, needs to be enabled.
 
 * Ingame Chat.

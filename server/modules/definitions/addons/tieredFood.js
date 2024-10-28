@@ -56,5 +56,5 @@ module.exports = ({ Config }) => {
 		])
 	]);
 
-	console.log('[labyFood.js] Using Tiered Food.');
+	console.log('[tieredFood.js] Using Tiered Food.');
 };
