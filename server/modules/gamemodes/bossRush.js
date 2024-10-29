@@ -6,7 +6,7 @@ let calculatePoints = wave => 5 + wave * 3;
 // Then it picks a boss at random, with all choices being equally likely.
 
 let oldGroups = {
-    elites: [ "eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner" ],
+    elites: [ "arras_eliteDestroyer", "arras_eliteGunner", "arras_eliteSprayer", "arras_eliteBattleship", "arras_eliteSpawner" ],
     strange: [ "arras_summoner", "arras_eliteSkimmer", "nestKeeper", "roguePalisade" ],
     celestials: [ "paladin", "freyja", "zaphkiel", "nyx", "theia" ],
     eternals: [ "legionaryCrasher", "kronos", "odin" ],
@@ -61,13 +61,13 @@ class BossRush {
             [  2, "arras_shaman"],
 
             //elites
-            [  2, "eliteDestroyer"],
-            [  2, "eliteGunner"],
-            [  2, "eliteSprayer"],
-            [  2, "eliteBattleship"],
-            [  2, "eliteSpawner"],
-            [  2, "eliteTrapGuard"],
-            [  2, "eliteSpinner"],
+            [  2, "arras_eliteDestroyer"],
+            [  2, "arras_eliteGunner"],
+            [  2, "arras_eliteSprayer"],
+            [  2, "arras_eliteBattleship"],
+            [  2, "arras_eliteSpawner"],
+            [  2, "arras_eliteTrapGuard"],
+            [  2, "arras_eliteSpinner"],
             [  2, "arras_eliteSkimmer"],
 
             //nesters
@@ -90,7 +90,7 @@ class BossRush {
             [ 35, "theia"],
 
             //eternals
-            [100, "legionaryCrasher"],
+            [100, "arras_legionaryCrasher"],
             [100, "kronos"],
             [100, "odin"],
         ];

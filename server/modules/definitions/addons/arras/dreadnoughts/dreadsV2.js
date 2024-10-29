@@ -114,7 +114,7 @@ Class.genericSquarenought = {
 	PARENT: "genericDreadnoughtOfficialV2",
 	BODY: squarenoughtBody,
 	SHAPE: 4,
-	COLOR: 'square',
+	COLOR: 'triangle',
 	SIZE: 20,
 	DANGER: 9,
 }
@@ -122,7 +122,7 @@ Class.genericTrinought = {
 	PARENT: "genericDreadnoughtOfficialV2",
 	BODY: trinoughtBody,
 	SHAPE: 3.5,
-	COLOR: 'triangle',
+	COLOR: 'square',
 	SIZE: 23,
 	DANGER: 10,
 }
@@ -195,7 +195,7 @@ Class.betadrone = {
 	PROPS: [
 		{
 			POSITION: [10, 0, 0, 180, 1],
-			TYPE: ["triangle", {COLOR: -1}],
+			TYPE: ["arras_triangle", {COLOR: -1}],
 		},
 	]
 }
@@ -498,7 +498,7 @@ Class.inquisitorOfficialV2 = {
 Class.assailantMinionOfficialV2 = {
 	PARENT: "minion",
 	SHAPE: 4,
-	COLOR: "square",
+	COLOR: "triangle",
 	GUNS: weaponArray({
 		POSITION: [15, 7.5, 1, 0, 0, 0, 0],
 		PROPERTIES: {
@@ -588,7 +588,7 @@ Class.automationOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [11, 0, 0, 0, 1],
-			TYPE: "square"
+			TYPE: "arras_square"
 		},
 	]
 }
@@ -617,7 +617,7 @@ Class.kilobyteOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [12, 0, 0, 0, 1],
-			TYPE: "square"
+			TYPE: "arras_square"
 		},
 	]
 }
@@ -633,7 +633,7 @@ Class.coronaOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [14, 0, 0, 0, 1],
-			TYPE: "square"
+			TYPE: "arras_square"
 		},
 	]
 }
@@ -650,7 +650,7 @@ Class.thermosphereOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [14, 0, 0, 0, 1],
-			TYPE: "square"
+			TYPE: "arras_square"
 		},
 	]
 }
@@ -661,10 +661,10 @@ Class.jumboOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [15, 0, 0, 0, 1],
-			TYPE: 'square'
+			TYPE: 'arras_square'
 		}, {
 			POSITION: [24, 0, 0, 0, 0],
-			TYPE: ['square', {COLOR: 9}]
+			TYPE: ['arras_square', {COLOR: 9}]
 		},
 	],
 }
@@ -854,7 +854,7 @@ Class.infiltratorOfficialV2 = {
 Class.aggressorMinionOfficialV2 = {
 	PARENT: "minion",
 	SHAPE: 3.5,
-	COLOR: "triangle",
+	COLOR: "square",
 	GUNS: weaponArray({
 		POSITION: [16, 8.5, 1, 0, 0, 0, 0],
 		PROPERTIES: {
@@ -957,7 +957,7 @@ Class.mechanismOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [10, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		},
 	],
 }
@@ -977,7 +977,7 @@ Class.fusionOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [13, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		},
 	]
 }
@@ -997,7 +997,7 @@ Class.binaryOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [13, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		},
 	],
 }
@@ -1018,7 +1018,7 @@ Class.exosphereOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [13, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		},
 	]
 }
@@ -1047,7 +1047,7 @@ Class.megabyteOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [15, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		},
 	]
 }
@@ -1067,7 +1067,7 @@ Class.trojanOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [13, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		},
 	]
 }
@@ -1088,7 +1088,7 @@ Class.hardwareOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [13, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		},
 	]
 }
@@ -1108,7 +1108,7 @@ Class.chromosphereOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [13, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		},
 	]
 }
@@ -1129,7 +1129,7 @@ Class.mesosphereOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [13, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		},
 	]
 }
@@ -1140,10 +1140,10 @@ Class.goliathOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [14, 0, 0, 180, 1],
-			TYPE: ['triangle', {COLOR: 9}]
+			TYPE: ['arras_triangle', {COLOR: 9}]
 		}, {
 			POSITION: [24, 0, 0, 180, 0],
-			TYPE: ['triangle', {COLOR: 9}]
+			TYPE: ['arras_triangle', {COLOR: 9}]
 		},
 	],
 }
@@ -1158,10 +1158,10 @@ Class.planetOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [24, 0, 0, 180, 0],
-			TYPE: ['triangle', {COLOR: 9}]
+			TYPE: ['arras_triangle', {COLOR: 9}]
 		}, {
 			POSITION: [12, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		}
 	],
 }
@@ -1176,10 +1176,10 @@ Class.moonOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [24, 0, 0, 180, 0],
-			TYPE: ['triangle', {COLOR: 9}]
+			TYPE: ['arras_triangle', {COLOR: 9}]
 		}, {
 			POSITION: [12, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		}
 	],
 }
@@ -1215,7 +1215,7 @@ Class.sirenOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [12, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		}, {
 			POSITION: [20, 0, 0, 0, 0],
 			TYPE: "titanTopOfficialV2"
@@ -1233,7 +1233,7 @@ Class.harpyOfficialV2 = {
 	PROPS: [
 		{
 			POSITION: [12, 0, 0, 180, 1],
-			TYPE: "triangle"
+			TYPE: "arras_triangle"
 		}, {
 			POSITION: [20, 0, 0, 0, 0],
 			TYPE: "titanTopOfficialV2"

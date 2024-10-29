@@ -2084,12 +2084,12 @@ Class.vortex.GUNS.push(
 )
 Class.weirdSpikeBody1 = {
     PARENT: "smasherBody",
-    FACING_TYPE: ["spin", { independent: true, speed: 0.08 }],
+    FACING_TYPE: ["spin", { independent: true, speed: 0.16 }],
     SHAPE: 3,
 }
 Class.weirdSpikeBody2 = {
     PARENT: "weirdSpikeBody1",
-    FACING_TYPE: ["spin", { independent: true, speed: -0.05 }],
+    FACING_TYPE: ["spin", { independent: true, speed: -0.10 }],
 }
 Class.weirdSpike = {
     PARENT: "genericSmasher",

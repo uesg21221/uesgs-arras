@@ -1077,10 +1077,7 @@ Class.developer.UPGRADES_TIER_0 = ["basic", "addons", "spectator", "levels", "te
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"]
 
-    Class.bosses.UPGRADES_TIER_0 = ["nesters", "rogues", "terrestrials", "celestials", "eternals", "devBosses"]
-        // deleted branch, moving to addons //Class.elites.UPGRADES_TIER_0 = ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner", "eliteTrapGuard", "eliteSpinner", "eliteSkimmer", "legionaryCrasher", "guardian", "defender", "sprayerLegion"]
-        Class.nesters.UPGRADES_TIER_0 = ["nestKeeper", "nestWarden", "nestGuardian"]
-        Class.rogues.UPGRADES_TIER_0 = ["roguePalisade", "rogueArmada", "julius", "genghis", "napoleon"]
+    Class.bosses.UPGRADES_TIER_0 = ["terrestrials", "celestials", "eternals", "devBosses", "guardian", "defender", "nestKeeper", "nestWarden", "nestGuardian", "roguePalisade", "rogueArmada"]
         Class.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"]
         Class.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "julius", "genghis", "napoleon"]
         Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"]
