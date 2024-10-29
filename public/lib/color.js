@@ -22,11 +22,11 @@ var color = {
         "cyan": "#33c7b1", //oklch(75% 0.125 180)
 
         // misc
-        "black": "#484848",
-        "dgrey": "#726f6f",
+        "black": "#484848", //oklch(40% 0 0)
+        "dgrey": "#717171", //oklch(55% 0 0)
         "lgrey": "#8f8f8f", //oklch(65% 0 0)
         "grey": "#aeaeae", //oklch(75% 0 0)
-        "white": "#dbdbdb",
+        "white": "#dedede", //oklch(90% 0 0)
         "lavender": "#b58efd",
 
         // gui

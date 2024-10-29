@@ -3,6 +3,10 @@ const { base, statnames, dfltskl, smshskl } = require('../../constants.js');
 require('../../groups/dev.js');
 const g = require('../../gunvals.js');
 
+// SETUP
+// Quickly configure stuff.
+const enableHealer = 1 // set to 1 to add healer to basic upgrades, set to 2 to replace smasher
+
 // menus
 Class.arras = menu("Arras")
 Class.arras_bosses = menu("Bosses")
@@ -3758,7 +3762,7 @@ Class.arras_autoSmasher = makeAuto({
 
 // Upgrade Paths
 Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "desmos"]
-    Class.basic.UPGRADES_TIER_2 = ["smasher"]
+    if (enableHealer == 1) {Class.basic.UPGRADES_TIER_2 = ["healer", "smasher"]} else if (enableHealer >= 2) {Class.basic.UPGRADES_TIER_2 = ["healer"]} else {Class.basic.UPGRADES_TIER_2 = ["smasher"]}
         Class.basic.UPGRADES_TIER_3 = []
         Class.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "arras_autoSmasher", "landmine", "cocci"]
         Class.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
