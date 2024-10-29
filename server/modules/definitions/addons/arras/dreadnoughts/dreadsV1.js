@@ -715,8 +715,8 @@ Class.medicaidOfficialV1 = {
 let tier1 = 10;
 let tier2 = 12;
 if (Config.MAX_UPGRADE_TIER < 10) {
-	tier1 = Config.MAX_UPGRADE_TIER;
-	tier2 = Config.MAX_UPGRADE_TIER + 3;
+	tier1 = 0;
+	tier2 = 0;
 }
 
 Class.arras.UPGRADES_TIER_0.push("dreadOfficialV1");
