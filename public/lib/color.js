@@ -1,5 +1,43 @@
 var color = {
     "normal": {
+        // polygons
+        "vlgrey": "#bebebe", //oklch(80% 0 40)
+        "orange": "#c37960", //oklch(65% 0.1 40)
+        "gold": "#af8842", //oklch(65% 0.1 80)
+        "purple": "#b278ac", //oklch(65% 0.1 330)
+        "aqua": "#38a391", //oklch(65% 0.1 180)
+        "pink": "#f3a3bb", //oklch(80% 0.1 0)
+        "lgreen": "#bbefb0", //oklch(90% 0.1 140)
+        "yellow": "#fdd990", //oklch(90% 0.1 85)
+        "teal": "#87f2fe", //oklch(90% 0.1 205)
+
+        // teams
+        "blue": "#33c0e4", //oklch(75% 0.125 220)
+        "green": "#6fc483", //oklch(75% 0.125 150)
+        "red": "#f38c8d", //oklch(75% 0.125 20)
+        "magenta": "#da90d4", //oklch(75% 0.125 330)
+        "mustard": "#c0af48", //oklch(75% 0.125 100)
+        "tangerine": "#e79a57", //oklch(75% 0.125 60)
+        "brown": "#cb7644", //oklch(65% 0.125 50)
+        "cyan": "#33c7b1", //oklch(75% 0.125 180)
+
+        // misc
+        "black": "#484848",
+        "dgrey": "#726f6f",
+        "lgrey": "#8f8f8f", //oklch(65% 0 0)
+        "grey": "#aeaeae", //oklch(75% 0 0)
+        "white": "#dbdbdb",
+        "lavender": "#b58efd",
+
+        // gui
+        "guiwhite": "#ffffff", //oklch(100% 0 0)
+        "guiblack": "#000000", //oklch(0% 0 0)
+
+        // info
+        "paletteSize": 20,
+        "border": 0.5
+    },
+    "light": {
         "teal": "#7ad3db",
         "lgreen": "#b9e87e",
         "orange": "#e7896d",
@@ -113,7 +151,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.5019607843137255
+        "border": 0.5
     },
     "forest": {
         "teal": "#884aa5",
@@ -142,7 +180,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.7019607843137254
+        "border": 0.7
     },
     "midnight": {
         "teal": "#2b9098",
@@ -200,7 +238,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.34901960784313724
+        "border": 0.35
     },
     "coralReef": {
         "teal": "#76eec6",
@@ -229,7 +267,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.2980392156862745
+        "border": 0.3
     },
     "badlands": {
         "teal": "#f9cb9c",
@@ -345,7 +383,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.7529411764705882
+        "border": 0.75
     },
     "pastel": {
         "teal": "#ffff98",
@@ -374,7 +412,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.7529411764705882
+        "border": 0.75
     },
     "discord": {
         "teal": "#d53f3f",
@@ -403,7 +441,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.7529411764705882
+        "border": 0.75
     },
     "wrSheetTheme": {
         "teal": "#fd9827",
@@ -432,7 +470,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.2980392156862745
+        "border": 0.3
     },
     "descent": {
         "teal": "#95cecf",
@@ -461,7 +499,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.5019607843137255
+        "border": 0.5
     },
     "solarizedDark": {
         "teal": "#b58900",
@@ -490,7 +528,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.7529411764705882
+        "border": 0.75
     },
     "eggplant": {
         "teal": "#e96ba8",
@@ -519,7 +557,7 @@ var color = {
         "brown": "#895918",
         "cyan": "#13808e",
         "paletteSize": 20,
-        "border": 0.7529411764705882
+        "border": 0.75
     },
     "gruvbox": {
         "teal": "#83a598",

@@ -26,7 +26,7 @@ Class.gem = {
     VALUE: 2e3,
     SHAPE: 6,
     SIZE: 4.5,
-    COLOR: "aqua",
+    COLOR: "teal",
     BODY: {
         DAMAGE: basePolygonDamage / 4,
         DENSITY: 4,
@@ -63,7 +63,7 @@ Class.jewel = {
 Class.shinyEgg = makeRare("egg", 0);
 Class.legendaryEgg = makeRare("egg", 1);
 Class.shadowEgg = makeRare("egg", 2);
-Class.rainbowEgg = makeRare("egg", 3);
+Class.rainbowEgg = makeRare("egg", 3); // holy shit skittles reference -zenphia
 Class.transEgg = makeRare("egg", 4); //ironic
 
 // TRIANGLES
@@ -73,7 +73,7 @@ Class.triangle = {
     VALUE: 30,
     SHAPE: 3,
     SIZE: 8,
-    COLOR: "orange",
+    COLOR: "gold",
     BODY: {
         DAMAGE: basePolygonDamage,
         DENSITY: 4,
@@ -97,7 +97,7 @@ Class.square = {
     VALUE: 120,
     SHAPE: 4,
     SIZE: 18,
-    COLOR: "gold",
+    COLOR: "orange",
     BODY: {
         DAMAGE: basePolygonDamage,
         DENSITY: 6,
