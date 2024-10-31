@@ -7,7 +7,7 @@ let calculatePoints = wave => 5 + wave * 3;
 
 let oldGroups = {
     elites: [ "arras_eliteDestroyer", "arras_eliteGunner", "arras_eliteSprayer", "arras_eliteBattleship", "arras_eliteSpawner" ],
-    strange: [ "arras_summoner", "arras_eliteSkimmer", "nestKeeper", "roguePalisade" ],
+    strange: [ "arras_summoner", "arras_eliteSkimmer", "nestKeeper", "arras_roguePalisade" ],
     celestials: [ "paladin", "freyja", "zaphkiel", "nyx", "theia" ],
     eternals: [ "legionaryCrasher", "kronos", "odin" ],
 };
@@ -71,9 +71,9 @@ class BossRush {
             [  2, "arras_eliteSkimmer"],
 
             //nesters
-            [  3, "nestKeeper"],
-            [  3, "nestWarden"],
-            [  3, "nestGuardian"],
+            [  3, "arras_nestKeeper"],
+            [  3, "arras_nestWarden"],
+            [  3, "arras_nestGuardian"],
 
             //terrestrials
             [ 15, "ares"],
@@ -94,7 +94,7 @@ class BossRush {
             [100, "kronos"],
             [100, "odin"],
         ];
-        this.friendlyBossChoices = [ [9, "roguePalisade"], [8, "rogueArmada"], [1, "julius"], [1, "genghis"], [1, "napoleon"] ];
+        this.friendlyBossChoices = [ [9, "arras_roguePalisade"], [8, "arras_rogueArmada"], [1, "julius"], [1, "genghis"], [1, "napoleon"] ];
         this.bigFodderChoices = ["sentryGun", "sentrySwarm", "sentryTrap", "shinySentryGun"];
         this.smallFodderChoices = ["crasher"];
         this.length = Config.CLASSIC_SIEGE ? this.waveCodes.length : Config.WAVES;

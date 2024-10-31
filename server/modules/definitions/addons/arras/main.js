@@ -6,12 +6,12 @@ Config.BOSS_TYPES = [
         amount: [5, 5, 4, 2, 1], chance: 2, nameType: "a",
     },
     {
-        bosses: ["roguePalisade"],
+        bosses: ["arras_roguePalisade"],
         amount: [4, 1], chance: 1, nameType: "castle",
         message: "A strange trembling..."
     },
     {
-        bosses: ["arras_summoner", "arras_eliteSkimmer", "nestKeeper"],
+        bosses: ["arras_summoner", "arras_eliteSkimmer", "arras_nestKeeper"],
         amount: [2, 2, 1], chance: 1, nameType: "a",
         message: "A strange trembling..."
     },

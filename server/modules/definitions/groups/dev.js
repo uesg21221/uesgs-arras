@@ -124,11 +124,6 @@ Class.generatorBase = {
 
 Class.bosses = menu("Bosses")
 Class.bosses.REROOT_UPGRADE_TREE = "bosses"
-Class.nesters = menu("Nesters", "purple", 5.5)
-Class.rogues = menu("Rogues", "darkGrey", 6)
-Class.terrestrials = menu("Terrestrials", "orange", 7)
-Class.celestials = menu("Celestials", "lightGreen", 9)
-Class.eternals = menu("Eternals", "veryLightGrey", 11)
 Class.devBosses = menu("Developers", "lightGreen", 4)
 Class.devBosses.UPGRADE_COLOR = "rainbow"
 
@@ -542,15 +537,6 @@ Class.radialAutoTest = makeRadialAuto("basic", {
     rotation: 0.04,
     danger: 10,
 })
-Class.makeAutoTestTurret = makeTurret("basic", {canRepel: true, limitFov: true, extraStats: {reload: 0.5}});
-Class.makeAutoTest = {
-    PARENT: 'genericTank',
-    LABEL: "Make Auto Test",
-    TURRETS: weaponArray({
-        POSITION: [8, 10, 0, 0, 180, 0],
-        TYPE: 'makeAutoTestTurret'
-    }, 3)
-}
 
 Class.imageShapeTest = {
     PARENT: 'genericTank',
@@ -1053,7 +1039,6 @@ Class['Team' + TEAM_ENEMIES] = {
 Class.teams.UPGRADES_TIER_0.push('Team' + TEAM_DREADNOUGHTS, 'Team' + TEAM_ROOM, 'Team' + TEAM_ENEMIES);
 
 Class.testing = menu("Testing")
-
 Class.addons = menu("Addon Content")
 Class.addons.UPGRADES_TIER_0 = []
 
@@ -1072,15 +1057,9 @@ testLayeredBoss.addLayer({turret: {
     TYPE: "crowbarTurret",
 }}, true);
 
-Class.developer.UPGRADES_TIER_0 = ["basic", "addons", "spectator", "levels", "teams", "specialTanks", "eggGenerator", "testing", "bosses"]
+Class.developer.UPGRADES_TIER_0 = ["basic", "addons", "spectator", "levels", "teams", "specialTanks", "eggGenerator", "testing", "devBosses"]
     Class.specialTanks.UPGRADES_TIER_0 = ["dominators", "baseProtector", "arenaCloser", "sanctuaries", "antiTankMachineGun", "mothership"]
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"]
-
-    Class.bosses.UPGRADES_TIER_0 = ["terrestrials", "celestials", "eternals", "devBosses", "guardian", "defender", "nestKeeper", "nestWarden", "nestGuardian", "roguePalisade", "rogueArmada"]
-        Class.terrestrials.UPGRADES_TIER_0 = ["ares", "gersemi", "ezekiel", "eris", "selene"]
-        Class.celestials.UPGRADES_TIER_0 = ["paladin", "freyja", "zaphkiel", "nyx", "theia", "atlas", "rhea", "julius", "genghis", "napoleon"]
-        Class.eternals.UPGRADES_TIER_0 = ["odin", "kronos"]
-        Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss", "AEMKShipBoss", "helenaBoss"]
-
-    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "radialAutoTest", "makeAutoTest", "imageShapeTest", "turretStatScaleTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "gunBenchmark", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "radialAutoTest", "imageShapeTest", "turretStatScaleTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "gunBenchmark", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
+    Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss", "AEMKShipBoss", "helenaBoss", "odin", "kronos"]

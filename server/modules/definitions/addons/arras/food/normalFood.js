@@ -153,6 +153,8 @@ Class.arras_tetrahedron = {
     GIVE_KILL_MESSAGE: true
 };
 
+return
+
 Config.FOOD_TYPES = [
         [2000, [
             [1024, 'arras_egg'], [256, 'arras_square'], [64, 'arras_triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
@@ -174,5 +176,10 @@ Config.FOOD_TYPES = [
         ]],
         [0.0001, [
             [100000, 'sphere'], [10000, 'arras_cube'], [1000, 'arras_tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
+        ]]
+    ]
+Config.FOOD_TYPES_NEST = [
+        [1, [
+            [16, 'pentagon'], [ 4, 'betaPentagon'], [ 1, 'alphaPentagon']
         ]]
     ]

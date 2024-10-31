@@ -176,25 +176,13 @@ module.exports = {
     // The possible food types that can spawn.
     FOOD_TYPES: [
         [2000, [
-            [1024, 'egg'], [256, 'triangle'], [64, 'square'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
+            [256, 'egg'], [64, 'triangle'], [16, 'square'], [4, 'pentagon'], [1, 'hexagon']
         ]],
         [1, [
-            [3125, 'gem'], [625, 'shinyTriangle'], [125, 'shinySquare'], [25, 'shinyPentagon'], [5, 'shinyBetaPentagon'], [1, 'shinyAlphaPentagon']
+            [625, 'gem'], [125, 'shinyTriangle'], [25, 'shinySquare'], [5, 'shinyPentagon'], [1, 'shinyHexagon']
         ]],
         [0.1, [
-            [6836, 'jewel'], [1296, 'legendaryTriangle'], [216, 'legendarySquare'], [36, 'legendaryPentagon'], [6, 'legendaryBetaPentagon'], [1, 'legendaryAlphaPentagon']
-        ]],
-        [0.005, [
-            /*[16807, 'egg'], */[2401, 'shadowTriangle'], [343, 'shadowSquare'], [49, 'shadowPentagon'], [7, 'shadowBetaPentagon'], [1, 'shadowAlphaPentagon']
-        ]],
-        [0.001, [
-            /*[65536, 'egg'], */[8192, 'rainbowTriangle'], [1024, 'rainbowSquare'], [64, 'rainbowPentagon'], [8, 'rainbowBetaPentagon'], [1, 'rainbowAlphaPentagon']
-        ]],
-        [0.0005, [
-            [59549, 'egg'], [6561, 'transTriangle'], [729, 'transSquare'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
-        ]],
-        [0.0001, [
-            [100000, 'sphere'], [10000, 'tetrahedron'], [1000, 'cube'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
+            [1296, 'jewel'], [216, 'legendaryTriangle'], [36, 'legendarySquare'], [6, 'legendaryPentagon'], [1, 'legendaryHexagon']
         ]]
     ],
 
@@ -217,7 +205,7 @@ module.exports = {
 
     // The possible boss types that can spawn.
     BOSS_TYPES: [{
-        bosses: ["arras_eliteSkimmer"],
+        bosses: ["defender"],
         amount: [1], chance: 1, nameType: "a",
         message: "yo some shit is about to move to a lower position",
     }],
