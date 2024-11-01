@@ -229,6 +229,7 @@ class io_listenToPlayer extends IO {
                 y: this.body.y + this.player.command.movement.y,
             },
             main: fire,
+            INDEPENDENT_CHILDREN: true
         };
     }
 }
