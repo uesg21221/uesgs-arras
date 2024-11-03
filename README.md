@@ -1,4 +1,4 @@
-# LibreTanks
+# LibreTanks - READ THE IMPORTANT NOTICE SECTION
 
 <img alt="Logo" src="public/favicon.ico" width="120" />
 
