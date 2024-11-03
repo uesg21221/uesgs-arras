@@ -1,6 +1,8 @@
 const { combineStats, menu, weaponArray, LayeredBoss, setTurretProjectileRecoil } = require('../../../facilitators.js')
 const { base } = require('../../../constants.js')
 const g = require('../../../gunvals.js')
+require('../tanks.js')
+require('../turrets.js')
 
 Class.arras_celestials = menu("Celestials", "lightGreen", 9)
 Class.arras_bosses.UPGRADES_TIER_0.push("arras_celestials")

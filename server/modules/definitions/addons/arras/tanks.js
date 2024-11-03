@@ -1,6 +1,5 @@
 const { combineStats, menu, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRadialAuto, weaponArray } = require('../../facilitators.js');
 const { base, statnames, dfltskl, smshskl } = require('../../constants.js');
-require('../../groups/dev.js');
 const g = require('../../gunvals.js');
 
 // SETUP
