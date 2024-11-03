@@ -1,5 +1,5 @@
-const { combineStats, skillSet, makeAuto, addAura, LayeredBoss, makeDeco, weaponArray, setTurretProjectileRecoil } = require('../facilitators.js');
-const { base, smshskl } = require('../constants.js');
+const { combineStats, skillSet, makeAuto, addAura, LayeredBoss, makeTurret, makeDeco, weaponArray, setTurretProjectileRecoil } = require('../facilitators.js');
+const { base, statnames, smshskl } = require('../constants.js');
 const g = require('../gunvals.js');
 require('./generics.js');
 require('./tanks.js');
@@ -247,7 +247,26 @@ Class.zephiSunchip = makeAuto({
         POSITION: [20 * Math.SQRT1_2 ** 2, 0, 0, 0, 0, 1],
         TYPE: ["shinySquare", { MIRROR_MASTER_ANGLE: true }]
     }]
-}, "Robo-Sunchip", {type: 'autoSmasherTurret', size: 6})
+}, "Robo-Sunchip", {type: makeTurret({
+    GUNS: [
+        {
+            POSITION: [20, 6, 1, 0, 5, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 1.15 }, g.turret, { speed: 1.2 }, g.machineGun, g.pounder, { reload: 0.75 }, { reload: 0.75 }]),
+                TYPE: "bullet",
+                STAT_CALCULATOR: "fixedReload",
+            },
+        },
+        {
+            POSITION: [20, 6, 1, 0, -5, 0, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 1.15 }, g.turret, { speed: 1.2 }, g.machineGun, g.pounder, { reload: 0.75 }, { reload: 0.75 }]),
+                TYPE: "bullet",
+                STAT_CALCULATOR: "fixedReload",
+            },
+        },
+    ],
+}, {label: "Turret", fov: 0.8, extraStats: []}), size: 6})
 Class.zephiEggchip = {
     PARENT: "drone",
     LABEL: "Guided Missile",
@@ -1733,7 +1752,38 @@ Class.MKTurretFactory = {
     ],
 }
 Class.MKTurretCarrier = {
-    PARENT: "carrier",
+    PARENT: "genericTank",
+    STAT_NAMES: statnames.swarm,
+    FACING_TYPE: "locksFacing",
+    BODY: {
+        FOV: base.FOV * 1.2,
+    },
+    GUNS: [
+        {
+            POSITION: [7, 8, 0.6, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, g.carrier]),
+                TYPE: "swarm",
+                STAT_CALCULATOR: "swarm",
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, 2, 30, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, g.carrier]),
+                TYPE: "swarm",
+                STAT_CALCULATOR: "swarm",
+            },
+        },
+        {
+            POSITION: [7, 8, 0.6, 7, -2, -30, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, g.carrier]),
+                TYPE: "swarm",
+                STAT_CALCULATOR: "swarm",
+            },
+        },
+    ],
     FACING_TYPE: "toTarget",
     LABEL: "MKTurret carrier",
     SKILL: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
@@ -2075,7 +2125,30 @@ Class.helenaBoss = {
                 POSITION: [8.5, 5, 1.25, 8.5, 0, 0, 0],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.twin, g.pounder, {reload: 1.15, health: 0.85, speed: 0.5, maxSpeed: 0.5, range: 0.25, size: 1.5}]),
-				    TYPE: "unsetPillbox",
+				    TYPE: {
+    PARENT: "unsetTrap",
+    LABEL: "Pillbox",
+    INDEPENDENT: true,
+    DIE_AT_RANGE: true,
+    TURRETS: [
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: makeTurret({
+    HAS_NO_RECOIL: true,
+    GUNS: [
+        {
+            POSITION: [22, 11, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, { density: 0.1 }]),
+                TYPE: "bullet",
+                WAIT_TO_CYCLE: true
+            },
+        },
+    ],
+}, {independent: true, extraStats: []}),
+        },
+    ],
+},
 				    STAT_CALCULATOR: "block",
                     ALPHA: 0
                 }

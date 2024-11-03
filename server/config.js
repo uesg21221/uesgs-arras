@@ -60,7 +60,7 @@ module.exports = {
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
                     +"Please report any bugs you encounter!\n"
-                    +"[NOTE: All arras-related content is being moved to its own addon and may not be present in future releases of this project.]",
+                    +"[NOTE: Almost all arras-related content has been moved to its own addon and will no longer be present in future releases of this project by default.]",
     
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
@@ -195,17 +195,14 @@ module.exports = {
 
     // The possible nest enemy types that can spawn.
     ENEMY_TYPES_NEST: [
-        [19, [
-            [1, 'crasher']
-        ]],
         [1, [
-            [1, 'sentryGun'], [1, 'sentrySwarm'], [1, 'sentryTrap']
+            [1, 'crasher']
         ]]
     ],
 
     // The possible boss types that can spawn.
     BOSS_TYPES: [{
-        bosses: ["defender"],
+        bosses: ["taureonBoss"],
         amount: [1], chance: 1, nameType: "a",
         message: "yo some shit is about to move to a lower position",
     }],

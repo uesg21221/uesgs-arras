@@ -349,46 +349,12 @@ Class.kronosMissile = {
         },
     ],
 }
-Class.autoSmasherMissile = {
-    PARENT: "missile",
-    HITS_OWN_TYPE: "never",
-    GUNS: [],
-    TURRETS: [
-        {
-            POSITION: [21.5, 0, 0, 0, 360, 0],
-            TYPE: "smasherBody",
-        }, {
-            POSITION: [12, 0, 0, 0, 360, 1],
-            TYPE: "autoSmasherMissileTurret",
-        },
-    ],
-}
 
 // Healer Projectiles
 Class.healerBullet = {
     PARENT: "bullet",
     HEALER: true,
 };
-Class.surgeonPillbox = {
-    PARENT: "trap",
-    LABEL: "Pillbox",
-    SHAPE: -6,
-    MOTION_TYPE: "motor",
-    CONTROLLERS: ["goToMasterTarget", "nearestDifferentMaster"],
-    INDEPENDENT: true,
-    BODY: {
-        SPEED: 1,
-        DENSITY: 5,
-        DAMAGE: 0
-    },
-    DIE_AT_RANGE: true,
-    TURRETS: [
-        {
-            POSITION: [11, 0, 0, 0, 360, 1],
-            TYPE: "surgeonPillboxTurret",
-        },
-    ],
-}
 
 // Drones
 Class.turretedDrone = makeAuto('drone', "Auto-Drone", {type: 'droneAutoTurret'})
@@ -589,47 +555,6 @@ Class.assemblerTrap = {
 Class.shotTrapBox = {
     PARENT: 'unsetTrap',
     MOTION_TYPE: "glide",
-}
-
-// Pillboxes
-Class.pillbox = {
-    PARENT: "setTrap",
-    LABEL: "Pillbox",
-    INDEPENDENT: true,
-    DIE_AT_RANGE: true,
-    TURRETS: [
-        {
-            POSITION: [11, 0, 0, 0, 360, 1],
-            TYPE: "pillboxTurret",
-        },
-    ],
-}
-Class.unsetPillbox = {
-    PARENT: "unsetTrap",
-    LABEL: "Pillbox",
-    INDEPENDENT: true,
-    DIE_AT_RANGE: true,
-    TURRETS: [
-        {
-            POSITION: [11, 0, 0, 0, 360, 1],
-            TYPE: "pillboxTurret",
-        },
-    ],
-}
-Class.legionaryPillbox = {
-    PARENT: "unsetTrap",
-    LABEL: "Pillbox",
-    BODY: {
-        SPEED: 1,
-        DENSITY: 5,
-    },
-    DIE_AT_RANGE: true,
-    TURRETS: [
-        {
-            POSITION: [11, 0, 0, 0, 360, 1],
-            TYPE: "legionaryTwin",
-        },
-    ],
 }
 
 // Swarms
