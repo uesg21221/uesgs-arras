@@ -201,13 +201,13 @@ function connectMatrix(matrix, matrix2Entrance) {
     }
 }
 let generatorMatrix = [
-    [ "egg"           , "gem"                , "jewel"                  , "crasher"             , "arras_genericSentry"  , "arras_genericShinySentry", "EggRelic"      , "sphere"       ],
-    [ "triangle"      , "shinyTriangle"      , "legendaryTriangle"      , "shadowTriangle"      , "rainbowTriangle"      , "transTriangle"      , "TriangleRelic"      , "tetrahedron"  ],
-    [ "square"        , "shinySquare"        , "legendarySquare"        , "shadowSquare"        , "rainbowSquare"        , "transSquare"        , "SquareRelic"        , "cube"         ],
-    [ "pentagon"      , "shinyPentagon"      , "legendaryPentagon"      , "shadowPentagon"      , "rainbowPentagon"      , "transPentagon"      , "PentagonRelic"      , "octahedron"   ],
-    [ "betaPentagon"  , "shinyBetaPentagon"  , "legendaryBetaPentagon"  , "shadowBetaPentagon"  , "rainbowBetaPentagon"  , "transBetaPentagon"  , "BetaPentagonRelic"  , "dodecahedron" ],
-    [ "alphaPentagon" , "shinyAlphaPentagon" , "legendaryAlphaPentagon" , "shadowAlphaPentagon" , "rainbowAlphaPentagon" , "transAlphaPentagon" , "AlphaPentagonRelic" , "icosahedron"  ],
-    [ "hexagon"       , "shinyHexagon"       , "legendaryHexagon"       , "shadowHexagon"       , "rainbowHexagon"       , "transHexagon"       , "HexagonRelic"       , "tesseract"    ],
+    [ "egg"           , "gem"                , "jewel"                  ],
+    [ "triangle"      , "shinyTriangle"      , "legendaryTriangle"      ],
+    [ "square"        , "shinySquare"        , "legendarySquare"        ],
+    [ "pentagon"      , "shinyPentagon"      , "legendaryPentagon"      ],
+    [ "betaPentagon"  , "shinyBetaPentagon"  , "legendaryBetaPentagon"  ],
+    [ "alphaPentagon" , "shinyAlphaPentagon" , "legendaryAlphaPentagon" ],
+    [ "hexagon"       , "shinyHexagon"       , "legendaryHexagon"       ],
 ],
 gemRelicMatrix = [];
 for (let tier of [ "", "Egg", "Triangle", "Square", "Pentagon", "BetaPentagon", "AlphaPentagon", "Hexagon" ]) {
@@ -1042,24 +1042,9 @@ Class.testing = menu("Testing")
 Class.addons = menu("Addon Content")
 Class.addons.UPGRADES_TIER_0 = []
 
-let testLayeredBoss = new LayeredBoss("testLayeredBoss", "Test Layered Boss", "terrestrial", 7, 3, "terrestrialTrapTurret", 5, 7, {SPEED: 10});
-testLayeredBoss.addLayer({gun: {
-    POSITION: [3.6, 7, -1.4, 8, 0, null, 0],
-    PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.factory, { size: 0.5 }]),
-        TYPE: ["minion", {INDEPENDENT: true}],
-        AUTOFIRE: true,
-        SYNCS_SKILLS: true,
-    },
-}}, true, null, 16);
-testLayeredBoss.addLayer({turret: {
-    POSITION: [10, 7.5, 0, null, 160, 0],
-    TYPE: "crowbarTurret",
-}}, true);
-
 Class.developer.UPGRADES_TIER_0 = ["basic", "addons", "spectator", "levels", "teams", "specialTanks", "eggGenerator", "testing", "devBosses"]
     Class.specialTanks.UPGRADES_TIER_0 = ["dominators", "baseProtector", "arenaCloser", "sanctuaries", "antiTankMachineGun", "mothership"]
         Class.dominators.UPGRADES_TIER_0 = ["destroyerDominator", "gunnerDominator", "trapperDominator"]
         Class.sanctuaries.UPGRADES_TIER_0 = ["sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"]
-    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "radialAutoTest", "imageShapeTest", "turretStatScaleTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "gunBenchmark", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
-    Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss", "AEMKShipBoss", "helenaBoss", "odin", "kronos"]
+    Class.testing.UPGRADES_TIER_0 = ["diamondShape", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "radialAutoTest", "imageShapeTest", "turretStatScaleTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "gunBenchmark", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
+    Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss", "AEMKShipBoss", "helenaBoss"]
