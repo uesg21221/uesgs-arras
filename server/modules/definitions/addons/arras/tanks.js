@@ -4,13 +4,14 @@ const g = require('../../gunvals.js');
 
 // SETUP
 // Quickly configure stuff.
+const enableArrasTanks = false
 const enableHealer = 1 // set to 1 to add healer to basic upgrades, set to 2 to replace smasher
 
 // menus
 Class.arras = menu("Arras")
 Class.arras_bosses = menu("Bosses")
 Class.addons.UPGRADES_TIER_0.push("arras")
-    Class.arras.UPGRADES_TIER_0 = ["arras_bosses"]
+    Class.arras.UPGRADES_TIER_0 = ["arras_basic", "arras_bosses"]
         Class.arras_bosses.UPGRADES_TIER_0 = []
 
 // move me!!!
@@ -61,7 +62,7 @@ Class.cocciPart3 = {
 }
 
 // basic tank
-Class.basic = {
+Class.arras_basic = {
     PARENT: "genericTank",
     LABEL: "Basic",
     DANGER: 4,
@@ -77,6 +78,10 @@ Class.basic = {
             }
         }
     ]
+}
+if (enableArrasTanks) {
+    Config.SPAWN_CLASS = "arras_basic"
+    Class.genericTank.REROOT_UPGRADE_TREE = "arras_basic"
 }
 
 // level 15 tanks
@@ -429,7 +434,7 @@ Class.gunner = {
         }
     ]
 }
-Class.healer = {
+Class.arras_healer = {
     PARENT: "genericTank",
     LABEL: "Healer",
     STAT_NAMES: statnames.heal,
@@ -491,7 +496,7 @@ Class.helix = {
         },
     ],
 }
-Class.hexaTank = {
+Class.arras_hexaTank = {
     PARENT: "genericTank",
     LABEL: "Hexa Tank",
     DANGER: 6,
@@ -3760,13 +3765,13 @@ Class.arras_autoSmasher = makeAuto({
 }, "Auto-Smasher", {type: "autoSmasherTurret", size: 11})
 
 // Upgrade Paths
-Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "desmos"]
-    if (enableHealer == 1) {Class.basic.UPGRADES_TIER_2 = ["healer", "smasher"]} else if (enableHealer >= 2) {Class.basic.UPGRADES_TIER_2 = ["healer"]} else {Class.basic.UPGRADES_TIER_2 = ["smasher"]}
-        Class.basic.UPGRADES_TIER_3 = []
+Class.arras_basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "desmos"]
+    if (enableHealer == 1) {Class.arras_basic.UPGRADES_TIER_2 = ["arras_healer", "smasher"]} else if (enableHealer >= 2) {Class.arras_basic.UPGRADES_TIER_2 = ["arras_healer"]} else {Class.arras_basic.UPGRADES_TIER_2 = ["smasher"]}
+        Class.arras_basic.UPGRADES_TIER_3 = []
         Class.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "arras_autoSmasher", "landmine", "cocci"]
-        Class.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
+        Class.arras_healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
 
-    Class.twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "hexaTank", "helix"]
+    Class.twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "arras_hexaTank", "helix"]
         Class.twin.UPGRADES_TIER_3 = ["dual", "bulwark", "musket"]
         Class.doubleTwin.UPGRADES_TIER_3 = ["tripleTwin", "hewnDouble", "arras_autoDouble", "bentDouble"]
         Class.tripleShot.UPGRADES_TIER_3 = ["pentaShot", "spreadshot", "bentHybrid", "bentDouble", "triplet", "triplex"]
@@ -3783,9 +3788,9 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
         Class.gunner.UPGRADES_TIER_3 = ["arras_autoGunner", "nailgun", "arras_auto4", "machineGunner", "gunnerTrapper", "cyclone", "overgunner"]
         Class.sprayer.UPGRADES_TIER_3 = ["redistributor", "phoenix", "atomizer", "focal"]
 
-    Class.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "arras_auto3", "trapGuard", "triTrapper"]
+    Class.flankGuard.UPGRADES_TIER_2 = ["arras_hexaTank", "triAngle", "arras_auto3", "trapGuard", "triTrapper"]
         Class.flankGuard.UPGRADES_TIER_3 = ["tripleTwin", "quadruplex"]
-        Class.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper"]
+        Class.arras_hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper"]
         Class.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "arras_autoTriAngle", "surfer", "eagle", "phoenix", "vulture"]
         Class.arras_auto3.UPGRADES_TIER_3 = ["arras_auto5", "mega3", "arras_auto4", "banshee"]
 
