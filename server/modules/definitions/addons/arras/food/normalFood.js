@@ -153,8 +153,6 @@ Class.arras_tetrahedron = {
     GIVE_KILL_MESSAGE: true
 };
 
-return
-
 Config.FOOD_TYPES = [
         [2000, [
             [1024, 'arras_egg'], [256, 'arras_square'], [64, 'arras_triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']

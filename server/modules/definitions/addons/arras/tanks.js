@@ -4,7 +4,7 @@ const g = require('../../gunvals.js');
 
 // SETUP
 // Quickly configure stuff.
-const enableArrasTanks = false
+const enableArrasTanks = true
 const enableHealer = 1 // set to 1 to add healer to basic upgrades, set to 2 to replace smasher
 
 // menus
