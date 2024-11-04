@@ -723,7 +723,7 @@ Class.sidewinder = {
         }
     ]
 }
-Class.smasher = {
+Class.arras_smasher = {
     PARENT: "genericSmasher",
     LABEL: "Smasher",
     DANGER: 6,
@@ -2689,7 +2689,7 @@ Class.overdrive = {
         }
     }, 2)
 }
-Class.overlord = {
+Class.arras_overlord = {
     PARENT: "genericTank",
     LABEL: "Overlord",
     DANGER: 7,
@@ -2699,17 +2699,30 @@ Class.overlord = {
         FOV: 1.1 * base.FOV,
     },
     MAX_CHILDREN: 8,
-    GUNS: weaponArray({
-        POSITION: [6, 12, 1.2, 8, 0, 0, 0],
-        PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.drone, g.overseer]),
-            TYPE: "drone",
-            AUTOFIRE: true,
-            SYNCS_SKILLS: true,
-            STAT_CALCULATOR: "drone",
-            WAIT_TO_CYCLE: true
+    GUNS: weaponArray([
+        {
+            POSITION: [6, 12, 1.2, 8, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, g.overseer]),
+                TYPE: "drone",
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: "drone",
+                WAIT_TO_CYCLE: true
+            }
+        },
+        {
+            POSITION: [6, 12, 1.2, 8, 0, 90, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, g.overseer]),
+                TYPE: "drone",
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: "drone",
+                WAIT_TO_CYCLE: true
+            }
         }
-    }, 4)
+    ], 2)
 }
 Class.paramedic = {
     PARENT: "genericTank",
@@ -3215,7 +3228,7 @@ Class.skimmer = {
         },
     ],
 }
-Class.spike = {
+Class.arras_spike = {
     PARENT: "genericSmasher",
     LABEL: "Spike",
     BODY: {
@@ -3766,9 +3779,9 @@ Class.arras_autoSmasher = makeAuto({
 
 // Upgrade Paths
 Class.arras_basic.UPGRADES_TIER_1 = ["arras_twin", "sniper", "machineGun", "flankGuard", "director", "arras_pounder", "trapper", "desmos"]
-    if (enableHealer == 1) {Class.arras_basic.UPGRADES_TIER_2 = ["arras_healer", "smasher"]} else if (enableHealer >= 2) {Class.arras_basic.UPGRADES_TIER_2 = ["arras_healer"]} else {Class.arras_basic.UPGRADES_TIER_2 = ["smasher"]}
+    if (enableHealer == 1) {Class.arras_basic.UPGRADES_TIER_2 = ["arras_healer", "arras_smasher"]} else if (enableHealer >= 2) {Class.arras_basic.UPGRADES_TIER_2 = ["arras_healer"]} else {Class.arras_basic.UPGRADES_TIER_2 = ["arras_smasher"]}
         Class.arras_basic.UPGRADES_TIER_3 = []
-        Class.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "arras_autoSmasher", "landmine", "cocci"]
+        Class.arras_smasher.UPGRADES_TIER_3 = ["megaSmasher", "arras_spike", "arras_autoSmasher", "landmine", "cocci"]
         Class.arras_healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
 
     Class.arras_twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "arras_hexaTank", "helix"]
@@ -3796,7 +3809,7 @@ Class.arras_basic.UPGRADES_TIER_1 = ["arras_twin", "sniper", "machineGun", "flan
 
     Class.director.UPGRADES_TIER_2 = ["arras_overseer", "cruiser", "underseer", "spawner"]
         Class.director.UPGRADES_TIER_3 = ["manager", "bigCheese"]
-        Class.arras_overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "arras_autoOverseer", "overdrive", "arras_commander"]
+        Class.arras_overseer.UPGRADES_TIER_3 = ["arras_overlord", "overtrapper", "overgunner", "banshee", "arras_autoOverseer", "overdrive", "arras_commander"]
         Class.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "arras_autoCruiser", "arras_commander"]
         Class.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor"]
         Class.spawner.UPGRADES_TIER_3 = ["factory", "arras_autoSpawner", "ranch"]
