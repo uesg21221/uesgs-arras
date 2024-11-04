@@ -6,7 +6,7 @@ const g = require('../gunvals.js')
 // Basic tank for basic stuff
 Class.basic = {
     PARENT: "genericTank",
-    LABEL: "Tank",
+    LABEL: "Basic",
     DANGER: 4,
     /*BODY: {
         ACCELERATION: base.ACCEL * 1,

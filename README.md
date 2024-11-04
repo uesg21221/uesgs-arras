@@ -1,4 +1,4 @@
-# LibreTanks - READ THE IMPORTANT NOTICE SECTION
+# LibreTanks
 
 <img alt="Logo" src="public/favicon.ico" width="120" />
 
@@ -9,8 +9,6 @@
 ## Important Notice
 
 **LibreTanks is beta software.** This build is **not** representative of the final product. Expect bugs and missing features.
-
-**We're also testing a debug version of LibreTanks that does not include any arras content. If you need the arras content, PLEASE use the latest release.**
 
 Major updates may introduce breaking changes that alter how certain things work. It is **your responsibility** to keep your private server up-to-date and functioning.
 
