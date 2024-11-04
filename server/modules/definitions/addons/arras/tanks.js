@@ -168,7 +168,7 @@ Class.machineGun = {
         }
     ]
 }
-Class.pounder = {
+Class.arras_pounder = {
     PARENT: "genericTank",
     LABEL: "Pounder",
     GUNS: [
@@ -229,7 +229,7 @@ Class.trapper = {
         }
     ]
 }
-Class.twin = {
+Class.arras_twin = {
     PARENT: "genericTank",
     LABEL: "Twin",
     GUNS: [
@@ -364,7 +364,7 @@ Class.cruiser = {
         },
     ],
 }
-Class.destroyer = {
+Class.arras_destroyer = {
     PARENT: "genericTank",
     LABEL: "Destroyer",
     DANGER: 6,
@@ -631,7 +631,7 @@ Class.minigun = {
         }
     ]
 }
-Class.overseer = {
+Class.arras_overseer = {
     PARENT: "genericTank",
     LABEL: "Overseer",
     DANGER: 6,
@@ -992,7 +992,7 @@ Class.ambulance = {
     STAT_NAMES: statnames.heal,
 }
 
-Class.annihilator = {
+Class.arras_annihilator = {
     PARENT: "genericTank",
     LABEL: "Annihilator",
     DANGER: 7,
@@ -1506,7 +1506,7 @@ Class.coil = {
         }
     ]
 }
-Class.commander = {
+Class.arras_commander = {
     PARENT: "genericTank",
     LABEL: "Commander",
     STAT_NAMES: statnames.drone,
@@ -3525,7 +3525,7 @@ Class.tripleTwin = {
         }
     ], 3)
 }
-Class.triplet = {
+Class.arras_triplet = {
     PARENT: "genericTank",
     DANGER: 7,
     LABEL: "Triplet",
@@ -3653,7 +3653,7 @@ Class.xHunter = {
 
 
 // level 45 bird tanks
-Class.eagle = makeBird("pounder", "Eagle")
+Class.eagle = makeBird("arras_pounder", "Eagle")
 Class.falcon = makeBird("assassin", "Falcon")
 Class.phoenix = makeBird("sprayer", "Phoenix")
 Class.vulture = makeBird({
@@ -3691,7 +3691,7 @@ Class.vulture = makeBird({
 Class.armsman = makeOver('rifle', "Armsman", {count: 1, independent: true, cycle: false})
 Class.bentHybrid = makeOver('tripleShot', "Bent Hybrid", {count: 1, independent: true, cycle: false})
 Class.cropDuster = makeOver('minigun', "Crop Duster", {count: 1, independent: true, cycle: false})
-Class.hybrid = makeOver('destroyer', "Hybrid", {count: 1, independent: true, cycle: false})
+Class.hybrid = makeOver('arras_destroyer', "Hybrid", {count: 1, independent: true, cycle: false})
 Class.poacher = makeOver('hunter', "Poacher", {count: 1, independent: true, cycle: false})
 
 // level 45 over-tanks
@@ -3748,7 +3748,7 @@ Class.arras_autoDouble = makeAuto("doubleTwin", "Auto-Double")
 Class.arras_autoAssassin = makeAuto("assassin")
 Class.arras_autoGunner = makeAuto("gunner")
 Class.arras_autoTriAngle = makeAuto("triAngle")
-Class.arras_autoOverseer = makeAuto("overseer")
+Class.arras_autoOverseer = makeAuto("arras_overseer")
 Class.arras_autoCruiser = makeAuto("cruiser")
 Class.arras_autoSpawner = makeAuto("spawner")
 Class.arras_autoBuilder = makeAuto("builder")
@@ -3765,16 +3765,16 @@ Class.arras_autoSmasher = makeAuto({
 }, "Auto-Smasher", {type: "autoSmasherTurret", size: 11})
 
 // Upgrade Paths
-Class.arras_basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "desmos"]
+Class.arras_basic.UPGRADES_TIER_1 = ["arras_twin", "sniper", "machineGun", "flankGuard", "director", "arras_pounder", "trapper", "desmos"]
     if (enableHealer == 1) {Class.arras_basic.UPGRADES_TIER_2 = ["arras_healer", "smasher"]} else if (enableHealer >= 2) {Class.arras_basic.UPGRADES_TIER_2 = ["arras_healer"]} else {Class.arras_basic.UPGRADES_TIER_2 = ["smasher"]}
         Class.arras_basic.UPGRADES_TIER_3 = []
         Class.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "arras_autoSmasher", "landmine", "cocci"]
         Class.arras_healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
 
-    Class.twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "arras_hexaTank", "helix"]
-        Class.twin.UPGRADES_TIER_3 = ["dual", "bulwark", "musket"]
+    Class.arras_twin.UPGRADES_TIER_2 = ["doubleTwin", "tripleShot", "gunner", "arras_hexaTank", "helix"]
+        Class.arras_twin.UPGRADES_TIER_3 = ["dual", "bulwark", "musket"]
         Class.doubleTwin.UPGRADES_TIER_3 = ["tripleTwin", "hewnDouble", "arras_autoDouble", "bentDouble"]
-        Class.tripleShot.UPGRADES_TIER_3 = ["pentaShot", "spreadshot", "bentHybrid", "bentDouble", "triplet", "triplex"]
+        Class.tripleShot.UPGRADES_TIER_3 = ["pentaShot", "spreadshot", "bentHybrid", "bentDouble", "arras_triplet", "triplex"]
 
     Class.sniper.UPGRADES_TIER_2 = ["assassin", "hunter", "minigun", "rifle", "marksman"]
         Class.sniper.UPGRADES_TIER_3 = ["bushwhacker"]
@@ -3794,16 +3794,16 @@ Class.arras_basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard
         Class.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "arras_autoTriAngle", "surfer", "eagle", "phoenix", "vulture"]
         Class.arras_auto3.UPGRADES_TIER_3 = ["arras_auto5", "mega3", "arras_auto4", "banshee"]
 
-    Class.director.UPGRADES_TIER_2 = ["overseer", "cruiser", "underseer", "spawner"]
+    Class.director.UPGRADES_TIER_2 = ["arras_overseer", "cruiser", "underseer", "spawner"]
         Class.director.UPGRADES_TIER_3 = ["manager", "bigCheese"]
-        Class.overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "arras_autoOverseer", "overdrive", "commander"]
-        Class.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "arras_autoCruiser", "commander"]
+        Class.arras_overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "arras_autoOverseer", "overdrive", "arras_commander"]
+        Class.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "arras_autoCruiser", "arras_commander"]
         Class.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor"]
         Class.spawner.UPGRADES_TIER_3 = ["factory", "arras_autoSpawner", "ranch"]
 
-    Class.pounder.UPGRADES_TIER_2 = ["destroyer", "builder", "artillery", "launcher"]
-        Class.pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"]
-        Class.destroyer.UPGRADES_TIER_3 = ["conqueror", "annihilator", "hybrid", "arras_constructor"]
+    Class.arras_pounder.UPGRADES_TIER_2 = ["arras_destroyer", "builder", "artillery", "launcher"]
+        Class.arras_pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"]
+        Class.arras_destroyer.UPGRADES_TIER_3 = ["conqueror", "arras_annihilator", "hybrid", "arras_constructor"]
         Class.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun"]
         Class.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "rocketeer", "fieldGun"]
 

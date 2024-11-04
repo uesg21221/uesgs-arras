@@ -621,7 +621,7 @@ Class.turretStatScaleTest = {
         TYPE: ['autoTankGun', {GUN_STAT_SCALE: {speed: 1 + i / 5, maxSpeed: 1 + i / 5, reload: 1 + i / 5, recoil: 0}}]
     }))
 }
-Class.auraBasicGen = addAura();
+Class.auraBasicGen = addAura()
 Class.auraBasic = {
     PARENT: "genericTank",
     LABEL: "Aura Basic",
@@ -636,12 +636,12 @@ Class.auraBasic = {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: "bullet",
-            },
-        },
-    ],
+                TYPE: "bullet"
+            }
+        }
+    ]
 }
-Class.auraHealerGen = addAura(-1);
+Class.auraHealerGen = addAura(-1)
 Class.auraHealer = {
     PARENT: "genericTank",
     LABEL: "Aura Healer",
@@ -659,10 +659,10 @@ Class.auraHealer = {
             POSITION: [18, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.healer]),
-                TYPE: "healerBullet",
-            },
-        },
-    ],
+                TYPE: "healerBullet"
+            }
+        }
+    ]
 }
 Class.ghoster_ghosted = {
     PARENT: "genericTank",
