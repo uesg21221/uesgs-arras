@@ -1506,18 +1506,18 @@ function drawEntities(px, py, ratio) {
         drawHealth(x, y, instance, ratio, instance.alpha);
     }
 
-    let now = Date.now(),
-        ratioForChat = (1 + ratio) / 2;
+    let now = Date.now();
     for (let instance of global.entities) {
         //put chat msg above name
         let size = instance.size * ratio,
+            ratioForChat = (ratio * instance.size) / 20,
             indexes = instance.index.split("-"),
             m = global.mockups[parseInt(indexes[0])],
             realSize = (size / m.size) * m.realSize,
             x = instance.id === gui.playerid ? global.player.screenx : ratio * instance.render.x - px,
             y = instance.id === gui.playerid ? global.player.screeny : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
-        y += global.screenHeight / 2 - realSize - 46 * ratio;
+        y += global.screenHeight / 2 - realSize - 46 * ratioForChat;
         if (instance.id !== gui.playerid && instance.nameplate) y -= 8 * ratio;
 
         //draw all the msgs
