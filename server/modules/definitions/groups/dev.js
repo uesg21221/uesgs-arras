@@ -4,7 +4,6 @@ const g = require('../gunvals.js');
 require('./tanks.js');
 require('./food.js');
 
-// Menus
 Class.developer = {
     PARENT: "genericTank",
     LABEL: "Developer",
@@ -99,7 +98,6 @@ Class.spectator = {
         handler: ({ body }) => body.FOV = body.y + body.control.target.y < body.y ? body.FOV + 0.5 : Math.max(body.FOV - 0.5, 0.2)
     }]
 }
-
 Class.generatorBase = {
     PARENT: "genericTank",
     LABEL: "Generator",
@@ -122,11 +120,11 @@ Class.generatorBase = {
     },
 }
 
+// menus
 Class.bosses = menu("Bosses")
 Class.bosses.REROOT_UPGRADE_TREE = "bosses"
 Class.devBosses = menu("Developers", "lightGreen", 4)
 Class.devBosses.UPGRADE_COLOR = "rainbow"
-
 Class.specialTanks = menu("Special Tanks")
 Class.dominators = menu("Dominators")
 Class.dominators.PROPS = [
@@ -217,7 +215,6 @@ for (let tier of [ "", "Egg", "Triangle", "Square", "Pentagon", "BetaPentagon", 
     }
     gemRelicMatrix.push(row);
 }
-
 compileMatrix(generatorMatrix);
 compileMatrix(gemRelicMatrix);
 
@@ -262,15 +259,12 @@ for (let poly = 0; poly < 5; poly++) {
     }
     labyTensor.push(row);
 }
-
 connectMatrix(generatorMatrix, 'PowerGemGenerator');
 connectMatrix(gemRelicMatrix, 'generator_laby_0_0_0_0');
-
 let tensorWidth = labyTensor.length,
     tensorHeight = labyTensor[0].length,
     tensorLength = labyTensor[0][0].length,
     tensorDepth = labyTensor[0][0][0].length;
-
 for (let x = 0; x < tensorWidth; x++) {
     for (let y = 0; y < tensorHeight; y++) {
         for (let z = 0; z < tensorLength; z++) {
@@ -311,12 +305,11 @@ Class.diamondShape = {
     PARENT: "basic",
     LABEL: "Rotated Body",
     SHAPE: 4.5
-};
-
+}
 Class.mummyHat = {
     SHAPE: 4.5,
     COLOR: -1
-};
+}
 Class.mummy = {
     PARENT: "drone",
     SHAPE: 4,
@@ -325,7 +318,7 @@ Class.mummy = {
         POSITION: [20 * Math.SQRT1_2, 0, 0, 180, 360, 1],
         TYPE: ["mummyHat"]
     }]
-};
+}
 Class.mummifier = {
     PARENT: "genericTank",
     LABEL: "Mummifier",
@@ -359,7 +352,7 @@ Class.mummifier = {
         POSITION: [20 * Math.SQRT1_2, 0, 0, 180, 360, 1],
         TYPE: ["mummyHat"]
     }]
-};
+}
 Class.miscTestHelper2 = {
     PARENT: "genericTank",
     LABEL: "Turret Reload 3",
@@ -375,7 +368,7 @@ Class.miscTestHelper2 = {
             },
         },
     ],
-};
+}
 Class.miscTestHelper = {
     PARENT: "genericTank",
     LABEL: "Turret Reload 2",
@@ -400,7 +393,7 @@ Class.miscTestHelper = {
           TYPE: "miscTestHelper2",
         }
     ]
-};
+}
 Class.miscTest = {
     PARENT: "genericTank",
     LABEL: "Turret Reload",
@@ -420,7 +413,7 @@ Class.miscTest = {
             TYPE: "miscTestHelper",
         }
     ]
-};
+}
 Class.mmaTest2 = {
     PARENT: "genericTank",
     MIRROR_MASTER_ANGLE: true,
@@ -453,7 +446,6 @@ Class.mmaTest = {
         },
     ]
 }
-
 Class.vulnturrettest_turret = {
     PARENT: "genericTank",
     COLOR: "grey",
@@ -461,7 +453,6 @@ Class.vulnturrettest_turret = {
     LABEL: 'Shield',
     COLOR: 'teal',
 }
-
 Class.vulnturrettest = {
     PARENT: "genericTank",
     LABEL: "Vulnerable Turrets",
@@ -482,8 +473,7 @@ Class.vulnturrettest = {
         TYPE: "vulnturrettest_turret",
         VULNERABLE: true
     }, 10)
-};
-
+}
 Class.turretLayerTesting = {
     PARENT: 'genericTank',
     LABEL: 'Turret Layer Testing',
@@ -510,7 +500,6 @@ Class.turretLayerTesting = {
         },
     ]
 }
-
 Class.alphaGunTest = {
     PARENT: "basic",
     LABEL: "Translucent Guns",
@@ -523,7 +512,6 @@ Class.alphaGunTest = {
         }
     }]
 }
-
 Class.radialAutoTest = makeRadialAuto("basic", {
     count: 5,
     isTurret: false,
@@ -537,7 +525,6 @@ Class.radialAutoTest = makeRadialAuto("basic", {
     rotation: 0.04,
     danger: 10,
 })
-
 Class.imageShapeTest = {
     PARENT: 'genericTank',
     LABEL: "Image Shape Test",
@@ -552,7 +539,6 @@ Class.imageShapeTest = {
         }
     ]
 }
-
 Class.strokeWidthTest = {
     PARENT: "basic",
     LABEL: "Stroke Width Test",
@@ -566,7 +552,6 @@ Class.strokeWidthTest = {
         }
     }]
 }
-
 Class.onTest = {
     PARENT: 'genericTank',
     LABEL: "ON property test",
@@ -628,7 +613,6 @@ Class.onTest = {
         }
     }]
 }
-
 Class.turretStatScaleTest = {
     PARENT: 'genericTank',
     LABEL: 'Turret Stat Test',
@@ -637,8 +621,7 @@ Class.turretStatScaleTest = {
         TYPE: ['autoTankGun', {GUN_STAT_SCALE: {speed: 1 + i / 5, maxSpeed: 1 + i / 5, reload: 1 + i / 5, recoil: 0}}]
     }))
 }
-
-Class.auraBasicGen = addAura();
+Class.auraBasicGen = addAura()
 Class.auraBasic = {
     PARENT: "genericTank",
     LABEL: "Aura Basic",
@@ -653,12 +636,12 @@ Class.auraBasic = {
             POSITION: [18, 8, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic]),
-                TYPE: "bullet",
-            },
-        },
-    ],
-};
-Class.auraHealerGen = addAura(-1);
+                TYPE: "bullet"
+            }
+        }
+    ]
+}
+Class.auraHealerGen = addAura(-1)
 Class.auraHealer = {
     PARENT: "genericTank",
     LABEL: "Aura Healer",
@@ -676,12 +659,11 @@ Class.auraHealer = {
             POSITION: [18, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.healer]),
-                TYPE: "healerBullet",
-            },
-        },
-    ],
-};
-
+                TYPE: "healerBullet"
+            }
+        }
+    ]
+}
 Class.ghoster_ghosted = {
     PARENT: "genericTank",
     TOOLTIP: 'You are now hidden, roam around and find your next target. You will be visible again in 5 seconds',
@@ -696,7 +678,6 @@ Class.ghoster_ghosted = {
     }],
     ALPHA: 0.6,
 }
-
 Class.ghoster = {
     PARENT: "genericTank",
     LABEL: 'Ghoster',
@@ -732,7 +713,6 @@ Class.ghoster = {
     }],
     ALPHA: 1,
 }
-
 Class.switcheroo = {
     PARENT: "basic",
     LABEL: 'Switcheroo',
@@ -760,7 +740,6 @@ Class.switcheroo = {
         }
     }]
 }
-
 Class.vanquisher = {
     PARENT: "genericTank",
     DANGER: 8,
@@ -869,7 +848,7 @@ Class.armyOfOne = {
             },
         }
     ],
-};
+}
 Class.weirdAutoBasic = {
     PARENT: "genericTank",
     LABEL: "Weirdly Defined Auto-Basic",
@@ -894,13 +873,11 @@ Class.weirdAutoBasic = {
         }]
     }]
 }
-
 Class.tooltipTank = {
     PARENT: 'genericTank',
     LABEL: "Tooltips",
     UPGRADE_TOOLTIP: "Allan please add details"
 }
-
 Class.bulletSpawnTest = {
     PARENT: 'genericTank',
     LABEL: "Bullet Spawn Position",
@@ -922,7 +899,6 @@ Class.bulletSpawnTest = {
         }
     ]
 }
-
 Class.propTestProp = {
     PARENT: 'genericTank',
     SHAPE: 6,
@@ -981,7 +957,6 @@ Class.weaponArrayTest = {
         }
     , 5),
 }
-
 Class.gunBenchmark = {
     PARENT: 'genericTank',
     LABEL: "Gun Benchmark",
@@ -1005,7 +980,6 @@ for (let i = 0; i < 12; i++) {
     };
     Class.levels.UPGRADES_TIER_0.push("level" + LEVEL);
 }
-
 Class.teams = menu("Teams")
 Class.teams.UPGRADES_TIER_0 = []
 for (let i = 1; i <= 8; i++) {
