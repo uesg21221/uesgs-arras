@@ -23,13 +23,13 @@ module.exports = {
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['tdm'],
+    GAME_MODES: ['tdm', 'domination'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
     // NOTE: Files starting with `map_` are maps. files starting with `overlay_` are overlays that get added on.
-    // NOTE: These prefixes are only for categorisation, a room file would work the same regardless of its prefix. LibreTanks does nothing based on file name prefixes.
-    ROOM_SETUP: ['map_libretanks_default'],
+    // NOTE: These prefixes are only for categorisation, a room file would work the same regardless of its prefix. APS++ does nothing based on file name prefixes.
+    ROOM_SETUP: ['map_apspp_default'],
 
     // The dimensions of a single tile on the map.
     TILE_WIDTH: 400,
@@ -51,7 +51,7 @@ module.exports = {
     DEFAULT_FILE: 'index.html',
 
     // Window name of the server terminal.
-    WINDOW_NAME: 'LibreTanks Server Instance',
+    WINDOW_NAME: 'OSA Game Server Instance',
 
     // Allows you to type and run javascript code in the terminal.
     REPL_WINDOW: false,
@@ -59,8 +59,7 @@ module.exports = {
     // Welcome message once a player spawns.
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
-                    +"Please report any bugs you encounter!\n"
-                    +"[NOTE: Almost all arras-related content has been moved to its own addon and will no longer be present in future releases of this project by default.]",
+                    +"Please report any bugs you encounter!",
     
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
@@ -123,10 +122,10 @@ module.exports = {
     BOTS: 0,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
-    BOT_XP: 0,
+    BOT_XP: 125,
 
     // How much XP player-bots will receive when first created.
-    BOT_START_XP: 26301,
+    BOT_START_XP: 0,
 
     // The chances of a player-bot upgrading a specific skill when skill upgrades are available.
     BOT_SKILL_UPGRADE_CHANCES: [ 1, 1, 3, 4, 4, 4, 4, 2, 1, 1],
@@ -176,13 +175,25 @@ module.exports = {
     // The possible food types that can spawn.
     FOOD_TYPES: [
         [2000, [
-            [256, 'egg'], [64, 'triangle'], [16, 'square'], [4, 'pentagon'], [1, 'hexagon']
+            [1024, 'egg'], [256, 'square'], [64, 'triangle'], [16, 'pentagon'], [4, 'betaPentagon'], [1, 'alphaPentagon']
         ]],
         [1, [
-            [625, 'gem'], [125, 'shinyTriangle'], [25, 'shinySquare'], [5, 'shinyPentagon'], [1, 'shinyHexagon']
+            [3125, 'gem'], [625, 'shinySquare'], [125, 'shinyTriangle'], [25, 'shinyPentagon'], [5, 'shinyBetaPentagon'], [1, 'shinyAlphaPentagon']
         ]],
         [0.1, [
-            [1296, 'jewel'], [216, 'legendaryTriangle'], [36, 'legendarySquare'], [6, 'legendaryPentagon'], [1, 'legendaryHexagon']
+            [6836, 'jewel'], [1296, 'legendarySquare'], [216, 'legendaryTriangle'], [36, 'legendaryPentagon'], [6, 'legendaryBetaPentagon'], [1, 'legendaryAlphaPentagon']
+        ]],
+        [0.005, [
+            /*[16807, 'egg'], */[2401, 'shadowSquare'], [343, 'shadowTriangle'], [49, 'shadowPentagon'], [7, 'shadowBetaPentagon'], [1, 'shadowAlphaPentagon']
+        ]],
+        [0.001, [
+            /*[65536, 'egg'], */[8192, 'rainbowSquare'], [1024, 'rainbowTriangle'], [64, 'rainbowPentagon'], [8, 'rainbowBetaPentagon'], [1, 'rainbowAlphaPentagon']
+        ]],
+        [0.0005, [
+            [59549, 'egg'], [6561, 'transSquare'], [729, 'transTriangle'], [81, 'transPentagon'], [9, 'transBetaPentagon'], [1, 'transAlphaPentagon']
+        ]],
+        [0.0001, [
+            [100000, 'sphere'], [10000, 'cube'], [1000, 'tetrahedron'], [100, 'octahedron'], [10, 'dodecahedron'], [1, 'icosahedron']
         ]]
     ],
 
@@ -195,16 +206,34 @@ module.exports = {
 
     // The possible nest enemy types that can spawn.
     ENEMY_TYPES_NEST: [
-        [1, [
+        [19, [
             [1, 'crasher']
+        ]],
+        [1, [
+            [1, 'sentryGun'], [1, 'sentrySwarm'], [1, 'sentryTrap']
         ]]
     ],
 
     // The possible boss types that can spawn.
     BOSS_TYPES: [{
-        bosses: ["taureonBoss"],
-        amount: [1], chance: 1, nameType: "a",
-        message: "yo some shit is about to move to a lower position",
+        bosses: ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner"],
+        amount: [5, 5, 4, 2, 1], chance: 2, nameType: "a",
+    },{
+        bosses: ["roguePalisade"],
+        amount: [4, 1], chance: 1, nameType: "castle",
+        message: "A strange trembling...",
+    },{
+        bosses: ["summoner", "eliteSkimmer", "nestKeeper"],
+        amount: [2, 2, 1], chance: 1, nameType: "a",
+        message: "A strange trembling...",
+    },{
+        bosses: ["paladin", "freyja", "zaphkiel", "nyx", "theia"],
+        amount: [1], chance: 0.01,
+        message: "The world tremors as the celestials are reborn anew!",
+    },{
+        bosses: ["julius", "genghis", "napoleon"],
+        amount: [1], chance: 0.1,
+        message: "The darkness arrives as the realms are torn apart!",
     }],
 
 

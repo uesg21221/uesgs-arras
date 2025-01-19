@@ -349,12 +349,46 @@ Class.kronosMissile = {
         },
     ],
 }
+Class.autoSmasherMissile = {
+    PARENT: "missile",
+    HITS_OWN_TYPE: "never",
+    GUNS: [],
+    TURRETS: [
+        {
+            POSITION: [21.5, 0, 0, 0, 360, 0],
+            TYPE: "smasherBody",
+        }, {
+            POSITION: [12, 0, 0, 0, 360, 1],
+            TYPE: "autoSmasherMissileTurret",
+        },
+    ],
+}
 
 // Healer Projectiles
 Class.healerBullet = {
     PARENT: "bullet",
     HEALER: true,
 };
+Class.surgeonPillbox = {
+    PARENT: "trap",
+    LABEL: "Pillbox",
+    SHAPE: -6,
+    MOTION_TYPE: "motor",
+    CONTROLLERS: ["goToMasterTarget", "nearestDifferentMaster"],
+    INDEPENDENT: true,
+    BODY: {
+        SPEED: 1,
+        DENSITY: 5,
+        DAMAGE: 0
+    },
+    DIE_AT_RANGE: true,
+    TURRETS: [
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: "surgeonPillboxTurret",
+        },
+    ],
+}
 
 // Drones
 Class.turretedDrone = makeAuto('drone', "Auto-Drone", {type: 'droneAutoTurret'})
@@ -502,6 +536,39 @@ Class.tinyMinion = {
     DIE_AT_RANGE: true,
     BUFF_VS_FOOD: true,
 }
+Class.sentrySwarmMinion = {
+    PARENT: 'drone',
+    LABEL: 'sentry',
+    COLOR: 'pink',
+    UPGRADE_COLOR: "pink",
+    DRAW_HEALTH: true,
+    HAS_NO_RECOIL: true,
+    GUNS: Class.sentrySwarm.GUNS
+}
+Class.sentryGunMinion = {
+    PARENT: 'drone',
+    LABEL: 'sentry',
+    COLOR: 'pink',
+    UPGRADE_COLOR: "pink",
+    DRAW_HEALTH: true,
+    HAS_NO_RECOIL: true,
+    TURRETS: [{
+        POSITION: [12, 0, 0, 0, 360, 1],
+        TYPE: ['megaAutoTankGun', {GUN_STAT_SCALE: {health: 0.8}}]
+    }]
+}
+Class.sentryTrapMinion = {
+    PARENT: 'drone',
+    LABEL: 'sentry',
+    COLOR: 'pink',
+    UPGRADE_COLOR: "pink",
+    DRAW_HEALTH: true,
+    HAS_NO_RECOIL: true,
+    TURRETS: [{
+        POSITION: [12, 0, 0, 0, 360, 1],
+        TYPE: 'trapTurret'
+    }]
+}
 
 // Traps
 Class.setTrap = {
@@ -555,6 +622,47 @@ Class.assemblerTrap = {
 Class.shotTrapBox = {
     PARENT: 'unsetTrap',
     MOTION_TYPE: "glide",
+}
+
+// Pillboxes
+Class.pillbox = {
+    PARENT: "setTrap",
+    LABEL: "Pillbox",
+    INDEPENDENT: true,
+    DIE_AT_RANGE: true,
+    TURRETS: [
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: "pillboxTurret",
+        },
+    ],
+}
+Class.unsetPillbox = {
+    PARENT: "unsetTrap",
+    LABEL: "Pillbox",
+    INDEPENDENT: true,
+    DIE_AT_RANGE: true,
+    TURRETS: [
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: "pillboxTurret",
+        },
+    ],
+}
+Class.legionaryPillbox = {
+    PARENT: "unsetTrap",
+    LABEL: "Pillbox",
+    BODY: {
+        SPEED: 1,
+        DENSITY: 5,
+    },
+    DIE_AT_RANGE: true,
+    TURRETS: [
+        {
+            POSITION: [11, 0, 0, 0, 360, 1],
+            TYPE: "legionaryTwin",
+        },
+    ],
 }
 
 // Swarms

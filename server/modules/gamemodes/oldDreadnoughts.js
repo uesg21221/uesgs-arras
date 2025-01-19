@@ -136,8 +136,8 @@ let generateLabyrinth = (size) => {
 
     // Big food
     // Class.sphere.SIZE = 17;
-    // Class.tetrahedron.SIZE = 22;
-    // Class.cube.SIZE = 27;
+    // Class.cube.SIZE = 22;
+    // Class.tetrahedron.SIZE = 27;
     // Class.octahedron.SIZE = 28;
     // Class.dodecahedron.SIZE = 30;
     // Class.icosahedron.SIZE = 32;

@@ -255,16 +255,15 @@ var gameDraw = {
             // polygons & other entities
             case "6":
             case "egg":
-            case "circle":
             case "veryLightGrey":
             case "veryLightGray":
                 return gameDraw.color.vlgrey;
             case "13":
-            case "triangle":
+            case "square":
             case "gold":
                 return gameDraw.color.gold;
             case "2":
-            case "square":
+            case "triangle":
             case "orange":
                 return gameDraw.color.orange;
             case "14":

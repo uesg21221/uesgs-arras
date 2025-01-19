@@ -1158,9 +1158,8 @@ function drawHealth(x, y, instance, ratio, alpha) {
         var name = instance.name.substring(7, instance.name.length + 1);
         var namecolor = instance.name.substring(0, 7);
         ctx.globalAlpha = fade * (alpha ** 2);
-        let nameRatio = (ratio * instance.size) / 20;
-        if (global.GUIStatus.renderPlayerNames) drawText(name, x, y - realSize - 22 * nameRatio, 12 * nameRatio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
-        if (global.GUIStatus.renderPlayerScores) drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * nameRatio, 6 * nameRatio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
+        if (global.GUIStatus.renderPlayerNames) drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
+        if (global.GUIStatus.renderPlayerScores) drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
     }
 }
 
@@ -1506,18 +1505,18 @@ function drawEntities(px, py, ratio) {
         drawHealth(x, y, instance, ratio, instance.alpha);
     }
 
-    let now = Date.now();
+    let now = Date.now(),
+        ratioForChat = (1 + ratio) / 2;
     for (let instance of global.entities) {
         //put chat msg above name
         let size = instance.size * ratio,
-            ratioForChat = (ratio * instance.size) / 20,
             indexes = instance.index.split("-"),
             m = global.mockups[parseInt(indexes[0])],
             realSize = (size / m.size) * m.realSize,
             x = instance.id === gui.playerid ? global.player.screenx : ratio * instance.render.x - px,
             y = instance.id === gui.playerid ? global.player.screeny : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
-        y += global.screenHeight / 2 - realSize - 46 * ratioForChat;
+        y += global.screenHeight / 2 - realSize - 46 * ratio;
         if (instance.id !== gui.playerid && instance.nameplate) y -= 8 * ratio;
 
         //draw all the msgs
@@ -1959,7 +1958,7 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     if (global.metrics.rendertime < 10) orangeColor = true;
     // Text
     if (global.showDebug) {
-        drawText("DEBUG BUILD - PLEASE REPORT ANY ISSUES", x + len, y - 50 - 5 * 14 - 2, 15, "#1081E5", "right");
+        drawText("Open Source Arras", x + len, y - 50 - 5 * 14 - 2, 15, "#1081E5", "right");
         drawText("Prediction: " + Math.round(GRAPHDATA) + "ms : " + global.mspt + " mspt", x + len, y - 50 - 4 * 14, 10, color.guiwhite, "right");
         // drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
         drawText("Memory: " + global.metrics.rendergap.toFixed(1) + " Mib : " + "Class: " + gui.class, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
@@ -1967,10 +1966,10 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
         drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText(global.metrics.latency + " ms - " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
     } else if (!global.GUIStatus.minimapReducedInfo) {
-        drawText("DEBUG BUILD - PLEASE REPORT ANY ISSUES", x + len, y - 50 - 2 * 14 - 2, 15, "#1081E5", "right");
+        drawText("Open Source Arras", x + len, y - 50 - 2 * 14 - 2, 15, "#1081E5", "right");
         drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText(global.metrics.latency + " ms : " + global.metrics.updatetime + "Hz", x + len, y - 50, 10, color.guiwhite, "right");
-    } else drawText("DEBUG BUILD - PLEASE REPORT ANY ISSUES", x + len, y - 22 - 2 * 14 - 2, 15, "#1081E5", "right");
+    } else drawText("Open Source Arras", x + len, y - 22 - 2 * 14 - 2, 15, "#1081E5", "right");
 }
 
 function drawLeaderboard(spacing, alcoveSize, max) {

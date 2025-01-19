@@ -587,7 +587,7 @@ class Canvas {
                   let k = URL.createObjectURL(a),
                     q = document.createElement("a");
                   q.style.display = "none";
-                  q.setAttribute("download", "lt-video.mp4");
+                  q.setAttribute("download", "osa-video.mp4");
                   q.setAttribute("href", k);
                   document.body.appendChild(q);
                   setTimeout(() => {
@@ -611,7 +611,7 @@ class Canvas {
         let q = URL.createObjectURL(new Blob([p], {type: x})),
         w = document.createElement("a");
         w.style.display = "none";
-        w.setAttribute("download", "lt-screenshot.png");
+        w.setAttribute("download", "osa-screenshot.png");
         w.setAttribute("href", q);
         document.body.appendChild(w);
         setTimeout(() => {

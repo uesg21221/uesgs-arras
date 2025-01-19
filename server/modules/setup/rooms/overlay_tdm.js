@@ -2,8 +2,6 @@ let bases = require('../tiles/tdm.js'),
 	teams = require('../gamemodeconfigs/tdm.js').TEAMS,
 	room = Array(Config.roomHeight).fill(() => Array(Config.roomWidth).fill()).map(x => x()),
 	isMaze = Config.GAME_MODES.includes('maze'),
-	diep2TDM = false,
-
 locations = [
 	[
 		[[ 0 + isMaze,  0 + isMaze], [ 1 + isMaze,  0 + isMaze], [ 0 + isMaze,  1 + isMaze]],
@@ -60,8 +58,7 @@ locations = [
 	]
 ];
 
-// uncomment this to enable diep-style 2tdm
-if (diep2TDM == true && teams === 2 && !isMaze) {
+if (teams === 2 && !isMaze) {
 	let baseprotGap = Math.ceil((Config.roomHeight - 1) / 6);
 	for (let y = 0; y < Config.roomHeight; y++) {
 		room[y][0] = bases.base1;

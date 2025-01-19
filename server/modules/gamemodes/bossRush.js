@@ -6,8 +6,8 @@ let calculatePoints = wave => 5 + wave * 3;
 // Then it picks a boss at random, with all choices being equally likely.
 
 let oldGroups = {
-    elites: [ "arras_eliteDestroyer", "arras_eliteGunner", "arras_eliteSprayer", "arras_eliteBattleship", "arras_eliteSpawner" ],
-    strange: [ "arras_summoner", "arras_eliteSkimmer", "nestKeeper", "arras_roguePalisade" ],
+    elites: [ "eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner" ],
+    strange: [ "summoner", "eliteSkimmer", "nestKeeper", "roguePalisade" ],
     celestials: [ "paladin", "freyja", "zaphkiel", "nyx", "theia" ],
     eternals: [ "legionaryCrasher", "kronos", "odin" ],
 };
@@ -54,26 +54,26 @@ class BossRush {
             // [ cost , definition reference ],
 
             //mysticals
-            [  2, "arras_sorcerer"],
-            [  2, "arras_summoner"],
-            [  2, "arras_enchantress"],
-            [  2, "arras_exorcistor"],
-            [  2, "arras_shaman"],
+            [  2, "sorcerer"],
+            [  2, "summoner"],
+            [  2, "enchantress"],
+            [  2, "exorcistor"],
+            [  2, "shaman"],
 
             //elites
-            [  2, "arras_eliteDestroyer"],
-            [  2, "arras_eliteGunner"],
-            [  2, "arras_eliteSprayer"],
-            [  2, "arras_eliteBattleship"],
-            [  2, "arras_eliteSpawner"],
-            [  2, "arras_eliteTrapGuard"],
-            [  2, "arras_eliteSpinner"],
-            [  2, "arras_eliteSkimmer"],
+            [  2, "eliteDestroyer"],
+            [  2, "eliteGunner"],
+            [  2, "eliteSprayer"],
+            [  2, "eliteBattleship"],
+            [  2, "eliteSpawner"],
+            [  2, "eliteTrapGuard"],
+            [  2, "eliteSpinner"],
+            [  2, "eliteSkimmer"],
 
             //nesters
-            [  3, "arras_nestKeeper"],
-            [  3, "arras_nestWarden"],
-            [  3, "arras_nestGuardian"],
+            [  3, "nestKeeper"],
+            [  3, "nestWarden"],
+            [  3, "nestGuardian"],
 
             //terrestrials
             [ 15, "ares"],
@@ -90,11 +90,11 @@ class BossRush {
             [ 35, "theia"],
 
             //eternals
-            [100, "arras_legionaryCrasher"],
+            [100, "legionaryCrasher"],
             [100, "kronos"],
             [100, "odin"],
         ];
-        this.friendlyBossChoices = [ [9, "arras_roguePalisade"], [8, "arras_rogueArmada"], [1, "julius"], [1, "genghis"], [1, "napoleon"] ];
+        this.friendlyBossChoices = [ [9, "roguePalisade"], [8, "rogueArmada"], [1, "julius"], [1, "genghis"], [1, "napoleon"] ];
         this.bigFodderChoices = ["sentryGun", "sentrySwarm", "sentryTrap", "shinySentryGun"];
         this.smallFodderChoices = ["crasher"];
         this.length = Config.CLASSIC_SIEGE ? this.waveCodes.length : Config.WAVES;
@@ -254,7 +254,7 @@ class BossRush {
 
     //runs once when the server starts
     init() {
-        Class.basic.UPGRADES_TIER_2.push("arras_healer");
+        Class.basic.UPGRADES_TIER_2.push("healer");
         //TODO: filter out tiles that are not of sanctuary type
         for (let tile of room.spawnable[TEAM_BLUE]) {
             this.leftSanctuaries += 1;

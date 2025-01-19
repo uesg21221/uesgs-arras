@@ -1,8 +1,8 @@
 # List of added, changed or removed features
 
-The list of all features that LibreTanks has included that are not in similar server templates.
+The list of all features that OSA/APS++ has included in the base template that are not in other templates.
 
-It includes almost all features up to the latest release version.
+It includes all features up to the latest release version.
 
 ## Added
 
@@ -12,11 +12,10 @@ It includes almost all features up to the latest release version.
   * They can add custom entities and gamemodes, aswell as change the server configuration if needed.
   * They also have access to `Events`, like `spawn` or `chatMessage`.
   * Template comes with some example addons:
-    * arras addon group: All arras-related items, now separated from the base template.
     * basicChatModeration*: Basic antispam which adds a ratelimit and chat message length limit to chat.
     * dreadv1 & dreadv2: Adds V1 and V2 dreadnoughts.
     * exampleAddon*: Showcases how addons can add custom definitions and interact with already existing ones.
-    * tieredFood*: Sets the food spawns to the Labyrinth ones.
+    * labyFood*: Sets the food spawns to the Labyrinth ones.
     * \* = disabled by default, needs to be enabled.
 
 * Ingame Chat.

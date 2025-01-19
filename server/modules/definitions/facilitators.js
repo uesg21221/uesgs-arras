@@ -410,7 +410,6 @@ exports.makeRadialAuto = (type, options = {}) => {
     let count = options.count ?? 3;
     let isTurret = options.isTurret ?? false;
     let turretIdentifier = type;
-    let noRecoil = options.noRecoil ?? false;
 
     if (!isTurret) {
         type = exports.dereference(type);
@@ -443,7 +442,6 @@ exports.makeRadialAuto = (type, options = {}) => {
     }
 
     let LABEL = options.label ?? (type.LABEL + "-" + count);
-    let HAS_NO_RECOIL = options.noRecoil ?? false;
     let turretSize = options.size ?? 11;
     let turretX = options.x ?? 8;
     let turretArc = options.arc ?? 190;
@@ -452,7 +450,6 @@ exports.makeRadialAuto = (type, options = {}) => {
     return {
         PARENT: 'genericTank',
         LABEL,
-        HAS_NO_RECOIL,
         FACING_TYPE: ["spin", {speed: options.rotation ?? 0.02}],
         DANGER: options.danger ?? (type.DANGER + 2),
         BODY: options.body ?? undefined,
@@ -807,12 +804,6 @@ exports.makeRare = (type, level) => {
         VALUE: [100, 500, 2000, 4000, 5000][level] * type.VALUE,
         SHAPE: type.SHAPE,
         SIZE: type.SIZE,
-        GLOW:  {
-            RADIUS: 2,
-            STRENGTH: 25,
-            COLOR: ["lightGreen", "teal", "darkGrey", "rainbow", "trans"][level],
-            ALPHA: 0.6
-        },
         COLOR: ["lightGreen", "teal", "darkGrey", "rainbow", "trans"][level],
         ALPHA: level == 2 ? 0.25 : 1,
         BODY: {

@@ -4,7 +4,7 @@ const { makeRelic, makeRare, makeCrasher, makeLaby } = require('../facilitators.
 // EGGS
 Class.egg = {
     PARENT: "food",
-    LABEL: "Circle",
+    LABEL: "Egg",
     VALUE: 10,
     SHAPE: 0,
     SIZE: 4.5,
@@ -26,7 +26,7 @@ Class.gem = {
     VALUE: 2e3,
     SHAPE: 6,
     SIZE: 4.5,
-    COLOR: "teal",
+    COLOR: "aqua",
     BODY: {
         DAMAGE: basePolygonDamage / 4,
         DENSITY: 4,
@@ -63,16 +63,16 @@ Class.jewel = {
 Class.shinyEgg = makeRare("egg", 0);
 Class.legendaryEgg = makeRare("egg", 1);
 Class.shadowEgg = makeRare("egg", 2);
-Class.rainbowEgg = makeRare("egg", 3); // holy shit skittles reference -zenphia
+Class.rainbowEgg = makeRare("egg", 3);
 Class.transEgg = makeRare("egg", 4); //ironic
 
-// TRIANGLES
-Class.triangle = {
+// SQUARES
+Class.square = {
     PARENT: "food",
-    LABEL: "Triangle",
+    LABEL: "Square",
     VALUE: 30,
-    SHAPE: 3,
-    SIZE: 8,
+    SHAPE: 4,
+    SIZE: 14,
     COLOR: "gold",
     BODY: {
         DAMAGE: basePolygonDamage,
@@ -82,21 +82,21 @@ Class.triangle = {
         ACCELERATION: 0.0075
     },
     DRAW_HEALTH: true,
-    INTANGIBLE: false
+    INTANGIBLE: false,
 };
-Class.shinyTriangle = makeRare("triangle", 0);
-Class.legendaryTriangle = makeRare("triangle", 1);
-Class.shadowTriangle = makeRare("triangle", 2);
-Class.rainbowTriangle = makeRare("triangle", 3);
-Class.transTriangle = makeRare("triangle", 4);
+Class.shinySquare = makeRare("square", 0);
+Class.legendarySquare = makeRare("square", 1);
+Class.shadowSquare = makeRare("square", 2);
+Class.rainbowSquare = makeRare("square", 3);
+Class.transSquare = makeRare("square", 4);
 
-// SQUARES
-Class.square = {
+// TRIANGLES
+Class.triangle = {
     PARENT: "food",
-    LABEL: "Square",
+    LABEL: "Triangle",
     VALUE: 120,
-    SHAPE: 4,
-    SIZE: 18,
+    SHAPE: 3,
+    SIZE: 10,
     COLOR: "orange",
     BODY: {
         DAMAGE: basePolygonDamage,
@@ -108,11 +108,11 @@ Class.square = {
     },
     DRAW_HEALTH: true,
 };
-Class.shinySquare = makeRare("square", 0);
-Class.legendarySquare = makeRare("square", 1);
-Class.shadowSquare = makeRare("square", 2);
-Class.rainbowSquare = makeRare("square", 3);
-Class.transSquare = makeRare("square", 4);
+Class.shinyTriangle = makeRare("triangle", 0);
+Class.legendaryTriangle = makeRare("triangle", 1);
+Class.shadowTriangle = makeRare("triangle", 2);
+Class.rainbowTriangle = makeRare("triangle", 3);
+Class.transTriangle = makeRare("triangle", 4);
 
 // PENTAGONS
 Class.pentagon = {
@@ -257,30 +257,11 @@ Class.sphere = {
         TYPE: ["egg", { COLOR: { BRIGHTNESS_SHIFT: 9 }, BORDERLESS: true }]
     }]
 };
-Class.tetrahedron = {
-    PARENT: "food",
-    LABEL: "The Tetrahedron",
-    VALUE: 2e7,
-    SIZE: 10,
-    COLOR: "egg",
-    SHAPE: "M -0.065 0.037 L -0.934 -0.477 L -0.054 1.047 Z M 0.065 0.037 L 0.054 1.047 L 0.934 -0.477 Z M 0 -0.075 L 0.88 -0.57 L -0.88 -0.57 Z",
-    BODY: {
-        DAMAGE: 6,
-        DENSITY: 23,
-        HEALTH: 50,
-        RESIST: 1.25,
-        PENETRATION: 22.5,
-        ACCELERATION: 0.002
-    },
-    DRAW_HEALTH: true,
-    INTANGIBLE: false,
-    GIVE_KILL_MESSAGE: true,
-};
 Class.cube = {
     PARENT: "food",
     LABEL: "The Cube",
-    VALUE: 3e7,
-    SIZE: 12,
+    VALUE: 2e7,
+    SIZE: 10,
     COLOR: "egg",
     SHAPE: "M -0.065 0.037 L -0.866 -0.425 L -0.866 0.5 L -0.065 0.962 Z M 0.065 0.037 L 0.065 0.962 L 0.866 0.5 L 0.866 -0.425 Z M 0 -0.075 L 0.801 -0.537 L 0 -1 L -0.801 -0.537 Z",
     BODY: {
@@ -289,6 +270,25 @@ Class.cube = {
         HEALTH: 40,
         RESIST: 1.25,
         PENETRATION: 17.5,
+        ACCELERATION: 0.002
+    },
+    DRAW_HEALTH: true,
+    INTANGIBLE: false,
+    GIVE_KILL_MESSAGE: true,
+};
+Class.tetrahedron = {
+    PARENT: "food",
+    LABEL: "The Tetrahedron",
+    VALUE: 3e7,
+    SIZE: 12,
+    COLOR: "egg",
+    SHAPE: "M -0.065 0.037 L -0.934 -0.477 L -0.054 1.047 Z M 0.065 0.037 L 0.054 1.047 L 0.934 -0.477 Z M 0 -0.075 L 0.88 -0.57 L -0.88 -0.57 Z",
+    BODY: {
+        DAMAGE: 6,
+        DENSITY: 23,
+        HEALTH: 50,
+        RESIST: 1.25,
+        PENETRATION: 22.5,
         ACCELERATION: 0.002
     },
     DRAW_HEALTH: true,
