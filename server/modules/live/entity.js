@@ -1523,7 +1523,7 @@ class Entity extends EventEmitter {
         this.shield.set(((this.settings.healthWithLevel ? 0.6 * this.level : 0) + this.SHIELD) * this.skill.shi, Math.max(0, ((this.settings.healthWithLevel ? 0.006 * this.level : 0) + 1) * this.REGEN * this.skill.rgn * regenMultiplier));
         this.damage = damageMultiplier * this.DAMAGE * this.skill.atk;
         this.penetration = penetrationMultiplier * (this.PENETRATION + 1.5 * (this.skill.brst + 0.8 * (this.skill.atk - 1)));
-        if (!this.settings.dieAtRange || !this.range) this.range = rangeMultiplier * this.RANGE;
+        if (!this.settings.diesAtRange || !this.range) this.range = rangeMultiplier * this.RANGE;
         this.fov = fovMultiplier * this.FOV * 275 * Math.sqrt(this.size);
         this.density = densityMultiplier * (1 + 0.08 * this.level) * this.DENSITY;
         this.stealth = stealthMultiplier * this.STEALTH;
