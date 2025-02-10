@@ -49,7 +49,7 @@ exports.sumArray = arr => {
 
 exports.signedSqrt = x => Math.sign(x) * Math.sqrt(Math.abs(x))
 
-exports.getJackpot = x => x > 39450 ? Math.pow(x - 26300, 0.85) + 26300 : x / 1.5
+exports.getJackpot = x => x > 39450 ? Math.pow(x - 39450, 0.85) + 26300 : x / 1.5
 
 exports.serverStartTime = Date.now();
 
