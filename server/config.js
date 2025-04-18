@@ -3,7 +3,7 @@ module.exports = {
 
     // Game server domain.
     // If the host is 'localhost:NUMBER', the NUMBER must be the port setting.
-    host: "localhost:26301",
+    host: "https://github.com/uesg21221/uesgs-arras/edit/main/server/config.js",
 
     // Which port to run the web server on.
     port: 26301,
